@@ -1,8 +1,8 @@
-# WorldAct 0.2
+# WorldAct 0.3
 
 A personal study project rebuilding familiar WordPress CMS workflows with **React, TypeScript, Node.js, and PostgreSQL**. The application runs without PHP or MySQL.
 
-WorldAct now includes the official Gutenberg React editor, publishing workflows, site editing, navigation, native JavaScript extensions, media editing, and content portability. **Complete WordPress parity and exact pixel matching have not been established.** The four React theme presentations and local extension registry are WorldAct implementations; arbitrary PHP themes and plugins cannot run here. See the [parity tracker](docs/parity.md).
+WorldAct includes the official Gutenberg React editor, dynamic Query Loops, synced patterns, native site entities, publishing workflows, account registration, privacy requests, comment editing, media editing, and content portability. **Complete WordPress parity and exact pixel matching have not been established.** The four React theme presentations and local extension registry are WorldAct implementations; arbitrary PHP themes and plugins cannot run here. See the [parity tracker](docs/parity.md).
 
 The supplied WordPress distribution declares version **7.1.4** and serves as a source and visual reference. It contains no configured site database or uploads. Its PHP/MySQL application has not been run for this project.
 
@@ -27,21 +27,24 @@ Vite runs at `127.0.0.1:5173`; the Node API runs at `127.0.0.1:3001`. PostgreSQL
 ## Included workflows
 
 - Posts and pages: categories, tags, hierarchical pages, featured images, excerpts, post-format classification, sticky posts, comment settings, drafts, pending review, publishing, scheduling, private/password-protected content, trash, revisions, autosave/recovery, and version conflict protection.
-- Official Gutenberg: 27 core block types, nested layouts, rich text, transforms, insertion, list view, block inspector, undo/redo, media selection, saved patterns, and YouTube/Vimeo embeds. Other embed providers are not enabled.
-- Site design: editable templates, template parts, patterns, eight live site/post binding blocks, global colors/typography/layout, hierarchical navigation, and four limited React theme presentations.
+- Official Gutenberg: static and dynamic core blocks, Query Loop and post metadata, nested layouts, rich text, transforms, insertion, list view, block inspector, undo/redo, media selection, synced and unsynced patterns, and YouTube/Vimeo embeds. Other embed providers are not enabled.
+- Site design: editable templates and referenced template parts; native site title/tagline/logo, navigation and page-list blocks; global colors/typography/layout; hierarchical menus; and four limited React theme presentations. Native entity edits persist when the site editor saves.
 - Extensions: install, activate, configure, deactivate, and remove Reading Time, Spam Shield, Site SEO, and Custom Footer from the local JavaScript registry.
-- Administration: dashboard preferences, five roles, account/profile editing, admin color schemes, password recovery, seven settings sections, site health, a local mail outbox, and personal-data export.
+- Administration: dashboard preferences, five roles, account/profile editing, registration and default roles, admin color schemes, password recovery, seven settings sections, site health, a local mail outbox, confirmed personal-data export/erasure requests, and account deletion with content reassignment or deletion.
+- Comments: search, status filters, sorting, pagination, full and quick editing, replies, bulk moderation, optimistic edit conflicts, and permanent deletion that preserves child comments.
 - Media: uploads up to 32 MiB for supported images, audio, video, PDF, and Office formats; image crop/rotate/flip/resize/restore; configurable generated image sizes and year/month folders.
 - Public site: archives/search, configured permalinks, static home/posts pages, comments, RSS/Atom and comment feeds, sitemap/robots output, and a supported subset of `/wp-json/wp/v2`.
 - Portability: WorldAct JSON and WordPress XML (WXR) export/import. See the exact boundaries below.
 
 ## Portability and email
 
-JSON import restores posts/pages, canonical Gutenberg data, terms, page/category hierarchy, and comments. JSON exports also include navigation, design, settings, and media reference data; these additional sections are **not restored by JSON import**. Media file bytes, account passwords, and sessions are excluded. Scheduled and password-protected imports become drafts for review. URLs are preserved when available and made unique on collision.
+JSON import restores posts/pages, canonical Gutenberg data, synced-pattern and block-navigation entities, terms, page/category hierarchy, and comments. Entity IDs are remapped, including nested references. Missing references are removed with warnings. JSON exports also include legacy menus, design, settings, and media reference data; these additional sections are **not restored by JSON import**. Media file bytes, account passwords, and sessions are excluded. Scheduled and password-protected imports become drafts for review. URLs are preserved when available and made unique on collision.
 
-WXR supports the implemented content, taxonomy, hierarchy, and comment workflows. It does not download remote attachment files; the import response warns about skipped attachments and retains existing media URLs. Upload those files separately. The Tools interface accepts export files up to 8 MB.
+WXR supports the implemented content, taxonomy, hierarchy, and comment workflows. It does not restore reusable/navigation entities; their references are removed with warnings during import. It does not download remote attachment files; the import response warns about skipped attachments and retains existing media URLs. Upload those files separately. The Tools interface accepts export files up to 8 MB.
 
 Password recovery writes to **Tools → Mail** by default, with no external delivery. Optional SMTP uses `SMTP_HOST`, `SMTP_PORT`, `SMTP_SECURE`, `SMTP_USER`, `SMTP_PASSWORD`, and `SMTP_FROM`. Without SMTP, an administrator can retrieve local reset messages from the mail outbox.
+
+Registration is disabled by default. Enable it in Settings → General and choose the default role. New users receive a single-use password-setting link through the configured mail channel. Privacy requests require email confirmation or explicit administrator confirmation. Export links expire after three days. Erasure anonymizes matching comment authors and revokes earlier exports; accounts, profile fields, authored content, comment text and request records are retained. Account deletion is a separate Users workflow.
 
 ## Checks and compiled server
 
@@ -53,7 +56,7 @@ npm test
 npm run build
 ```
 
-The test suite runs sequentially and uses the administrator credentials in `.env`. Integration checks create temporary records, exercise real API/database workflows, and clean up afterward; platform checks temporarily change and restore settings. `TEST_API_URL` can override the default API test address.
+The 65-test suite runs sequentially and uses the administrator credentials in `.env`. Integration checks create temporary records, exercise real API/database workflows, and clean up afterward; platform checks temporarily change and restore settings. `TEST_API_URL` can override the default API test address. Repeated full runs can reach the login rate limit; restart the local API before another full run.
 
 To serve the compiled application locally:
 

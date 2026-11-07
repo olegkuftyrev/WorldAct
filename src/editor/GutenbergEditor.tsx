@@ -14,6 +14,8 @@ import {
 } from "react";
 import {
   BlockBreadcrumb,
+  BlockContextProvider,
+  store as blockEditorStore,
   BlockCanvas,
   BlockEditorProvider,
   BlockInspector,
@@ -26,6 +28,8 @@ import {
 import {
   createBlock,
   getBlockType,
+  getBlockBindingsSource,
+  registerBlockBindingsSource,
   getBlockVariations,
   parse,
   rawHandler,
@@ -35,10 +39,20 @@ import {
   type Block,
 } from "@wordpress/blocks";
 import { registerCoreBlocks } from "@wordpress/block-library";
-import { Button, Modal, Notice, SlotFillProvider } from "@wordpress/components";
+import {
+  Button,
+  Modal,
+  Notice,
+  Popover,
+  SlotFillProvider,
+} from "@wordpress/components";
 import { addFilter } from "@wordpress/hooks";
 import apiFetch from "@wordpress/api-fetch";
-import { dispatch } from "@wordpress/data";
+import {
+  getSettings as getDateSettings,
+  setSettings as setDateSettings,
+} from "@wordpress/date";
+import { dispatch, select, useSelect } from "@wordpress/data";
 import { store as coreDataStore } from "@wordpress/core-data";
 import "@wordpress/format-library";
 import "@wordpress/components/build-style/style.css";
@@ -90,7 +104,99 @@ export const WORLDAct_CONTENT_BLOCKS = [
   "core/embed",
 ];
 
+export const WORLDAct_DYNAMIC_BLOCKS = [
+  "core/query",
+  "core/post-template",
+  "core/post-title",
+  "core/post-content",
+  "core/post-excerpt",
+  "core/post-date",
+  "core/post-author",
+  "core/post-author-name",
+  "core/post-author-biography",
+  "core/post-featured-image",
+  "core/post-terms",
+  "core/read-more",
+  "core/query-pagination",
+  "core/query-pagination-next",
+  "core/query-pagination-previous",
+  "core/query-pagination-numbers",
+  "core/query-no-results",
+  "core/query-title",
+  "core/block",
+];
+export const WORLDAct_SITE_BLOCKS = [
+  "core/site-title",
+  "core/site-tagline",
+  "core/site-logo",
+  "core/navigation",
+  "core/navigation-link",
+  "core/navigation-submenu",
+  "core/page-list",
+  "core/home-link",
+  "core/template-part",
+  "core/pattern",
+];
+
 if (!getBlockType("core/paragraph")) registerCoreBlocks();
+if (!getBlockBindingsSource("core/post-data"))
+  registerBlockBindingsSource({
+    name: "core/post-data",
+    label: "Post data",
+    usesContext: ["postId", "postType", "queryId"],
+    getValues: ({ select, context, bindings, clientId }: any) => {
+      const attrs = select(blockEditorStore).getBlockAttributes(clientId) || {};
+      const id = attrs.kind === "post-type" ? attrs.id : context.postId,
+        type = attrs.kind === "post-type" ? attrs.type : context.postType;
+      const record =
+        id && type
+          ? select(coreDataStore).getEditedEntityRecord("postType", type, id)
+          : null;
+      const values: Record<string, unknown> = {};
+      for (const [key, binding] of Object.entries(bindings) as any) {
+        const field = binding.args?.field;
+        if (["date", "modified", "link", "title", "excerpt"].includes(field)) {
+          const value = record?.[field];
+          values[key] =
+            typeof value === "object" && value !== null
+              ? (value.raw ?? value.rendered)
+              : value;
+        }
+      }
+      return values;
+    },
+    setValues: ({ dispatch, context, bindings }: any) => {
+      if (
+        !context.postId ||
+        !context.postType ||
+        Number.isFinite(context.queryId)
+      )
+        return;
+      const edits: Record<string, unknown> = {};
+      for (const binding of Object.values(bindings) as any) {
+        if (
+          ["date", "modified", "title", "excerpt"].includes(binding.args?.field)
+        )
+          edits[binding.args.field] = binding.newValue;
+      }
+      if (Object.keys(edits).length)
+        dispatch(coreDataStore).editEntityRecord(
+          "postType",
+          context.postType,
+          context.postId,
+          edits,
+        );
+    },
+    canUserEditValue: ({ select, context }: any) =>
+      !Number.isFinite(context.queryId) &&
+      !!context.postId &&
+      !!select(coreDataStore).canUser("update", {
+        kind: "postType",
+        name: context.postType,
+        id: context.postId,
+      }),
+  });
+
 for (const variation of getBlockVariations("core/embed") || []) {
   if (!["youtube", "vimeo"].includes(variation.name))
     unregisterBlockVariation("core/embed", variation.name);
@@ -173,6 +279,7 @@ for (const binding of siteBindings) {
       attributes: {},
       supports: {
         html: false,
+        inserter: false,
         align: true,
         color: { text: true, background: true },
         typography: { fontSize: true },
@@ -314,8 +421,64 @@ apiFetch.use(async (options, next) => {
       html: `<iframe src="${embed.src.replace(/&/g, "&amp;")}" title="${embed.title}" width="${embed.width}" height="${embed.height}" allow="encrypted-media; picture-in-picture" allowfullscreen loading="lazy" referrerpolicy="strict-origin-when-cross-origin"></iframe>`,
     };
   }
-  if (!path || !/^\/?wp\/v2\/media(?:\/\d+)?(?:\?|$)/.test(path))
-    return next(options);
+  if (!path || !/^\/?wp\/v2\/media(?:\/\d+)?(?:\?|$)/.test(path)) {
+    if (
+      !path ||
+      !(
+        path === "/" ||
+        path.startsWith("/?") ||
+        /^\/?(?:wp\/v2|wp-block-editor\/v1)\//.test(path)
+      )
+    )
+      return next(options);
+    const target = new URL(
+      path.startsWith("/?")
+        ? "/wp-json" + path
+        : path === "/"
+          ? "/wp-json/"
+          : "/wp-json/" + path.replace(/^\//, ""),
+      window.location.origin,
+    );
+    if (
+      /\/wp\/v2\/(posts|pages)$/.test(target.pathname) &&
+      options.method !== "POST"
+    )
+      target.searchParams.set("has_password", "false");
+    let data = options.data;
+    const entityPath = target.pathname.match(
+      /^\/wp-json\/wp\/v2\/(navigation|blocks|template-parts)\/(.+)$/,
+    );
+    if (
+      entityPath &&
+      data &&
+      typeof data === "object" &&
+      !Array.isArray(data) &&
+      ["POST", "PUT", "PATCH"].includes(
+        (options.method || "GET").toUpperCase(),
+      ) &&
+      !(data as any).version
+    ) {
+      const name =
+        entityPath[1] === "navigation"
+          ? "wp_navigation"
+          : entityPath[1] === "blocks"
+            ? "wp_block"
+            : "wp_template_part";
+      const id =
+        name === "wp_template_part"
+          ? decodeURIComponent(entityPath[2])
+          : Number(entityPath[2]);
+      const record = select(coreDataStore).getEntityRecord(
+        "postType",
+        name,
+        id,
+      ) as { version?: number } | undefined;
+      if (record?.version) data = { ...data, version: record.version };
+    }
+    // Continue through the official fetch-all middleware: per_page=-1 must
+    // follow every REST Link page, while parse:false retains native headers.
+    return next({ ...options, path: undefined, url: target.href, data });
+  }
   if (
     options.method &&
     !["GET", "OPTIONS"].includes(options.method.toUpperCase())
@@ -370,6 +533,23 @@ dispatch(coreDataStore).addEntities([
     baseURLParams: { context: "edit" },
     supportsPagination: true,
     rawAttributes: ["title", "caption", "description"],
+  },
+  {
+    kind: "postType",
+    name: "wp_template_part",
+    label: "Template Parts",
+    baseURL: "/wp/v2/template-parts",
+    baseURLParams: { context: "edit" },
+    supportsPagination: false,
+    rawAttributes: ["title", "content"],
+    transientEdits: {
+      blocks: {
+        read: (record: any) => parse(record.content?.raw || ""),
+        write: (record: any) => ({ content: serialize(record.blocks) }),
+      },
+    },
+    getTitle: (record: any) =>
+      record.title?.rendered || record.title?.raw || record.slug,
   },
 ]);
 
@@ -558,6 +738,89 @@ function toStored(blocks: Block[]): SerializedBlock[] {
 
 function restoreBlocks(blocks: SerializedBlock[]): Block[] {
   return blocks.map((block) => {
+    // Earlier documents keep working while their next visual save adopts the
+    // corresponding genuine core entity-backed blocks.
+    const legacy: Record<string, [string, Record<string, unknown>]> = {
+      "worldact/site-title": [
+        "core/site-title",
+        { level: 0, isLink: true, className: "site-title" },
+      ],
+      "worldact/tagline": ["core/site-tagline", { className: "site-tagline" }],
+      "worldact/navigation": ["core/navigation", {}],
+      "worldact/post-title": [
+        "core/post-title",
+        { level: 1, className: "post-title" },
+      ],
+      "worldact/post-content": [
+        "core/post-content",
+        { className: "public-content" },
+      ],
+      "worldact/post-date": ["core/post-date", { className: "post-date" }],
+      "worldact/post-author": [
+        "core/post-author-name",
+        { className: "post-author" },
+      ],
+    };
+    const replacement = legacy[block.name];
+    if (replacement)
+      block = {
+        ...block,
+        name: replacement[0],
+        attributes: { ...replacement[1], ...block.attributes },
+      };
+    if (block.name === "worldact/post-list")
+      return createBlock(
+        "core/query",
+        {
+          queryId: 0,
+          query: {
+            perPage: 10,
+            postType: "post",
+            order: "desc",
+            orderBy: "date",
+            inherit: true,
+          },
+        },
+        [
+          createBlock("core/post-template", {}, [
+            createBlock("core/post-title", { level: 2, isLink: true }),
+            createBlock("core/post-excerpt"),
+          ]),
+          createBlock("core/query-pagination", {}, [
+            createBlock("core/query-pagination-previous"),
+            createBlock("core/query-pagination-numbers"),
+            createBlock("core/query-pagination-next"),
+          ]),
+          createBlock("core/query-no-results", {}, [
+            createBlock("core/paragraph", { content: "No posts found." }),
+          ]),
+        ],
+      );
+    if (
+      block.name === "core/post-date" &&
+      !block.attributes.datetime &&
+      !(block.attributes.metadata as any)?.bindings?.datetime
+    ) {
+      block = {
+        ...block,
+        attributes: {
+          ...block.attributes,
+          metadata: {
+            ...(block.attributes.metadata as any),
+            bindings: {
+              datetime: {
+                source: "core/post-data",
+                args: {
+                  field: (block.attributes as any).displayModified
+                    ? "modified"
+                    : "date",
+                },
+              },
+            },
+          },
+        },
+      };
+    }
     if (!getBlockType(block.name)) {
       // Preserve an unknown block's data in the official recovery block.
       const attrs = JSON.stringify(block.attributes).replace(/</g, "\\u003c");
@@ -580,7 +843,7 @@ function initialValue(blocks: SerializedBlock[] | null, html: string): Block[] {
     ? restoreBlocks(blocks)
     : html.trim()
       ? html.includes("<!-- wp:")
-        ? parse(html)
+        ? restoreBlocks(toStored(parse(html)))
         : rawHandler({ HTML: html })
       : [];
   return value.length ? value : [createBlock("core/paragraph")];
@@ -627,6 +890,7 @@ export type GutenbergEditorHandle = {
   getBlocks: () => SerializedBlock[];
   getHTML: () => string;
   insertBlocks: (blocks: SerializedBlock[]) => void;
+  flushEntities: () => Promise<void>;
 };
 export type GutenbergEditorProps = {
   initialBlocks: SerializedBlock[] | null;
@@ -641,6 +905,9 @@ export type GutenbergEditorProps = {
   inspectorOpen?: boolean;
   canvasCSS?: string;
   context?: "post" | "site";
+  postId?: number;
+  postType?: "post" | "page";
+  hidePatternManager?: boolean;
 };
 
 function UndoIcon({ redo = false }: { redo?: boolean }) {
@@ -660,6 +927,35 @@ function UndoIcon({ redo = false }: { redo?: boolean }) {
   );
 }
 
+function EntityEditsObserver({ onDirty }: { onDirty: () => void }) {
+  const changes = useSelect(
+    (select) =>
+      JSON.stringify(
+        select(coreDataStore)
+          .__experimentalGetDirtyEntityRecords()
+          .map((record) => ({
+            kind: record.kind,
+            name: record.name,
+            key: record.key,
+            edits: select(coreDataStore).getEntityRecordEdits(
+              record.kind,
+              record.name,
+              record.key,
+            ),
+          })),
+      ),
+    [],
+  );
+  const last = useRef(changes);
+  useEffect(() => {
+    if (last.current !== changes) {
+      last.current = changes;
+      if (changes !== "[]") onDirty();
+    }
+  }, [changes, onDirty]);
+  return null;
+}
+
 const GutenbergSession = forwardRef<
   GutenbergEditorHandle,
   GutenbergEditorProps
@@ -672,7 +968,68 @@ const GutenbergSession = forwardRef<
   const [patterns, setPatterns] = useState<
     { name: string; title: string; content: string; categories: string[] }[]
   >([]);
+  const entityHistory = useSelect(
+    (select) => ({
+      undo: select(coreDataStore).hasUndo(),
+      redo: select(coreDataStore).hasRedo(),
+      dirty:
+        select(coreDataStore).__experimentalGetDirtyEntityRecords().length > 0,
+    }),
+    [],
+  );
   const [historyVersion, setHistoryVersion] = useState(0);
+  const [previewContext, setPreviewContext] = useState<Record<string, unknown>>(
+    {},
+  );
+  const [reusable, setReusable] = useState<any[]>([]);
+  const [patternsOpen, setPatternsOpen] = useState(false);
+  const [editingPattern, setEditingPattern] = useState<any>(null);
+  const patternEditorRef = useRef<GutenbergEditorHandle>(null);
+  const [patternHTML, setPatternHTML] = useState("");
+  const [patternTitle, setPatternTitle] = useState("");
+  const [patternBusy, setPatternBusy] = useState(false);
+  const reloadReusable = useCallback(async () => {
+    try {
+      const records = await apiFetch<any[]>({
+        path: "/wp/v2/blocks?per_page=100&context=edit",
+      });
+      setReusable(records);
+    } catch {
+      /* Authors without entity-edit capabilities keep ordinary content editing. */
+    }
+  }, []);
+  useEffect(() => {
+    void reloadReusable();
+  }, [reloadReusable]);
+  useEffect(() => {
+    let active = true;
+    if (props.postId) {
+      setPreviewContext({
+        postId: props.postId,
+        postType: props.postType || "post",
+        // Post metadata stays a preview here; the surrounding document form
+        // owns editable title/excerpt fields and their optimistic version.
+        queryId: 0,
+      });
+      return;
+    }
+    if (props.context !== "site") return;
+    apiFetch<any[]>({
+      path: "/wp/v2/posts?per_page=1&status=publish&context=view&has_password=false",
+    })
+      .then((posts) => {
+        if (active && posts[0])
+          setPreviewContext({
+            postId: posts[0].id,
+            postType: posts[0].type,
+            queryId: 0,
+          });
+      })
+      .catch(() => {});
+    return () => {
+      active = false;
+    };
+  }, [props.postId, props.postType, props.context]);
   const blocksRef = useRef(blocks);
   const containerRef = useRef<HTMLDivElement>(null);
   const onChangeRef = useRef(props.onChange);
@@ -728,9 +1085,38 @@ const GutenbergSession = forwardRef<
 
   const travel = useCallback(
     (direction: -1 | 1) => {
+      const active = containerRef.current?.querySelector<HTMLIFrameElement>(
+        'iframe[name="editor-canvas"]',
+      )?.contentDocument?.activeElement;
+      const name = active?.closest("[data-type]")?.getAttribute("data-type");
+      const entities = select(coreDataStore),
+        canTravel = direction === -1 ? entities.hasUndo() : entities.hasRedo();
+      const inEntity = [
+        "core/site-title",
+        "core/site-tagline",
+        "core/site-logo",
+        "core/navigation",
+        "core/navigation-link",
+        "core/navigation-submenu",
+        "core/template-part",
+      ].includes(name || "");
+      if (inEntity && canTravel) {
+        if (direction === -1) dispatch(coreDataStore).undo();
+        else dispatch(coreDataStore).redo();
+        return;
+      }
       const state = history.current;
       const nextIndex = state.index + direction;
-      if (nextIndex < 0 || nextIndex >= state.items.length) return;
+      if (nextIndex < 0 || nextIndex >= state.items.length) {
+        if (
+          canTravel &&
+          entities.__experimentalGetDirtyEntityRecords().length
+        ) {
+          if (direction === -1) dispatch(coreDataStore).undo();
+          else dispatch(coreDataStore).redo();
+        }
+        return;
+      }
       state.index = nextIndex;
       state.lastInput = 0;
       emit(state.items[nextIndex], "history");
@@ -780,12 +1166,69 @@ const GutenbergSession = forwardRef<
       getHTML: () => serialize(blocksRef.current),
       insertBlocks: (next) =>
         emit([...blocksRef.current, ...restoreBlocks(next)], "change"),
+      flushEntities: async () => {
+        const records =
+          select(coreDataStore).__experimentalGetDirtyEntityRecords();
+        for (const record of records) {
+          if (
+            (record.kind === "root" && record.name === "site") ||
+            (record.kind === "postType" &&
+              ["wp_block", "wp_navigation", "wp_template_part"].includes(
+                record.name,
+              ))
+          ) {
+            try {
+              await dispatch(coreDataStore).saveEditedEntityRecord(
+                record.kind,
+                record.name,
+                record.key,
+                { throwOnError: true },
+              );
+            } catch (reason) {
+              throw reason instanceof Error
+                ? reason
+                : new Error(
+                    reason && typeof reason === "object" && "message" in reason
+                      ? String(reason.message)
+                      : "This change could not be saved. Please try again.",
+                  );
+            }
+          }
+        }
+      },
     }),
     [travel, emit],
   );
 
   useEffect(() => {
     let active = true;
+    api<{
+      settings: { timezone: string; dateFormat: string; timeFormat: string };
+    }>("/public/site")
+      .then(({ settings }) => {
+        if (!active) return;
+        const current = getDateSettings();
+        const fixed = /^([+-])(\d{2}):(\d{2})$/.exec(settings.timezone);
+        const offset = fixed
+          ? (fixed[1] === "-" ? -1 : 1) *
+            (Number(fixed[2]) + Number(fixed[3]) / 60)
+          : current.timezone.offset;
+        setDateSettings({
+          ...current,
+          timezone: {
+            ...current.timezone,
+            string: fixed ? "" : settings.timezone,
+            offset,
+            offsetFormatted: String(offset),
+          },
+          formats: {
+            ...current.formats,
+            date: settings.dateFormat,
+            time: settings.timeFormat,
+          },
+        });
+      })
+      .catch(() => {});
     api<{
       patterns: {
         id: number;
@@ -895,9 +1338,11 @@ const GutenbergSession = forwardRef<
         props.context === "site"
           ? [
               ...WORLDAct_CONTENT_BLOCKS,
+              ...WORLDAct_DYNAMIC_BLOCKS,
+              ...WORLDAct_SITE_BLOCKS,
               ...siteBindings.map((binding) => `worldact/${binding.name}`),
             ]
-          : WORLDAct_CONTENT_BLOCKS,
+          : [...WORLDAct_CONTENT_BLOCKS, ...WORLDAct_DYNAMIC_BLOCKS],
       alignWide: true,
       supportsLayout: true,
       hasFixedToolbar: true,
@@ -945,7 +1390,35 @@ const GutenbergSession = forwardRef<
         layout: { contentSize: "680px", wideSize: "1120px" },
       },
       __experimentalBlockPatterns: patterns,
-      __experimentalReusableBlocks: [],
+      __experimentalReusableBlocks: reusable,
+      __experimentalBlockBindingsSupportedAttributes: {
+        "core/post-date": ["datetime"],
+        "core/navigation-link": ["url"],
+        "core/navigation-submenu": ["url"],
+      },
+      onNavigateToEntityRecord: ({
+        postId,
+        postType,
+      }: {
+        postId: string | number;
+        postType: string;
+      }) => {
+        if (!["wp_block", "wp_template_part"].includes(postType)) return;
+        const base =
+          postType === "wp_template_part" ? "template-parts" : "blocks";
+        apiFetch<any>({
+          path: `/wp/v2/${base}/${encodeURIComponent(postId)}?context=edit`,
+        })
+          .then((record) => {
+            setEditingPattern({ ...record, _entityType: postType });
+            setPatternHTML(record.content.raw);
+            setPatternTitle(record.title.raw);
+            setPatternsOpen(true);
+          })
+          .catch((reason) =>
+            reportError(reason.message || "This pattern could not be opened."),
+          );
+      },
       __experimentalFetchLinkSuggestions: async (search: string) => {
         const { posts } = await api<{
           posts: { id: number; title: string; slug: string; type: string }[];
@@ -961,7 +1434,7 @@ const GutenbergSession = forwardRef<
       mediaUpload,
       styles: canvasStyles,
     }),
-    [mediaUpload, patterns, props.context],
+    [mediaUpload, patterns, reusable, props.context, reportError],
   );
 
   const keyDown = (event: KeyboardEvent<HTMLDivElement>) => {
@@ -991,91 +1464,310 @@ const GutenbergSession = forwardRef<
           onChange={(next) => emit(next, "change")}
           settings={settings}
         >
-          <div
-            ref={containerRef}
-            className={`worldact-gutenberg ${props.inspectorOpen ? "has-block-inspector" : ""}`}
-            onKeyDownCapture={keyDown}
-          >
-            {error && (
-              <Notice
-                status="error"
-                isDismissible
-                onRemove={() => setError("")}
-              >
-                {error}
-              </Notice>
-            )}
+          <EntityEditsObserver
+            onDirty={() =>
+              onChangeRef.current(
+                toStored(blocksRef.current),
+                serialize(blocksRef.current),
+              )
+            }
+          />
+          <BlockContextProvider value={previewContext}>
             <div
-              className="worldact-gutenberg-toolbar"
-              aria-label="Block editing tools"
+              ref={containerRef}
+              className={`worldact-gutenberg ${props.inspectorOpen ? "has-block-inspector" : ""}`}
+              onKeyDownCapture={keyDown}
             >
-              <Inserter
-                position="bottom right"
-                toggleProps={{ label: "Insert a block" }}
-              />
-              <Button
-                label="Undo"
-                icon={<UndoIcon />}
-                disabled={history.current.index < 1}
-                onClick={() => travel(-1)}
-              />
-              <Button
-                label="Redo"
-                icon={<UndoIcon redo />}
-                disabled={
-                  history.current.index >= history.current.items.length - 1
-                }
-                onClick={() => travel(1)}
-              />
-              <span className="worldact-toolbar-divider" />
-              <div className="worldact-selected-block-toolbar">
-                <BlockToolbar hideDragHandle />
-              </div>
-            </div>
-            <div className="worldact-gutenberg-workspace">
-              {(props.inserterOpen || props.listViewOpen) && (
-                <aside
-                  className="worldact-gutenberg-outline"
-                  aria-label={
-                    props.listViewOpen ? "List view" : "Block inserter"
-                  }
+              {error && (
+                <Notice
+                  status="error"
+                  isDismissible
+                  onRemove={() => setError("")}
                 >
-                  {props.listViewOpen ? (
-                    <>
-                      <h2>List View</h2>
-                      <ListView showBlockMovers isExpanded />
-                    </>
-                  ) : (
-                    <InserterLibrary
-                      showInserterHelpPanel={false}
-                      shouldFocusBlock
-                    />
-                  )}
-                </aside>
+                  {error}
+                </Notice>
               )}
-              <div className="worldact-gutenberg-canvas">
-                <BlockCanvas
-                  height="min(72vh, 900px)"
-                  styles={
-                    props.canvasCSS
-                      ? [...canvasStyles, { css: props.canvasCSS }]
-                      : canvasStyles
-                  }
+              <div
+                className="worldact-gutenberg-toolbar"
+                aria-label="Block editing tools"
+              >
+                <Inserter
+                  position="bottom right"
+                  toggleProps={{ label: "Insert a block" }}
                 />
+                <Button
+                  label="Undo"
+                  icon={<UndoIcon />}
+                  disabled={
+                    history.current.index < 1 &&
+                    !(entityHistory.dirty && entityHistory.undo)
+                  }
+                  onClick={() => travel(-1)}
+                />
+                <Button
+                  label="Redo"
+                  icon={<UndoIcon redo />}
+                  disabled={
+                    history.current.index >= history.current.items.length - 1 &&
+                    !(entityHistory.dirty && entityHistory.redo)
+                  }
+                  onClick={() => travel(1)}
+                />
+                {!props.hidePatternManager && (
+                  <Button
+                    onClick={() => {
+                      setPatternsOpen(true);
+                      void reloadReusable();
+                    }}
+                  >
+                    Patterns
+                  </Button>
+                )}
+                <span className="worldact-toolbar-divider" />
+                <div className="worldact-selected-block-toolbar">
+                  <BlockToolbar hideDragHandle />
+                </div>
               </div>
-              {props.inspectorOpen && (
-                <aside
-                  className="worldact-gutenberg-inspector"
-                  aria-label="Block settings"
+              <div className="worldact-gutenberg-workspace">
+                {(props.inserterOpen || props.listViewOpen) && (
+                  <aside
+                    className="worldact-gutenberg-outline"
+                    aria-label={
+                      props.listViewOpen ? "List view" : "Block inserter"
+                    }
+                  >
+                    {props.listViewOpen ? (
+                      <>
+                        <h2>List View</h2>
+                        <ListView showBlockMovers isExpanded />
+                      </>
+                    ) : (
+                      <InserterLibrary
+                        showInserterHelpPanel={false}
+                        shouldFocusBlock
+                      />
+                    )}
+                  </aside>
+                )}
+                <div className="worldact-gutenberg-canvas">
+                  <BlockCanvas
+                    height="min(72vh, 900px)"
+                    styles={
+                      props.canvasCSS
+                        ? [...canvasStyles, { css: props.canvasCSS }]
+                        : canvasStyles
+                    }
+                  />
+                </div>
+                {props.inspectorOpen && (
+                  <aside
+                    className="worldact-gutenberg-inspector"
+                    aria-label="Block settings"
+                  >
+                    <BlockInspector />
+                  </aside>
+                )}
+              </div>
+              <div className="worldact-gutenberg-breadcrumb">
+                <BlockBreadcrumb />
+              </div>
+            </div>
+          </BlockContextProvider>
+          {patternsOpen && (
+            <Modal
+              title={
+                editingPattern
+                  ? editingPattern._entityType === "wp_template_part"
+                    ? "Edit template part"
+                    : "Edit synced pattern"
+                  : "Synced patterns"
+              }
+              onRequestClose={() => {
+                setPatternsOpen(false);
+                setEditingPattern(null);
+              }}
+              size="large"
+              className="worldact-synced-patterns"
+            >
+              {error && (
+                <Notice
+                  status="error"
+                  isDismissible
+                  onRemove={() => setError("")}
                 >
-                  <BlockInspector />
-                </aside>
+                  {error}
+                </Notice>
               )}
-            </div>
-            <div className="worldact-gutenberg-breadcrumb">
-              <BlockBreadcrumb />
-            </div>
-          </div>
+              {editingPattern ? (
+                <>
+                  <label>
+                    {editingPattern._entityType === "wp_template_part"
+                      ? "Template part name"
+                      : "Pattern name"}
+                    <input
+                      value={patternTitle}
+                      onChange={(event) => setPatternTitle(event.target.value)}
+                      maxLength={200}
+                    />
+                  </label>
+                  <GutenbergEditor
+                    ref={patternEditorRef}
+                    initialBlocks={null}
+                    initialHTML={editingPattern.content.raw}
+                    resetKey={`pattern-${editingPattern.id}-${editingPattern.version}`}
+                    media={allMedia}
+                    onChange={(_next, html) => setPatternHTML(html)}
+                    hidePatternManager
+                    canvasCSS={props.canvasCSS}
+                    context={props.context}
+                    onError={reportError}
+                  />
+                  <Button
+                    variant="primary"
+                    disabled={patternBusy || !patternTitle.trim()}
+                    onClick={async () => {
+                      setPatternBusy(true);
+                      try {
+                        await patternEditorRef.current?.flushEntities();
+                        const record = await apiFetch<any>({
+                          path: `/wp/v2/${editingPattern._entityType === "wp_template_part" ? "template-parts" : "blocks"}/${encodeURIComponent(editingPattern.id)}`,
+                          method: "POST",
+                          data: {
+                            title: patternTitle,
+                            content: patternHTML,
+                            version: editingPattern.version,
+                          },
+                        });
+                        dispatch(coreDataStore).receiveEntityRecords(
+                          "postType",
+                          editingPattern._entityType || "wp_block",
+                          record,
+                          undefined,
+                          false,
+                        );
+                        setEditingPattern(null);
+                        await reloadReusable();
+                      } catch (reason) {
+                        reportError((reason as Error).message);
+                      } finally {
+                        setPatternBusy(false);
+                      }
+                    }}
+                  >
+                    {editingPattern._entityType === "wp_template_part"
+                      ? "Save template part"
+                      : "Save pattern"}
+                  </Button>
+                  <Button onClick={() => setEditingPattern(null)}>
+                    Back to patterns
+                  </Button>
+                </>
+              ) : (
+                <>
+                  <p>
+                    Synced patterns update everywhere they are used. Create one
+                    from the current document or insert an existing pattern.
+                  </p>
+                  <Button
+                    variant="primary"
+                    onClick={async () => {
+                      const title = window.prompt("Pattern name");
+                      if (!title?.trim()) return;
+                      setPatternBusy(true);
+                      try {
+                        const record = await apiFetch<any>({
+                          path: "/wp/v2/blocks",
+                          method: "POST",
+                          data: {
+                            title: title.trim(),
+                            content: serialize(blocksRef.current),
+                            status: "publish",
+                          },
+                        });
+                        dispatch(coreDataStore).receiveEntityRecords(
+                          "postType",
+                          "wp_block",
+                          record,
+                          undefined,
+                          false,
+                        );
+                        await reloadReusable();
+                      } catch (reason) {
+                        reportError((reason as Error).message);
+                      } finally {
+                        setPatternBusy(false);
+                      }
+                    }}
+                    disabled={patternBusy}
+                  >
+                    Create from this document
+                  </Button>
+                  <ul className="worldact-pattern-entities">
+                    {reusable.map((record) => (
+                      <li key={record.id}>
+                        <strong>
+                          {record.title.raw || record.title.rendered}
+                        </strong>
+                        <span>
+                          <Button
+                            onClick={() => {
+                              emit(
+                                [
+                                  ...blocksRef.current,
+                                  createBlock("core/block", { ref: record.id }),
+                                ],
+                                "change",
+                              );
+                              setPatternsOpen(false);
+                            }}
+                          >
+                            Insert
+                          </Button>
+                          <Button
+                            onClick={() => {
+                              setEditingPattern(record);
+                              setPatternTitle(record.title.raw);
+                              setPatternHTML(record.content.raw);
+                            }}
+                          >
+                            Edit
+                          </Button>
+                          <Button
+                            isDestructive
+                            onClick={async () => {
+                              if (
+                                !window.confirm(
+                                  "Delete this synced pattern? References to it will no longer display content.",
+                                )
+                              )
+                                return;
+                              try {
+                                await dispatch(
+                                  coreDataStore,
+                                ).deleteEntityRecord(
+                                  "postType",
+                                  "wp_block",
+                                  record.id,
+                                  { force: true },
+                                );
+                                await reloadReusable();
+                              } catch (reason) {
+                                reportError((reason as Error).message);
+                              }
+                            }}
+                          >
+                            Delete
+                          </Button>
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
+                  {!reusable.length && <p>No synced patterns yet.</p>}
+                </>
+              )}
+            </Modal>
+          )}
+          <Popover.Slot />
         </BlockEditorProvider>
       </SlotFillProvider>
     </MediaContext.Provider>

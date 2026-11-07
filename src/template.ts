@@ -109,7 +109,7 @@ function safeURL(value: string, links: boolean) {
   return true;
 }
 const allowedTags = new Set(
-  "header footer main article section nav aside p br h1 h2 h3 h4 h5 h6 ul ol li blockquote figure figcaption img a strong em b i u s del ins code pre hr div span table caption thead tbody tfoot tr th td details summary video audio source mark sub sup kbd cite abbr".split(
+  "header footer main article section nav aside p br h1 h2 h3 h4 h5 h6 ul ol li blockquote figure figcaption img a strong em b i u s del ins code pre hr div span table caption thead tbody tfoot tr th td details summary time video audio source mark sub sup kbd cite abbr".split(
     " ",
   ),
 );
@@ -130,6 +130,7 @@ const tagAttributes: Record<string, Set<string>> = Object.fromEntries(
     audio: "src controls autoplay muted loop preload",
     source: "src type media srcset sizes",
     details: "open",
+    time: "datetime",
     ol: "start reversed type",
     li: "value",
     td: "colspan rowspan headers",

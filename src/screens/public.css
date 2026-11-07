@@ -3,14 +3,16 @@
   font-style: normal;
   font-weight: 200 800;
   font-display: swap;
-  src: url("/vendor/wordpress/wp-content/themes/twentytwentyfive/assets/fonts/manrope/Manrope-VariableFont_wght.woff2") format("woff2");
+  src: url("/vendor/wordpress/wp-content/themes/twentytwentyfive/assets/fonts/manrope/Manrope-VariableFont_wght.woff2")
+    format("woff2");
 }
 @font-face {
   font-family: "Inter";
   font-style: oblique 0deg 10deg;
   font-weight: 100 900;
   font-display: swap;
-  src: url("/vendor/wordpress/wp-content/themes/twentytwentyfour/assets/fonts/inter/Inter-VariableFont_slnt,wght.woff2") format("woff2");
+  src: url("/vendor/wordpress/wp-content/themes/twentytwentyfour/assets/fonts/inter/Inter-VariableFont_slnt,wght.woff2")
+    format("woff2");
 }
 .public-site {
   background: var(--worldact-background, #fff);
@@ -297,5 +299,39 @@
 @media (max-width: 600px) {
   .public-site .public-comment-children {
     margin-left: 18px;
+  }
+}
+
+/* Dynamic Navigation uses native disclosure controls on narrow screens. */
+.wp-block-navigation .worldact-navigation-desktop {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.2em;
+  list-style: none;
+  padding: 0;
+}
+.worldact-navigation-toggle {
+  display: none;
+  max-width: 100%;
+}
+.worldact-navigation-toggle summary {
+  cursor: pointer;
+  padding: 0.5em 0;
+}
+.worldact-navigation-toggle > ul {
+  flex-direction: column;
+  gap: 0.5em;
+  padding: 0.5em 0;
+  list-style: none;
+}
+.worldact-overlay-always .worldact-navigation-toggle {
+  display: block;
+}
+@media (max-width: 600px) {
+  .worldact-overlay-mobile .worldact-navigation-desktop {
+    display: none;
+  }
+  .worldact-overlay-mobile .worldact-navigation-toggle {
+    display: block;
   }
 }

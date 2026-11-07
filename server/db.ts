@@ -35,7 +35,7 @@ export interface User {
   createdAt: Date;
 }
 export const userFields = `id, username, email, display_name AS "displayName", role, created_at AS "createdAt"`;
-export const postFields = `p.id, p.type, p.title, p.slug, p.content, p.excerpt, p.status, p.format,
+export const postFields = `p.id, p.type, p.title, p.slug, p.content,p.raw_content AS "rawContent", p.excerpt, p.status, p.format,
   p.author_id AS "authorId", u.display_name AS "authorName", p.created_at AS "createdAt",
   p.updated_at AS "updatedAt", p.published_at AS "publishedAt", p.scheduled_at AS "scheduledAt",
   p.blocks, p.version, p.parent_id AS "parentId", p.menu_order AS "menuOrder",
@@ -46,13 +46,17 @@ export const postFields = `p.id, p.type, p.title, p.slug, p.content, p.excerpt, 
 export const mediaFields = `id, title, '/uploads/' || filename AS url, mime_type AS "mimeType", filename,
   alt, caption, size, created_at AS "createdAt"`;
 export const commentFields = `c.id, c.author_name AS "authorName", c.author_email AS "authorEmail",
-  c.content, c.status, c.parent_id AS "parentId", c.post_id AS "postId", p.title AS "postTitle", c.created_at AS "createdAt"`;
+  c.author_url AS "authorUrl",c.user_id AS "userId",c.content, c.status, c.version,c.updated_at AS "updatedAt",c.parent_id AS "parentId", c.post_id AS "postId", p.title AS "postTitle", c.created_at AS "createdAt"`;
 
 export const defaultSettings = {
   siteTitle: "WorldAct",
   tagline: "Just another WorldAct site",
   siteUrl: process.env.APP_ORIGIN || "http://127.0.0.1:5173",
   adminEmail: process.env.ADMIN_EMAIL || "admin@worldact.local",
+  usersCanRegister: false,
+  defaultRole: "subscriber" as Role,
+  siteLogoId: 0,
+  siteIconId: 0,
   timezone: "America/Los_Angeles",
   dateFormat: "F j, Y",
   timeFormat: "g:i a",

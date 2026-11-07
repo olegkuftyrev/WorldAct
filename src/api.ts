@@ -137,6 +137,10 @@ export type Comment = {
   id: number;
   authorName: string;
   authorEmail: string;
+  authorUrl?: string;
+  userId?: number | null;
+  version?: number;
+  updatedAt?: string;
   content: string;
   rawContent?: string;
   permalink?: string;
@@ -156,6 +160,11 @@ export type Settings = {
   tagline: string;
   siteUrl: string;
   adminEmail: string;
+  usersCanRegister: boolean;
+  defaultRole: Role;
+  siteLogoId?: number;
+  siteIconId?: number;
+  siteIconUrl?: string | null;
   timezone: string;
   dateFormat: string;
   timeFormat: string;

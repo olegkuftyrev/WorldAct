@@ -21,6 +21,7 @@ import {
 } from "./utils.js";
 import { enhancePublicPost, classifySpam } from "./design.js";
 import { withPermalink } from "./permalinks.js";
+import { renderPublicContent, type RenderOptions } from "./block-renderer.js";
 
 const router = Router();
 const contentRoles = requireRole(
@@ -1007,7 +1008,7 @@ async function hasPostAccess(
   );
   return !!access.rowCount;
 }
-async function publicPost(post: any, locked = false) {
+async function publicPost(post: any, locked = false, options: RenderOptions = {}) {
   const {
     blocks: _blocks,
     rawContent: _rawContent,
@@ -1017,7 +1018,7 @@ async function publicPost(post: any, locked = false) {
   const result = {
     ...safe,
     locked,
-    content: locked ? "" : safe.content,
+    content: locked ? "" : await renderPublicContent(post, options),
     excerpt: locked ? "" : safe.excerpt,
   };
   const linked = await withPermalink(result);
@@ -1027,7 +1028,7 @@ async function publicComments(postId: number, page = 1) {
   const settings = await getSettings();
   return (
     await pool.query(
-      `SELECT c.id,c.author_name AS "authorName",c.content,c.status,c.parent_id AS "parentId",c.post_id AS "postId",p.title AS "postTitle",c.created_at AS "createdAt" FROM comments c JOIN posts p ON p.id=c.post_id WHERE c.post_id=$1 AND c.status='approved' ORDER BY c.created_at ${settings.commentOrder === "desc" ? "DESC" : "ASC"},c.id ${settings.commentOrder === "desc" ? "DESC" : "ASC"} LIMIT $2 OFFSET $3`,
+      `SELECT c.id,c.author_name AS "authorName",c.author_url AS "authorUrl",c.user_id AS "userId",c.content,c.status,c.parent_id AS "parentId",c.post_id AS "postId",p.title AS "postTitle",c.created_at AS "createdAt" FROM comments c JOIN posts p ON p.id=c.post_id WHERE c.post_id=$1 AND c.status='approved' ORDER BY c.created_at ${settings.commentOrder === "desc" ? "DESC" : "ASC"},c.id ${settings.commentOrder === "desc" ? "DESC" : "ASC"} LIMIT $2 OFFSET $3`,
       [postId, settings.commentsPerPage, (page - 1) * settings.commentsPerPage],
     )
   ).rows;
@@ -1070,7 +1071,7 @@ router.get(
     const post = await authorizedPost(req);
     res.setHeader("X-Robots-Tag", "noindex, nofollow");
     res.json({
-      post: await publicPost(post),
+      post: await publicPost(post, false, { query: req.query }),
       ...(await commentResponse(post.id, req)),
     });
   },
@@ -1082,11 +1083,13 @@ router.get("/public/site", async (req, res) => {
       search: z.string().trim().max(200).optional(),
       category: z.string().min(1).max(220).optional(),
       tag: z.string().min(1).max(220).optional(),
+      author: z.coerce.number().int().positive().max(2147483647).optional(),
     })
     .parse(req.query);
   const settings = await getSettings(),
     args: unknown[] = [];
   let where = "p.type='post' AND p.status='publish'";
+  if (filter.author) { args.push(filter.author); where += ` AND p.author_id=$${args.length}`; }
   if (filter.search) {
     args.push(`%${filter.search}%`);
     where += ` AND (p.title ILIKE $${args.length} OR (p.password_hash IS NULL AND (p.content ILIKE $${args.length} OR p.excerpt ILIKE $${args.length})))`;
@@ -1115,9 +1118,19 @@ router.get("/public/site", async (req, res) => {
     return publicPost(
       safe,
       !(await hasPostAccess(req, post.id, _passwordHash)),
+      { query: req.query },
     );
   };
   const { adminEmail: _adminEmail, ...safeSettings } = settings;
+  const author = filter.author ? (await pool.query("SELECT display_name AS name FROM users WHERE id=$1 AND EXISTS(SELECT 1 FROM posts WHERE author_id=$1 AND type='post' AND status='publish')", [filter.author])).rows[0] : null;
+  const icon = settings.siteIconId
+    ? (
+        await pool.query(
+          "SELECT filename FROM media WHERE id=$1 AND mime_type LIKE 'image/%'",
+          [settings.siteIconId],
+        )
+      ).rows[0]
+    : null;
   const totalPosts = count.rows[0].total;
   const safePages = await Promise.all(pages.rows.map(sanitize));
   const frontPage =
@@ -1128,7 +1141,11 @@ router.get("/public/site", async (req, res) => {
     safePages.find((page) => page.id === settings.postsPageId) ?? null;
   await setRobots(res);
   res.json({
-    settings: safeSettings,
+    settings: {
+      ...safeSettings,
+      siteIconUrl: icon ? `/uploads/${icon.filename}` : null,
+    },
+    archive: author ? { type: "author", name: author.name, authorId: filter.author } : null,
     posts: await Promise.all(posts.rows.map(sanitize)),
     pages: safePages,
     frontPage,
@@ -1164,7 +1181,7 @@ router.get("/public/posts/:slug", async (req, res) => {
   const locked = !(await hasPostAccess(req, post.id, _passwordHash));
   await setRobots(res);
   res.json({
-    post: await publicPost(post, locked),
+    post: await publicPost(post, locked, { query: req.query }),
     ...(await commentResponse(post.id, req, locked)),
   });
 });
@@ -1216,7 +1233,7 @@ router.post("/public/posts/:slug/unlock", async (req, res) => {
     });
   }
   res.json({
-    post: await publicPost(post),
+    post: await publicPost(post, false, { query: req.query }),
     ...(await commentResponse(post.id, req)),
   });
 });
@@ -1241,6 +1258,18 @@ router.post("/public/comments", async (req, res) => {
       parentId: idSchema.nullable().optional(),
       authorName: z.string().trim().max(160).optional(),
       authorEmail: z.union([z.email().max(254), z.literal("")]).optional(),
+      authorUrl: z
+        .union([
+          z.literal(""),
+          z
+            .url()
+            .max(2000)
+            .refine(
+              (value) => /^https?:\/\//i.test(value),
+              "Use an HTTP or HTTPS website URL.",
+            ),
+        ])
+        .optional(),
       content: z.string().trim().min(1).max(20_000),
     })
     .strict()
@@ -1308,7 +1337,7 @@ router.post("/public/comments", async (req, res) => {
       ? "pending"
       : "approved";
   const result = await pool.query(
-    `INSERT INTO comments(post_id,author_name,author_email,content,status,parent_id) SELECT id,$2,$3,$4,$5,$6 FROM posts WHERE id=$1 AND status='publish' AND comment_status='open' RETURNING id`,
+    `INSERT INTO comments(post_id,author_name,author_email,content,status,parent_id,author_url,user_id) SELECT id,$2,$3,$4,$5,$6,$7,$8 FROM posts WHERE id=$1 AND status='publish' AND comment_status='open' RETURNING id`,
     [
       post.id,
       authorName,
@@ -1316,6 +1345,8 @@ router.post("/public/comments", async (req, res) => {
       content,
       status,
       input.parentId ?? null,
+      input.authorUrl ?? "",
+      user?.id ?? null,
     ],
   );
   if (!result.rowCount)

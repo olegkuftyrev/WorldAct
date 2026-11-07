@@ -428,6 +428,8 @@ const settingKeys: Record<string, string[]> = {
     "tagline",
     "siteUrl",
     "adminEmail",
+    "usersCanRegister",
+    "defaultRole",
     "timezone",
     "dateFormat",
     "timeFormat",
@@ -608,6 +610,22 @@ export function SettingsSuite() {
                       "email",
                       true,
                     )}
+                  </Field>
+                  <Field label="Membership">
+                    {check("usersCanRegister", "Anyone can register")}
+                  </Field>
+                  <Field label="New User Default Role">
+                    {select("defaultRole", "New User Default Role", [
+                      ["subscriber", "Subscriber"],
+                      ["contributor", "Contributor"],
+                      ["author", "Author"],
+                      ["editor", "Editor"],
+                      ["administrator", "Administrator"],
+                    ])}
+                    <p className="description">
+                      This role is assigned to new accounts registered through
+                      the public registration form.
+                    </p>
                   </Field>
                   <Field
                     label="Timezone"
@@ -1703,7 +1721,7 @@ export function SiteEditor() {
   }, [dirty]);
   function choose(document: SiteDocument) {
     if (dirty && !confirm("Discard unsaved template changes?")) return;
-    setSelected(document);
+    setSelected({ ...document, content: document.rawContent || document.content });
     setResetKey((current) => current + 1);
     setDirty(false);
     action.setNotice("");
@@ -1711,6 +1729,7 @@ export function SiteEditor() {
   async function save() {
     if (!selected) return;
     await action.run(async () => {
+      await editor.current?.flushEntities();
       const { slug, title, type, version } = selected;
       const result = await api<{ document: SiteDocument }>(
         `/site-editor/documents/${selected.id}`,
@@ -1727,7 +1746,7 @@ export function SiteEditor() {
           ...(version ? { version } : {}),
         }),
       );
-      setSelected(result.document);
+      setSelected({ ...result.document, content: result.document.rawContent || result.document.content });
       setDirty(false);
       await resource.reload();
     }, "Design saved. Your public site now uses these changes.");
@@ -2232,7 +2251,8 @@ export function ToolsSuite() {
         ["health", "Site Health"],
         ["export", "Export"],
         ["import", "Import"],
-        ["privacy", "Personal Data"],
+        ["privacy-export", "Export Personal Data"],
+        ["privacy-erase", "Erase Personal Data"],
         ["mail", "Mail"],
       ]
     : [["privacy", "Personal Data"]];
@@ -2400,7 +2420,10 @@ export function ToolsSuite() {
                 onClick={() =>
                   void action
                     .run(async () => {
-                      const result = await api<{ imported: number }>(
+                      const result = await api<{
+                        imported: number;
+                        warnings?: string[];
+                      }>(
                         "/tools/import",
                         json("POST", importData),
                       );
@@ -2410,7 +2433,12 @@ export function ToolsSuite() {
                     })
                     .then((result) => {
                       if (result)
-                        action.setNotice(`${result.imported} items imported.`);
+                        action.setNotice(
+                          [
+                            `${result.imported} items imported.`,
+                            ...new Set(result.warnings || []),
+                          ].join(" "),
+                        );
                     })
                 }
               >

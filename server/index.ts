@@ -7,6 +7,7 @@ import express, {
 } from "express";
 import multer from "multer";
 import { z } from "zod";
+import qs from "qs";
 import { access } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
@@ -18,7 +19,6 @@ import {
   postFields,
   mediaFields,
   commentFields,
-  getComment,
   type User,
 } from "./db.js";
 import {
@@ -34,10 +34,28 @@ import {
 import coreRouter, { startScheduler } from "./core.js";
 import platformRouter from "./platform.js";
 import compatRouter from "./compat.js";
+import commentsRouter from "./comments.js";
+import accountsRouter from "./accounts.js";
+import legacyRouter from "./legacy.js";
+import blocksRouter from "./blocks.js";
 import { plainText, HttpError, parseId, needUser } from "./utils.js";
 
 export const app = express();
 app.disable("x-powered-by");
+app.set("query parser", (query: string) => {
+  try {
+    return qs.parse(query, {
+      arrayLimit: 1000,
+      parameterLimit: 2000,
+      depth: 5,
+      strictDepth: true,
+      throwOnLimitExceeded: true,
+      allowPrototypes: false,
+    });
+  } catch {
+    throw new HttpError(400, "The query exceeds the supported size or nesting limit.");
+  }
+});
 app.use((_req, res, next) => {
   res.setHeader("X-Content-Type-Options", "nosniff");
   res.setHeader("Referrer-Policy", "strict-origin-when-cross-origin");
@@ -71,6 +89,7 @@ app.use("/api", (req, res, next) => {
   next();
 });
 app.use(express.json({ limit: "10mb" }));
+app.use(blocksRouter);
 app.use(compatRouter);
 
 app.get("/api/health", async (_req, res) => {
@@ -82,6 +101,8 @@ app.get("/api/health", async (_req, res) => {
   }
 });
 app.use("/api", attachUser);
+app.use("/api", accountsRouter);
+app.use("/api", commentsRouter);
 app.use("/api", platformRouter);
 app.use("/api", coreRouter);
 
@@ -92,7 +113,6 @@ const dashboardRoles = requireRole(
   "author",
   "contributor",
 );
-const moderationRoles = requireRole("administrator", "editor");
 const administrator = requireRole("administrator");
 function assertOwner(user: User, authorId: number) {
   if (["author", "contributor"].includes(user.role) && user.id !== authorId)
@@ -221,34 +241,6 @@ app.put("/api/media/:id", contentRoles, async (req: AuthRequest, res) => {
   );
   res.json({ media: updated.rows[0] });
 });
-app.get("/api/comments", moderationRoles, async (_req, res) => {
-  const result = await pool.query(
-    `SELECT ${commentFields} FROM comments c JOIN posts p ON p.id = c.post_id ORDER BY c.created_at DESC, c.id DESC`,
-  );
-  res.json({ comments: result.rows });
-});
-app.put("/api/comments/:id", moderationRoles, async (req, res) => {
-  const id = parseId(req.params.id);
-  const input = z
-    .object({ status: z.enum(["approved", "pending", "spam", "trash"]) })
-    .strict()
-    .parse(req.body);
-  const result = await pool.query(
-    "UPDATE comments SET status = $1 WHERE id = $2 RETURNING id",
-    [input.status, id],
-  );
-  if (!result.rows[0]) throw new HttpError(404, "Comment not found.");
-  res.json({ comment: await getComment(id) });
-});
-app.delete("/api/comments/:id", moderationRoles, async (req, res) => {
-  const result = await pool.query(
-    "DELETE FROM comments WHERE id = $1 RETURNING id",
-    [parseId(req.params.id)],
-  );
-  if (!result.rows[0]) throw new HttpError(404, "Comment not found.");
-  res.json({ ok: true });
-});
-
 app.get("/api/users", administrator, async (_req, res) => {
   const result = await pool.query(
     `SELECT ${userFields} FROM users ORDER BY id`,
@@ -312,8 +304,7 @@ app.use(
       res.setHeader("Content-Security-Policy", "default-src 'none'; sandbox"),
   }),
 );
-app.get("/wp-admin", (_req, res) => res.redirect("/admin"));
-app.get("/wp-login.php", (_req, res) => res.redirect("/login"));
+app.use(legacyRouter);
 const distDir = path.resolve(
   process.env.STATIC_DIR || path.join(rootDir, "dist"),
 );

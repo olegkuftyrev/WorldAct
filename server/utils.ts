@@ -164,6 +164,7 @@ export function cleanContent(content: string) {
       "kbd",
       "cite",
       "abbr",
+      "time",
     ],
     allowedAttributes: {
       "*": ["class", "id", "style", "aria-label", "aria-hidden", "role"],
@@ -200,6 +201,7 @@ export function cleanContent(content: string) {
       th: ["colspan", "rowspan", "scope"],
       abbr: ["title"],
       blockquote: ["cite"],
+      time: ["datetime"],
     },
     allowedStyles: { "*": allowedStyles },
     allowedSchemes: ["http", "https", "mailto", "tel"],
@@ -378,7 +380,9 @@ export function cleanRawContent(content: string) {
               .replace(/>/g, "\\u003e")
               .replace(/&/g, "\\u0026")
           : "";
-        marker = `<!-- wp:${shortName}${json ? " " + json : ""}${selfClosing ? " /" : ""} -->`;
+        marker = selfClosing
+          ? `<!-- wp:${shortName}${json ? " " + json : ""} /-->`
+          : `<!-- wp:${shortName}${json ? " " + json : ""} -->`;
         if (!selfClosing) {
           stack.push(name);
           if (stack.length > 20)

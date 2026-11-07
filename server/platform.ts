@@ -5,6 +5,7 @@ import { fileTypeFromBuffer } from "file-type";
 import nodemailer from "nodemailer";
 import { z } from "zod";
 import { createHash, randomBytes } from "node:crypto";
+import type { PoolClient } from "pg";
 import { mkdir, writeFile, readFile, unlink, copyFile } from "node:fs/promises";
 import path from "node:path";
 import {
@@ -28,6 +29,7 @@ import {
   parseId,
   needUser,
   cleanBlocks,
+  slugify,
 } from "./utils.js";
 import { readDesign, pluginRegistry, themes } from "./design.js";
 import {
@@ -36,6 +38,7 @@ import {
   safeStoredFile,
   mediaBackups,
 } from "./media-files.js";
+import { remapImportedBlockReferences, type ImportedBlockEntity } from "./block-portability.js";
 
 const router = express.Router();
 const admin = requireRole("administrator");
@@ -60,7 +63,7 @@ const safeUrl = z
     "Use an HTTP(S), relative, or email URL.",
   );
 const docFields =
-  'id,slug,title,type,content,blocks,version,updated_at AS "updatedAt"';
+  'id,slug,title,type,content,raw_content AS "rawContent",blocks,version,updated_at AS "updatedAt"';
 const menuFields = 'id,name,location,items,updated_at AS "updatedAt"';
 function normalizedText(value: string) {
   const clean = plainText(value).trim();
@@ -75,6 +78,16 @@ function ownsMedia(req: AuthRequest, owner: number) {
 function parseBlocks(value: unknown) {
   return value === undefined || value === null ? null : cleanBlocks(value);
 }
+async function clearDeletedSiteImages(client: PoolClient, ids: number[]) {
+  if (!ids.length) return;
+  await client.query(
+    `UPDATE settings SET data=data
+      || CASE WHEN data->>'siteLogoId'=ANY($1::text[]) THEN '{"siteLogoId":0}'::jsonb ELSE '{}'::jsonb END
+      || CASE WHEN data->>'siteIconId'=ANY($1::text[]) THEN '{"siteIconId":0}'::jsonb ELSE '{}'::jsonb END
+      WHERE id=1 AND (data->>'siteLogoId'=ANY($1::text[]) OR data->>'siteIconId'=ANY($1::text[]))`,
+    [ids.map(String)],
+  );
+}
 
 // General, Writing, Reading, Discussion, Media, Permalinks and Privacy settings.
 const settingSchema = z
@@ -86,6 +99,16 @@ const settingSchema = z
       .max(2000)
       .refine((v) => /^https?:\/\//i.test(v)),
     adminEmail: z.email().max(254),
+    usersCanRegister: z.boolean(),
+    defaultRole: z.enum([
+      "administrator",
+      "editor",
+      "author",
+      "contributor",
+      "subscriber",
+    ]),
+    siteLogoId: z.number().int().min(0).max(2147483647),
+    siteIconId: z.number().int().min(0).max(2147483647),
     timezone: text(1, 100).refine((v) => {
       try {
         new Intl.DateTimeFormat("en", { timeZone: v });
@@ -192,6 +215,15 @@ router.put("/settings", admin, async (req, res) => {
     if (!term.rowCount)
       throw new HttpError(400, "Choose an existing category.");
   }
+  for (const key of ["siteLogoId", "siteIconId"] as const)
+    if (input[key]) {
+      const image = await pool.query(
+        "SELECT id FROM media WHERE id=$1 AND mime_type LIKE 'image/%'",
+        [input[key]],
+      );
+      if (!image.rowCount)
+        throw new HttpError(400, "Choose an existing image.");
+    }
   await pool.query("UPDATE settings SET data=data || $1::jsonb WHERE id=1", [
     JSON.stringify(input),
   ]);
@@ -340,7 +372,7 @@ router.delete("/users/:id", admin, async (req: AuthRequest, res) => {
     if (exists.rowCount !== 2) throw new HttpError(404, "User not found.");
     if (options.deleteContent === "true") {
       const media = await client.query(
-        "SELECT filename,original_filename,derivatives,sizes FROM media WHERE author_id=$1",
+        "SELECT id,filename,original_filename,derivatives,sizes FROM media WHERE author_id=$1 ORDER BY id FOR UPDATE",
         [target],
       );
       for (const item of media.rows)
@@ -353,6 +385,10 @@ router.delete("/users/:id", admin, async (req: AuthRequest, res) => {
           if (safeStoredFile(value)) files.push(value);
       await client.query("DELETE FROM posts WHERE author_id=$1", [target]);
       await client.query("DELETE FROM media WHERE author_id=$1", [target]);
+      await clearDeletedSiteImages(client, media.rows.map(item => item.id));
+      await client.query("DELETE FROM block_entities WHERE author_id=$1", [
+        target,
+      ]);
     } else {
       await client.query("UPDATE posts SET author_id=$1 WHERE author_id=$2", [
         replacement,
@@ -362,6 +398,10 @@ router.delete("/users/:id", admin, async (req: AuthRequest, res) => {
         replacement,
         target,
       ]);
+      await client.query(
+        "UPDATE block_entities SET author_id=$1 WHERE author_id=$2",
+        [replacement, target],
+      );
     }
     await client.query("DELETE FROM users WHERE id=$1", [target]);
     await client.query("COMMIT");
@@ -685,13 +725,14 @@ const documentSchema = z
 router.post("/site-editor/documents", editors, async (req, res) => {
   const input = documentSchema.parse(req.body);
   const result = await pool.query(
-    `INSERT INTO site_documents(slug,title,type,content,blocks) VALUES($1,$2,$3,$4,$5) RETURNING ${docFields}`,
+    `INSERT INTO site_documents(slug,title,type,content,blocks,raw_content) VALUES($1,$2,$3,$4,$5,$6) RETURNING ${docFields}`,
     [
       input.slug,
       normalizedText(input.title),
       input.type,
       cleanContent(input.content),
       JSON.stringify(parseBlocks(input.blocks)),
+      cleanRawContent(input.content),
     ],
   );
   res.status(201).json({ document: result.rows[0] });
@@ -699,13 +740,14 @@ router.post("/site-editor/documents", editors, async (req, res) => {
 router.put("/site-editor/documents/:id", editors, async (req, res) => {
   const input = documentSchema.parse(req.body);
   const result = await pool.query(
-    `UPDATE site_documents SET slug=$1,title=$2,type=$3,content=$4,blocks=$5,version=version+1,updated_at=now() WHERE id=$6 ${input.version ? "AND version=$7" : ""} RETURNING ${docFields}`,
+    `UPDATE site_documents SET slug=$1,title=$2,type=$3,content=$4,blocks=$5,raw_content=$6,version=version+1,updated_at=now() WHERE id=$7 ${input.version ? "AND version=$8" : ""} RETURNING ${docFields}`,
     [
       input.slug,
       normalizedText(input.title),
       input.type,
       cleanContent(input.content),
       JSON.stringify(parseBlocks(input.blocks)),
+      cleanRawContent(input.content),
       parseId(req.params.id),
       ...(input.version ? [input.version] : []),
     ],
@@ -1074,13 +1116,26 @@ router.post("/media/:id/restore", creators, async (req: AuthRequest, res) => {
   }
 });
 router.delete("/media/:id", creators, async (req: AuthRequest, res) => {
-  const selected = await pool.query("SELECT * FROM media WHERE id=$1", [
-      parseId(req.params.id),
-    ]),
-    item = selected.rows[0];
-  if (!item) throw new HttpError(404, "Media not found.");
-  ownsMedia(req, item.author_id);
-  await pool.query("DELETE FROM media WHERE id=$1", [item.id]);
+  const client = await pool.connect();
+  let item: any;
+  try {
+    await client.query("BEGIN");
+    item = (
+      await client.query("SELECT * FROM media WHERE id=$1 FOR UPDATE", [
+        parseId(req.params.id),
+      ])
+    ).rows[0];
+    if (!item) throw new HttpError(404, "Media not found.");
+    ownsMedia(req, item.author_id);
+    await client.query("DELETE FROM media WHERE id=$1", [item.id]);
+    await clearDeletedSiteImages(client, [item.id]);
+    await client.query("COMMIT");
+  } catch (error) {
+    await client.query("ROLLBACK");
+    throw error;
+  } finally {
+    client.release();
+  }
   for (const filename of [
     item.filename,
     item.original_filename,
@@ -1149,7 +1204,7 @@ router.delete("/tools/mail/:id", admin, async (req, res) => {
   res.json({ ok: true });
 });
 router.get("/tools/export", admin, async (_req, res) => {
-  const [posts, terms, media, comments, menus, docs, styles] =
+  const [posts, terms, media, comments, menus, docs, styles, blockEntities] =
     await Promise.all(
       [
         "posts",
@@ -1159,6 +1214,7 @@ router.get("/tools/export", admin, async (_req, res) => {
         "navigation_menus",
         "site_documents",
         "site_styles",
+        "block_entities",
       ].map((table) => pool.query(`SELECT * FROM ${table} ORDER BY id`)),
     );
   const postIds = posts.rows.map((p) => p.id),
@@ -1177,6 +1233,7 @@ router.get("/tools/export", admin, async (_req, res) => {
     postTerms: relations.rows,
     media: media.rows,
     comments: comments.rows,
+    blockEntities: blockEntities.rows,
     menus: menus.rows,
     documents: docs.rows,
     styles: styles.rows[0]?.data || {},
@@ -1199,6 +1256,7 @@ router.post("/tools/import", admin, async (req: AuthRequest, res) => {
         .array(z.record(z.string(), z.unknown()))
         .max(10000)
         .optional(),
+      blockEntities: z.array(z.record(z.string(), z.unknown())).max(1000).optional(),
     })
     .passthrough()
     .parse(req.body);
@@ -1206,6 +1264,7 @@ router.post("/tools/import", admin, async (req: AuthRequest, res) => {
     input.posts,
     input.terms || [],
     input.comments || [],
+    input.blockEntities || [],
   ]) {
     const ids = records.map((item) => Number(item.id));
     if (new Set(ids).size !== ids.length)
@@ -1220,7 +1279,48 @@ router.post("/tools/import", admin, async (req: AuthRequest, res) => {
     await client.query("BEGIN");
     const postMap = new Map<number, number>(),
       termMap = new Map<number, number>(),
-      newTerms = new Set<number>();
+      newTerms = new Set<number>(),
+      blockEntityMap = new Map<number, ImportedBlockEntity>(),
+      warnings = new Set<string>();
+    const addWarnings = (items: string[]) => {
+      for (const warning of items)
+        if (warnings.size < 100) warnings.add(warning);
+    };
+    const blockEntitySchema = z.object({
+      id,
+      kind: z.enum(["reusable", "navigation"]),
+      title: z.string().max(200),
+      slug: z.string().max(220).optional(),
+      content: z.string().max(1_000_000),
+      raw_content: z.string().max(1_000_000).optional(),
+      blocks: z.unknown().optional(),
+      status: z.enum(["publish", "draft", "trash"]).default("publish"),
+      created_at: z.iso.datetime({ offset: true }).optional(),
+      updated_at: z.iso.datetime({ offset: true }).optional(),
+    });
+    const entityInputs: z.infer<typeof blockEntitySchema>[] = [];
+    // Allocate every ID first so forward references and nested entities can be
+    // rewritten without ever consulting an unrelated local entity.
+    for (const item of input.blockEntities || []) {
+      const entity = blockEntitySchema.parse(item);
+      const allocated = await client.query(
+        "INSERT INTO block_entities(kind,title,slug,status,author_id,created_at,updated_at) VALUES($1,$2,$3,$4,$5,coalesce($6::timestamptz,now()),coalesce($7::timestamptz,now())) RETURNING id",
+        [entity.kind, plainText(entity.title), `${slugify(entity.slug || entity.title).slice(0, 160)}-import-${randomBytes(8).toString("hex")}`,
+          entity.status, needUser(req).id, entity.created_at ?? null, entity.updated_at ?? null],
+      );
+      blockEntityMap.set(entity.id, { id: allocated.rows[0].id, kind: entity.kind });
+      entityInputs.push(entity);
+    }
+    for (const entity of entityInputs) {
+      const rewritten = remapImportedBlockReferences(
+        entity.raw_content || entity.content, entity.blocks, blockEntityMap,
+      );
+      addWarnings(rewritten.warnings);
+      await client.query(
+        "UPDATE block_entities SET content=$1,raw_content=$2,blocks=$3::jsonb WHERE id=$4",
+        [rewritten.content, rewritten.rawContent, JSON.stringify(rewritten.blocks), blockEntityMap.get(entity.id)!.id],
+      );
+    }
     for (const item of input.terms || []) {
       const term = z
         .object({
@@ -1339,18 +1439,22 @@ router.post("/tools/import", admin, async (req: AuthRequest, res) => {
         post.status === "future" || post.passwordProtected
           ? "draft"
           : post.status;
+      const rewritten = remapImportedBlockReferences(
+        post.raw_content || post.content, post.blocks, blockEntityMap,
+      );
+      addWarnings(rewritten.warnings);
       const r = await client.query(
         "INSERT INTO posts(type,title,slug,content,excerpt,status,author_id,blocks,raw_content,menu_order,sticky,comment_status,created_at,updated_at,published_at,format) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,COALESCE($13::timestamptz,now()),COALESCE($14::timestamptz,now()),CASE WHEN $6::varchar='publish' THEN COALESCE($15::timestamptz,$13::timestamptz,now()) ELSE $15::timestamptz END,$16) RETURNING id",
         [
           post.type,
           plainText(post.title),
           slug,
-          cleanContent(post.content),
+          rewritten.content,
           plainText(post.excerpt),
           status,
           needUser(req).id,
-          JSON.stringify(parseBlocks(post.blocks) ?? []),
-          cleanRawContent(post.raw_content || post.content),
+          JSON.stringify(rewritten.blocks),
+          rewritten.rawContent,
           post.menu_order ?? 0,
           post.sticky ?? false,
           post.comment_status ?? "open",
@@ -1415,6 +1519,15 @@ router.post("/tools/import", admin, async (req: AuthRequest, res) => {
           post_id: id,
           author_name: text(1, 160),
           author_email: z.union([z.email().max(254), z.literal("")]),
+          author_url: z
+            .union([
+              z.literal(""),
+              z
+                .url()
+                .max(2000)
+                .refine((value) => /^https?:\/\//i.test(value)),
+            ])
+            .default(""),
           content: text(1, 20000),
           status: z
             .enum(["approved", "pending", "spam", "trash"])
@@ -1425,13 +1538,14 @@ router.post("/tools/import", admin, async (req: AuthRequest, res) => {
       const post = postMap.get(comment.post_id);
       if (!post) continue;
       const result = await client.query(
-        "INSERT INTO comments(post_id,author_name,author_email,content,status) VALUES($1,$2,$3,$4,$5) RETURNING id",
+        "INSERT INTO comments(post_id,author_name,author_email,content,status,author_url) VALUES($1,$2,$3,$4,$5,$6) RETURNING id",
         [
           post,
           normalizedText(comment.author_name),
           comment.author_email,
           cleanContent(comment.content),
           comment.status,
+          comment.author_url,
         ],
       );
       commentMap.set(comment.id, result.rows[0].id);
@@ -1476,14 +1590,14 @@ router.post("/tools/import", admin, async (req: AuthRequest, res) => {
       [[...postMap.values()]],
     );
     await client.query("COMMIT");
-    res
-      .status(201)
-      .json({
-        ok: true,
-        imported,
-        postIds: [...postMap.values()],
-        termIds: [...newTerms],
-      });
+    res.status(201).json({
+      ok: true,
+      imported,
+      postIds: [...postMap.values()],
+      termIds: [...newTerms],
+      blockEntityIds: [...blockEntityMap.values()].map(entity => entity.id),
+      ...(warnings.size ? { warnings: [...warnings] } : {}),
+    });
   } catch (e) {
     await client.query("ROLLBACK");
     throw e;

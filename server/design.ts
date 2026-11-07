@@ -68,7 +68,7 @@ export async function readDesign() {
   const [styles, documents, menus, plugins] = await Promise.all([
     pool.query("SELECT data FROM site_styles WHERE id=1"),
     pool.query(
-      'SELECT id,slug,title,type,content,blocks,version,updated_at AS "updatedAt" FROM site_documents ORDER BY type,title',
+      'SELECT id,slug,title,type,content,raw_content AS "rawContent",blocks,version,updated_at AS "updatedAt" FROM site_documents ORDER BY type,title',
     ),
     pool.query(
       'SELECT id,name,location,items,updated_at AS "updatedAt" FROM navigation_menus ORDER BY id',

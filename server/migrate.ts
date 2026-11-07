@@ -15,11 +15,38 @@ export async function migrate() {
     );
     await client.query(sql);
     // Platform extensions are optional during bootstrap and migrate atomically.
-    const platformSql = await readFile(path.join(rootDir, "server", "platform-schema.sql"), "utf8").catch((error: NodeJS.ErrnoException) => {
-      if (error.code === "ENOENT") return "";
-      throw error;
-    });
-    if (platformSql) await client.query(platformSql);
+    for (const schema of [
+      "platform-schema.sql",
+      "comments-schema.sql",
+      "accounts-schema.sql",
+      "blocks-schema.sql",
+    ]) {
+      const extension = await readFile(
+        path.join(rootDir, "server", schema),
+        "utf8",
+      ).catch((error: NodeJS.ErrnoException) => {
+        if (error.code === "ENOENT") return "";
+        throw error;
+      });
+      if (extension) await client.query(extension);
+    }
+    // Earlier canonicalization inserted whitespace into self-closing block delimiters.
+    // Repair only Gutenberg comments, preserving surrounding content and attributes.
+    for (const table of [
+      "posts",
+      "post_revisions",
+      "post_autosaves",
+      "site_documents",
+      "block_entities",
+    ]) {
+      if (
+        (await client.query("SELECT to_regclass($1) AS present", [table]))
+          .rows[0].present
+      )
+        await client.query(
+          `UPDATE ${table} SET raw_content=regexp_replace(raw_content,'(<!-- wp:[a-zA-Z0-9_/-]+[^<]*?)/ -->','\\1/-->','g') WHERE raw_content LIKE '%/ -->%'`,
+        );
+    }
     await client.query("COMMIT");
   } catch (error) {
     await client.query("ROLLBACK");

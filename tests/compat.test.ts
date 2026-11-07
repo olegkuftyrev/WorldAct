@@ -86,6 +86,36 @@ test("portable WXR, feeds, sitemap, permalink resolver and WordPress REST workfl
       "",
     );
     cookie = login.response.headers.get("set-cookie")!.split(";")[0];
+    await t.test("REST scheduling preserves site-local civil dates and updates an existing schedule", async () => {
+      const timezone = (await ok("/api/settings")).data.settings.timezone;
+      let scheduledId: number | undefined;
+      try {
+        await ok("/api/settings", "PUT", { timezone: "America/Los_Angeles" });
+        const created = await ok("/wp-json/wp/v2/posts", "POST", {
+          title: stamp + " scheduled",
+          status: "future",
+          date: "2099-07-01T12:34:00",
+        });
+        scheduledId = created.data.id;
+        assert.equal(created.data.date, "2099-07-01T12:34:00");
+        assert.equal(new Date(created.data.date_gmt + "Z").toISOString(), "2099-07-01T19:34:00.000Z");
+        const updated = await ok(`/wp-json/wp/v2/posts/${created.data.id}`, "PATCH", {
+          date: "2099-12-01T12:34:00",
+        });
+        assert.equal(updated.data.status, "future");
+        assert.equal(updated.data.date, "2099-12-01T12:34:00");
+        assert.equal(new Date(updated.data.date_gmt + "Z").toISOString(), "2099-12-01T20:34:00.000Z");
+        assert.equal(new Date((await ok(`/api/posts/${created.data.id}`)).data.post.scheduledAt).toISOString(), "2099-12-01T20:34:00.000Z");
+        assert.equal((await request(`/wp-json/wp/v2/posts/${created.data.id}`, "GET", undefined, "")).response.status, 401);
+        assert.equal((await request(`/wp-json/wp/v2/posts/${created.data.id}`, "PATCH", { date: "2099-02-30T12:34:00" })).response.status, 400);
+      } finally {
+        if (scheduledId) {
+          await request(`/api/posts/${scheduledId}`, "PUT", { status: "trash" });
+          await request(`/api/posts/${scheduledId}`, "DELETE");
+        }
+        await ok("/api/settings", "PUT", { timezone });
+      }
+    });
     await t.test(
       "native Gutenberg markers are retained for authenticated editing and omitted publicly",
       async () => {
@@ -333,13 +363,28 @@ test("portable WXR, feeds, sitemap, permalink resolver and WordPress REST workfl
         ).data;
         terms.push(term.id);
         assert.equal(term.taxonomy, "post_tag");
-        assert.ok(
-          (await ok("/wp-json/wp/v2/types", "GET", undefined, "")).data.post,
-        );
-        assert.ok(
-          (await ok("/wp-json/wp/v2/taxonomies", "GET", undefined, "")).data
-            .category,
-        );
+        const secondTerm = (await ok("/wp-json/wp/v2/tags", "POST", { name: stamp + " second tag" })).data;
+        terms.push(secondTerm.id);
+        const selected = await ok(`/wp-json/wp/v2/tags?include[0]=${term.id}&include[1]=${secondTerm.id}&exclude[0]=${secondTerm.id}`);
+        assert.deepEqual(selected.data.map((item: any) => item.id), [term.id]);
+        const manyIds = [term.id, secondTerm.id, ...Array.from({ length: 19 }, (_, index) => 2147483600 + index)];
+        const manyQuery = new URLSearchParams(manyIds.map((id, index) => [`include[${index}]`, String(id)]));
+        assert.deepEqual(new Set((await ok(`/wp-json/wp/v2/tags?${manyQuery}`)).data.map((item: any) => item.id)), new Set([term.id, secondTerm.id]));
+        const firstPage = await ok(`/wp-json/wp/v2/tags?include=${term.id},${secondTerm.id}&per_page=1`);
+        const nextLink = /<([^>]+)>; rel="next"/.exec(firstPage.response.headers.get("link") || "")?.[1];
+        assert.ok(nextLink);
+        const nextURL = new URL(nextLink);
+        assert.equal(nextURL.origin, origin);
+        const nextPage = await ok(nextURL.pathname + nextURL.search);
+        assert.notEqual(firstPage.data[0].id, nextPage.data[0].id);
+        const postTypes = (await ok("/wp-json/wp/v2/types", "GET", undefined, "")).data;
+        assert.equal(postTypes.post.viewable, true);
+        assert.equal(postTypes.page.labels.singular_name, "Page");
+        assert.equal(postTypes.post.supports["post-formats"], true);
+        assert.ok((await ok("/wp-json/wp/v2/themes")).data[0].theme_supports.formats.includes("aside"));
+        const taxonomies = (await ok("/wp-json/wp/v2/taxonomies", "GET", undefined, "")).data;
+        assert.equal(taxonomies.category.visibility.publicly_queryable, true);
+        assert.equal(taxonomies.post_tag.labels.singular_name, "Tag");
         assert.ok(
           (await ok("/wp-json/wp/v2/statuses", "GET", undefined, "")).data
             .publish,
@@ -374,6 +419,34 @@ test("portable WXR, feeds, sitemap, permalink resolver and WordPress REST workfl
         );
         assert.ok(comments.data.some((c: any) => c.id === comment.id));
         assert.equal(comments.data[0].author_email, undefined);
+      },
+    );
+    await t.test(
+      "native Query previews honor offset, sticky, formats, parents and taxonomy exclusions",
+      async () => {
+        const category = (await ok("/wp-json/wp/v2/categories", "POST", { name: stamp + " query category" })).data;
+        terms.push(category.id);
+        const first = (await ok("/api/posts", "POST", {
+          title: stamp + " query first", status: "publish", format: "aside", sticky: true,
+          categoryIds: [category.id], tagIds: [terms[0]],
+        })).data.post;
+        posts.push(first.id);
+        const second = (await ok("/api/posts", "POST", {
+          title: stamp + " query second", status: "publish", format: "standard",
+        })).data.post;
+        posts.push(second.id);
+        const path = `/wp-json/wp/v2/posts?include[0]=${first.id}&include[1]=${second.id}`;
+        const ids = async (query: string) => (await ok(path + query)).data.map((post: any) => post.id);
+        assert.deepEqual(await ids("&orderby=id&order=asc&offset=1"), [second.id]);
+        assert.deepEqual(await ids("&format[0]=aside&sticky=true"), [first.id]);
+        assert.deepEqual(await ids("&format=standard&sticky=false"), [second.id]);
+        assert.deepEqual(await ids(`&categories_exclude[0]=${category.id}&tags_exclude[0]=${terms[0]}`), [second.id]);
+        assert.deepEqual(await ids(`&categories[0]=${category.id}&tags[0]=${terms[0]}`), [first.id]);
+        const parent = (await ok("/api/posts", "POST", { type: "page", title: stamp + " query parent", status: "publish" })).data.post;
+        posts.push(parent.id);
+        const child = (await ok("/api/posts", "POST", { type: "page", title: stamp + " query child", parentId: parent.id, status: "publish" })).data.post;
+        posts.push(child.id);
+        assert.deepEqual((await ok(`/wp-json/wp/v2/pages?parent[0]=${parent.id}`)).data.map((page: any) => page.id), [child.id]);
       },
     );
     await t.test(
@@ -425,7 +498,10 @@ test("portable WXR, feeds, sitemap, permalink resolver and WordPress REST workfl
       async () => {
         const xml = `<?xml version="1.0"?><rss version="2.0" xmlns:wp="http://wordpress.org/export/1.2/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:excerpt="http://wordpress.org/export/1.2/excerpt/"><channel><title>Import fixture</title><wp:wxr_version>1.2</wp:wxr_version><wp:category><wp:term_id>101</wp:term_id><wp:category_nicename>${stamp}-parent</wp:category_nicename><wp:cat_name>${stamp} parent</wp:cat_name></wp:category><wp:category><wp:term_id>102</wp:term_id><wp:category_nicename>${stamp}-child</wp:category_nicename><wp:category_parent>${stamp}-parent</wp:category_parent><wp:cat_name>${stamp} child</wp:cat_name></wp:category><wp:tag><wp:term_id>103</wp:term_id><wp:tag_slug>${stamp}-wxr-tag</wp:tag_slug><wp:tag_name>WXR tag</wp:tag_name></wp:tag><item><title>${stamp} WXR</title><wp:post_id>501</wp:post_id><wp:post_type>post</wp:post_type><wp:post_name>${stamp}-wxr</wp:post_name><wp:status>draft</wp:status><content:encoded><![CDATA[<!-- wp:paragraph --><p onclick="x()">Imported safe body</p><!-- /wp:paragraph --><script>bad()</script>]]></content:encoded><excerpt:encoded>Imported excerpt</excerpt:encoded><category domain="post_format" nicename="post-format-aside">Aside</category><category domain="category" nicename="${stamp}-child">Child</category><category domain="post_tag" nicename="${stamp}-wxr-tag">WXR tag</category><wp:comment><wp:comment_id>601</wp:comment_id><wp:comment_author>Parent</wp:comment_author><wp:comment_author_email>parent@example.com</wp:comment_author_email><wp:comment_content>Parent comment</wp:comment_content><wp:comment_approved>1</wp:comment_approved></wp:comment><wp:comment><wp:comment_id>602</wp:comment_id><wp:comment_parent>601</wp:comment_parent><wp:comment_author>Reply</wp:comment_author><wp:comment_content>Reply body</wp:comment_content><wp:comment_approved>0</wp:comment_approved></wp:comment></item><item><title>${stamp} parent page</title><wp:post_id>502</wp:post_id><wp:post_type>page</wp:post_type><wp:post_name>${stamp}-parent-page</wp:post_name><wp:status>draft</wp:status><content:encoded>Parent page</content:encoded></item><item><title>${stamp} child page</title><wp:post_id>503</wp:post_id><wp:post_parent>502</wp:post_parent><wp:post_type>page</wp:post_type><wp:post_name>${stamp}-child-page</wp:post_name><wp:status>draft</wp:status><content:encoded>Child page</content:encoded></item><item><title>External attachment</title><wp:post_id>504</wp:post_id><wp:post_type>attachment</wp:post_type><wp:attachment_url>https://example.invalid/image.png</wp:attachment_url></item></channel></rss>`;
         const imported = (
-          await ok("/api/tools/import", "POST", { format: "wxr", xml })
+          await ok("/api/tools/import", "POST", {
+            format: "wxr",
+            xml: xml.replace("<!-- /wp:paragraph -->", '<!-- /wp:paragraph --><!-- wp:block {"ref":2147483647} /-->'),
+          })
         ).data;
         posts.push(...imported.postIds);
         terms.push(...imported.termIds);
@@ -434,6 +510,8 @@ test("portable WXR, feeds, sitemap, permalink resolver and WordPress REST workfl
         assert.equal(imported.commentIds.length, 2);
         const p = (await ok("/api/posts/" + imported.postIds[0])).data.post;
         assert.match(p.rawContent, /<!-- wp:paragraph/);
+        assert.doesNotMatch(p.rawContent, /wp:block|2147483647/);
+        assert.ok(imported.warnings.some((warning: string) => warning.includes("Dropped core/block")));
         assert.match(p.content, /Imported safe body/);
         assert.doesNotMatch(p.content, /onclick|script/);
         assert.equal(p.excerpt, "Imported excerpt");

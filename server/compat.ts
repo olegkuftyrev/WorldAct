@@ -5,6 +5,9 @@ import express, {
 } from "express";
 import { XMLParser, XMLValidator } from "fast-xml-parser";
 import { randomBytes } from "node:crypto";
+import { renderPublicContent } from "./block-renderer.js";
+import { restLocalDate, restDateToUTC } from "./date.js";
+import { remapImportedBlockReferences } from "./block-portability.js";
 import {
   pool,
   getPost,
@@ -181,7 +184,14 @@ async function feedPosts() {
   ).rows;
   return {
     settings,
-    posts: await Promise.all(posts.map((p) => withPermalink(p, settings))),
+    posts: await Promise.all(
+      posts.map(async (p) =>
+        withPermalink(
+          { ...p, content: await renderPublicContent(p) },
+          settings,
+        ),
+      ),
+    ),
   };
 }
 router.get(
@@ -285,6 +295,18 @@ function pagination(req: Request, res: Response, total: number) {
     );
   res.setHeader("X-WP-Total", total);
   res.setHeader("X-WP-TotalPages", Math.ceil(total / perPage));
+  const links: string[] = [];
+  for (const [relation, targetPage] of [["prev", page - 1], ["next", page + 1]] as const) {
+    if (targetPage < 1 || targetPage > Math.ceil(total / perPage)) continue;
+    const target = new URL(process.env.APP_ORIGIN || "http://127.0.0.1:5173");
+    const [pathname, search = ""] = req.originalUrl.split("?");
+    target.pathname = pathname;
+    target.search = search;
+    target.searchParams.set("page", String(targetPage));
+    target.searchParams.set("per_page", String(perPage));
+    links.push(`<${target.href}>; rel="${relation}"`);
+  }
+  if (links.length) res.setHeader("Link", links.join(", "));
   return { page, perPage, offset: (page - 1) * perPage };
 }
 function wpFields(req: Request, value: any) {
@@ -304,15 +326,21 @@ function wpFields(req: Request, value: any) {
 async function wpPost(post: any, req: AuthRequest, edit = false) {
   const settings = await getSettings(),
     link = absolute(await postPermalink(post, settings), settings.siteUrl);
+  const publicationDate = (post.status === "future" ? post.scheduledAt : null) || post.publishedAt || post.createdAt;
   const protectedPost = !!post.hasPassword;
   const own = canEdit(req.user, post);
   const raw = edit && own ? post.rawContent || post.content : undefined;
+  const rendered = protectedPost && !own ? "" : await renderPublicContent(post);
+  const excerptWords = plainText(rendered).trim().split(/\s+/).filter(Boolean);
+  const excerpt = protectedPost && !own ? "" : post.excerpt
+    ? `<p>${esc(post.excerpt)}</p>`
+    : excerptWords.length ? `<p>${esc(excerptWords.slice(0, 55).join(" "))}${excerptWords.length > 55 ? " […]" : ""}</p>` : "";
   return {
     id: post.id,
-    date: iso(post.publishedAt || post.createdAt).replace(/Z$/, ""),
-    date_gmt: iso(post.publishedAt || post.createdAt).replace(/Z$/, ""),
+    date: restLocalDate(publicationDate, settings.timezone),
+    date_gmt: iso(publicationDate).replace(/Z$/, ""),
     guid: { rendered: link },
-    modified: iso(post.updatedAt).replace(/Z$/, ""),
+    modified: restLocalDate(post.updatedAt, settings.timezone),
     modified_gmt: iso(post.updatedAt).replace(/Z$/, ""),
     slug: post.slug,
     status: post.status,
@@ -323,12 +351,12 @@ async function wpPost(post: any, req: AuthRequest, edit = false) {
       ...(raw !== undefined ? { raw: post.title } : {}),
     },
     content: {
-      rendered: protectedPost && !own ? "" : post.content,
+      rendered,
       protected: protectedPost,
       ...(raw !== undefined ? { raw } : {}),
     },
     excerpt: {
-      rendered: protectedPost && !own ? "" : post.excerpt,
+      rendered: excerpt,
       protected: protectedPost,
       ...(raw !== undefined ? { raw: post.excerpt } : {}),
     },
@@ -414,18 +442,33 @@ router.get(["/wp-json/wp/v2", "/wp-json/wp/v2/"], (_req, res) =>
     },
   }),
 );
-const integerList = (value: unknown) =>
-  value === undefined
-    ? []
-    : z
-        .string()
-        .max(2000)
-        .parse(value)
-        .split(",")
-        .map((value) => parseId(value.trim()));
+const integerList = (value: unknown, allowZero = false) => {
+  if (value === undefined) return [];
+  const values = z.union([
+    z.string().max(2000),
+    z.array(z.string().max(2000)).max(1000),
+  ]).parse(value);
+  const ids = (Array.isArray(values) ? values : [values])
+    .flatMap((item) => item.split(","));
+  if (ids.length > 1000) throw new HttpError(400, "Select at most 1000 identifiers.");
+  return ids.map((item) => allowZero && item.trim() === "0" ? 0 : parseId(item.trim()));
+};
 for (const collection of ["posts", "pages"] as const) {
   const type = collection === "pages" ? "page" : "post";
+  const createAllowed = (user: User | undefined) => !!user && (["administrator", "editor"].includes(user.role) || (type === "post" && ["author", "contributor"].includes(user.role)));
+  router.options("/wp-json/wp/v2/" + collection, (req: AuthRequest, res) => {
+    res.setHeader("Allow", createAllowed(req.user) ? "GET, POST" : "GET");
+    res.json({ namespace: "wp/v2", methods: createAllowed(req.user) ? ["GET", "POST"] : ["GET"], schema: { properties: { title: { type: "object" }, content: { type: "object" }, excerpt: { type: "object" }, status: { type: "string" } } } });
+  });
+  router.options("/wp-json/wp/v2/" + collection + "/:id", async (req: AuthRequest, res) => {
+    const post = await getPost(parseId(req.params.id));
+    if (!post || post.type !== type || (post.status !== "publish" && !canEdit(req.user, post))) throw new HttpError(404, "Post not found.");
+    const methods = canEdit(req.user, post) ? ["GET", "POST", "PUT", "PATCH", "DELETE"] : ["GET"];
+    res.setHeader("Allow", methods.join(", "));
+    res.json({ namespace: "wp/v2", methods, schema: { properties: { title: { type: "object" }, content: { type: "object" }, excerpt: { type: "object" }, status: { type: "string" } } } });
+  });
   router.get("/wp-json/wp/v2/" + collection, async (req: AuthRequest, res) => {
+    res.setHeader("Allow", createAllowed(req.user) ? "GET, POST" : "GET");
     const edit = req.query.context === "edit",
       user = req.user;
     if (edit && !user)
@@ -464,6 +507,15 @@ for (const collection of ["posts", "pages"] as const) {
       args.push(status);
       where += ` AND p.status=$${args.length}`;
     } else where += " AND p.status<>'trash'";
+    if (req.query.has_password !== undefined) {
+      const protectedOnly = z
+        .enum(["true", "false"])
+        .parse(req.query.has_password);
+      where +=
+        protectedOnly === "true"
+          ? " AND p.password_hash IS NOT NULL"
+          : " AND p.password_hash IS NULL";
+    }
     if (
       (edit || status !== "publish") &&
       user &&
@@ -495,11 +547,30 @@ for (const collection of ["posts", "pages"] as const) {
     for (const [field, taxonomy] of [
       ["categories", "category"],
       ["tags", "tag"],
+      ["categories_exclude", "category"],
+      ["tags_exclude", "tag"],
     ] as const)
       if (req.query[field] !== undefined) {
         args.push(integerList(req.query[field]));
-        where += ` AND EXISTS(SELECT 1 FROM post_terms pt JOIN terms t ON t.id=pt.term_id WHERE pt.post_id=p.id AND t.taxonomy='${taxonomy}' AND t.id=ANY($${args.length}::int[]))`;
+        where += ` AND ${field.endsWith("_exclude") ? "NOT " : ""}EXISTS(SELECT 1 FROM post_terms pt JOIN terms t ON t.id=pt.term_id WHERE pt.post_id=p.id AND t.taxonomy='${taxonomy}' AND t.id=ANY($${args.length}::int[]))`;
       }
+    if (req.query.parent !== undefined) {
+      args.push(integerList(req.query.parent, true));
+      where += ` AND coalesce(p.parent_id,0)=ANY($${args.length}::int[])`;
+    }
+    if (req.query.format !== undefined) {
+      const formats = z.union([
+        z.string().max(200), z.array(z.string().max(20)).max(8),
+      ]).parse(req.query.format);
+      const names = (Array.isArray(formats) ? formats : formats.split(","))
+        .map((format) => z.enum(["standard", "aside", "image", "video", "quote", "link", "gallery", "audio"]).parse(format));
+      args.push(names);
+      where += ` AND p.format=ANY($${args.length}::text[])`;
+    }
+    if (req.query.sticky !== undefined) {
+      args.push(z.enum(["true", "false"]).parse(req.query.sticky) === "true");
+      where += ` AND p.sticky=$${args.length}`;
+    }
     for (const [field, operator] of [
       ["after", ">"],
       ["before", "<"],
@@ -514,7 +585,8 @@ for (const collection of ["posts", "pages"] as const) {
         args,
       )
     ).rows[0].total;
-    const { perPage, offset } = pagination(req, res, total);
+    const baseOffset = z.coerce.number().int().min(0).max(2147483647).default(0).parse(req.query.offset);
+    const { perPage, offset } = pagination(req, res, Math.max(0, total - baseOffset));
     const order = z
         .enum(["asc", "desc"])
         .default("desc")
@@ -531,10 +603,12 @@ for (const collection of ["posts", "pages"] as const) {
       slug: "p.slug",
       menu_order: "p.menu_order",
     }[orderby];
-    args.push(perPage, offset);
+    args.push(perPage, baseOffset + offset);
+    const stickyOrder = type === "post" && req.query.ignore_sticky === "false" && req.query.sticky === undefined
+      ? "p.sticky DESC," : "";
     const rows = (
       await pool.query(
-        `SELECT ${postFields}${edit ? ',p.raw_content AS "rawContent"' : ""} FROM posts p JOIN users u ON u.id=p.author_id WHERE ${where} ORDER BY ${column} ${order},p.id ${order} LIMIT $${args.length - 1} OFFSET $${args.length}`,
+        `SELECT ${postFields}${edit ? ',p.raw_content AS "rawContent"' : ""} FROM posts p JOIN users u ON u.id=p.author_id WHERE ${where} ORDER BY ${stickyOrder}${column} ${order},p.id ${order} LIMIT $${args.length - 1} OFFSET $${args.length}`,
         args,
       )
     ).rows;
@@ -556,6 +630,7 @@ for (const collection of ["posts", "pages"] as const) {
         throw new HttpError(req.user ? 403 : 401, "You cannot read this post.");
       if (edit && !canEdit(req.user, post))
         throw new HttpError(req.user ? 403 : 401, "You cannot edit this post.");
+      res.setHeader("Allow", canEdit(req.user, post) ? "GET, POST, PUT, PATCH, DELETE" : "GET");
       res.json(wpFields(req, await wpPost(post, req, edit)));
     },
   );
@@ -640,16 +715,15 @@ for (const collection of ["posts", "pages"] as const) {
           ["parent", "featured_media"].includes(wp) && data[wp] === 0
             ? null
             : data[wp];
-    if (data.date || data.date_gmt) {
-      const date = z.iso
-        .datetime({ offset: true })
-        .parse((data.date_gmt || data.date)!.replace(/Z$/, "") + "Z");
-      body[data.status === "future" ? "scheduledAt" : "publishedAt"] = date;
-    }
+    let existing: Awaited<ReturnType<typeof getPost>>;
     if (req.params.id) {
-      const existing = await getPost(parseId(req.params.id));
+      existing = await getPost(parseId(req.params.id));
       if (!existing || existing.type !== type)
         throw new HttpError(404, "Post not found.");
+    }
+    if (data.date || data.date_gmt) {
+      const date = restDateToUTC((data.date_gmt || data.date)!, (await getSettings()).timezone, !!data.date_gmt);
+      body[(data.status || existing?.status) === "future" ? "scheduledAt" : "publishedAt"] = date;
     }
     const result = await forward(
       req,
@@ -691,7 +765,8 @@ async function wpMedia(item: any) {
     url = absolute(item.url || "/uploads/" + item.filename, s.siteUrl);
   return {
     id: item.id,
-    date: iso(item.createdAt || item.created_at).replace(/Z$/, ""),
+    date: restLocalDate(item.createdAt || item.created_at, s.timezone),
+    date_gmt: iso(item.createdAt || item.created_at).replace(/Z$/, ""),
     slug: slugify(item.title),
     status: "inherit",
     type: "attachment",
@@ -798,6 +873,11 @@ for (const collection of ["categories", "tags"] as const) {
       args.push("%" + z.string().max(200).parse(req.query.search) + "%");
       where += ` AND t.name ILIKE $${args.length}`;
     }
+    for (const field of ["include", "exclude"] as const)
+      if (req.query[field] !== undefined) {
+        args.push(integerList(req.query[field]));
+        where += ` AND ${field === "exclude" ? "NOT " : ""}(t.id=ANY($${args.length}::int[]))`;
+      }
     if (req.query.hide_empty === "true")
       where +=
         " AND EXISTS(SELECT 1 FROM post_terms pt JOIN posts p ON p.id=pt.post_id WHERE pt.term_id=t.id AND p.status='publish')";
@@ -919,16 +999,17 @@ for (const collection of ["categories", "tags"] as const) {
     },
   );
 }
-function wpComment(comment: any, edit = false) {
+async function wpComment(comment: any, edit = false, timezone?: string) {
+  timezone ??= (await getSettings()).timezone;
   return {
     id: comment.id,
     post: comment.postId,
     parent: comment.parentId || 0,
-    author: 0,
+    author: comment.userId || 0,
     author_name: comment.authorName,
     ...(edit ? { author_email: comment.authorEmail } : {}),
-    author_url: "",
-    date: iso(comment.createdAt).replace(/Z$/, ""),
+    author_url: comment.authorUrl || "",
+    date: restLocalDate(comment.createdAt, timezone),
     date_gmt: iso(comment.createdAt).replace(/Z$/, ""),
     content: {
       rendered: comment.content,
@@ -980,14 +1061,15 @@ router.get("/wp-json/wp/v2/comments", async (req: AuthRequest, res) => {
   args.push(perPage, offset);
   const rows = (
     await pool.query(
-      `SELECT c.id,c.post_id AS "postId",c.parent_id AS "parentId",c.author_name AS "authorName",c.author_email AS "authorEmail",c.content,c.status,c.created_at AS "createdAt" FROM comments c JOIN posts p ON p.id=c.post_id WHERE ${where} ORDER BY c.created_at DESC,c.id DESC LIMIT $${args.length - 1} OFFSET $${args.length}`,
+      `SELECT c.id,c.post_id AS "postId",c.parent_id AS "parentId",c.author_name AS "authorName",c.author_email AS "authorEmail",c.author_url AS "authorUrl",c.user_id AS "userId",c.content,c.status,c.created_at AS "createdAt" FROM comments c JOIN posts p ON p.id=c.post_id WHERE ${where} ORDER BY c.created_at DESC,c.id DESC LIMIT $${args.length - 1} OFFSET $${args.length}`,
       args,
     )
   ).rows;
+  const { timezone } = await getSettings();
   res.json(
     wpFields(
       req,
-      rows.map((c) => wpComment(c, edit)),
+      await Promise.all(rows.map((c) => wpComment(c, edit, timezone))),
     ),
   );
 });
@@ -998,7 +1080,7 @@ router.get("/wp-json/wp/v2/comments/:id", async (req: AuthRequest, res) => {
     throw new HttpError(req.user ? 403 : 401, "You cannot moderate comments.");
   const row = (
     await pool.query(
-      `SELECT c.id,c.post_id AS "postId",c.parent_id AS "parentId",c.author_name AS "authorName",c.author_email AS "authorEmail",c.content,c.status,c.created_at AS "createdAt",p.status AS "postStatus",p.password_hash AS protected FROM comments c JOIN posts p ON p.id=c.post_id WHERE c.id=$1`,
+      `SELECT c.id,c.post_id AS "postId",c.parent_id AS "parentId",c.author_name AS "authorName",c.author_email AS "authorEmail",c.author_url AS "authorUrl",c.user_id AS "userId",c.content,c.status,c.created_at AS "createdAt",p.status AS "postStatus",p.password_hash AS protected FROM comments c JOIN posts p ON p.id=c.post_id WHERE c.id=$1`,
       [parseId(req.params.id)],
     )
   ).rows[0];
@@ -1010,7 +1092,7 @@ router.get("/wp-json/wp/v2/comments/:id", async (req: AuthRequest, res) => {
         row.protected))
   )
     throw new HttpError(404, "Comment not found.");
-  res.json(wpFields(req, wpComment(row, edit)));
+  res.json(wpFields(req, await wpComment(row, edit)));
 });
 router.post("/wp-json/wp/v2/comments", async (req: AuthRequest, res) => {
   const input = z
@@ -1019,6 +1101,7 @@ router.post("/wp-json/wp/v2/comments", async (req: AuthRequest, res) => {
       parent: z.number().int().min(0).optional(),
       author_name: z.string().optional(),
       author_email: z.string().optional(),
+      author_url: z.string().max(2000).optional(),
       content: z.string(),
     })
     .strict()
@@ -1028,47 +1111,67 @@ router.post("/wp-json/wp/v2/comments", async (req: AuthRequest, res) => {
     parentId: input.parent || null,
     authorName: input.author_name,
     authorEmail: input.author_email,
+    authorUrl: input.author_url,
     content: input.content,
   });
   const row = (
     await pool.query(
-      `SELECT id,post_id AS "postId",parent_id AS "parentId",author_name AS "authorName",content,status,created_at AS "createdAt" FROM comments WHERE id=$1`,
+      `SELECT id,post_id AS "postId",parent_id AS "parentId",author_name AS "authorName",author_url AS "authorUrl",user_id AS "userId",content,status,created_at AS "createdAt" FROM comments WHERE id=$1`,
       [result.data.comment.id],
     )
   ).rows[0];
-  res.status(201).json(wpComment(row));
+  res.status(201).json(await wpComment(row));
 });
-router.post("/wp-json/wp/v2/comments/:id", async (req: AuthRequest, res) => {
+async function updateWPComment(req: AuthRequest, res: Response) {
   needUser(req);
   const input = z
     .object({
-      status: z.enum([
-        "approved",
-        "approve",
-        "hold",
-        "unapproved",
-        "spam",
-        "trash",
-      ]),
+      status: z
+        .enum(["approved", "approve", "hold", "unapproved", "spam", "trash"])
+        .optional(),
+      author_name: z.string().max(160).optional(),
+      author_email: z.string().max(254).optional(),
+      author_url: z.string().max(2000).optional(),
+      content: z.string().max(20000).optional(),
+      parent: z.number().int().min(0).max(2147483647).optional(),
+      version: z.number().int().positive().optional(),
     })
     .strict()
+    .refine(
+      (value) => Object.keys(value).some((key) => key !== "version"),
+      "Provide comment fields to update.",
+    )
     .parse(req.body);
-  const status = {
-    approved: "approved",
-    approve: "approved",
-    hold: "pending",
-    unapproved: "pending",
-    spam: "spam",
-    trash: "trash",
-  }[input.status];
+  const patch: Record<string, unknown> = {};
+  if (input.status !== undefined)
+    patch.status = {
+      approved: "approved",
+      approve: "approved",
+      hold: "pending",
+      unapproved: "pending",
+      spam: "spam",
+      trash: "trash",
+    }[input.status];
+  for (const [source, target] of [
+    ["author_name", "authorName"],
+    ["author_email", "authorEmail"],
+    ["author_url", "authorUrl"],
+    ["content", "content"],
+    ["version", "version"],
+  ] as const)
+    if (input[source] !== undefined) patch[target] = input[source];
+  if (input.parent !== undefined) patch.parentId = input.parent || null;
   const result = await forward(
     req,
     "/comments/" + parseId(req.params.id),
     "PUT",
-    { status },
+    patch,
   );
-  res.json(wpComment(result.data.comment, true));
-});
+  res.json(await wpComment(result.data.comment, true));
+}
+router.post("/wp-json/wp/v2/comments/:id", updateWPComment);
+router.put("/wp-json/wp/v2/comments/:id", updateWPComment);
+router.patch("/wp-json/wp/v2/comments/:id", updateWPComment);
 router.delete("/wp-json/wp/v2/comments/:id", async (req: AuthRequest, res) => {
   needUser(req);
   await forward(req, "/comments/" + parseId(req.params.id), "DELETE");
@@ -1112,35 +1215,89 @@ const types = {
   post: {
     slug: "post",
     name: "Posts",
+    labels: { name: "Posts", singular_name: "Post" },
+    viewable: true,
     description: "Posts published in the site blog.",
     hierarchical: false,
     rest_base: "posts",
     rest_namespace: "wp/v2",
     taxonomies: ["category", "post_tag"],
+    supports: {
+      title: true,
+      editor: true,
+      excerpt: true,
+      author: true,
+      thumbnail: true,
+      "custom-fields": true,
+      "post-formats": true,
+      comments: true,
+      revisions: true,
+    },
   },
   page: {
     slug: "page",
     name: "Pages",
+    labels: { name: "Pages", singular_name: "Page" },
+    viewable: true,
     description: "Hierarchical site pages.",
     hierarchical: true,
     rest_base: "pages",
     rest_namespace: "wp/v2",
     taxonomies: [],
+    supports: {
+      title: true,
+      editor: true,
+      excerpt: true,
+      author: true,
+      thumbnail: true,
+      "custom-fields": true,
+      comments: true,
+      revisions: true,
+      "page-attributes": true,
+    },
   },
   attachment: {
     slug: "attachment",
     name: "Media",
+    labels: { name: "Media", singular_name: "Media" },
+    viewable: false,
     description: "Uploaded media files.",
     hierarchical: false,
     rest_base: "media",
     rest_namespace: "wp/v2",
     taxonomies: [],
   },
+  wp_block: {
+    slug: "wp_block",
+    name: "Patterns",
+    labels: { name: "Patterns", singular_name: "Pattern" },
+    viewable: false,
+    description: "Synced reusable block patterns.",
+    hierarchical: false,
+    rest_base: "blocks",
+    rest_namespace: "wp/v2",
+    taxonomies: [],
+    supports: { title: true, editor: true, reusable: true },
+  },
+  wp_navigation: {
+    slug: "wp_navigation",
+    name: "Navigation",
+    labels: { name: "Navigation", singular_name: "Navigation" },
+    viewable: false,
+    description: "Block navigation menus.",
+    hierarchical: false,
+    rest_base: "navigation",
+    rest_namespace: "wp/v2",
+    taxonomies: [],
+    supports: { title: true, editor: true, inserter: false },
+  },
 };
 const taxonomies = {
   category: {
     slug: "category",
     name: "Categories",
+    labels: { name: "Categories", singular_name: "Category" },
+    visibility: { public: true, publicly_queryable: true, show_ui: true, show_in_nav_menus: true, show_admin_column: true },
     description: "Hierarchical post categories.",
     hierarchical: true,
     types: ["post"],
@@ -1150,6 +1307,8 @@ const taxonomies = {
   post_tag: {
     slug: "post_tag",
     name: "Tags",
+    labels: { name: "Tags", singular_name: "Tag" },
+    visibility: { public: true, publicly_queryable: true, show_ui: true, show_in_nav_menus: true, show_admin_column: true },
     description: "Post tags.",
     hierarchical: false,
     types: ["post"],
@@ -1240,7 +1399,7 @@ router.get("/api/tools/export", admin, async (req, res, next) => {
           .filter((c) => c.post_id === p.id)
           .map(
             (c) =>
-              `<wp:comment><wp:comment_id>${c.id}</wp:comment_id><wp:comment_author>${cdata(c.author_name)}</wp:comment_author><wp:comment_author_email>${esc(c.author_email)}</wp:comment_author_email><wp:comment_date>${wpDate(c.created_at)}</wp:comment_date><wp:comment_date_gmt>${wpDate(c.created_at)}</wp:comment_date_gmt><wp:comment_content>${cdata(c.content)}</wp:comment_content><wp:comment_approved>${c.status === "approved" ? "1" : c.status === "pending" ? "0" : c.status}</wp:comment_approved><wp:comment_type/><wp:comment_parent>${c.parent_id || 0}</wp:comment_parent><wp:comment_user_id>0</wp:comment_user_id></wp:comment>`,
+              `<wp:comment><wp:comment_id>${c.id}</wp:comment_id><wp:comment_author>${cdata(c.author_name)}</wp:comment_author><wp:comment_author_email>${esc(c.author_email)}</wp:comment_author_email><wp:comment_author_url>${esc(c.author_url || "")}</wp:comment_author_url><wp:comment_date>${wpDate(c.created_at)}</wp:comment_date><wp:comment_date_gmt>${wpDate(c.created_at)}</wp:comment_date_gmt><wp:comment_content>${cdata(c.content)}</wp:comment_content><wp:comment_approved>${c.status === "approved" ? "1" : c.status === "pending" ? "0" : c.status}</wp:comment_approved><wp:comment_type/><wp:comment_parent>${c.parent_id || 0}</wp:comment_parent><wp:comment_user_id>0</wp:comment_user_id></wp:comment>`,
           )
           .join("")}</item>`,
     ),
@@ -1303,6 +1462,7 @@ router.post("/api/tools/import", admin, async (req: AuthRequest, res, next) => {
     createdComments: number[] = [];
   let skippedAttachments = 0,
     skippedItems = 0;
+  const referenceWarnings = new Set<string>();
   function parsedDate(value: any) {
     const raw = text(value).trim();
     if (!raw || raw.startsWith("0000-")) return null;
@@ -1438,9 +1598,12 @@ router.post("/api/tools/import", admin, async (req: AuthRequest, res, next) => {
           .rowCount
       )
         slug = base.slice(0, 170) + "-import-" + randomBytes(5).toString("hex");
-      const raw = cleanRawContent(
-          z.string().max(1_000_000).parse(text(item["content:encoded"])),
-        ),
+      const portable = remapImportedBlockReferences(
+          z.string().max(1_000_000).parse(text(item["content:encoded"])), [], new Map(),
+        );
+      for (const warning of portable.warnings)
+        if (referenceWarnings.size < 100) referenceWarnings.add(warning);
+      const raw = portable.rawContent,
         content = cleanContent(raw),
         excerpt = plainText(text(item["excerpt:encoded"])).slice(0, 20000),
         date = parsedDate(item["wp:post_date_gmt"] || item["wp:post_date"]);
@@ -1562,7 +1725,7 @@ router.post("/api/tools/import", admin, async (req: AuthRequest, res, next) => {
             } as Record<string, string>
           )[text(comment["wp:comment_approved"])] || "pending";
         const row = await client.query(
-          "INSERT INTO comments(post_id,author_name,author_email,content,status,created_at) VALUES($1,$2,$3,$4,$5,coalesce($6,now())) RETURNING id",
+          "INSERT INTO comments(post_id,author_name,author_email,content,status,created_at,author_url) VALUES($1,$2,$3,$4,$5,coalesce($6,now()),$7) RETURNING id",
           [
             id,
             plainText(text(comment["wp:comment_author"])).slice(0, 160) ||
@@ -1573,6 +1736,9 @@ router.post("/api/tools/import", admin, async (req: AuthRequest, res, next) => {
             parsedDate(
               comment["wp:comment_date_gmt"] || comment["wp:comment_date"],
             ),
+            /^https?:\/\//i.test(text(comment["wp:comment_author_url"]))
+              ? text(comment["wp:comment_author_url"]).slice(0, 2000)
+              : "",
           ],
         );
         commentMap.set(oldComment, row.rows[0].id);
@@ -1637,11 +1803,12 @@ router.post("/api/tools/import", admin, async (req: AuthRequest, res, next) => {
       commentIds: createdComments,
       skippedAttachments,
       skippedItems,
-      warnings: skippedAttachments
-        ? [
+      warnings: [
+        ...(skippedAttachments ? [
             "Remote attachment files are not downloaded. Imported block HTML retains original media URLs; upload files in Media to migrate them.",
-          ]
-        : [],
+          ] : []),
+        ...referenceWarnings,
+      ],
     });
   } catch (error) {
     await client.query("ROLLBACK");

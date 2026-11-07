@@ -62,6 +62,9 @@ export default function PublicSite({
     archive?.taxonomy === "tag" ? archive.slug : params.get("tag");
   const requestedPage = Math.max(1, Number(params.get("page")) || 1);
   const commentPage = Math.max(1, Number(params.get("commentPage")) || 1);
+  const blockQuery = new URLSearchParams(
+    [...params.entries()].filter(([name]) => /^query-\d+-page$/.test(name)),
+  ).toString();
   const publicQuery = new URLSearchParams({
     page: String(detail ? 1 : requestedPage),
   });
@@ -69,11 +72,15 @@ export default function PublicSite({
     ["search", params.get("search")],
     ["category", categoryFilter],
     ["tag", tagFilter],
+    ["author", params.get("author")],
   ])
     if (value) publicQuery.set(key!, value);
+  for (const [key, value] of new URLSearchParams(blockQuery))
+    publicQuery.set(key, value);
   const design = useResource<PublicDesign>("/public/design");
   const site = useResource<{
     settings: Partial<Settings>;
+    archive?: { type: "author"; name: string; authorId: number } | null;
     posts: Post[];
     pages: Post[];
     frontPage: Post | null;
@@ -110,8 +117,8 @@ export default function PublicSite({
       commentsPagination?: CommentPagination;
     }>(
       preview
-        ? `/posts/${previewId}/preview`
-        : `/public/posts/${encodeURIComponent(slug!)}?commentPage=${commentPage}`,
+        ? `/posts/${previewId}/preview${blockQuery ? "?" + blockQuery : ""}`
+        : `/public/posts/${encodeURIComponent(slug!)}?commentPage=${commentPage}${blockQuery ? "&" + blockQuery : ""}`,
     )
       .then((data) => {
         if (!preview && data.post.type !== (page ? "page" : "post"))
@@ -125,13 +132,34 @@ export default function PublicSite({
         setError(errorText(e));
       })
       .finally(() => setLoading(false));
-  }, [detail, slug, page, preview, previewId, commentPage]);
+  }, [detail, slug, page, preview, previewId, commentPage, blockQuery]);
   const settings = site.data?.settings,
     title = settings?.siteTitle || "WorldAct",
     posts = site.data?.posts || [];
+  useEffect(() => {
+    const href = site.data?.settings.siteIconUrl;
+    if (!href) return;
+    let url: URL;
+    try {
+      url = new URL(href, window.location.origin);
+    } catch {
+      return;
+    }
+    if (!["http:", "https:"].includes(url.protocol)) return;
+    const link = document.createElement("link");
+    link.rel = "icon";
+    link.href = url.href;
+    link.dataset.worldactIcon = "true";
+    document.head.appendChild(link);
+    return () => link.remove();
+  }, [site.data?.settings.siteIconUrl]);
   const pagination = site.data?.pagination;
   const hasArchiveFilter = Boolean(
-    params.get("search") || categoryFilter || tagFilter || params.get("page"),
+    params.get("search") ||
+    categoryFilter ||
+    tagFilter ||
+    params.get("author") ||
+    params.get("page"),
   );
   const frontPage = !detail && !hasArchiveFilter ? site.data?.frontPage : null;
   const isPostsPage = detail && post?.id === site.data?.postsPage?.id;
@@ -292,7 +320,7 @@ export default function PublicSite({
           comments: Comment[];
           commentsPagination: CommentPagination;
         }>(
-          `/public/posts/${encodeURIComponent(post.slug)}?commentPage=${commentPage}`,
+          `/public/posts/${encodeURIComponent(post.slug)}?commentPage=${commentPage}${blockQuery ? "&" + blockQuery : ""}`,
         );
         setComments(data.comments);
         setCommentsPagination(data.commentsPagination);
@@ -314,7 +342,7 @@ export default function PublicSite({
         comments: Comment[];
         commentsPagination?: CommentPagination;
       }>(
-        `/public/posts/${encodeURIComponent(post?.slug || slug || "")}/unlock`,
+        `/public/posts/${encodeURIComponent(post?.slug || slug || "")}/unlock${blockQuery ? "?" + blockQuery : ""}`,
         json("POST", { password }),
       );
       setPost(data.post);
@@ -378,11 +406,13 @@ export default function PublicSite({
         </div>
       )}
       {customHeader ? (
-        <div
+        <RenderedTemplate
+          document={customHeader}
+          postId={displayedPost?.locked ? undefined : displayedPost?.id}
+          query={publicQuery.toString()}
           className="custom-template-part"
-          dangerouslySetInnerHTML={{
-            __html: renderTemplate(customHeader.content, templateValues()),
-          }}
+          fallback={renderTemplate(customHeader.content, templateValues())}
+          preview={preview}
         />
       ) : (
         <header className="site-header">
@@ -416,14 +446,16 @@ export default function PublicSite({
           ((post) => (
             <>
               {customSingle && !post.locked ? (
-                <div
+                <RenderedTemplate
+                  document={customSingle}
+                  postId={post.id}
+                  query={publicQuery.toString()}
                   className={`custom-post-template format-${post.format || "standard"}`}
-                  dangerouslySetInnerHTML={{
-                    __html: renderTemplate(
-                      customSingle.content,
-                      templateValues(post),
-                    ),
-                  }}
+                  fallback={renderTemplate(
+                    customSingle.content,
+                    templateValues(post),
+                  )}
+                  preview={preview}
                 />
               ) : (
                 <article
@@ -665,12 +697,13 @@ export default function PublicSite({
           ))(displayedPost)
         ) : (
           <>
-            {customIndex && !hasArchiveFilter ? (
-              <div
+            {customIndex ? (
+              <RenderedTemplate
+                document={customIndex}
+                query={publicQuery.toString()}
                 className="custom-index-template"
-                dangerouslySetInnerHTML={{
-                  __html: renderTemplate(customIndex.content, templateValues()),
-                }}
+                fallback={renderTemplate(customIndex.content, templateValues())}
+                preview={preview}
               />
             ) : (
               <>
@@ -681,9 +714,11 @@ export default function PublicSite({
                       ? `Category: ${archive?.name || categoryFilter}`
                       : tagFilter
                         ? `Tag: ${archive?.name || tagFilter}`
-                        : isPostsPage
-                          ? post?.title || "Blog"
-                          : "Blog"}
+                        : params.get("author")
+                          ? `Author: ${site.data?.archive?.name || "Posts"}`
+                          : isPostsPage
+                            ? post?.title || "Blog"
+                            : "Blog"}
                 </h1>
                 <form
                   className="public-search-form"
@@ -709,9 +744,10 @@ export default function PublicSite({
                     onChange={(e) => setPublicSearch(e.target.value)}
                   />
                   <button>Search</button>
-                  {(params.get("search") || categoryFilter || tagFilter) && (
-                    <Link to="/">Show all posts</Link>
-                  )}
+                  {(params.get("search") ||
+                    categoryFilter ||
+                    tagFilter ||
+                    params.get("author")) && <Link to="/">Show all posts</Link>}
                 </form>
                 <div className="public-posts">
                   {posts.map((item) => (
@@ -790,14 +826,16 @@ export default function PublicSite({
         )}
       </main>
       {customFooter ? (
-        <div
+        <RenderedTemplate
+          document={customFooter}
+          postId={displayedPost?.locked ? undefined : displayedPost?.id}
+          query={publicQuery.toString()}
           className="custom-template-part"
-          dangerouslySetInnerHTML={{
-            __html: renderTemplate(customFooter.content, {
-              ...templateValues(),
-              navigation: footerMenu ? navigationHTML(footerMenu.items) : "",
-            }),
-          }}
+          fallback={renderTemplate(customFooter.content, {
+            ...templateValues(),
+            navigation: footerMenu ? navigationHTML(footerMenu.items) : "",
+          })}
+          preview={preview}
         />
       ) : (
         <footer className="site-footer">
@@ -878,6 +916,72 @@ type PublicDesign = {
   menus: NavigationMenu[];
   plugins: { slug: string; settings: Record<string, unknown> }[];
 };
+function RenderedTemplate({
+  document,
+  postId,
+  query,
+  className,
+  fallback,
+  preview = false,
+}: {
+  document: SiteTemplate;
+  postId?: number;
+  query: string;
+  className: string;
+  fallback: string;
+  preview?: boolean;
+}) {
+  const location = useLocation();
+  const [content, setContent] = useState<string | null>(null),
+    [error, setError] = useState("");
+  const requestQuery = new URLSearchParams(location.search);
+  for (const [key, value] of new URLSearchParams(query))
+    requestQuery.set(key, value);
+  requestQuery.set("requestPath", location.pathname);
+  if (postId) requestQuery.set("postId", String(postId));
+  if (document.type === "template-part")
+    requestQuery.set("type", "template-part");
+  const request = `/public/templates/${encodeURIComponent(document.slug)}?${requestQuery}`;
+  useEffect(() => {
+    let active = true;
+    setError("");
+    setContent(null);
+    if (preview) return;
+    api<{ content: string }>(request)
+      .then((result) => {
+        if (active) setContent(result.content);
+      })
+      .catch((reason) => {
+        if (active) setError(errorText(reason));
+      });
+    return () => {
+      active = false;
+    };
+  }, [request, document.updatedAt, preview]);
+  if (preview)
+    return (
+      <div
+        className={className}
+        dangerouslySetInnerHTML={{ __html: fallback }}
+      />
+    );
+  if (error)
+    return (
+      <p className="public-comment-notice" role="alert">
+        {error}
+      </p>
+    );
+  if (content === null)
+    return (
+      <p className="public-template-loading" role="status">
+        Loading…
+      </p>
+    );
+  return (
+    <div className={className} dangerouslySetInnerHTML={{ __html: content }} />
+  );
+}
+
 const defaultDocuments: Record<string, string> = {
   header:
     '<header class="site-header"><div class="site-title">{{siteTitle}}</div><nav>{{navigation}}</nav></header>',

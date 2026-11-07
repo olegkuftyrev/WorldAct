@@ -172,7 +172,7 @@ export default function Dashboard() {
             )}
           </ul>
           <p>
-            WorldAct 0.2.0 running{" "}
+            WorldAct 0.3.0 running{" "}
             {user?.role === "administrator" ? (
               <Link to="/admin/appearance">
                 {site.data?.settings.theme === "classic"
@@ -396,7 +396,7 @@ export default function Dashboard() {
                   <h2>Welcome to WorldAct!</h2>
                   <p>
                     <Link to="/admin/about">
-                      Learn more about the 0.2.0 version.
+                      Learn more about the 0.3.0 version.
                     </Link>
                   </p>
                 </div>

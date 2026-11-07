@@ -1,0 +1,239 @@
+.worldact-account-screen .message h2 {
+  font-size: 16px;
+  line-height: 1.5;
+  margin: 0 0 10px;
+}
+.worldact-account-screen .message p {
+  margin: 8px 0 0;
+}
+.worldact-account-screen form {
+  overflow: hidden;
+}
+.worldact-account-screen .submit {
+  margin-top: 20px;
+}
+.worldact-account-screen #reg_passmail,
+.account-delivery-note {
+  font-size: 13px;
+  line-height: 1.5;
+}
+.worldact-account-screen .privacy-confirmed {
+  border-left-color: #00a32a;
+}
+.privacy-tools-tabs {
+  margin: 12px 0 22px;
+}
+.privacy-requests-wrap > p {
+  max-width: 1000px;
+}
+.wp-privacy-request-form {
+  margin-top: 22px;
+}
+.wp-privacy-request-form h2 {
+  font-size: 18px;
+}
+.wp-privacy-request-form .submit {
+  padding-top: 0;
+  margin-top: 8px;
+}
+.privacy-admin-verification {
+  margin: 14px 0 0;
+  border-left: 4px solid #dba617;
+  padding: 4px 12px;
+  background: #fff;
+  max-width: 700px;
+}
+.privacy-admin-verification p {
+  margin: 4px 0 10px;
+}
+.privacy-requests .column-email {
+  width: 30%;
+}
+.privacy-requests .column-status {
+  width: 15%;
+}
+.privacy-requests .column-created {
+  width: 17%;
+}
+.privacy-requests .column-actions {
+  width: 38%;
+}
+.privacy-requests .column-email strong {
+  overflow-wrap: anywhere;
+}
+.privacy-requests .column-status small,
+.privacy-requests .column-created small {
+  display: block;
+  margin-top: 8px;
+  line-height: 1.5;
+  color: #50575e;
+}
+.privacy-requests .row-actions.visible {
+  visibility: visible;
+}
+.privacy-requests .column-actions > p:first-child {
+  margin-top: 0;
+}
+.privacy-row-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+.privacy-status {
+  font-weight: 600;
+}
+.privacy-completed,
+.privacy-confirmed {
+  color: #006b1b;
+}
+.privacy-failed,
+.privacy-request-error {
+  color: #b32d2e;
+}
+.privacy-request-result {
+  margin-top: 12px;
+}
+.privacy-request-result summary {
+  cursor: pointer;
+  color: #2271b1;
+}
+.privacy-request-result ul {
+  list-style: disc;
+  padding-left: 22px;
+}
+.privacy-dialog-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+  margin: 22px 0 0;
+}
+.wp-core-ui .button-danger {
+  background: #b32d2e;
+  border-color: #b32d2e;
+  color: #fff;
+}
+.wp-core-ui .button-danger:hover {
+  background: #8a2424;
+  border-color: #8a2424;
+  color: #fff;
+}
+.wp-core-ui .button-danger:disabled {
+  opacity: 0.55;
+}
+.privacy-retained-data {
+  border-left: 4px solid #dba617;
+  background: #f6f7f7;
+  padding: 12px 16px;
+  margin: 20px 0;
+}
+.privacy-retained-data h2 {
+  font-size: 16px;
+  margin: 0 0 8px;
+}
+.privacy-retained-data p {
+  margin: 0;
+}
+.delete-user-form fieldset {
+  border: 0;
+  padding: 0;
+  margin: 16px 0;
+}
+.delete-user-form select {
+  margin: 4px 0 8px 25px;
+  max-width: calc(100% - 25px);
+}
+.delete-user-form .delete-user-warning {
+  margin-left: 25px;
+  color: #b32d2e;
+}
+@media (max-width: 782px) {
+  .privacy-requests-wrap .tablenav .actions {
+    display: block;
+  }
+  .privacy-requests-wrap .tablenav {
+    height: auto;
+    min-height: 38px;
+  }
+  .privacy-requests-wrap .search-box {
+    float: none;
+    display: flex;
+    gap: 7px;
+    clear: both;
+    padding-top: 14px;
+  }
+  .privacy-requests-wrap .search-box input {
+    min-width: 0;
+    width: 100%;
+  }
+  .privacy-requests-wrap .search-box .button {
+    flex-shrink: 0;
+  }
+  .privacy-requests-wrap .form-table input.regular-text {
+    width: 100%;
+    max-width: 100%;
+  }
+  .privacy-requests thead,
+  .privacy-requests tfoot {
+    display: none;
+  }
+  table.privacy-requests,
+  table.privacy-requests tbody,
+  table.privacy-requests tbody tr {
+    display: block;
+    width: auto;
+  }
+  table.privacy-requests tbody tr {
+    position: relative;
+    padding: 12px 12px 12px 52px;
+    border-bottom: 1px solid #c3c4c7;
+  }
+  table.privacy-requests tbody td {
+    display: block !important;
+    padding: 4px 0 !important;
+    width: auto !important;
+    border: 0 !important;
+  }
+  table.privacy-requests tbody th.check-column {
+    position: absolute;
+    left: 10px;
+    top: 16px;
+    width: 24px;
+    padding: 0;
+  }
+  table.privacy-requests tbody td:not(.column-primary):before {
+    content: attr(data-colname) ": " !important;
+    font-weight: 600;
+    position: static !important;
+    left: auto !important;
+    top: auto !important;
+    width: auto !important;
+    display: inline !important;
+    margin-right: 4px;
+  }
+  table.privacy-requests tbody td.column-actions:before {
+    display: block !important;
+    margin: 8px 0;
+  }
+  table.privacy-requests tbody td:not([data-colname]):before {
+    content: none !important;
+  }
+  .privacy-row-buttons {
+    margin: 6px 0;
+  }
+  .privacy-tools-tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .privacy-tools-tabs .nav-tab {
+    margin-left: 0;
+  }
+  .privacy-dialog-actions {
+    flex-wrap: wrap;
+  }
+  .worldact-account-screen {
+    max-width: calc(100vw - 40px);
+  }
+}

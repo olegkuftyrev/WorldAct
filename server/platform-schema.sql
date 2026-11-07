@@ -24,6 +24,7 @@ CREATE TABLE IF NOT EXISTS site_documents (
  UNIQUE(type,slug)
 );
 CREATE TABLE IF NOT EXISTS site_styles (id integer PRIMARY KEY CHECK(id=1),data jsonb NOT NULL DEFAULT '{}'::jsonb);
+ALTER TABLE site_documents ADD COLUMN IF NOT EXISTS raw_content text NOT NULL DEFAULT '';
 CREATE TABLE IF NOT EXISTS extensions (
  slug varchar(100) PRIMARY KEY,
  enabled boolean NOT NULL DEFAULT false,

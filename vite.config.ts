@@ -4,10 +4,13 @@ export default defineConfig({
   plugins: [react()],
   server: {
     port: 5173,
+    cors: false,
     proxy: {
       "/api": "http://127.0.0.1:3001",
       "/uploads": "http://127.0.0.1:3001",
       "/wp-json": "http://127.0.0.1:3001",
+      "/wp-admin": "http://127.0.0.1:3001",
+      "/wp-login.php": "http://127.0.0.1:3001",
       "/feed": "http://127.0.0.1:3001",
       "/comments/feed": "http://127.0.0.1:3001",
       "/sitemap.xml": "http://127.0.0.1:3001",

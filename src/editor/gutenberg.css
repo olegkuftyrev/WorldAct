@@ -250,3 +250,40 @@
     grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
   }
 }
+
+.worldact-synced-patterns > .components-modal__content > label {
+  display: grid;
+  gap: 6px;
+  margin-bottom: 16px;
+  font-weight: 600;
+}
+.worldact-synced-patterns > .components-modal__content > label input {
+  width: 100%;
+}
+.worldact-pattern-entities {
+  margin: 20px 0;
+  padding: 0;
+  list-style: none;
+}
+.worldact-pattern-entities li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 0;
+  border-bottom: 1px solid #dcdcde;
+}
+.worldact-pattern-entities li span {
+  display: flex;
+  flex-wrap: wrap;
+}
+.worldact-synced-patterns .worldact-gutenberg-inspector {
+  position: static;
+  width: 260px;
+}
+@media (max-width: 600px) {
+  .worldact-pattern-entities li {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}

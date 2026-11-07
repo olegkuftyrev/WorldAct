@@ -1,3 +1,12 @@
+import Comments from "./screens/Comments";
+import {
+  Register,
+  CheckEmail,
+  PrivacyConfirmation,
+  PrivacyRequests,
+  RegistrationLink,
+  DeleteUserDialog,
+} from "./screens/Accounts";
 import PublicSite, { PermalinkResolver } from "./screens/PublicSite";
 import Dashboard from "./screens/Dashboard";
 import MediaImageEditor from "./components/MediaImageEditor";
@@ -54,7 +63,6 @@ import {
   type User,
   type Post,
   type Media,
-  type Comment,
   type Settings,
 } from "./api";
 
@@ -101,9 +109,14 @@ export default function App() {
     const scheme = schemes.includes(user?.adminColor || "")
       ? user!.adminColor!
       : "modern";
-    const login = ["/login", "/lost-password", "/reset-password"].includes(
-      location.pathname,
-    );
+    const login = [
+      "/login",
+      "/lost-password",
+      "/reset-password",
+      "/register",
+      "/check-email",
+      "/privacy/confirm",
+    ].includes(location.pathname);
     const admin = location.pathname.startsWith("/admin");
     document.body.className = location.pathname.startsWith("/admin")
       ? `wp-admin wp-core-ui js admin-color-${scheme}`
@@ -168,6 +181,9 @@ export default function App() {
             element={<Navigate to="/login" replace />}
           />
           <Route path="/login" element={<Login serverError={error} />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/check-email" element={<CheckEmail />} />
+          <Route path="/privacy/confirm" element={<PrivacyConfirmation />} />
           <Route path="/lost-password" element={<LostPassword />} />
           <Route path="/reset-password" element={<ResetPassword />} />
           <Route
@@ -179,7 +195,7 @@ export default function App() {
                 <Navigate
                   to="/login"
                   replace
-                  state={{ from: location.pathname }}
+                  state={{ from: location.pathname + location.search }}
                 />
               )
             }
@@ -195,6 +211,7 @@ export default function App() {
               }
             />
             <Route path="posts" element={<PostList type="post" />} />
+            <Route path="content/:id" element={<ContentEditorRedirect />} />
             <Route
               path="posts/categories"
               element={<Taxonomies taxonomy="category" />}
@@ -211,31 +228,63 @@ export default function App() {
             <Route path="appearance/editor" element={<SiteEditor />} />
             <Route path="appearance/menus" element={<Menus />} />
             <Route path="plugins" element={<Plugins />} />
-            <Route path="tools" element={<ToolsSuite />} />
+            <Route path="tools" element={<ToolsRoute />} />
             <Route path="about" element={<About />} />
           </Route>
           <Route
             path="/admin/posts/new"
             element={
-              user ? <Editor type="post" /> : <Navigate to="/login" replace />
+              user ? (
+                <Editor type="post" />
+              ) : (
+                <Navigate
+                  to="/login"
+                  replace
+                  state={{ from: location.pathname + location.search }}
+                />
+              )
             }
           />
           <Route
             path="/admin/posts/:id"
             element={
-              user ? <Editor type="post" /> : <Navigate to="/login" replace />
+              user ? (
+                <Editor type="post" />
+              ) : (
+                <Navigate
+                  to="/login"
+                  replace
+                  state={{ from: location.pathname + location.search }}
+                />
+              )
             }
           />
           <Route
             path="/admin/pages/new"
             element={
-              user ? <Editor type="page" /> : <Navigate to="/login" replace />
+              user ? (
+                <Editor type="page" />
+              ) : (
+                <Navigate
+                  to="/login"
+                  replace
+                  state={{ from: location.pathname + location.search }}
+                />
+              )
             }
           />
           <Route
             path="/admin/pages/:id"
             element={
-              user ? <Editor type="page" /> : <Navigate to="/login" replace />
+              user ? (
+                <Editor type="page" />
+              ) : (
+                <Navigate
+                  to="/login"
+                  replace
+                  state={{ from: location.pathname + location.search }}
+                />
+              )
             }
           />
           <Route path="/" element={<PublicSite />} />
@@ -245,7 +294,11 @@ export default function App() {
               user ? (
                 <PublicSite detail preview />
               ) : (
-                <Navigate to="/login" replace />
+                <Navigate
+                  to="/login"
+                  replace
+                  state={{ from: location.pathname + location.search }}
+                />
               )
             }
           />
@@ -256,6 +309,55 @@ export default function App() {
       </Suspense>
     </Session.Provider>
   );
+}
+function ContentEditorRedirect() {
+  const { id } = useParams();
+  const resource = useResource<{ post: Post }>(`/posts/${id}`);
+  if (resource.data?.post)
+    return (
+      <Navigate
+        to={`/admin/${resource.data.post.type === "page" ? "pages" : "posts"}/${resource.data.post.id}`}
+        replace
+      />
+    );
+  return (
+    <main className="wrap">
+      <ResourceState
+        loading={resource.loading}
+        error={resource.error}
+        retry={resource.reload}
+      />
+    </main>
+  );
+}
+function ToolsRoute() {
+  const [params] = useSearchParams();
+  const { user } = useContext(Session);
+  const tab = params.get("tab");
+  if (
+    user?.role === "administrator" &&
+    ["privacy", "privacy-export", "privacy-erase"].includes(tab || "")
+  )
+    return (
+      <PrivacyRequests type={tab === "privacy-erase" ? "erase" : "export"} />
+    );
+  return <ToolsSuite />;
+}
+function safeLoginRedirect(value: unknown): string | null {
+  if (
+    typeof value !== "string" ||
+    !/^\/(?:admin(?:\/|[?#]|$)|preview\/)/.test(value) ||
+    /[\\\u0000-\u0020]/.test(value)
+  )
+    return null;
+  try {
+    const url = new URL(value, window.location.origin);
+    return url.origin === window.location.origin
+      ? url.pathname + url.search + url.hash
+      : null;
+  } catch {
+    return null;
+  }
 }
 function Login({ serverError }: { serverError: string }) {
   const { user, setUser } = useContext(Session),
@@ -276,14 +378,32 @@ function Login({ serverError }: { serverError: string }) {
         json("POST", { login, password }),
       );
       setUser(data.user);
-      navigate(location.state?.from || "/admin");
+      navigate(
+        safeLoginRedirect(location.state?.from) ||
+          safeLoginRedirect(
+            new URLSearchParams(location.search).get("redirect_to"),
+          ) ||
+          "/admin",
+      );
     } catch (e) {
       setError(errorText(e));
     } finally {
       setBusy(false);
     }
   }
-  if (user) return <Navigate to="/admin" replace />;
+  if (user)
+    return (
+      <Navigate
+        to={
+          safeLoginRedirect(location.state?.from) ||
+          safeLoginRedirect(
+            new URLSearchParams(location.search).get("redirect_to"),
+          ) ||
+          "/admin"
+        }
+        replace
+      />
+    );
   return (
     <div id="login">
       <h1>
@@ -346,6 +466,7 @@ function Login({ serverError }: { serverError: string }) {
         <Link to="/">← Go to WorldAct</Link>
       </p>
       <p id="nav">
+        <RegistrationLink />
         <Link to="/lost-password">Lost your password?</Link>
       </p>
       <p className="login-help">
@@ -450,7 +571,8 @@ function AdminShell() {
         ["Site Health", "/admin/tools"],
         ["Export", "/admin/tools?tab=export"],
         ["Import", "/admin/tools?tab=import"],
-        ["Personal Data", "/admin/tools?tab=privacy"],
+        ["Export Personal Data", "/admin/tools?tab=privacy-export"],
+        ["Erase Personal Data", "/admin/tools?tab=privacy-erase"],
         ["Mail", "/admin/tools?tab=mail"],
       ],
     },
@@ -687,7 +809,7 @@ function AdminShell() {
         <p id="footer-left">
           Thank you for creating with <Link to="/admin/about">WorldAct</Link>.
         </p>
-        <p id="footer-upgrade">Version 0.2.0</p>
+        <p id="footer-upgrade">Version 0.3.0</p>
       </footer>
     </div>
   );
@@ -1047,249 +1169,12 @@ function MediaLibrary() {
     </>
   );
 }
-function Comments() {
-  const resource = useResource<{ comments: Comment[] }>("/comments");
-  const [params, setParams] = useSearchParams(),
-    status = params.get("status") || "all";
-  const [search, setSearch] = useState(""),
-    [selected, setSelected] = useState<number[]>([]),
-    [bulk, setBulk] = useState(""),
-    [notice, setNotice] = useState(""),
-    [error, setError] = useState(""),
-    [busy, setBusy] = useState(false);
-  const comments = (resource.data?.comments || []).filter(
-    (item) =>
-      (status === "all"
-        ? item.status !== "spam" && item.status !== "trash"
-        : item.status === status) &&
-      `${item.authorName} ${item.content} ${item.postTitle}`
-        .toLowerCase()
-        .includes(search.toLowerCase()),
-  );
-  async function action(ids: number[], nextStatus: string) {
-    if (!ids.length || !nextStatus) return;
-    setBusy(true);
-    setError("");
-    try {
-      for (const id of ids)
-        await api(
-          `/comments/${id}`,
-          nextStatus === "delete"
-            ? json("DELETE")
-            : json("PUT", { status: nextStatus }),
-        );
-      setSelected([]);
-      setNotice("Comment updated.");
-      await resource.reload();
-    } catch (e) {
-      setError(errorText(e));
-    } finally {
-      setBusy(false);
-    }
-  }
-  return (
-    <>
-      <ScreenTabs />
-      <main className="wrap">
-        <h1>Comments</h1>
-        {notice && <Notice onDismiss={() => setNotice("")}>{notice}</Notice>}
-        {error && <Notice error>{error}</Notice>}
-        <ResourceState
-          loading={resource.loading}
-          error={resource.error}
-          retry={resource.reload}
-        />
-        <ul className="subsubsub">
-          {[
-            ["all", "All"],
-            ["pending", "Pending"],
-            ["approved", "Approved"],
-            ["spam", "Spam"],
-            ["trash", "Trash"],
-          ].map(([value, label], i) => (
-            <li key={value}>
-              {i > 0 && " | "}
-              <Link
-                className={status === value ? "current" : ""}
-                to={`?status=${value}`}
-              >
-                {label}{" "}
-                <span className="count">
-                  (
-                  {
-                    (resource.data?.comments || []).filter((item) =>
-                      value === "all"
-                        ? !["trash", "spam"].includes(item.status)
-                        : item.status === value,
-                    ).length
-                  }
-                  )
-                </span>
-              </Link>
-            </li>
-          ))}
-        </ul>
-        <div className="search-box">
-          <input
-            type="search"
-            aria-label="Search comments"
-            placeholder="Search comments"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-          />
-        </div>
-        <div className="tablenav top">
-          <div className="alignleft actions bulkactions">
-            <select
-              aria-label="Bulk actions"
-              value={bulk}
-              onChange={(e) => setBulk(e.target.value)}
-            >
-              <option value="">Bulk actions</option>
-              <option value="approved">Approve</option>
-              <option value="pending">Unapprove</option>
-              <option value="spam">Mark as spam</option>
-              <option value="trash">Move to Trash</option>
-              {status === "trash" && (
-                <option value="delete">Delete permanently</option>
-              )}
-            </select>
-            <button
-              className="button"
-              disabled={busy || !selected.length || !bulk}
-              onClick={() => action(selected, bulk)}
-            >
-              Apply
-            </button>
-          </div>
-          <div className="tablenav-pages">{comments.length} comments</div>
-        </div>
-        <table className="wp-list-table widefat fixed striped comments">
-          <thead>
-            <tr>
-              <td className="check-column">
-                <input
-                  type="checkbox"
-                  aria-label="Select all comments"
-                  checked={
-                    comments.length > 0 &&
-                    comments.every((item) => selected.includes(item.id))
-                  }
-                  onChange={(e) =>
-                    setSelected(
-                      e.target.checked ? comments.map((item) => item.id) : [],
-                    )
-                  }
-                />
-              </td>
-              <th className="column-author">Author</th>
-              <th>Comment</th>
-              <th className="column-response">In response to</th>
-              <th className="column-date">Submitted on</th>
-            </tr>
-          </thead>
-          <tbody>
-            {comments.map((comment) => (
-              <tr
-                className={comment.status === "pending" ? "unapproved" : ""}
-                key={comment.id}
-              >
-                <th scope="row" className="check-column">
-                  <input
-                    type="checkbox"
-                    aria-label={`Select comment by ${comment.authorName}`}
-                    checked={selected.includes(comment.id)}
-                    onChange={(e) =>
-                      setSelected(
-                        e.target.checked
-                          ? [...selected, comment.id]
-                          : selected.filter((id) => id !== comment.id),
-                      )
-                    }
-                  />
-                </th>
-                <td className="author">
-                  <strong>{comment.authorName}</strong>
-                  <br />
-                  <a href={`mailto:${comment.authorEmail}`}>
-                    {comment.authorEmail}
-                  </a>
-                </td>
-                <td className="comment column-comment">
-                  <div
-                    className="comment-content"
-                    dangerouslySetInnerHTML={{ __html: comment.content }}
-                  />
-                  <div className="row-actions visible">
-                    {comment.status === "approved" ? (
-                      <button
-                        className="button-link"
-                        onClick={() => action([comment.id], "pending")}
-                      >
-                        Unapprove
-                      </button>
-                    ) : (
-                      <button
-                        className="button-link"
-                        onClick={() => action([comment.id], "approved")}
-                      >
-                        Approve
-                      </button>
-                    )}
-                    {" | "}
-                    <button
-                      className="button-link"
-                      onClick={() => action([comment.id], "spam")}
-                    >
-                      Spam
-                    </button>
-                    {" | "}
-                    {comment.status === "trash" ? (
-                      <button
-                        className="button-link button-link-delete"
-                        onClick={() => action([comment.id], "delete")}
-                      >
-                        Delete permanently
-                      </button>
-                    ) : (
-                      <button
-                        className="button-link button-link-delete"
-                        onClick={() => action([comment.id], "trash")}
-                      >
-                        Trash
-                      </button>
-                    )}
-                  </div>
-                </td>
-                <td className="column-response">
-                  <Link to={`/admin/posts/${comment.postId}`}>
-                    {comment.postTitle}
-                  </Link>
-                </td>
-                <td>
-                  {date(comment.createdAt)}
-                  <br />
-                  <span className={`comment-status status-${comment.status}`}>
-                    {comment.status}
-                  </span>
-                </td>
-              </tr>
-            ))}
-            {!resource.loading && !comments.length && (
-              <tr>
-                <td colSpan={5}>No comments found.</td>
-              </tr>
-            )}
-          </tbody>
-        </table>
-      </main>
-    </>
-  );
-}
 function Users() {
+  const [userParams] = useSearchParams();
   const resource = useResource<{ users: User[] }>("/users"),
     { user } = useContext(Session);
-  const [adding, setAdding] = useState(false),
+  const [removingUser, setRemovingUser] = useState<User | null>(null);
+  const [adding, setAdding] = useState(userParams.get("new") === "1"),
     [query, setQuery] = useState(""),
     [roleFilter, setRoleFilter] = useState("all"),
     [form, setForm] = useState({
@@ -1325,24 +1210,8 @@ function Users() {
       setBusy(false);
     }
   }
-  async function remove(item: User) {
-    if (
-      !window.confirm(
-        `Delete user “${item.displayName}”? This action permanently removes the account.`,
-      )
-    )
-      return;
-    setBusy(true);
-    setError("");
-    try {
-      await api(`/users/${item.id}`, json("DELETE"));
-      setNotice("User deleted.");
-      await resource.reload();
-    } catch (e) {
-      setError(errorText(e));
-    } finally {
-      setBusy(false);
-    }
+  function remove(item: User) {
+    setRemovingUser(item);
   }
   const users = (resource.data?.users || []).filter(
     (item) =>
@@ -1564,6 +1433,19 @@ function Users() {
             </table>
           </>
         )}
+        {removingUser && (
+          <DeleteUserDialog
+            target={removingUser}
+            users={resource.data?.users || []}
+            currentUserId={user!.id}
+            onClose={() => setRemovingUser(null)}
+            onDeleted={async () => {
+              setRemovingUser(null);
+              setNotice("User deleted.");
+              await resource.reload();
+            }}
+          />
+        )}
       </main>
     </>
   );
@@ -1574,7 +1456,7 @@ function About() {
       <div className="about-header">
         <Brand />
         <div>
-          <h1>WorldAct 0.2</h1>
+          <h1>WorldAct 0.3</h1>
           <p>Your words. Your site. Your world.</p>
         </div>
       </div>

@@ -840,6 +840,8 @@ export default function Editor({ type }: { type: "post" | "page" }) {
                 />
               </div>
               <GutenbergEditor
+                postId={postId||undefined}
+                postType={type}
                 initialBlocks={doc.blocks}
                 initialHTML={doc.content}
                 resetKey={`${postId || "new"}-${resetKey}`}
