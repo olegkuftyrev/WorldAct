@@ -1,0 +1,18 @@
+services:
+  db:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_DB: worldact
+      POSTGRES_USER: worldact
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-worldact_local}
+    ports:
+      - "127.0.0.1:54329:5432"
+    volumes:
+      - worldact_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U worldact -d worldact"]
+      interval: 2s
+      timeout: 5s
+      retries: 20
+volumes:
+  worldact_pgdata:
