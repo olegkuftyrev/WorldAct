@@ -14,6 +14,12 @@ export async function migrate() {
       "SELECT pg_advisory_xact_lock(hashtext('worldact-migration'))",
     );
     await client.query(sql);
+    // Platform extensions are optional during bootstrap and migrate atomically.
+    const platformSql = await readFile(path.join(rootDir, "server", "platform-schema.sql"), "utf8").catch((error: NodeJS.ErrnoException) => {
+      if (error.code === "ENOENT") return "";
+      throw error;
+    });
+    if (platformSql) await client.query(platformSql);
     await client.query("COMMIT");
   } catch (error) {
     await client.query("ROLLBACK");

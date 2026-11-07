@@ -51,12 +51,17 @@ export async function seed() {
         VALUES ('page', 'Sample Page', 'sample-page', '<p>This is an example page. You can edit this page from your WorldAct dashboard and create new pages for your site.</p>', '', 'publish', $1, now()) ON CONFLICT (slug) DO NOTHING`,
         [adminId],
       );
-      if (post.rows[0])
+      if (post.rows[0]) {
+        await client.query(
+          "INSERT INTO post_terms(post_id,term_id) SELECT $1,id FROM terms WHERE is_default ON CONFLICT DO NOTHING",
+          [post.rows[0].id],
+        );
         await client.query(
           `INSERT INTO comments (post_id, author_name, author_email, content, status)
         VALUES ($1, 'A WorldAct Commenter', 'commenter@worldact.local', '<p>Hi, this is a comment. To get started with moderating, editing, and deleting comments, please visit the Comments screen in the dashboard.</p>', 'approved')`,
           [post.rows[0].id],
         );
+      }
     }
     await client.query("COMMIT");
     console.log(

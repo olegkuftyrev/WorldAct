@@ -1,85 +1,95 @@
 # WorldAct architecture
 
-WorldAct rebuilds selected WordPress workflows using **React + TypeScript → Express + `pg` → PostgreSQL 17**. The implementation must contain no PHP runtime or MySQL dependency. This is an independent application with its own schema and API, using the supplied WordPress distribution as a visual and behavioral reference.
+WorldAct 0.2 is an independent **React + TypeScript → Express + `pg` → PostgreSQL 17** CMS. Its application runtime and build outputs use JavaScript/CSS, with no PHP runtime or MySQL dependency. The supplied WordPress distribution supplies interface references and selected attributed static assets.
 
-## Implementation status
-
-The first React application, Express API, schema, migration, seed, and PostgreSQL Compose service are implemented. Setup, the API integration suite, TypeScript, and the client/server build pass. Core editor/public workflows have also been exercised in a browser. This is a limited first milestone; see [the parity tracker](parity.md) for exact verification and remaining gaps.
-
-## Runtime shape
+## Runtime and modules
 
 ```mermaid
 flowchart LR
-    Browser[React and TypeScript UI] -->|Same-origin JSON and multipart requests| API[Express API]
-    API -->|Parameterized SQL via pg| DB[(PostgreSQL 17)]
-    API --> Uploads[Local uploads directory]
-    API -->|Production static assets| Browser
+    Browser[React admin and public site] -->|Same-origin API| API[Express Node API]
+    Browser -->|Lazy editor chunk| Gutenberg[Official Gutenberg React packages]
+    API -->|Parameterized SQL| DB[(PostgreSQL 17)]
+    API --> Files[Uploads and image derivatives]
+    API --> Mail[Local outbox or configured SMTP]
+    API --> Jobs[Scheduled publishing]
 ```
 
-Vite supplies the development client at `http://127.0.0.1:5173`. Its proxy forwards `/api` and `/uploads` to Express at `http://127.0.0.1:3001`, so browser requests use the same origin. Express also serves the Vite build together with the API and uploaded media when using the compiled application.
+Vite serves development at `127.0.0.1:5173` and proxies API, upload, REST, and feed requests to `127.0.0.1:3001`. The compiled Node server serves the built client and backend together. Node 22.13.0+ is required by the current Gutenberg packages. `compose.yaml` defines PostgreSQL `17-alpine`, its health check, loopback port `54329`, and the persistent `worldact_pgdata` volume.
 
-`compose.yaml` currently defines PostgreSQL `17-alpine`, a persistent `worldact_pgdata` volume, a database health check, and a database port bound to loopback at `127.0.0.1:54329`. The application reads its connection string from `DATABASE_URL`; database credentials belong in the environment, not client bundles.
+| Source                                                             | Responsibility                                                                            |
+| ------------------------------------------------------------------ | ----------------------------------------------------------------------------------------- |
+| `src/App.tsx`, `src/components/`                                   | Routing, authenticated admin shell, common controls, media/image UI                       |
+| `src/screens/`                                                     | Dashboard, posts/editor, taxonomies, platform settings/design, and public rendering       |
+| `src/editor/`                                                      | Lazy official Gutenberg integration, durable block contract, media adapter, site bindings |
+| `src/embeds.ts`, `src/publicLinks.ts`, `src/template.ts`           | Video-provider validation, public links and safe template binding                         |
+| `server/index.ts`, `server/auth.ts`                                | HTTP application, sessions, login, common middleware and bootstrap                        |
+| `server/core.ts`                                                   | Editorial workflows, access rules, taxonomies, revisions/autosaves, locks and scheduler   |
+| `server/platform.ts`, `server/design.ts`                           | Profiles/settings, media, menus, site documents, extensions, tools and mail               |
+| `server/media-files.ts`, `server/permalinks.ts`, `server/utils.ts` | Derivatives/storage, routing, validation, sanitization and canonical block handling       |
+| `server/compat.ts`                                                 | REST compatibility subset, feeds, sitemap/robots, permalink resolver and WXR              |
+| `server/schema.sql`, `server/platform-schema.sql`                  | Repeatable, additive PostgreSQL schema upgrades                                           |
 
-The configured build checks TypeScript, builds the React client with Vite, and bundles the server entry with esbuild. Migration and idempotent seed scripts are implemented and have been run successfully against PostgreSQL. The root README owns runnable setup instructions and verified commands.
+Migration runs atomically under a PostgreSQL advisory lock. Seeds use explicit markers and preserve existing content. `.env`, uploads, dependency directories, and build outputs are excluded from source control as configured by `.gitignore`.
 
-## Client
+## Editor and content representations
 
-React Router exposes:
+The post editor is loaded through `React.lazy`. It uses the official `@wordpress/block-editor`, `@wordpress/blocks`, `@wordpress/block-library`, components, data, hooks, and format packages. A `BlockEditorProvider` owns an iframe `BlockCanvas`; official insertion, transforms, nested blocks, list view, inspector, toolbar and rich-text formats supply editing behavior. WorldAct provides persistence, history controls/iframe keyboard undo, media selection/uploads, link suggestions and attachment entities.
 
-- Public `/`, `/posts/:slug`, and `/pages/:slug` views.
-- `/login` and the authenticated `/admin` shell.
-- `/admin/posts`, `/admin/posts/new`, `/admin/posts/:id`, and equivalent page routes.
-- `/admin/media`, `/admin/comments`, `/admin/users`, and `/admin/settings`.
+The editor enables 27 core block types. This includes paragraph/heading/list/quote, code/table, image/gallery/cover/media-text, audio/video/file, buttons, groups/columns, separators/spacers, details, HTML, and embeds. YouTube and Vimeo are the enabled embed providers. A strict URL/ID parser constructs their player URLs; public rendering creates those recognized player iframes without trusting arbitrary HTML or contacting a PHP oEmbed service.
 
-The `/wp-admin` and `/wp-login.php` aliases are redirects only; a legacy-looking URL does not introduce a PHP file or runtime.
+Content has separate durable representations:
 
-The client uses an API helper with same-origin credentials, explicit loading states, and JSON errors shaped as `{ "error": "message" }`. It must not store an authentication bearer token in localStorage. The server remains responsible for validation, permission checks, sanitization, and persistence even when a control is hidden in the UI.
+- `blocks`: JSONB trees of `{ name, attributes, innerBlocks }`; transient client IDs and selections are omitted and recreated on load.
+- `raw_content`: sanitized canonical Gutenberg markup with balanced block comments, for round trips and portability.
+- `content`: sanitized public HTML without editor metadata or active scripts.
 
-The initial editor stores sanitized HTML and offers a small set of editable blocks. It is not the complete Gutenberg editor. The public site renders published content only. Reference static CSS and assets can reproduce the admin interface while application behavior is implemented in React; copying WordPress's PHP code is unnecessary and outside this design.
+Block JSON has name, attribute, depth and count limits. It is not rendered by blindly interpolating attributes. The server sanitizes published HTML and vetted inline styles, while preserving supported layout/color/typography/spacing markup. Legacy HTML can be converted through Gutenberg's HTML transforms. Revisions and per-user autosaves preserve canonical content as well as block state.
 
-## API boundaries
+## Domain and editorial rules
 
-| Boundary       | Intended API                                                                             |
-| -------------- | ---------------------------------------------------------------------------------------- |
-| Session        | `GET /api/session`; `POST /api/auth/login`; `POST /api/auth/logout`                      |
-| Dashboard      | `GET /api/dashboard` with content counts, recent posts, and recent comments              |
-| Content        | `GET/POST /api/posts`; `GET/PUT/DELETE /api/posts/:id`; type, status, and search filters |
-| Media          | `GET/POST /api/media`; `PUT/DELETE /api/media/:id`; multipart field `file`               |
-| Comments       | `GET /api/comments`; `PUT/DELETE /api/comments/:id`                                      |
-| Users          | `GET/POST /api/users`; `DELETE /api/users/:id`                                           |
-| Settings       | `GET/PUT /api/settings`                                                                  |
-| Public content | `GET /api/public/site`; `GET /api/public/posts/:slug`; `POST /api/public/comments`       |
+PostgreSQL holds users/sessions, posts/pages, terms and post-term relations, media metadata, comments, settings/preferences, revisions, autosaves, navigation menus, site documents/styles, extensions, password-reset tokens and mail messages. File bytes and generated image derivatives live separately in `uploads/`.
 
-The first-slice post states are `publish`, `draft`, and `trash`; content type is `post` or `page`. Comment states are `approved`, `pending`, `spam`, and `trash`. The supported roles are `administrator`, `editor`, `author`, and `subscriber`. These roles need explicit server-side authorization rather than an assumption that their presence establishes WordPress's complete capability model.
+Posts/pages support `draft`, `pending`, `publish`, `future`, `private`, and `trash`, with publication/scheduling timestamps, page hierarchy/order, featured media, post-format classification metadata, sticky and discussion settings, and optional password protection. The Writing default supplies the format classification/public class; format-specific templates and archives are not implemented. Optimistic versions prevent silently overwriting a concurrent save. Per-user autosaves support recovery; transactional row locks serialize conflicting writes. The in-process scheduler publishes due content while Node is running; it is not a separate always-on job service.
 
-Published public responses must exclude drafts and trash. Public comments require validation and enter moderation as pending. Private administrative endpoints must authenticate before returning protected data or accepting mutations. Permanent deletion is distinct from moving an item to trash.
+Five roles are enforced server-side: administrator, editor, author, contributor and subscriber. Authors/contributors are restricted to their own posts; contributors cannot publish or upload. Page/term/moderation and administrator-only functions have explicit checks. These implemented rules do not constitute WordPress's entire extensible capability system.
 
-## Persistence
+## Site design and extensions
 
-PostgreSQL is the authoritative store. The intended domain includes users, sessions, posts/pages, media metadata, comments, and site settings. Posts reference an author; comments reference content; media records hold metadata for files in the upload directory. Foreign-key and deletion policies must preserve valid relationships and protect administrative access, including attempts to remove the active user.
+Templates, template parts and patterns are versioned site documents using the same block/HTML contract. Eight site-context blocks emit controlled bindings: site title, tagline, navigation, post title/content/date/author, and post list. The public renderer binds metadata through DOM text/attribute APIs and inserts sanitized HTML slots only into text positions. A final structural and URL allowlist prevents token binding from creating executable attributes or unsafe schemes. Saved patterns appear in the editor's actual Patterns library.
 
-Use parameterized SQL through `pg` for user values. Migrations own schema changes, and seeds create explicit study content and an initial administrator. The application must not depend on a WordPress/MySQL database or report success for writes that exist only in browser state. Upload bytes live on the filesystem in this first slice, so a backup must include both the PostgreSQL database and the uploads directory.
+Global styles store supported colors, text/heading font selections, content width and spacing. Navigation items have stable IDs, parent IDs, labels, URLs and targets; validation rejects cycles and each primary/footer location has one assigned menu. The public site consumes these designs, menus and styles.
 
-Timestamps cross the API as ISO strings and are displayed in the user's local time. Settings include site title, tagline, site URL, administrator email, timezone, date/time formats, posts per page, search-engine discouragement, and a restricted theme identifier.
+Four limited React theme presentations are offered under the Twenty Twenty-Five, Twenty Twenty-Four, Twenty Twenty-Three and WorldAct Classic names. They are not complete executions or ports of the original PHP themes. Manrope and Inter variable fonts are served locally from the supplied themes with their SIL Open Font License notices. Other font choices use system fonts and fallbacks.
 
-## Authentication and content safety contract
+The local JavaScript registry implements Reading Time, Spam Shield, Site SEO and Custom Footer. Installation, activation, settings, deactivation and deletion persist in PostgreSQL. Enabled modules affect public metadata/footer/reading time or comment classification. There is no arbitrary ZIP/PHP plugin loader or WordPress.org update service.
 
-The server implements the following controls; the API integration tests exercise their primary behavior:
+## HTTP boundaries
 
-- Hash passwords with Node's native `scrypt`, a per-password random salt, and a constant-time comparison. Store password hashes only; never return them in user JSON.
-- Generate unpredictable server sessions, store only a hash of each session token, enforce expiration, and invalidate the session on logout. Deliver the token in an HttpOnly, SameSite cookie, with Secure enabled when served over HTTPS.
-- Check roles and resource ownership on the server for protected reads and mutations. Administrative user/settings operations must not rely on client-side route protection.
-- Enforce the configured same-site/origin boundary for state-changing requests. A development proxy keeps client requests same-origin; it does not replace request-origin validation or cookie protections.
-- Validate input with explicit field/type/length limits before SQL. Treat user HTML as untrusted and sanitize it with an allowlist on the server before storage or rendering.
-- Limit uploads by size and allowed formats, validate the actual file content as well as the declared MIME type, generate safe server filenames, and reject executable formats. Serve uploaded content as static files with appropriate content types and browser protections. Do not accept SVG/HTML or arbitrary scripts as trusted images.
-- Return useful errors without exposing secrets, session values, password hashes, filesystem internals, or database connection strings.
+| Boundary         | Implemented routes                                                                                      |
+| ---------------- | ------------------------------------------------------------------------------------------------------- |
+| Sessions/account | `/api/session`, `/api/auth/*`, `/api/profile`, `/api/preferences`, `/api/users`                         |
+| Editorial        | `/api/posts`, post revisions/autosave routes, `/api/terms`, `/api/comments`                             |
+| Media            | `/api/media`, image edit/restore routes, `/uploads/*`                                                   |
+| Design           | `/api/menus`, `/api/site-editor/*`, `/api/themes`, `/api/plugins`                                       |
+| Public           | `/api/public/site`, posts/unlock/comments, `/api/public/design`, `/api/public/resolve`                  |
+| Tools            | `/api/tools/health`, mail, export/import and personal-data export                                       |
+| Compatibility    | `/wp-json/wp/v2` subset for posts/pages/media/categories/tags/comments/search/types/taxonomies/statuses |
+| Discovery        | RSS/Atom/comment feeds, sitemap and robots output                                                       |
 
-Uploads are limited to 8 MiB JPEG, PNG, GIF, or WebP files with a matching MIME type and signature. Login and public comments have in-memory request limits. Production sessions set Secure and require an HTTPS deployment. These checks are a first implementation, not a security certification or the full WordPress capability model.
+The REST subset adapts to WorldAct's domain, session authentication and permission checks; it is not complete endpoint/schema/extension compatibility. Legacy `/wp-admin` and `/wp-login.php` paths redirect to React routes and do not execute PHP.
 
-## Reference and compatibility
+## Storage, portability and limits
 
-The supplied `/Users/olegkuftyrev/Desktop/wordpress/wp-includes/version.php` declares WordPress 7.1.4. The reference is an unconfigured distribution, so it cannot establish an installed site's actual content or enabled options. It has not been run as a PHP/MySQL service for this rewrite.
+Uploads allow supported images, audio/video, PDF and Office documents up to **32 MiB**, with signature/MIME checks and executable/SVG/HTML rejection. Sharp generates configured thumbnail/medium/large sizes and applies crop, rotation, flip, resize and restore. Year/month storage and size settings affect generated files. Existing image URLs are retained as backups during edits until permanent deletion. A backup must cover both PostgreSQL and uploads.
 
-WorldAct's `/api` is not the WordPress REST API. PHP plugins/themes, multisite, complete Gutenberg/site editing, revisions/autosave, scheduled/private publication, taxonomies, installer/updater behavior, feeds, and import/export need separate work. Reusing a theme's name or static assets does not execute its PHP or reproduce every template. [The parity tracker](parity.md) records those limitations.
+WorldAct JSON import restores content, canonical blocks, terms, hierarchy and comments. The export also carries design/settings/navigation/media references, which the JSON importer does not restore. Password-protected exports and scheduled/protected imports use draft status for review. IDs are remapped and colliding URLs made unique. WXR supports implemented posts/pages/taxonomies/hierarchy/comments, preserves canonical markup, and reports skipped remote attachments instead of downloading them. Neither format is a complete site/database/files backup. The UI caps import files at 8 MB; JSON HTTP bodies are capped at 10 MB.
 
-WordPress reference assets retain their original attribution and license notices; the supplied readme identifies GPL v2 or later. Project license and third-party notices belong at the repository root. Personal use is the intended project context, while the code should still preserve the provenance of copied assets.
+## Authentication and operational safeguards
+
+Passwords use native Node `scrypt` with per-password salts and constant-time comparison. Session/reset tokens are random; only token hashes are stored. Session cookies are HttpOnly/SameSite, with Secure in production. Logout/revocation, other-session logout and password resets invalidate the appropriate sessions. Protected endpoints validate roles, ownership, input sizes/types and same-origin mutations. SQL values are parameterized. Login/comment/reset flows have request limits.
+
+Email defaults to a local database outbox. SMTP sends only when configured; failed delivery leaves the message available locally. Runtime credentials remain server-side. These are implemented controls, not a security certification.
+
+At the recorded audit, npm reports 19 low findings originating from the transitive `deepmerge@4.3.1` advisory [GHSA-gcqx-w48m-w2h4](https://github.com/advisories/GHSA-gcqx-w48m-w2h4), with no fixed compatible release available. Forced downgrades of the current Gutenberg package family are not applied.
+
+See [parity and verification](parity.md) for exercised workflows and the remaining ecosystem/visual boundaries.

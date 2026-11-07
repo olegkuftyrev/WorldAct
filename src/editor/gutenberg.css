@@ -1,0 +1,252 @@
+.worldact-gutenberg {
+  --wp-admin-theme-color: #3858e9;
+  --wp-admin-theme-color--rgb: 56, 88, 233;
+  color: #1e1e1e;
+  background: #fff;
+  width: 100%;
+  min-width: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-size: 13px;
+  line-height: 1.4;
+}
+.worldact-gutenberg-toolbar {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  min-height: 48px;
+  padding: 4px 12px;
+  background: #fff;
+  border-top: 1px solid #e0e0e0;
+  border-bottom: 1px solid #e0e0e0;
+  box-sizing: border-box;
+}
+.worldact-gutenberg-toolbar > .components-button {
+  flex-shrink: 0;
+}
+.worldact-toolbar-divider {
+  width: 1px;
+  height: 24px;
+  background: #ddd;
+  margin: 0 6px;
+  flex-shrink: 0;
+}
+.worldact-selected-block-toolbar {
+  min-width: 0;
+}
+.worldact-selected-block-toolbar .block-editor-block-contextual-toolbar {
+  margin: 0;
+  border: 0;
+  box-shadow: none;
+}
+.worldact-gutenberg-workspace {
+  display: flex;
+  min-width: 0;
+  position: relative;
+  align-items: stretch;
+}
+.worldact-gutenberg-canvas {
+  flex: 1;
+  min-width: 0;
+}
+.worldact-gutenberg-canvas iframe {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  border: 0;
+  background: #fff;
+}
+.worldact-gutenberg-canvas .block-editor-block-tools {
+  width: 100%;
+}
+.worldact-gutenberg-outline {
+  width: 300px;
+  flex-shrink: 0;
+  border-right: 1px solid #ddd;
+  background: #fff;
+  max-height: 72vh;
+  overflow: auto;
+}
+.worldact-gutenberg-outline h2 {
+  padding: 16px;
+  margin: 0;
+  font-size: 13px;
+  font-weight: 500;
+  border-bottom: 1px solid #eee;
+}
+.worldact-gutenberg-outline .block-editor-inserter__menu {
+  width: 100%;
+}
+.worldact-gutenberg-outline
+  .block-editor-inserter__tabs
+  .components-tab-panel__tabs {
+  position: sticky;
+  top: 0;
+}
+.worldact-gutenberg-inspector {
+  width: 280px;
+  flex-shrink: 0;
+  border-left: 1px solid #ddd;
+  max-height: 72vh;
+  overflow: auto;
+  background: #fff;
+}
+.worldact-gutenberg-inspector .components-panel {
+  border: 0;
+}
+.block-editor-screen .worldact-gutenberg-inspector {
+  position: fixed;
+  right: 0;
+  top: 108px;
+  bottom: 25px;
+  width: 280px;
+  max-height: none;
+  z-index: 25;
+  box-sizing: border-box;
+}
+.worldact-gutenberg-breadcrumb {
+  min-height: 30px;
+  display: flex;
+  align-items: center;
+  padding: 2px 12px;
+  border-top: 1px solid #e0e0e0;
+  background: #fff;
+  box-sizing: border-box;
+}
+.worldact-gutenberg .components-notice {
+  margin: 0;
+}
+.worldact-block-media-modal .components-modal__content {
+  display: flex;
+  flex-direction: column;
+  min-height: 420px;
+}
+.worldact-block-media-tools {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #ddd;
+}
+.worldact-block-media-tools > label:last-child {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+.worldact-block-upload-button {
+  position: relative;
+  display: inline-flex;
+  cursor: pointer;
+}
+.worldact-block-upload-button input {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+  opacity: 0;
+}
+.worldact-block-upload-button:focus-within {
+  outline: 2px solid #3858e9;
+  outline-offset: 2px;
+}
+.worldact-block-media-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 12px;
+  margin: 20px 0;
+  overflow-y: auto;
+  max-height: 55vh;
+  padding: 4px;
+}
+.worldact-block-media-grid > button {
+  appearance: none;
+  padding: 0;
+  border: 2px solid transparent;
+  box-shadow: 0 0 0 1px #ddd;
+  background: #f6f7f7;
+  min-width: 0;
+  color: #1e1e1e;
+  text-align: center;
+}
+.worldact-block-media-grid > button:hover {
+  box-shadow: 0 0 0 1px #3858e9;
+}
+.worldact-block-media-grid > button.is-selected {
+  border-color: #3858e9;
+  box-shadow: 0 0 0 1px #3858e9;
+}
+.worldact-block-media-grid img {
+  display: block;
+  width: 100%;
+  height: 112px;
+  object-fit: contain;
+}
+.worldact-block-media-grid > button > span:last-child {
+  display: block;
+  padding: 8px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.worldact-block-file-icon {
+  display: flex;
+  height: 112px;
+  align-items: center;
+  justify-content: center;
+  font-size: 60px;
+  color: #646970;
+}
+.worldact-block-media-actions {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 20px;
+  border-top: 1px solid #ddd;
+  padding-top: 16px;
+  margin-top: auto;
+}
+@media (max-width: 1100px) {
+  .worldact-gutenberg-outline {
+    width: 260px;
+  }
+  .worldact-gutenberg-inspector {
+    width: 260px;
+  }
+}
+@media (max-width: 782px) {
+  .worldact-gutenberg-toolbar {
+    padding-inline: 4px;
+    overflow-x: auto;
+  }
+  .worldact-gutenberg-outline,
+  .worldact-gutenberg-inspector {
+    position: absolute;
+    inset: 0 auto 0 0;
+    width: min(300px, 85vw);
+    max-height: 100%;
+    z-index: 15;
+    box-shadow: 4px 0 10px #0002;
+  }
+  .worldact-gutenberg-inspector {
+    inset: 0 0 0 auto;
+  }
+  .block-editor-screen .worldact-gutenberg-inspector {
+    left: auto;
+    right: 0;
+    top: 108px;
+    bottom: 0;
+    width: min(280px, 85vw);
+  }
+  .worldact-block-media-tools > label:last-child {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+  .worldact-block-media-grid {
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  }
+}

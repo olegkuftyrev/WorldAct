@@ -2,6 +2,7 @@ import dotenv from "dotenv";
 import pg from "pg";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { withPermalink } from "./permalinks.js";
 
 export const rootDir = path.resolve(
   path.dirname(fileURLToPath(import.meta.url)),
@@ -19,7 +20,12 @@ pool.on("error", (error) =>
   console.error("Database pool error:", error.message),
 );
 
-export type Role = "administrator" | "editor" | "author" | "subscriber";
+export type Role =
+  | "administrator"
+  | "editor"
+  | "author"
+  | "contributor"
+  | "subscriber";
 export interface User {
   id: number;
   username: string;
@@ -29,13 +35,18 @@ export interface User {
   createdAt: Date;
 }
 export const userFields = `id, username, email, display_name AS "displayName", role, created_at AS "createdAt"`;
-export const postFields = `p.id, p.type, p.title, p.slug, p.content, p.excerpt, p.status,
+export const postFields = `p.id, p.type, p.title, p.slug, p.content, p.excerpt, p.status, p.format,
   p.author_id AS "authorId", u.display_name AS "authorName", p.created_at AS "createdAt",
-  p.updated_at AS "updatedAt", p.published_at AS "publishedAt"`;
+  p.updated_at AS "updatedAt", p.published_at AS "publishedAt", p.scheduled_at AS "scheduledAt",
+  p.blocks, p.version, p.parent_id AS "parentId", p.menu_order AS "menuOrder",
+  p.featured_media_id AS "featuredMediaId", p.comment_status AS "commentStatus", p.sticky,
+  (p.password_hash IS NOT NULL) AS "hasPassword",
+  COALESCE((SELECT jsonb_agg(jsonb_build_object('id',t.id,'taxonomy',t.taxonomy,'name',t.name,'slug',t.slug,'description',t.description,'parentId',t.parent_id,'count',(SELECT count(*)::int FROM post_terms counted JOIN posts counted_post ON counted_post.id=counted.post_id WHERE counted.term_id=t.id AND counted_post.status='publish')) ORDER BY t.name,t.id)
+    FROM post_terms pt JOIN terms t ON t.id=pt.term_id WHERE pt.post_id=p.id), '[]'::jsonb) AS terms`;
 export const mediaFields = `id, title, '/uploads/' || filename AS url, mime_type AS "mimeType", filename,
   alt, caption, size, created_at AS "createdAt"`;
 export const commentFields = `c.id, c.author_name AS "authorName", c.author_email AS "authorEmail",
-  c.content, c.status, c.post_id AS "postId", p.title AS "postTitle", c.created_at AS "createdAt"`;
+  c.content, c.status, c.parent_id AS "parentId", c.post_id AS "postId", p.title AS "postTitle", c.created_at AS "createdAt"`;
 
 export const defaultSettings = {
   siteTitle: "WorldAct",
@@ -47,21 +58,77 @@ export const defaultSettings = {
   timeFormat: "g:i a",
   postsPerPage: 10,
   discourageSearchEngines: false,
-  theme: "twentytwentyfive" as const,
+  theme: "twentytwentyfive" as
+    | "twentytwentyfive"
+    | "twentytwentyfour"
+    | "twentytwentythree"
+    | "classic",
+  defaultCategoryId: null as number | null,
+  defaultPostFormat: "standard" as
+    | "standard"
+    | "aside"
+    | "image"
+    | "video"
+    | "quote"
+    | "link"
+    | "gallery"
+    | "audio",
+  frontPageMode: "posts" as "posts" | "page",
+  frontPageId: null as number | null,
+  postsPageId: null as number | null,
+  feedItems: 10,
+  feedExcerpt: false,
+  defaultCommentStatus: "open" as "open" | "closed",
+  requireCommentNameEmail: true,
+  commentRegistration: false,
+  commentModeration: true,
+  commentsPerPage: 50,
+  threadComments: true,
+  threadDepth: 5,
+  closeCommentsDays: 0,
+  commentOrder: "asc" as "asc" | "desc",
+  permalinkStructure: "/posts/%postname%/",
+  categoryBase: "category",
+  tagBase: "tag",
+  thumbnailWidth: 150,
+  thumbnailHeight: 150,
+  thumbnailCrop: true,
+  mediumWidth: 300,
+  mediumHeight: 300,
+  largeWidth: 1024,
+  largeHeight: 1024,
+  uploadsYearMonth: true,
+  privacyPageId: null as number | null,
 };
-export async function getSettings() {
-  const result = await pool.query<{ data: Partial<typeof defaultSettings> }>(
+export async function getSettings(
+  db: Pick<pg.Pool, "query"> | pg.PoolClient = pool,
+) {
+  const result = await db.query<{ data: Partial<typeof defaultSettings> }>(
     "SELECT data FROM settings WHERE id = 1",
   );
   return { ...defaultSettings, ...result.rows[0]?.data };
 }
 
-export async function getPost(id: number) {
-  const result = await pool.query(
-    `SELECT ${postFields} FROM posts p JOIN users u ON u.id = p.author_id WHERE p.id = $1`,
+export async function getPost(
+  id: number,
+  db: Pick<pg.Pool, "query"> | pg.PoolClient = pool,
+) {
+  const result = await db.query(
+    `SELECT ${postFields},p.raw_content AS "rawContent" FROM posts p JOIN users u ON u.id = p.author_id WHERE p.id = $1`,
     [id],
   );
-  return result.rows[0];
+  const post = result.rows[0];
+  if (post) {
+    post.categories = post.terms.filter(
+      (term: { taxonomy: string }) => term.taxonomy === "category",
+    );
+    post.tags = post.terms.filter(
+      (term: { taxonomy: string }) => term.taxonomy === "tag",
+    );
+    post.categoryIds = post.categories.map((term: { id: number }) => term.id);
+    post.tagIds = post.tags.map((term: { id: number }) => term.id);
+  }
+  return post ? withPermalink(post, undefined, db) : post;
 }
 export async function getComment(id: number) {
   const result = await pool.query(

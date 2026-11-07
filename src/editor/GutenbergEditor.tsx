@@ -1,0 +1,1092 @@
+import {
+  createContext,
+  forwardRef,
+  useCallback,
+  useContext,
+  useEffect,
+  useImperativeHandle,
+  useMemo,
+  useRef,
+  useState,
+  createElement,
+  type KeyboardEvent,
+  type ReactNode,
+} from "react";
+import {
+  BlockBreadcrumb,
+  BlockCanvas,
+  BlockEditorProvider,
+  BlockInspector,
+  BlockToolbar,
+  Inserter,
+  useBlockProps,
+  __experimentalLibrary as InserterLibrary,
+  __experimentalListView as ListView,
+} from "@wordpress/block-editor";
+import {
+  createBlock,
+  getBlockType,
+  getBlockVariations,
+  parse,
+  rawHandler,
+  registerBlockType,
+  unregisterBlockVariation,
+  serialize,
+  type Block,
+} from "@wordpress/blocks";
+import { registerCoreBlocks } from "@wordpress/block-library";
+import { Button, Modal, Notice, SlotFillProvider } from "@wordpress/components";
+import { addFilter } from "@wordpress/hooks";
+import apiFetch from "@wordpress/api-fetch";
+import { dispatch } from "@wordpress/data";
+import { store as coreDataStore } from "@wordpress/core-data";
+import "@wordpress/format-library";
+import "@wordpress/components/build-style/style.css";
+import "@wordpress/block-editor/build-style/style.css";
+import "@wordpress/block-library/build-style/editor.css";
+// The format-library package does not export its CSS subpath.
+import "../../node_modules/@wordpress/format-library/build-style/style.css";
+import libraryCSS from "@wordpress/block-library/build-style/style.css?inline";
+import libraryEditorCSS from "@wordpress/block-library/build-style/editor.css?inline";
+import editorContentCSS from "@wordpress/block-editor/build-style/content.css?inline";
+import themeCSS from "@wordpress/block-library/build-style/theme.css?inline";
+import formatCSS from "../../node_modules/@wordpress/format-library/build-style/style.css?inline";
+import { api, type Media } from "../api";
+import type { SerializedBlock } from "./types";
+import { parseVideoEmbed } from "../embeds";
+import "./gutenberg.css";
+
+export type { SerializedBlock, GutenbergBlock } from "./types";
+
+// These blocks serialize complete, usable markup without a WordPress/PHP renderer.
+// Query, navigation and other entity-backed blocks belong to the site renderer.
+export const WORLDAct_CONTENT_BLOCKS = [
+  "core/paragraph",
+  "core/heading",
+  "core/list",
+  "core/list-item",
+  "core/quote",
+  "core/pullquote",
+  "core/preformatted",
+  "core/code",
+  "core/table",
+  "core/verse",
+  "core/image",
+  "core/gallery",
+  "core/cover",
+  "core/media-text",
+  "core/audio",
+  "core/video",
+  "core/file",
+  "core/buttons",
+  "core/button",
+  "core/separator",
+  "core/spacer",
+  "core/columns",
+  "core/column",
+  "core/group",
+  "core/details",
+  "core/html",
+  "core/embed",
+];
+
+if (!getBlockType("core/paragraph")) registerCoreBlocks();
+for (const variation of getBlockVariations("core/embed") || []) {
+  if (!["youtube", "vimeo"].includes(variation.name))
+    unregisterBlockVariation("core/embed", variation.name);
+}
+
+const siteBindings = [
+  {
+    name: "site-title",
+    title: "Site Title",
+    token: "siteTitle",
+    tag: "div",
+    className: "site-title",
+    preview: "Your site title",
+  },
+  {
+    name: "tagline",
+    title: "Site Tagline",
+    token: "tagline",
+    tag: "p",
+    className: "site-tagline",
+    preview: "Your site tagline",
+  },
+  {
+    name: "navigation",
+    title: "Navigation",
+    token: "navigation",
+    tag: "nav",
+    className: "site-navigation",
+    preview: "Your navigation menu",
+  },
+  {
+    name: "post-title",
+    title: "Post Title",
+    token: "postTitle",
+    tag: "h1",
+    className: "post-title",
+    preview: "Your post title",
+  },
+  {
+    name: "post-content",
+    title: "Post Content",
+    token: "content",
+    tag: "div",
+    className: "public-content",
+    preview: "The content of each post or page appears here.",
+  },
+  {
+    name: "post-date",
+    title: "Post Date",
+    token: "postDate",
+    tag: "span",
+    className: "post-date",
+    preview: "Publication date",
+  },
+  {
+    name: "post-author",
+    title: "Post Author",
+    token: "postAuthor",
+    tag: "span",
+    className: "post-author",
+    preview: "Author name",
+  },
+  {
+    name: "post-list",
+    title: "Posts",
+    token: "postList",
+    tag: "div",
+    className: "post-list",
+    preview: "Your published posts appear here.",
+  },
+];
+for (const binding of siteBindings) {
+  const name = `worldact/${binding.name}`;
+  if (!getBlockType(name))
+    registerBlockType(name, {
+      apiVersion: 3,
+      title: binding.title,
+      category: "theme",
+      icon: "admin-site",
+      attributes: {},
+      supports: {
+        html: false,
+        align: true,
+        color: { text: true, background: true },
+        typography: { fontSize: true },
+        spacing: { margin: true, padding: true },
+      },
+      edit: function SiteBindingEdit() {
+        return createElement(
+          binding.tag,
+          useBlockProps({ className: "worldact-binding-preview" }),
+          createElement(
+            "span",
+            { className: "worldact-binding-label" },
+            binding.title,
+          ),
+          createElement(
+            "span",
+            { className: "worldact-binding-content" },
+            binding.preview,
+          ),
+        );
+      },
+      save: function SiteBindingSave() {
+        return createElement(
+          binding.tag,
+          useBlockProps.save({ className: binding.className }),
+          `{{${binding.token}}}`,
+        );
+      },
+    });
+}
+
+type Attachment = Record<string, unknown>;
+type MediaUploadOptions = {
+  filesList: ArrayLike<File>;
+  allowedTypes?: string[];
+  multiple?: boolean;
+  onFileChange?: (files: Attachment[]) => void;
+  onSuccess?: (files: Attachment[]) => void;
+  onError?: (message: string) => void;
+};
+type MediaAdapter = {
+  media: Media[];
+  upload: (files: File[]) => Promise<Media[]>;
+  onError: (message: string) => void;
+};
+const MediaContext = createContext<MediaAdapter | null>(null);
+
+function mediaMatches(item: Media, allowedTypes?: string[]) {
+  return (
+    !allowedTypes?.length ||
+    allowedTypes.some(
+      (type) =>
+        item.mimeType === type ||
+        item.mimeType.startsWith(`${type.replace(/\/\*$/, "")}/`),
+    )
+  );
+}
+
+function attachment(item: Media, rest = false): Attachment {
+  const dimensions = item as Media & {
+    width?: number | null;
+    height?: number | null;
+  };
+  const full = {
+    url: item.url,
+    source_url: item.url,
+    width: dimensions.width || undefined,
+    height: dimensions.height || undefined,
+    mime_type: item.mimeType,
+  };
+  const sizes = {
+    full,
+    ...Object.fromEntries(
+      Object.entries(item.sizes || {}).map(([name, size]) => [
+        name,
+        {
+          ...size,
+          source_url: size.url,
+          mime_type: size.mimeType,
+        },
+      ]),
+    ),
+  };
+  return {
+    id: item.id,
+    url: item.url,
+    src: item.url,
+    source_url: item.url,
+    title: rest ? { raw: item.title, rendered: item.title } : item.title,
+    caption: rest
+      ? { raw: item.caption, rendered: item.caption }
+      : item.caption,
+    description: { raw: "", rendered: "" },
+    alt: item.alt,
+    alt_text: item.alt,
+    mime: item.mimeType,
+    mime_type: item.mimeType,
+    type: item.mimeType.split("/")[0],
+    media_type: item.mimeType.startsWith("image/") ? "image" : "file",
+    subtype: item.mimeType.split("/")[1],
+    filesize: item.size,
+    filename: item.filename,
+    width: dimensions.width || undefined,
+    height: dimensions.height || undefined,
+    sizes,
+    media_details: {
+      width: dimensions.width || undefined,
+      height: dimensions.height || undefined,
+      sizes,
+    },
+    link: item.url,
+  };
+}
+
+// Core image and gallery blocks also read attachment entities. Adapt only this
+// narrow endpoint to our real Node API; no WordPress server is required.
+apiFetch.use(async (options, next) => {
+  const path = options.path;
+  if (path && /^\/?oembed\/1\.0\/proxy(?:\?|$)/.test(path)) {
+    const target = new URL(path, window.location.origin);
+    const embed = parseVideoEmbed(target.searchParams.get("url") || "");
+    if (!embed)
+      throw {
+        code: "oembed_invalid_url",
+        message: "Enter a YouTube or Vimeo video link.",
+        data: { status: 400 },
+      };
+    return {
+      version: "1.0",
+      type: "video",
+      provider_name: embed.provider,
+      provider_url:
+        embed.provider === "YouTube"
+          ? "https://www.youtube.com"
+          : "https://vimeo.com",
+      title: embed.title,
+      width: embed.width,
+      height: embed.height,
+      html: `<iframe src="${embed.src.replace(/&/g, "&amp;")}" title="${embed.title}" width="${embed.width}" height="${embed.height}" allow="encrypted-media; picture-in-picture" allowfullscreen loading="lazy" referrerpolicy="strict-origin-when-cross-origin"></iframe>`,
+    };
+  }
+  if (!path || !/^\/?wp\/v2\/media(?:\/\d+)?(?:\?|$)/.test(path))
+    return next(options);
+  if (
+    options.method &&
+    !["GET", "OPTIONS"].includes(options.method.toUpperCase())
+  )
+    return next(options);
+  const target = new URL(path, window.location.origin);
+  const { media } = await api<{ media: Media[] }>("/media");
+  const id = target.pathname.match(/\/(\d+)$/)?.[1];
+  const include = target.searchParams.get("include")?.split(",").map(Number);
+  const search = target.searchParams.get("search")?.toLowerCase();
+  let records = media.filter(
+    (item) =>
+      (!include || include.includes(item.id)) &&
+      (!search ||
+        `${item.title} ${item.filename}`.toLowerCase().includes(search)),
+  );
+  const mime = target.searchParams.get("media_type");
+  if (mime)
+    records = records.filter((item) => item.mimeType.startsWith(`${mime}/`));
+  const selected = id
+    ? records.find((item) => item.id === Number(id))
+    : undefined;
+  if (id && !selected)
+    throw {
+      code: "rest_media_invalid_id",
+      message: "Media item not found.",
+      data: { status: 404 },
+    };
+  const result = id
+    ? attachment(selected!, true)
+    : records.map((item) => attachment(item, true));
+  if (options.parse === false) {
+    return new Response(JSON.stringify(result), {
+      status: 200,
+      headers: {
+        "Content-Type": "application/json",
+        "X-WP-Total": String(records.length),
+        "X-WP-TotalPages": "1",
+        Allow: "GET, POST, PUT, DELETE",
+      },
+    });
+  }
+  return result;
+});
+
+dispatch(coreDataStore).addEntities([
+  {
+    kind: "postType",
+    name: "attachment",
+    label: "Media",
+    baseURL: "/wp/v2/media",
+    baseURLParams: { context: "edit" },
+    supportsPagination: true,
+    rawAttributes: ["title", "caption", "description"],
+  },
+]);
+
+type MediaUploadProps = {
+  allowedTypes?: string[];
+  multiple?: boolean | string;
+  value?: number | number[];
+  title?: string;
+  onClose?: () => void;
+  onSelect: (media: unknown) => void;
+  render: (props: { open: () => void }) => ReactNode;
+};
+
+function WorldActMediaUpload({
+  allowedTypes,
+  multiple,
+  value,
+  title,
+  onClose,
+  onSelect,
+  render,
+}: MediaUploadProps) {
+  const adapter = useContext(MediaContext);
+  const [open, setOpen] = useState(false);
+  const [selected, setSelected] = useState<number[]>([]);
+  const [search, setSearch] = useState("");
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState("");
+  if (!adapter) return null;
+  const available = adapter.media.filter((item) =>
+    mediaMatches(item, allowedTypes),
+  );
+  const visible = available.filter((item) =>
+    `${item.title} ${item.filename}`
+      .toLowerCase()
+      .includes(search.toLowerCase()),
+  );
+  const close = () => {
+    setOpen(false);
+    onClose?.();
+  };
+  const selectedMedia = available.filter((item) => selected.includes(item.id));
+  async function upload(files: File[]) {
+    if (!files.length || !adapter) return;
+    setBusy(true);
+    setError("");
+    try {
+      const uploaded = await adapter.upload(
+        multiple ? files : files.slice(0, 1),
+      );
+      setSelected(
+        uploaded
+          .filter((item) => mediaMatches(item, allowedTypes))
+          .map((item) => item.id),
+      );
+    } catch (reason) {
+      setError(
+        reason instanceof Error
+          ? reason.message
+          : "The upload could not be completed.",
+      );
+    } finally {
+      setBusy(false);
+    }
+  }
+  return (
+    <>
+      {render({
+        open: () => {
+          setSelected(Array.isArray(value) ? value : value ? [value] : []);
+          setError("");
+          setOpen(true);
+        },
+      })}
+      {open && (
+        <Modal
+          title={title || "Select or upload media"}
+          onRequestClose={close}
+          className="worldact-block-media-modal"
+          size="large"
+        >
+          <div className="worldact-block-media-tools">
+            <label className="worldact-block-upload-button">
+              <span className="button">
+                {busy ? "Uploading…" : "Upload files"}
+              </span>
+              <input
+                type="file"
+                disabled={busy}
+                multiple={!!multiple}
+                accept={allowedTypes
+                  ?.map((type) => (type.includes("/") ? type : `${type}/*`))
+                  .join(",")}
+                onChange={(event) => {
+                  void upload(Array.from(event.currentTarget.files || []));
+                  event.currentTarget.value = "";
+                }}
+              />
+            </label>
+            <label>
+              Search media{" "}
+              <input
+                type="search"
+                value={search}
+                onChange={(event) => setSearch(event.target.value)}
+              />
+            </label>
+          </div>
+          {error && (
+            <Notice status="error" isDismissible onRemove={() => setError("")}>
+              {error}
+            </Notice>
+          )}
+          <div
+            className="worldact-block-media-grid"
+            role="group"
+            aria-label="Media library"
+          >
+            {visible.map((item) => (
+              <button
+                type="button"
+                key={item.id}
+                aria-pressed={selected.includes(item.id)}
+                className={selected.includes(item.id) ? "is-selected" : ""}
+                onClick={() => {
+                  setSelected((current) =>
+                    multiple
+                      ? current.includes(item.id)
+                        ? current.filter((id) => id !== item.id)
+                        : [...current, item.id]
+                      : [item.id],
+                  );
+                }}
+              >
+                {item.mimeType.startsWith("image/") ? (
+                  <img src={item.url} alt={item.alt || item.title} />
+                ) : (
+                  <span className="worldact-block-file-icon" aria-hidden="true">
+                    ▤
+                  </span>
+                )}
+                <span>{item.title}</span>
+              </button>
+            ))}
+            {!visible.length && (
+              <p>No matching media. Upload a file to add it to your library.</p>
+            )}
+          </div>
+          <div className="worldact-block-media-actions">
+            <span>{selectedMedia.length} selected</span>
+            <Button
+              variant="primary"
+              disabled={!selectedMedia.length || busy}
+              onClick={() => {
+                const result = selectedMedia.map((item) => attachment(item));
+                close();
+                onSelect(multiple ? result : result[0]);
+              }}
+            >
+              Select
+            </Button>
+          </div>
+        </Modal>
+      )}
+    </>
+  );
+}
+
+addFilter(
+  "editor.MediaUpload",
+  "worldact/native-media-library",
+  () => WorldActMediaUpload,
+);
+
+function toStored(blocks: Block[]): SerializedBlock[] {
+  return blocks.map((block) => ({
+    name: block.name,
+    // RichTextData implements toJSON; this also detaches Gutenberg's mutable data.
+    attributes: JSON.parse(JSON.stringify(block.attributes)) as Record<
+      string,
+      unknown
+    >,
+    innerBlocks: toStored(block.innerBlocks || []),
+  }));
+}
+
+function restoreBlocks(blocks: SerializedBlock[]): Block[] {
+  return blocks.map((block) => {
+    if (!getBlockType(block.name)) {
+      // Preserve an unknown block's data in the official recovery block.
+      const attrs = JSON.stringify(block.attributes).replace(/</g, "\\u003c");
+      const originalContent = `<!-- wp:${block.name} ${attrs} /-->`;
+      return createBlock("core/missing", {
+        originalName: block.name,
+        originalContent,
+      });
+    }
+    return createBlock(
+      block.name,
+      block.attributes,
+      restoreBlocks(block.innerBlocks || []),
+    );
+  });
+}
+
+function initialValue(blocks: SerializedBlock[] | null, html: string): Block[] {
+  const value = blocks?.length
+    ? restoreBlocks(blocks)
+    : html.trim()
+      ? html.includes("<!-- wp:")
+        ? parse(html)
+        : rawHandler({ HTML: html })
+      : [];
+  return value.length ? value : [createBlock("core/paragraph")];
+}
+
+const canvasCSS = `
+:root { --wp--style--global--content-size: 680px; --wp--style--global--wide-size: 1120px; --wp--preset--color--base: #fff; --wp--preset--color--contrast: #111; --wp--preset--color--accent-1: #ffee58; --wp--preset--color--accent-2: #f6cff4; --wp--preset--color--accent-3: #503aa8; --wp--preset--font-size--small: 14px; --wp--preset--font-size--medium: 20px; --wp--preset--font-size--large: 36px; --wp--preset--font-size--x-large: 48px; --wp--preset--font-size--xx-large: 64px; --wp--preset--spacing--20: 10px; --wp--preset--spacing--30: 20px; --wp--preset--spacing--40: 30px; --wp--preset--spacing--50: 40px; --wp--preset--spacing--60: 60px; --wp--preset--spacing--70: 80px; --wp--preset--spacing--80: 120px; }
+body { margin: 0; color: #1e1e1e; background: #fff; font-family: Georgia, 'Times New Roman', serif; font-size: 20px; line-height: 1.6; }
+body.editor-styles-wrapper { padding: 36px 32px 120px; box-sizing: border-box; }
+.editor-styles-wrapper .is-root-container > :where(.wp-block):not(.alignwide):not(.alignfull), .editor-styles-wrapper .block-editor-default-block-appender { max-width: 680px; margin-inline: auto; }
+.editor-styles-wrapper .is-root-container > .alignwide { max-width: 1120px; margin-inline: auto; }
+.editor-styles-wrapper .is-root-container > .alignfull { max-width: none; }
+.editor-styles-wrapper :where(h1,h2,h3,h4,h5,h6) { line-height: 1.2; font-weight: 400; }
+.editor-styles-wrapper .wp-block { margin-top: 24px; margin-bottom: 24px; }
+.editor-styles-wrapper .wp-block-button__link { border-radius: 0; background-color: #111; color: #fff; }
+.editor-styles-wrapper .wp-block-image img { max-width: 100%; height: auto; }
+.editor-styles-wrapper .wp-block-table table { border-collapse: collapse; width: 100%; }
+.has-base-color { color: var(--wp--preset--color--base); } .has-base-background-color { background-color: var(--wp--preset--color--base); } .has-contrast-color { color: var(--wp--preset--color--contrast); } .has-contrast-background-color { background-color: var(--wp--preset--color--contrast); } .has-accent-1-color { color: var(--wp--preset--color--accent-1); } .has-accent-1-background-color { background-color: var(--wp--preset--color--accent-1); } .has-accent-2-color { color: var(--wp--preset--color--accent-2); } .has-accent-2-background-color { background-color: var(--wp--preset--color--accent-2); } .has-accent-3-color { color: var(--wp--preset--color--accent-3); } .has-accent-3-background-color { background-color: var(--wp--preset--color--accent-3); }
+.has-small-font-size { font-size: var(--wp--preset--font-size--small); } .has-medium-font-size { font-size: var(--wp--preset--font-size--medium); } .has-large-font-size { font-size: var(--wp--preset--font-size--large); } .has-x-large-font-size { font-size: var(--wp--preset--font-size--x-large); } .has-xx-large-font-size { font-size: var(--wp--preset--font-size--xx-large); }
+.worldact-binding-preview { border: 1px dashed #c3c4c7; padding: 20px; min-height: 64px; box-sizing: border-box; } .worldact-binding-label { display: block; font: 500 11px/1.4 -apple-system,BlinkMacSystemFont,sans-serif; text-transform: uppercase; color: #646970; margin-bottom: 8px; } .worldact-binding-content { display: block; }
+.editor-styles-wrapper .wp-has-aspect-ratio .wp-block-embed__wrapper::before { content: ""; display: block; padding-top: 56.25%; }
+.editor-styles-wrapper .wp-has-aspect-ratio iframe.components-sandbox { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+@media(max-width:600px) { body.editor-styles-wrapper { padding: 20px 20px 100px; } body { font-size: 18px; } }
+`;
+const canvasStyles = [
+  { css: libraryCSS },
+  { css: libraryEditorCSS },
+  { css: editorContentCSS },
+  { css: themeCSS },
+  { css: formatCSS },
+  { css: canvasCSS },
+];
+const colors = [
+  { name: "Base", slug: "base", color: "#ffffff" },
+  { name: "Contrast", slug: "contrast", color: "#111111" },
+  { name: "Accent 1", slug: "accent-1", color: "#ffee58" },
+  { name: "Accent 2", slug: "accent-2", color: "#f6cff4" },
+  { name: "Accent 3", slug: "accent-3", color: "#503aa8" },
+];
+
+export type GutenbergEditorHandle = {
+  undo: () => void;
+  redo: () => void;
+  getBlocks: () => SerializedBlock[];
+  getHTML: () => string;
+  insertBlocks: (blocks: SerializedBlock[]) => void;
+};
+export type GutenbergEditorProps = {
+  initialBlocks: SerializedBlock[] | null;
+  initialHTML: string;
+  resetKey: string | number;
+  onChange: (blocks: SerializedBlock[], html: string) => void;
+  media: Media[];
+  onUpload?: (files: File[]) => Promise<Media[]>;
+  onError?: (message: string) => void;
+  inserterOpen?: boolean;
+  listViewOpen?: boolean;
+  inspectorOpen?: boolean;
+  canvasCSS?: string;
+  context?: "post" | "site";
+};
+
+function UndoIcon({ redo = false }: { redo?: boolean }) {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      width="24"
+      height="24"
+      aria-hidden="true"
+      style={redo ? { transform: "scaleX(-1)" } : undefined}
+    >
+      <path
+        d="M8 7v-3L2.5 9.5 8 15v-3h6a4 4 0 0 1 0 8h-3v1.5h3a5.5 5.5 0 0 0 0-11H8V7Z"
+        fill="currentColor"
+      />
+    </svg>
+  );
+}
+
+const GutenbergSession = forwardRef<
+  GutenbergEditorHandle,
+  GutenbergEditorProps
+>(function GutenbergSession(props, ref) {
+  const [blocks, setBlocks] = useState(() =>
+    initialValue(props.initialBlocks, props.initialHTML),
+  );
+  const [addedMedia, setAddedMedia] = useState<Media[]>([]);
+  const [error, setError] = useState("");
+  const [patterns, setPatterns] = useState<
+    { name: string; title: string; content: string; categories: string[] }[]
+  >([]);
+  const [historyVersion, setHistoryVersion] = useState(0);
+  const blocksRef = useRef(blocks);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const onChangeRef = useRef(props.onChange);
+  onChangeRef.current = props.onChange;
+  const history = useRef({ items: [blocks], index: 0, lastInput: 0 });
+  const signature = useRef(JSON.stringify(toStored(blocks)));
+  const allMedia = useMemo(
+    () => [
+      ...new Map(
+        [...props.media, ...addedMedia].map((item) => [item.id, item]),
+      ).values(),
+    ],
+    [props.media, addedMedia],
+  );
+  const reportError = useCallback(
+    (message: string) => {
+      setError(message);
+      props.onError?.(message);
+    },
+    [props.onError],
+  );
+
+  const emit = useCallback(
+    (next: Block[], kind: "input" | "change" | "history") => {
+      setBlocks(next);
+      blocksRef.current = next;
+      const stored = toStored(next);
+      const nextSignature = JSON.stringify(stored);
+      if (signature.current === nextSignature) return;
+      signature.current = nextSignature;
+      if (kind !== "history") {
+        const state = history.current;
+        const now = Date.now();
+        const mergeTyping =
+          kind === "input" &&
+          state.index === state.items.length - 1 &&
+          state.index > 0 &&
+          now - state.lastInput < 800;
+        if (mergeTyping) state.items[state.index] = next;
+        else {
+          state.items = state.items.slice(0, state.index + 1);
+          state.items.push(next);
+          if (state.items.length > 100) state.items.shift();
+          state.index = state.items.length - 1;
+        }
+        state.lastInput = kind === "input" ? now : 0;
+      }
+      setHistoryVersion((value) => value + 1);
+      onChangeRef.current(stored, serialize(next));
+    },
+    [],
+  );
+
+  const travel = useCallback(
+    (direction: -1 | 1) => {
+      const state = history.current;
+      const nextIndex = state.index + direction;
+      if (nextIndex < 0 || nextIndex >= state.items.length) return;
+      state.index = nextIndex;
+      state.lastInput = 0;
+      emit(state.items[nextIndex], "history");
+    },
+    [emit],
+  );
+
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
+    let canvasDocument: Document | null = null;
+    const keyDown = (event: globalThis.KeyboardEvent) => {
+      if (!(event.metaKey || event.ctrlKey) || event.altKey) return;
+      const key = event.key.toLowerCase();
+      if (key !== "z" && key !== "y") return;
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      travel(event.shiftKey || key === "y" ? 1 : -1);
+    };
+    const bind = () => {
+      const document =
+        container.querySelector<HTMLIFrameElement>(
+          'iframe[name="editor-canvas"]',
+        )?.contentDocument || null;
+      if (document === canvasDocument) return;
+      canvasDocument?.removeEventListener("keydown", keyDown, true);
+      canvasDocument = document;
+      canvasDocument?.addEventListener("keydown", keyDown, true);
+    };
+    const observer = new MutationObserver(bind);
+    observer.observe(container, { childList: true, subtree: true });
+    container.addEventListener("load", bind, true);
+    bind();
+    return () => {
+      observer.disconnect();
+      container.removeEventListener("load", bind, true);
+      canvasDocument?.removeEventListener("keydown", keyDown, true);
+    };
+  }, [travel]);
+
+  useImperativeHandle(
+    ref,
+    () => ({
+      undo: () => travel(-1),
+      redo: () => travel(1),
+      getBlocks: () => toStored(blocksRef.current),
+      getHTML: () => serialize(blocksRef.current),
+      insertBlocks: (next) =>
+        emit([...blocksRef.current, ...restoreBlocks(next)], "change"),
+    }),
+    [travel, emit],
+  );
+
+  useEffect(() => {
+    let active = true;
+    api<{
+      patterns: {
+        id: number;
+        title: string;
+        content: string;
+        blocks: SerializedBlock[] | null;
+      }[];
+    }>("/public/design")
+      .then((design) => {
+        if (active)
+          setPatterns(
+            design.patterns.map((pattern) => ({
+              name: `worldact/pattern-${pattern.id}`,
+              title: pattern.title,
+              content: serialize(initialValue(pattern.blocks, pattern.content)),
+              categories: ["featured"],
+            })),
+          );
+      })
+      .catch(() => {
+        /* Patterns are optional; content editing remains available. */
+      });
+    return () => {
+      active = false;
+    };
+  }, []);
+
+  const upload = useCallback(
+    async (files: File[]) => {
+      const uploaded = props.onUpload
+        ? await props.onUpload(files)
+        : await Promise.all(
+            files.map(async (file) => {
+              const data = new FormData();
+              data.append("file", file);
+              return (
+                await api<{ media: Media }>("/media", {
+                  method: "POST",
+                  body: data,
+                })
+              ).media;
+            }),
+          );
+      setAddedMedia((current) => [...current, ...uploaded]);
+      return uploaded;
+    },
+    [props.onUpload],
+  );
+
+  useEffect(() => {
+    dispatch(coreDataStore).receiveEntityRecords(
+      "postType",
+      "attachment",
+      allMedia.map((item) => attachment(item, true)),
+      undefined,
+      false,
+    );
+  }, [allMedia]);
+
+  const mediaUpload = useCallback(
+    async ({
+      filesList,
+      allowedTypes,
+      multiple,
+      onFileChange,
+      onSuccess,
+      onError,
+    }: MediaUploadOptions) => {
+      const files = Array.from(filesList);
+      if (multiple === false && files.length > 1) {
+        onError?.("Choose a single file for this block.");
+        return;
+      }
+      if (
+        allowedTypes?.length &&
+        files.some(
+          (file) =>
+            !allowedTypes.some(
+              (type) =>
+                file.type === type ||
+                file.type.startsWith(`${type.replace(/\/\*$/, "")}/`),
+            ),
+        )
+      ) {
+        onError?.("This file type cannot be used in this block.");
+        return;
+      }
+      try {
+        const uploaded = (await upload(files)).map((item) => attachment(item));
+        onFileChange?.(uploaded);
+        onSuccess?.(uploaded);
+      } catch (reason) {
+        const message =
+          reason instanceof Error
+            ? reason.message
+            : "The upload could not be completed.";
+        onError?.(message);
+        reportError(message);
+      }
+    },
+    [upload, reportError],
+  );
+
+  const settings = useMemo(
+    () => ({
+      allowedBlockTypes:
+        props.context === "site"
+          ? [
+              ...WORLDAct_CONTENT_BLOCKS,
+              ...siteBindings.map((binding) => `worldact/${binding.name}`),
+            ]
+          : WORLDAct_CONTENT_BLOCKS,
+      alignWide: true,
+      supportsLayout: true,
+      hasFixedToolbar: true,
+      canLockBlocks: true,
+      imageEditing: false,
+      imageSizes: [
+        { slug: "thumbnail", name: "Thumbnail" },
+        { slug: "medium", name: "Medium" },
+        { slug: "large", name: "Large" },
+        { slug: "full", name: "Full size" },
+      ],
+      maxWidth: 1120,
+      colors,
+      fontSizes: [
+        { name: "Small", slug: "small", size: 14 },
+        { name: "Medium", slug: "medium", size: 20 },
+        { name: "Large", slug: "large", size: 36 },
+        { name: "Extra Large", slug: "x-large", size: 48 },
+      ],
+      __experimentalFeatures: {
+        appearanceTools: true,
+        color: {
+          custom: true,
+          customGradient: true,
+          text: true,
+          background: true,
+          palette: { theme: colors },
+        },
+        typography: {
+          customFontSize: true,
+          lineHeight: true,
+          fontStyle: true,
+          fontWeight: true,
+          letterSpacing: true,
+          textDecoration: true,
+          textTransform: true,
+        },
+        spacing: {
+          padding: true,
+          margin: true,
+          blockGap: true,
+          units: ["px", "em", "rem", "%", "vw", "vh"],
+        },
+        border: { color: true, radius: true, style: true, width: true },
+        layout: { contentSize: "680px", wideSize: "1120px" },
+      },
+      __experimentalBlockPatterns: patterns,
+      __experimentalReusableBlocks: [],
+      __experimentalFetchLinkSuggestions: async (search: string) => {
+        const { posts } = await api<{
+          posts: { id: number; title: string; slug: string; type: string }[];
+        }>(`/posts?search=${encodeURIComponent(search)}`);
+        return posts.map((post) => ({
+          id: post.id,
+          title: post.title || "(no title)",
+          url: `${window.location.origin}/${post.type === "page" ? "pages" : "posts"}/${post.slug}`,
+          type: post.type,
+          kind: "post-type",
+        }));
+      },
+      mediaUpload,
+      styles: canvasStyles,
+    }),
+    [mediaUpload, patterns, props.context],
+  );
+
+  const keyDown = (event: KeyboardEvent<HTMLDivElement>) => {
+    const target = event.target as HTMLElement;
+    if (
+      !(event.metaKey || event.ctrlKey) ||
+      event.altKey ||
+      !target.isContentEditable
+    )
+      return;
+    if (event.key.toLowerCase() === "z" || event.key.toLowerCase() === "y") {
+      event.preventDefault();
+      event.stopPropagation();
+      travel(event.shiftKey || event.key.toLowerCase() === "y" ? 1 : -1);
+    }
+  };
+  // Reading this value keeps the toolbar in step with the ref-backed history.
+  void historyVersion;
+  return (
+    <MediaContext.Provider
+      value={{ media: allMedia, upload, onError: reportError }}
+    >
+      <SlotFillProvider>
+        <BlockEditorProvider
+          value={blocks}
+          onInput={(next) => emit(next, "input")}
+          onChange={(next) => emit(next, "change")}
+          settings={settings}
+        >
+          <div
+            ref={containerRef}
+            className={`worldact-gutenberg ${props.inspectorOpen ? "has-block-inspector" : ""}`}
+            onKeyDownCapture={keyDown}
+          >
+            {error && (
+              <Notice
+                status="error"
+                isDismissible
+                onRemove={() => setError("")}
+              >
+                {error}
+              </Notice>
+            )}
+            <div
+              className="worldact-gutenberg-toolbar"
+              aria-label="Block editing tools"
+            >
+              <Inserter
+                position="bottom right"
+                toggleProps={{ label: "Insert a block" }}
+              />
+              <Button
+                label="Undo"
+                icon={<UndoIcon />}
+                disabled={history.current.index < 1}
+                onClick={() => travel(-1)}
+              />
+              <Button
+                label="Redo"
+                icon={<UndoIcon redo />}
+                disabled={
+                  history.current.index >= history.current.items.length - 1
+                }
+                onClick={() => travel(1)}
+              />
+              <span className="worldact-toolbar-divider" />
+              <div className="worldact-selected-block-toolbar">
+                <BlockToolbar hideDragHandle />
+              </div>
+            </div>
+            <div className="worldact-gutenberg-workspace">
+              {(props.inserterOpen || props.listViewOpen) && (
+                <aside
+                  className="worldact-gutenberg-outline"
+                  aria-label={
+                    props.listViewOpen ? "List view" : "Block inserter"
+                  }
+                >
+                  {props.listViewOpen ? (
+                    <>
+                      <h2>List View</h2>
+                      <ListView showBlockMovers isExpanded />
+                    </>
+                  ) : (
+                    <InserterLibrary
+                      showInserterHelpPanel={false}
+                      shouldFocusBlock
+                    />
+                  )}
+                </aside>
+              )}
+              <div className="worldact-gutenberg-canvas">
+                <BlockCanvas
+                  height="min(72vh, 900px)"
+                  styles={
+                    props.canvasCSS
+                      ? [...canvasStyles, { css: props.canvasCSS }]
+                      : canvasStyles
+                  }
+                />
+              </div>
+              {props.inspectorOpen && (
+                <aside
+                  className="worldact-gutenberg-inspector"
+                  aria-label="Block settings"
+                >
+                  <BlockInspector />
+                </aside>
+              )}
+            </div>
+            <div className="worldact-gutenberg-breadcrumb">
+              <BlockBreadcrumb />
+            </div>
+          </div>
+        </BlockEditorProvider>
+      </SlotFillProvider>
+    </MediaContext.Provider>
+  );
+});
+
+export const GutenbergEditor = forwardRef<
+  GutenbergEditorHandle,
+  GutenbergEditorProps
+>(function GutenbergEditor(props, ref) {
+  return <GutenbergSession key={props.resetKey} {...props} ref={ref} />;
+});
+
+export default GutenbergEditor;

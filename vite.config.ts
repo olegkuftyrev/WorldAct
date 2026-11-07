@@ -7,6 +7,11 @@ export default defineConfig({
     proxy: {
       "/api": "http://127.0.0.1:3001",
       "/uploads": "http://127.0.0.1:3001",
+      "/wp-json": "http://127.0.0.1:3001",
+      "/feed": "http://127.0.0.1:3001",
+      "/comments/feed": "http://127.0.0.1:3001",
+      "/sitemap.xml": "http://127.0.0.1:3001",
+      "/robots.txt": "http://127.0.0.1:3001",
     },
   },
 });

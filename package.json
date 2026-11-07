@@ -1,11 +1,11 @@
 {
   "name": "worldact",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
   "type": "module",
   "description": "A personal React and PostgreSQL CMS study, inspired by WordPress.",
   "engines": {
-    "node": ">=22"
+    "node": ">=22.13.0"
   },
   "scripts": {
     "dev": "concurrently -k -n api,web \"tsx watch server/index.ts\" \"vite --host 127.0.0.1\"",
@@ -14,24 +14,40 @@
     "typecheck": "tsc --noEmit",
     "db:migrate": "tsx server/migrate.ts",
     "db:seed": "tsx server/seed.ts",
-    "test": "tsx --test tests/*.test.ts",
+    "test": "tsx --test --test-concurrency=1 tests/*.test.ts",
     "setup": "node scripts/setup.mjs"
   },
   "dependencies": {
+    "@wordpress/api-fetch": "8.1.0",
+    "@wordpress/block-editor": "20.0.0",
+    "@wordpress/block-library": "12.1.0",
+    "@wordpress/block-serialization-default-parser": "6.1.0",
+    "@wordpress/blocks": "17.1.0",
+    "@wordpress/components": "44.0.0",
+    "@wordpress/core-data": "9.1.0",
+    "@wordpress/data": "11.1.0",
+    "@wordpress/format-library": "6.1.0",
+    "@wordpress/hooks": "5.1.0",
+    "@wordpress/icons": "20.0.0",
     "dotenv": "^17.2.3",
     "express": "^5.1.0",
+    "fast-xml-parser": "5.12.0",
+    "file-type": "22.3.0",
     "multer": "^2.0.2",
+    "nodemailer": "10.3.1",
     "pg": "^8.16.3",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "react-router-dom": "^7.9.5",
     "sanitize-html": "^2.17.0",
+    "sharp": "0.35.5",
     "zod": "^4.1.12"
   },
   "devDependencies": {
     "@types/express": "^5.0.5",
     "@types/multer": "^2.0.0",
     "@types/node": "^24.10.0",
+    "@types/nodemailer": "^8.0.2",
     "@types/pg": "^8.15.6",
     "@types/react": "^19.2.2",
     "@types/react-dom": "^19.2.2",
@@ -39,6 +55,7 @@
     "@vitejs/plugin-react": "^5.1.0",
     "concurrently": "^9.2.1",
     "esbuild": "^0.25.12",
+    "linkedom": "0.18.15",
     "tsx": "^4.20.6",
     "typescript": "^5.9.3",
     "vite": "^7.2.2"

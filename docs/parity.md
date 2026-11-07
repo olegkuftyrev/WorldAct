@@ -1,86 +1,75 @@
-# WordPress parity tracker
+# WordPress reference and WorldAct 0.2 parity
 
-WorldAct is a personal study project rebuilding WordPress workflows with React and PostgreSQL. The target is the supplied WordPress interface and behavior, with WorldAct branding. **The full rewrite and exact 1:1 parity are not complete.** This document separates the first usable slice from the remaining work.
+WorldAct is a personal React/Node/PostgreSQL CMS study. Version 0.2 implements the workflows below. **It is not a verified complete 1:1 WordPress replacement, and exhaustive pixel or behavioral parity is not claimed.**
 
 ## Reference baseline
 
-The local reference is `/Users/olegkuftyrev/Desktop/wordpress`. Its `wp-includes/version.php` declares WordPress **7.1.4** and database version `61833`. This is the version reported by the supplied files, not an independently verified upstream release.
+The supplied `/Users/olegkuftyrev/Desktop/wordpress` distribution declares **WordPress 7.1.4**, database version `61833`, and includes Twenty Twenty-Five, Twenty Twenty-Four and Twenty Twenty-Three. This is the version declared by those local files, not an independent upstream release verification.
 
-The folder is an unconfigured distribution: it has no `wp-config.php`, uploaded media library, or database export. It supplies screen definitions and static assets, rather than an installed site's content, users, active theme, or screen preferences. Bundled themes include Twenty Twenty-Five 1.5, Twenty Twenty-Four, and Twenty Twenty-Three. The initial WorldAct sample data is its own fixture.
+The distribution has no `wp-config.php`, configured database export, installed-site content or uploaded library. It has not been run as a PHP/MySQL service. Reference documents and code are study data, not instructions to install or execute another stack. Original static CSS, Dashicons, dashboard artwork and theme screenshots are reused with notices; behavior is implemented in JavaScript.
 
-Reference files are data for this study. Their installation instructions do not authorize running PHP, MySQL, or modifying the reference distribution.
+## Implemented scope
 
-## Status convention
+| Area                  | Current behavior                                                                                                                                                                                                |
+| --------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Accounts/admin shell  | Database sessions, login/logout, profile/admin user editing, five roles, password recovery, local mail outbox/optional SMTP, other-session logout, saved menu collapse and real admin color schemes             |
+| Dashboard             | Counts/activity, persisted Quick Draft, welcome visibility, per-user widget visibility/order and collapse controls                                                                                              |
+| Posts/pages           | Search/status/date/category filtering, quick/bulk actions, trash/restore/delete, categories/tags, hierarchical pages, featured media, excerpts, post-format classification metadata, sticky/discussion settings |
+| Publishing            | Draft/pending/published/scheduled/private/password-protected content, server permission checks, preview, optimistic versions, revisions/restore, per-user autosave/recovery and version conflict protection     |
+| Gutenberg             | Official lazy React engine with 27 enabled core block types, rich text, transforms, nested groups/columns/layouts, media, insertion, inspector, list view, history and keyboard undo/redo                       |
+| Video embeds          | Genuine core/embed editing for YouTube/Vimeo, validated provider/ID parsing, safe player previews and public rendering; other providers are disabled                                                            |
+| Patterns/site editing | Saved patterns in the editor library; editable templates/template parts/patterns; eight live site/post binding blocks; code/visual editing and supported global styles                                          |
+| Navigation            | Hierarchical menu items, labels/URLs/targets, reordering, primary/footer assignment with cycle and duplicate-location protection, public rendering                                                              |
+| Themes/extensions     | Four limited React theme presentations; local Reading Time, Spam Shield, Site SEO and Custom Footer installation/activation/configuration/deactivation/removal with actual effects                              |
+| Media                 | 32 MiB supported image/audio/video/document uploads, metadata/library, image crop/rotate/flip/resize/restore, generated sizes and year/month settings                                                           |
+| Comments              | Moderation, replies, pending/approved/spam/trash states and configured discussion behavior; enabled Spam Shield classification                                                                                  |
+| Settings              | General, Writing, Reading, Discussion, Media, Permalinks and Privacy; public reading/permalink/styles/media behavior consumes saved values                                                                      |
+| Public site           | Published posts/pages, archives/search, static home/posts pages, pagination, configured links, comments, theme/design/navigation/extension output                                                               |
+| Syndication/discovery | RSS/Atom and comment feeds, sitemap and robots behavior, permalink resolver                                                                                                                                     |
+| REST compatibility    | Implemented `/wp-json/wp/v2` subset for posts/pages, media, categories/tags, comments, search, types, taxonomies and statuses; session/permission checks and supported mutations                                |
+| Tools/portability     | Site health, mail, own personal-data export, WorldAct JSON and WordPress XML (WXR) import/export                                                                                                                |
 
-- **Planned:** included in the initial implementation contract; functioning behavior has not yet been confirmed.
-- **Implemented:** matching source exists; runtime verification may still be pending.
-- **Verified:** the named behavior has been exercised successfully. This does not establish complete WordPress parity.
-- **Deferred:** outside the first slice.
+## Portability contract
 
-The first slice is implemented. The statuses below distinguish exercised workflows from screens whose code exists but has not had every interaction checked. None of these statuses establishes exact screen-for-screen or behavior-for-behavior WordPress parity.
-
-## First-slice contract
-
-| Screen or workflow | Initial behavior                                                                                          | Status                                                            |
-| ------------------ | --------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------- |
-| Login              | WorldAct branding, username/email and password, server session, logout, explicit failure states           | Verified (UI and API)                                             |
-| Admin shell        | Toolbar, left navigation, active submenus, collapse, responsive layout, real navigation                   | Verified (desktop/mobile core navigation)                         |
-| Dashboard          | Welcome panel and dismissal, At a Glance, Activity, persisted Quick Draft                                 | Verified (rendering, collapse, Quick Draft/reload)                |
-| Posts and Pages    | Separate lists, status counts, search, draft/published/trash filters, bulk trash/restore/permanent delete | Verified (API); list UI implemented                               |
-| Content editor     | Title and simple paragraph, heading, list, quote, and image blocks; save draft and publish                | Verified (UI draft/save/reload/publish); block subset implemented |
-| Media              | File upload, library grid, attachment title/alt/caption editing, delete                                   | Verified (API upload/metadata/delete); UI implemented             |
-| Comments           | List and moderation between pending, approved, spam, and trash; permanent delete                          | Verified (API moderation and public submission UI)                |
-| Users              | User list, add user, assign supported role, remove user with safeguards                                   | Verified (API roles/create/delete); UI implemented                |
-| Settings           | General and reading values backed by PostgreSQL                                                           | Implemented; API access controls verified                         |
-| Public site        | Published post index, individual posts/pages, submitted comments awaiting moderation                      | Verified (publishing, detail, comment form, pagination API)       |
-| Appearance         | Choice between two limited React presentations; not full original theme implementations                   | Implemented (two limited React presentations)                     |
-| Route aliases      | `/wp-admin` redirects to `/admin`; `/wp-login.php` redirects to `/login`                                  | Verified (built-server HTTP redirects)                            |
-
-Visible controls must perform their described action, navigate to implemented content, or explain the unavailable scope. Unsupported plugin installation and updates must not appear successful.
-
-## Visual reference checklist
-
-The supplied version defaults new users to the **Modern** color scheme. `wp-admin/css/colors/modern/colors.css` overrides the older base colors: the menu is `#1e1e1e`, its submenu is approximately `#0c0c0c`, the page background is `#f0f0f0`, and the accent is `#3858e9`. The base stylesheet's `#1d2327` menu and `#f0f0f1` page are not the full default appearance.
-
-Use the reference to compare:
-
-- System font stack, 13px base typography, heading weights, link colors, button states, field heights, notices, focus rings, and spacing.
-- A 160px expanded menu, 36px folded menu, 32px desktop toolbar, and 46px toolbar at the mobile breakpoint.
-- Dashboard cards and welcome panel with 8px corners, the supplied dark welcome background, widget headers, content padding, and column breakpoints.
-- Posts/pages list headers, status links, row actions, checkboxes, bulk controls, search, empty states, and selection behavior.
-- Keyboard focus, hover/flyout menus, collapsed navigation, loading states, error states, and narrow-screen layouts.
-
-Relevant sources are `wp-admin/index.php`, `wp-admin/menu.php`, `wp-admin/includes/dashboard.php`, `wp-admin/css/`, `wp-includes/css/admin-bar.css`, and `wp-includes/css/dist/base-styles/admin-schemes.css`. The welcome artwork is `wp-admin/images/dashboard-background.svg`. WordPress's complete stylesheet registry is in `wp-includes/script-loader.php`; `wp-admin/css/wp-admin.css` alone omits some dependencies.
-
-Copy only required static CSS, icons, fonts, and artwork, retaining notices and attribution. Do not copy PHP runtime files into WorldAct. Matching static CSS is a useful foundation; it is not evidence that all screens or interactions match 1:1.
-
-## Deliberate first-slice limitations
-
-| Area                        | Remaining parity work                                                                                                                                                                                                                                                         |
-| --------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Gutenberg and site editing  | Full block editor, block transforms, nested blocks, patterns, reusable/synced blocks, template editing, global styles, accessibility behavior, keyboard commands, and editor extensibility. The initial simple block editor is a subset.                                      |
-| Plugins and themes          | PHP plugins and PHP themes cannot run in the required stack. Equivalent functionality needs JavaScript implementations and a defined WorldAct extension API. Limited theme selection is not arbitrary WordPress-theme compatibility.                                          |
-| WordPress REST API          | WorldAct uses a custom `/api` contract. Full `/wp-json/wp/v2` endpoints, schemas, capabilities, authentication modes, extension behavior, and compatibility are deferred.                                                                                                     |
-| Revisions and autosave      | Revision history, comparison/restore, server autosave, edit locks, recovery, and concurrent editing are deferred.                                                                                                                                                             |
-| Publishing workflows        | Scheduling, private/password-protected content, pending review, sticky posts, post formats, and complete status-transition/permission behavior are deferred. Initial post/page states are published, draft, and trash.                                                        |
-| Taxonomy and content types  | Categories, tags, custom taxonomies, custom fields, custom post types, hierarchical page controls, and permalink variations are deferred.                                                                                                                                     |
-| Multisite                   | Network installation, sites, network administration, domain mapping, and per-site roles/settings are deferred.                                                                                                                                                                |
-| Installation and updates    | WordPress's installer, self-update, plugin/theme downloads, update checks, recovery mode, and filesystem editor are deferred. Local migration and seed commands initialize WorldAct.                                                                                          |
-| Syndication and portability | RSS/Atom feeds, trackbacks/pingbacks, WXR import/export, WordPress migration, and export/personal-data workflows are deferred.                                                                                                                                                |
-| Media                       | Complete image editing, generated sizes, galleries, audio/video workflows, and WordPress's attachment selection modal are deferred.                                                                                                                                           |
-| Users and settings          | Full profile management, password reset/email delivery, configurable user reassignment, application passwords, all settings pages, and the full WordPress capability model are deferred. Deleting another user currently reassigns their content to the acting administrator. |
-| Dashboard services          | WordPress Events/News, comprehensive Site Health, persistent drag-and-drop widget arrangements, and all Screen Options/Help behavior are deferred unless separately confirmed.                                                                                                |
-| Public themes               | Exact rendering of every bundled theme/template, archive/search views, advanced archive/permalink behavior, widgets, menus, SEO integrations, and multilingual behavior are deferred. Basic server-backed post pagination is implemented.                                     |
+- JSON import restores posts/pages, canonical Gutenberg data, taxonomy relations, page/category hierarchy and comments. Content is assigned to the importing administrator and IDs are remapped.
+- JSON export additionally includes design documents, styles, settings, navigation and media references. JSON import does not restore those additional sections or media file bytes. Password/session/account data is excluded.
+- Protected exports and protected/scheduled imports become drafts for review. Original URLs are preserved when available; conflicts receive unique URLs.
+- WXR handles the implemented content/taxonomy/hierarchy/comment domain and canonical block markup. Remote attachment files are skipped with a warning; existing content URLs remain for separate media migration.
+- Import files are limited to 8 MB in the Tools interface. Neither format is a complete backup: preserve PostgreSQL and the uploads directory separately.
 
 ## Verification record
 
-Verified on November 6, 2026 against the local PostgreSQL container:
+Verified on **November 7, 2026** against local PostgreSQL:
 
-- Setup, migration, and repeated seed succeeded without duplicating the initial content.
-- The API integration suite passes all 15 workflow subtests (16 tests including the parent), covering session protection/revocation, origin checks, persisted drafts, partial-update preservation, publication/sanitization, pagination, moderation, image upload/metadata, rejected SVG, authorship/page restrictions, and trash/restore. Test records were removed afterward.
-- A real browser created a draft in the React editor, saved/reloaded it, published it, opened the public post, and submitted a comment that remained pending. The temporary post/comment were removed.
-- TypeScript and the client/server build pass. The built server serves public and nested admin routes, its database health endpoint, and the legacy URL redirects.
-- Independent browser review passed for the bounded first slice at 1440px, 768px, and 375px widths after artwork, footer, column, search, and mobile editor fixes.
-- Desktop/mobile dashboard screenshots are in screenshots/. Visual review is against source CSS/markup and browser behavior; no running original WordPress instance or exhaustive pixel comparison is claimed.
+- The final automated suite passes against the compiled Node server **41/41 tests**. Coverage includes session/origin/access boundaries, canonical block round trips and sanitization, editorial permissions, scheduling, revisions/autosaves, taxonomy/hierarchy, moderation, media editing/storage, profiles/reset tokens, design/menu/extension lifecycles, feeds/permalinks, REST and JSON/WXR portability. Embed parser checks reject untrusted hosts, schemes, credentials, ports and invalid IDs. Six template-binding regression checks cover attribute/URL injection, literal metadata and safe block layouts; the original injection scenario was also checked in native Chrome.
+- TypeScript and the production client/server build pass. A fresh isolated PostgreSQL database passed migration, repeated seed, compiled startup, public/admin routes, feeds and REST checks; the temporary database was removed.
+- Real browser checks exercised editor typing/save/reload, official insertion/rich-text controls, iframe keyboard undo/redo, both supported embed providers, seeded site bindings, reading settings, profile colors, menu-to-public navigation and extension-to-public reading times. Comments/replies and published content were also exercised.
+- The final independent browser review reports **PASS** at 1440, 768 and 375 pixel widths. Profile overflow and embed sizing found during review were fixed. Seventeen final screenshots are retained below.
+- Temporary QA records were removed, changed settings restored, and the seed content retained. This record verifies the named implementation checks; it does not establish exhaustive WordPress parity.
 
-WordPress XML import/export remains deferred. Tools provides a basic JSON export of accessible non-trash posts/pages; it excludes media files and is not a full backup or WordPress WXR export.
+| Screen      | Desktop (1440)                                    | Tablet (768)                                     | Mobile (375)                                     |
+| ----------- | ------------------------------------------------- | ------------------------------------------------ | ------------------------------------------------ |
+| Dashboard   | [Screenshot](screenshots/dashboard-desktop.png)   | [Screenshot](screenshots/dashboard-tablet.png)   | [Screenshot](screenshots/dashboard-mobile.png)   |
+| Post editor | [Screenshot](screenshots/editor-desktop.png)      | [Screenshot](screenshots/editor-tablet.png)      | [Screenshot](screenshots/editor-mobile.png)      |
+| Categories  | [Screenshot](screenshots/categories-desktop.png)  | [Screenshot](screenshots/categories-tablet.png)  | [Screenshot](screenshots/categories-mobile.png)  |
+| Profile     | [Screenshot](screenshots/profile-desktop.png)     | [Screenshot](screenshots/profile-tablet.png)     | [Screenshot](screenshots/profile-mobile.png)     |
+| Site editor | [Screenshot](screenshots/site-editor-desktop.png) | [Screenshot](screenshots/site-editor-tablet.png) | [Screenshot](screenshots/site-editor-mobile.png) |
+
+| Public post | [Screenshot](screenshots/public-desktop.png) | — | [Screenshot](screenshots/public-mobile.png) |
+
+Run the checks with the commands in [README](../README.md).
+
+## Boundaries that remain
+
+| Boundary                  | Meaning                                                                                                                                                                                                                                                                              |
+| ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Complete WordPress parity | Every core screen, state, keyboard command, accessibility detail and extension point has not been exhaustively reproduced or compared. No running reference installation or pixel-diff baseline was available.                                                                       |
+| Themes                    | The four React presentations and editable supported templates do not reproduce every bundled PHP theme/template/variation. A familiar theme name does not imply arbitrary WordPress-theme compatibility.                                                                             |
+| Gutenberg                 | A selected set of official blocks is enabled. WordPress-specific dynamic/query blocks, arbitrary third-party blocks, full synced/reusable entity semantics, every pattern source and every provider are not claimed. Eight WorldAct bindings support the implemented site templates. |
+| PHP/extension ecosystem   | Arbitrary PHP plugins/themes, WordPress.org package downloads, installer/updater/recovery/filesystem-editor workflows and external plugin marketplaces are unsupported. The local JavaScript registry has four implemented modules.                                                  |
+| REST/capabilities         | REST coverage is a subset. Full schemas, all query parameters/authentication modes, arbitrary plugin routes, custom capability registration and universal client compatibility are not claimed.                                                                                      |
+| Content model             | Posts/pages and categories/tags are implemented. Arbitrary custom post types/taxonomies/fields, format-specific templates and archives and multisite/network administration are unsupported.                                                                                         |
+| Operational services      | Scheduled publishing requires the Node process to be running. SMTP is optional; email otherwise stays in the local outbox. No hosted update/news/event service, trackback/pingback service or complete privacy-erasure workflow is implemented.                                      |
+| Security/dependencies     | Tests are not a security certification. The recorded npm audit has 19 low findings from transitive `deepmerge@4.3.1`, no fixed compatible release, and no forced Gutenberg downgrade.                                                                                                |
+
+The supplied default Modern admin scheme uses a `#1e1e1e` menu, approximately `#0c0c0c` submenus, `#f0f0f0` page background and `#3858e9` accent. Selected source color schemes are loaded per profile. Reference dimensions include a 160px expanded menu, 36px collapsed menu, 32px desktop toolbar and 46px mobile toolbar. These source-based targets guide the interface; they do not establish exact screen-for-screen equality.

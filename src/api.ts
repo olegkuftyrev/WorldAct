@@ -1,24 +1,111 @@
+export type Role =
+  | "administrator"
+  | "editor"
+  | "author"
+  | "contributor"
+  | "subscriber";
 export type User = {
   id: number;
   username: string;
   email: string;
   displayName: string;
-  role: string;
+  role: Role;
   createdAt: string;
+  firstName?: string;
+  lastName?: string;
+  nickname?: string;
+  bio?: string;
+  website?: string;
+  adminColor?: string;
+  locale?: string;
+};
+export type SerializedBlock = {
+  name: string;
+  attributes: Record<string, unknown>;
+  innerBlocks: SerializedBlock[];
+};
+export type PostStatus =
+  | "publish"
+  | "draft"
+  | "pending"
+  | "future"
+  | "private"
+  | "trash";
+export type Term = {
+  id: number;
+  taxonomy: "category" | "tag";
+  name: string;
+  slug: string;
+  description: string;
+  parentId: number | null;
+  count: number;
 };
 export type Post = {
   id: number;
   type: "post" | "page";
+  format:
+    | "standard"
+    | "aside"
+    | "image"
+    | "video"
+    | "quote"
+    | "link"
+    | "gallery"
+    | "audio";
   title: string;
   slug: string;
   content: string;
+  rawContent?: string;
+  permalink?: string;
   excerpt: string;
-  status: "publish" | "draft" | "trash";
+  status: PostStatus;
   authorId: number;
   authorName: string;
   createdAt: string;
   updatedAt: string;
   publishedAt: string | null;
+  scheduledAt: string | null;
+  version: number;
+  blocks: SerializedBlock[] | null;
+  terms: Term[];
+  categories: Term[];
+  tags: Term[];
+  categoryIds: number[];
+  tagIds: number[];
+  parentId: number | null;
+  menuOrder: number;
+  featuredMediaId: number | null;
+  featuredMedia?: Media | null;
+  commentStatus: "open" | "closed";
+  sticky: boolean;
+  hasPassword: boolean;
+  locked?: boolean;
+  readingTime?: number;
+};
+export type Revision = {
+  id: number;
+  postId: number;
+  title: string;
+  content: string;
+  rawContent?: string;
+  permalink?: string;
+  excerpt: string;
+  blocks: SerializedBlock[] | null;
+  createdAt: string;
+  authorName: string;
+  version: number;
+  slug: string;
+  status: PostStatus;
+};
+export type Autosave = {
+  title: string;
+  content: string;
+  rawContent?: string;
+  permalink?: string;
+  excerpt: string;
+  blocks: SerializedBlock[] | null;
+  savedAt: string;
+  version: number;
 };
 export type Media = {
   id: number;
@@ -29,18 +116,41 @@ export type Media = {
   alt: string;
   caption: string;
   size: number;
+  width?: number | null;
+  height?: number | null;
+  canRestore?: boolean;
+  sizes?: Record<
+    string,
+    {
+      filename: string;
+      url: string;
+      width: number;
+      height: number;
+      mimeType: string;
+    }
+  >;
   createdAt: string;
+  authorId?: number;
+  authorName?: string;
 };
 export type Comment = {
   id: number;
   authorName: string;
   authorEmail: string;
   content: string;
+  rawContent?: string;
+  permalink?: string;
   status: "approved" | "pending" | "spam" | "trash";
   postId: number;
   postTitle: string;
   createdAt: string;
+  parentId?: number | null;
 };
+export type ThemeId =
+  | "twentytwentyfive"
+  | "twentytwentyfour"
+  | "twentytwentythree"
+  | "classic";
 export type Settings = {
   siteTitle: string;
   tagline: string;
@@ -51,8 +161,80 @@ export type Settings = {
   timeFormat: string;
   postsPerPage: number;
   discourageSearchEngines: boolean;
-  theme: "twentytwentyfive" | "classic";
+  theme: ThemeId;
+  defaultCategoryId?: number;
+  defaultPostFormat?: string;
+  frontPageMode?: "posts" | "page";
+  frontPageId?: number | null;
+  postsPageId?: number | null;
+  feedItems?: number;
+  feedExcerpt?: boolean;
+  defaultCommentStatus?: "open" | "closed";
+  requireCommentNameEmail?: boolean;
+  commentRegistration?: boolean;
+  commentModeration?: boolean;
+  commentsPerPage?: number;
+  threadComments?: boolean;
+  threadDepth?: number;
+  closeCommentsDays?: number;
+  commentOrder?: "asc" | "desc";
+  permalinkStructure?: string;
+  categoryBase?: string;
+  tagBase?: string;
+  thumbnailWidth?: number;
+  thumbnailCrop?: boolean;
+  thumbnailHeight?: number;
+  mediumWidth?: number;
+  mediumHeight?: number;
+  largeWidth?: number;
+  largeHeight?: number;
+  uploadsYearMonth?: boolean;
+  privacyPageId?: number | null;
 };
+export type NavigationItem = {
+  id: string;
+  label: string;
+  url: string;
+  parentId?: string | null;
+  target?: "_self" | "_blank";
+};
+export type NavigationMenu = {
+  id: number;
+  name: string;
+  location: string;
+  items: NavigationItem[];
+  updatedAt: string;
+};
+export type SiteStyle = {
+  backgroundColor: string;
+  textColor: string;
+  accentColor: string;
+  fontFamily: string;
+  contentWidth: number;
+  headingFont: string;
+  spacing: number;
+};
+export type SiteTemplate = {
+  id: number;
+  slug: string;
+  title: string;
+  type: "template" | "template-part" | "pattern";
+  content: string;
+  rawContent?: string;
+  permalink?: string;
+  blocks: SerializedBlock[] | null;
+  updatedAt: string;
+};
+export class ApiError extends Error {
+  constructor(
+    message: string,
+    public status: number,
+    public data: Record<string, unknown> = {},
+  ) {
+    super(message);
+    this.name = "ApiError";
+  }
+}
 export async function api<T>(
   path: string,
   options: RequestInit = {},
@@ -69,7 +251,11 @@ export async function api<T>(
     .json()
     .catch(() => ({ error: "The server returned an invalid response." }));
   if (!response.ok)
-    throw new Error(data.error || `Request failed (${response.status}).`);
+    throw new ApiError(
+      data.error || `Request failed (${response.status}).`,
+      response.status,
+      data,
+    );
   return data as T;
 }
 export const json = (method: string, value?: unknown): RequestInit => ({
