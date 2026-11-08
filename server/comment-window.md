@@ -60,8 +60,15 @@ control. Supplied `wp-includes/blocks/comment-reply-link.php:31–49` computes
 ancestry before passing depth/max_depth to the source reply-link helper.
 The render walk carries that actual depth without per-comment SQL or recursion.
 The focused follow-up build and36 source/36 compiled checks across seven files
-pass; independent backend/native depth rechecks remain pending, separate from
-the earlier native gate.
+pass. Independent backend recheck passed21 source/21 compiled checks across four
+files, including actual HTTP acceptance for each offered Reply parent and
+rejection at the configured limit. Independent native review at `20e3b53`
+passed all twelve depth1/2/3/10 by1440/768/375 control rows, including a real
+eligible child Reply saved and reloaded at the maximum depth; its own23 source
+and23 compiled checks across four files passed. That follow-up also found
+source depth10 overflow at tablet/mobile from inherited global ordered-list
+margins. Layout correction and independent native re-evaluation remain a
+separate release gate; the passing control checks do not waive it.
 
 ## Reference provenance
 
