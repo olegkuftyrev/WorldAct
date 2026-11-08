@@ -104,8 +104,12 @@ test("default canonical content survives authenticated editing and JSON/WXR copi
   try{
     const exported=await api("/api/tools/export","GET",undefined,cookie); assert.equal(exported.response.status,200);
     const originals=exported.data.posts.filter((post:any)=>["hello-world","sample-page","privacy-policy"].includes(post.slug)); assert.equal(originals.length,3);
-    const copied=await api("/api/tools/import","POST",{application:"WorldAct",version:3,posts:originals,settings:{privacyPageId:originalPolicyId},replaceDesign:true},cookie);assert.equal(copied.response.status,201,JSON.stringify(copied.data));owned.push(...copied.data.postIds);
+    const comments=exported.data.comments.filter((comment:any)=>originals.some((post:any)=>post.id===comment.post_id));assert.equal(comments.length,1);assert.equal(comments[0].author_url,"/");
+    const copied=await api("/api/tools/import","POST",{application:"WorldAct",version:3,posts:originals,comments,settings:{privacyPageId:originalPolicyId},replaceDesign:true},cookie);assert.equal(copied.response.status,201,JSON.stringify(copied.data));owned.push(...copied.data.postIds);
     assert.equal(copied.data.restoredDesign,true);const copiedPolicyId=copied.data.postIds[originals.findIndex((post:any)=>post.slug==="privacy-policy")];assert.equal((await getSettings()).privacyPageId,copiedPolicyId);assert.notEqual(copiedPolicyId,originalPolicyId);
+    const copiedComment=(await pool.query("SELECT post_id,author_url,content FROM comments WHERE post_id=ANY($1::int[])",[owned])).rows;assert.equal(copiedComment.length,1);assert.equal(copiedComment[0].post_id,copied.data.postIds[originals.findIndex((post:any)=>post.slug==="hello-world")]);assert.equal(copiedComment[0].author_url,"/");assert.equal(copiedComment[0].content,comments[0].content.trim());
+    const count=(await pool.query("SELECT count(*)::int AS n FROM posts")).rows[0].n;
+    for(const author_url of ["//foreign.invalid/","/\\foreign.invalid/","javascript:bad()","data:text/html,bad","/unrecognized-relative"]){const rejected=await api("/api/tools/import","POST",{application:"WorldAct",version:3,posts:[originals[0]],comments:[{...comments[0],author_url}]},cookie);assert.equal(rejected.response.status,400);assert.equal((await pool.query("SELECT count(*)::int AS n FROM posts")).rows[0].n,count);}
     for(let index=0;index<owned.length;index++){
       const saved=await api("/api/posts/"+owned[index],"GET",undefined,cookie);assert.equal(saved.response.status,200);const post=saved.data.post, source=originals[index];
       assert.equal(post.rawContent,source.raw_content);assert.deepEqual(names(post.rawContent),names(source.raw_content));

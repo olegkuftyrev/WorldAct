@@ -57,5 +57,12 @@ policy selection and public privacy. Session expiry is checked against the
 actual issued database sessions. The bundled-plugin regression restores its
 preexisting inactive baseline after exercising its own mutations.
 
+The regular JSON-copy regression includes the actual starter comment, including
+its safe root-homepage author URL `/`. The importer accepts that one fixed local
+URL alongside empty and HTTP(S) author URLs; arbitrary relative, protocol-relative
+and unsafe-protocol URLs still fail and roll back. This corrects the fresh-site
+archive restore failure found by CI and retains comment formatting and fresh
+post/comment identity across separate source/destination databases.
+
 No UI, main-tree/live database, migration, email delivery, plugin activation,
 PHP/MySQL, multisite or classic-widget changes are part of this batch.

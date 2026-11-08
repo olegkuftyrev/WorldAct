@@ -1369,6 +1369,9 @@ router.post("/tools/import", admin, async (req: AuthRequest, res) => {
           author_url: z
             .union([
               z.literal(""),
+              // The bundled starter comment links to this site's root. Keep
+              // its exported value without accepting arbitrary relative URLs.
+              z.literal("/"),
               z
                 .url()
                 .max(2000)
