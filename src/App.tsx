@@ -1,6 +1,8 @@
 import Users from "./screens/Users";
 import { normalizeLoginRedirect } from "./loginRedirect";
 import { AdminEmailConfirmation } from "./screens/SiteIdentity";
+import ProfileEmailConfirmation from "./screens/ProfileEmail";
+import Install from "./screens/Install";
 import Comments from "./screens/Comments";
 import {
   Register,
@@ -114,9 +116,12 @@ export default function App() {
       "/check-email",
       "/privacy/confirm",
       "/confirm-admin-email",
+      "/confirm-profile-email",
     ].includes(location.pathname);
     const admin = location.pathname.startsWith("/admin");
-    document.body.className = location.pathname.startsWith("/admin")
+    document.body.className = location.pathname === "/install"
+      ? "worldact-install-body wp-core-ui admin-color-modern"
+      : location.pathname.startsWith("/admin")
       ? `wp-admin wp-core-ui js admin-color-${scheme}`
       : login
         ? `login wp-core-ui admin-color-${scheme}`
@@ -183,6 +188,8 @@ export default function App() {
           <Route path="/check-email" element={<CheckEmail />} />
           <Route path="/privacy/confirm" element={<PrivacyConfirmation />} />
           <Route path="/confirm-admin-email" element={<AdminEmailConfirmation />} />
+          <Route path="/confirm-profile-email" element={<ProfileEmailConfirmation />} />
+          <Route path="/install" element={<Install />} />
           <Route path="/lost-password" element={<LostPassword />} />
           <Route path="/reset-password" element={<ResetPassword />} />
           <Route

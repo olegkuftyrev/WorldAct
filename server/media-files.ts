@@ -1,9 +1,11 @@
 import sharp from "sharp";
 import path from "node:path";
-import { mkdir, writeFile, unlink } from "node:fs/promises";
+import { mkdir, open, unlink } from "node:fs/promises";
 import { randomBytes } from "node:crypto";
 import type { Pool } from "pg";
 import { pool, uploadsDir } from "./db.js";
+import { HttpError } from "./utils.js";
+import { rasterOutput, encodeRaster, jpegAutoOrientation } from "./image-formats.js";
 export type ImageSize = {
   filename: string;
   url: string;
@@ -18,6 +20,18 @@ export function safeStoredFile(filename: unknown): filename is string {
     !filename.includes("\\") &&
     path.resolve(uploadsDir, filename).startsWith(uploadsDir + path.sep)
   );
+}
+
+/** Mark ownership only after exclusive creation, before any potentially partial write. */
+export async function writeNewMediaFile(filename: string, data: Buffer, owned: Set<string>) {
+  if (!safeStoredFile(filename)) throw new HttpError(400, "Use a safe upload-relative filename.");
+  const handle = await open(path.join(uploadsDir, filename), "wx");
+  owned.add(filename);
+  try { await handle.writeFile(data); }
+  finally { await handle.close(); }
+}
+export async function cleanupStagedMediaFiles(owned: Iterable<string>) {
+  await Promise.all([...owned].filter(safeStoredFile).map(filename => unlink(path.join(uploadsDir, filename)).catch(() => {})));
 }
 
 /** Run after the deleting transaction commits. Archives can share physical files. */
@@ -68,63 +82,137 @@ export function uploadPrefix(settings: {
   }).formatToParts(new Date());
   return `${parts.find((p) => p.type === "year")!.value}/${parts.find((p) => p.type === "month")!.value}/`;
 }
+export type ImageResizeGeometry = {
+  left: number;
+  top: number;
+  cropWidth: number;
+  cropHeight: number;
+  width: number;
+  height: number;
+};
+/** Supplied media.php image_resize_dimensions/wp_constrain_dimensions, no filters. */
+export function imageResizeGeometry(
+  originalWidth: number,
+  originalHeight: number,
+  maxWidth: number,
+  maxHeight: number,
+  crop = false,
+): ImageResizeGeometry | null {
+  if (
+    ![originalWidth, originalHeight, maxWidth, maxHeight].every(Number.isInteger) ||
+    originalWidth <= 0 || originalHeight <= 0 || maxWidth < 0 || maxHeight < 0 ||
+    (!maxWidth && !maxHeight)
+  ) return null;
+  const wouldEnlarge = !maxHeight
+    ? originalWidth < maxWidth
+    : !maxWidth
+      ? originalHeight < maxHeight
+      : originalWidth < maxWidth && originalHeight < maxHeight;
+  if (wouldEnlarge) return null;
+  let width: number, height: number;
+  let cropWidth = originalWidth, cropHeight = originalHeight, left = 0, top = 0;
+  if (crop) {
+    width = Math.min(maxWidth, originalWidth);
+    height = Math.min(maxHeight, originalHeight);
+    if (!width) width = Math.round(height * originalWidth / originalHeight);
+    if (!height) height = Math.round(width * originalHeight / originalWidth);
+    const ratio = Math.max(width / originalWidth, height / originalHeight);
+    cropWidth = Math.round(width / ratio);
+    cropHeight = Math.round(height / ratio);
+    left = Math.floor((originalWidth - cropWidth) / 2);
+    top = Math.floor((originalHeight - cropHeight) / 2);
+  } else {
+    const widthRatio = maxWidth > 0 && originalWidth > maxWidth ? maxWidth / originalWidth : 1;
+    const heightRatio = maxHeight > 0 && originalHeight > maxHeight ? maxHeight / originalHeight : 1;
+    const larger = Math.max(widthRatio, heightRatio), smaller = Math.min(widthRatio, heightRatio);
+    const ratio = Math.round(originalWidth * larger) > maxWidth || Math.round(originalHeight * larger) > maxHeight
+      ? smaller : larger;
+    width = Math.max(1, Math.round(originalWidth * ratio));
+    height = Math.max(1, Math.round(originalHeight * ratio));
+    if (widthRatio < 1 && width === maxWidth - 1) width = maxWidth;
+    if (heightRatio < 1 && height === maxHeight - 1) height = maxHeight;
+  }
+  // Extremely thin crops can round one side to zero; no usable intermediate
+  // exists in that case, so retain the original instead of failing the upload.
+  if (Math.min(width, height, cropWidth, cropHeight) < 1) return null;
+  if (Math.abs(width - originalWidth) <= 1 && Math.abs(height - originalHeight) <= 1) return null;
+  return { left, top, cropWidth, cropHeight, width, height };
+}
 export async function buildSizes(
   buffer: Buffer,
   prefix: string,
   settings: Record<string, any>,
 ) {
   const result: Record<string, ImageSize> = {};
+  const owned = new Set<string>();
+  const metadata = await sharp(buffer, { limitInputPixels: 80_000_000 }).metadata();
+  const output = await rasterOutput(buffer, metadata);
+  // Geometry uses the same automatic EXIF orientation applied by the pipeline.
+  const orient = jpegAutoOrientation(metadata, output);
+  const swapped = orient && metadata.orientation! >= 5;
+  const originalWidth = swapped ? metadata.height : metadata.width;
+  const originalHeight = swapped ? metadata.width : metadata.height;
+  if (!originalWidth || !originalHeight) throw new HttpError(400, "The image could not be decoded.");
   await mkdir(path.join(uploadsDir, prefix), { recursive: true });
   try {
     for (const [name, w, h, crop] of [
       [
         "thumbnail",
-        settings.thumbnailWidth || 150,
-        settings.thumbnailHeight || 150,
+        settings.thumbnailWidth ?? 150,
+        settings.thumbnailHeight ?? 150,
         settings.thumbnailCrop !== false,
       ],
       [
         "medium",
-        settings.mediumWidth || 300,
-        settings.mediumHeight || 300,
+        settings.mediumWidth ?? 300,
+        settings.mediumHeight ?? 300,
         false,
       ],
       [
         "large",
-        settings.largeWidth || 1024,
-        settings.largeHeight || 1024,
+        settings.largeWidth ?? 1024,
+        settings.largeHeight ?? 1024,
         false,
       ],
+      ["medium_large", 768, 0, false],
+      ["1536x1536", 1536, 1536, false],
+      ["2048x2048", 2048, 2048, false],
     ] as const) {
-      const { data, info } = await sharp(buffer, {
+      const maximum = name === "thumbnail" ? 4096 : 8192;
+      if (![w, h].every(value => typeof value === "number" && Number.isInteger(value) && value >= 0 && value <= maximum)) {
+        throw new HttpError(400, "Image size dimensions must be whole numbers within the supported range.");
+      }
+      const geometry = imageResizeGeometry(originalWidth, originalHeight, w, h, crop);
+      if (!geometry) continue;
+      let pipeline = sharp(buffer, {
         limitInputPixels: 80_000_000,
-      })
-        .rotate()
+      });
+      if (orient) pipeline = pipeline.autoOrient();
+      pipeline = pipeline
+        .extract({ left: geometry.left, top: geometry.top, width: geometry.cropWidth, height: geometry.cropHeight })
         .resize({
-          width: w,
-          height: h,
-          fit: crop ? "cover" : "inside",
+          width: geometry.width,
+          height: geometry.height,
+          fit: "fill",
           withoutEnlargement: true,
-        })
-        .png()
-        .toBuffer({ resolveWithObject: true });
-      const filename = `${prefix}${randomBytes(20).toString("hex")}-${info.width}x${info.height}.png`;
-      await writeFile(path.join(uploadsDir, filename), data, { flag: "wx" });
+        });
+      const { data, info } = await encodeRaster(pipeline, output).toBuffer({ resolveWithObject: true });
+      const filename = `${prefix}${randomBytes(20).toString("hex")}-${info.width}x${info.height}.${output.extension}`;
+      await writeNewMediaFile(filename, data, owned);
       result[name] = {
         filename,
         url: `/uploads/${filename}`,
         width: info.width,
         height: info.height,
-        mimeType: "image/png",
+        mimeType: output.mimeType,
       };
     }
+    // With all sizes disabled or unchanged, no encoder has decoded the pixels.
+    // Header-only metadata must not allow a truncated tiny image to be stored.
+    if (!Object.keys(result).length) await sharp(buffer, { limitInputPixels: 80_000_000 }).stats();
     return result;
   } catch (error) {
-    await Promise.all(
-      Object.values(result).map((item) =>
-        unlink(path.join(uploadsDir, item.filename)).catch(() => {}),
-      ),
-    );
+    await cleanupStagedMediaFiles(owned);
     throw error;
   }
 }

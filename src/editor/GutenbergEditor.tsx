@@ -39,6 +39,8 @@ import {
   type Block,
 } from "@wordpress/blocks";
 import { registerCoreBlocks } from "@wordpress/block-library";
+import { registerClassicContentHandler } from "./classic/register";
+import { recordBlockHistory, type HistoryMode } from "./blockHistory";
 import {
   Button,
   Modal,
@@ -81,6 +83,8 @@ import { editorSelectorContext, isNavigationOverlayEntity, ownsEntityEdit, type 
 import { overlayPickerReference } from "./navigationOverlayReference";
 import { parseVideoEmbed } from "../embeds";
 import { compileThemeStyles, type ThemeJSON, type ThemeStyleOverrides } from "../themeStyles";
+import { ClassicSupport } from "./classic/ClassicSupport";
+import { NativeClassicEdit } from "./classic/NativeClassic";
 import "./gutenberg.css";
 
 export type { SerializedBlock, GutenbergBlock } from "./types";
@@ -89,6 +93,8 @@ export type { SerializedBlock, GutenbergBlock } from "./types";
 // Query, navigation and other entity-backed blocks belong to the site renderer.
 export const WORLDAct_CONTENT_BLOCKS = [
   "core/paragraph",
+  "core/freeform",
+  "core/shortcode",
   "core/math",
   "core/icon",
   "core/more",
@@ -207,7 +213,13 @@ export const WORLDAct_SITE_BLOCKS = [
 type FootnoteOwner={postId?:number;postType:string};
 const AtomicFootnotesContext=createContext<FootnoteOwner|null>(null);
 const ownsFootnotes=(owner:FootnoteOwner|null,context:{postId?:number;postType?:string}|undefined)=>!!owner?.postId && Number(context?.postId)===owner.postId && context?.postType===owner.postType;
+addFilter(
+  "blocks.registerBlockType",
+  "worldact/classic-nested-media-slot",
+  (settings: any, name: string) => name === "core/freeform" ? { ...settings, edit: NativeClassicEdit } : settings,
+);
 if (!getBlockType("core/paragraph")) registerCoreBlocks();
+registerClassicContentHandler();
 const nativeFootnoteFormat=select(richTextStore).getFormatType("core/footnote");
 if(nativeFootnoteFormat?.edit){
   function AtomicFootnoteFormat(props:any){return ownsFootnotes(useContext(AtomicFootnotesContext),props.context)?<OwnedFootnoteFormat {...props}/>:null;}
@@ -423,6 +435,7 @@ type MediaAdapter = {
   media: Media[];
   upload: (files: File[]) => Promise<Media[]>;
   onError: (message: string) => void;
+  onUpdate: (item: Media) => void;
 };
 const MediaContext = createContext<MediaAdapter | null>(null);
 
@@ -761,6 +774,17 @@ function WorldActMediaUpload({
     </>
   );
 }
+
+addFilter(
+  "editor.BlockEdit",
+  "worldact/source-classic-runtime",
+  (BlockEdit: any) => function SourceClassic(props: any) {
+    const adapter = useContext(MediaContext);
+    return props.name === "core/freeform"
+      ? <ClassicSupport {...props} media={adapter?.media || []} onMediaUpdate={adapter?.onUpdate} BlockEdit={BlockEdit} MediaUpload={WorldActMediaUpload}/>
+      : <BlockEdit {...props}/>;
+  },
+);
 
 addFilter(
   "editor.MediaUpload",
@@ -1146,6 +1170,9 @@ const GutenbergSession = forwardRef<
     ],
     [props.media, addedMedia],
   );
+  const onMediaUpdate = useCallback((item: Media) => {
+    setAddedMedia(current => [...current.filter(existing => existing.id !== item.id), item]);
+  }, []);
   const reportError = useCallback(
     (message: string) => {
       setError(message);
@@ -1155,7 +1182,7 @@ const GutenbergSession = forwardRef<
   );
 
   const emit = useCallback(
-    (next: Block[], kind: "input" | "change" | "history", noteSnapshot?:Footnote[]) => {
+    (next: Block[], kind: HistoryMode, noteSnapshot?:Footnote[]) => {
       let footnotes=noteSnapshot || footnotesRef.current;
       if(metadataRef.current) {
         try {
@@ -1171,23 +1198,7 @@ const GutenbergSession = forwardRef<
       signature.current = nextSignature;
       footnotesRef.current=footnotes;
       void writeNativeFootnotes(footnotes);
-      if (kind !== "history") {
-        const state = history.current;
-        const now = Date.now();
-        const mergeTyping =
-          kind === "input" &&
-          state.index === state.items.length - 1 &&
-          state.index > 0 &&
-          now - state.lastInput < 800;
-        if (mergeTyping) state.items[state.index] = {blocks:next,footnotes};
-        else {
-          state.items = state.items.slice(0, state.index + 1);
-          state.items.push({blocks:next,footnotes});
-          if (state.items.length > 100) state.items.shift();
-          state.index = state.items.length - 1;
-        }
-        state.lastInput = kind === "input" ? now : 0;
-      }
+      recordBlockHistory(history.current, {blocks:next,footnotes}, kind);
       setHistoryVersion((value) => value + 1);
       onChangeRef.current(stored, serialize(next));
       metadataRef.current?.(footnotes);
@@ -1590,9 +1601,12 @@ const GutenbergSession = forwardRef<
         }));
       },
       mediaUpload,
-      styles: canvasStyles,
+      styles: [...canvasStyles,
+        ...(themeDocument ? [{css:compileThemeStyles(themeDocument, "body.editor-styles-wrapper",themeOverrides)}] : []),
+        ...(props.canvasCSS ? [{css:props.canvasCSS}] : []),
+      ],
     }),
-    [mediaUpload, patterns, reusable, props.context, !!props.onMetadataChange, reportError, themeDocument, props.entityContext],
+    [mediaUpload, patterns, reusable, props.context, !!props.onMetadataChange, reportError, themeDocument, themeOverrides, props.canvasCSS, props.entityContext],
   );
 
   const keyDown = (event: KeyboardEvent<HTMLDivElement>) => {
@@ -1617,15 +1631,15 @@ const GutenbergSession = forwardRef<
   if(readyEntity!==entityKey)return <p role="status">Loading block editor…</p>;
   return (
     <MediaContext.Provider
-      value={{ media: allMedia, upload, onError: reportError }}
+      value={{ media: allMedia, upload, onError: reportError, onUpdate: onMediaUpdate }}
     >
       <AtomicFootnotesContext.Provider value={props.onMetadataChange?{postId:props.postId,postType:props.postType || "post"}:null}>
       <SlotFillProvider>
         <BlockEditorProvider
           key={canvasGeneration}
           value={blocks}
-          onInput={(next) => emit(next, "input")}
-          onChange={(next) => emit(next, "change")}
+          onInput={(next, options) => emit(next, options?.undoIgnore ? "ignore" : "merge")}
+          onChange={(next, options) => emit(next, options?.undoIgnore ? "ignore" : "change")}
           settings={settings}
         >
           <EntityEditsObserver
@@ -1723,11 +1737,7 @@ const GutenbergSession = forwardRef<
                 <div className="worldact-gutenberg-canvas">
                   {metadataReady ? <BlockCanvas
                     height="min(72vh, 900px)"
-                    styles={
-                      props.canvasCSS
-                        ? [...canvasStyles, ...(themeDocument ? [{css:compileThemeStyles(themeDocument, "body.editor-styles-wrapper",themeOverrides)}] : []), { css: props.canvasCSS }]
-                        : [...canvasStyles, ...(themeDocument ? [{css:compileThemeStyles(themeDocument, "body.editor-styles-wrapper",themeOverrides)}] : [])]
-                    }
+                    styles={settings.styles}
                   /> : <p className="worldact-public-loading" role="status">Loading…</p>}
                 </div>
                 {props.inspectorOpen && (

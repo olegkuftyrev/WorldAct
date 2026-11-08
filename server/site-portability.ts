@@ -15,6 +15,7 @@ import { validateThemeDesign, getBundledTheme } from "./themes.js";
 import { sourceTemplatePartArea } from "../shared/template-areas.js";
 import { inspectFont, bundledFontCollection, validateFontChoices } from "./fonts.js";
 import { inspectAudio } from "./audio-metadata.js";
+import { importedMediaCaption } from "./media-captions.js";
 
 export const MAX_ARCHIVE_FILE_BYTES = 32 * 1024 * 1024;
 export const MAX_ARCHIVE_MEDIA_BYTES = 64 * 1024 * 1024;
@@ -219,7 +220,7 @@ export class SiteImport {
       if (byteCount > MAX_ARCHIVE_MEDIA_BYTES) throw new HttpError(413, "Import at most 64 MiB of uploaded files per archive.");
       const type = await detectMediaType(data);
       if (!type || type.mime !== file.mimeType || !supportedMimes.has(type.mime)) throw new HttpError(400, "An embedded media file has an unsupported or mismatched MIME signature.");
-      if (type.mime.startsWith("image/")) await sharp(data, { limitInputPixels: 80_000_000 }).metadata().catch(() => { throw new HttpError(400, "An embedded image cannot be decoded safely."); });
+      if (type.mime.startsWith("image/")) await sharp(data, { limitInputPixels: 80_000_000 }).stats().catch(() => { throw new HttpError(400, "An embedded image cannot be decoded safely."); });
       embedded.set(file.filename, { data, mime: type.mime, ext: type.ext });
     }
     const copied = new Map<string, { filename: string; mime: string; data: Buffer }>();
@@ -237,6 +238,7 @@ export class SiteImport {
         if (data.length > MAX_ARCHIVE_FILE_BYTES || byteCount > MAX_ARCHIVE_MEDIA_BYTES) throw new HttpError(413, "Local media exceeds the archive file limit.");
         const type = await detectMediaType(data);
         if (!type || !supportedMimes.has(type.mime)) throw new HttpError(400, "A local media file has an unsupported MIME signature.");
+        if (type.mime.startsWith("image/")) await sharp(data, { limitInputPixels: 80_000_000 }).stats().catch(() => { throw new HttpError(400, "A local image cannot be decoded safely."); });
         file = { data, mime: type.mime, ext: type.ext };
         this.warn(`Media file ${source} was copied from the existing local upload library.`);
       }
@@ -251,16 +253,25 @@ export class SiteImport {
     };
     for (const item of records) {
       const sourceId = id.parse(item.id);
+      const caption = importedMediaCaption(item.caption, item.caption_is_html);
       const main = await copy(item.filename);
       if (!main) { this.warn(`Media record ${sourceId} could not be restored; its ID references were detached.`); continue; }
       const original = await copy(item.original_filename), derivatives: Record<string, string> = {}, sizes: Record<string, any> = {};
       const inputDerivatives = z.record(z.string().max(200), filename).parse(item.derivatives || {});
       for (const [key, name] of Object.entries(inputDerivatives)) { const file = await copy(name); if (file) derivatives[key] = file.filename; }
       const inputSizes = z.record(z.string().max(100), z.object({ filename, width: z.number().int().positive().max(20000), height: z.number().int().positive().max(20000) }).passthrough()).parse(item.sizes || {});
-      for (const [key, size] of Object.entries(inputSizes)) { const file = await copy(size.filename); if (file) sizes[key] = { filename: file.filename, url: "/uploads/" + file.filename, width: size.width, height: size.height, mimeType: file.mime }; }
+      for (const [key, size] of Object.entries(inputSizes)) {
+        const file = await copy(size.filename);
+        if (!file) continue;
+        if (!file.mime.startsWith("image/")) throw new HttpError(400, "An image sub-size must contain a supported raster image.");
+        const decoded = await sharp(file.data, { limitInputPixels: 80_000_000 }).metadata();
+        if (!decoded.width || !decoded.height) throw new HttpError(400, "An image sub-size could not be decoded safely.");
+        if (size.width !== decoded.width || size.height !== decoded.height) this.warn(`Image sub-size ${key} dimensions were recomputed from its verified bytes.`);
+        sizes[key] = { filename: file.filename, url: "/uploads/" + file.filename, width: decoded.width, height: decoded.height, mimeType: file.mime };
+      }
       let width = null, height = null;
       if (main.mime.startsWith("image/")) { const metadata = await sharp(main.data, { limitInputPixels: 80_000_000 }).metadata(); width = metadata.width ?? null; height = metadata.height ?? null; }
-      const row = await this.client.query("INSERT INTO media(author_id,title,filename,mime_type,alt,caption,size,width,height,original_filename,derivatives,sizes,created_at) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11::jsonb,$12::jsonb,coalesce($13::timestamptz,now())) RETURNING id", [this.user.id, plainText(z.string().max(300).parse(item.title)), main.filename, main.mime, plainText(z.string().max(1000).parse(item.alt || "")), plainText(z.string().max(20000).parse(item.caption || "")), main.data.length, width, height, original?.filename || null, JSON.stringify(derivatives), JSON.stringify(sizes), z.iso.datetime({ offset: true }).optional().parse(item.created_at) ?? null]);
+      const row = await this.client.query("INSERT INTO media(author_id,title,filename,mime_type,alt,caption,size,width,height,original_filename,derivatives,sizes,created_at) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11::jsonb,$12::jsonb,coalesce($13::timestamptz,now())) RETURNING id", [this.user.id, plainText(z.string().max(300).parse(item.title)), main.filename, main.mime, plainText(z.string().max(1000).parse(item.alt || "")), caption, main.data.length, width, height, original?.filename || null, JSON.stringify(derivatives), JSON.stringify(sizes), z.iso.datetime({ offset: true }).optional().parse(item.created_at) ?? null]);
       this.media.set(sourceId, row.rows[0].id);
       // Recompute descriptive metadata from the verified restored bytes;
       // imported JSON fields cannot inject tags, paths or fabricated durations.

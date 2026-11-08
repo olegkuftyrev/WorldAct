@@ -77,7 +77,7 @@ router.post("/users/bulk",admin,async(req:AuthRequest,res)=>{
   if(input.action==="delete"&&input.reassignTo&&input.ids.includes(input.reassignTo))throw new HttpError(400,"Choose a reassignment user outside the selected accounts.");
   for(const id of new Set(input.ids)){
     try{
-      if(input.action==="role")await updateUser({...req,body:{role:input.role}} as AuthRequest,id);
+      if(input.action==="role")await updateUser({...req,headers:req.headers,body:{role:input.role}} as AuthRequest,id);
       else await deleteUser(req,id,{reassignTo:input.reassignTo,deleteContent:input.deleteContent?"true":"false"});
       updated++;
     }catch(error){if(!(error instanceof HttpError))throw error;errors.push({id,message:error.message});}

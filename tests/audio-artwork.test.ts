@@ -38,7 +38,9 @@ test("audio artwork creates one verified owned image, deduplicates and remaps ac
     assert.ok(first.artworkMediaId); assert.equal(first.artworkMediaId, second.artworkMediaId); assert.equal(first.image.id, first.artworkMediaId); assert.equal(first.image.width, 12); assert.equal(first.image.height, 8);
     assert.equal((await pool.query("SELECT count(*)::int AS n FROM media")).rows[0].n, before + 3);
     const cover = (await api(`/api/media/${first.artworkMediaId}`)).data.media;
-    assert.equal(cover.mimeType, "image/png"); assert.ok(cover.sizes.thumbnail); assert.deepEqual(Buffer.from(await (await fetch(base + cover.url)).arrayBuffer()), png);
+    assert.equal(cover.mimeType, "image/png"); assert.deepEqual(cover.sizes, {}, "A tiny cover retains its original instead of duplicating or enlarging it"); assert.deepEqual(Buffer.from(await (await fetch(base + cover.url)).arrayBuffer()), png);
+    const nativeCover = (await api(`/wp-json/wp/v2/media/${cover.id}`)).data;
+    assert.equal(nativeCover.media_details.sizes.full.source_url, nativeCover.source_url); assert.equal(nativeCover.media_details.sizes.full.width, 12); assert.equal(nativeCover.media_details.sizes.full.height, 8);
     const native = (await api(`/wp-json/wp/v2/media/${first.id}`)).data; assert.ok(native.image.src.endsWith(cover.url)); assert.equal(native.media_details.album, "Embedded album");
     const archive = (await api("/api/tools/export")).data, sourceIds = new Set([first.id, second.id, cover.id]);
     const records = archive.media.filter((item: any) => sourceIds.has(item.id)), names = new Set(records.flatMap((item: any) => [item.filename, ...Object.values(item.sizes || {}).map((size: any) => size.filename)]));

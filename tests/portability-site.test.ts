@@ -70,7 +70,7 @@ test("complete site archive crosses fresh databases with media, design and setti
       await ok("/api/plugins/custom-footer/install", "POST", {});
       await ok("/api/plugins/custom-footer", "PUT", { enabled: true, settings: { text: "Portable custom footer" } });
       const archive = await ok("/api/tools/export");
-      assert.equal(archive.version, 3); assert.ok(archive.mediaFiles.length >= 5); assert.equal(archive.settings.adminEmail, undefined);
+      assert.equal(archive.version, 3); assert.ok(archive.mediaFiles.length >= 2); assert.equal(archive.settings.adminEmail, undefined);
       assert.ok(archive.mediaFiles.every((item: any) => item.data && /^[a-f0-9]{64}$/.test(item.sha256)));
       assert.equal(archive.extensions.find((item: any) => item.slug === "custom-footer")?.settings.text, "Portable custom footer");
       assert.equal(archive.posts.find((item: any) => item.id === post.id).featured_media_id, image.id);
@@ -93,7 +93,9 @@ test("complete site archive crosses fresh databases with media, design and setti
       assert.equal(expanded.content, archive.posts.find((item: any) => item.title === expanded.title).content);
       const media = exported.media.find((item: any) => item.id === post.featured_media_id);
       assert.ok(restored.mediaIds.includes(media.id)); assert.notEqual(media.filename, archive.media.find((item: any) => item.id === fixture.mediaId).filename);
-      assert.ok(media.original_filename); assert.ok(Object.keys(media.derivatives).length); assert.ok(media.sizes.thumbnail);
+      assert.ok(media.original_filename); assert.ok(Object.keys(media.derivatives).length); assert.deepEqual(media.sizes, {}, "The 8×12 edited fixture requires no enlarged or identical sub-sizes");
+      const nativeMedia = await ok(`/wp-json/wp/v2/media/${media.id}`);
+      assert.equal(nativeMedia.media_details.sizes.full.source_url, nativeMedia.source_url); assert.equal(nativeMedia.media_details.sizes.full.width, 8); assert.equal(nativeMedia.media_details.sizes.full.height, 12);
       assert.equal(media.attached_post_id,post.id);assert.equal(media.description,"<p>Portable attachment description</p>");assert.equal(media.comment_status,"open");
       const settings = (await ok("/api/settings")).settings;
       assert.equal(settings.siteTitle, "Portable source site"); assert.equal(settings.siteUrl, baseline.siteUrl); assert.equal(settings.adminEmail, baseline.adminEmail);

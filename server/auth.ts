@@ -3,6 +3,8 @@ import { promisify } from "node:util";
 import type { NextFunction, Request, Response } from "express";
 import type { PoolClient } from "pg";
 import { pool, userFields, type Role, type User } from "./db.js";
+import { HttpError } from "./utils.js";
+import { profileOptionsSQL } from "./profile-options.js";
 
 const scryptAsync = promisify(scrypt);
 const COOKIE = "worldact_session";
@@ -40,6 +42,14 @@ function readToken(req: Request) {
   const token = item?.slice(COOKIE.length + 1);
   return token && /^[a-f0-9]{64}$/.test(token) ? token : undefined;
 }
+/** Recheck a waiting mutation after locking its actor, before changing identity. */
+export async function assertActiveAccountAuthentication(req: AuthRequest, db: PoolClient) {
+  const userId = req.user?.id;
+  const exists = req.authenticationMethod === "application-password"
+    ? await db.query("SELECT 1 FROM application_passwords WHERE user_id=$1 AND uuid=$2", [userId, req.applicationPasswordUuid])
+    : await db.query("SELECT 1 FROM sessions WHERE user_id=$1 AND token_hash=$2 AND expires_at>now()", [userId, tokenHash(readToken(req) || "")]);
+  if (!exists.rowCount) throw new HttpError(401, "Your sign-in has expired. Sign in again to update this account.");
+}
 export async function attachUser(
   req: AuthRequest,
   _res: Response,
@@ -59,7 +69,7 @@ export async function attachUser(
         secret = credentials.slice(separator + 1).replace(/\s/g, "");
       if (separator > 0 && login.length <= 254 && /^[A-Za-z0-9_-]{32}$/.test(secret)) {
         const result = await pool.query<User & { uuid: string }>(
-          `SELECT ${userFields.split(",").map(field => `u.${field.trim()}`).join(", ")},a.uuid
+          `SELECT ${userFields.split(",").map(field => `u.${field.trim()}`).join(", ")},${profileOptionsSQL("u")},a.uuid
            FROM users u JOIN application_passwords a ON a.user_id=u.id
            WHERE a.key_hash=$1 AND (lower(u.username)=lower($2) OR lower(u.email)=lower($2))`,
           [tokenHash(secret), login],
@@ -83,7 +93,7 @@ export async function attachUser(
         `SELECT ${userFields
           .split(",")
           .map((field) => `u.${field.trim()}`)
-          .join(", ")}
+          .join(", ")},${profileOptionsSQL("u")}
         FROM users u JOIN sessions s ON s.user_id = u.id WHERE s.token_hash = $1 AND s.expires_at > now()`,
         [tokenHash(token)],
       );

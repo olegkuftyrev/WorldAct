@@ -19,6 +19,8 @@ export type User = {
   website?: string;
   adminColor?: string;
   locale?: string;
+  showAdminBar?: boolean;
+  commentShortcuts?: boolean;
 };
 export type SerializedBlock = {
   name: string;
@@ -126,6 +128,7 @@ export type Media = {
   width?: number | null;
   height?: number | null;
   canRestore?: boolean;
+  originalUploadUrl?: string | null;
   sizes?: Record<
     string,
     {

@@ -50,14 +50,15 @@ test("archive aliases retain current, original, derivative and size files until 
   try {
     const login = await api("/api/auth/login", "POST", { login: process.env.ADMIN_EMAIL, password: process.env.ADMIN_PASSWORD });
     assert.equal(login.response.status, 200); cookie = login.response.headers.get("set-cookie")!.split(";")[0];
-    const image = await sharp({ create: { width: 20, height: 12, channels: 3, background: "#2658aa" } }).png().toBuffer();
+    // Exercise real generated sizes now that unchanged/tiny copies are omitted.
+    const image = await sharp({ create: { width: 1200, height: 800, channels: 3, background: "#2658aa" } }).png().toBuffer();
     const form = new FormData(); form.append("file", new Blob([new Uint8Array(image)], { type: "image/png" }), stamp + ".png");
     const upload = await fetch(base + "/api/media", { method: "POST", headers: { Origin: origin, Cookie: cookie }, body: form });
     const uploaded = await upload.json(); assert.equal(upload.status, 201); media.add(uploaded.media.id);
     const edited = await api(`/api/media/${uploaded.media.id}/edit`, "POST", { rotate: 90 }, cookie); assert.equal(edited.response.status, 200);
     const exported = (await api("/api/tools/export", "GET", undefined, cookie)).data;
     const record = exported.media.find((item: any) => item.id === uploaded.media.id);
-    assert.ok(record.original_filename); assert.ok(Object.keys(record.derivatives).length); assert.equal(Object.keys(record.sizes).length, 3);
+    assert.ok(record.original_filename); assert.ok(Object.keys(record.derivatives).length); assert.deepEqual(Object.keys(record.sizes).sort(), ["large", "medium", "medium_large", "thumbnail"]);
     const names = new Set(filenames(record));
     const files = exported.mediaFiles.filter((file: any) => names.has(file.filename));
     assert.equal(files.length, names.size);

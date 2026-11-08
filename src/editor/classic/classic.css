@@ -1,0 +1,96 @@
+/* Source media-frame proportions and compact Gallery Settings, scoped to the
+   React transport adapter so existing editor dialogs keep their native styles. */
+.worldact-classic-gallery-toolbar {
+  padding-bottom: 16px;
+  border-bottom: 1px solid #dcdcde;
+}
+.worldact-classic-gallery-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 260px;
+  min-height: 320px;
+}
+.worldact-classic-gallery-images {
+  padding: 16px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 16px;
+  align-content: start;
+}
+.worldact-classic-gallery-image {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.worldact-classic-gallery-image > img {
+  width: 100%;
+  height: 160px;
+  object-fit: contain;
+  background: #f0f0f0;
+}
+.worldact-classic-gallery-image > span {
+  overflow-wrap: anywhere;
+}
+.worldact-classic-gallery-image label {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.worldact-classic-gallery-image textarea {
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  min-height: 56px;
+}
+.worldact-classic-gallery-image > div {
+  display: flex;
+  justify-content: space-between;
+  gap: 4px;
+}
+.worldact-classic-gallery .gallery-settings {
+  padding: 16px;
+  background: #f6f7f7;
+  border-left: 1px solid #dcdcde;
+}
+.worldact-classic-gallery .gallery-settings h2 {
+  font-size: 13px;
+  font-weight: 600;
+  text-transform: uppercase;
+  margin: 0 0 16px;
+}
+.worldact-classic-gallery .gallery-settings label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 16px;
+}
+.worldact-classic-gallery .gallery-settings select {
+  width: 100%;
+  min-width: 0;
+}
+.worldact-classic-gallery .gallery-settings .worldact-classic-gallery-checkbox {
+  flex-direction: row;
+  align-items: center;
+}
+.worldact-classic-gallery-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  border-top: 1px solid #dcdcde;
+  padding-top: 16px;
+}
+@media (max-width: 600px) {
+  .worldact-classic-gallery-layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .worldact-classic-gallery .gallery-settings {
+    border-left: 0;
+    border-top: 1px solid #dcdcde;
+  }
+  .worldact-classic-gallery-images {
+    padding: 16px 0;
+  }
+}
+/* Keep the source Classic text controls in their scrollable toolbar slot;
+   shrinking the slot makes its sibling Options button overlap Edit on phones. */
+.worldact-selected-block-toolbar .block-editor-block-toolbar__slot:has(.worldact-classic-tools){flex-shrink:0}

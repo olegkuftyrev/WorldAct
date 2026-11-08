@@ -21,6 +21,7 @@ import {
   hashPassword,
   verifyPassword,
   requireRole,
+  assertActiveAccountAuthentication,
   type AuthRequest,
 } from "./auth.js";
 import {
@@ -40,7 +41,12 @@ import {
   safeStoredFile,
   unlinkUnreferencedMediaFiles,
   mediaBackups,
+  writeNewMediaFile,
 } from "./media-files.js";
+import { rasterOutput, encodeRaster, jpegAutoOrientation } from "./image-formats.js";
+import { stageImageUpload } from "./image-uploads.js";
+import { editMediaCopy } from "./media-edit-copy.js";
+import { mediaCaptionSchema, mediaCaptionHTML } from "./media-captions.js";
 import { remapImportedBlockReferences } from "./block-portability.js";
 import { SiteImport, allocateImportedBlockEntities, exportMediaFiles, exportFontLibrary, MAX_ARCHIVE_JSON_BYTES, MAX_STORED_CONTENT_BYTES } from "./site-portability.js";
 import { postPermalink } from "./permalinks.js";
@@ -53,6 +59,8 @@ import { settingSchema, menuSchema, validMenu, styleSchema, documentSchema, vali
 import { readThemeDesign, validateThemeDesign, resetBundledDocument } from "./themes.js";
 import {pendingAdminEmail,queueAdminEmailChange} from "./site-identity.js";
 import {deliverMail,queueMail} from "./accounts.js";
+import {pendingProfileEmail,queueProfileEmailChange,assertAvailableProfileEmail} from "./profile-email.js";
+import { profileOptionsSQL } from "./profile-options.js";
 
 const router = express.Router();
 const admin = requireRole("administrator");
@@ -176,6 +184,8 @@ const profileSchema = z
       ])
       .optional(),
     locale: text(1, 40).optional(),
+    showAdminBar: z.boolean().optional(),
+    commentShortcuts: z.boolean().optional(),
     password: z.string().min(12).max(1024).optional(),
     currentPassword: z.string().max(1024).optional(),
     role: z
@@ -186,30 +196,34 @@ const profileSchema = z
 router.get("/profile", auth, async (req: AuthRequest, res) => {
   const user = needUser(req);
   const result = await pool.query(
-    `SELECT ${userFields},profile,preferences FROM users WHERE id=$1`,
+    `SELECT ${userFields},${profileOptionsSQL()},profile,preferences FROM users WHERE id=$1`,
     [user.id],
   );
   const row = result.rows[0];
-  res.json({ user: { ...row, ...row.profile }, preferences: row.preferences });
+  if(!row)throw new HttpError(401,"This account is no longer available.");
+  res.json({ user: { ...row, ...row.profile }, preferences: row.preferences, pendingEmail: await pendingProfileEmail(user.id) });
 });
-export async function updateUser(req: AuthRequest, target: number) {
+async function updateUserResult(req: AuthRequest, target: number) {
   const user = needUser(req),
     input = profileSchema.parse(req.body);
   if (target !== user.id && user.role !== "administrator")
     throw new HttpError(403, "You cannot edit this user.");
-  const client=await pool.connect();
+  const client=await pool.connect();let mail:Awaited<ReturnType<typeof queueMail>>|null=null,resultUser:any;
   try {
   await client.query("BEGIN");
-  await client.query("SELECT pg_advisory_xact_lock(hashtext('worldact-account-identity'))");
-  const existing = await client.query("SELECT * FROM users WHERE id=$1 FOR UPDATE", [
-    target,
+  const existing = await client.query("SELECT * FROM users WHERE id=ANY($1::int[]) ORDER BY id FOR UPDATE", [
+    [...new Set([user.id,target])],
   ]);
-  const row = existing.rows[0];
+  const actor=existing.rows.find(row=>row.id===user.id),row=existing.rows.find(row=>row.id===target);
+  if(!actor)throw new HttpError(401,"This account is no longer available.");
   if (!row) throw new HttpError(404, "User not found.");
+  await assertActiveAccountAuthentication(req,client);
+  if(target!==user.id && actor.role!=="administrator")throw new HttpError(403,"You cannot edit this user.");
+  await client.query("SELECT pg_advisory_xact_lock(hashtext('worldact-account-identity'))");
   if (
     input.role &&
     input.role !== row.role &&
-    (user.role !== "administrator" || user.id === target)
+    (actor.role !== "administrator" || user.id === target)
   )
     throw new HttpError(403, "You cannot change this account role.");
   if (
@@ -219,7 +233,7 @@ export async function updateUser(req: AuthRequest, target: number) {
       !(await verifyPassword(input.currentPassword, row.password_hash)))
   )
     throw new HttpError(400, "Your current password is incorrect.");
-  if(input.email && input.email.toLowerCase()!==row.email.toLowerCase() && (await client.query("SELECT id FROM users WHERE id<>$1 AND (lower(email)=lower($2) OR lower(username)=lower($2))",[target,input.email])).rowCount)throw new HttpError(409,"That email address is already registered.");
+  if(input.email && input.email.toLowerCase()!==row.email.toLowerCase())await assertAvailableProfileEmail(client,target,input.email);
   const {
     email,
     displayName,
@@ -230,10 +244,16 @@ export async function updateUser(req: AuthRequest, target: number) {
   } = input;
   for (const key of ["firstName", "lastName", "nickname", "bio"] as const)
     if (profile[key] !== undefined) profile[key] = plainText(profile[key]!);
+  const emailChanged=email!==undefined && email.toLowerCase()!==row.email.toLowerCase();
+  if(password || (emailChanged && target!==user.id)){
+    await client.query("DELETE FROM user_email_changes WHERE user_id=$1",[target]);
+    await client.query("DELETE FROM password_resets WHERE user_id=$1",[target]);
+  }
+  if(emailChanged && target===user.id)mail=await queueProfileEmailChange(client,row,email!);
   await client.query(
     "UPDATE users SET email=$1,display_name=$2,password_hash=$3,role=$4,profile=profile || $5::jsonb WHERE id=$6",
     [
-      email?.toLowerCase() ?? row.email,
+      target===user.id ? row.email : email?.toLowerCase() ?? row.email,
       displayName !== undefined
         ? normalizedText(displayName)
         : row.display_name,
@@ -255,19 +275,21 @@ export async function updateUser(req: AuthRequest, target: number) {
     );
   }
   const result = await client.query(
-    `SELECT ${userFields},profile FROM users WHERE id=$1`,
+    `SELECT ${userFields},${profileOptionsSQL()},profile FROM users WHERE id=$1`,
     [target],
   );
   await client.query("COMMIT");
-  return { ...result.rows[0], ...result.rows[0].profile };
+  resultUser={ ...result.rows[0], ...result.rows[0].profile };
   } catch(error){await client.query("ROLLBACK");throw error;}finally{client.release();}
+  return {user:resultUser,pendingEmail:target===user.id?await pendingProfileEmail(target):null,delivery:await deliverMail(mail)};
 }
+export async function updateUser(req:AuthRequest,target:number){return (await updateUserResult(req,target)).user;}
 router.put("/profile", auth, async (req: AuthRequest, res) =>
-  res.json({ user: await updateUser(req, needUser(req).id) }),
+  res.json(await updateUserResult(req, needUser(req).id)),
 );
 router.get("/users/:id", admin, async (req, res) => {
   const result = await pool.query(
-    `SELECT ${userFields},profile FROM users WHERE id=$1`,
+    `SELECT ${userFields},${profileOptionsSQL()},profile FROM users WHERE id=$1`,
     [parseId(req.params.id)],
   );
   if (!result.rowCount) throw new HttpError(404, "User not found.");
@@ -342,10 +364,10 @@ router.delete("/users/:id", admin, async (req: AuthRequest, res) => {
   res.json({ok:true});
 });
 router.put("/users/:id", admin, async (req: AuthRequest, res) =>
-  res.json({ user: await updateUser(req, parseId(req.params.id)) }),
+  res.json(await updateUserResult(req, parseId(req.params.id))),
 );
 router.patch("/users/:id", admin, async (req: AuthRequest, res) =>
-  res.json({ user: await updateUser(req, parseId(req.params.id)) }),
+  res.json(await updateUserResult(req, parseId(req.params.id))),
 );
 router.put("/preferences", auth, async (req: AuthRequest, res) => {
   const preferences = z
@@ -355,6 +377,17 @@ router.put("/preferences", auth, async (req: AuthRequest, res) => {
       hiddenWidgets: z.array(z.string().max(100)).max(30).optional(),
       welcome: z.boolean().optional(),
       postsPerPage: z.number().int().min(1).max(100).optional(),
+      editor: z.object({
+        editorMode: z.enum(["visual", "text"]).optional(),
+        fixedToolbar: z.boolean().optional(),
+        distractionFree: z.boolean().optional(),
+        focusMode: z.boolean().optional(),
+        fullscreenMode: z.boolean().optional(),
+        showBlockBreadcrumbs: z.boolean().optional(),
+        showListViewByDefault: z.boolean().optional(),
+        showIconLabels: z.boolean().optional(),
+        keepCaretInsideBlock: z.boolean().optional(),
+      }).strict().optional(),
       listTables: z.partialRecord(
         z.enum(["posts", "pages", "comments", "categories", "tags", "users", "media"]),
         z.object({
@@ -367,7 +400,11 @@ router.put("/preferences", auth, async (req: AuthRequest, res) => {
     .strict()
     .parse(req.body);
   const result = await pool.query(
-    `UPDATE users SET preferences=(preferences || ($1::jsonb-'listTables'))
+    `UPDATE users SET preferences=(preferences || ($1::jsonb-'listTables'-'editor'))
+      || CASE WHEN $1::jsonb ? 'editor' THEN jsonb_build_object('editor',
+        CASE WHEN jsonb_typeof(preferences->'editor')='object'
+          THEN preferences->'editor' ELSE '{}'::jsonb END || ($1::jsonb->'editor'))
+        ELSE '{}'::jsonb END
       || CASE WHEN $1::jsonb ? 'listTables' THEN jsonb_build_object('listTables',
         coalesce(preferences->'listTables','{}'::jsonb) || coalesce((
           SELECT jsonb_object_agg(entry.key,
@@ -414,7 +451,7 @@ router.post("/auth/forgot-password", async (req, res) => {
     .strict()
     .parse(req.body);
   const user = await pool.query(
-    "SELECT id,email FROM users WHERE lower(username)=lower($1) OR lower(email)=lower($1)",
+    "SELECT id,email,username FROM users WHERE lower(username)=lower($1) OR lower(email)=lower($1)",
     [login],
   );
   const mode = process.env.SMTP_HOST && process.env.NODE_ENV !== "test" && process.env.WORLDACT_MAIL_MODE !== "outbox" ? "queued" : "local-outbox";
@@ -430,7 +467,7 @@ router.post("/auth/forgot-password", async (req, res) => {
     try {
       await client.query("BEGIN");
       const current=(await client.query("SELECT id,email FROM users WHERE id=$1 FOR UPDATE",[user.rows[0].id])).rows[0];
-      if(current){
+      if(current && [current.email.toLowerCase(),user.rows[0].username.toLowerCase()].includes(login.toLowerCase())){
         await client.query("DELETE FROM password_resets WHERE user_id=$1",[current.id]);
         await client.query("INSERT INTO password_resets(token_hash,user_id,expires_at) VALUES($1,$2,now()+interval '30 minutes')",[createHash("sha256").update(token).digest("hex"),current.id]);
         mail=await queueMail(client,current.email,"Reset your WorldAct password",body);
@@ -486,6 +523,7 @@ router.post("/auth/reset-password", async (req, res) => {
     await client.query("DELETE FROM password_resets WHERE user_id=$1", [
       result.rows[0].user_id,
     ]);
+    await client.query("DELETE FROM user_email_changes WHERE user_id=$1", [result.rows[0].user_id]);
     await client.query("COMMIT");
     res.json({ ok: true });
   } catch (e) {
@@ -733,7 +771,7 @@ router.get("/media", creators, async (req: AuthRequest, res) => {
   const result=await pool.query(`SELECT ${expandedMediaFields} FROM media ${predicate} ORDER BY ${sort} ${input.order},id ${input.order} LIMIT $${values.length-1} OFFSET $${values.length}`,values);
   res.json({media:result.rows,counts:counts.rows[0],months:months.rows.map(row=>row.month),pagination:{page,perPage:input.perPage,total,totalPages}});
 });
-const mediaUpdate=z.object({title:z.string().trim().min(1).max(300).optional(),alt:z.string().max(1000).optional(),caption:z.string().max(20_000).optional(),description:z.string().max(20_000).optional(),commentStatus:z.enum(["open","closed"]).optional(),attachedPostId:z.number().int().positive().max(2147483647).nullable().optional()}).strict().refine(value=>Object.keys(value).length>0,"Provide a field to update.");
+const mediaUpdate=z.object({title:z.string().trim().min(1).max(300).optional(),alt:z.string().max(1000).optional(),caption:mediaCaptionSchema.optional(),description:z.string().max(20_000).optional(),commentStatus:z.enum(["open","closed"]).optional(),attachedPostId:z.number().int().positive().max(2147483647).nullable().optional()}).strict().refine(value=>Object.keys(value).length>0,"Provide a field to update.");
 async function updateMedia(req:AuthRequest,id:number,body:unknown){
   const input=mediaUpdate.parse(body),client=await pool.connect();
   try{
@@ -745,7 +783,7 @@ async function updateMedia(req:AuthRequest,id:number,body:unknown){
       if(needUser(req).role==="author" && (post.author_id!==needUser(req).id || post.type!=="post"))throw new HttpError(403,"You can only attach files to your own posts.");
     }
     const title=normalizedText(input.title ?? existing.title);
-    const result=await client.query(`UPDATE media SET title=$1,alt=$2,caption=$3,description=$4,comment_status=$5,attached_post_id=$6 WHERE id=$7 RETURNING ${expandedMediaFields}`,[title,plainText(input.alt ?? existing.alt),plainText(input.caption ?? existing.caption),cleanContent(input.description ?? existing.description),input.commentStatus ?? existing.comment_status,input.attachedPostId===undefined?existing.attached_post_id:input.attachedPostId,id]);
+    const result=await client.query(`UPDATE media SET title=$1,alt=$2,caption=$3,caption_is_html=true,description=$4,comment_status=$5,attached_post_id=$6 WHERE id=$7 RETURNING ${expandedMediaFields}`,[title,plainText(input.alt ?? existing.alt),mediaCaptionHTML(input.caption ?? existing.caption, input.caption === undefined ? existing.caption_is_html : true),cleanContent(input.description ?? existing.description),input.commentStatus ?? existing.comment_status,input.attachedPostId===undefined?existing.attached_post_id:input.attachedPostId,id]);
     await client.query("COMMIT");return result.rows[0];
   }catch(error){await client.query("ROLLBACK");throw error;}finally{client.release();}
 }
@@ -785,63 +823,54 @@ router.post(
       /\.(php\d?|phtml|html?|svg|js|exe|sh)$/i.test(file.originalname)
     )
       throw new HttpError(400, "Executable files are not permitted.");
-    let width: number | null = null,
-      height: number | null = null;
-    if (type.mime.startsWith("image/")) {
-      const metadata = await sharp(file.buffer, {
-        limitInputPixels: 80_000_000,
-      })
-        .metadata()
-        .catch(() => null);
-      if (!metadata?.width || !metadata?.height)
-        throw new HttpError(400, "The image could not be decoded.");
-      width = metadata.width;
-      height = metadata.height;
-    }
     const inspection = await inspectAudioWithArtwork(file.buffer, type.mime), audioMetadata = inspection.metadata;
     const settings = await getSettings();
     const prefix = uploadPrefix(settings);
     await mkdir(path.join(uploadsDir, prefix), { recursive: true });
-    const filename = `${prefix}${randomBytes(20).toString("hex")}.${type.ext}`;
-    const sizes = type.mime.startsWith("image/")
-      ? await buildSizes(file.buffer, prefix, settings).catch(() => {
-          throw new HttpError(400, "The image could not be decoded.");
-        })
-      : {};
-    await writeFile(path.join(uploadsDir, filename), file.buffer, {
-      flag: "wx",
-    });
-    const createdFiles = new Set([filename, ...Object.values(sizes).map(size => size.filename)]);
+    const rawFilename = `${prefix}${randomBytes(20).toString("hex")}.${type.ext}`;
+    const createdFiles = new Set<string>();
     let mediaClient: PoolClient | undefined;
     try {
+      const image = type.mime.startsWith("image/")
+        ? await stageImageUpload(file.buffer, rawFilename, prefix, settings, createdFiles).catch(() => { throw new HttpError(400, "The image could not be decoded."); })
+        : null;
+      if (!image) await writeNewMediaFile(rawFilename, file.buffer, createdFiles);
       mediaClient = await pool.connect(); await mediaClient.query("BEGIN");
       const title = audioMetadata.title?.slice(0, 300) || plainText(path.basename(file.originalname).replace(/\.[^.]+$/, "")).slice(0, 300) || "Untitled file";
       const artwork = await storeAudioArtwork(inspection.artwork, mediaClient, needUser(req).id, title, prefix, settings);
       for (const file of artwork.files) createdFiles.add(file);
       const result = await mediaClient.query(
-        `INSERT INTO media(author_id,title,filename,mime_type,size,width,height,sizes,audio_metadata,artwork_media_id) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9::jsonb,$10) RETURNING ${expandedMediaFields}`,
+        `INSERT INTO media(author_id,title,filename,mime_type,size,width,height,sizes,audio_metadata,artwork_media_id,derivatives) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9::jsonb,$10,$11::jsonb) RETURNING ${expandedMediaFields}`,
         [
           needUser(req).id,
           title,
-          filename,
-          type.mime,
-          file.size,
-          width,
-          height,
-          JSON.stringify(sizes),
+          image?.filename || rawFilename,
+          image?.mimeType || type.mime,
+          image?.size ?? file.size,
+          image?.width ?? null,
+          image?.height ?? null,
+          JSON.stringify(image?.sizes || {}),
           JSON.stringify(audioMetadata),
           artwork.id,
+          JSON.stringify(image?.derivatives || {}),
         ],
       );
       await mediaClient.query("COMMIT");
       res.status(201).json({ media: result.rows[0] });
     } catch (e) {
-      if (mediaClient) await mediaClient.query("ROLLBACK").catch(() => {});
-      await Promise.all([...createdFiles].map(file => unlink(path.join(uploadsDir, file)).catch(() => {})));
+      if (mediaClient) {
+        await mediaClient.query("ROLLBACK").catch(() => {});
+        mediaClient.release(); mediaClient = undefined;
+      }
+      await unlinkUnreferencedMediaFiles(createdFiles);
       throw e;
     } finally { mediaClient?.release(); }
   },
 );
+router.post("/media/:id/edit-copy", creators, async (req: AuthRequest, res) => {
+  const media = await editMediaCopy(req, parseId(req.params.id), req.body, expandedMediaFields);
+  res.status(201).location(`/api/media/${media.id}`).json({ media });
+});
 router.post("/media/:id/edit", creators, async (req: AuthRequest, res) => {
   const input = z
     .object({
@@ -871,9 +900,13 @@ router.post("/media/:id/edit", creators, async (req: AuthRequest, res) => {
   ownsMedia(req, item.author_id);
   if (!item.mime_type.startsWith("image/"))
     throw new HttpError(400, "Only images can be edited.");
-  let pipeline = sharp(path.join(uploadsDir, item.filename), {
+  const source = await readFile(path.join(uploadsDir, item.filename));
+  const metadata = await sharp(source, { limitInputPixels: 80_000_000 }).metadata();
+  const output = await rasterOutput(source, metadata);
+  let pipeline = sharp(source, {
     limitInputPixels: 80_000_000,
   });
+  if (jpegAutoOrientation(metadata, output)) pipeline = pipeline.autoOrient();
   if (input.crop) pipeline = pipeline.extract(input.crop);
   if (input.rotate) pipeline = pipeline.rotate(input.rotate);
   if (input.flip) pipeline = pipeline.flip();
@@ -885,8 +918,7 @@ router.post("/media/:id/edit", creators, async (req: AuthRequest, res) => {
       fit: "inside",
       withoutEnlargement: true,
     });
-  const { data, info } = await pipeline
-    .png()
+  const { data, info } = await encodeRaster(pipeline, output)
     .toBuffer({ resolveWithObject: true })
     .catch(() => {
       throw new HttpError(
@@ -898,12 +930,14 @@ router.post("/media/:id/edit", creators, async (req: AuthRequest, res) => {
     path.dirname(item.filename) === "."
       ? ""
       : path.dirname(item.filename) + "/";
-  const filename = `${prefix}${randomBytes(20).toString("hex")}.png`;
-  const sizes = await buildSizes(data, prefix, await getSettings());
-  await writeFile(path.join(uploadsDir, filename), data, { flag: "wx" });
+  const filename = `${prefix}${randomBytes(20).toString("hex")}.${output.extension}`;
+  const owned = new Set<string>();
   try {
+    const sizes = await buildSizes(data, prefix, await getSettings());
+    Object.values(sizes).forEach(size => owned.add(size.filename));
+    await writeNewMediaFile(filename, data, owned);
     const result = await pool.query(
-      `UPDATE media SET filename=$1,mime_type='image/png',size=$2,width=$3,height=$4,original_filename=coalesce(original_filename,$5),derivatives=derivatives || $7::jsonb || jsonb_build_object($8::text,$5::text),sizes=$9::jsonb WHERE id=$6 AND filename=$5 RETURNING ${expandedMediaFields}`,
+      `UPDATE media SET filename=$1,mime_type=$10,size=$2,width=$3,height=$4,original_filename=coalesce(original_filename,$5),derivatives=derivatives || $7::jsonb || jsonb_build_object($8::text,$5::text),sizes=$9::jsonb WHERE id=$6 AND filename=$5 RETURNING ${expandedMediaFields}`,
       [
         filename,
         data.length,
@@ -914,6 +948,7 @@ router.post("/media/:id/edit", creators, async (req: AuthRequest, res) => {
         JSON.stringify(mediaBackups(item)),
         `backup-${randomBytes(8).toString("hex")}`,
         JSON.stringify(sizes),
+        output.mimeType,
       ],
     );
     if (!result.rowCount)
@@ -925,12 +960,7 @@ router.post("/media/:id/edit", creators, async (req: AuthRequest, res) => {
     // reference their URLs. Permanent deletion removes the complete history.
     res.json({ media: result.rows[0] });
   } catch (error) {
-    await unlink(path.join(uploadsDir, filename)).catch(() => {});
-    await Promise.all(
-      Object.values(sizes).map((size) =>
-        unlink(path.join(uploadsDir, size.filename)).catch(() => {}),
-      ),
-    );
+    await unlinkUnreferencedMediaFiles(owned);
     throw error;
   }
 });
@@ -944,8 +974,8 @@ router.post("/media/:id/restore", creators, async (req: AuthRequest, res) => {
   if (!item.original_filename)
     throw new HttpError(400, "This image has no original to restore.");
   const buffer = await readFile(path.join(uploadsDir, item.original_filename)),
-    type = await detectMediaType(buffer),
-    metadata = await sharp(buffer).metadata();
+    metadata = await sharp(buffer, { limitInputPixels: 80_000_000 }).metadata(),
+    output = await rasterOutput(buffer, metadata);
   const prefix =
     path.dirname(item.original_filename) === "."
       ? ""
@@ -955,7 +985,7 @@ router.post("/media/:id/restore", creators, async (req: AuthRequest, res) => {
     const result = await pool.query(
       `UPDATE media SET filename=original_filename,original_filename=NULL,mime_type=$1,size=$2,width=$3,height=$4,derivatives=derivatives || $7::jsonb || jsonb_build_object($8::text,filename),sizes=$9::jsonb WHERE id=$5 AND filename=$6 RETURNING ${expandedMediaFields}`,
       [
-        type?.mime || "image/png",
+        output.mimeType,
         buffer.length,
         metadata.width,
         metadata.height,
@@ -973,11 +1003,7 @@ router.post("/media/:id/restore", creators, async (req: AuthRequest, res) => {
       );
     res.json({ media: result.rows[0] });
   } catch (error) {
-    await Promise.all(
-      Object.values(sizes).map((size) =>
-        unlink(path.join(uploadsDir, size.filename)).catch(() => {}),
-      ),
-    );
+    await unlinkUnreferencedMediaFiles(Object.values(sizes).map(size => size.filename));
     throw error;
   }
 });

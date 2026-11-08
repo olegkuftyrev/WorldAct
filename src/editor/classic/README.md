@@ -1,0 +1,17 @@
+# Classic block bridge
+
+The Classic block uses the supplied TinyMCE 4.9.11 engine, WordPress plugins, skins, fonts and editor/link scripts. It does not use a textarea as its editor, execute PHP, or switch the entire post screen to the Classic Editor plugin.
+
+Source provenance:
+
+- `NativeClassic.tsx` ports the installed `@wordpress/block-library/src/freeform/edit.jsx`, `modal.jsx` and `convert-to-blocks-button.jsx`. The native controls and explicit Save/Cancel buffer remain. Its media slot is inside the source Modal so nested React media dialogs do not dismiss the editor. Existing source floating toolbars/link/windows are contained in that modal for focus and stacking, and narrow TinyMCE forms retain their controls in a stacked layout.
+- `public/vendor/wordpress/wp-includes/js/tinymce/` is copied JavaScript/CSS/image/font/license data from the supplied reference. The neighboring PHP loader is excluded. The supplied `wp-tinymce.js` already bundles the core, theme and WordPress plugins; the source `image` plugin additionally supplies its genuine image dialog.
+- The supplied `wp-admin/js/editor.js`, `wp-includes/js/utils.js`, `wplink.js`, jQuery and jQuery UI scripts run as JavaScript. English settings/labels are static equivalents of `script-loader.php` and `_WP_Editors` reference data. `linkDialog.ts` is the source English link-dialog markup without a PHP nonce handler; session-authenticated reads replace its fixed link query.
+- `runtime.ts` exposes the source `wp.oldEditor` API, composes the native setup callback, and adapts only known media/link operations. Both the inline link autocomplete and full link dialog use the fixed published-content REST search endpoint. No generic PHP AJAX transport is emulated.
+- Media upload/selection reuses the real Gutenberg media provider. Source `wpeditimage` opens the supplied TinyMCE image dialog; native audio/video placeholders use its real media dialog. Source `wpgallery` uses `GalleryDialog.tsx`, a React data/frame adapter with real image upload, ordering/removal, caption persistence and source gallery settings. Official `@wordpress/shortcode` parsing/serialization preserves the shortcode buffer and unknown source attributes. Unavailable image IDs are retained.
+
+`wp.mce.views` and the full Backbone media-view subsystem are outside this bounded bridge. Imported audio/video/playlist shortcodes remain editable shortcode text; they render through the existing safe server shortcode handlers. Caption and gallery use the source TinyMCE transforms, and transient placeholder DOM is never the saved value. The official Shortcode block intentionally retains its upstream PlainText editing UI. Arbitrary third-party shortcode/plugin execution is not provided.
+
+Runtime JavaScript/assets are loaded once when a Classic block is present. Per-editor initialization, source windows/toolbars, media bookmarks, link requests and editor ownership are cleaned up when that editor closes/unmounts. Source asset/license files stay cached; the public route does not request the legacy editor scripts.
+
+Validation: `npm run test:isolated -- tests/classic-editor.test.ts tests/classic-persistence.test.ts` and `npm run build`. Browser implementation evidence is under `docs/screenshots/classic-*` and `shortcode-*`.

@@ -17,6 +17,7 @@ test(
     let cookie = "",
       postId: number | undefined;
     const requestIds: number[] = [];
+    const originalPlugins = (await pool.query("SELECT slug,enabled,settings,installed_at FROM extensions WHERE slug=ANY($1::text[])", [["hello-dolly","akismet"]])).rows;
     async function call(
       route: string,
       method = "GET",
@@ -203,6 +204,7 @@ test(
         await call(`/plugins/${slug}`, "PUT", { enabled: false });
         await call(`/plugins/${slug}`, "DELETE");
       }
+      for (const original of originalPlugins) await pool.query("INSERT INTO extensions(slug,enabled,settings,installed_at) VALUES($1,$2,$3::jsonb,$4) ON CONFLICT(slug) DO UPDATE SET enabled=excluded.enabled,settings=excluded.settings,installed_at=excluded.installed_at", [original.slug,original.enabled,JSON.stringify(original.settings),original.installed_at]);
       if (postId) {
         await call(`/posts/${postId}`, "PUT", {status:"trash"});
         await call(`/posts/${postId}`, "DELETE");
