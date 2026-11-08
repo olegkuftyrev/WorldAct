@@ -1,0 +1,16 @@
+{
+  "before": {
+    "gated": true,
+    "h1": true,
+    "inert": true,
+    "opacity": "0",
+    "ssrBody": true
+  },
+  "after": {
+    "bootstrapRemoved": true,
+    "identical": true,
+    "inert": false,
+    "opacity": "1"
+  },
+  "errors": ""
+}

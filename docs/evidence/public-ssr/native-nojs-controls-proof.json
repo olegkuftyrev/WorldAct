@@ -1,0 +1,223 @@
+{
+  "cases": [
+    {
+      "kind": "Genuine no-JS embedded source LoginOut login",
+      "requests": [
+        {
+          "id": 635,
+          "path": "/public-login",
+          "method": "POST",
+          "status": 303,
+          "kind": null
+        },
+        {
+          "id": 636,
+          "path": "/?p=11",
+          "method": "GET",
+          "status": 200,
+          "kind": null
+        },
+        {
+          "id": 637,
+          "path": "/assets/index-Cv2tuIAS.css",
+          "method": "GET",
+          "status": 304,
+          "kind": null
+        },
+        {
+          "id": 638,
+          "path": "/vendor/wordpress/wp-content/themes/twentytwentyfive/assets/fonts/manrope/Manrope-VariableFont_wght.woff2",
+          "method": "GET",
+          "status": 304,
+          "kind": null
+        }
+      ]
+    },
+    {
+      "kind": "Genuine no-JS source LoginOut logout",
+      "requests": [
+        {
+          "id": 639,
+          "path": "/logout",
+          "method": "POST",
+          "status": 303,
+          "kind": null
+        },
+        {
+          "id": 640,
+          "path": "/?p=11",
+          "method": "GET",
+          "status": 200,
+          "kind": null
+        },
+        {
+          "id": 641,
+          "path": "/assets/index-Cv2tuIAS.css",
+          "method": "GET",
+          "status": 304,
+          "kind": null
+        },
+        {
+          "id": 642,
+          "path": "/vendor/wordpress/wp-content/themes/twentytwentyfive/assets/fonts/manrope/Manrope-VariableFont_wght.woff2",
+          "method": "GET",
+          "status": 304,
+          "kind": null
+        }
+      ]
+    },
+    {
+      "kind": "Genuine no-JS source search and source Query pagination",
+      "requests": [
+        {
+          "id": 643,
+          "path": "/?s=SSR+card",
+          "method": "GET",
+          "status": 200,
+          "kind": null
+        },
+        {
+          "id": 644,
+          "path": "/assets/index-Cv2tuIAS.css",
+          "method": "GET",
+          "status": 304,
+          "kind": null
+        },
+        {
+          "id": 645,
+          "path": "/vendor/wordpress/wp-content/themes/twentytwentyfive/assets/fonts/manrope/Manrope-VariableFont_wght.woff2",
+          "method": "GET",
+          "status": 304,
+          "kind": null
+        }
+      ],
+      "paging": [
+        {
+          "id": 649,
+          "path": "/?p=7&page=2&query-4-page=1&commentPage=2",
+          "method": "GET",
+          "status": 200,
+          "kind": null
+        },
+        {
+          "id": 650,
+          "path": "/assets/index-Cv2tuIAS.css",
+          "method": "GET",
+          "status": 304,
+          "kind": null
+        }
+      ]
+    },
+    {
+      "kind": "Genuine no-JS password form",
+      "theme": "twentytwentyfive",
+      "requests": [
+        {
+          "id": 655,
+          "path": "/post-password",
+          "method": "POST",
+          "status": 303,
+          "kind": null
+        },
+        {
+          "id": 656,
+          "path": "/?p=8",
+          "method": "GET",
+          "status": 200,
+          "kind": null
+        },
+        {
+          "id": 657,
+          "path": "/assets/index-Cv2tuIAS.css",
+          "method": "GET",
+          "status": 304,
+          "kind": null
+        },
+        {
+          "id": 658,
+          "path": "/vendor/wordpress/wp-content/themes/twentytwentyfive/assets/fonts/manrope/Manrope-VariableFont_wght.woff2",
+          "method": "GET",
+          "status": 304,
+          "kind": null
+        }
+      ]
+    },
+    {
+      "kind": "Genuine no-JS password form",
+      "theme": "classic",
+      "requests": [
+        {
+          "id": 662,
+          "path": "/post-password",
+          "method": "POST",
+          "status": 303,
+          "kind": null
+        },
+        {
+          "id": 663,
+          "path": "/?p=8",
+          "method": "GET",
+          "status": 200,
+          "kind": null
+        },
+        {
+          "id": 664,
+          "path": "/assets/index-Cv2tuIAS.css",
+          "method": "GET",
+          "status": 304,
+          "kind": null
+        },
+        {
+          "id": 665,
+          "path": "/vendor/wordpress/wp-content/themes/twentytwentyfive/assets/fonts/manrope/Manrope-VariableFont_wght.woff2",
+          "method": "GET",
+          "status": 304,
+          "kind": null
+        }
+      ]
+    },
+    {
+      "kind": "Genuine no-JS Classic search and archive pagination",
+      "requests": [
+        {
+          "id": 669,
+          "path": "/?search=SSR+card",
+          "method": "GET",
+          "status": 200,
+          "kind": null
+        },
+        {
+          "id": 670,
+          "path": "/assets/index-Cv2tuIAS.css",
+          "method": "GET",
+          "status": 304,
+          "kind": null
+        },
+        {
+          "id": 671,
+          "path": "/vendor/wordpress/wp-content/themes/twentytwentyfive/assets/fonts/manrope/Manrope-VariableFont_wght.woff2",
+          "method": "GET",
+          "status": 304,
+          "kind": null
+        }
+      ],
+      "paging": [
+        {
+          "id": 672,
+          "path": "/?search=SSR+card&page=2",
+          "method": "GET",
+          "status": 200,
+          "kind": null
+        },
+        {
+          "id": 673,
+          "path": "/assets/index-Cv2tuIAS.css",
+          "method": "GET",
+          "status": 304,
+          "kind": null
+        }
+      ]
+    }
+  ],
+  "errors": ""
+}

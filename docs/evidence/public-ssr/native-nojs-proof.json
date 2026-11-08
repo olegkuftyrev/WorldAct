@@ -1,0 +1,65 @@
+{
+  "rows": [
+    {
+      "theme": "twentytwentyfive",
+      "before": {
+        "action": "/wp-comments-post.php",
+        "body1": false,
+        "body2": true,
+        "card2": true,
+        "gate": false,
+        "inert": false,
+        "lifecycle": false,
+        "method": "post",
+        "opacity": "1",
+        "parent": "11"
+      },
+      "posts": [
+        {
+          "id": 275,
+          "path": "/wp-comments-post.php",
+          "method": "POST",
+          "status": 303,
+          "kind": null
+        }
+      ],
+      "saved": {
+        "id": 42,
+        "parent_id": 11,
+        "user_id": 2
+      },
+      "noDocumentFetch": true
+    },
+    {
+      "theme": "classic",
+      "before": {
+        "action": "/wp-comments-post.php",
+        "body1": false,
+        "body2": true,
+        "card2": true,
+        "gate": false,
+        "inert": false,
+        "lifecycle": false,
+        "method": "post",
+        "opacity": "1",
+        "parent": "11"
+      },
+      "posts": [
+        {
+          "id": 288,
+          "path": "/wp-comments-post.php",
+          "method": "POST",
+          "status": 303,
+          "kind": null
+        }
+      ],
+      "saved": {
+        "id": 43,
+        "parent_id": 11,
+        "user_id": 2
+      },
+      "noDocumentFetch": true
+    }
+  ],
+  "errors": ""
+}

@@ -1,0 +1,111 @@
+{
+  "cases": [
+    {
+      "kind": "Actual public-body HTML with private viewer A held then its server session revoked before delivery",
+      "original": [
+        {
+          "id": 474,
+          "path": "/?p=9",
+          "method": "GET",
+          "status": 200,
+          "kind": "html"
+        }
+      ],
+      "refreshed": [
+        {
+          "id": 478,
+          "path": "/api/public/document?path=%2F%3Fp%3D9",
+          "method": "GET",
+          "status": 200,
+          "kind": "model"
+        }
+      ],
+      "masked": {
+        "defaultHead": 0,
+        "descriptionCount": 1,
+        "gated": true,
+        "inert": true,
+        "lifecycle": true,
+        "oldSecret": true,
+        "opacity": "0",
+        "readerA": true,
+        "readerB": false,
+        "titleCount": 1
+      },
+      "anonymous": {
+        "defaultHead": 0,
+        "descriptionCount": 1,
+        "gated": false,
+        "inert": false,
+        "lifecycle": true,
+        "oldSecret": true,
+        "opacity": "1",
+        "readerA": false,
+        "readerB": false,
+        "titleCount": 1
+      }
+    },
+    {
+      "kind": "Initial framework login document to SPA public content and authenticated viewer controls with owned head",
+      "frameworkToPrivate": {
+        "defaultHead": 0,
+        "descriptionCount": 1,
+        "gated": false,
+        "inert": false,
+        "lifecycle": true,
+        "oldSecret": true,
+        "opacity": "1",
+        "readerA": true,
+        "readerB": false,
+        "titleCount": 1
+      }
+    },
+    {
+      "kind": "Actual account A viewer HTML held, real server login creates B session, owned browser cookie updated before held HTML delivery, then fresh model renders B",
+      "cookieSetup": "Narrow CDP cookie operation because agent-browser serializes cookie commands behind held navigation; no token bytes logged",
+      "original": [
+        {
+          "id": 494,
+          "path": "/?p=9",
+          "method": "GET",
+          "status": 200,
+          "kind": "html"
+        }
+      ],
+      "fresh": [
+        {
+          "id": 498,
+          "path": "/api/public/document?path=%2F%3Fp%3D9",
+          "method": "GET",
+          "status": 200,
+          "kind": "model"
+        }
+      ],
+      "masked": {
+        "defaultHead": 0,
+        "descriptionCount": 1,
+        "gated": true,
+        "inert": true,
+        "lifecycle": true,
+        "oldSecret": true,
+        "opacity": "0",
+        "readerA": true,
+        "readerB": false,
+        "titleCount": 1
+      },
+      "current": {
+        "defaultHead": 0,
+        "descriptionCount": 1,
+        "gated": false,
+        "inert": false,
+        "lifecycle": true,
+        "oldSecret": true,
+        "opacity": "1",
+        "readerA": false,
+        "readerB": true,
+        "titleCount": 1
+      }
+    }
+  ],
+  "errors": ""
+}

@@ -1,0 +1,40 @@
+{
+  "cases": [
+    {
+      "fault": "missing",
+      "faultInjection": "Owned session init observer only removes/corrupts inert JSON bootstrap; actual server HTML/body and actual fresh model remain authoritative",
+      "masked": {
+        "body": true,
+        "fault": "missing",
+        "inert": true,
+        "opacity": "0"
+      },
+      "current": {
+        "body": true,
+        "bootstrapRemoved": true,
+        "inert": false,
+        "opacity": "1",
+        "titleCount": 1
+      },
+      "errors": ""
+    },
+    {
+      "fault": "malformed",
+      "faultInjection": "Owned session init observer only removes/corrupts inert JSON bootstrap; actual server HTML/body and actual fresh model remain authoritative",
+      "masked": {
+        "body": true,
+        "fault": "malformed",
+        "inert": true,
+        "opacity": "0"
+      },
+      "current": {
+        "body": true,
+        "bootstrapRemoved": true,
+        "inert": false,
+        "opacity": "1",
+        "titleCount": 1
+      },
+      "errors": ""
+    }
+  ]
+}

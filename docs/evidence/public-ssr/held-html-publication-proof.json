@@ -1,0 +1,35 @@
+{
+  "kind": "Actual initial HTML held after Node rendered public content; publication made private before delivery",
+  "html": [
+    {
+      "id": 298,
+      "path": "/?p=9",
+      "method": "GET",
+      "status": 200,
+      "kind": "html"
+    }
+  ],
+  "fresh": [
+    {
+      "id": 302,
+      "path": "/api/public/document?path=%2F%3Fp%3D9",
+      "method": "GET",
+      "status": 404,
+      "kind": "model"
+    }
+  ],
+  "held": {
+    "descendantVisibility": null,
+    "gated": true,
+    "inert": true,
+    "oldBodyPresent": true,
+    "opacity": "0",
+    "visibleDescendant": false
+  },
+  "final": {
+    "secretAbsent": true,
+    "inert": false,
+    "opacity": "1"
+  },
+  "errors": ""
+}

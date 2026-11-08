@@ -1,0 +1,721 @@
+{
+  "comment": [
+    {
+      "theme": "twentytwentyfive",
+      "width": 1440,
+      "before": {
+        "gate": false,
+        "lifecycle": false,
+        "parent": "11",
+        "redirect": "/?p=7&page=2&query-4-page=2&commentPage=2#respond"
+      },
+      "after": {
+        "body1": false,
+        "body2": true,
+        "bodyPage": "2",
+        "card2": true,
+        "commentPage": "2",
+        "documentWidth": 1440,
+        "queryPage": "2",
+        "savedText": true,
+        "savedVisible": true,
+        "url": "http://127.0.0.1:3050/?p=7&page=2&query-4-page=2&commentPage=2#comment-54",
+        "width": 1440
+      },
+      "saved": {
+        "id": 54,
+        "parent_id": 11,
+        "user_id": 2,
+        "status": "approved"
+      },
+      "requests": [
+        {
+          "id": 885,
+          "path": "/wp-comments-post.php",
+          "method": "POST",
+          "status": 303,
+          "kind": null
+        },
+        {
+          "id": 886,
+          "path": "/?p=7&page=2&query-4-page=2&commentPage=2",
+          "method": "GET",
+          "status": 200,
+          "kind": null
+        },
+        {
+          "id": 887,
+          "path": "/assets/index-BsgYOWhl.css",
+          "method": "GET",
+          "status": 304,
+          "kind": null
+        },
+        {
+          "id": 888,
+          "path": "/vendor/wordpress/wp-content/themes/twentytwentyfive/assets/fonts/manrope/Manrope-VariableFont_wght.woff2",
+          "method": "GET",
+          "status": 304,
+          "kind": null
+        }
+      ]
+    },
+    {
+      "theme": "twentytwentyfive",
+      "width": 768,
+      "before": {
+        "gate": false,
+        "lifecycle": false,
+        "parent": "11",
+        "redirect": "/?p=7&page=2&query-4-page=2&commentPage=2#respond"
+      },
+      "after": {
+        "body1": false,
+        "body2": true,
+        "bodyPage": "2",
+        "card2": true,
+        "commentPage": "2",
+        "documentWidth": 768,
+        "queryPage": "2",
+        "savedText": true,
+        "savedVisible": true,
+        "url": "http://127.0.0.1:3050/?p=7&page=2&query-4-page=2&commentPage=2#comment-55",
+        "width": 768
+      },
+      "saved": {
+        "id": 55,
+        "parent_id": 11,
+        "user_id": 2,
+        "status": "approved"
+      },
+      "requests": [
+        {
+          "id": 892,
+          "path": "/wp-comments-post.php",
+          "method": "POST",
+          "status": 303,
+          "kind": null
+        },
+        {
+          "id": 893,
+          "path": "/?p=7&page=2&query-4-page=2&commentPage=2",
+          "method": "GET",
+          "status": 200,
+          "kind": null
+        },
+        {
+          "id": 894,
+          "path": "/assets/index-BsgYOWhl.css",
+          "method": "GET",
+          "status": 304,
+          "kind": null
+        },
+        {
+          "id": 895,
+          "path": "/vendor/wordpress/wp-content/themes/twentytwentyfive/assets/fonts/manrope/Manrope-VariableFont_wght.woff2",
+          "method": "GET",
+          "status": 304,
+          "kind": null
+        }
+      ]
+    },
+    {
+      "theme": "twentytwentyfive",
+      "width": 375,
+      "before": {
+        "gate": false,
+        "lifecycle": false,
+        "parent": "11",
+        "redirect": "/?p=7&page=2&query-4-page=2&commentPage=2#respond"
+      },
+      "after": {
+        "body1": false,
+        "body2": true,
+        "bodyPage": "2",
+        "card2": true,
+        "commentPage": "2",
+        "documentWidth": 375,
+        "queryPage": "2",
+        "savedText": true,
+        "savedVisible": true,
+        "url": "http://127.0.0.1:3050/?p=7&page=2&query-4-page=2&commentPage=2#comment-56",
+        "width": 375
+      },
+      "saved": {
+        "id": 56,
+        "parent_id": 11,
+        "user_id": 2,
+        "status": "approved"
+      },
+      "requests": [
+        {
+          "id": 899,
+          "path": "/wp-comments-post.php",
+          "method": "POST",
+          "status": 303,
+          "kind": null
+        },
+        {
+          "id": 900,
+          "path": "/?p=7&page=2&query-4-page=2&commentPage=2",
+          "method": "GET",
+          "status": 200,
+          "kind": null
+        },
+        {
+          "id": 901,
+          "path": "/assets/index-BsgYOWhl.css",
+          "method": "GET",
+          "status": 304,
+          "kind": null
+        },
+        {
+          "id": 902,
+          "path": "/vendor/wordpress/wp-content/themes/twentytwentyfive/assets/fonts/manrope/Manrope-VariableFont_wght.woff2",
+          "method": "GET",
+          "status": 304,
+          "kind": null
+        }
+      ]
+    },
+    {
+      "theme": "classic",
+      "width": 1440,
+      "before": {
+        "gate": false,
+        "lifecycle": false,
+        "parent": "11",
+        "redirect": "/?p=7&page=2&query-4-page=2&commentPage=2#respond"
+      },
+      "after": {
+        "body1": false,
+        "body2": true,
+        "bodyPage": "2",
+        "card2": true,
+        "commentPage": "2",
+        "documentWidth": 1440,
+        "queryPage": "2",
+        "savedText": true,
+        "savedVisible": true,
+        "url": "http://127.0.0.1:3050/?p=7&page=2&query-4-page=2&commentPage=2#comment-57",
+        "width": 1440
+      },
+      "saved": {
+        "id": 57,
+        "parent_id": 11,
+        "user_id": 2,
+        "status": "approved"
+      },
+      "requests": [
+        {
+          "id": 912,
+          "path": "/wp-comments-post.php",
+          "method": "POST",
+          "status": 303,
+          "kind": null
+        },
+        {
+          "id": 913,
+          "path": "/?p=7&page=2&query-4-page=2&commentPage=2",
+          "method": "GET",
+          "status": 200,
+          "kind": null
+        },
+        {
+          "id": 914,
+          "path": "/assets/index-BsgYOWhl.css",
+          "method": "GET",
+          "status": 304,
+          "kind": null
+        },
+        {
+          "id": 915,
+          "path": "/vendor/wordpress/wp-content/themes/twentytwentyfive/assets/fonts/manrope/Manrope-VariableFont_wght.woff2",
+          "method": "GET",
+          "status": 304,
+          "kind": null
+        }
+      ]
+    },
+    {
+      "theme": "classic",
+      "width": 768,
+      "before": {
+        "gate": false,
+        "lifecycle": false,
+        "parent": "11",
+        "redirect": "/?p=7&page=2&query-4-page=2&commentPage=2#respond"
+      },
+      "after": {
+        "body1": false,
+        "body2": true,
+        "bodyPage": "2",
+        "card2": true,
+        "commentPage": "2",
+        "documentWidth": 768,
+        "queryPage": "2",
+        "savedText": true,
+        "savedVisible": true,
+        "url": "http://127.0.0.1:3050/?p=7&page=2&query-4-page=2&commentPage=2#comment-58",
+        "width": 768
+      },
+      "saved": {
+        "id": 58,
+        "parent_id": 11,
+        "user_id": 2,
+        "status": "approved"
+      },
+      "requests": [
+        {
+          "id": 919,
+          "path": "/wp-comments-post.php",
+          "method": "POST",
+          "status": 303,
+          "kind": null
+        },
+        {
+          "id": 920,
+          "path": "/?p=7&page=2&query-4-page=2&commentPage=2",
+          "method": "GET",
+          "status": 200,
+          "kind": null
+        },
+        {
+          "id": 921,
+          "path": "/assets/index-BsgYOWhl.css",
+          "method": "GET",
+          "status": 304,
+          "kind": null
+        },
+        {
+          "id": 922,
+          "path": "/vendor/wordpress/wp-content/themes/twentytwentyfive/assets/fonts/manrope/Manrope-VariableFont_wght.woff2",
+          "method": "GET",
+          "status": 304,
+          "kind": null
+        }
+      ]
+    },
+    {
+      "theme": "classic",
+      "width": 375,
+      "before": {
+        "gate": false,
+        "lifecycle": false,
+        "parent": "11",
+        "redirect": "/?p=7&page=2&query-4-page=2&commentPage=2#respond"
+      },
+      "after": {
+        "body1": false,
+        "body2": true,
+        "bodyPage": "2",
+        "card2": true,
+        "commentPage": "2",
+        "documentWidth": 375,
+        "queryPage": "2",
+        "savedText": true,
+        "savedVisible": true,
+        "url": "http://127.0.0.1:3050/?p=7&page=2&query-4-page=2&commentPage=2#comment-59",
+        "width": 375
+      },
+      "saved": {
+        "id": 59,
+        "parent_id": 11,
+        "user_id": 2,
+        "status": "approved"
+      },
+      "requests": [
+        {
+          "id": 926,
+          "path": "/wp-comments-post.php",
+          "method": "POST",
+          "status": 303,
+          "kind": null
+        },
+        {
+          "id": 927,
+          "path": "/?p=7&page=2&query-4-page=2&commentPage=2",
+          "method": "GET",
+          "status": 200,
+          "kind": null
+        },
+        {
+          "id": 928,
+          "path": "/assets/index-BsgYOWhl.css",
+          "method": "GET",
+          "status": 304,
+          "kind": null
+        },
+        {
+          "id": 929,
+          "path": "/vendor/wordpress/wp-content/themes/twentytwentyfive/assets/fonts/manrope/Manrope-VariableFont_wght.woff2",
+          "method": "GET",
+          "status": 304,
+          "kind": null
+        }
+      ]
+    }
+  ],
+  "password": [
+    {
+      "theme": "twentytwentyfive",
+      "width": 1440,
+      "before": {
+        "bodyHidden": true,
+        "lifecycle": false,
+        "redirect": "/?p=8&page=2&query-4-page=2&commentPage=2&replytocom=62"
+      },
+      "after": {
+        "body1": false,
+        "body2": true,
+        "bodyPage": "2",
+        "card2": true,
+        "commentPage": "2",
+        "documentWidth": 1440,
+        "parent": "62",
+        "queryPage": "2",
+        "reply": "62",
+        "url": "http://127.0.0.1:3050/?p=8&page=2&query-4-page=2&commentPage=2&replytocom=62",
+        "width": 1440
+      },
+      "requests": [
+        {
+          "id": 952,
+          "path": "/post-password",
+          "method": "POST",
+          "status": 303,
+          "kind": null
+        },
+        {
+          "id": 953,
+          "path": "/?p=8&page=2&query-4-page=2&commentPage=2&replytocom=62",
+          "method": "GET",
+          "status": 200,
+          "kind": null
+        },
+        {
+          "id": 954,
+          "path": "/assets/index-BsgYOWhl.css",
+          "method": "GET",
+          "status": 304,
+          "kind": null
+        },
+        {
+          "id": 955,
+          "path": "/vendor/wordpress/wp-content/themes/twentytwentyfive/assets/fonts/manrope/Manrope-VariableFont_wght.woff2",
+          "method": "GET",
+          "status": 304,
+          "kind": null
+        }
+      ]
+    },
+    {
+      "theme": "twentytwentyfive",
+      "width": 768,
+      "before": {
+        "bodyHidden": true,
+        "lifecycle": false,
+        "redirect": "/?p=8&page=2&query-4-page=2&commentPage=2&replytocom=62"
+      },
+      "after": {
+        "body1": false,
+        "body2": true,
+        "bodyPage": "2",
+        "card2": true,
+        "commentPage": "2",
+        "documentWidth": 768,
+        "parent": "62",
+        "queryPage": "2",
+        "reply": "62",
+        "url": "http://127.0.0.1:3050/?p=8&page=2&query-4-page=2&commentPage=2&replytocom=62",
+        "width": 768
+      },
+      "requests": [
+        {
+          "id": 959,
+          "path": "/post-password",
+          "method": "POST",
+          "status": 303,
+          "kind": null
+        },
+        {
+          "id": 960,
+          "path": "/?p=8&page=2&query-4-page=2&commentPage=2&replytocom=62",
+          "method": "GET",
+          "status": 200,
+          "kind": null
+        },
+        {
+          "id": 961,
+          "path": "/assets/index-BsgYOWhl.css",
+          "method": "GET",
+          "status": 304,
+          "kind": null
+        },
+        {
+          "id": 962,
+          "path": "/vendor/wordpress/wp-content/themes/twentytwentyfive/assets/fonts/manrope/Manrope-VariableFont_wght.woff2",
+          "method": "GET",
+          "status": 304,
+          "kind": null
+        }
+      ]
+    },
+    {
+      "theme": "twentytwentyfive",
+      "width": 375,
+      "before": {
+        "bodyHidden": true,
+        "lifecycle": false,
+        "redirect": "/?p=8&page=2&query-4-page=2&commentPage=2&replytocom=62"
+      },
+      "after": {
+        "body1": false,
+        "body2": true,
+        "bodyPage": "2",
+        "card2": true,
+        "commentPage": "2",
+        "documentWidth": 375,
+        "parent": "62",
+        "queryPage": "2",
+        "reply": "62",
+        "url": "http://127.0.0.1:3050/?p=8&page=2&query-4-page=2&commentPage=2&replytocom=62",
+        "width": 375
+      },
+      "requests": [
+        {
+          "id": 966,
+          "path": "/post-password",
+          "method": "POST",
+          "status": 303,
+          "kind": null
+        },
+        {
+          "id": 967,
+          "path": "/?p=8&page=2&query-4-page=2&commentPage=2&replytocom=62",
+          "method": "GET",
+          "status": 200,
+          "kind": null
+        },
+        {
+          "id": 968,
+          "path": "/vendor/wordpress/wp-content/themes/twentytwentyfive/assets/fonts/manrope/Manrope-VariableFont_wght.woff2",
+          "method": "GET",
+          "status": 304,
+          "kind": null
+        },
+        {
+          "id": 969,
+          "path": "/assets/index-BsgYOWhl.css",
+          "method": "GET",
+          "status": 304,
+          "kind": null
+        }
+      ]
+    },
+    {
+      "theme": "classic",
+      "width": 1440,
+      "before": {
+        "bodyHidden": true,
+        "lifecycle": false,
+        "redirect": "/?p=8&page=2&query-4-page=2&commentPage=2&replytocom=62"
+      },
+      "after": {
+        "body1": false,
+        "body2": true,
+        "bodyPage": "2",
+        "card2": true,
+        "commentPage": "2",
+        "documentWidth": 1440,
+        "parent": "62",
+        "queryPage": "2",
+        "reply": "62",
+        "url": "http://127.0.0.1:3050/?p=8&page=2&query-4-page=2&commentPage=2&replytocom=62",
+        "width": 1440
+      },
+      "requests": [
+        {
+          "id": 979,
+          "path": "/post-password",
+          "method": "POST",
+          "status": 303,
+          "kind": null
+        },
+        {
+          "id": 980,
+          "path": "/?p=8&page=2&query-4-page=2&commentPage=2&replytocom=62",
+          "method": "GET",
+          "status": 200,
+          "kind": null
+        },
+        {
+          "id": 981,
+          "path": "/assets/index-BsgYOWhl.css",
+          "method": "GET",
+          "status": 304,
+          "kind": null
+        },
+        {
+          "id": 982,
+          "path": "/vendor/wordpress/wp-content/themes/twentytwentyfive/assets/fonts/manrope/Manrope-VariableFont_wght.woff2",
+          "method": "GET",
+          "status": 304,
+          "kind": null
+        }
+      ]
+    },
+    {
+      "theme": "classic",
+      "width": 768,
+      "before": {
+        "bodyHidden": true,
+        "lifecycle": false,
+        "redirect": "/?p=8&page=2&query-4-page=2&commentPage=2&replytocom=62"
+      },
+      "after": {
+        "body1": false,
+        "body2": true,
+        "bodyPage": "2",
+        "card2": true,
+        "commentPage": "2",
+        "documentWidth": 768,
+        "parent": "62",
+        "queryPage": "2",
+        "reply": "62",
+        "url": "http://127.0.0.1:3050/?p=8&page=2&query-4-page=2&commentPage=2&replytocom=62",
+        "width": 768
+      },
+      "requests": [
+        {
+          "id": 986,
+          "path": "/post-password",
+          "method": "POST",
+          "status": 303,
+          "kind": null
+        },
+        {
+          "id": 987,
+          "path": "/?p=8&page=2&query-4-page=2&commentPage=2&replytocom=62",
+          "method": "GET",
+          "status": 200,
+          "kind": null
+        },
+        {
+          "id": 988,
+          "path": "/assets/index-BsgYOWhl.css",
+          "method": "GET",
+          "status": 304,
+          "kind": null
+        },
+        {
+          "id": 989,
+          "path": "/vendor/wordpress/wp-content/themes/twentytwentyfive/assets/fonts/manrope/Manrope-VariableFont_wght.woff2",
+          "method": "GET",
+          "status": 304,
+          "kind": null
+        }
+      ]
+    },
+    {
+      "theme": "classic",
+      "width": 375,
+      "before": {
+        "bodyHidden": true,
+        "lifecycle": false,
+        "redirect": "/?p=8&page=2&query-4-page=2&commentPage=2&replytocom=62"
+      },
+      "after": {
+        "body1": false,
+        "body2": true,
+        "bodyPage": "2",
+        "card2": true,
+        "commentPage": "2",
+        "documentWidth": 375,
+        "parent": "62",
+        "queryPage": "2",
+        "reply": "62",
+        "url": "http://127.0.0.1:3050/?p=8&page=2&query-4-page=2&commentPage=2&replytocom=62",
+        "width": 375
+      },
+      "requests": [
+        {
+          "id": 993,
+          "path": "/post-password",
+          "method": "POST",
+          "status": 303,
+          "kind": null
+        },
+        {
+          "id": 994,
+          "path": "/?p=8&page=2&query-4-page=2&commentPage=2&replytocom=62",
+          "method": "GET",
+          "status": 200,
+          "kind": null
+        },
+        {
+          "id": 995,
+          "path": "/assets/index-BsgYOWhl.css",
+          "method": "GET",
+          "status": 304,
+          "kind": null
+        },
+        {
+          "id": 996,
+          "path": "/vendor/wordpress/wp-content/themes/twentytwentyfive/assets/fonts/manrope/Manrope-VariableFont_wght.woff2",
+          "method": "GET",
+          "status": 304,
+          "kind": null
+        }
+      ]
+    }
+  ],
+  "complete": true,
+  "newRoot": {
+    "saved": {
+      "id": 60,
+      "parent_id": null,
+      "user_id": 2
+    },
+    "expectedWindow": 3,
+    "after": {
+      "body2": true,
+      "bodyPage": "2",
+      "card2": true,
+      "commentPage": "3",
+      "queryPage": "2",
+      "text": true,
+      "visible": true
+    },
+    "requests": [
+      {
+        "id": 939,
+        "path": "/wp-comments-post.php",
+        "method": "POST",
+        "status": 303,
+        "kind": null
+      },
+      {
+        "id": 940,
+        "path": "/?p=7&page=2&query-4-page=2&commentPage=3",
+        "method": "GET",
+        "status": 200,
+        "kind": null
+      },
+      {
+        "id": 941,
+        "path": "/assets/index-BsgYOWhl.css",
+        "method": "GET",
+        "status": 304,
+        "kind": null
+      },
+      {
+        "id": 942,
+        "path": "/vendor/wordpress/wp-content/themes/twentytwentyfive/assets/fonts/manrope/Manrope-VariableFont_wght.woff2",
+        "method": "GET",
+        "status": 304,
+        "kind": null
+      }
+    ]
+  },
+  "errors": ""
+}

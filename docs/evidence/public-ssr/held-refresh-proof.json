@@ -1,0 +1,76 @@
+{
+  "kind": "Actual held post-success document model response, distinct429, then release",
+  "held": [
+    {
+      "id": 313,
+      "path": "/api/public/document?path=%2F%3Fp%3D7%26page%3D2%26query-4-page%3D2%26commentPage%3D2",
+      "method": "GET",
+      "status": 200,
+      "kind": "model"
+    }
+  ],
+  "before": {
+    "alerts": 1,
+    "body2": true,
+    "busy": null,
+    "card2": true,
+    "draft": "SSR held refresh rejected distinct mw82x5xn",
+    "error": "You are posting comments too quickly. Slow down.",
+    "focused": true,
+    "horizontal": false,
+    "parent": "11",
+    "url": "http://127.0.0.1:3050/?p=7&page=2&query-4-page=2&commentPage=2",
+    "visible": true
+  },
+  "after": {
+    "alerts": 1,
+    "body2": true,
+    "busy": null,
+    "card2": true,
+    "draft": "SSR held refresh rejected distinct mw82x5xn",
+    "error": "You are posting comments too quickly. Slow down.",
+    "focused": true,
+    "horizontal": false,
+    "parent": "11",
+    "url": "http://127.0.0.1:3050/?p=7&page=2&query-4-page=2&commentPage=2",
+    "visible": true
+  },
+  "posts": [
+    {
+      "id": 312,
+      "path": "/api/public/comments",
+      "method": "POST",
+      "status": 201,
+      "kind": null
+    },
+    {
+      "id": 314,
+      "path": "/api/public/comments",
+      "method": "POST",
+      "status": 429,
+      "kind": null
+    },
+    {
+      "id": 315,
+      "path": "/api/public/comments",
+      "method": "POST",
+      "status": 201,
+      "kind": null
+    }
+  ],
+  "admitted": {
+    "id": 44,
+    "parent_id": 11,
+    "user_id": 2
+  },
+  "retry": {
+    "id": 45,
+    "parent_id": 11,
+    "user_id": 2
+  },
+  "agedOnlyOwnAdmissions": [
+    44,
+    45
+  ],
+  "browserErrors": ""
+}
