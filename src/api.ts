@@ -68,6 +68,8 @@ export type Post = {
   updatedAt: string;
   publishedAt: string | null;
   scheduledAt: string | null;
+  postDate: string;
+  postDateGmt: string | null;
   version: number;
   blocks: SerializedBlock[] | null;
   terms: Term[];
