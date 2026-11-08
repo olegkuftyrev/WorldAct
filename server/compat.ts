@@ -1878,13 +1878,13 @@ router.post("/api/tools/import", admin, async (req: AuthRequest, res, next) => {
         urls.set(sourceURL, destination); footnoteSelfURLs.add(sourceURL); footnoteSelfURLs.add(destination);
         if (/^https?:\/\//i.test(sourceURL)) { try { const path = new URL(sourceURL).pathname + new URL(sourceURL).search; urls.set(path, destination); footnoteSelfURLs.add(path); } catch {} }
       }
-      const options = { posts: postMap, footnotes, urls, footnoteSelfURLs };
+      const options = { posts: postMap, media: new Map<number, number>(), footnotes, urls, footnoteSelfURLs };
       const value=remapImportedBlockReferences(rawContent,[],entityGraph.map,options);
       const copiedNotes = notes.map(note => ({ id: footnotes.get(note.id)!, content: remapImportedBlockReferences(note.content, [], entityGraph.map, options).content }));
       await client.query("UPDATE posts SET content=$1,raw_content=$2,blocks=$3::jsonb,footnotes=$4::jsonb WHERE id=$5",[value.content,value.rawContent,JSON.stringify(value.blocks),JSON.stringify(copiedNotes),postMap.get(oldId)]);
       for(const warning of value.warnings)if(referenceWarnings.size<100)referenceWarnings.add(warning);
     }
-    for(const warning of await entityGraph.finalize({posts:postMap}))if(referenceWarnings.size<100)referenceWarnings.add(warning);
+    for(const warning of await entityGraph.finalize({posts:postMap,media:new Map<number,number>()}))if(referenceWarnings.size<100)referenceWarnings.add(warning);
     await client.query("COMMIT");
     res.status(201).json({
       ok: true,
