@@ -1,0 +1,2664 @@
+{
+  "codeCommit": "67df6da2b67fe423e235602893c71b47ede03d17",
+  "baseline": "ea4d3d81e0a61d06697954f591c9194f6c96418b",
+  "method": "Author agent-browser native public UI; screenshots unmodified. Source/Vite5180+Node3010 matrix24; final built UI+compiled Node3010 max10matrix6. No evaluator reports, main data, reviewer3035, remote services or benchmark use.",
+  "sourceContract": "Core source comment-template has zero root padding and2rem child padding, with normal zero inline list margins. Imported admin common.css adds ol margin-left2em. Scoped public reset removes only that physical left margin, preserves centered source auto margins, existing32px desktop/tablet and16px mobile child padding. No JS/markup/ancestry/pagination changes.",
+  "largeFixtureBoundary": "Real TT25 custom source template uses one comment-content child to retain2500 complete records within existing4000 rendering-node budget; full source controls tested with14-level fixture.",
+  "expected": {
+    "sourcePage1Ids": [
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18
+    ],
+    "sourcePage2Ids": [
+      19
+    ],
+    "rootA": 2,
+    "rootB": 17,
+    "rootPing": 18,
+    "chain": [
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16
+    ],
+    "largeCount": 2500,
+    "largeIdsSHA256": "07d4f30365398794b8f3547243289297c85e87558ac56244f43097e83cb3f2b1",
+    "largeTail": 2520
+  },
+  "references": [
+    {
+      "file": "wp-includes/blocks/comment-template/style.css",
+      "sha256": "c366505db6abca32db9907c35074b6a78a9493e3a81aea8657caa5d2c4424a27"
+    },
+    {
+      "file": "wp-includes/css/dist/block-library/style.css",
+      "sha256": "e566f566e2e8feee2837f6a6e29d649ffbe1bbee3d5ce7a8fdeaad1454bbe3ca"
+    },
+    {
+      "file": "wp-admin/css/common.css",
+      "sha256": "727477a4bb6f2826a4fa4f014e5551d49ff1efb7edeee5fd3ca38e68aedc9532"
+    },
+    {
+      "file": "wp-content/themes/twentytwentyfive/patterns/comments.php",
+      "sha256": "7553ccfe075e5d626f6f130176e524870d05f960164cb671dd0e4ab5beaf8d40"
+    }
+  ],
+  "screenshots": [
+    {
+      "file": "source-comment-overflow-classic-1440.png",
+      "width": 1440,
+      "height": 1000,
+      "sha256": "8872438daa322752c32056371a83a8a0393e112142931bc1c799e36aa87554de",
+      "capturedAt": "2026-11-08T14:34:01.576Z",
+      "scenario": "classic-1440.png",
+      "origin": "http://127.0.0.1:5180"
+    },
+    {
+      "file": "source-comment-overflow-classic-375.png",
+      "width": 375,
+      "height": 812,
+      "sha256": "8934759644ce1c091b1c1afc336bade49f97b2e578e5e74a5b3321ea84a96f5a",
+      "capturedAt": "2026-11-08T14:34:05.961Z",
+      "scenario": "classic-375.png",
+      "origin": "http://127.0.0.1:5180"
+    },
+    {
+      "file": "source-comment-overflow-classic-768.png",
+      "width": 768,
+      "height": 1024,
+      "sha256": "12c1b603977288073500536cc89d14d82179c952550d789907891fdccd1d9503",
+      "capturedAt": "2026-11-08T14:34:03.833Z",
+      "scenario": "classic-768.png",
+      "origin": "http://127.0.0.1:5180"
+    },
+    {
+      "file": "source-comment-overflow-comment-page2-375.png",
+      "width": 375,
+      "height": 812,
+      "sha256": "ccc5e9d2869a557ab39bc882e07d58126656357f75ba1cd645c518aebf6ab4df",
+      "capturedAt": "2026-11-08T14:32:40.706Z",
+      "scenario": "comment-page2-375.png",
+      "origin": "http://127.0.0.1:5180"
+    },
+    {
+      "file": "source-comment-overflow-compiled-source14-depth10-375.png",
+      "width": 375,
+      "height": 812,
+      "sha256": "241d05b5b8314410d0898d2c3965443845f34e5797fe88338f964b9696ed4b7d",
+      "capturedAt": "2026-11-08T14:34:29.892Z",
+      "scenario": "compiled-source14-depth10-375.png",
+      "origin": "http://127.0.0.1:3010"
+    },
+    {
+      "file": "source-comment-overflow-compiled-source2500-depth10-375.png",
+      "width": 375,
+      "height": 812,
+      "sha256": "c552c122a836b316360042ce3d75d103102f881dc9f5c7b26759759236ca9aa6",
+      "capturedAt": "2026-11-08T14:34:36.406Z",
+      "scenario": "compiled-source2500-depth10-375.png",
+      "origin": "http://127.0.0.1:3010"
+    },
+    {
+      "file": "source-comment-overflow-reply-depth10-1440.png",
+      "width": 1440,
+      "height": 1000,
+      "sha256": "62b1b61dab6e11fc39f04bfb5060e7390d65b16e2d903b5ef2d043b82cb61485",
+      "capturedAt": "2026-11-08T14:32:32.947Z",
+      "scenario": "reply-depth10-1440.png",
+      "origin": "http://127.0.0.1:5180"
+    },
+    {
+      "file": "source-comment-overflow-reply-depth10-375.png",
+      "width": 375,
+      "height": 812,
+      "sha256": "e81169c08122f5396808cc7475ac90703e6f0ad897e76496c94ea469b0f2326a",
+      "capturedAt": "2026-11-08T14:32:38.451Z",
+      "scenario": "reply-depth10-375.png",
+      "origin": "http://127.0.0.1:5180"
+    },
+    {
+      "file": "source-comment-overflow-reply-depth10-768.png",
+      "width": 768,
+      "height": 1024,
+      "sha256": "227d9e2c94498472def658aad8ab2b25f30352746c42d267028cb86536f8f90d",
+      "capturedAt": "2026-11-08T14:32:35.673Z",
+      "scenario": "reply-depth10-768.png",
+      "origin": "http://127.0.0.1:5180"
+    },
+    {
+      "file": "source-comment-overflow-source14-depth1-1440.png",
+      "width": 1440,
+      "height": 1000,
+      "sha256": "04b0620b2a6a17741c630fca154548e57ba0b6ae1b026bf4ecf55a76f8672581",
+      "capturedAt": "2026-11-08T14:29:31.318Z",
+      "scenario": "source14-depth1-1440.png",
+      "origin": "http://127.0.0.1:5180"
+    },
+    {
+      "file": "source-comment-overflow-source14-depth1-375.png",
+      "width": 375,
+      "height": 812,
+      "sha256": "9bc9576f389ab214640bd8b06e9beed4fee67d6d3e086e4b219959d302359cc7",
+      "capturedAt": "2026-11-08T14:29:35.527Z",
+      "scenario": "source14-depth1-375.png",
+      "origin": "http://127.0.0.1:5180"
+    },
+    {
+      "file": "source-comment-overflow-source14-depth1-768.png",
+      "width": 768,
+      "height": 1024,
+      "sha256": "c3a03834bdf5b82c60e45731353f747a57e3417034f2853b77fbfc3da737e53e",
+      "capturedAt": "2026-11-08T14:29:33.430Z",
+      "scenario": "source14-depth1-768.png",
+      "origin": "http://127.0.0.1:5180"
+    },
+    {
+      "file": "source-comment-overflow-source14-depth10-1440.png",
+      "width": 1440,
+      "height": 1000,
+      "sha256": "e04b8fe76132805add8b5a14fe9414d4da506faeea801a0700595e6962da0007",
+      "capturedAt": "2026-11-08T14:30:50.748Z",
+      "scenario": "source14-depth10-1440.png",
+      "origin": "http://127.0.0.1:5180"
+    },
+    {
+      "file": "source-comment-overflow-source14-depth10-375.png",
+      "width": 375,
+      "height": 812,
+      "sha256": "241d05b5b8314410d0898d2c3965443845f34e5797fe88338f964b9696ed4b7d",
+      "capturedAt": "2026-11-08T14:30:55.073Z",
+      "scenario": "source14-depth10-375.png",
+      "origin": "http://127.0.0.1:5180"
+    },
+    {
+      "file": "source-comment-overflow-source14-depth10-768.png",
+      "width": 768,
+      "height": 1024,
+      "sha256": "6052349fd66fbe9090cd2f6c6ed5bab080c5608d29c2db857f42a79ce8bc08fa",
+      "capturedAt": "2026-11-08T14:30:52.976Z",
+      "scenario": "source14-depth10-768.png",
+      "origin": "http://127.0.0.1:5180"
+    },
+    {
+      "file": "source-comment-overflow-source14-depth10-full-375.png",
+      "width": 375,
+      "height": 5306,
+      "sha256": "a3f1aaf237d38a9219f0528c18cbb1037d48f2d395eb484fc73a22441bdd4d52",
+      "capturedAt": "2026-11-08T14:35:43.836Z",
+      "scenario": "source14-depth10-full-375.png",
+      "origin": "http://127.0.0.1:3010"
+    },
+    {
+      "file": "source-comment-overflow-source14-depth2-1440.png",
+      "width": 1440,
+      "height": 1000,
+      "sha256": "7fdf0e8d6e349760b07b669f67f78fd4bd6aadb1fb29c30db6b492679aa6349e",
+      "capturedAt": "2026-11-08T14:29:47.984Z",
+      "scenario": "source14-depth2-1440.png",
+      "origin": "http://127.0.0.1:5180"
+    },
+    {
+      "file": "source-comment-overflow-source14-depth2-375.png",
+      "width": 375,
+      "height": 812,
+      "sha256": "5483d9b92d79220e074edf818e0884ef9207665afdc7d4be543a2c674b339eb3",
+      "capturedAt": "2026-11-08T14:29:52.258Z",
+      "scenario": "source14-depth2-375.png",
+      "origin": "http://127.0.0.1:5180"
+    },
+    {
+      "file": "source-comment-overflow-source14-depth2-768.png",
+      "width": 768,
+      "height": 1024,
+      "sha256": "3228c40cdfd184f11fed95d98a1ef0a41efecaf2178e71b3458913553ba7b5d3",
+      "capturedAt": "2026-11-08T14:29:50.099Z",
+      "scenario": "source14-depth2-768.png",
+      "origin": "http://127.0.0.1:5180"
+    },
+    {
+      "file": "source-comment-overflow-source14-depth3-1440.png",
+      "width": 1440,
+      "height": 1000,
+      "sha256": "ed7c9424af58ab550cb504534e83658893866f1cad5db9342affb6fddf9ea84b",
+      "capturedAt": "2026-11-08T14:30:31.815Z",
+      "scenario": "source14-depth3-1440.png",
+      "origin": "http://127.0.0.1:5180"
+    },
+    {
+      "file": "source-comment-overflow-source14-depth3-375.png",
+      "width": 375,
+      "height": 812,
+      "sha256": "563d7af9c4d6032c617f2fe18134335e3a595c57598dbd9b6f89c97b09cb23ac",
+      "capturedAt": "2026-11-08T14:30:36.157Z",
+      "scenario": "source14-depth3-375.png",
+      "origin": "http://127.0.0.1:5180"
+    },
+    {
+      "file": "source-comment-overflow-source14-depth3-768.png",
+      "width": 768,
+      "height": 1024,
+      "sha256": "8d9ecccbeeefdd9d04c3b2322c08173ef93eb03e098b031378e8d14c67d8bd30",
+      "capturedAt": "2026-11-08T14:30:34.029Z",
+      "scenario": "source14-depth3-768.png",
+      "origin": "http://127.0.0.1:5180"
+    },
+    {
+      "file": "source-comment-overflow-source2500-depth1-375.png",
+      "width": 375,
+      "height": 812,
+      "sha256": "8c13352ee0ca7c2ec9600eb294c88f93fcd0b402282eb4abf02021b847520b1c",
+      "capturedAt": "2026-11-08T14:29:43.990Z",
+      "scenario": "source2500-depth1-375.png",
+      "origin": "http://127.0.0.1:5180"
+    },
+    {
+      "file": "source-comment-overflow-source2500-depth10-1440.png",
+      "width": 1440,
+      "height": 1000,
+      "sha256": "2f85c3eb5a604c034604ccb9804f14768dbecf961537dd332e7aa2ca07adf018",
+      "capturedAt": "2026-11-08T14:31:01.298Z",
+      "scenario": "source2500-depth10-1440.png",
+      "origin": "http://127.0.0.1:5180"
+    },
+    {
+      "file": "source-comment-overflow-source2500-depth10-375.png",
+      "width": 375,
+      "height": 812,
+      "sha256": "c552c122a836b316360042ce3d75d103102f881dc9f5c7b26759759236ca9aa6",
+      "capturedAt": "2026-11-08T14:31:05.638Z",
+      "scenario": "source2500-depth10-375.png",
+      "origin": "http://127.0.0.1:5180"
+    },
+    {
+      "file": "source-comment-overflow-source2500-depth10-768.png",
+      "width": 768,
+      "height": 1024,
+      "sha256": "dafd3b805e1a4cd0372367ab8ad62e5910e29060603d310a8e7994e6100e632d",
+      "capturedAt": "2026-11-08T14:31:03.478Z",
+      "scenario": "source2500-depth10-768.png",
+      "origin": "http://127.0.0.1:5180"
+    },
+    {
+      "file": "source-comment-overflow-source2500-depth2-375.png",
+      "width": 375,
+      "height": 812,
+      "sha256": "99570e4c13fd2c9861b491ce138d97dffb2c914cf2513985505348b772557936",
+      "capturedAt": "2026-11-08T14:30:00.690Z",
+      "scenario": "source2500-depth2-375.png",
+      "origin": "http://127.0.0.1:5180"
+    },
+    {
+      "file": "source-comment-overflow-source2500-depth3-1440.png",
+      "width": 1440,
+      "height": 1000,
+      "sha256": "13dc99706e7c02e69010c88ddde37a162c16127fde9a2cb87e7237ebe8a58843",
+      "capturedAt": "2026-11-08T14:30:42.349Z",
+      "scenario": "source2500-depth3-1440.png",
+      "origin": "http://127.0.0.1:5180"
+    },
+    {
+      "file": "source-comment-overflow-source2500-depth3-375.png",
+      "width": 375,
+      "height": 812,
+      "sha256": "3054ba2f8009dc32a1918270dd5371aa64d90d2bdec3c0437397aa2cf82fa1e9",
+      "capturedAt": "2026-11-08T14:30:46.789Z",
+      "scenario": "source2500-depth3-375.png",
+      "origin": "http://127.0.0.1:5180"
+    },
+    {
+      "file": "source-comment-overflow-source2500-depth3-768.png",
+      "width": 768,
+      "height": 1024,
+      "sha256": "d3db0c357c9c1352137274f696d9ae52b4bdd37f0a84c223283ebf5f05dcb27f",
+      "capturedAt": "2026-11-08T14:30:44.528Z",
+      "scenario": "source2500-depth3-768.png",
+      "origin": "http://127.0.0.1:5180"
+    }
+  ],
+  "geometryRows": [
+    {
+      "file": "compiled-source14-depth10-1440.json",
+      "url": "http://127.0.0.1:3010/posts/source-threaded-discussion/?page=2&query-4-page=2&commentPage=1",
+      "viewport": 1440,
+      "maxDepth": 10,
+      "isLarge": false,
+      "documentWidth": 1440,
+      "ids": [
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18
+      ],
+      "rootIds": [
+        2,
+        17,
+        18
+      ],
+      "replies": [
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        17
+      ],
+      "expectedReplies": [
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        17
+      ],
+      "minimumWidth": 357,
+      "root": {
+        "marginLeft": "0px",
+        "marginInlineStart": "0px",
+        "paddingInlineStart": "0px",
+        "listStyle": "none"
+      },
+      "child": {
+        "marginLeft": "0px",
+        "marginInlineStart": "0px",
+        "paddingInlineStart": "32px",
+        "listStyle": "none"
+      },
+      "wrapper": {
+        "x": 397.5,
+        "right": 1042.5,
+        "width": 645,
+        "height": 3924.3125
+      },
+      "list": {
+        "x": 397.5,
+        "right": 1042.5,
+        "width": 645,
+        "height": 2849.46875
+      },
+      "tail": {
+        "x": 685.5,
+        "right": 1042.5,
+        "width": 357,
+        "height": 109.03125
+      },
+      "tailId": "comment-16",
+      "tailText": "December 31, 2024\n\t\t\t\tDeepLevel14\n\t\t\t\tDeepLevel14 content.",
+      "tailVisible": true,
+      "body2": true,
+      "query2": true,
+      "privateEmail": false,
+      "avatars": 0
+    },
+    {
+      "file": "compiled-source14-depth10-375.json",
+      "url": "http://127.0.0.1:3010/posts/source-threaded-discussion/?page=2&query-4-page=2&commentPage=1",
+      "viewport": 375,
+      "maxDepth": 10,
+      "isLarge": false,
+      "documentWidth": 375,
+      "ids": [
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18
+      ],
+      "rootIds": [
+        2,
+        17,
+        18
+      ],
+      "replies": [
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        17
+      ],
+      "expectedReplies": [
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        17
+      ],
+      "minimumWidth": 171,
+      "root": {
+        "marginLeft": "0px",
+        "marginInlineStart": "0px",
+        "paddingInlineStart": "0px",
+        "listStyle": "none"
+      },
+      "child": {
+        "marginLeft": "0px",
+        "marginInlineStart": "0px",
+        "paddingInlineStart": "16px",
+        "listStyle": "none"
+      },
+      "wrapper": {
+        "x": 30,
+        "right": 345,
+        "width": 315,
+        "height": 3518.484375
+      },
+      "list": {
+        "x": 30,
+        "right": 345,
+        "width": 315,
+        "height": 2490.15625
+      },
+      "tail": {
+        "x": 174,
+        "right": 345,
+        "width": 171,
+        "height": 106.71875
+      },
+      "tailId": "comment-16",
+      "tailText": "December 31, 2024\n\t\t\t\tDeepLevel14\n\t\t\t\tDeepLevel14 content.",
+      "tailVisible": true,
+      "body2": true,
+      "query2": true,
+      "privateEmail": false,
+      "avatars": 0
+    },
+    {
+      "file": "compiled-source14-depth10-768.json",
+      "url": "http://127.0.0.1:3010/posts/source-threaded-discussion/?page=2&query-4-page=2&commentPage=1",
+      "viewport": 768,
+      "maxDepth": 10,
+      "isLarge": false,
+      "documentWidth": 768,
+      "ids": [
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18
+      ],
+      "rootIds": [
+        2,
+        17,
+        18
+      ],
+      "replies": [
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        17
+      ],
+      "expectedReplies": [
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        17
+      ],
+      "minimumWidth": 357,
+      "root": {
+        "marginLeft": "0px",
+        "marginInlineStart": "0px",
+        "paddingInlineStart": "0px",
+        "listStyle": "none"
+      },
+      "child": {
+        "marginLeft": "0px",
+        "marginInlineStart": "0px",
+        "paddingInlineStart": "32px",
+        "listStyle": "none"
+      },
+      "wrapper": {
+        "x": 61.5,
+        "right": 706.5,
+        "width": 645,
+        "height": 3663.359375
+      },
+      "list": {
+        "x": 61.5,
+        "right": 706.5,
+        "width": 645,
+        "height": 2638.75
+      },
+      "tail": {
+        "x": 349.5,
+        "right": 706.5,
+        "width": 357,
+        "height": 107.5625
+      },
+      "tailId": "comment-16",
+      "tailText": "December 31, 2024\n\t\t\t\tDeepLevel14\n\t\t\t\tDeepLevel14 content.",
+      "tailVisible": true,
+      "body2": true,
+      "query2": true,
+      "privateEmail": false,
+      "avatars": 0
+    },
+    {
+      "file": "compiled-source2500-depth10-1440.json",
+      "url": "http://127.0.0.1:3010/posts/source-historical-thread/?page=2&query-4-page=2&commentPage=1",
+      "viewport": 1440,
+      "maxDepth": 10,
+      "isLarge": true,
+      "documentWidth": 1440,
+      "rootIds": [
+        21
+      ],
+      "replies": [],
+      "expectedReplies": [],
+      "minimumWidth": 357,
+      "root": {
+        "marginLeft": "0px",
+        "marginInlineStart": "0px",
+        "paddingInlineStart": "0px",
+        "listStyle": "none"
+      },
+      "child": {
+        "marginLeft": "0px",
+        "marginInlineStart": "0px",
+        "paddingInlineStart": "32px",
+        "listStyle": "none"
+      },
+      "wrapper": {
+        "x": 397.5,
+        "right": 1042.5,
+        "width": 645,
+        "height": 113073.6875
+      },
+      "list": {
+        "x": 397.5,
+        "right": 1042.5,
+        "width": 645,
+        "height": 112089.375
+      },
+      "tail": {
+        "x": 685.5,
+        "right": 1042.5,
+        "width": 357,
+        "height": 24.84375
+      },
+      "tailId": "comment-2520",
+      "tailText": "HISTORICAL TAIL 2500",
+      "tailVisible": true,
+      "body2": true,
+      "query2": true,
+      "privateEmail": false,
+      "avatars": 0,
+      "idsCount": 2500,
+      "idsSHA256": "07d4f30365398794b8f3547243289297c85e87558ac56244f43097e83cb3f2b1",
+      "firstId": 21,
+      "lastId": 2520,
+      "completeOrderMatchesFixture": true
+    },
+    {
+      "file": "compiled-source2500-depth10-375.json",
+      "url": "http://127.0.0.1:3010/posts/source-historical-thread/?page=2&query-4-page=2&commentPage=1",
+      "viewport": 375,
+      "maxDepth": 10,
+      "isLarge": true,
+      "documentWidth": 375,
+      "rootIds": [
+        21
+      ],
+      "replies": [],
+      "expectedReplies": [],
+      "minimumWidth": 171,
+      "root": {
+        "marginLeft": "0px",
+        "marginInlineStart": "0px",
+        "paddingInlineStart": "0px",
+        "listStyle": "none"
+      },
+      "child": {
+        "marginLeft": "0px",
+        "marginInlineStart": "0px",
+        "paddingInlineStart": "16px",
+        "listStyle": "none"
+      },
+      "wrapper": {
+        "x": 30,
+        "right": 345,
+        "width": 315,
+        "height": 107318.25
+      },
+      "list": {
+        "x": 30,
+        "right": 345,
+        "width": 315,
+        "height": 106308.125
+      },
+      "tail": {
+        "x": 174,
+        "right": 345,
+        "width": 171,
+        "height": 22.53125
+      },
+      "tailId": "comment-2520",
+      "tailText": "HISTORICAL TAIL 2500",
+      "tailVisible": true,
+      "body2": true,
+      "query2": true,
+      "privateEmail": false,
+      "avatars": 0,
+      "idsCount": 2500,
+      "idsSHA256": "07d4f30365398794b8f3547243289297c85e87558ac56244f43097e83cb3f2b1",
+      "firstId": 21,
+      "lastId": 2520,
+      "completeOrderMatchesFixture": true
+    },
+    {
+      "file": "compiled-source2500-depth10-768.json",
+      "url": "http://127.0.0.1:3010/posts/source-historical-thread/?page=2&query-4-page=2&commentPage=1",
+      "viewport": 768,
+      "maxDepth": 10,
+      "isLarge": true,
+      "documentWidth": 768,
+      "rootIds": [
+        21
+      ],
+      "replies": [],
+      "expectedReplies": [],
+      "minimumWidth": 357,
+      "root": {
+        "marginLeft": "0px",
+        "marginInlineStart": "0px",
+        "paddingInlineStart": "0px",
+        "listStyle": "none"
+      },
+      "child": {
+        "marginLeft": "0px",
+        "marginInlineStart": "0px",
+        "paddingInlineStart": "32px",
+        "listStyle": "none"
+      },
+      "wrapper": {
+        "x": 61.5,
+        "right": 706.5,
+        "width": 645,
+        "height": 109369.125
+      },
+      "list": {
+        "x": 61.5,
+        "right": 706.5,
+        "width": 645,
+        "height": 108417.5
+      },
+      "tail": {
+        "x": 349.5,
+        "right": 706.5,
+        "width": 357,
+        "height": 23.375
+      },
+      "tailId": "comment-2520",
+      "tailText": "HISTORICAL TAIL 2500",
+      "tailVisible": true,
+      "body2": true,
+      "query2": true,
+      "privateEmail": false,
+      "avatars": 0,
+      "idsCount": 2500,
+      "idsSHA256": "07d4f30365398794b8f3547243289297c85e87558ac56244f43097e83cb3f2b1",
+      "firstId": 21,
+      "lastId": 2520,
+      "completeOrderMatchesFixture": true
+    },
+    {
+      "file": "source14-depth1-1440.json",
+      "url": "http://127.0.0.1:5180/posts/source-threaded-discussion/?page=2&query-4-page=2&commentPage=1",
+      "viewport": 1440,
+      "maxDepth": 1,
+      "isLarge": false,
+      "documentWidth": 1440,
+      "ids": [
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18
+      ],
+      "rootIds": [
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18
+      ],
+      "replies": [],
+      "expectedReplies": [],
+      "minimumWidth": 645,
+      "root": {
+        "marginLeft": "0px",
+        "marginInlineStart": "0px",
+        "paddingInlineStart": "0px",
+        "listStyle": "none"
+      },
+      "child": null,
+      "wrapper": {
+        "x": 397.5,
+        "right": 1042.5,
+        "width": 645,
+        "height": 3728.375
+      },
+      "list": {
+        "x": 397.5,
+        "right": 1042.5,
+        "width": 645,
+        "height": 2653.53125
+      },
+      "tail": {
+        "x": 397.5,
+        "right": 1042.5,
+        "width": 645,
+        "height": 109.03125
+      },
+      "tailId": "comment-16",
+      "tailText": "December 31, 2024\n\t\t\t\tDeepLevel14\n\t\t\t\tDeepLevel14 content.",
+      "tailVisible": true,
+      "body2": true,
+      "query2": true,
+      "privateEmail": false,
+      "avatars": 0
+    },
+    {
+      "file": "source14-depth1-375.json",
+      "url": "http://127.0.0.1:5180/posts/source-threaded-discussion/?page=2&query-4-page=2&commentPage=1",
+      "viewport": 375,
+      "maxDepth": 1,
+      "isLarge": false,
+      "documentWidth": 375,
+      "ids": [
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18
+      ],
+      "rootIds": [
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18
+      ],
+      "replies": [],
+      "expectedReplies": [],
+      "minimumWidth": 315,
+      "root": {
+        "marginLeft": "0px",
+        "marginInlineStart": "0px",
+        "paddingInlineStart": "0px",
+        "listStyle": "none"
+      },
+      "child": null,
+      "wrapper": {
+        "x": 30,
+        "right": 345,
+        "width": 315,
+        "height": 3322.546875
+      },
+      "list": {
+        "x": 30,
+        "right": 345,
+        "width": 315,
+        "height": 2294.21875
+      },
+      "tail": {
+        "x": 30,
+        "right": 345,
+        "width": 315,
+        "height": 106.71875
+      },
+      "tailId": "comment-16",
+      "tailText": "December 31, 2024\n\t\t\t\tDeepLevel14\n\t\t\t\tDeepLevel14 content.",
+      "tailVisible": true,
+      "body2": true,
+      "query2": true,
+      "privateEmail": false,
+      "avatars": 0
+    },
+    {
+      "file": "source14-depth1-768.json",
+      "url": "http://127.0.0.1:5180/posts/source-threaded-discussion/?page=2&query-4-page=2&commentPage=1",
+      "viewport": 768,
+      "maxDepth": 1,
+      "isLarge": false,
+      "documentWidth": 768,
+      "ids": [
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18
+      ],
+      "rootIds": [
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18
+      ],
+      "replies": [],
+      "expectedReplies": [],
+      "minimumWidth": 645,
+      "root": {
+        "marginLeft": "0px",
+        "marginInlineStart": "0px",
+        "paddingInlineStart": "0px",
+        "listStyle": "none"
+      },
+      "child": null,
+      "wrapper": {
+        "x": 61.5,
+        "right": 706.5,
+        "width": 645,
+        "height": 3467.421875
+      },
+      "list": {
+        "x": 61.5,
+        "right": 706.5,
+        "width": 645,
+        "height": 2442.8125
+      },
+      "tail": {
+        "x": 61.5,
+        "right": 706.5,
+        "width": 645,
+        "height": 107.5625
+      },
+      "tailId": "comment-16",
+      "tailText": "December 31, 2024\n\t\t\t\tDeepLevel14\n\t\t\t\tDeepLevel14 content.",
+      "tailVisible": true,
+      "body2": true,
+      "query2": true,
+      "privateEmail": false,
+      "avatars": 0
+    },
+    {
+      "file": "source14-depth10-1440.json",
+      "url": "http://127.0.0.1:5180/posts/source-threaded-discussion/?page=2&query-4-page=2&commentPage=1",
+      "viewport": 1440,
+      "maxDepth": 10,
+      "isLarge": false,
+      "documentWidth": 1440,
+      "ids": [
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18
+      ],
+      "rootIds": [
+        2,
+        17,
+        18
+      ],
+      "replies": [
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        17
+      ],
+      "expectedReplies": [
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        17
+      ],
+      "minimumWidth": 357,
+      "root": {
+        "marginLeft": "0px",
+        "marginInlineStart": "0px",
+        "paddingInlineStart": "0px",
+        "listStyle": "none"
+      },
+      "child": {
+        "marginLeft": "0px",
+        "marginInlineStart": "0px",
+        "paddingInlineStart": "32px",
+        "listStyle": "none"
+      },
+      "wrapper": {
+        "x": 397.5,
+        "right": 1042.5,
+        "width": 645,
+        "height": 3924.3125
+      },
+      "list": {
+        "x": 397.5,
+        "right": 1042.5,
+        "width": 645,
+        "height": 2849.46875
+      },
+      "tail": {
+        "x": 685.5,
+        "right": 1042.5,
+        "width": 357,
+        "height": 109.03125
+      },
+      "tailId": "comment-16",
+      "tailText": "December 31, 2024\n\t\t\t\tDeepLevel14\n\t\t\t\tDeepLevel14 content.",
+      "tailVisible": true,
+      "body2": true,
+      "query2": true,
+      "privateEmail": false,
+      "avatars": 0
+    },
+    {
+      "file": "source14-depth10-375.json",
+      "url": "http://127.0.0.1:5180/posts/source-threaded-discussion/?page=2&query-4-page=2&commentPage=1",
+      "viewport": 375,
+      "maxDepth": 10,
+      "isLarge": false,
+      "documentWidth": 375,
+      "ids": [
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18
+      ],
+      "rootIds": [
+        2,
+        17,
+        18
+      ],
+      "replies": [
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        17
+      ],
+      "expectedReplies": [
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        17
+      ],
+      "minimumWidth": 171,
+      "root": {
+        "marginLeft": "0px",
+        "marginInlineStart": "0px",
+        "paddingInlineStart": "0px",
+        "listStyle": "none"
+      },
+      "child": {
+        "marginLeft": "0px",
+        "marginInlineStart": "0px",
+        "paddingInlineStart": "16px",
+        "listStyle": "none"
+      },
+      "wrapper": {
+        "x": 30,
+        "right": 345,
+        "width": 315,
+        "height": 3518.484375
+      },
+      "list": {
+        "x": 30,
+        "right": 345,
+        "width": 315,
+        "height": 2490.15625
+      },
+      "tail": {
+        "x": 174,
+        "right": 345,
+        "width": 171,
+        "height": 106.71875
+      },
+      "tailId": "comment-16",
+      "tailText": "December 31, 2024\n\t\t\t\tDeepLevel14\n\t\t\t\tDeepLevel14 content.",
+      "tailVisible": true,
+      "body2": true,
+      "query2": true,
+      "privateEmail": false,
+      "avatars": 0
+    },
+    {
+      "file": "source14-depth10-768.json",
+      "url": "http://127.0.0.1:5180/posts/source-threaded-discussion/?page=2&query-4-page=2&commentPage=1",
+      "viewport": 768,
+      "maxDepth": 10,
+      "isLarge": false,
+      "documentWidth": 768,
+      "ids": [
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18
+      ],
+      "rootIds": [
+        2,
+        17,
+        18
+      ],
+      "replies": [
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        17
+      ],
+      "expectedReplies": [
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        17
+      ],
+      "minimumWidth": 357,
+      "root": {
+        "marginLeft": "0px",
+        "marginInlineStart": "0px",
+        "paddingInlineStart": "0px",
+        "listStyle": "none"
+      },
+      "child": {
+        "marginLeft": "0px",
+        "marginInlineStart": "0px",
+        "paddingInlineStart": "32px",
+        "listStyle": "none"
+      },
+      "wrapper": {
+        "x": 61.5,
+        "right": 706.5,
+        "width": 645,
+        "height": 3663.359375
+      },
+      "list": {
+        "x": 61.5,
+        "right": 706.5,
+        "width": 645,
+        "height": 2638.75
+      },
+      "tail": {
+        "x": 349.5,
+        "right": 706.5,
+        "width": 357,
+        "height": 107.5625
+      },
+      "tailId": "comment-16",
+      "tailText": "December 31, 2024\n\t\t\t\tDeepLevel14\n\t\t\t\tDeepLevel14 content.",
+      "tailVisible": true,
+      "body2": true,
+      "query2": true,
+      "privateEmail": false,
+      "avatars": 0
+    },
+    {
+      "file": "source14-depth2-1440.json",
+      "url": "http://127.0.0.1:5180/posts/source-threaded-discussion/?page=2&query-4-page=2&commentPage=1",
+      "viewport": 1440,
+      "maxDepth": 2,
+      "isLarge": false,
+      "documentWidth": 1440,
+      "ids": [
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18
+      ],
+      "rootIds": [
+        2,
+        17,
+        18
+      ],
+      "replies": [
+        2,
+        17
+      ],
+      "expectedReplies": [
+        2,
+        17
+      ],
+      "minimumWidth": 613,
+      "root": {
+        "marginLeft": "0px",
+        "marginInlineStart": "0px",
+        "paddingInlineStart": "0px",
+        "listStyle": "none"
+      },
+      "child": {
+        "marginLeft": "0px",
+        "marginInlineStart": "0px",
+        "paddingInlineStart": "32px",
+        "listStyle": "none"
+      },
+      "wrapper": {
+        "x": 397.5,
+        "right": 1042.5,
+        "width": 645,
+        "height": 3767.5625
+      },
+      "list": {
+        "x": 397.5,
+        "right": 1042.5,
+        "width": 645,
+        "height": 2692.71875
+      },
+      "tail": {
+        "x": 429.5,
+        "right": 1042.5,
+        "width": 613,
+        "height": 109.03125
+      },
+      "tailId": "comment-16",
+      "tailText": "December 31, 2024\n\t\t\t\tDeepLevel14\n\t\t\t\tDeepLevel14 content.",
+      "tailVisible": true,
+      "body2": true,
+      "query2": true,
+      "privateEmail": false,
+      "avatars": 0
+    },
+    {
+      "file": "source14-depth2-375.json",
+      "url": "http://127.0.0.1:5180/posts/source-threaded-discussion/?page=2&query-4-page=2&commentPage=1",
+      "viewport": 375,
+      "maxDepth": 2,
+      "isLarge": false,
+      "documentWidth": 375,
+      "ids": [
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18
+      ],
+      "rootIds": [
+        2,
+        17,
+        18
+      ],
+      "replies": [
+        2,
+        17
+      ],
+      "expectedReplies": [
+        2,
+        17
+      ],
+      "minimumWidth": 299,
+      "root": {
+        "marginLeft": "0px",
+        "marginInlineStart": "0px",
+        "paddingInlineStart": "0px",
+        "listStyle": "none"
+      },
+      "child": {
+        "marginLeft": "0px",
+        "marginInlineStart": "0px",
+        "paddingInlineStart": "16px",
+        "listStyle": "none"
+      },
+      "wrapper": {
+        "x": 30,
+        "right": 345,
+        "width": 315,
+        "height": 3361.734375
+      },
+      "list": {
+        "x": 30,
+        "right": 345,
+        "width": 315,
+        "height": 2333.40625
+      },
+      "tail": {
+        "x": 46,
+        "right": 345,
+        "width": 299,
+        "height": 106.71875
+      },
+      "tailId": "comment-16",
+      "tailText": "December 31, 2024\n\t\t\t\tDeepLevel14\n\t\t\t\tDeepLevel14 content.",
+      "tailVisible": true,
+      "body2": true,
+      "query2": true,
+      "privateEmail": false,
+      "avatars": 0
+    },
+    {
+      "file": "source14-depth2-768.json",
+      "url": "http://127.0.0.1:5180/posts/source-threaded-discussion/?page=2&query-4-page=2&commentPage=1",
+      "viewport": 768,
+      "maxDepth": 2,
+      "isLarge": false,
+      "documentWidth": 768,
+      "ids": [
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18
+      ],
+      "rootIds": [
+        2,
+        17,
+        18
+      ],
+      "replies": [
+        2,
+        17
+      ],
+      "expectedReplies": [
+        2,
+        17
+      ],
+      "minimumWidth": 613,
+      "root": {
+        "marginLeft": "0px",
+        "marginInlineStart": "0px",
+        "paddingInlineStart": "0px",
+        "listStyle": "none"
+      },
+      "child": {
+        "marginLeft": "0px",
+        "marginInlineStart": "0px",
+        "paddingInlineStart": "32px",
+        "listStyle": "none"
+      },
+      "wrapper": {
+        "x": 61.5,
+        "right": 706.5,
+        "width": 645,
+        "height": 3506.609375
+      },
+      "list": {
+        "x": 61.5,
+        "right": 706.5,
+        "width": 645,
+        "height": 2482
+      },
+      "tail": {
+        "x": 93.5,
+        "right": 706.5,
+        "width": 613,
+        "height": 107.5625
+      },
+      "tailId": "comment-16",
+      "tailText": "December 31, 2024\n\t\t\t\tDeepLevel14\n\t\t\t\tDeepLevel14 content.",
+      "tailVisible": true,
+      "body2": true,
+      "query2": true,
+      "privateEmail": false,
+      "avatars": 0
+    },
+    {
+      "file": "source14-depth3-1440.json",
+      "url": "http://127.0.0.1:5180/posts/source-threaded-discussion/?page=2&query-4-page=2&commentPage=1",
+      "viewport": 1440,
+      "maxDepth": 3,
+      "isLarge": false,
+      "documentWidth": 1440,
+      "ids": [
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18
+      ],
+      "rootIds": [
+        2,
+        17,
+        18
+      ],
+      "replies": [
+        2,
+        3,
+        17
+      ],
+      "expectedReplies": [
+        2,
+        3,
+        17
+      ],
+      "minimumWidth": 581,
+      "root": {
+        "marginLeft": "0px",
+        "marginInlineStart": "0px",
+        "paddingInlineStart": "0px",
+        "listStyle": "none"
+      },
+      "child": {
+        "marginLeft": "0px",
+        "marginInlineStart": "0px",
+        "paddingInlineStart": "32px",
+        "listStyle": "none"
+      },
+      "wrapper": {
+        "x": 397.5,
+        "right": 1042.5,
+        "width": 645,
+        "height": 3787.15625
+      },
+      "list": {
+        "x": 397.5,
+        "right": 1042.5,
+        "width": 645,
+        "height": 2712.3125
+      },
+      "tail": {
+        "x": 461.5,
+        "right": 1042.5,
+        "width": 581,
+        "height": 109.03125
+      },
+      "tailId": "comment-16",
+      "tailText": "December 31, 2024\n\t\t\t\tDeepLevel14\n\t\t\t\tDeepLevel14 content.",
+      "tailVisible": true,
+      "body2": true,
+      "query2": true,
+      "privateEmail": false,
+      "avatars": 0
+    },
+    {
+      "file": "source14-depth3-375.json",
+      "url": "http://127.0.0.1:5180/posts/source-threaded-discussion/?page=2&query-4-page=2&commentPage=1",
+      "viewport": 375,
+      "maxDepth": 3,
+      "isLarge": false,
+      "documentWidth": 375,
+      "ids": [
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18
+      ],
+      "rootIds": [
+        2,
+        17,
+        18
+      ],
+      "replies": [
+        2,
+        3,
+        17
+      ],
+      "expectedReplies": [
+        2,
+        3,
+        17
+      ],
+      "minimumWidth": 283,
+      "root": {
+        "marginLeft": "0px",
+        "marginInlineStart": "0px",
+        "paddingInlineStart": "0px",
+        "listStyle": "none"
+      },
+      "child": {
+        "marginLeft": "0px",
+        "marginInlineStart": "0px",
+        "paddingInlineStart": "16px",
+        "listStyle": "none"
+      },
+      "wrapper": {
+        "x": 30,
+        "right": 345,
+        "width": 315,
+        "height": 3381.328125
+      },
+      "list": {
+        "x": 30,
+        "right": 345,
+        "width": 315,
+        "height": 2353
+      },
+      "tail": {
+        "x": 62,
+        "right": 345,
+        "width": 283,
+        "height": 106.71875
+      },
+      "tailId": "comment-16",
+      "tailText": "December 31, 2024\n\t\t\t\tDeepLevel14\n\t\t\t\tDeepLevel14 content.",
+      "tailVisible": true,
+      "body2": true,
+      "query2": true,
+      "privateEmail": false,
+      "avatars": 0
+    },
+    {
+      "file": "source14-depth3-768.json",
+      "url": "http://127.0.0.1:5180/posts/source-threaded-discussion/?page=2&query-4-page=2&commentPage=1",
+      "viewport": 768,
+      "maxDepth": 3,
+      "isLarge": false,
+      "documentWidth": 768,
+      "ids": [
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18
+      ],
+      "rootIds": [
+        2,
+        17,
+        18
+      ],
+      "replies": [
+        2,
+        3,
+        17
+      ],
+      "expectedReplies": [
+        2,
+        3,
+        17
+      ],
+      "minimumWidth": 581,
+      "root": {
+        "marginLeft": "0px",
+        "marginInlineStart": "0px",
+        "paddingInlineStart": "0px",
+        "listStyle": "none"
+      },
+      "child": {
+        "marginLeft": "0px",
+        "marginInlineStart": "0px",
+        "paddingInlineStart": "32px",
+        "listStyle": "none"
+      },
+      "wrapper": {
+        "x": 61.5,
+        "right": 706.5,
+        "width": 645,
+        "height": 3526.203125
+      },
+      "list": {
+        "x": 61.5,
+        "right": 706.5,
+        "width": 645,
+        "height": 2501.59375
+      },
+      "tail": {
+        "x": 125.5,
+        "right": 706.5,
+        "width": 581,
+        "height": 107.5625
+      },
+      "tailId": "comment-16",
+      "tailText": "December 31, 2024\n\t\t\t\tDeepLevel14\n\t\t\t\tDeepLevel14 content.",
+      "tailVisible": true,
+      "body2": true,
+      "query2": true,
+      "privateEmail": false,
+      "avatars": 0
+    },
+    {
+      "file": "source2500-depth1-1440.json",
+      "url": "http://127.0.0.1:5180/posts/source-historical-thread/?page=2&query-4-page=2&commentPage=1",
+      "viewport": 1440,
+      "maxDepth": 1,
+      "isLarge": true,
+      "documentWidth": 1440,
+      "replies": [],
+      "expectedReplies": [],
+      "minimumWidth": 645,
+      "root": {
+        "marginLeft": "0px",
+        "marginInlineStart": "0px",
+        "paddingInlineStart": "0px",
+        "listStyle": "none"
+      },
+      "child": null,
+      "wrapper": {
+        "x": 397.5,
+        "right": 1042.5,
+        "width": 645,
+        "height": 113073.6875
+      },
+      "list": {
+        "x": 397.5,
+        "right": 1042.5,
+        "width": 645,
+        "height": 112089.375
+      },
+      "tail": {
+        "x": 397.5,
+        "right": 1042.5,
+        "width": 645,
+        "height": 24.84375
+      },
+      "tailId": "comment-2520",
+      "tailText": "HISTORICAL TAIL 2500",
+      "tailVisible": true,
+      "body2": true,
+      "query2": true,
+      "privateEmail": false,
+      "avatars": 0,
+      "idsCount": 2500,
+      "idsSHA256": "07d4f30365398794b8f3547243289297c85e87558ac56244f43097e83cb3f2b1",
+      "firstId": 21,
+      "lastId": 2520,
+      "completeOrderMatchesFixture": true,
+      "rootIdsCount": 2500,
+      "rootIdsSHA256": "07d4f30365398794b8f3547243289297c85e87558ac56244f43097e83cb3f2b1"
+    },
+    {
+      "file": "source2500-depth1-375.json",
+      "url": "http://127.0.0.1:5180/posts/source-historical-thread/?page=2&query-4-page=2&commentPage=1",
+      "viewport": 375,
+      "maxDepth": 1,
+      "isLarge": true,
+      "documentWidth": 375,
+      "replies": [],
+      "expectedReplies": [],
+      "minimumWidth": 315,
+      "root": {
+        "marginLeft": "0px",
+        "marginInlineStart": "0px",
+        "paddingInlineStart": "0px",
+        "listStyle": "none"
+      },
+      "child": null,
+      "wrapper": {
+        "x": 30,
+        "right": 345,
+        "width": 315,
+        "height": 107318.25
+      },
+      "list": {
+        "x": 30,
+        "right": 345,
+        "width": 315,
+        "height": 106308.125
+      },
+      "tail": {
+        "x": 30,
+        "right": 345,
+        "width": 315,
+        "height": 22.53125
+      },
+      "tailId": "comment-2520",
+      "tailText": "HISTORICAL TAIL 2500",
+      "tailVisible": true,
+      "body2": true,
+      "query2": true,
+      "privateEmail": false,
+      "avatars": 0,
+      "idsCount": 2500,
+      "idsSHA256": "07d4f30365398794b8f3547243289297c85e87558ac56244f43097e83cb3f2b1",
+      "firstId": 21,
+      "lastId": 2520,
+      "completeOrderMatchesFixture": true,
+      "rootIdsCount": 2500,
+      "rootIdsSHA256": "07d4f30365398794b8f3547243289297c85e87558ac56244f43097e83cb3f2b1"
+    },
+    {
+      "file": "source2500-depth1-768.json",
+      "url": "http://127.0.0.1:5180/posts/source-historical-thread/?page=2&query-4-page=2&commentPage=1",
+      "viewport": 768,
+      "maxDepth": 1,
+      "isLarge": true,
+      "documentWidth": 768,
+      "replies": [],
+      "expectedReplies": [],
+      "minimumWidth": 645,
+      "root": {
+        "marginLeft": "0px",
+        "marginInlineStart": "0px",
+        "paddingInlineStart": "0px",
+        "listStyle": "none"
+      },
+      "child": null,
+      "wrapper": {
+        "x": 61.5,
+        "right": 706.5,
+        "width": 645,
+        "height": 109369.125
+      },
+      "list": {
+        "x": 61.5,
+        "right": 706.5,
+        "width": 645,
+        "height": 108417.5
+      },
+      "tail": {
+        "x": 61.5,
+        "right": 706.5,
+        "width": 645,
+        "height": 23.375
+      },
+      "tailId": "comment-2520",
+      "tailText": "HISTORICAL TAIL 2500",
+      "tailVisible": true,
+      "body2": true,
+      "query2": true,
+      "privateEmail": false,
+      "avatars": 0,
+      "idsCount": 2500,
+      "idsSHA256": "07d4f30365398794b8f3547243289297c85e87558ac56244f43097e83cb3f2b1",
+      "firstId": 21,
+      "lastId": 2520,
+      "completeOrderMatchesFixture": true,
+      "rootIdsCount": 2500,
+      "rootIdsSHA256": "07d4f30365398794b8f3547243289297c85e87558ac56244f43097e83cb3f2b1"
+    },
+    {
+      "file": "source2500-depth10-1440.json",
+      "url": "http://127.0.0.1:5180/posts/source-historical-thread/?page=2&query-4-page=2&commentPage=1",
+      "viewport": 1440,
+      "maxDepth": 10,
+      "isLarge": true,
+      "documentWidth": 1440,
+      "rootIds": [
+        21
+      ],
+      "replies": [],
+      "expectedReplies": [],
+      "minimumWidth": 357,
+      "root": {
+        "marginLeft": "0px",
+        "marginInlineStart": "0px",
+        "paddingInlineStart": "0px",
+        "listStyle": "none"
+      },
+      "child": {
+        "marginLeft": "0px",
+        "marginInlineStart": "0px",
+        "paddingInlineStart": "32px",
+        "listStyle": "none"
+      },
+      "wrapper": {
+        "x": 397.5,
+        "right": 1042.5,
+        "width": 645,
+        "height": 113073.6875
+      },
+      "list": {
+        "x": 397.5,
+        "right": 1042.5,
+        "width": 645,
+        "height": 112089.375
+      },
+      "tail": {
+        "x": 685.5,
+        "right": 1042.5,
+        "width": 357,
+        "height": 24.84375
+      },
+      "tailId": "comment-2520",
+      "tailText": "HISTORICAL TAIL 2500",
+      "tailVisible": true,
+      "body2": true,
+      "query2": true,
+      "privateEmail": false,
+      "avatars": 0,
+      "idsCount": 2500,
+      "idsSHA256": "07d4f30365398794b8f3547243289297c85e87558ac56244f43097e83cb3f2b1",
+      "firstId": 21,
+      "lastId": 2520,
+      "completeOrderMatchesFixture": true
+    },
+    {
+      "file": "source2500-depth10-375.json",
+      "url": "http://127.0.0.1:5180/posts/source-historical-thread/?page=2&query-4-page=2&commentPage=1",
+      "viewport": 375,
+      "maxDepth": 10,
+      "isLarge": true,
+      "documentWidth": 375,
+      "rootIds": [
+        21
+      ],
+      "replies": [],
+      "expectedReplies": [],
+      "minimumWidth": 171,
+      "root": {
+        "marginLeft": "0px",
+        "marginInlineStart": "0px",
+        "paddingInlineStart": "0px",
+        "listStyle": "none"
+      },
+      "child": {
+        "marginLeft": "0px",
+        "marginInlineStart": "0px",
+        "paddingInlineStart": "16px",
+        "listStyle": "none"
+      },
+      "wrapper": {
+        "x": 30,
+        "right": 345,
+        "width": 315,
+        "height": 107318.25
+      },
+      "list": {
+        "x": 30,
+        "right": 345,
+        "width": 315,
+        "height": 106308.125
+      },
+      "tail": {
+        "x": 174,
+        "right": 345,
+        "width": 171,
+        "height": 22.53125
+      },
+      "tailId": "comment-2520",
+      "tailText": "HISTORICAL TAIL 2500",
+      "tailVisible": true,
+      "body2": true,
+      "query2": true,
+      "privateEmail": false,
+      "avatars": 0,
+      "idsCount": 2500,
+      "idsSHA256": "07d4f30365398794b8f3547243289297c85e87558ac56244f43097e83cb3f2b1",
+      "firstId": 21,
+      "lastId": 2520,
+      "completeOrderMatchesFixture": true
+    },
+    {
+      "file": "source2500-depth10-768.json",
+      "url": "http://127.0.0.1:5180/posts/source-historical-thread/?page=2&query-4-page=2&commentPage=1",
+      "viewport": 768,
+      "maxDepth": 10,
+      "isLarge": true,
+      "documentWidth": 768,
+      "rootIds": [
+        21
+      ],
+      "replies": [],
+      "expectedReplies": [],
+      "minimumWidth": 357,
+      "root": {
+        "marginLeft": "0px",
+        "marginInlineStart": "0px",
+        "paddingInlineStart": "0px",
+        "listStyle": "none"
+      },
+      "child": {
+        "marginLeft": "0px",
+        "marginInlineStart": "0px",
+        "paddingInlineStart": "32px",
+        "listStyle": "none"
+      },
+      "wrapper": {
+        "x": 61.5,
+        "right": 706.5,
+        "width": 645,
+        "height": 109369.125
+      },
+      "list": {
+        "x": 61.5,
+        "right": 706.5,
+        "width": 645,
+        "height": 108417.5
+      },
+      "tail": {
+        "x": 349.5,
+        "right": 706.5,
+        "width": 357,
+        "height": 23.375
+      },
+      "tailId": "comment-2520",
+      "tailText": "HISTORICAL TAIL 2500",
+      "tailVisible": true,
+      "body2": true,
+      "query2": true,
+      "privateEmail": false,
+      "avatars": 0,
+      "idsCount": 2500,
+      "idsSHA256": "07d4f30365398794b8f3547243289297c85e87558ac56244f43097e83cb3f2b1",
+      "firstId": 21,
+      "lastId": 2520,
+      "completeOrderMatchesFixture": true
+    },
+    {
+      "file": "source2500-depth2-1440.json",
+      "url": "http://127.0.0.1:5180/posts/source-historical-thread/?page=2&query-4-page=2&commentPage=1",
+      "viewport": 1440,
+      "maxDepth": 2,
+      "isLarge": true,
+      "documentWidth": 1440,
+      "rootIds": [
+        21
+      ],
+      "replies": [],
+      "expectedReplies": [],
+      "minimumWidth": 613,
+      "root": {
+        "marginLeft": "0px",
+        "marginInlineStart": "0px",
+        "paddingInlineStart": "0px",
+        "listStyle": "none"
+      },
+      "child": {
+        "marginLeft": "0px",
+        "marginInlineStart": "0px",
+        "paddingInlineStart": "32px",
+        "listStyle": "none"
+      },
+      "wrapper": {
+        "x": 397.5,
+        "right": 1042.5,
+        "width": 645,
+        "height": 113073.6875
+      },
+      "list": {
+        "x": 397.5,
+        "right": 1042.5,
+        "width": 645,
+        "height": 112089.375
+      },
+      "tail": {
+        "x": 429.5,
+        "right": 1042.5,
+        "width": 613,
+        "height": 24.84375
+      },
+      "tailId": "comment-2520",
+      "tailText": "HISTORICAL TAIL 2500",
+      "tailVisible": true,
+      "body2": true,
+      "query2": true,
+      "privateEmail": false,
+      "avatars": 0,
+      "idsCount": 2500,
+      "idsSHA256": "07d4f30365398794b8f3547243289297c85e87558ac56244f43097e83cb3f2b1",
+      "firstId": 21,
+      "lastId": 2520,
+      "completeOrderMatchesFixture": true
+    },
+    {
+      "file": "source2500-depth2-375.json",
+      "url": "http://127.0.0.1:5180/posts/source-historical-thread/?page=2&query-4-page=2&commentPage=1",
+      "viewport": 375,
+      "maxDepth": 2,
+      "isLarge": true,
+      "documentWidth": 375,
+      "rootIds": [
+        21
+      ],
+      "replies": [],
+      "expectedReplies": [],
+      "minimumWidth": 299,
+      "root": {
+        "marginLeft": "0px",
+        "marginInlineStart": "0px",
+        "paddingInlineStart": "0px",
+        "listStyle": "none"
+      },
+      "child": {
+        "marginLeft": "0px",
+        "marginInlineStart": "0px",
+        "paddingInlineStart": "16px",
+        "listStyle": "none"
+      },
+      "wrapper": {
+        "x": 30,
+        "right": 345,
+        "width": 315,
+        "height": 107318.25
+      },
+      "list": {
+        "x": 30,
+        "right": 345,
+        "width": 315,
+        "height": 106308.125
+      },
+      "tail": {
+        "x": 46,
+        "right": 345,
+        "width": 299,
+        "height": 22.53125
+      },
+      "tailId": "comment-2520",
+      "tailText": "HISTORICAL TAIL 2500",
+      "tailVisible": true,
+      "body2": true,
+      "query2": true,
+      "privateEmail": false,
+      "avatars": 0,
+      "idsCount": 2500,
+      "idsSHA256": "07d4f30365398794b8f3547243289297c85e87558ac56244f43097e83cb3f2b1",
+      "firstId": 21,
+      "lastId": 2520,
+      "completeOrderMatchesFixture": true
+    },
+    {
+      "file": "source2500-depth2-768.json",
+      "url": "http://127.0.0.1:5180/posts/source-historical-thread/?page=2&query-4-page=2&commentPage=1",
+      "viewport": 768,
+      "maxDepth": 2,
+      "isLarge": true,
+      "documentWidth": 768,
+      "rootIds": [
+        21
+      ],
+      "replies": [],
+      "expectedReplies": [],
+      "minimumWidth": 613,
+      "root": {
+        "marginLeft": "0px",
+        "marginInlineStart": "0px",
+        "paddingInlineStart": "0px",
+        "listStyle": "none"
+      },
+      "child": {
+        "marginLeft": "0px",
+        "marginInlineStart": "0px",
+        "paddingInlineStart": "32px",
+        "listStyle": "none"
+      },
+      "wrapper": {
+        "x": 61.5,
+        "right": 706.5,
+        "width": 645,
+        "height": 109369.125
+      },
+      "list": {
+        "x": 61.5,
+        "right": 706.5,
+        "width": 645,
+        "height": 108417.5
+      },
+      "tail": {
+        "x": 93.5,
+        "right": 706.5,
+        "width": 613,
+        "height": 23.375
+      },
+      "tailId": "comment-2520",
+      "tailText": "HISTORICAL TAIL 2500",
+      "tailVisible": true,
+      "body2": true,
+      "query2": true,
+      "privateEmail": false,
+      "avatars": 0,
+      "idsCount": 2500,
+      "idsSHA256": "07d4f30365398794b8f3547243289297c85e87558ac56244f43097e83cb3f2b1",
+      "firstId": 21,
+      "lastId": 2520,
+      "completeOrderMatchesFixture": true
+    },
+    {
+      "file": "source2500-depth3-1440.json",
+      "url": "http://127.0.0.1:5180/posts/source-historical-thread/?page=2&query-4-page=2&commentPage=1",
+      "viewport": 1440,
+      "maxDepth": 3,
+      "isLarge": true,
+      "documentWidth": 1440,
+      "rootIds": [
+        21
+      ],
+      "replies": [],
+      "expectedReplies": [],
+      "minimumWidth": 581,
+      "root": {
+        "marginLeft": "0px",
+        "marginInlineStart": "0px",
+        "paddingInlineStart": "0px",
+        "listStyle": "none"
+      },
+      "child": {
+        "marginLeft": "0px",
+        "marginInlineStart": "0px",
+        "paddingInlineStart": "32px",
+        "listStyle": "none"
+      },
+      "wrapper": {
+        "x": 397.5,
+        "right": 1042.5,
+        "width": 645,
+        "height": 113073.6875
+      },
+      "list": {
+        "x": 397.5,
+        "right": 1042.5,
+        "width": 645,
+        "height": 112089.375
+      },
+      "tail": {
+        "x": 461.5,
+        "right": 1042.5,
+        "width": 581,
+        "height": 24.84375
+      },
+      "tailId": "comment-2520",
+      "tailText": "HISTORICAL TAIL 2500",
+      "tailVisible": true,
+      "body2": true,
+      "query2": true,
+      "privateEmail": false,
+      "avatars": 0,
+      "idsCount": 2500,
+      "idsSHA256": "07d4f30365398794b8f3547243289297c85e87558ac56244f43097e83cb3f2b1",
+      "firstId": 21,
+      "lastId": 2520,
+      "completeOrderMatchesFixture": true
+    },
+    {
+      "file": "source2500-depth3-375.json",
+      "url": "http://127.0.0.1:5180/posts/source-historical-thread/?page=2&query-4-page=2&commentPage=1",
+      "viewport": 375,
+      "maxDepth": 3,
+      "isLarge": true,
+      "documentWidth": 375,
+      "rootIds": [
+        21
+      ],
+      "replies": [],
+      "expectedReplies": [],
+      "minimumWidth": 283,
+      "root": {
+        "marginLeft": "0px",
+        "marginInlineStart": "0px",
+        "paddingInlineStart": "0px",
+        "listStyle": "none"
+      },
+      "child": {
+        "marginLeft": "0px",
+        "marginInlineStart": "0px",
+        "paddingInlineStart": "16px",
+        "listStyle": "none"
+      },
+      "wrapper": {
+        "x": 30,
+        "right": 345,
+        "width": 315,
+        "height": 107318.25
+      },
+      "list": {
+        "x": 30,
+        "right": 345,
+        "width": 315,
+        "height": 106308.125
+      },
+      "tail": {
+        "x": 62,
+        "right": 345,
+        "width": 283,
+        "height": 22.53125
+      },
+      "tailId": "comment-2520",
+      "tailText": "HISTORICAL TAIL 2500",
+      "tailVisible": true,
+      "body2": true,
+      "query2": true,
+      "privateEmail": false,
+      "avatars": 0,
+      "idsCount": 2500,
+      "idsSHA256": "07d4f30365398794b8f3547243289297c85e87558ac56244f43097e83cb3f2b1",
+      "firstId": 21,
+      "lastId": 2520,
+      "completeOrderMatchesFixture": true
+    },
+    {
+      "file": "source2500-depth3-768.json",
+      "url": "http://127.0.0.1:5180/posts/source-historical-thread/?page=2&query-4-page=2&commentPage=1",
+      "viewport": 768,
+      "maxDepth": 3,
+      "isLarge": true,
+      "documentWidth": 768,
+      "rootIds": [
+        21
+      ],
+      "replies": [],
+      "expectedReplies": [],
+      "minimumWidth": 581,
+      "root": {
+        "marginLeft": "0px",
+        "marginInlineStart": "0px",
+        "paddingInlineStart": "0px",
+        "listStyle": "none"
+      },
+      "child": {
+        "marginLeft": "0px",
+        "marginInlineStart": "0px",
+        "paddingInlineStart": "32px",
+        "listStyle": "none"
+      },
+      "wrapper": {
+        "x": 61.5,
+        "right": 706.5,
+        "width": 645,
+        "height": 109369.125
+      },
+      "list": {
+        "x": 61.5,
+        "right": 706.5,
+        "width": 645,
+        "height": 108417.5
+      },
+      "tail": {
+        "x": 125.5,
+        "right": 706.5,
+        "width": 581,
+        "height": 23.375
+      },
+      "tailId": "comment-2520",
+      "tailText": "HISTORICAL TAIL 2500",
+      "tailVisible": true,
+      "body2": true,
+      "query2": true,
+      "privateEmail": false,
+      "avatars": 0,
+      "idsCount": 2500,
+      "idsSHA256": "07d4f30365398794b8f3547243289297c85e87558ac56244f43097e83cb3f2b1",
+      "firstId": 21,
+      "lastId": 2520,
+      "completeOrderMatchesFixture": true
+    }
+  ],
+  "otherProofs": {
+    "after-375.json": {
+      "width": 375,
+      "scroll": 375,
+      "root": "0px",
+      "child": "0px",
+      "childPadding": "16px",
+      "tail": {
+        "x": 174,
+        "y": 2932.34375,
+        "width": 171,
+        "height": 106.71875,
+        "top": 2932.34375,
+        "right": 345,
+        "bottom": 3039.0625,
+        "left": 174
+      }
+    },
+    "before-375.json": {
+      "width": 375,
+      "scroll": 628,
+      "root": "36.3438px",
+      "child": "36.3438px",
+      "childPadding": "16px",
+      "ids": [
+        "comment-2",
+        "comment-3",
+        "comment-4",
+        "comment-5",
+        "comment-6",
+        "comment-7",
+        "comment-8",
+        "comment-9",
+        "comment-10",
+        "comment-11",
+        "comment-12",
+        "comment-13",
+        "comment-14",
+        "comment-15",
+        "comment-16",
+        "comment-17",
+        "comment-18"
+      ]
+    },
+    "classic-1440.json": {
+      "viewport": 1440,
+      "documentWidth": 1440,
+      "ids": [
+        "comment-2",
+        "comment-3",
+        "comment-4",
+        "comment-5",
+        "comment-6",
+        "comment-7",
+        "comment-8",
+        "comment-9",
+        "comment-10",
+        "comment-11",
+        "comment-12",
+        "comment-13",
+        "comment-14",
+        "comment-15",
+        "comment-16",
+        "comment-17",
+        "comment-18"
+      ],
+      "minimumWidth": 304,
+      "replyLabels": [
+        "Reply to RootA",
+        "Reply to DeepLevel1",
+        "Reply to DeepLevel2",
+        "Reply to DeepLevel3",
+        "Reply to DeepLevel4",
+        "Reply to DeepLevel5",
+        "Reply to DeepLevel6",
+        "Reply to DeepLevel7",
+        "Reply to DeepLevel8",
+        "Reply to RootB"
+      ],
+      "privateEmail": false,
+      "avatars": 0,
+      "body2": true
+    },
+    "classic-375.json": {
+      "viewport": 375,
+      "documentWidth": 375,
+      "ids": [
+        "comment-2",
+        "comment-3",
+        "comment-4",
+        "comment-5",
+        "comment-6",
+        "comment-7",
+        "comment-8",
+        "comment-9",
+        "comment-10",
+        "comment-11",
+        "comment-12",
+        "comment-13",
+        "comment-14",
+        "comment-15",
+        "comment-16",
+        "comment-17",
+        "comment-18"
+      ],
+      "minimumWidth": 165,
+      "replyLabels": [
+        "Reply to RootA",
+        "Reply to DeepLevel1",
+        "Reply to DeepLevel2",
+        "Reply to DeepLevel3",
+        "Reply to DeepLevel4",
+        "Reply to DeepLevel5",
+        "Reply to DeepLevel6",
+        "Reply to DeepLevel7",
+        "Reply to DeepLevel8",
+        "Reply to RootB"
+      ],
+      "privateEmail": false,
+      "avatars": 0,
+      "body2": true
+    },
+    "classic-768.json": {
+      "viewport": 768,
+      "documentWidth": 768,
+      "ids": [
+        "comment-2",
+        "comment-3",
+        "comment-4",
+        "comment-5",
+        "comment-6",
+        "comment-7",
+        "comment-8",
+        "comment-9",
+        "comment-10",
+        "comment-11",
+        "comment-12",
+        "comment-13",
+        "comment-14",
+        "comment-15",
+        "comment-16",
+        "comment-17",
+        "comment-18"
+      ],
+      "minimumWidth": 295.21875,
+      "replyLabels": [
+        "Reply to RootA",
+        "Reply to DeepLevel1",
+        "Reply to DeepLevel2",
+        "Reply to DeepLevel3",
+        "Reply to DeepLevel4",
+        "Reply to DeepLevel5",
+        "Reply to DeepLevel6",
+        "Reply to DeepLevel7",
+        "Reply to DeepLevel8",
+        "Reply to RootB"
+      ],
+      "privateEmail": false,
+      "avatars": 0,
+      "body2": true
+    },
+    "paging.json": {
+      "ids": [
+        "comment-19"
+      ],
+      "url": "http://127.0.0.1:5180/posts/source-threaded-discussion/?page=2&query-4-page=2&commentPage=2",
+      "body2": true,
+      "query2": true,
+      "links": [
+        "/posts/source-threaded-discussion/?page=2&query-4-page=2&commentPage=1#comments"
+      ]
+    },
+    "reply-depth10-1440.json": {
+      "viewport": 1440,
+      "focused": true,
+      "parent": "10",
+      "value": "Native source depth draft retained",
+      "url": "http://127.0.0.1:5180/posts/source-threaded-discussion/?page=2&query-4-page=2&commentPage=1",
+      "scrollWidth": 1440
+    },
+    "reply-depth10-375.json": {
+      "viewport": 375,
+      "focused": true,
+      "parent": "10",
+      "value": "Native source depth draft retained",
+      "url": "http://127.0.0.1:5180/posts/source-threaded-discussion/?page=2&query-4-page=2&commentPage=1",
+      "scrollWidth": 375
+    },
+    "reply-depth10-768.json": {
+      "viewport": 768,
+      "focused": true,
+      "parent": "10",
+      "value": "Native source depth draft retained",
+      "url": "http://127.0.0.1:5180/posts/source-threaded-discussion/?page=2&query-4-page=2&commentPage=1",
+      "scrollWidth": 768
+    },
+    "reply-depth2-375.json": {
+      "viewport": 375,
+      "maxDepth": 2,
+      "focused": true,
+      "parent": "2",
+      "value": "Depth 2 draft retained",
+      "url": "http://127.0.0.1:5180/posts/source-threaded-discussion/?page=2&query-4-page=2&commentPage=1",
+      "scrollWidth": 375
+    },
+    "reply-depth3-375.json": {
+      "viewport": 375,
+      "maxDepth": 3,
+      "focused": true,
+      "parent": "3",
+      "value": "Depth 3 draft retained",
+      "url": "http://127.0.0.1:5180/posts/source-threaded-discussion/?page=2&query-4-page=2&commentPage=1",
+      "scrollWidth": 375
+    }
+  }
+}
