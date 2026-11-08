@@ -54,6 +54,13 @@ relation reads, and embedding does not recurse through attached posts.
 not guess raw-original or historical backup sizes. Native mutations validate
 embedding/field selectors before uploads, metadata writes or copy staging, so
 a malformed projection cannot report an error after committing a change.
+The source Attached-to control may send its read-only `_embedded` preview with
+the actual `post` edit. That preview is accepted only within 32768 serialized
+bytes, 512 values and eight levels, checked before discarding all its content
+(including prototype-shaped keys). The real `post` field still receives normal
+attachment authority checks; responses rebuild relations from authorized rows.
+Contributor checks retain the parent's pre-trash status, so formerly published
+trashed posts cannot acquire draft-like visibility through this projection.
 
 Actual API checks cover raw/edit mutation roundtrips, escaped literal captions,
 public versus author/subscriber reads, filters and bracket IDs, parent0,

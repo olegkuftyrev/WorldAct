@@ -5,7 +5,7 @@ import { pool } from "../server/db.js";
 import { parseHTML } from "linkedom";
 
 const base = process.env.TEST_API_URL!, origin = process.env.APP_ORIGIN!, stamp = "native-rest-" + Date.now().toString(36);
-let admin = "", author = "", subscriber = "", authorId = 0;
+let admin = "", author = "", subscriber = "", contributor = "", authorId = 0;
 const media: any[] = [], accounts: number[] = [], parents: number[] = [];
 async function api(route: string, method = "GET", body?: unknown, cookie = admin) {
   const response = await fetch(base + route, { method, signal: AbortSignal.timeout(12000), headers: { Origin: origin, "Content-Type": "application/json", ...(cookie ? { Cookie: cookie } : {}) }, ...(body === undefined ? {} : { body: JSON.stringify(body) }) });
@@ -20,12 +20,12 @@ async function upload(cookie: string, name: string) {
 before(async () => {
   const signed = await api("/api/auth/login", "POST", { login: process.env.ADMIN_EMAIL, password: process.env.ADMIN_PASSWORD }, ""); assert.equal(signed.response.status, 200);
   admin = signed.response.headers.get("set-cookie")!.split(";")[0];
-  for (const role of ["author", "subscriber"]) {
+  for (const role of ["author", "subscriber", "contributor"]) {
     const password = "Native-media-password-" + stamp, username = stamp + "-" + role;
     const created = await api("/api/users", "POST", { username, email: username + "@example.test", displayName: "Native media " + role, role, password }); assert.equal(created.response.status, 201); accounts.push(created.data.user.id);
     const login = await api("/api/auth/login", "POST", { login: username, password }, ""); assert.equal(login.response.status, 200);
     const cookie = login.response.headers.get("set-cookie")!.split(";")[0];
-    if (role === "author") { author = cookie; authorId = created.data.user.id; } else subscriber = cookie;
+    if (role === "author") { author = cookie; authorId = created.data.user.id; } else if (role === "subscriber") subscriber = cookie; else contributor = cookie;
   }
 });
 after(async () => {
@@ -155,6 +155,41 @@ test("invalid native embedding and field projections fail before metadata writes
     assert.equal((await api(`/wp-json/wp/v2/media/${item.id}?${query}`, "POST", { title: "Must stay unchanged" })).response.status, 400, query.slice(0, 50));
     assert.equal((await api(`/wp-json/wp/v2/media/${item.id}/edit?${query}`, "POST", { src: item.source_url, modifiers: [{ type: "rotate", args: { angle: 90 } }] })).response.status, 400);
     assert.equal(Number((await pool.query("SELECT count(*) AS n FROM media")).rows[0].n), count);
+    assert.equal((await api(`/api/media/${item.id}`)).data.media.title, item.title.raw);
+  }
+});
+
+test("attached-post embedding retains contributor authority across draft-origin versus published-origin trash", async () => {
+  const item = await upload(admin, stamp + "-contributor-parent");
+  const created = await api("/api/posts", "POST", { title: stamp + " contributor trash parent", status: "draft", content: "A body which must never be embedded" }, contributor);
+  assert.equal(created.response.status, 201); const parent = created.data.post; parents.push(parent.id);
+  assert.equal((await api(`/wp-json/wp/v2/media/${item.id}`, "POST", { post: parent.id })).response.status, 200);
+  assert.equal((await api(`/api/posts/${parent.id}`, "PUT", { status: "trash" })).response.status, 200);
+  const draftTrash = await api(`/wp-json/wp/v2/media/${item.id}?_embed=wp:attached-to`, "GET", undefined, contributor);
+  assert.equal(draftTrash.response.status, 200); assert.equal(draftTrash.data._embedded["wp:attached-to"][0].id, parent.id);
+  assert.equal((await api(`/api/posts/${parent.id}`, "PUT", { status: "publish" })).response.status, 200);
+  assert.equal((await api(`/api/posts/${parent.id}`, "PUT", { status: "trash" })).response.status, 200);
+  assert.equal((await api(`/api/posts/${parent.id}`, "GET", undefined, contributor)).response.status, 403);
+  const publishedTrash = await api(`/wp-json/wp/v2/media/${item.id}?_embed=wp:attached-to`, "GET", undefined, contributor);
+  assert.equal(publishedTrash.response.status, 200); assert.equal(Object.hasOwn(publishedTrash.data, "_embedded"), false);
+  assert.ok(!JSON.stringify(publishedTrash.data).includes(parent.title));
+});
+
+test("native Attached-to saves ignore bounded read-only previews and authorize only the actual post field", async () => {
+  const item = await upload(author, stamp + "-readonly-relations");
+  const own = await api("/api/posts", "POST", { title: stamp + " actual attached post", status: "draft", content: "A real parent" }, author);
+  assert.equal(own.response.status, 201); parents.push(own.data.post.id);
+  const preview = { author: [{ id: 2147483000, name: "Forged author must stay ignored" }], "wp:attached-to": [{ id: 2147483000, type: "post", title: { raw: "Forged parent", rendered: "Forged parent" } }] };
+  const saved = await api(`/wp-json/wp/v2/media/${item.id}?context=edit&_embed=author,wp:attached-to`, "POST", { id: item.id, post: own.data.post.id, _embedded: preview }, author);
+  assert.equal(saved.response.status, 200, JSON.stringify(saved.data)); assert.equal(saved.data.post, own.data.post.id);
+  assert.equal(saved.data._embedded.author[0].id, authorId); assert.equal(saved.data._embedded["wp:attached-to"][0].title.rendered, own.data.post.title);
+  assert.doesNotMatch(JSON.stringify(saved.data), /Forged author|Forged parent/);
+  const foreign = await api("/api/posts", "POST", { title: stamp + " foreign attached post", status: "draft", content: "Foreign parent" });
+  assert.equal(foreign.response.status, 201); parents.push(foreign.data.post.id);
+  assert.equal((await api(`/wp-json/wp/v2/media/${item.id}`, "POST", { id: item.id, post: foreign.data.post.id, _embedded: { "wp:attached-to": [{ id: own.data.post.id }] } }, author)).response.status, 403);
+  let deep: unknown = "ignored"; for (let index = 0; index < 10; index++) deep = { nested: deep };
+  for (const _embedded of [null, [], { escaped: "\\".repeat(17000) }, { author: [{ name: "x".repeat(32769) }] }, { values: Array(513).fill(false) }, { deep }, JSON.parse('{"__proto__":{"ignored":"' + "x".repeat(32769) + '"}}')]) {
+    assert.equal((await api(`/wp-json/wp/v2/media/${item.id}`, "POST", { title: "Must not change", _embedded }, author)).response.status, 400);
     assert.equal((await api(`/api/media/${item.id}`)).data.media.title, item.title.raw);
   }
 });

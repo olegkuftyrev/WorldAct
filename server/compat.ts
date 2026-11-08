@@ -43,6 +43,7 @@ import { z } from "zod";
 import { projectRestFields } from "./rest-fields.js";
 import { mediaCaptionHTML, renderedMediaCaption, mediaCaptionSchema } from "./media-captions.js";
 import { avatarURL } from "./avatars.js";
+import { readOnlyMediaEmbedsSchema } from "./media-native-input.js";
 import { readTermQuery } from "./term-blocks.js";
 import { assertPostAccess } from "./core.js";
 import { postFormats } from "../shared/post-formats.js";
@@ -850,7 +851,7 @@ async function mediaEmbeddings(item: any, req: AuthRequest, settings: Awaited<Re
     const parent = await embeddedRecord(req, `media-parent:${parentId}`, async () => {
       // Context=embed exposes fixed relation metadata, never a post body. A
       // public attachment must not disclose an unreadable draft/private title.
-      const post = (await pool.query(`SELECT ${postMetadataFields} FROM posts p WHERE p.id=$1`, [parentId])).rows[0];
+      const post = (await pool.query(`SELECT ${postMetadataFields},p.pre_trash_status AS "preTrashStatus" FROM posts p WHERE p.id=$1`, [parentId])).rows[0];
       if (!post || (post.status !== "publish" && !canEdit(req.user, post))) return null;
       return { id: post.id, type: post.type, slug: post.slug,
         link: absolute(await postPermalink(post, settings), settings.siteUrl),
@@ -969,6 +970,7 @@ router.post("/wp-json/wp/v2/media/:id", async (req: AuthRequest, res) => {
   const input = z
     .object({
       id: z.number().int().positive().max(2147483647).optional(),
+      _embedded: readOnlyMediaEmbedsSchema.optional(),
       title: z.string().optional(),
       caption: mediaCaptionSchema.optional(),
       description:z.string().optional(),
