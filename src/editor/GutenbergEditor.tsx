@@ -80,6 +80,7 @@ import { footnoteEntityBoundaries } from "./footnoteScope";
 import type { SerializedBlock } from "./types";
 import { persistentBlockAttributes } from "./blockAttributes";
 import { parseEditorSource } from "./editorSource";
+import { rebaseNativeImageSource, type NativeImageChange } from "./media/sourceRebase";
 import { editorBackgroundSettings, editorDimensionSettings } from "./backgroundSettings";
 import { editorSelectorContext, isNavigationOverlayEntity, ownsEntityEdit, type EditorEntityContext } from "./entityContext";
 import { overlayPickerReference } from "./navigationOverlayReference";
@@ -1090,6 +1091,7 @@ const GutenbergSession = forwardRef<
   const [source, setSource] = useState(sourceRef.current);
   const codeMode = props.preferences?.editorMode === "text";
   const codeModeRef = useRef(codeMode); codeModeRef.current = codeMode;
+  const nativeUndoDepth = useRef(0);
   const codeInput = useRef<HTMLTextAreaElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const onChangeRef = useRef(props.onChange);
@@ -1158,7 +1160,7 @@ const GutenbergSession = forwardRef<
 
   const emit = useCallback(
     (next: Block[], kind: HistoryMode, noteSnapshot?:Footnote[], rawSource?:string) => {
-      if (codeModeRef.current && rawSource === undefined && kind !== "history") return;
+      if (nativeUndoDepth.current || (codeModeRef.current && rawSource === undefined && kind !== "history")) return;
       let footnotes=noteSnapshot || footnotesRef.current;
       if(metadataRef.current) {
         try {
@@ -1459,7 +1461,23 @@ const GutenbergSession = forwardRef<
     [upload, reportError],
   );
 
-  const nativeMedia = useNativeMediaEditor(reportError, onMediaUpdate, canvasGeneration);
+  const rebaseNativeMedia = useCallback((change: NativeImageChange) => {
+    const rebased=rebaseNativeImageSource(sourceRef.current,blocksRef.current,change);
+    if(rebased.changed)emit(rebased.blocks,"change",footnotesRef.current,rebased.source);
+    return rebased.changed;
+  },[emit]);
+  const nativeMediaDocument = useMemo(() => ({
+    update: (change: NativeImageChange) => { if(codeModeRef.current)rebaseNativeMedia(change); },
+    undo: (runNativeUndo: () => NativeImageChange | undefined) => {
+      let change: NativeImageChange | undefined;
+      nativeUndoDepth.current++;
+      try { change=runNativeUndo(); } finally { nativeUndoDepth.current--; }
+      // The genuine callback also touches the native store. Reconcile through the
+      // existing controlled value even if a deleted/replaced owner rejects it.
+      if(!change || !rebaseNativeMedia(change))setBlocks([...blocksRef.current]);
+    },
+  }),[rebaseNativeMedia]);
+  const nativeMedia = useNativeMediaEditor(reportError, onMediaUpdate, canvasGeneration, nativeMediaDocument);
   const settings = useMemo(
     () => ({
       allowedBlockTypes: (
@@ -1628,6 +1646,7 @@ const GutenbergSession = forwardRef<
           onChange={(next, options) => emit(next, options?.undoIgnore ? "ignore" : "change")}
           settings={settings}
         >
+          {nativeMedia.bridge}
           <EditorTypingObserver onChange={props.onTypingChange}/>
           <EntityEditsObserver
             postId={props.postId}
@@ -1699,7 +1718,7 @@ const GutenbergSession = forwardRef<
                   <BlockToolbar hideDragHandle />
                 </div>}
               </div>
-              {codeMode && <div className="worldact-code-editor"><div className="worldact-code-editor-header"><span>Editing code</span><Button variant="tertiary" onClick={() => props.onModeChange?.("visual")}>Exit code editor</Button></div><label className="screen-reader-text" htmlFor="worldact-post-content">Type text or HTML</label><textarea id="worldact-post-content" ref={codeInput} className="editor-post-text-editor" aria-label="Type text or HTML" autoComplete="off" spellCheck={false} dir="auto" value={source} placeholder="Start writing with text or HTML" onChange={event => { emit(parseEditorSource(event.target.value), "input", undefined, event.target.value); props.onTypingChange?.(true); }} onKeyDown={event => { if ((event.metaKey || event.ctrlKey) && !event.altKey && ["z", "y"].includes(event.key.toLowerCase())) { event.preventDefault(); travel(event.shiftKey || event.key.toLowerCase() === "y" ? 1 : -1); } }} /></div>}
+              {codeMode && <div className="worldact-code-editor"><div className="worldact-code-editor-header"><span>Editing code</span><Button variant="tertiary" onClick={() => props.onModeChange?.("visual")}>Exit code editor</Button></div><label className="screen-reader-text" htmlFor="worldact-post-content">Type text or HTML</label><textarea id="worldact-post-content" ref={codeInput} className="editor-post-text-editor" aria-label="Type text or HTML" autoComplete="off" spellCheck={false} dir="auto" value={source} placeholder="Start writing with text or HTML" onChange={event => { emit(parseEditorSource(event.target.value, blocksRef.current), "input", undefined, event.target.value); props.onTypingChange?.(true); }} onKeyDown={event => { if ((event.metaKey || event.ctrlKey) && !event.altKey && ["z", "y"].includes(event.key.toLowerCase())) { event.preventDefault(); travel(event.shiftKey || event.key.toLowerCase() === "y" ? 1 : -1); } }} /></div>}
               <div className="worldact-gutenberg-workspace" hidden={codeMode}>
                 {(props.inserterOpen || props.listViewOpen) && (
                   <aside

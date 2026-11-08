@@ -1,7 +1,7 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import apiFetch from "@wordpress/api-fetch";
-import { createRegistry, dispatch, RegistryProvider, useRegistry } from "@wordpress/data";
-import { BlockEditorProvider, privateApis as blockEditorPrivateApis, useSettings } from "@wordpress/block-editor";
+import { createRegistry, dispatch, RegistryProvider, useRegistry, type DataRegistry } from "@wordpress/data";
+import { BlockEditorProvider, privateApis as blockEditorPrivateApis, useSettings, store as blockEditorStore } from "@wordpress/block-editor";
 import { privateApis as mediaEditorPrivateApis } from "@wordpress/media-editor";
 import { store as coreDataStore } from "@wordpress/core-data";
 import { SnackbarNotices, store as noticesStore } from "@wordpress/notices";
@@ -20,6 +20,23 @@ import "../../../node_modules/@wordpress/media-fields/build-style/style.css";
 import "@wordpress/notices/build-style/style.css";
 import "@wordpress/dataviews/build-style/style.css";
 import "./native-media.css";
+import { changedImageAttributes, imageAttributes, type ImageAttributes, type NativeImageChange } from "./sourceRebase";
+import type { Block } from "@wordpress/blocks";
+
+type ImageSnapshot = Map<string, ImageAttributes>;
+export type NativeMediaDocument = {
+  update: (change: NativeImageChange) => void;
+  undo: (runNativeUndo: () => NativeImageChange | undefined) => void;
+};
+function snapshot(registry: DataRegistry | null): ImageSnapshot {
+  const result: ImageSnapshot = new Map();
+  const visit = (blocks: Block[]) => { for (const block of blocks) { const attributes=imageAttributes(block); if(attributes)result.set(block.clientId,attributes); visit(block.innerBlocks || []); } };
+  if(registry)visit(registry.select(blockEditorStore).getBlocks());
+  return result;
+}
+function NativeDocumentBridge({ connect }: { connect: (registry: DataRegistry) => () => void }) {
+  const registry=useRegistry(); useLayoutEffect(()=>connect(registry),[connect,registry]); return null;
+}
 
 const { store, MediaEditorModal } = unlock(mediaEditorPrivateApis);
 const { mediaEditKey, openMediaEditorModalKey } = unlock(blockEditorPrivateApis);
@@ -56,7 +73,7 @@ type Opening = {
   dispose: () => void;
 };
 
-export function useNativeMediaEditor(onError: (message: string) => void, onMediaUpdate: (item: Media) => void, resetKey: number) {
+export function useNativeMediaEditor(onError: (message: string) => void, onMediaUpdate: (item: Media) => void, resetKey: number, document?: NativeMediaDocument) {
   const parentRegistry = useRegistry();
   const mounted = useRef(true);
   const pending = useRef<AbortController | null>(null);
@@ -64,6 +81,8 @@ export function useNativeMediaEditor(onError: (message: string) => void, onMedia
   const sequence = useRef(0);
   const entries = useRef(new Set<Opening>());
   const activeRef = useRef<Opening | null>(null);
+  const documentRegistry = useRef<DataRegistry | null>(null), documentOwner = useRef(document); documentOwner.current=document;
+  const connectDocument = useCallback((registry: DataRegistry) => { documentRegistry.current=registry; return ()=>{ if(documentRegistry.current===registry)documentRegistry.current=null; }; },[]);
   const [active, setActive] = useState<Opening | null>(null);
   const [openings, setOpenings] = useState<Opening[]>([]);
 
@@ -138,10 +157,17 @@ export function useNativeMediaEditor(onError: (message: string) => void, onMedia
         if (entry.closed && !(registry.select(noticesStore).getNotices() || []).length) remove(entry);
       };
       entry.unsubscribe = registry.subscribe(() => queueMicrotask(removeWhenEmpty), noticesStore);
+      const canvasRegistry=documentRegistry.current;
+      let saved: {clientId:string;after:ImageAttributes} | undefined;
       entry.owner.open({
         ...options,
-        onUpdate: update => {
-          const result = options.onUpdate?.(update);
+        onUpdate: async update => {
+          const before=snapshot(canvasRegistry);
+          const result = await options.onUpdate?.(update);
+          if(!mounted.current || entry.retired)return result;
+          const after=snapshot(canvasRegistry);
+          const changed=[...after].filter(([clientId,attributes])=>before.get(clientId)?.id===options.id && attributes.id===update.id && Object.keys(changedImageAttributes(before.get(clientId)!,attributes)).length);
+          if(changed.length===1){ const [clientId,attributes]=changed[0]; saved={clientId,after:attributes};documentOwner.current?.update({clientId,expected:before.get(clientId)!,changes:changedImageAttributes(before.get(clientId)!,attributes)}); }
           const refresh = new AbortController();
           refreshes.current.add(refresh);
           // The real React picker also needs newly created attachments and
@@ -153,6 +179,17 @@ export function useNativeMediaEditor(onError: (message: string) => void, onMedia
             .finally(() => refreshes.current.delete(refresh));
           return result;
         },
+        onUndo: options.onUndo ? () => {
+          if(!mounted.current || entry.retired)return;
+          const run=()=>{
+            const before=snapshot(canvasRegistry); options.onUndo!(); const after=snapshot(canvasRegistry);
+            if(!saved)return;
+            const original=before.get(saved.clientId),restored=after.get(saved.clientId);
+            if(!original || !restored)return;
+            return {clientId:saved.clientId,expected:saved.after,changes:changedImageAttributes(original,restored)};
+          };
+          if(documentOwner.current)documentOwner.current.undo(run);else run();
+        } : undefined,
         onClose: () => {
           if (entry.retired) return;
           entry.closed = true;
@@ -179,6 +216,7 @@ export function useNativeMediaEditor(onError: (message: string) => void, onMedia
     [openMediaEditorModalKey]: open,
   }), [open]);
   return {
+    bridge: <NativeDocumentBridge connect={connectDocument}/>,
     settings,
     modal: active ? <NativeMediaModalContent key={active.key} registry={active.registry} /> : null,
     notices: <div className="worldact-native-media-notice-stack">{openings.map(entry =>
