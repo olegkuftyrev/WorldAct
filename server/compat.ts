@@ -247,33 +247,21 @@ router.get(["/comments/feed", "/comments/feed/"], async (req, res) => {
   });
   res.type("application/rss+xml").send(xml);
 });
-router.get(["/sitemap.xml", "/wp-sitemap.xml"], async (_req, res) => {
-  const settings = await getSettings();
-  if (settings.discourageSearchEngines) {
-    res.setHeader("X-Robots-Tag", "noindex, nofollow");
-    res
-      .type("application/xml")
-      .send(
-        '<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"/>',
-      );
-    return;
-  }
-  const posts = (
-    await pool.query(
-      `SELECT ${postMetadataFields} FROM posts p WHERE p.status='publish' ORDER BY p.id LIMIT 50000`,
-    )
-  ).rows;
-  const urls = await Promise.all(
-    posts.map(
-      async (p) =>
-        `<url><loc>${esc(absolute(await postPermalink(p, settings), settings.siteUrl))}</loc><lastmod>${iso(p.updatedAt)}</lastmod></url>`,
-    ),
-  );
-  res
-    .type("application/xml")
-    .send(
-      `<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"><url><loc>${esc(settings.siteUrl)}</loc></url>${urls.join("")}</urlset>`,
-    );
+router.get(["/sitemap.xml", "/wp-sitemap.xml"], async (req, res) => {
+  const xml=await completePublicRead(postAccessReader(req),async reader=>{
+    const settings=await getSettings();
+    if(settings.discourageSearchEngines){
+      res.setHeader("X-Robots-Tag","noindex, nofollow");
+      return '<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"/>';
+    }
+    const posts=(await pool.query(`SELECT ${postMetadataFields} FROM posts p WHERE p.status='publish' ORDER BY p.id LIMIT 50000`)).rows;
+    const urls=await settledPublicReads(posts.map(async post=>{
+      observePublicPost(reader,post,false);
+      return `<url><loc>${esc(absolute(await postPermalink(post,settings),settings.siteUrl))}</loc><lastmod>${iso(post.updatedAt)}</lastmod></url>`;
+    }));
+    return `<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"><url><loc>${esc(settings.siteUrl)}</loc></url>${urls.join("")}</urlset>`;
+  });
+  res.type("application/xml").send(xml);
 });
 router.get("/robots.txt", async (_req, res) => {
   const settings = await getSettings();
@@ -815,7 +803,7 @@ function mediaEmbedNames(req: Request): Set<string> {
   mediaEmbedRequests.set(req, selected);
   return selected;
 }
-async function mediaEmbeddings(item: any, req: AuthRequest, settings: Awaited<ReturnType<typeof getSettings>>) {
+async function mediaEmbeddings(item: any, req: AuthRequest, settings: Awaited<ReturnType<typeof getSettings>>,reader:NonNullable<RenderOptions["canReadProtectedPost"]>) {
   const names = mediaEmbedNames(req), embedded: Record<string, any[]> = {};
   const authorId = item.authorId || item.author_id;
   if (authorId && names.has("author")) {
@@ -839,6 +827,7 @@ async function mediaEmbeddings(item: any, req: AuthRequest, settings: Awaited<Re
       // public attachment must not disclose an unreadable draft/private title.
       const post = (await pool.query(`SELECT ${postMetadataFields},p.pre_trash_status AS "preTrashStatus" FROM posts p WHERE p.id=$1`, [parentId])).rows[0];
       if (!post || (post.status !== "publish" && !canEdit(req.user, post))) return null;
+      if(post.status==="publish")observePublicPost(reader,post,false);
       return { id: post.id, type: post.type, slug: post.slug,
         link: absolute(await postPermalink(post, settings), settings.siteUrl),
         title: { rendered: esc(post.title) } };
@@ -847,7 +836,12 @@ async function mediaEmbeddings(item: any, req: AuthRequest, settings: Awaited<Re
   }
   return Object.keys(embedded).length ? { _embedded: embedded } : {};
 }
-async function wpMedia(item: any, edit = false, req?: AuthRequest) {
+async function wpMedia(item:any,edit=false,req?:AuthRequest,reader?:NonNullable<RenderOptions["canReadProtectedPost"]>):Promise<any>{
+  if(req && !reader)return completePublicRead(postAccessReader(req),async current=>{
+    // The request cache must not carry a retired parent DTO into a new attempt.
+    embeddedRecords.delete(req);
+    return wpMedia(item,edit,req,current);
+  });
   if (req) mediaEmbedNames(req);
   const s = req ? await embeddedRecord(req, "media-settings", () => getSettings()) : await getSettings(),
     url = absolute(item.url || "/uploads/" + item.filename, s.siteUrl),
@@ -889,10 +883,12 @@ async function wpMedia(item: any, edit = false, req?: AuthRequest) {
     post: item.attachedPostId || item.attached_post_id || 0,
     comment_status:item.commentStatus || item.comment_status || "closed",
     source_url: url,
-    ...(req ? await mediaEmbeddings(item, req, s) : {}),
+    ...(req ? await mediaEmbeddings(item, req, s,reader!) : {}),
   };
 }
 router.get("/wp-json/wp/v2/media", async (req: AuthRequest, res) => {
+  const output=await completePublicRead(postAccessReader(req),async reader=>{
+  embeddedRecords.delete(req);
   const edit = mediaContext(req) === "edit";
   const user = edit ? requireMediaEditContext(req) : undefined;
   const owner = user?.role === "author" ? user.id : null;
@@ -928,9 +924,13 @@ router.get("/wp-json/wp/v2/media", async (req: AuthRequest, res) => {
       values,
     )
   ).rows;
-  res.json(wpFields(req, await Promise.all(rows.map(item => wpMedia(item, edit, req)))));
+  return wpFields(req, await settledPublicReads(rows.map(item => wpMedia(item, edit, req,reader))));
+  });
+  res.json(output);
 });
 router.get("/wp-json/wp/v2/media/:id", async (req: AuthRequest, res) => {
+  const output=await completePublicRead(postAccessReader(req),async reader=>{
+  embeddedRecords.delete(req);
   const edit = mediaContext(req) === "edit";
   if (edit) requireMediaEditContext(req);
   const item = (
@@ -941,7 +941,9 @@ router.get("/wp-json/wp/v2/media/:id", async (req: AuthRequest, res) => {
   ).rows[0];
   if (!item) throw new HttpError(404, "Media not found.");
   if (edit) requireMediaEditContext(req, item);
-  res.json(wpFields(req, await wpMedia(item, edit, req)));
+  return wpFields(req, await wpMedia(item, edit, req,reader));
+  });
+  res.json(output);
 });
 router.post("/wp-json/wp/v2/media", async (req: AuthRequest, res) => {
   needUser(req);
@@ -1342,6 +1344,7 @@ router.delete("/wp-json/wp/v2/comments/:id", async (req: AuthRequest, res) => {
   }
 });
 router.get("/wp-json/wp/v2/search", async (req, res) => {
+  const output=await completePublicRead(postAccessReader(req),async reader=>{
   const search = z.string().max(200).default("").parse(req.query.search),
     args: unknown[] = ["%" + search + "%"];
   const where = "p.status='publish' AND p.title ILIKE $1";
@@ -1355,25 +1358,28 @@ router.get("/wp-json/wp/v2/search", async (req, res) => {
   args.push(perPage, offset);
   const rows = (
       await pool.query(
-        `SELECT ${postFields} FROM posts p JOIN users u ON u.id=p.author_id WHERE ${where} ORDER BY p.published_at DESC,p.id DESC LIMIT $2 OFFSET $3`,
+        `SELECT ${postMetadataFields} FROM posts p WHERE ${where} ORDER BY p.published_at DESC,p.id DESC LIMIT $2 OFFSET $3`,
         args,
       )
     ).rows,
     s = await getSettings();
-  res.json(
-    wpFields(
+  return wpFields(
       req,
-      await Promise.all(
-        rows.map(async (p) => ({
+      await settledPublicReads(
+        rows.map(async (p) => {
+          observePublicPost(reader,p,false);
+          return {
           id: p.id,
           title: p.title,
           url: absolute(await postPermalink(p, s), s.siteUrl),
           type: "post",
           subtype: p.type,
-        })),
+        };
+        }),
       ),
-    ),
-  );
+    );
+  });
+  res.json(output);
 });
 const types = {
   post: {

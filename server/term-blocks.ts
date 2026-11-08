@@ -1,6 +1,7 @@
 import moment from "moment-timezone";
 import type { BlockDatabase, Context, Node, RenderPost, State } from "./block-renderer.js";
 import { postPermalink } from "./permalinks.js";
+import {observePublicPost} from "./public-read-attempt.js";
 import { dateArchivePath, parseDateArchivePath, parseDateArchiveQuery } from "./date-archives.js";
 import { cleanContent, plainText } from "./utils.js";
 
@@ -66,7 +67,9 @@ async function termAncestors(term: RenderTerm, state: State) {
   return ancestors;
 }
 async function loadPage(id: number, state: State): Promise<RenderPost | null> {
-  return cached(state, `breadcrumb-page:${id}`, async () => (await state.db.query('SELECT id,type,title,slug,parent_id AS "parentId",status,published_at AS "publishedAt",created_at AS "createdAt",(password_hash IS NOT NULL) AS "hasPassword" FROM posts WHERE id=$1 AND type=\'page\' AND status=\'publish\'', [id])).rows[0] || null);
+  const page=await cached(state, `breadcrumb-page:${id}`, async () => (await state.db.query('SELECT id,type,title,slug,author_id AS "authorId",parent_id AS "parentId",status,published_at AS "publishedAt",created_at AS "createdAt",(password_hash IS NOT NULL) AS "hasPassword" FROM posts WHERE id=$1 AND type=\'page\' AND status=\'publish\'', [id])).rows[0] || null);
+  if(page && !state.options.preview)observePublicPost(state.options.canReadProtectedPost,page,false);
+  return page;
 }
 const safeURL = (value: unknown) => /^(?:https?:\/\/|\/(?!\/)|#)/i.test(String(value ?? "")) && !/[\u0000-\u0020<>"']/.test(String(value)) ? String(value) : "";
 type Crumb = { label: string; url?: string };
@@ -74,6 +77,7 @@ async function breadcrumbs(node: Node, context: Context, state: State, attribute
   const a = node.attrs, query = state.options.query || {}, path = (state.options.requestPath || "/").split("?")[0], template = state.options.templateSlug || "";
   const post = context.post, search = String(query.search || query.s || ""), date = parseDateArchiveQuery(query) || parseDateArchivePath(path);
   const term = await archiveTerm({ ...context, term: undefined }, state), authorId = int(query.author, 0);
+  if(post && !state.options.preview)observePublicPost(state.options.canReadProtectedPost,post,false);
   const paged = int(query.paged ?? query.page ?? state.options.page, 1), commentPage = int(query.commentPage ?? query.cpage, 1), is404 = template === "404" || query.notFound === "true";
   const archive = Boolean(search || date || term || authorId || is404), front = !archive && (path === "/" || template === "front-page") && (!post || post.id === state.settings.frontPageId || state.settings.frontPageMode === "posts");
   const postsIndex = !archive && state.settings.frontPageMode === "page" && state.settings.postsPageId && (post?.id === state.settings.postsPageId || template === "home");

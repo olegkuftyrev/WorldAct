@@ -9,6 +9,7 @@ import { legacyExcerptSource } from "./legacy-content.js";
 import { excerptText } from "./excerpts.js";
 import { postPermalink } from "./permalinks.js";
 import { protectedPostExcerpt, publicPostTitle } from "./post-passwords.js";
+import {observePublicPost,settledPublicReads} from "./public-read-attempt.js";
 export { FeedError } from "./rss-transport.js";
 
 export type FeedItem = { title: string; link: string; author: string; date: string | null; description: string };
@@ -114,8 +115,13 @@ export async function readInternalFeed(url: URL, state: State): Promise<ParsedFe
   if ((!url.search && url.pathname.replace(/\/$/, "") === home.pathname.replace(/\/$/, "")) || (!url.search && url.pathname === "/")) throw new FeedError("Adding an RSS feed to this site’s homepage is not supported, as it could lead to a loop that slows down your site.");
   const legacyQuery = url.pathname === "/" && url.searchParams.size === 1 && ["rss", "rss2", "atom"].includes(url.searchParams.get("feed") || "");
   if ((!internalPaths.has(url.pathname) || url.search) && !legacyQuery) throw new FeedError("This site URL is not a supported internal feed.");
-  const rows = (await state.db.query(`SELECT p.id,p.type,p.title,p.slug,p.published_at AS "publishedAt",p.created_at AS "createdAt",p.parent_id AS "parentId",p.content,p.raw_content AS "rawContent",p.blocks,p.excerpt,(p.password_hash IS NOT NULL) AS "hasPassword",u.display_name AS "authorName",COALESCE((SELECT json_agg(json_build_object('taxonomy',t.taxonomy,'slug',t.slug) ORDER BY t.name,t.id) FROM post_terms pt JOIN terms t ON t.id=pt.term_id WHERE pt.post_id=p.id),'[]'::json) AS terms FROM posts p JOIN users u ON u.id=p.author_id WHERE p.type='post' AND p.status='publish' ORDER BY p.published_at DESC,p.id DESC LIMIT $1`, [Math.min(200, state.settings.feedItems)])).rows;
-  return { items: await Promise.all(rows.map(async post => ({ title: String(publicPostTitle(post)), author: String(post.authorName || ""), link: new URL(await postPermalink(post, state.settings, state.db), state.settings.siteUrl).href, date: new Date(post.publishedAt || post.createdAt).toISOString(), description: post.hasPassword ? protectedPostExcerpt : String(post.excerpt || excerptText(legacyExcerptSource(post))).slice(0, 400) }))) };
+  const rows = (await state.db.query(`SELECT p.id,p.type,p.title,p.slug,p.author_id AS "authorId",p.published_at AS "publishedAt",p.created_at AS "createdAt",p.parent_id AS "parentId",p.content,p.raw_content AS "rawContent",p.blocks,p.excerpt,(p.password_hash IS NOT NULL) AS "hasPassword",u.display_name AS "authorName",COALESCE((SELECT json_agg(json_build_object('taxonomy',t.taxonomy,'slug',t.slug) ORDER BY t.name,t.id) FROM post_terms pt JOIN terms t ON t.id=pt.term_id WHERE pt.post_id=p.id),'[]'::json) AS terms FROM posts p JOIN users u ON u.id=p.author_id WHERE p.type='post' AND p.status='publish' ORDER BY p.published_at DESC,p.id DESC LIMIT $1`, [Math.min(200, state.settings.feedItems)])).rows;
+  return { items: await settledPublicReads(rows.map(async post => {
+    // Local feeds never forward grants: protected entries expose only the
+    // generic excerpt, while public excerpts carry their complete body policy.
+    if(!state.options.preview)observePublicPost(state.options.canReadProtectedPost,{...post,locked:false},!post.hasPassword);
+    return { title: String(publicPostTitle(post)), author: String(post.authorName || ""), link: new URL(await postPermalink(post, state.settings, state.db), state.settings.siteUrl).href, date: new Date(post.publishedAt || post.createdAt).toISOString(), description: post.hasPassword ? protectedPostExcerpt : String(post.excerpt || excerptText(legacyExcerptSource(post))).slice(0, 400) };
+  })) };
 }
 const inflight = new Map<string, Promise<ParsedFeed>>();
 export type FeedServiceOptions = { transport?: typeof fetchFeedDocument; now?: () => number };

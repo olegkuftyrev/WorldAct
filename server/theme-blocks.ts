@@ -6,6 +6,7 @@ import socialIcons from "../src/theme-source/social-icons.json";
 import { MAX_RENDER_NODES, type Node, type Context, type State } from "./block-renderer.js";
 import { postFields, postMetadataFields } from "./db.js";
 import { postPermalink } from "./permalinks.js";
+import {observePublicPost} from "./public-read-attempt.js";
 import { cleanContent, plainText, HttpError } from "./utils.js";
 import {avatarURL} from "./avatars.js";
 import {canEditPostComments} from "./comment-access.js";
@@ -85,6 +86,7 @@ export async function renderThemeBlock(
     const previous=a.type==="previous",operator=previous?"<":">",order=previous?"DESC":"ASC";
     const next=await cached(state,`post-navigation:${p.id}:${previous}:${a.taxonomy || ""}`,async()=>(await state.db.query(`SELECT ${postMetadataFields} FROM posts p WHERE p.type=$1 AND p.id<>$2 AND p.status='publish' AND (coalesce(p.published_at,p.created_at),p.id)${operator}(SELECT coalesce(current_post.published_at,current_post.created_at),current_post.id FROM posts current_post WHERE current_post.id=$2) ${a.taxonomy?"AND EXISTS(SELECT 1 FROM post_terms current JOIN post_terms related ON related.term_id=current.term_id JOIN terms t ON t.id=current.term_id WHERE current.post_id=$2 AND related.post_id=p.id AND t.taxonomy=$3)":""} ORDER BY coalesce(p.published_at,p.created_at) ${order},p.id ${order} LIMIT 1`,a.taxonomy?[p.type,p.id,a.taxonomy==="post_tag"?"tag":"category"]:[p.type,p.id])).rows[0]);
     if(!next)return "";
+    if(!state.options.preview)observePublicPost(state.options.canReadProtectedPost,next,false);
     const url=await postPermalink(next,state.settings,state.db),title=esc(next.title || "(no title)"),label=esc(a.label || (previous?"Previous Post":"Next Post")),arrow=a.arrow && a.arrow!=="none"?(previous?"← ":" →"):"";
     return `<div${attributes()}>${a.showTitle && !a.linkLabel?`<span class="post-navigation-link__label">${label}</span>`:""}<a href="${esc(url)}" rel="${previous?"prev":"next"}">${previous?arrow:""}${a.showTitle?title:label}${previous?"":arrow}</a></div>`;
   }
