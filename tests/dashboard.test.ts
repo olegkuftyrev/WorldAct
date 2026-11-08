@@ -5,7 +5,7 @@ import { version } from "../package.json";
 const base=process.env.TEST_API_URL!,origin=process.env.APP_ORIGIN!;
 let admin:any,initialSettings:any,adminCookie="",authorCookie="",contributorCookie="",subscriberCookie="";
 const users:number[]=[],posts:number[]=[],ownDrafts:number[]=[],otherDrafts:number[]=[],published:number[]=[],future:number[]=[];
-let contributorPost:number;
+let contributorPost:number,readableContributorPost:number;
 async function login(login:string){
   const r=await fetch(base+"/api/auth/login",{method:"POST",headers:{Origin:origin,"Content-Type":"application/json"},body:JSON.stringify({login,password:process.env.ADMIN_PASSWORD})});assert.equal(r.status,200);return r.headers.get("set-cookie")!.split(";")[0];
 }
@@ -24,7 +24,11 @@ before(async()=>{
   for(let i=0;i<6;i++)await post(admin.id,i%2?"private":"draft","page",old,new Date(Date.now()+20_000+i*1000));
   for(const [owner,days] of [[admin.id,3],[users[0],2],[users[0],1],[users[1],4]])future.push(await post(owner,"future","post",new Date(Date.now()+days*86_400_000)));
   contributorPost=await post(users[1],"publish","post",new Date("2022-01-01T00:00:00Z"));
-  await pool.query("INSERT INTO comments(post_id,author_name,author_email,content,status) VALUES($1,'Private email fixture','private-person@example.test','Comment preview','approved')",[contributorPost]);
+  readableContributorPost=await post(users[1],"publish","post",new Date("2019-01-01T00:00:00Z"));
+  await pool.query("UPDATE posts SET password_hash=NULL WHERE id=$1",[readableContributorPost]);
+  await pool.query("INSERT INTO comments(post_id,author_name,author_email,content,status) VALUES($1,'Private email fixture','private-person@example.test','Readable comment preview','approved')",[readableContributorPost]);
+  // These newer protected comments must be excluded before the five-row limit.
+  for(let i=0;i<6;i++)await pool.query("INSERT INTO comments(post_id,author_name,author_email,content,status,created_at) VALUES($1,'Protected visitor','protected@example.test','PROTECTED-COMMENT-BODY','approved',now()+interval '1 minute')",[contributorPost]);
 });
 after(async()=>{try{await pool.query("DELETE FROM posts WHERE id=ANY($1::int[])",[posts]);await pool.query("DELETE FROM users WHERE id=ANY($1::int[])",[users]);await pool.query("UPDATE settings SET data=data || $1::jsonb WHERE id=1",[JSON.stringify({theme:initialSettings.theme})]);}finally{await pool.end();}});
 
@@ -47,8 +51,10 @@ test("readable publication metadata never exposes bodies and future/draft/commen
   assert.ok(data.recentDrafts.every((row:any)=>row.authorId===users[0]));assert.equal(data.recentDrafts.length,4);
   assert.deepEqual(data.publishingSoon.map((row:any)=>row.id),[future[2],future[1]]);
   const lower=await dashboard(contributorCookie);assert.equal(lower.status,200);assert.deepEqual(lower.publishingSoon,[]);
+  assert.equal(lower.recentComments.length,1);assert.equal(lower.recentComments[0].content,"Readable comment preview");
   assert.equal(lower.recentComments[0].authorEmail,undefined);assert.equal(lower.recentComments[0].userId,undefined);
-  assert.ok(!JSON.stringify(lower).includes("private-person@example.test"));
+  assert.doesNotMatch(JSON.stringify(lower),/private-person@example\.test|PROTECTED-COMMENT-BODY|protected@example\.test/);
+  assert.ok((await dashboard()).recentComments.some((row:any)=>row.content==="PROTECTED-COMMENT-BODY"),"An administrator may edit/read the protected post comments.");
   assert.equal((await dashboard(subscriberCookie)).status,403);assert.equal((await dashboard("")).status,401);
 });
 test("dashboard application and active-theme labels derive from actual registered metadata for all supported themes",async()=>{

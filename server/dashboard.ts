@@ -2,7 +2,7 @@ import { version } from "../package.json";
 import { pool, getSettings, postMetadataFields, commentFields, type User } from "./db.js";
 import { getBundledTheme } from "./themes.js";
 import { withPermalink } from "./permalinks.js";
-import { canEditPostComments } from "./comment-access.js";
+import { canEditPostComments, editableCommentPostsSQL } from "./comment-access.js";
 import { plainText } from "./utils.js";
 
 /** Source dashboard.php uses independent publication, future and own-draft
@@ -10,6 +10,8 @@ import { plainText } from "./utils.js";
 export async function readDashboard(user: User) {
   const own = ["author", "contributor"].includes(user.role), params = own ? [user.id] : [];
   const metadata = `${postMetadataFields},p.scheduled_at AS "scheduledAt"`;
+  const commentParams: unknown[] = [...params];
+  const editableCommentPost = editableCommentPostsSQL(user,value=>{commentParams.push(value);return "$"+commentParams.length;});
   const [counts, legacy, comments, published, scheduled, drafts, settings] = await Promise.all([
     pool.query(`SELECT
       (SELECT count(*)::int FROM posts WHERE type='post' AND status='publish' ${own ? "AND author_id=$1" : ""}) AS posts,
@@ -19,7 +21,9 @@ export async function readDashboard(user: User) {
     // Retained as a metadata-only compatibility field until all clients migrate.
     pool.query(`SELECT ${metadata} FROM posts p WHERE p.status<>'trash' ${own ? "AND p.author_id=$1" : ""} ORDER BY p.updated_at DESC,p.id DESC LIMIT 5`, params),
     pool.query(`SELECT ${commentFields},p.author_id AS "postAuthorId",p.type AS "postType",p.status AS "postStatus",p.pre_trash_status AS "postPreTrashStatus"
-      FROM comments c JOIN posts p ON p.id=c.post_id WHERE c.status NOT IN('trash','spam') ${own ? "AND p.author_id=$1" : ""} ORDER BY c.created_at DESC,c.id DESC LIMIT 5`, params),
+      FROM comments c JOIN posts p ON p.id=c.post_id WHERE c.status NOT IN('trash','spam') ${own ? "AND p.author_id=$1" : ""}
+      AND (${editableCommentPost} OR (p.status='publish' AND p.password_hash IS NULL))
+      ORDER BY c.created_at DESC,c.id DESC LIMIT 5`, commentParams),
     // Published metadata is readable even when another author owns it; no body,
     // blocks, raw source, excerpt, password hash or private draft enters this DTO.
     pool.query(`SELECT ${metadata} FROM posts p WHERE p.type='post' AND p.status='publish' ORDER BY COALESCE(p.published_at,p.created_at) DESC,p.id DESC LIMIT 5`),

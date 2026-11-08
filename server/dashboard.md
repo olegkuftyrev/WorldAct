@@ -18,8 +18,9 @@ hide publication activity or the current user's drafts.
   as a compatibility field and reduced to metadata. New activity/draft widgets
   should use the dedicated arrays above.
 - `recentComments`: the existing five recent non-trash/non-spam comments in the
-  actor's dashboard scope. Account identity and email are removed when the actor
-  cannot edit comments on the underlying post.
+  actor's dashboard scope. Before applying the limit, retain only comments on
+  editable posts or publicly readable published, unprotected posts. Account
+  identity and email are removed when the actor cannot edit the underlying post.
 - `application`: the WorldAct name and the actual package version.
 - `theme`: the active registered theme ID, name and version, including Classic.
 
