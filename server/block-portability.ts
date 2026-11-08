@@ -145,7 +145,7 @@ export function remapImportedBlockReferences(
         for (const values of Object.values(content)) {
           if (!values || typeof values !== "object" || Array.isArray(values)) continue;
           const item = values as Record<string, any>, target = item.values && typeof item.values === "object" && !Array.isArray(item.values) ? item.values : item;
-          if (!Object.hasOwn(target, "id") || !/^[1-9]\d{0,9}$/.test(String(target.id))) continue;
+          if (!Object.hasOwn(target, "id") || !["string", "number"].includes(typeof target.id) || !/^[1-9]\d{0,9}$/.test(String(target.id))) continue;
           const replacement = options.media.get(Number(target.id));
           if (replacement) target.id = replacement;
           else { target.id = 0; warn("Detached missing image id in imported pattern overrides."); }

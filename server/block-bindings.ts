@@ -17,7 +17,7 @@ export type PatternOverrides = Readonly<Record<string, unknown>>;
 const object = (value: unknown): value is Record<string, any> => !!value && typeof value === "object" && !Array.isArray(value);
 const own = (value: object, key: string) => Object.hasOwn(value, key);
 const escape = (value: unknown) => String(value ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]!);
-const id = (value: unknown) => /^(?:[1-9]\d{0,9})$/.test(String(value)) && Number(value) <= 2147483647 ? Number(value) : 0;
+const id = (value: unknown) => (typeof value === "string" || typeof value === "number") && /^(?:[1-9]\d{0,9})$/.test(String(value)) && Number(value) <= 2147483647 ? Number(value) : 0;
 const cached = <T>(state: State, key: string, read: () => Promise<T>): Promise<T> => { if (!state.cache.has(key)) state.cache.set(key, read()); return state.cache.get(key)!; };
 type Value = { value: string | number | boolean; textOnly?: boolean };
 
@@ -108,8 +108,15 @@ function replacement(html: string, offsets: number[], name: string, attribute: s
   let element: any;
   const firstChild = offsets[0] ?? Infinity;
   for (const tag of selector.split(",")) {
-    const visit = (nodes: any[]): any => { for (const node of nodes) { if (typeof node.startIndex !== "number" || node.startIndex >= firstChild) continue; if (node.type === "tag" && node.name === tag) return node; const found = visit(node.children || []); if (found) return found; } };
-    element = visit(parsed.children); if (element) break;
+    const stack: any[] = [];
+    for (let i = parsed.children.length - 1; i >= 0; i--) stack.push(parsed.children[i]);
+    while (stack.length) {
+      const candidate = stack.pop();
+      if (typeof candidate.startIndex !== "number" || candidate.startIndex >= firstChild) continue;
+      if (candidate.type === "tag" && candidate.name === tag) { element = candidate; break; }
+      for (let i = (candidate.children?.length || 0) - 1; i >= 0; i--) stack.push(candidate.children[i]);
+    }
+    if (element) break;
   }
   if (!element) return null;
   const start = element.startIndex, end = openerEnd(html, start); if (end < 0) return null;

@@ -76,6 +76,7 @@ test("post-data uses only source date/modified/link fields, correct navigation i
   const navigation = (id: number, field = "link") => block("navigation-link", { id, kind: "post-type", url: "/fallback/", label: "Link", metadata: { bindings: { url: { source: "core/post-data", args: { field } } } } });
   assert.equal(doc(await renderSiteDocument({ rawContent: navigation(2) }, { db: data.db, post: post(1) })).querySelector("a")!.getAttribute("href"), "/posts/post-2/");
   for (const target of [3, 4]) assert.equal(doc(await renderSiteDocument({ rawContent: navigation(target) }, { db: data.db })).querySelector("a")!.getAttribute("href"), "/fallback/");
+  assert.equal(doc(await renderSiteDocument({ rawContent: block("navigation-link", { id: { toString: "not callable" }, label: "Malformed id", url: "/fallback/", metadata: { bindings: { url: { source: "core/post-data", args: { field: "link" } } } } }) }, { db: data.db })).querySelector("a")!.getAttribute("href"), "/fallback/");
   assert.equal(doc(await renderSiteDocument({ rawContent: navigation(3) }, { db: data.db, canReadProtectedPost: async id => id === 3 })).querySelector("a")!.getAttribute("href"), "/posts/post-3/");
   assert.equal(doc(await renderSiteDocument({ rawContent: navigation(4) }, { db: data.db, preview: true, user: { id: 1, role: "administrator", displayName: "Admin" } })).querySelector("a")!.getAttribute("href"), "/posts/post-4/");
   const modified = block("post-date", { metadata: { bindings: { datetime: { source: "core/post-data", args: { key: "modified" } } } } });
@@ -106,6 +107,8 @@ test("override media identities remap through current and legacy forms, while cy
   const cycle = fixture({ 1: { rawContent: block("block", { ref: 1 }) } }); assert.equal(await renderSiteDocument({ rawContent: block("block", { ref: 1 }) }, { db: cycle.db }), "");
   const data = fixture({ 1: { rawContent: block("paragraph", bind("P"), "<p>Saved</p>") } });
   await assert.rejects(renderSiteDocument({ rawContent: Array.from({ length: 40 }, () => block("block", { ref: 1, content: { P: { content: "x".repeat(256 * 1024) } } })).join("") }, { db: data.db }), /8 MiB/);
+  const deep = fixture({ 1: { rawContent: block("paragraph", bind("P"), "<div>".repeat(12000) + "Deep saved fallback" + "</div>".repeat(12000)) } });
+  assert.match(await renderSiteDocument({ rawContent: block("block", { ref: 1, content: { P: { content: "No selector to replace" } } }) }, { db: deep.db }), /Deep saved fallback/);
 });
 
 test("real saves, revisions, native reusable previews, JSON and WXR copies retain bindings and fresh scoped references", async () => {
