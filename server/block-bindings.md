@@ -35,6 +35,13 @@ sanitization remains unconditional. Bound image IDs update existing wp-image-N
 classes and gallery data-id values without loading arbitrary attachments.
 JSON trees render computed attributes rather than stale saved HTML snapshots.
 
+Freshly resolved rich-text bindings first pass through ordinary authored-content
+sanitization, then expand the fixed shortcodes once. This preserves the supplied
+block-before-shortcode ordering without expanding saved override maps twice.
+Escaped and code literals remain inert, and authored attributes cannot impersonate
+the trusted generated playlist configuration. Final rendered output still passes
+through the generated-content sanitizer.
+
 The existing request cache/query/node/depth/cycle/output budgets also cover
 bindings. A single bound string additionally has a 2 MiB limit. Storage,
 revisions and autosaves retain original binding metadata and source content.

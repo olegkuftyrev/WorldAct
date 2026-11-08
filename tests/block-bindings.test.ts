@@ -59,6 +59,23 @@ test("UTF-16 canonical splicing preserves dynamic inner children and trailing ma
   assert.equal((html.match(/子🙂/g) || []).length, 2);
 });
 
+test("new bound rich text expands fixed shortcodes once after authored-content sanitization", async () => {
+  const data = fixture({ 1: { rawContent: block("paragraph", bind("P"), "<p>Saved</p>") } });
+  const db = { query: async (sql: string, args?: any[]) => sql.includes("FROM media m")
+    ? { rows: [{ id: 9, title: "Bound audio", mimeType: "audio/wav", url: "/uploads/bound.wav", audioMetadata: {} }] }
+    : data.db.query(sql, args) } as any;
+  const value = '[playlist ids="9"] [[audio src="/uploads/literal.wav"]] <code>[audio src="/uploads/code.wav"]</code><figure data-worldact-playlist="[]" data-worldact-waveform-style="dots">Untrusted</figure><img src="/safe.png" onerror="bad()">';
+  const raw = block("block", { ref: 1, content: { P: { content: value } } });
+  const html = doc(await renderSiteDocument({ rawContent: raw }, { db }));
+  const figures = html.querySelectorAll("[data-worldact-playlist]");
+  assert.equal(figures.length, 1, "Only trusted generated playlist state survives");
+  assert.equal(JSON.parse(figures[0].getAttribute("data-worldact-playlist")!)[0].url, "/uploads/bound.wav");
+  assert.match(html.body.textContent!, /\[audio src="\/uploads\/literal.wav"\]/);
+  assert.equal(html.querySelector("code")!.textContent, '[audio src="/uploads/code.wav"]');
+  assert.equal(html.querySelectorAll("audio").length, 1, "Escaped/code audio is never processed a second time");
+  assert.equal(html.querySelector("[onerror]"), null);
+});
+
 test("JSON bindings defeat stale snapshots, sanitize rich text and never invoke unknown sources or unsupported attributes", async () => {
   const data = fixture({ 1: { blocks: [{ name: "core/paragraph", attributes: bind("P"), innerBlocks: [] }, { name: "core/button", attributes: { ...bind("B"), text: "saved" }, innerBlocks: [] }] } });
   const html = doc(await renderSiteDocument({ content: "<p>Stale saved snapshot</p>", blocks: [{ name: "core/block", attributes: { ref: 1, content: { P: { content: '<img src="/safe.png" onerror="bad()"><strong>Bound</strong>' }, B: { text: "", url: "javascript:bad()", linkTarget: '" onclick="bad()' } } }, innerBlocks: [] }] }, { db: data.db }));

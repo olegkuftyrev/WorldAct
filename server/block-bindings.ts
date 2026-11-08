@@ -5,6 +5,7 @@ import { cleanContent, HttpError } from "./utils.js";
 import { postNeedsPassword } from "./post-passwords.js";
 import { postPermalink } from "./permalinks.js";
 import { archiveTerm, termLink, type RenderTerm } from "./term-blocks.js";
+import { expandShortcodes } from "./shortcodes.js";
 
 /** Supplied block-bindings.php: the fixed default-core supported attributes. */
 export const bindingAttributes: Readonly<Record<string, readonly string[]>> = {
@@ -167,7 +168,12 @@ export async function applyBlockBindings(node: Node, context: Context, state: St
     const result = await sourceValue(binding, node, attribute, context, state); if (result === null) continue;
     let value: unknown = result.value;
     if (typeof value === "string" && Buffer.byteLength(value) > 2 * 1024 * 1024) throw new HttpError(413, "Bound block content exceeds the 2 MiB limit.");
-    if (["content", "text", "caption"].includes(attribute)) value = result.textOnly ? escape(value) : cleanContent(value === false ? "" : String(value));
+    if (["content", "text", "caption"].includes(attribute)) {
+      // Source bindings sanitize authored rich text before do_shortcode runs.
+      // Expand only the new bound value once, preserving escaped original HTML.
+      const authored = result.textOnly ? escape(value) : cleanContent(value === false ? "" : String(value));
+      value = await expandShortcodes(authored, context, state);
+    }
     else if (attribute === "url") value = value === false ? false : safeURL(value);
     else if (attribute === "id") {
       value = id(value);

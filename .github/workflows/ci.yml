@@ -61,6 +61,7 @@ jobs:
           tests/math-blocks.test.ts tests/icons.test.ts tests/protected-metadata.test.ts
           tests/rss.test.ts tests/playlist-blocks.test.ts tests/audio-metadata.test.ts
           tests/block-render-attributes.test.ts
+          tests/block-bindings.test.ts tests/m4a-mime.test.ts
           tests/audio-artwork.test.ts
           tests/media-file-references.test.ts
           tests/wxr-media.test.ts

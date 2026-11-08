@@ -1,4 +1,4 @@
-import test from "node:test";
+import test from "./isolated-test.js";
 import assert from "node:assert/strict";
 import { attachment } from "../src/editor/mediaAttachment.js";
 import type { Media } from "../src/api.js";
