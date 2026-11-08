@@ -2408,4 +2408,5 @@ body.public-body {
 
 /* Native public controls retain the existing button geometry. */
 .public-pagination .public-page-link {display:inline-block;text-decoration:none;line-height:normal;text-align:center;}
+.public-site .public-pagination a.public-page-link {color:#fff;}
 .public-logout-form {display:contents;}
