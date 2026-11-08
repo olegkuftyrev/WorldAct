@@ -1,13 +1,13 @@
+import test, { after } from "./isolated-test.js";
 import "dotenv/config";
 import assert from "node:assert/strict";
-import test, { after } from "node:test";
 import { DOMParser } from "linkedom";
 import sharp from "sharp";
 import { readdir } from "node:fs/promises";
 import { pool, defaultSettings, uploadsDir } from "../server/db.js";
 import { parseShortcodes, shortcodeAttributes, stripBuiltinShortcodes, ShortcodeLimitError } from "../server/shortcode-parser.js";
 import { renderPublicContent, renderSiteDocument, renderBlock } from "../server/block-renderer.js";
-import { cleanRawContent, cleanBlocks } from "../server/utils.js";
+import { cleanRawContent, cleanBlocks, cleanContent } from "../server/utils.js";
 import { remapImportedBlockReferences } from "../server/block-portability.js";
 import { excerptText } from "../server/excerpts.js";
 
@@ -100,6 +100,8 @@ test("shortcode preparation bounds repeated raw and JSON expansion before joins 
 });
 
 test("MathML equations and SVG integration subtrees keep shortcode-shaped text inert and unchanged", async () => {
+  assert.equal(cleanContent('<svg><script>bad()</script></svg>'), "");
+  assert.equal(cleanContent('<svg><text>Ordinary literal</text></svg>'), "Ordinary literal");
   const equation = '<math display="block"><semantics><mtext>[gallery ids="1"]</mtext><annotation encoding="application/x-tex">\\text{[audio src="/uploads/never.wav"]}</annotation><annotation-xml encoding="text/html"><div>[playlist ids="1"]</div></annotation-xml></semantics></math>';
   const vector = '<svg><foreignObject><div>[video src="/uploads/never.mp4"]</div></foreignObject><text>[gallery ids="1"]</text></svg>';
   assert.deepEqual(parseShortcodes(equation + vector), [equation + vector]);

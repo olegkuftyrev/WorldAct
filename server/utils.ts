@@ -4,6 +4,7 @@ import { gridTemplateColumnsPattern } from "./block-layout.js";
 import { LEGACY_CONTENT_MARKER, canonicalLegacyMarker } from "./legacy-content.js";
 import { backgroundImagePattern, backgroundSizePattern, backgroundPositionPattern, backgroundRepeatPattern, backgroundAttachmentPattern } from "./background-styles.js";
 import { mathMLTags, mathMLAttributes, mathMLTransforms } from "./mathml.js";
+import { hasShortcodes } from "../shared/shortcodes.js";
 
 export class HttpError extends Error {
   constructor(
@@ -266,6 +267,9 @@ export function cleanContent(content: string, generatedBlocks = false, canonical
       track: ["http", "https"],
     },
     allowProtocolRelative: false,
+    // Keep a boundary only when its surviving text could activate a builtin.
+    // Empty/ordinary unsupported SVG retains the original sanitizer output.
+    exclusiveFilter: frame => (frame.tag === "svg" || frame.tag === "span") && frame.attribs.class === "worldact-inert-shortcodes" && !hasShortcodes(frame.text) ? "excludeTag" : false,
     transformTags: {
       ...mathMLTransforms,
       // SVG author markup remains unsupported. Retain its literal-text
