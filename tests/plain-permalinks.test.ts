@@ -1,6 +1,9 @@
 import test, { after } from "./isolated-test.js";
 import assert from "node:assert/strict";
 import { DOMParser } from "linkedom";
+import express from "express";
+import { createServer } from "node:http";
+import compatRouter from "../server/compat.js";
 import { pool, getSettings } from "../server/db.js";
 import { postPermalink, resolvePublicPath } from "../server/permalinks.js";
 import { readPlainPermalinkQuery } from "../shared/plain-permalink-query.js";
@@ -46,6 +49,8 @@ test("Plain and numeric permalinks preserve public identity, protected access, p
       await api("/api/settings","PUT",{frontPageMode:"page",frontPageId:parent.id,postsPageId:child.id});
       assert.equal(await postPermalink(parent),"/");assert.equal(await postPermalink(child),"/?page_id="+child.id);
       assert.equal((await resolvePublicPath("/"))?.id,parent.id);assert.equal((await resolve(parent.permalink)).data.post.id,parent.id);
+      const frontSecond=await resolve("/?page=2&query-4-page=7");assert.equal(frontSecond.response.status,200);assert.equal(frontSecond.data.contentPage,2);assert.match(frontSecond.data.post.content,/PLAIN-SECOND/);assert.doesNotMatch(frontSecond.data.post.content,/PLAIN-FIRST/);assert.equal(frontSecond.data.post.contentPagination.links[1].url,"/?page=2");
+      assert.ok(frontSecond.data.post.content.includes('href="/"'));assert.equal((await resolve("/?page[]=2")).response.status,404);
       const site=(await api("/api/public/site","GET",undefined,"")).data;assert.equal(site.frontPage.id,parent.id);assert.equal(site.postsPage.id,child.id);
       await api("/api/settings","PUT",{frontPageMode:"posts",frontPageId:null,postsPageId:null});
     });
@@ -54,9 +59,22 @@ test("Plain and numeric permalinks preserve public identity, protected access, p
       assert.equal(await postPermalink(story),"/archives/"+story.id);
       assert.equal((await resolve("/archives/"+story.id)).data.post.id,story.id);assert.equal((await resolve("/archives/"+story.id+"/")).data.post.id,story.id);
       assert.equal((await resolve("/archives/"+story.id+"/2/")).data.contentPage,2);
+      assert.equal((await resolve("/archives/"+story.id+"/2")).data.post.contentPagination.links[1].url,"/archives/"+story.id+"/2");
       assert.equal((await resolve(story.permalink)).data.post.id,story.id,"Plain ID links remain resolvable after enabling pretty links.");
-      assert.equal(await postPermalink(child),`/${parent.slug}/${child.slug}/`);
+      assert.equal(await postPermalink(child),`/${parent.slug}/${child.slug}`);
+      const childSecond=await resolve(`/${parent.slug}/${child.slug}/2`);assert.equal(childSecond.response.status,200);assert.equal(childSecond.data.post.contentPagination.links[1].url,`/${parent.slug}/${child.slug}/2`);
+      await api("/api/settings","PUT",{frontPageMode:"page",frontPageId:parent.id});
+      const numericFront=await resolve("/page/2");assert.equal(numericFront.response.status,200);assert.equal(numericFront.data.post.contentPagination.links[1].url,"/page/2");
+      await api("/api/settings","PUT",{frontPageMode:"posts",frontPageId:null});
       await api("/api/settings","PUT",{permalinkStructure:""});
+    });
+    await t.test("a changed slug handoff cannot replace a fixed-ID request with another published post",async()=>{
+      const other=await post({content:"<p>WRONG-FIXED-ID-BODY</p>"}),otherPublic=(await api("/api/public/posts/"+other.slug,"GET",undefined,"")).data;
+      // Controlled internal handoff fixture supplies the real second post DTO,
+      // representing a rename/slug-reuse between identity read and public read.
+      const app=express();app.get("/api/public/posts/:slug",(_req,res)=>res.json(otherPublic));app.use(compatRouter);app.use((error:any,_req:any,res:any,_next:any)=>res.status(error.status||500).json({error:error.message}));
+      const server=createServer(app);await new Promise<void>(done=>server.listen(0,"127.0.0.1",done));
+      try{const port=(server.address() as {port:number}).port,response=await fetch(`http://127.0.0.1:${port}/api/public/resolve?`+new URLSearchParams({path:story.permalink}));assert.equal(response.status,404);assert.doesNotMatch(await response.text(),/WRONG-FIXED-ID-BODY/);}finally{await new Promise<void>((done,fail)=>server.close(error=>error?fail(error):done()));}
     });
     await t.test("real notification workers use query identities and reject a changed canonical target",async()=>{
       const target=new URL(story.permalink,(await getSettings()).siteUrl).href;

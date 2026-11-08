@@ -61,7 +61,7 @@ export async function postPermalink(
       slugs.unshift(row.slug);
       parent = row.parent_id;
     }
-    return "/" + slugs.map(segment).join("/") + "/";
+    return "/" + slugs.map(segment).join("/") + (settings.permalinkStructure.endsWith("/")?"/":"");
   }
   if (!settings.permalinkStructure) return "/?p="+post.id;
   const date = new Date(
@@ -175,6 +175,7 @@ async function resolveExactPublicPath(path: string, settings: Settings) {
 }
 /** Exact post/page identities win before the source's numeric content-page suffix. */
 export async function resolvePublicPath(path: string) {
+  let rootContentPage:number|undefined;
   const queryIndex=path.indexOf("?");
   if(queryIndex>=0){
     const identity=readPlainPermalinkQuery(new URLSearchParams(path.slice(queryIndex+1)));
@@ -184,9 +185,17 @@ export async function resolvePublicPath(path: string) {
       const post=rows[0];if(!post)return null;
       return identity.contentPage?{...post,contentPage:identity.contentPage}:post;
     }
+    if(path.slice(0,queryIndex)==="/"){
+      const query=new URLSearchParams(path.slice(queryIndex+1));
+      if([...query.keys()].some(key=>/^page(?:\[|$)/.test(key))){
+        const pages=query.getAll("page");
+        if(pages.length!==1||!pages[0]||!/^[1-9]\d{0,9}$/.test(pages[0])||Number(pages[0])>2147483647||[...query.keys()].some(key=>/^page\[/.test(key)))return null;
+        rootContentPage=Number(pages[0]);
+      }
+    }
   }
   const settings = await getSettings(), exact = await resolveExactPublicPath(path, settings);
-  if (exact) return exact;
+  if (exact) return rootContentPage ? {...exact,contentPage:rootContentPage} : exact;
   const normalized = "/" + path.split("?")[0].replace(/^\/+|\/+$/g, "") + "/";
   const suffix = /^(.*\/)([1-9]\d{0,9})\/$/.exec(normalized);
   if (!suffix || Number(suffix[2]) > 2147483647) return null;

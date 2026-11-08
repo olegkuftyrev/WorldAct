@@ -202,6 +202,7 @@ router.get("/api/public/resolve", async (req, res) => {
     req,
     "/public/posts/" + encodeURIComponent(resolved.slug) + "?page=" + parseContentPage(resolved.contentPage ?? req.query.page),
   );
+  if(result.data?.post?.id!==resolved.id)throw new HttpError(404,"Post not found.");
   res.json({ ...result.data, ...(resolved.contentPage ? { contentPage: resolved.contentPage } : {}) });
 });
 async function feedPosts(req: Request) {

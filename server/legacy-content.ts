@@ -90,21 +90,22 @@ export function legacyExcerptSource(document: RenderDocument): string {
   const read = (blocks: SerializedNode[], depth = 0): string => depth > 20 ? "" : blocks.map(block => String(block.attributes.content || block.attributes.value || block.attributes.text || "") + " " + read(block.innerBlocks || [], depth + 1)).join(" ");
   return read(selected.blocks || []);
 }
-export function contentPageURL(post: RenderPost, permalink: string, page: number, preview = false): string {
+export function contentPageURL(post: RenderPost, permalink: string, page: number, preview = false, permalinkStructure?: string): string {
   if (preview || ["draft", "pending", "future", "private"].includes(post.status)) return `/preview/${post.id}${page > 1 ? "?page=" + page : ""}`;
   if (page === 1) return permalink;
+  if (permalinkStructure === "") return permalink + (permalink.includes("?")?"&":"?") + "page=" + page;
   if (permalink.includes("?")) return permalink + "&page=" + page;
-  return permalink.replace(/\/?$/, "/") + (permalink === "/" ? "page/" : "") + page + "/";
+  return permalink.replace(/\/?$/, "/") + (permalink === "/" ? "page/" : "") + page + (permalinkStructure === undefined || permalinkStructure.endsWith("/") ? "/" : "");
 }
-export function contentPagination(post: RenderPost, permalink: string, requested = 1, preview = false): ContentPagination {
+export function contentPagination(post: RenderPost, permalink: string, requested = 1, preview = false, permalinkStructure?: string): ContentPagination {
   const totalPages = legacyPageCount(post), page = Math.min(totalPages, Math.max(1, Math.trunc(requested) || 1));
-  return { page, totalPages, links: Array.from({ length: totalPages }, (_, index) => ({ page: index + 1, url: contentPageURL(post, permalink, index + 1, preview), current: page === index + 1 })) };
+  return { page, totalPages, links: Array.from({ length: totalPages }, (_, index) => ({ page: index + 1, url: contentPageURL(post, permalink, index + 1, preview,permalinkStructure), current: page === index + 1 })) };
 }
 export function renderContentPagination(pagination: ContentPagination, archive = false): string {
   if (pagination.totalPages < 2) return "";
   return `<p class="post-nav-links">Pages: ${pagination.links.map(link => link.current && !archive ? `<span class="post-page-numbers current" aria-current="page">${link.page}</span>` : `<a href="${escape(link.url)}" class="post-page-numbers">${link.page}</a>`).join(" ")}</p>`;
 }
-export function selectLegacyContent(document: RenderDocument, post: RenderPost, permalink: string, mode: ContentMode, requested = 1, preview = false) {
+export function selectLegacyContent(document: RenderDocument, post: RenderPost, permalink: string, mode: ContentMode, requested = 1, preview = false, permalinkStructure?: string) {
   const all = pieces(document), pages = splitPages(all);
   const page = mode === "complete" || mode === "archive" || mode === "feed" ? 1 : Math.min(pages.length, Math.max(1, Math.trunc(requested) || 1));
   const selected = mode === "complete" ? pages.flat() : pages[page - 1], more = selected.findIndex(piece => "type" in piece && piece.type === "more");
@@ -124,6 +125,6 @@ export function selectLegacyContent(document: RenderDocument, post: RenderPost, 
   const output: RenderDocument = isJSON ? { blocks } : { rawContent: raw.join("") };
   const title = text(post.title || ""), label = moreMarker?.text ? escape(moreMarker.text) : `<span aria-label="Continue reading ${escape(title)}">(more…)</span>`;
   const moreLink = mode === "archive" && more >= 0 ? ` <a href="${escape(permalink + "#more-" + (Number(post.id) || 0))}" class="more-link">${label}</a>` : "";
-  const pagination: ContentPagination = { page, totalPages: pages.length, links: pages.map((_value, index) => ({ page: index + 1, url: contentPageURL(post, permalink, index + 1, preview), current: page === index + 1 })) };
+  const pagination: ContentPagination = { page, totalPages: pages.length, links: pages.map((_value, index) => ({ page: index + 1, url: contentPageURL(post, permalink, index + 1, preview,permalinkStructure), current: page === index + 1 })) };
   return { document: output, moreLink, pagination, navigation: mode === "singular" || mode === "archive" ? renderContentPagination(pagination, mode === "archive") : "" };
 }

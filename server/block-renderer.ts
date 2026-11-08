@@ -747,7 +747,7 @@ async function renderDocument(document: RenderDocument, context: Context, state:
   return renderChildren(parseRenderNodes(await prepareShortcodeDocument(document, context, state)), context, state);
 }
 async function renderPostBody(post: RenderPost, context: Context, state: State, mode: ContentMode, page = 1) {
-  const selected = selectLegacyContent(post, post, await postURL(post, state), mode, page, state.options.preview);
+  const selected = selectLegacyContent(post, post, await postURL(post, state), mode, page, state.options.preview,state.settings.permalinkStructure);
   const body = await renderDocument(selected.document, context, state), extra = selected.moreLink + selected.navigation;
   const bytes = Buffer.byteLength(extra, "utf8");
   if (state.outputBytes + bytes > MAX_RENDER_BYTES) throw new HttpError(413, "Rendered content exceeds the 8 MiB limit. Reduce repeated patterns or query output.");

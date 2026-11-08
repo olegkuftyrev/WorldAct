@@ -1260,13 +1260,13 @@ async function publicPost(post: any, locked = false, options: RenderOptions = {}
     pendingCommentCount: _pendingCommentCount,
     ...safe
   } = decoratePost(post);
-  const linked = await withPermalink(safe);
+  const settings=await getSettings(),linked = await withPermalink(safe,settings);
   const result = {
     ...linked,
     commentCount: safe.approvedCommentCount ?? safe.commentCount ?? 0,
     locked,
     footnotes: locked ? [] : safe.footnotes ?? [],
-    ...(!locked ? { contentPagination: contentPagination(post, linked.permalink, options.contentPage || 1, options.preview) } : {}),
+    ...(!locked ? { contentPagination: contentPagination(post, linked.permalink, options.contentPage || 1, options.preview,settings.permalinkStructure) } : {}),
     content: locked ? "" : await renderPublicContent({ ...post, locked }, { requestPath: linked.permalink, ...options }),
     excerpt: locked ? "" : safe.excerpt,
   };
