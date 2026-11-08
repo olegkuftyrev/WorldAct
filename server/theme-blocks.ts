@@ -62,11 +62,21 @@ export async function renderThemeBlock(
   }
   if(name==="core/avatar") {
     if(!state.settings.showAvatars)return "";
-    const id=int(a.userId,c?.userId || p?.authorId || 0),size=int(a.size,96,512);
-    const account=id?await cached(state,`avatar:${id}`,async()=>(await state.db.query("SELECT display_name AS name,email,profile FROM users WHERE id=$1",[id])).rows[0]):null;
-    const label=account?.name || c?.authorName || "Avatar";
-    const image=`<img src="${esc(avatarURL(account?.email || c?._avatarEmail || "",state.settings,size))}" alt="${esc(label)}" width="${size}" height="${size}" class="avatar avatar-${size} photo" loading="lazy">`;
-    return `<div${attributes()}>${a.isLink && id?`<a href="/?author=${id}"${a.linkTarget==="_blank"?' target="_blank" rel="noopener noreferrer"':''}>${image}</a>`:image}</div>`;
+    // Source comment context always wins over explicit block/post user IDs.
+    // Notifications are not avatar-bearing people and must not inherit an author.
+    if(c && c.type && !["comment","note"].includes(c.type))return `<div${attributes()}></div>`;
+    const id=c?int(c.userId,0):a.userId!=null?int(a.userId,0):int(p?.authorId ?? p?.author_id ?? state.options.query?.author,0);
+    if(!c && !id)return "";
+    const size=int(a.size,96,512);
+    const account=id?await cached(state,`avatar:${id}`,async()=>(await state.db.query("SELECT display_name AS name,email FROM users WHERE id=$1",[id])).rows[0]):null;
+    if(!c && !account)return "";
+    const name=String(c?c.authorName || "":account.name || "");
+    const email=account?account.email:c?._avatarEmail || "";
+    const image=`<img src="${esc(avatarURL(email,state.settings,size))}" alt="${esc(name+" Avatar")}" width="${size}" height="${size}" class="avatar avatar-${size} photo wp-block-avatar__image" loading="lazy">`;
+    const url=c?safeUrl(c.authorUrl):`/?author=${id}`;
+    const newTab=a.linkTarget==="_blank";
+    const linked=a.isLink && url?`<a href="${esc(url)}" class="wp-block-avatar__link"${newTab?` target="_blank" rel="noopener noreferrer" aria-label="${esc(`(${name} ${c?"website link":"author archive"}, opens in a new tab)`)}"`:""}>${image}</a>`:image;
+    return `<div${attributes()}>${linked}</div>`;
   }
   if(name==="core/search") {
     const id="wp-search-"+state.nodes,label=plainText(String(a.label || "Search")),button=plainText(String(a.buttonText || "Search"));
