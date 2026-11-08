@@ -155,7 +155,7 @@ export async function prepareShortcodeDocument(document: RenderDocument, context
     if (depth > 20) return [];
     const result = [];
     for (const block of blocks) {
-      if (["core/code", "core/preformatted", "core/verse"].includes(block.name)) { result.push(block); continue; }
+      if (["core/code", "core/preformatted", "core/verse", "core/math", "core/icon"].includes(block.name)) { result.push(block); continue; }
       const attributes = { ...block.attributes };
       for (const key of ["text", "content", "value", "values", "caption"]) if (typeof attributes[key] === "string" && (block.name === "core/shortcode" || hasShortcodes(attributes[key]))) {
         attributes[key] = await expandShortcodes(block.name === "core/shortcode" ? autop(attributes[key]) : attributes[key], context, state);

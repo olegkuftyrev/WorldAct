@@ -98,6 +98,26 @@ test("shortcode preparation bounds repeated raw and JSON expansion before joins 
   assert.equal(data.queries, 2, "Each independent render caches its own media query");
 });
 
+test("MathML equations and SVG integration subtrees keep shortcode-shaped text inert and unchanged", async () => {
+  const equation = '<math display="block"><semantics><mtext>[gallery ids="1"]</mtext><annotation encoding="application/x-tex">\\text{[audio src="/uploads/never.wav"]}</annotation><annotation-xml encoding="text/html"><div>[playlist ids="1"]</div></annotation-xml></semantics></math>';
+  const vector = '<svg><foreignObject><div>[video src="/uploads/never.mp4"]</div></foreignObject><text>[gallery ids="1"]</text></svg>';
+  assert.deepEqual(parseShortcodes(equation + vector), [equation + vector]);
+  const data = fixture();
+  const output = dom(await renderSiteDocument({ rawContent: block("math", '<div class="wp-block-math">' + equation + '</div>', { latex: '\\text{[gallery ids="1"]}' }) + vector + '[audio src="/uploads/actual.wav"]' }, { db: data.db }));
+  assert.equal(output.querySelectorAll("audio").length, 1); assert.equal(output.querySelectorAll(".gallery").length, 0); assert.equal(output.querySelectorAll("video").length, 0); assert.equal(data.queries, 0);
+  assert.equal(output.querySelector("annotation")!.textContent, '\\text{[audio src="/uploads/never.wav"]}'); assert.match(output.querySelector("mtext")!.textContent!, /\[gallery ids="1"\]/); assert.equal(output.querySelector("source")!.getAttribute("src"), "/uploads/actual.wav");
+  const json = cleanBlocks([{ name: "core/math", attributes: { latex: '[gallery ids="1"]', mathML: '<semantics><mtext>[audio src="/uploads/never.wav"]</mtext></semantics>', caption: '[gallery ids="1"]' }, innerBlocks: [] }]);
+  const math = dom(await renderSiteDocument({ blocks: json }, { db: data.db })); assert.equal(math.querySelector("audio"), null); assert.match(math.querySelector("mtext")!.textContent!, /\[audio/); assert.equal(data.queries, 0);
+  const portable = remapImportedBlockReferences(equation + vector, [], new Map(), { media: new Map([[1, 99]]) }); assert.match(portable.rawContent, /gallery ids="1"/); assert.doesNotMatch(portable.rawContent, /ids="99"/);
+  assert.match(portable.rawContent, /worldact-inert-shortcodes/); assert.equal(dom(await renderSiteDocument({ rawContent: portable.rawContent }, { db: data.db })).querySelector("audio"), null);
+  const copiedMath = remapImportedBlockReferences(block("math", equation, { latex: '[gallery ids="1"]', mathML: equation }), json, new Map(), { media: new Map([[1, 99]]) }); assert.doesNotMatch(copiedMath.rawContent, /ids=\\"99\\"/); assert.equal(copiedMath.blocks[0].attributes.latex, '[gallery ids="1"]'); assert.equal(data.queries, 0);
+  const nested = '<svg onload="evil()"><foreignObject><span>' + equation + '<span>[gallery ids="1"]</span></span><script>evil()</script><img src="/image.png" onerror="evil()"></foreignObject></svg>';
+  const saved = cleanRawContent(nested); assert.equal(cleanRawContent(cleanRawContent(saved)), saved, "Repeated canonical saves retain the inert context");
+  const copied = remapImportedBlockReferences(saved, cleanBlocks([{ name: "core/html", attributes: { content: nested }, innerBlocks: [] }]), new Map(), { media: new Map([[1, 99]]) });
+  assert.doesNotMatch(copied.rawContent, /ids="99"|onload|onerror|<script|evil\(\)/);
+  const repeated = dom(await renderSiteDocument({ rawContent: cleanRawContent(copied.rawContent) + '[audio src="/uploads/outside.wav"]' }, { db: data.db })); assert.equal(repeated.querySelectorAll("audio").length, 1); assert.equal(repeated.querySelector("[onerror]"), null); assert.equal(data.queries, 0);
+});
+
 test("portable shortcode IDs and uploaded URLs remap in raw/JSON without falling back after detachment", async () => {
   const raw = '[gallery ids="2,9" id="4"] [playlist include="9"] [audio src="/uploads/old.wav"] [caption id="attachment_2" width="100"]<img src="/uploads/old.png">Caption[/caption] [[gallery ids="2"]] <code>[gallery ids="2"]</code>';
   const options = { media: new Map([[2, 22]]), posts: new Map([[4, 44]]), urls: new Map([["/uploads/old.wav", "/uploads/new.wav"], ["/uploads/old.png", "/uploads/new.png"]]) };
@@ -119,10 +139,12 @@ test("actual API preserves shortcode source through save/history/SSR/public and 
     const login = await call("/api/auth/login", "POST", { login: process.env.ADMIN_EMAIL, password: process.env.ADMIN_PASSWORD }, ""); assert.equal(login.response.status, 200); cookie = login.response.headers.get("set-cookie")!.split(";")[0];
     const bytes = await sharp({ create: { width: 8, height: 8, channels: 4, background: "#4488aa" } }).png().toBuffer();
     for (const title of ["included", "collision"]) { const form = new FormData(); form.append("file", new Blob([new Uint8Array(bytes)], { type: "image/png" }), stamp + title + ".png"); const result = await fetch(base + "/api/media", { method: "POST", headers: { Origin: origin, Cookie: cookie }, body: form }); assert.equal(result.status, 201); media.push((await result.json()).media.id); }
-    const source = block("shortcode", `[gallery ids="${media[0]}" link="none"]`) + '<p>[[audio src="/uploads/literal.wav"]] [unknown]</p>';
+    const equation = '<math display="block"><semantics><annotation encoding="application/x-tex">[gallery ids="' + media[0] + '"]</annotation></semantics></math>';
+    const source = block("shortcode", `[gallery ids="${media[0]}" link="none"]`) + '<p>[[audio src="/uploads/literal.wav"]] [unknown]</p>' + block("math", equation, { latex: '[gallery ids="' + media[0] + '"]' });
     const created = (await ok("/api/posts", "POST", { title: stamp, status: "publish", content: source })).post; posts.push(created.id); assert.match(created.rawContent, /\[gallery/); assert.doesNotMatch(created.rawContent, /gallery-item/);
     await ok("/api/media/" + media[0], "PUT", { attachedPostId: created.id });
     const publicPost = (await ok("/api/public/posts/" + created.slug, "GET", undefined, "")).post; assert.equal(dom(publicPost.content).querySelectorAll(".gallery img").length, 1); assert.match(dom(publicPost.content).body.textContent!, /\[audio/);
+    assert.equal(dom(publicPost.content).querySelector("annotation")!.textContent, '[gallery ids="' + media[0] + '"]');
     const preview = await ok("/wp-json/wp/v2/block-renderer/core/shortcode", "POST", { attributes: { text: `[gallery ids="${media[0]}"]` }, post_id: created.id }); assert.equal(dom(preview.rendered).querySelectorAll(".gallery img").length, 1);
     const updated = (await ok("/api/posts/" + created.id, "PUT", { content: `[gallery ids="${media[1]}" link="none"]` })).post; assert.ok(updated.version > created.version);
     const revisions = (await ok(`/api/posts/${created.id}/revisions`)).revisions; assert.ok(revisions.some((row: any) => row.rawContent?.includes(`[gallery ids="${media[0]}"`)));

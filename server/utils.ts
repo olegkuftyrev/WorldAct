@@ -268,6 +268,9 @@ export function cleanContent(content: string, generatedBlocks = false, canonical
     allowProtocolRelative: false,
     transformTags: {
       ...mathMLTransforms,
+      // SVG author markup remains unsupported. Retain its literal-text
+      // boundary when removing the namespace, so it cannot activate shortcodes.
+      ...(!generatedBlocks ? { svg: () => ({ tagName: "span", attribs: { class: "worldact-inert-shortcodes" } }) } : {}),
       sup: (_tag: string, attrs: Record<string, string>) => {
         const { "data-fn": id, ...safe } = attrs;
         return { tagName: "sup", attribs: { ...safe, ...(id && /^[a-z0-9_-]{1,100}$/.test(id) ? { "data-fn": id } : {}) } };

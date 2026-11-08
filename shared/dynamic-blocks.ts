@@ -66,5 +66,5 @@ export const SUPPORTED_DYNAMIC_BLOCKS = new Set(CORE_DYNAMIC_BLOCKS);
 
 type DynamicBlockNode = { name: string; attributes?: Record<string, unknown>; innerBlocks?: readonly DynamicBlockNode[] };
 export function hasDynamicBlocks(blocks: readonly DynamicBlockNode[] | null | undefined): boolean {
-  return !!blocks?.some(block => !["core/code", "core/preformatted", "core/verse"].includes(block.name) && (SUPPORTED_DYNAMIC_BLOCKS.has(block.name) || block.name.startsWith("worldact/") || ["content", "text", "value", "values", "caption"].some(key => typeof block.attributes?.[key] === "string" && hasShortcodes(block.attributes[key] as string)) || hasDynamicBlocks(block.innerBlocks)));
+  return !!blocks?.some(block => !["core/code", "core/preformatted", "core/verse"].includes(block.name) && (SUPPORTED_DYNAMIC_BLOCKS.has(block.name) || block.name.startsWith("worldact/") || !["core/math", "core/icon"].includes(block.name) && ["content", "text", "value", "values", "caption"].some(key => typeof block.attributes?.[key] === "string" && hasShortcodes(block.attributes[key] as string)) || hasDynamicBlocks(block.innerBlocks)));
 }

@@ -69,8 +69,8 @@ export function remapImportedBlockReferences(
   const urls = [...(options.urls || [])].sort((a, b) => b[0].length - a[0].length);
   for (const [source, target] of options.footnotes || []) if (!/^[a-z0-9_-]{1,100}$/.test(source) || !/^[a-z0-9_-]{1,100}$/.test(target))
     throw new HttpError(400, "Invalid imported footnote reference mapping.");
-  const rewriteText = (value: string) => {
-    value = remapShortcodeReferences(value, options, warn);
+  const rewriteText = (value: string, shortcodes = true) => {
+    if (shortcodes) value = remapShortcodeReferences(value, options, warn);
     // Match a whole URL, never a local-looking path or mapped origin nested
     // inside an unrelated URL's path/query. Apply each mapping only once.
     // CSS declarations (padding:..., etc.) are not URL schemes. Recognize
@@ -101,7 +101,7 @@ export function remapImportedBlockReferences(
       .replace(/(\bstyle\s*=\s*)(["'])([\s\S]*?)\2/gi, (_match, prefix, quote, style) => prefix + quote + style.replace(/(\bfont-family\s*:\s*)((?:&(?:quot|apos|#39|#34|#x22|#x27);|[^;])*)/gi, (_declaration: string, property: string, family: string) => property + rewriteFontFamily(family).replace(/"/g, "&quot;").replace(/'/g, "&#39;")) + quote);
     return value;
   };
-  const rewriteValues = (value: unknown, key = ""): unknown => {
+  const rewriteValues = (value: unknown, key = "", shortcodes = true): unknown => {
     if (typeof value === "string") {
       if (key === "className" && fontSlugs) return rewriteFontClasses(value);
       if (key === "fontFamily" && (fontFamilies.size || fontSlugs)) {
@@ -112,14 +112,14 @@ export function remapImportedBlockReferences(
         }
         return rewriteFontFamily(value);
       }
-      return rewriteText(value);
+      return rewriteText(value, shortcodes);
     }
-    if (Array.isArray(value)) return value.map(item => rewriteValues(item));
-    if (value && typeof value === "object") return Object.fromEntries(Object.entries(value).map(([key, item]) => [key, rewriteValues(item, key)]).filter(([, item]) => item !== undefined));
+    if (Array.isArray(value)) return value.map(item => rewriteValues(item, "", shortcodes));
+    if (value && typeof value === "object") return Object.fromEntries(Object.entries(value).map(([key, item]) => [key, rewriteValues(item, key, shortcodes)]).filter(([, item]) => item !== undefined));
     return value;
   };
   const reference = (name: string, attributes: Record<string, unknown>) => {
-    attributes = rewriteValues(attributes) as Record<string, unknown>;
+    attributes = rewriteValues(attributes, "", !["core/math", "core/icon", "core/code", "core/preformatted", "core/verse"].includes(name)) as Record<string, unknown>;
     if(options.documents && name==='core/navigation' && typeof attributes.overlay==='string' && attributes.overlay){
       const overlay=attributes.overlay, separator=overlay.includes('//')?'//':'/';
       const pieces=overlay.split(separator), sourceSlug=pieces.pop() || '';

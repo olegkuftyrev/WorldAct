@@ -9,7 +9,9 @@ expressions. The fixed registry is `gallery`, `audio`, `video`, `playlist`,
 Original classic HTML, canonical block bodies and JSON textual block fields are
 prepared transiently, once, before rendering. Revisions, autosaves, storage and
 exports keep the original text. Original code/preformatted/verse subtrees, HTML
-attributes, comments and code/pre/script/style/textarea/xmp regions are inert.
+attributes, comments and code/pre/script/style/textarea/xmp/math/svg regions are
+inert, including MathML/SVG HTML integration descendants and native math/icon
+JSON subtrees.
 Registered `[[escaped]]` forms lose one bracket layer without being expanded a
 second time. Unknown plugin tags and malformed tokens stay literal. The official
 `@wordpress/autop` formatter supplies the Shortcode block's paragraph callback.

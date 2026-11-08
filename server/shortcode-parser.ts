@@ -5,7 +5,7 @@ export type Shortcode = { tag: string; attributes: Record<string, string>; conte
 export type ShortcodePiece = string | Shortcode;
 export class ShortcodeLimitError extends Error {}
 type Token = { tag: string; attributes: Record<string, string>; start: number; end: number; closing: boolean; selfClosing: boolean; extraOpen: boolean; extraClose: boolean; pair?: number };
-const inert = new Set(["code", "pre", "script", "style", "textarea", "xmp"]);
+const inert = new Set(["code", "pre", "script", "style", "textarea", "xmp", "math", "svg"]);
 const decode = (value: string) => value.replace(/\\([\\"'])/g, "$1");
 export function shortcodeAttributes(input: string) {
   const result: Record<string, string> = Object.create(null);
@@ -46,7 +46,8 @@ function tokens(input: string, editableComments?: Set<number>): Token[] {
       const end = tagEnd(input, index + 1), name = /^<\s*(\/?)\s*([a-z][a-z\d-]*)/i.exec(input.slice(index, end));
       if (name) {
         const tag = name[2].toLowerCase();
-        if (inert.has(tag)) {
+        const markerSpan = tag === "span" && /(?:^|\s)worldact-inert-shortcodes(?:\s|$)/.test(/\bclass\s*=\s*(["'])([^]*?)\1/i.exec(input.slice(index, end))?.[2] || "");
+        if (inert.has(tag) || tag === "span" && (markerSpan || protectedTags.at(-1) === "span")) {
           if (name[1]) { if (protectedTags.at(-1) === tag) protectedTags.pop(); }
           else if (!/\/\s*>$/.test(input.slice(index, end))) protectedTags.push(tag);
           if (protectedTags.length > 100) throw new ShortcodeLimitError("Shortcode HTML nesting is too deep.");
