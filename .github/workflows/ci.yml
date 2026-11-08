@@ -77,6 +77,7 @@ jobs:
           tests/media-native-rest.test.ts tests/rest-fields.test.ts
           tests/media-captions.test.ts
           tests/native-media-owner.test.ts
+          tests/native-caption-initialization.test.ts
           tests/classic-editor.test.ts tests/classic-persistence.test.ts
           tests/classic-parser.test.ts tests/block-history.test.ts
           tests/account-tools-ui.test.ts
