@@ -8,6 +8,7 @@ import {
   useContext,
   type Dispatch,
   type SetStateAction,
+  type RefObject,
   type ReactNode,
 } from "react";
 import { api, type User } from "../api";
@@ -166,17 +167,22 @@ export function Modal({
   title,
   close,
   children,
+  actions,
+  initialFocus,
 }: {
   title: string;
   close: () => void;
   children: ReactNode;
+  actions?: ReactNode;
+  initialFocus?: RefObject<HTMLElement | null>;
 }) {
   const ref = useRef<HTMLDivElement>(null),
     closeRef = useRef(close);
   closeRef.current = close;
   useEffect(() => {
     const previous = document.activeElement as HTMLElement | null;
-    ref.current?.focus();
+    const preferred = initialFocus?.current;
+    (preferred && !preferred.matches(":disabled") ? preferred : ref.current)?.focus();
     const keydown = (e: KeyboardEvent) => {
       if (e.key === "Escape" && !e.isComposing && !e.defaultPrevented) closeRef.current();
       if (e.key === "Tab" && ref.current) {
@@ -219,6 +225,7 @@ export function Modal({
       >
         <header>
           <h1>{title}</h1>
+          {actions}
           <button
             className="editor-icon-button"
             aria-label="Close dialog"

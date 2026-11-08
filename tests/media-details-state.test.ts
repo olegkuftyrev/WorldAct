@@ -1,6 +1,6 @@
 import test from "./isolated-test.js";
 import assert from "node:assert/strict";
-import { mergeMediaDetails } from "../src/mediaDetailsState.js";
+import { mediaMetadataDraft, mergeMediaDetails } from "../src/mediaDetailsState.js";
 import type { Media } from "../src/api.js";
 
 const original = { id: 1, title: "Original", alt: "Alternative", caption: "Caption", description: "Description", commentStatus: "open", width: 120, height: 80, url: "/original.png" } as Media & { description: string; commentStatus: "open" | "closed" };
@@ -14,6 +14,15 @@ test("committed image pixels refresh without replacing an attachment's unsaved m
   assert.equal(result?.caption, "New caption");
   assert.equal(mergeMediaDetails({ ...draft, id: 2 }, null, original)?.id, 2);
   assert.equal(mergeMediaDetails(null, null, original), null);
+});
+
+test("adjacent browsing restores only changed metadata over fresh attachment pixels and untouched server fields", () => {
+  const patch = mediaMetadataDraft({ ...original, caption: "Unsaved caption" }, original);
+  assert.deepEqual(patch, { caption: "Unsaved caption" });
+  const reopened = { ...original, title: "Changed on server", width: 80, height: 120, ...patch };
+  assert.equal(reopened.title, "Changed on server");
+  assert.equal(reopened.caption, "Unsaved caption");
+  assert.equal(reopened.width, 80);
 });
 
 test("metadata completion applies server normalization only to fields not edited again after Submit", () => {

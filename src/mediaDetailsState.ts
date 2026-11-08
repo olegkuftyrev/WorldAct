@@ -2,6 +2,13 @@ import type { Media } from "./api";
 
 const draftFields = ["title", "alt", "caption", "description", "commentStatus"] as const;
 type Details = Media & { description?: string; commentStatus?: "open" | "closed" };
+export type MediaMetadataDraft = Partial<Pick<Details, typeof draftFields[number]>>;
+export function mediaMetadataDraft(current: Details, baseline: Details): MediaMetadataDraft {
+  const draft: MediaMetadataDraft = {};
+  for (const field of draftFields) if (current[field] !== baseline[field])
+    draft[field] = current[field] as never;
+  return draft;
+}
 
 // Pixel operations do not submit these fields. A metadata save may normalize
 // them, but only while the user has not edited that field again after Submit.
