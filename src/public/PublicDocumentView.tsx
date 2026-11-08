@@ -5,6 +5,7 @@ import ClassicCommentThread from "../components/ClassicCommentThread";
 import { Brand, ResourceState } from "../components/PublicPrimitives";
 import { postLink } from "../publicLinks";
 import { commentReturnPath } from "../../shared/comment-links";
+import { postPublicationKey } from "../../shared/post-civil-date";
 
 export type PublicInteractionState = {
  error:string; errorLocal?:boolean; notice:string; busy:boolean; password:string; publicSearch:string;
@@ -45,7 +46,7 @@ export function PublicDocumentView({model,state=initialPublicInteraction(model),
  const readTime=(item:PublicPost)=>{const plugin=enabledPlugin("reading-time");return !plugin || item.locked ? null : Math.max(1,Math.ceil(item.content.replace(/<[^>]*>/g," ").trim().split(/\s+/).filter(Boolean).length/Math.max(50,Number(plugin.settings.wordsPerMinute)||200)));};
  const style=model.design.styles;
  const globalStyle={"--worldact-background":style.backgroundColor,"--worldact-text":style.textColor,"--worldact-accent":style.accentColor,"--worldact-font":fontStack(style.fontFamily),"--worldact-heading-font":fontStack(style.headingFont),"--worldact-width":style.contentWidth ? `${style.contentWidth}px`:undefined,"--worldact-spacing":style.spacing ? `${style.spacing}px`:undefined} as CSSProperties;
- const displayDate=(value:string|null)=>value ? model.controls.dates[value] || "—" : "—";
+ const displayDate=(item:PublicPost)=>model.controls.dates[postPublicationKey(item)] || "—";
   const adminBar = (user && user.showAdminBar !== false && (
         <div className="public-admin-bar">
           <a onClick={actions.navigate} href={user.role === "subscriber" ? "/" : "/admin"}>
@@ -149,7 +150,7 @@ export function PublicDocumentView({model,state=initialPublicInteraction(model),
                   <h1>{post.title}</h1>
                   {post.type === "post" && (
                     <p className="post-meta">
-                      {displayDate(post.publishedAt)}
+                      {displayDate(post)}
                       <span>by {post.authorName}</span>
                       {readTime(post) && <span>{readTime(post)} min read</span>}
                     </p>
@@ -226,7 +227,7 @@ export function PublicDocumentView({model,state=initialPublicInteraction(model),
                   <ClassicCommentThread
                     comments={comments}
                     onNavigate={actions.navigate}
-                    displayDate={displayDate}
+                    displayDate={value => value ? model.controls.dates[value] || "—" : "—"}
                     threaded={settings?.threadComments !== false}
                     maxDepth={settings?.threadDepth || 5}
                     canReply={model.controls.commentsOpen}
@@ -418,7 +419,7 @@ export function PublicDocumentView({model,state=initialPublicInteraction(model),
                         </a>
                       </h2>
                       <p className="post-meta">
-                        {displayDate(item.publishedAt)}
+                        {displayDate(item)}
                         {readTime(item) && (
                           <span>{readTime(item)} min read</span>
                         )}

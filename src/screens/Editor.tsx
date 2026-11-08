@@ -23,6 +23,7 @@ import {
   type Autosave,
   type SerializedBlock,
   type Footnote,
+  type Settings,
 } from "../api";
 import {
   Session,
@@ -32,6 +33,7 @@ import {
   ResourceState,
   Modal,
   errorText,
+  useResource,
 } from "../components/AdminUI";
 import GutenbergEditor, {type GutenbergEditorHandle} from "../editor/GutenbergEditor";
 import EditorOptions from "../editor/EditorOptions";
@@ -39,6 +41,8 @@ import { useEditorPreferences } from "../editor/EditorPreferences";
 import { useEditorShortcuts } from "../editor/editorShortcuts";
 import type { EditorPreferencePatch } from "../editor/preferenceQueue";
 import { documentRecovery, editorOwnerMatches, editorTargetMatches } from "../editor/documentRecovery";
+import { formatPostCivil } from "../../shared/post-civil-date";
+import { publicationDateChange, publicationDatePayload, publicationInstant } from "../editor/publicationDate";
 
 type DocumentState = {
   title: string;
@@ -49,6 +53,9 @@ type DocumentState = {
   slug: string;
   status: Post["status"];
   scheduledAt: string;
+  postDate: string;
+  postDateOriginal: string;
+  postDateIntent?: string | null;
   visibility: "public" | "private" | "password";
   password?: string;
   categoryIds: number[];
@@ -72,6 +79,8 @@ const emptyDocument = (): DocumentState => ({
   slug: "",
   status: "draft",
   scheduledAt: "",
+  postDate: "",
+  postDateOriginal: "",
   visibility: "public",
   categoryIds: [],
   tagIds: [],
@@ -90,6 +99,8 @@ const postDocument = (post: Post): DocumentState => ({
   slug: post.slug,
   status: post.status,
   scheduledAt: post.scheduledAt || "",
+  postDate: post.postDate,
+  postDateOriginal: post.postDate,
   visibility:
     post.status === "private"
       ? "private"
@@ -110,13 +121,6 @@ const postDocument = (post: Post): DocumentState => ({
   format: post.format || "standard",
   sticky: post.sticky || false,
 });
-function localDate(value: string) {
-  if (!value) return "";
-  const d = new Date(value);
-  return new Date(d.getTime() - d.getTimezoneOffset() * 60000)
-    .toISOString()
-    .slice(0, 16);
-}
 const statuses: Record<Post["status"], string> = {
   publish: "Published",
   draft: "Draft",
@@ -286,6 +290,8 @@ export default function Editor({ type }: { type: "post" | "page" }) {
   const { id } = useParams(),
     navigate = useNavigate(),
     { user } = useContext(Session);
+  const siteClock = useResource<{ settings: Pick<Settings, "timezone" | "dateFormat" | "timeFormat"> }>("/public/site");
+  const timezone = siteClock.data?.settings.timezone;
   const targetKey = `${user?.id}:${type}:${id || "new"}`;
   const activeTarget = useRef(targetKey); activeTarget.current = targetKey;
   const preferences = useEditorPreferences(), options = preferences.value;
@@ -588,12 +594,13 @@ export default function Editor({ type }: { type: "post" | "page" }) {
       nextStatus === "publish" && current.visibility === "private"
         ? "private"
         : nextStatus;
-    const { visibility: _visibility, password: _password, ...fields } = current;
+    const { visibility: _visibility, password: _password, scheduledAt: _scheduledAt,
+      postDate: _postDate, postDateOriginal: _postDateOriginal, postDateIntent, ...fields } = current;
     return {
       ...fields,
       blocks: current.blocks || [],
       status: effective,
-      scheduledAt: current.scheduledAt || null,
+      ...publicationDatePayload(postDateIntent),
       categoryIds: current.categoryIds,
       tagIds: current.tagIds,
       ...(current.visibility === "password"
@@ -613,6 +620,10 @@ export default function Editor({ type }: { type: "post" | "page" }) {
       if(loadGeneration.current!==generation)return post.id;
       idRef.current=post.id;versionRef.current=post.version;
       setPostId(post.id);setVersion(post.version);setPermalink(postLink(post));
+      setDoc(current => ({ ...current, postDateOriginal: post.postDate,
+        ...(current.postDate === snapshot.postDate && current.postDateIntent === snapshot.postDateIntent
+          ? { postDate: post.postDate, postDateIntent: undefined, scheduledAt: post.scheduledAt || "" }
+          : publicationDateChange(current.postDate, post.postDate)) }));
       createdRoute.current=post.id;
       localStorage.removeItem(storageKey(null));
       navigate(`${base}/${post.id}`,{replace:true});
@@ -707,7 +718,7 @@ export default function Editor({ type }: { type: "post" | "page" }) {
     if (!documentReady || busyRef.current || !leaseReady.current) return;
     if (
       nextStatus === "future" &&
-      (!doc.scheduledAt || new Date(doc.scheduledAt) <= new Date())
+      (!scheduleInstant || Date.parse(scheduleInstant) <= Date.now())
     ) {
       setError("Choose a future publication date before scheduling.");
       return;
@@ -749,6 +760,10 @@ export default function Editor({ type }: { type: "post" | "page" }) {
         status: post.status,
         slug: post.slug,
         scheduledAt: post.scheduledAt || "",
+        postDateOriginal: post.postDate,
+        ...(current.postDate === snapshot.postDate && current.postDateIntent === snapshot.postDateIntent
+          ? { postDate: post.postDate, postDateIntent: undefined }
+          : publicationDateChange(current.postDate, post.postDate)),
       }));
       blockEditor.current?.acknowledgeFootnotes(post.footnotes || [],snapshot.footnotes);
       const unchanged = JSON.stringify(docRef.current) === fingerprint;
@@ -942,12 +957,14 @@ export default function Editor({ type }: { type: "post" | "page" }) {
     }
     return candidate.id === postId;
   }
+  const scheduleInstant = doc.postDateIntent === undefined && doc.scheduledAt
+    ? doc.scheduledAt : timezone ? publicationInstant(doc.postDate, timezone) : null;
   const primaryStatus: Post["status"] = !canPublish
     ? doc.status === "private"
       ? "private"
       : "pending"
     : doc.status === "draft" || doc.status === "pending"
-      ? doc.scheduledAt && new Date(doc.scheduledAt) > new Date()
+      ? scheduleInstant && Date.parse(scheduleInstant) > Date.now()
         ? "future"
         : "publish"
       : doc.status;
@@ -1312,27 +1329,32 @@ export default function Editor({ type }: { type: "post" | "page" }) {
                         <input
                           type="datetime-local"
                           aria-label="Publication date"
-                          value={localDate(doc.scheduledAt)}
+                          aria-describedby="publication-date-zone"
+                          step="1"
+                          min="0001-01-01T00:00:00"
+                          max="9999-12-31T23:59:59"
+                          disabled={!timezone}
+                          value={doc.postDate}
                           onChange={(e) =>
                             change({
-                              scheduledAt: e.target.value
-                                ? new Date(e.target.value).toISOString()
-                                : "",
+                              ...publicationDateChange(e.target.value, doc.postDateOriginal),
+                              ...(!e.target.value && doc.status === "future" ? { status: "draft" as const } : {}),
                             })
                           }
                         />
                       </label>
-                      <p className="description">
-                        {doc.scheduledAt
-                          ? `Publication time: ${new Date(doc.scheduledAt).toLocaleString()}`
+                      <p className="description" id="publication-date-zone">
+                        {timezone ? `Site timezone: ${timezone}.` : siteClock.error || "Loading site timezone…"}{" "}
+                        {doc.postDate && timezone
+                          ? (() => { try { return `Publication time: ${formatPostCivil(doc.postDate, "Y-m-d H:i:s", timezone)}`; } catch { return "Choose a valid publication date."; } })()
                           : "Immediately"}
                       </p>
-                      {doc.scheduledAt && (
+                      {doc.postDate && (
                         <button
                           className="button-link"
                           onClick={() =>
                             change({
-                              scheduledAt: "",
+                              postDate: "", postDateIntent: null,
                               ...(doc.status === "future"
                                 ? { status: "draft" as const }
                                 : {}),

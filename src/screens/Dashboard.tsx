@@ -27,7 +27,7 @@ import {
 import { dashboardActivityDate, dashboardDraftDate } from "../dashboardDates";
 import { decodeEntities } from "@wordpress/html-entities";
 
-type DashboardEntry = Pick<Post, "id" | "title" | "publishedAt" | "createdAt" | "updatedAt" | "scheduledAt"> & { permalink: string; canEdit: boolean; preview?: string };
+type DashboardEntry = Pick<Post, "id" | "title" | "publishedAt" | "createdAt" | "updatedAt" | "scheduledAt" | "postDate" | "postDateGmt"> & { permalink: string; canEdit: boolean; preview?: string };
 type DashboardComment = Comment & { type?: "comment" | "pingback" | "trackback"; canEdit: boolean; postPermalink: string };
 type DashboardData = {
   counts: Record<string, number>;
@@ -527,7 +527,7 @@ function ActivityPosts({ id, title, posts, future = false, settings }: { id: str
   return <div id={id} className="activity-block">
     <h3>{title}</h3>
     <ul>{posts.map(post => <li key={post.id}>
-      <span>{settings && dashboardActivityDate(future ? post.scheduledAt : post.publishedAt || post.createdAt, settings)}</span>{" "}
+      <span>{settings && dashboardActivityDate(post.postDate, settings)}</span>{" "}
       <Link to={post.canEdit ? `/admin/posts/${post.id}` : post.permalink} aria-label={`${post.canEdit ? "Edit" : "View"} “${post.title || "(no title)"}”`}>{post.title || "(no title)"}</Link>
     </li>)}</ul>
   </div>;

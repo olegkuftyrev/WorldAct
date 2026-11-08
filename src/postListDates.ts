@@ -1,15 +1,18 @@
 import { date as formatDate } from "@wordpress/date";
 import type { PostStatus } from "./api";
+import { formatPostCivil, parsePostCivil } from "../shared/post-civil-date";
 
 /** Source column_date uses the chosen post date in the site's clock, including
  * drafts and Trash. The list response already supplies that effective date. */
-export function postListDate(value: string | null | undefined, timezone: string | undefined, status: PostStatus, now = Date.now()) {
-  const timestamp = value ? Date.parse(value) : NaN;
+export function postListDate(value: string | null | undefined, timezone: string | undefined, status: PostStatus, now = Date.now(), scheduledAt?: string | null) {
+  // A missed schedule is a due-instant policy, independent of the selected civil
+  // publication date and any subsequent site timezone change.
+  const timestamp = scheduledAt ? Date.parse(scheduledAt) : NaN;
   const missed = status === "future" && Number.isFinite(timestamp) && timestamp < now;
   const label = status === "publish" ? "Published" : status === "future" ? missed ? "Missed schedule" : "Scheduled" : "Last Modified";
   let text = "—";
-  if (value && timezone && Number.isFinite(timestamp)) {
-    try { text = `${formatDate("Y/m/d", value, timezone)} at ${formatDate("g:i a", value, timezone)}`; }
+  if (value && timezone && parsePostCivil(value)) {
+    try { text = `${formatPostCivil(value, "Y/m/d", timezone)} at ${formatPostCivil(value, "g:i a", timezone)}`; }
     catch { /* Missing/unusable metadata must not become a browser-local date. */ }
   }
   return { label, text, missed };
