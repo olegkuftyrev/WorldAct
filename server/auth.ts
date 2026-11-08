@@ -47,7 +47,7 @@ export async function assertActiveAccountAuthentication(req: AuthRequest, db: Po
   const userId = req.user?.id;
   const exists = req.authenticationMethod === "application-password"
     ? await db.query("SELECT 1 FROM application_passwords WHERE user_id=$1 AND uuid=$2", [userId, req.applicationPasswordUuid])
-    : await db.query("SELECT 1 FROM sessions WHERE user_id=$1 AND token_hash=$2 AND expires_at>now()", [userId, tokenHash(readToken(req) || "")]);
+    : await db.query("SELECT 1 FROM sessions WHERE user_id=$1 AND token_hash=$2 AND expires_at>clock_timestamp()", [userId, tokenHash(readToken(req) || "")]);
   if (!exists.rowCount) throw new HttpError(401, "Your sign-in has expired. Sign in again to update this account.");
 }
 export async function attachUser(

@@ -95,6 +95,9 @@ const updateSchema = z
     "Provide at least one field to update.",
   );
 type PostInput = z.infer<typeof createSchema>;
+// Only the internal mail wrapper can relax the normal author-role check for a
+// new pending post. This authority cannot be supplied by any request body.
+const mailPostAuthority = Symbol("pending-mail-post");
 function ownOnly(user: User) {
   return user.role === "author" || user.role === "contributor";
 }
@@ -355,12 +358,18 @@ async function savePost(
   user: User,
   existing?: any,
   oldPasswordHash?: string | null,
+  authority?: typeof mailPostAuthority,
 ) {
   const type = input.type ?? existing?.type ?? "post";
   const templateSlug=input.templateSlug ?? existing?.templateSlug ?? "";
   if(input.templateSlug!==undefined || (input.type!==undefined && type!==existing?.type))await validatePostTemplate(templateSlug,type,client);
   const authorId = input.authorId ?? existing?.authorId ?? user.id;
-  if (!existing || input.authorId !== undefined) await validateAuthor(client, authorId, user);
+  if (authority === mailPostAuthority) {
+    if (existing || type !== "post" || input.status !== "pending" || authorId !== user.id)
+      throw new HttpError(400, "Invalid mail post authority.");
+    const account = (await client.query("SELECT role FROM users WHERE id=$1 FOR SHARE", [authorId])).rows[0];
+    if (!account || account.role !== user.role) throw new HttpError(409, "The mail author changed. Check mail again.");
+  } else if (!existing || input.authorId !== undefined) await validateAuthor(client, authorId, user);
   let status = input.status ?? existing?.status ?? "draft";
   assertNewAccess(user, type, status, existing?.status);
   if (input.sticky !== undefined && input.sticky !== (existing?.sticky ?? false) && ownOnly(user))
@@ -573,6 +582,26 @@ async function savePost(
     return getPost(id, client);
   }
   throw new HttpError(409, "Please choose a different permalink.");
+}
+
+/** Caller owns the transaction and has locked/rechecked its operator and mailbox.
+ * Email headers are claimed sender identities, never an authenticated session. */
+export async function createMailPost(
+  client: PoolClient,
+  author: User,
+  input: { title: string; content: string; categoryId: number | null; date: string | null },
+  recognized: boolean,
+) {
+  const publishing = recognized && ["administrator", "editor", "author"].includes(author.role);
+  const future = publishing && input.date !== null && Date.parse(input.date) > Date.now() + 60_000;
+  const data = createSchema.parse({
+    type: "post", authorId: author.id, title: input.title, content: input.content,
+    categoryIds: input.categoryId === null ? [] : [input.categoryId],
+    status: future ? "future" : publishing ? "publish" : "pending",
+    ...(future ? { scheduledAt: input.date } : input.date ? { publishedAt: input.date } : {}),
+  });
+  return savePost(client, data, author, undefined, undefined,
+    !publishing ? mailPostAuthority : undefined);
 }
 
 export async function publishDuePosts(

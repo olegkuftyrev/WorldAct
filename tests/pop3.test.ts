@@ -135,3 +135,16 @@ test("timed-out DNS keeps its physical lookup slots and never starts a socket", 
     assert.equal(calls, 2); assert.equal(sockets, 0);
   } finally { resolvers.forEach(resolve => resolve([address])); }
 });
+
+test("mail intake can retain ownership of a failed opening until its physical socket closes", async () => {
+  const peer = new Peer(command => command.startsWith("PASS ") ? undefined : defaultReply(command)); peer.holdClose = true;
+  const open = createPOP3Transport({ resolve: async () => [address], connect: () => peer.ready(), deadlineMs: 20, waitForPhysicalClose: true });
+  let settled = false;
+  const opening = open(configuration).finally(() => { settled = true; });
+  const rejected = assert.rejects(opening, is("unavailable"));
+  try {
+    await new Promise(resolve => setTimeout(resolve, 40));
+    assert.equal(peer.destroyed, true); assert.equal(settled, false);
+    await assert.rejects(open(configuration), is("busy"));
+  } finally { peer.emit("close"); await rejected; }
+});

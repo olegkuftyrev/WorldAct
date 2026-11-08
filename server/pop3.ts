@@ -14,6 +14,7 @@ type Options = {
   resolve?: (host: string) => Promise<PublicAddress[]>;
   connect?: (input: ConnectInput) => Socket;
   deadlineMs?: number;
+  waitForPhysicalClose?: boolean;
 };
 export function normalizePOP3Configuration(input: POP3Configuration): POP3Configuration {
   if (!input || typeof input.host !== "string" || input.host.length > 253 || !input.host || /[\u0000-\u0020\u007f/@\\?#%]/.test(input.host) ||
@@ -204,8 +205,9 @@ export function createPOP3Transport(options: Options = {}) {
       const safe = error instanceof POP3Error ? error : new POP3Error("unavailable");
       fail(safe);
       if (!socket) { active = false; signal.removeEventListener("abort", abort); finishClose(); }
+      if (options.waitForPhysicalClose) await closed;
       throw safe;
     }
   };
 }
-export const openPOP3 = createPOP3Transport();
+export const openPOP3 = createPOP3Transport({ waitForPhysicalClose: true });
