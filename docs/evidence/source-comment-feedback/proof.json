@@ -1,0 +1,190 @@
+{
+  "rows": [
+    {
+      "width": 1440,
+      "failure": {
+        "alert": {
+          "bottom": 684.8125,
+          "text": "You are posting comments too quickly. Slow down.",
+          "top": 626.8125,
+          "visible": true
+        },
+        "alerts": 1,
+        "body1": false,
+        "body2": true,
+        "card2": true,
+        "documentWidth": 1440,
+        "draft": "Feedback rejected distinct 1440 mw80mtx9",
+        "falseSuccess": false,
+        "formBusy": null,
+        "height": 1000,
+        "parent": "4",
+        "responses": [
+          201,
+          429
+        ],
+        "scrollY": 8276,
+        "submit": {
+          "bottom": 597.8125,
+          "disabled": false,
+          "focused": true,
+          "top": 541.8125,
+          "visible": true
+        },
+        "url": "http://127.0.0.1:3044/?p=7&page=2&query-4-page=2&commentPage=2#respond",
+        "width": 1440
+      },
+      "admitted": {
+        "id": 24,
+        "parent_id": 4,
+        "user_id": 2,
+        "status": "approved"
+      },
+      "retry": {
+        "id": 25,
+        "parent_id": 4,
+        "user_id": 2,
+        "status": "approved"
+      },
+      "agedOnlyOwnAdmissions": [
+        24,
+        25
+      ]
+    },
+    {
+      "width": 768,
+      "failure": {
+        "alert": {
+          "bottom": 685.265625,
+          "text": "You are posting comments too quickly. Slow down.",
+          "top": 627.265625,
+          "visible": true
+        },
+        "alerts": 1,
+        "body1": false,
+        "body2": true,
+        "card2": true,
+        "documentWidth": 768,
+        "draft": "Feedback rejected distinct 768 mw80mue5",
+        "falseSuccess": false,
+        "formBusy": null,
+        "height": 1000,
+        "parent": "4",
+        "responses": [
+          201,
+          429,
+          201,
+          201,
+          429
+        ],
+        "scrollY": 7538,
+        "submit": {
+          "bottom": 598.265625,
+          "disabled": false,
+          "focused": true,
+          "top": 543.265625,
+          "visible": true
+        },
+        "url": "http://127.0.0.1:3044/?p=7&page=2&query-4-page=2&commentPage=2#respond",
+        "width": 768
+      },
+      "admitted": {
+        "id": 26,
+        "parent_id": 4,
+        "user_id": 2,
+        "status": "approved"
+      },
+      "retry": {
+        "id": 27,
+        "parent_id": 4,
+        "user_id": 2,
+        "status": "approved"
+      },
+      "agedOnlyOwnAdmissions": [
+        26,
+        27
+      ]
+    },
+    {
+      "width": 375,
+      "failure": {
+        "alert": {
+          "bottom": 703.53125,
+          "text": "You are posting comments too quickly. Slow down.",
+          "top": 621.53125,
+          "visible": true
+        },
+        "alerts": 1,
+        "body1": false,
+        "body2": true,
+        "card2": true,
+        "documentWidth": 375,
+        "draft": "Feedback rejected distinct 375 mw80muub",
+        "falseSuccess": false,
+        "formBusy": null,
+        "height": 1000,
+        "parent": "4",
+        "responses": [
+          201,
+          429,
+          201,
+          201,
+          429,
+          201,
+          201,
+          429
+        ],
+        "scrollY": 10803,
+        "submit": {
+          "bottom": 592.53125,
+          "disabled": false,
+          "focused": true,
+          "top": 538.53125,
+          "visible": true
+        },
+        "url": "http://127.0.0.1:3044/?p=7&page=2&query-4-page=2&commentPage=2#respond",
+        "width": 375
+      },
+      "admitted": {
+        "id": 28,
+        "parent_id": 4,
+        "user_id": 2,
+        "status": "approved"
+      },
+      "retry": {
+        "id": 29,
+        "parent_id": 4,
+        "user_id": 2,
+        "status": "approved"
+      },
+      "agedOnlyOwnAdmissions": [
+        28,
+        29
+      ]
+    }
+  ],
+  "screenshots": [
+    "docs/evidence/source-comment-feedback/source-feedback-1440.png",
+    "docs/evidence/source-comment-feedback/source-feedback-768.png",
+    "docs/evidence/source-comment-feedback/source-feedback-375.png"
+  ],
+  "method": "Actual compiled Node API and Vite production assets; real subscriber UI controls; no injected DOM/CSS or fake requests.",
+  "browserErrors": "",
+  "codeCommit": "1d98417e7ef1a3b8e663f4adced2f933cabadf06",
+  "sourceSha256": "0aa8a1b7a51d6dd99fc08c66f3cdd77a95ffb1726167210820088453a31a472d",
+  "sourceTests": {
+    "passed": 12,
+    "files": 6,
+    "skipped": 0,
+    "failed": 0
+  },
+  "compiledTests": {
+    "passed": 12,
+    "files": 6,
+    "skipped": 0,
+    "failed": 0
+  },
+  "productionBuild": true,
+  "typecheck": true,
+  "screenshotsInspected": true
+}
