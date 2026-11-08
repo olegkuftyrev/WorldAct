@@ -40,6 +40,7 @@ import {
 } from "@wordpress/blocks";
 import { registerCoreBlocks } from "@wordpress/block-library";
 import { registerClassicContentHandler } from "./classic/register";
+import { recordBlockHistory, type HistoryMode } from "./blockHistory";
 import {
   Button,
   Modal,
@@ -1181,7 +1182,7 @@ const GutenbergSession = forwardRef<
   );
 
   const emit = useCallback(
-    (next: Block[], kind: "input" | "change" | "history", noteSnapshot?:Footnote[]) => {
+    (next: Block[], kind: HistoryMode, noteSnapshot?:Footnote[]) => {
       let footnotes=noteSnapshot || footnotesRef.current;
       if(metadataRef.current) {
         try {
@@ -1197,23 +1198,7 @@ const GutenbergSession = forwardRef<
       signature.current = nextSignature;
       footnotesRef.current=footnotes;
       void writeNativeFootnotes(footnotes);
-      if (kind !== "history") {
-        const state = history.current;
-        const now = Date.now();
-        const mergeTyping =
-          kind === "input" &&
-          state.index === state.items.length - 1 &&
-          state.index > 0 &&
-          now - state.lastInput < 800;
-        if (mergeTyping) state.items[state.index] = {blocks:next,footnotes};
-        else {
-          state.items = state.items.slice(0, state.index + 1);
-          state.items.push({blocks:next,footnotes});
-          if (state.items.length > 100) state.items.shift();
-          state.index = state.items.length - 1;
-        }
-        state.lastInput = kind === "input" ? now : 0;
-      }
+      recordBlockHistory(history.current, {blocks:next,footnotes}, kind);
       setHistoryVersion((value) => value + 1);
       onChangeRef.current(stored, serialize(next));
       metadataRef.current?.(footnotes);
@@ -1653,8 +1638,8 @@ const GutenbergSession = forwardRef<
         <BlockEditorProvider
           key={canvasGeneration}
           value={blocks}
-          onInput={(next) => emit(next, "input")}
-          onChange={(next) => emit(next, "change")}
+          onInput={(next, options) => emit(next, options?.undoIgnore ? "ignore" : "merge")}
+          onChange={(next, options) => emit(next, options?.undoIgnore ? "ignore" : "change")}
           settings={settings}
         >
           <EntityEditsObserver
