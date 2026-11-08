@@ -67,6 +67,8 @@ initially anonymous document can acquire account or password state through
 in-app navigation. Static scripts, styles and uploads retain their existing
 independent cache policy. Choosing these headers does not authenticate Basic
 credentials, write application-password usage, or fetch private document bodies.
+Direct and encoded `index.html` openings use the same document classifier and
+private policy, so the preceding static handler cannot bypass these headers.
 
 Actual HTTP tests cover anonymous/session/expired/password-cookie contexts,
 framework/protected/missing routes, GET/HEAD and conditional requests. This

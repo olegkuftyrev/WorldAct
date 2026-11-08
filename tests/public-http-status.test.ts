@@ -84,6 +84,11 @@ test("Node serves the React document with actual public identity status and pres
       assert.equal(await basic.text(), index);
       const head = await fetch(base + "/", { method: "HEAD", headers: { Cookie: cookie } });
       assert.equal(head.status, 200); assertPrivateDocument(head); assert.equal(await head.text(), "");
+      for (const route of ["/index.html", "/index%2Ehtml", "/%69ndex.html", "/INDEX.HTML"]) {
+        const response = await fetch(base + route);
+        assert.equal(response.status, 404, "a direct file opening retains the unknown public-route identity");
+        assertPrivateDocument(response); assert.equal(await response.text(), index);
+      }
       const asset = /src="([^"]+\.js)"/.exec(index)![1];
       const staticResponse = await fetch(base + asset, { headers: { Cookie: cookie } });
       assert.equal(staticResponse.status, 200);

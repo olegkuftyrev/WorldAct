@@ -193,7 +193,16 @@ app.use(legacyRouter);
 const distDir = path.resolve(
   process.env.STATIC_DIR || path.join(rootDir, "dist"),
 );
-app.use(express.static(distDir, { index: false }));
+const staticFiles = express.static(distDir, { index: false });
+app.use((req, res, next) => {
+  // Direct or encoded index.html openings must use the same document status
+  // and private cache policy as route fallback, rather than static-file policy.
+  let requested: string;
+  try { requested = decodeURIComponent(req.path); }
+  catch { next(); return; }
+  if (path.posix.normalize(requested).toLowerCase() === "/index.html") { next(); return; }
+  staticFiles(req, res, next);
+});
 app.get("/{*splat}", async (req, res) => {
   const document = await publicDocumentIdentity(req.originalUrl);
   const index = path.join(distDir, "index.html");
