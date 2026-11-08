@@ -42,6 +42,17 @@ function readToken(req: Request) {
   const token = item?.slice(COOKIE.length + 1);
   return token && /^[a-f0-9]{64}$/.test(token) ? token : undefined;
 }
+/** Browser HTML only: ignore Basic headers and never update application-password
+ * usage. This is a read-only session lookup, including the existing expiry. */
+export async function readCookieSessionUser(req: Pick<Request, "headers">): Promise<User | undefined> {
+  const token = readToken(req as Request);
+  if (!token) return undefined;
+  return (await pool.query<User>(
+    `SELECT ${userFields.split(",").map(field => `u.${field.trim()}`).join(", ")},${profileOptionsSQL("u")}
+     FROM users u JOIN sessions s ON s.user_id=u.id WHERE s.token_hash=$1 AND s.expires_at>now()`,
+    [tokenHash(token)],
+  )).rows[0];
+}
 /** Recheck a waiting mutation after locking its actor, before changing identity. */
 export async function assertActiveAccountAuthentication(req: AuthRequest, db: PoolClient) {
   const userId = req.user?.id;
@@ -87,19 +98,8 @@ export async function attachUser(
       _res.status(401).json({ error: "The application password is invalid or has been revoked.", code: "invalid_application_password", data: { status: 401 } });
       return;
     }
-    const token = readToken(req);
-    if (token) {
-      const result = await pool.query<User>(
-        `SELECT ${userFields
-          .split(",")
-          .map((field) => `u.${field.trim()}`)
-          .join(", ")},${profileOptionsSQL("u")}
-        FROM users u JOIN sessions s ON s.user_id = u.id WHERE s.token_hash = $1 AND s.expires_at > now()`,
-        [tokenHash(token)],
-      );
-      req.user = result.rows[0];
-      if (req.user) req.authenticationMethod = "session";
-    }
+    req.user = await readCookieSessionUser(req);
+    if (req.user) req.authenticationMethod = "session";
     next();
   } catch (error) {
     next(error);

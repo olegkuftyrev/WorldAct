@@ -1,3 +1,4 @@
+import { pool } from "./db.js";
 import { createHash } from "node:crypto";
 import type { Request } from "express";
 import type { BlockDatabase, RenderPost } from "./block-renderer.js";
@@ -25,4 +26,27 @@ export function postAccessReader(req: Pick<Request, "headers">) {
     const result = await db.query("SELECT 1 FROM post_access_tokens access JOIN posts p ON p.id=access.post_id AND p.password_hash=access.password_hash WHERE access.post_id=$1 AND access.token_hash=$2 AND access.expires_at>now()", [postId, hash]);
     return Boolean(result.rowCount);
   };
+}
+
+function accessToken(req: Pick<Request, "headers">, postId: number) {
+  const cookie = req.headers.cookie
+    ?.split(";")
+    .map((value) => value.trim())
+    .find((value) => value.startsWith(`worldact_post_${postId}=`));
+  const token = cookie?.slice(`worldact_post_${postId}=`.length);
+  return token && /^[a-f\d]{64}$/.test(token) ? token : null;
+}
+export async function hasPostAccess(
+  req: Pick<Request, "headers">,
+  postId: number,
+  passwordHash: string | null,
+) {
+  if (!passwordHash) return true;
+  const token = accessToken(req, postId);
+  if (!token) return false;
+  const access = await pool.query(
+    "SELECT 1 FROM post_access_tokens WHERE token_hash=$1 AND post_id=$2 AND password_hash=$3 AND expires_at>now()",
+    [createHash("sha256").update(token).digest("hex"), postId, passwordHash],
+  );
+  return !!access.rowCount;
 }

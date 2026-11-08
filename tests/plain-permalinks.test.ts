@@ -1,9 +1,6 @@
 import test, { after } from "./isolated-test.js";
 import assert from "node:assert/strict";
 import { DOMParser } from "linkedom";
-import express from "express";
-import { createServer } from "node:http";
-import compatRouter from "../server/compat.js";
 import { pool, getSettings } from "../server/db.js";
 import { postPermalink, resolvePublicPath } from "../server/permalinks.js";
 import { readPlainPermalinkQuery } from "../shared/plain-permalink-query.js";
@@ -70,13 +67,18 @@ test("Plain and numeric permalinks preserve public identity, protected access, p
       await api("/api/settings","PUT",{frontPageMode:"posts",frontPageId:null});
       await api("/api/settings","PUT",{permalinkStructure:""});
     });
-    await t.test("a changed slug handoff cannot replace a fixed-ID request with another published post",async()=>{
-      const other=await post({content:"<p>WRONG-FIXED-ID-BODY</p>"}),otherPublic=(await api("/api/public/posts/"+other.slug,"GET",undefined,"")).data;
-      // Controlled internal handoff fixture supplies the real second post DTO,
-      // representing a rename/slug-reuse between identity read and public read.
-      const app=express();app.get("/api/public/posts/:slug",(_req,res)=>res.json(otherPublic));app.use(compatRouter);app.use((error:any,_req:any,res:any,_next:any)=>res.status(error.status||500).json({error:error.message}));
-      const server=createServer(app);await new Promise<void>(done=>server.listen(0,"127.0.0.1",done));
-      try{const port=(server.address() as {port:number}).port,response=await fetch(`http://127.0.0.1:${port}/api/public/resolve?`+new URLSearchParams({path:story.permalink}));assert.equal(response.status,404);assert.doesNotMatch(await response.text(),/WRONG-FIXED-ID-BODY/);}finally{await new Promise<void>((done,fail)=>server.close(error=>error?fail(error):done()));}
+    await t.test("a renamed and reused slug cannot replace a fixed-ID public body",async()=>{
+      const other=await post({content:"<p>WRONG-FIXED-ID-BODY</p>"});
+      await pool.query("UPDATE posts SET slug=$2 WHERE id=$1",[story.id,story.slug+"-renamed"]);
+      await pool.query("UPDATE posts SET slug=$2 WHERE id=$1",[other.id,story.slug]);
+      try {
+        const result=await resolve(story.permalink);
+        assert.equal(result.response.status,200);assert.equal(result.data.post.id,story.id);
+        assert.match(result.data.post.content,/PLAIN-FIRST/);assert.doesNotMatch(JSON.stringify(result.data),/WRONG-FIXED-ID-BODY/);
+      } finally {
+        await pool.query("UPDATE posts SET slug=$2 WHERE id=$1",[other.id,other.slug]);
+        await pool.query("UPDATE posts SET slug=$2 WHERE id=$1",[story.id,story.slug]);
+      }
     });
     await t.test("real notification workers use query identities and reject a changed canonical target",async()=>{
       const target=new URL(story.permalink,(await getSettings()).siteUrl).href;

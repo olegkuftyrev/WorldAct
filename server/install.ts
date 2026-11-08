@@ -1,12 +1,13 @@
 import { Router } from "express";
 import { createHash, timingSafeEqual } from "node:crypto";
-import type { PoolClient } from "pg";
 import { z } from "zod";
 import { pool, defaultSettings, userFields } from "./db.js";
 import { hashPassword } from "./auth.js";
 import { seedInitialContent } from "./initial-content.js";
 import { HttpError, plainText } from "./utils.js";
 import { queueMail, deliverMail } from "./accounts.js";
+import { isInstalled } from "./installation-state.js";
+export { isInstalled } from "./installation-state.js";
 
 const router = Router();
 const inputSchema = z.object({
@@ -25,9 +26,6 @@ export function installationTokenMatches(input: string, expected = configuredTok
   if (!expected || !/^[a-f0-9]{64}$/.test(input)) return false;
   const digest = (value: string) => createHash("sha256").update(value).digest();
   return timingSafeEqual(digest(input), digest(expected));
-}
-export async function isInstalled(db: Pick<PoolClient, "query"> = pool) {
-  return Boolean((await db.query("SELECT EXISTS(SELECT 1 FROM users) OR EXISTS(SELECT 1 FROM seed_markers WHERE name IN('initial-content-v1','browser-install-v1')) OR EXISTS(SELECT 1 FROM posts) OR EXISTS(SELECT 1 FROM media) AS installed")).rows[0].installed);
 }
 router.get("/install", async (_req, res) => {
   const installed = await isInstalled();

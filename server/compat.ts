@@ -1,3 +1,4 @@
+import {readPublishedPostById} from "./public-read.js";
 import {normalizePingSource,renderedCommentContent} from "./comment-policy.js";
 import {submitPublicComment} from "./core.js";
 import express, {
@@ -171,12 +172,12 @@ router.get("/api/public/resolve", async (req, res) => {
     if (archive) { res.json({ archive }); return; }
     throw new HttpError(404, "Post not found.");
   }
-  const result = await forward(
-    req,
-    "/public/posts/" + encodeURIComponent(resolved.slug) + "?page=" + parseContentPage(resolved.contentPage ?? req.query.page),
-  );
-  if(result.data?.post?.id!==resolved.id)throw new HttpError(404,"Post not found.");
-  res.json({ ...result.data, ...(resolved.contentPage ? { contentPage: resolved.contentPage } : {}) });
+  const result = await readPublishedPostById(resolved.id,resolved.type,{
+    query:{page:parseContentPage(resolved.contentPage ?? req.query.page)},user:(req as AuthRequest).user,requestPath:path,canReadProtectedPost:postAccessReader(req),
+  });
+  if(result.post.id!==resolved.id)throw new HttpError(404,"Post not found.");
+  const {rawPost: _rawPost,...data}=result;
+  res.json({...data,...(resolved.contentPage?{contentPage:resolved.contentPage}:{})});
 });
 async function feedPosts(req: Request) {
   const settings = await getSettings();

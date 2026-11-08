@@ -1,3 +1,4 @@
+import {renderPublicTemplateDocument} from "./public-presentation.js";
 import {pingbackHeader} from "./incoming-ping-policy.js";
 import express, { type Request, type Response } from "express";
 import { createHash } from "node:crypto";
@@ -23,7 +24,6 @@ import {
   CORE_DYNAMIC_BLOCKS,
   SUPPORTED_DYNAMIC_BLOCKS,
   renderBlock,
-  renderSiteDocument,
 } from "./block-renderer.js";
 import { themeIds, readThemeDesign, getBundledTheme, resetBundledDocument } from "./themes.js";
 import { templatePartAreas, sourceTemplatePartArea } from "../shared/template-areas.js";
@@ -852,7 +852,7 @@ router.get("/api/public/templates/:slug", async (req:AuthRequest, res) => {
       type: doc.type,
       version: doc.version,
     },
-    content: await renderSiteDocument(doc, {
+    content: await renderPublicTemplateDocument(doc, {
       post,
       requestPath,
       templateSlug: doc.slug,

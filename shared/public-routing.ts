@@ -39,7 +39,8 @@ export function normalizePublicQuery(query: URLSearchParams, options: {
   const blockPages: Record<string, number> = {};
   for (const [key, value] of Object.entries(values)) if (/^query-\d+-page$/.test(key)) blockPages[key] = positive(value, key);
   const contentPage = options.singular ? options.contentPage ?? page : 1;
-  values.page = String(options.singular ? 1 : page);
+  if (!options.singular || query.has("page")) values.page = String(options.singular ? contentPage : page);
+  else delete values.page;
   const commentPage = values.commentPage ? positive(values.commentPage, "comment page") : undefined;
   return { search, category, tag, ...(values.author ? {author: positive(values.author,"author")} : {}), date,
     archivePage: options.singular ? 1 : page, contentPage, ...(commentPage ? {commentPage} : {}), blockPages, values };

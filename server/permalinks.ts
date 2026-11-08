@@ -104,7 +104,7 @@ async function resolveExactPublicPath(path: string, settings: Settings) {
   if (normalized === "//" || normalized === "/") {
     if (settings.frontPageMode === "page" && settings.frontPageId) {
       const row = await pool.query(
-        "SELECT id,slug FROM posts WHERE id=$1 AND type='page' AND status='publish'",
+        "SELECT id,slug,type FROM posts WHERE id=$1 AND type='page' AND status='publish'",
         [settings.frontPageId],
       );
       return row.rows[0] ?? null;
@@ -164,7 +164,7 @@ async function resolveExactPublicPath(path: string, settings: Settings) {
   for (const part of normalized.split("/").filter(Boolean)) {
     const slug = decodeURIComponent(part);
     const rows = await pool.query(
-      "SELECT id,slug,parent_id,status FROM posts WHERE type='page' AND slug=$1 AND parent_id IS NOT DISTINCT FROM $2",
+      "SELECT id,slug,type,parent_id,status FROM posts WHERE type='page' AND slug=$1 AND parent_id IS NOT DISTINCT FROM $2",
       [slug, parent],
     );
     current = rows.rows[0];

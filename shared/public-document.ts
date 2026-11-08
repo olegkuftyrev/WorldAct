@@ -26,6 +26,7 @@ export type PublicQuery = {
 };
 export type PublicRoute = {
   kind: "home" | "archive" | "singular" | "front-page" | "posts-page" | "not-found";
+  detail: boolean;
   archive: PublicArchive | null; query: PublicQuery;
   selectedId?: number; selectedType?: "post" | "page";
 };
@@ -53,6 +54,7 @@ export type PublicHead = {
   title: string; robots: string | null; canonical: string | null;
   seo: null | { description: string; title: string; type: "article" | "website"; url: string; image: string | null };
   icons: { rel: string; href: string; sizes?: string }[];
+  tileImage: string | null;
 };
 export type PublicDocumentModel = {
   schema: 1; requestPath: string; status: 200 | 404; route: PublicRoute; viewer: PublicViewer;

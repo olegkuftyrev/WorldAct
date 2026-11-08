@@ -1,6 +1,10 @@
+import {readPublicDocument,publicDocumentContext} from "./public-document-data.js";
+import { publicPost, commentResponse, readPublicSite } from "./public-read.js";
+import { hasPostAccess } from "./post-passwords.js";
+export { hasPostAccess } from "./post-passwords.js";
 import {pingbackHeader} from "./incoming-ping-policy.js";
 import {commentsOpen} from "../shared/comment-open.js";
-import {moderateComment,renderedCommentContent} from "./comment-policy.js";
+import {moderateComment} from "./comment-policy.js";
 export {matchesCommentKeywords} from "./comment-policy.js";
 import {enqueuePublicationPings} from "./outgoing-pings.js";
 import {checkAkismetComment,recordAkismetCheck,type AkismetComment} from "./bundled-plugins.js";
@@ -26,22 +30,19 @@ import {
   cleanBlocks,
   cleanRawContent,
 } from "./utils.js";
-import { enhancePublicPost, classifySpam } from "./design.js";
+import { classifySpam } from "./design.js";
 import { withPermalink } from "./permalinks.js";
-import { renderPublicContent, type RenderOptions } from "./block-renderer.js";
 import { postAccessReader } from "./post-passwords.js";
 import { queueMail, deliverMail } from "./accounts.js";
 import {validatePostTemplate} from "./post-templates.js";
-import { avatarURL } from "./avatars.js";
 import { assertEditLease } from "./edit-lease.js";
 import { postFormats } from "../shared/post-formats.js";
 import { contributorCanEditPostStatus } from "./comment-access.js";
-import { appendDateArchiveSQL, dateArchiveDTO, dateArchiveLocalSQL, parseDateArchiveQuery } from "./date-archives.js";
+import { appendDateArchiveSQL, dateArchiveLocalSQL } from "./date-archives.js";
 import { POST_DATE_SQL } from "./post-date.js";
 import { parseFootnotes } from "./footnotes.js";
 import { withPreviewAutosave } from "./post-preview.js";
 import { contentPagination, parseContentPage } from "./legacy-content.js";
-import { publicCommentWindow } from "./comment-window.js";
 import { lockPageHierarchy, reparentDeletedPages } from "./page-hierarchy.js";
 import { assertCommentFloodAllowed, cleanupCommentFloodMetadata, commentAdmissionTime, recordCommentFloodMetadata } from "./comment-flood.js";
 
@@ -1250,74 +1251,6 @@ router.get("/public/comment-author", async (req, res) => {
   if (!author && rememberedAuthorToken(req)) res.clearCookie(commentAuthorCookie, { path: "/", httpOnly: true, sameSite: "lax" });
   res.json({ author });
 });
-function accessToken(req: Request, postId: number) {
-  const cookie = req.headers.cookie
-    ?.split(";")
-    .map((value) => value.trim())
-    .find((value) => value.startsWith(`worldact_post_${postId}=`));
-  const token = cookie?.slice(`worldact_post_${postId}=`.length);
-  return token && /^[a-f\d]{64}$/.test(token) ? token : null;
-}
-export async function hasPostAccess(
-  req: Request,
-  postId: number,
-  passwordHash: string | null,
-) {
-  if (!passwordHash) return true;
-  const token = accessToken(req, postId);
-  if (!token) return false;
-  const access = await pool.query(
-    "SELECT 1 FROM post_access_tokens WHERE token_hash=$1 AND post_id=$2 AND password_hash=$3 AND expires_at>now()",
-    [tokenHash(token), postId, passwordHash],
-  );
-  return !!access.rowCount;
-}
-async function publicPost(post: any, locked = false, options: RenderOptions = {}) {
-  const {
-    blocks: _blocks,
-    rawContent: _rawContent,
-    raw_content: _raw,
-    pendingCommentCount: _pendingCommentCount,
-    ...safe
-  } = decoratePost(post);
-  const settings=await getSettings(),linked = await withPermalink(safe,settings);
-  const result = {
-    ...linked,
-    commentCount: safe.approvedCommentCount ?? safe.commentCount ?? 0,
-    locked,
-    footnotes: locked ? [] : safe.footnotes ?? [],
-    ...(!locked ? { contentPagination: contentPagination(post, linked.permalink, options.contentPage || 1, options.preview,settings.permalinkStructure) } : {}),
-    content: locked ? "" : await renderPublicContent({ ...post, locked }, { requestPath: linked.permalink, ...options }),
-    excerpt: locked ? "" : safe.excerpt,
-  };
-  return locked ? result : enhancePublicPost(result);
-}
-async function commentResponse(postId: number, req: Request, locked = false) {
-  const requestedPage = z.coerce
-    .number()
-    .int()
-    .positive()
-    .max(2_147_483_647)
-    .optional()
-    .parse(req.query.commentPage);
-  const settings = await getSettings();
-  const window = locked
-    ? { comments: [], total: 0, totalTopLevelComments: 0, totalPages: 1, page: 1, perPage: settings.paginateComments ? settings.commentsPerPage : 1 }
-    : await publicCommentWindow(postId, requestedPage, settings);
-  return {
-    comments: window.comments.map(({ _avatarEmail, _accountAvatarEmail, ...comment }) => ({
-      ...comment, content: renderedCommentContent(comment.content,comment.type),
-      avatarUrl: comment.type === "comment" ? avatarURL(_accountAvatarEmail ?? _avatarEmail, settings) : null,
-    })),
-    commentsPagination: {
-      page: window.page,
-      perPage: window.perPage,
-      totalComments: window.total,
-      totalTopLevelComments: window.totalTopLevelComments,
-      totalPages: window.totalPages,
-    },
-  };
-}
 async function setRobots(res: Response) {
   if ((await getSettings()).discourageSearchEngines)
     res.setHeader("X-Robots-Tag", "noindex, nofollow");
@@ -1331,96 +1264,19 @@ router.get(
     res.setHeader("Cache-Control", "private, no-store");
     res.json({
       post: await publicPost(post, false, { query: req.query, preview: true, user: needUser(req), contentPage: parseContentPage(req.query.page), canReadProtectedPost: postAccessReader(req) }),
-      ...(await commentResponse(post.id, req)),
+      ...(await commentResponse(post.id, {query:req.query,user:(req as AuthRequest).user,canReadProtectedPost:postAccessReader(req)})),
     });
   },
 );
-router.get("/public/site", async (req, res) => {
-  const filter = z
-    .object({
-      page: z.coerce.number().int().positive().max(2_147_483_647).default(1),
-      search: z.string().trim().max(200).optional(),
-      category: z.string().min(1).max(220).optional(),
-      tag: z.string().min(1).max(220).optional(),
-      author: z.coerce.number().int().positive().max(2147483647).optional(),
-    })
-    .parse(req.query);
-  const settings = await getSettings(),
-    args: unknown[] = [];
-  const dateArchive = parseDateArchiveQuery(req.query);
-  let where = "p.type='post' AND p.status='publish'";
-  if (filter.author) { args.push(filter.author); where += ` AND p.author_id=$${args.length}`; }
-  if (filter.search) {
-    args.push(`%${filter.search}%`);
-    where += ` AND (p.title ILIKE $${args.length} OR p.content ILIKE $${args.length} OR p.excerpt ILIKE $${args.length})`;
-    if (!(req as AuthRequest).user) where += " AND p.password_hash IS NULL";
-  }
-  for (const taxonomy of ["category", "tag"] as const)
-    if (filter[taxonomy]) {
-      args.push(filter[taxonomy]);
-      where += ` AND EXISTS(SELECT 1 FROM post_terms pt JOIN terms t ON t.id=pt.term_id WHERE pt.post_id=p.id AND t.taxonomy='${taxonomy}' AND t.slug=$${args.length})`;
-    }
-  const dateWhere: string[] = [];
-  appendDateArchiveSQL(dateWhere, args, "coalesce(p.published_at,p.created_at)", dateArchive, settings.timezone, settings.weekStartsOn);
-  if (dateWhere.length) where += " AND " + dateWhere.map((clause) => `(${clause})`).join(" AND ");
-  const count = await pool.query(
-    `SELECT count(*)::int AS total FROM posts p WHERE ${where}`,
-    args,
-  );
-  args.push(settings.postsPerPage, (filter.page - 1) * settings.postsPerPage);
-  const [posts, pages] = await Promise.all([
-    pool.query(
-      `SELECT ${postFields},p.password_hash AS "_passwordHash" FROM posts p JOIN users u ON u.id=p.author_id WHERE ${where} ORDER BY ${dateArchive || filter.search || filter.author || filter.category || filter.tag ? "" : "p.sticky DESC,"}p.published_at DESC,p.id DESC LIMIT $${args.length - 1} OFFSET $${args.length}`,
-      args,
-    ),
-    pool.query(
-      `SELECT ${postFields},p.password_hash AS "_passwordHash" FROM posts p JOIN users u ON u.id=p.author_id WHERE p.type='page' AND p.status='publish' ORDER BY p.menu_order,p.title,p.id`,
-    ),
-  ]);
-  const sanitize = async (post: any, contentMode: "singular" | "archive" = "singular") => {
-    const { _passwordHash, ...safe } = post;
-    return publicPost(
-      safe,
-      !(await hasPostAccess(req, post.id, _passwordHash)),
-      { query: req.query, requestPath: "/", user: (req as AuthRequest).user, contentMode, canReadProtectedPost: postAccessReader(req) },
-    );
-  };
-  const { defaultPingbackFlag: _outgoingFlag, pingServices: _pingServices, adminEmail: _adminEmail, commentModerationKeys: _moderationKeys, disallowedCommentKeys: _disallowedKeys, ...safeSettings } = settings;
-  const author = filter.author ? (await pool.query("SELECT display_name AS name FROM users WHERE id=$1 AND EXISTS(SELECT 1 FROM posts WHERE author_id=$1 AND type='post' AND status='publish')", [filter.author])).rows[0] : null;
-  const icon = settings.siteIconId
-    ? (
-        await pool.query(
-          "SELECT filename,sizes FROM media WHERE id=$1 AND mime_type LIKE 'image/%'",
-          [settings.siteIconId],
-        )
-      ).rows[0]
-    : null;
-  const totalPosts = count.rows[0].total;
-  const safePages = await Promise.all(pages.rows.map(post => sanitize(post)));
-  const frontPage =
-    settings.frontPageMode === "page"
-      ? (safePages.find((page) => page.id === settings.frontPageId) ?? null)
-      : null;
-  const postsPage =
-    safePages.find((page) => page.id === settings.postsPageId) ?? null;
+router.get("/public/document", async (req: AuthRequest, res) => {
+  const path=z.string().min(1).max(2000).parse(req.query.path);
+  const model=await readPublicDocument(path,await publicDocumentContext(req,{user:req.user}));
+  if("kind" in model) { res.status(400).json({error:"This path uses the application document."}); return; }
+  res.status(model.status).json(model);
+});
+router.get("/public/site", async (req: AuthRequest, res) => {
   await setRobots(res);
-  res.json({
-    settings: {
-      ...safeSettings,
-      siteIconUrl: icon ? `/uploads/${icon.filename}` : null,
-      siteIconSizes:icon?.sizes || {},
-    },
-    archive: dateArchive ? dateArchiveDTO(dateArchive) : author ? { type: "author", name: author.name, authorId: filter.author } : null,
-    posts: await Promise.all(posts.rows.map(post => sanitize(post, "archive"))),
-    pages: safePages,
-    frontPage,
-    postsPage,
-    pagination: {
-      page: filter.page,
-      totalPosts,
-      totalPages: Math.max(1, Math.ceil(totalPosts / settings.postsPerPage)),
-    },
-  });
+  res.json(await readPublicSite({query:req.query,user:req.user,canReadProtectedPost:postAccessReader(req)}));
 });
 router.get("/public/terms", async (req, res) => {
   const taxonomy = z
@@ -1448,7 +1304,7 @@ router.get("/public/posts/:slug", async (req, res) => {
   await setRobots(res);
   res.json({
     post: await publicPost(post, locked, { query: req.query, user: (req as AuthRequest).user, contentPage: parseContentPage(req.query.page), canReadProtectedPost: postAccessReader(req) }),
-    ...(await commentResponse(post.id, req, locked)),
+    ...(await commentResponse(post.id, {query:req.query,user:(req as AuthRequest).user,canReadProtectedPost:postAccessReader(req)}, locked)),
   });
 });
 const passwordAttempts = new Map<string, { count: number; expires: number }>();
@@ -1501,7 +1357,7 @@ export async function unlockPublicPost(req:Request,res:Response) {
   }
   res.json({
     post: await publicPost(post, false, { query: req.query, user: (req as AuthRequest).user, contentPage }),
-    ...(await commentResponse(post.id, req)),
+    ...(await commentResponse(post.id, {query:req.query,user:(req as AuthRequest).user,canReadProtectedPost:postAccessReader(req)})),
   });
 }
 router.post("/public/posts/:slug/unlock",unlockPublicPost);
