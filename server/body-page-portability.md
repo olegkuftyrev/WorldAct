@@ -38,6 +38,15 @@ references, copied design/entity content, and legacy menu URLs share the mapper.
 Term/media/font numeric lookalikes remain unchanged while their ordinary
 canonical links still remap.
 
+Body-page URLs share the existing canonical continuation boundary for closing
+parentheses, including nested closing parentheses and one following comma,
+period, or semicolon. The mapper separates that trailing prose punctuation for
+body matching and restores its exact bytes afterward. Canonical identity priority
+still runs first; the alternate-slash numeric-child guard checks the URL without
+that punctuation and keeps the original full token when rejecting an inference.
+Query/hash joining and Plain counters retain the same boundary behavior. The
+whole-URL scanner itself is unchanged.
+
 When a destination already has a Plain query identity, an independent source
 `?query` is joined with `&`, avoiding a second question mark. A query that would
 introduce another fixed identity or duplicate the already-selected Plain body

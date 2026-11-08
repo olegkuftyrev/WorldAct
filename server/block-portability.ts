@@ -53,18 +53,22 @@ export function remapImportedURL(token:string,mappings:readonly (readonly [strin
   }
   if(complete)return mappedContinuation(complete[1],token.slice(complete[0].length))??token;
   if(!bodyPages?.size)return token;
-  const match=/^([^?#]+\/)([1-9]\d{0,9})\/?((?:\?[^#]*)?(?:#.*)?)$/.exec(token);
+  // The unchanged absolute-URL scanner includes closing prose punctuation.
+  // Keep the same boundary as complete canonicals, including for child guards.
+  const punctuation=/\)+[,.;]?$/.exec(token)?.[0]??"", candidate=token.slice(0,token.length-punctuation.length);
+  const match=/^([^?#]+\/)([1-9]\d{0,9})\/?((?:\?[^#]*)?(?:#.*)?)$/.exec(candidate);
   if(!match)return token;
   const page=Number(match[2]);
   if(page<2||page>2147483647)return token;
-  const pathname=token.split(/[?#]/,1)[0];
+  const pathname=candidate.split(/[?#]/,1)[0];
   // A known numeric child's alternate trailing slash must not become its
   // parent's body page. Existing exact canonical matching remains authoritative.
   if(mappings.some(([source])=>source&&!/[?#]/.test(source)&&source.replace(/\/$/,"")===pathname.replace(/\/$/,"")))return token;
   const canonical=bodyPages.has(match[1])?match[1]:match[1].slice(0,-1), metadata=bodyPages.get(canonical);
   if(!metadata||page>metadata.totalPages||!mappings.some(([source,target])=>source===canonical&&target===metadata.target))return token;
   const target=contentPageURL(metadata.targetPost,metadata.target,page,false,metadata.permalinkStructure);
-  return mappedContinuation(target,match[3])??token;
+  const mapped=mappedContinuation(target,match[3]);
+  return mapped===null?token:mapped+punctuation;
 }
 
 /** Imported references must resolve only inside the imported entity graph. */

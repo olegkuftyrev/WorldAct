@@ -42,7 +42,8 @@ test("time-token settings and known body-page links cross fresh archive database
       foreign:"https://foreign.example.test/?next="+post.permalink+"2/",
     };
     const links = Object.entries(urls).map(([label,url])=>`<a data-proof="${label}" href="${url.replace(/&/g,"&amp;")}">${label}</a>`).join("");
-    await api("/api/posts/" + post.id, "PUT", { content: `<p>TIME-ARCHIVE-FIRST ${links}</p><pre>&lt;!--nextpage--&gt; [php]inert[/php]</pre><!--nextpage--><p>TIME-ARCHIVE-SECOND</p>` });
+    const absolute="https://body-source.example.invalid",boundary=`<p>BOUNDARY-CANONICAL (${absolute+post.permalink}) BOUNDARY-BODY (${absolute+post.permalink}2/) BOUNDARY-NESTED ((${absolute+post.permalink}2/)), BOUNDARY-QUERY (${absolute+urls.body}); BOUNDARY-RELATIVE (${post.permalink}2/). BOUNDARY-CHILD (${absolute+child.permalink}) BOUNDARY-CHILD-ALIAS (${absolute+child.permalink.slice(0,-1)}) BOUNDARY-TERM (${absolute+urls.termBody}) BOUNDARY-MEDIA (${absolute+urls.mediaBody}) BOUNDARY-UNKNOWN (${absolute+post.permalink}2/extra/)</p>`;
+    await api("/api/posts/" + post.id, "PUT", { content: `<p>TIME-ARCHIVE-FIRST ${links}</p>${boundary}<pre>&lt;!--nextpage--&gt; [php]inert[/php]</pre><!--nextpage--><p>TIME-ARCHIVE-SECOND</p>` });
     await api("/api/menus","POST",{name:"Body archive menu",location:"primary",items:[{id:"body",label:"Body second",url:"https://body-source.example.invalid"+urls.body},{id:"child",label:"Numeric child",url:"https://body-source.example.invalid"+urls.child}]});
     const archive = (await api("/api/tools/export")).data;
     assert.equal(archive.settings.permalinkStructure, structure); assert.equal(archive.settings.timezone, "+05:45");
@@ -67,6 +68,18 @@ test("time-token settings and known body-page links cross fresh archive database
       assert.equal(href("childBody"),expectedChildBody+"#child-body");
       for(const label of ["termBody","mediaBody","privateBody","protectedBody","foreign"])assert.equal(href(label),fixture.urls[label],label);
       assert.ok(post.rawContent.includes('&lt;!--nextpage--&gt; [php]inert[/php]'));
+      const boundary=[...dom.querySelectorAll("p")].find(paragraph=>paragraph.textContent.startsWith("BOUNDARY-CANONICAL"))!.textContent;
+      const absoluteCanonical=new URL(post.permalink,settings.siteUrl).href,absoluteBody=new URL(expectedBody,settings.siteUrl).href;
+      assert.ok(boundary.includes(`BOUNDARY-CANONICAL (${absoluteCanonical})`));
+      assert.ok(boundary.includes(`BOUNDARY-BODY (${absoluteBody})`));
+      assert.ok(boundary.includes(`BOUNDARY-NESTED ((${absoluteBody})),`));
+      assert.ok(boundary.includes(`BOUNDARY-QUERY (${absoluteBody}${absoluteBody.includes("?")?"&":"?"}query-4-page=3&commentPage=2#keep);`));
+      assert.ok(boundary.includes(`BOUNDARY-RELATIVE (${expectedBody}).`));
+      assert.ok(boundary.includes(`BOUNDARY-CHILD (${new URL(child.permalink,settings.siteUrl).href})`));
+      const sourceChild=fixture.archive.posts.find((record:any)=>record.title==="Body archive numeric child").permalink;
+      assert.ok(boundary.includes(`BOUNDARY-CHILD-ALIAS (https://body-source.example.invalid${sourceChild.slice(0,-1)})`));
+      for(const label of ["TERM","MEDIA"]){assert.ok(boundary.includes(`BOUNDARY-${label} (https://body-source.example.invalid${fixture.urls[label.toLowerCase()+"Body"]})`));}
+      assert.ok(boundary.includes(`BOUNDARY-UNKNOWN (https://body-source.example.invalid${fixture.archive.posts.find((record:any)=>record.id===fixture.sourceId).permalink}2/extra/)`));
       const resolve=(href:string)=>{const url=new URL(href,base);return api("/api/public/resolve?"+new URLSearchParams({path:url.pathname+url.search}));};
       const result=await resolve(href("body")!);assert.equal(result.data.post.id,post.id);assert.equal(result.data.contentPage,2);
       assert.match(result.data.post.content,/TIME-ARCHIVE-SECOND/);assert.doesNotMatch(result.data.post.content,/TIME-ARCHIVE-FIRST|BODY-PRIVATE|BODY-PROTECTED/);

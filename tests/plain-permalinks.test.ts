@@ -60,6 +60,41 @@ test("known imported body-page URLs retain identity, boundaries, counters and on
     assert.equal(remap("/uploads/source.png?size=2#keep"),"/uploads/copy.png?size=2#keep");
     assert.equal(remap("/story/2/"),"/copy-story/2/","A newly generated target must not be remapped again.");
   });
+  await t.test("closing prose punctuation follows canonical boundaries in relative, absolute and Plain destinations", () => {
+    for(const punctuation of [")","))", ").", ")),", ");"]){
+      assert.equal(remap("/story/)"),"/copy-story/)");
+      assert.equal(remap("/story/2/"+punctuation),"/copy-story/2/"+punctuation);
+      assert.equal(remap("https://source.example.test/story/2/"+punctuation),"https://destination.example.test/copy-story/2/"+punctuation);
+      const query="?query-4-page=3&commentPage=2#keep";
+      assert.equal(remap("https://source.example.test/story/2/"+query+punctuation),"https://destination.example.test/copy-story/2/"+query+punctuation);
+      const map=[["/story/","/?p=90"]] as const,plain=new Map([["/story/",metadata("/?p=90","")]]);
+      assert.equal(remapImportedURL("/story/2/"+punctuation,map,plain),"/?p=90&page=2"+punctuation);
+      assert.equal(remapImportedURL("/story/2/"+query+punctuation,map,plain),"/?p=90&page=2&query-4-page=3&commentPage=2#keep"+punctuation);
+      const conflicting="/story/2/?page=3#keep"+punctuation;
+      assert.equal(remapImportedURL(conflicting,map,plain),conflicting);
+    }
+  });
+  await t.test("punctuation cannot bypass exact numeric child priority or alternate-slash guards", () => {
+    for(const punctuation of [")","))", ").", ")),", ");"]){
+      assert.equal(remap("/parent/2/"+punctuation),"/?page_id=80"+punctuation);
+      assert.equal(remap("/parent/2/?x=1#child"+punctuation),"/?page_id=80&x=1#child"+punctuation);
+      for(const [child,alias] of [["/parent/2","/parent/2/"],["/parent/2/","/parent/2"]]){
+        const map=[["/parent/","/copy-parent/"],[child,"/?page_id=81"]] as const;
+        for(const query of ["","?x=1#child"]){const source=alias+query+punctuation;assert.equal(remapImportedURL(source,map,bodyPages),source);}
+      }
+      const absoluteMap=[["https://source.example.test/parent/","https://destination.example.test/parent/"],["https://source.example.test/parent/2/","https://destination.example.test/?page_id=82"]] as const;
+      const absolutePages=new Map([[absoluteMap[0][0],metadata(absoluteMap[0][1])]]);
+      assert.equal(remapImportedURL(absoluteMap[1][0]+punctuation,absoluteMap,absolutePages),absoluteMap[1][1]+punctuation);
+      const alias=absoluteMap[1][0].slice(0,-1)+punctuation;
+      assert.equal(remapImportedURL(alias,absoluteMap,absolutePages),alias);
+    }
+  });
+  await t.test("closing punctuation does not expand unknown, extra, invalid or mixed-entity eligibility", () => {
+    for(const punctuation of [")","))", ").", ")),", ");"]){
+      for(const source of ["/unknown/2/","/story/02/","/story/4/","/story/2/extra/","/category/topic/2/","/uploads/source.png/2/","/fonts/source.woff2/2/","https://foreign.example.test/story/2/","https://source.example.test.evil/story/2/"]){assert.equal(remap(source+punctuation),source+punctuation);}
+    }
+    for(const source of ["/story/2/.","/story/2/),;","/story/2/%29"]){assert.equal(remap(source),source);}
+  });
   await t.test("raw/JSON links keep whole-URL boundaries and inert escaped text", () => {
     const foreign="https://foreign.example.test/?next=/story/2/",literal='&lt;!--nextpage--&gt; [gallery ids="5"]';
     const raw='<p><a href="/story/2/?query-4-page=3&amp;commentPage=2#keep">Second</a><a href="'+foreign+'">Foreign</a></p><pre>'+literal+'</pre>';
@@ -68,6 +103,12 @@ test("known imported body-page URLs retain identity, boundaries, counters and on
     assert.equal(document.querySelector("a")!.getAttribute("href"),"/copy-story/2/?query-4-page=3&commentPage=2#keep");
     assert.equal(document.querySelectorAll("a")[1].getAttribute("href"),foreign);
     assert.ok(value.rawContent.includes(literal));assert.equal(value.blocks[0].attributes.url,"/copy-story/2/?x=1#keep");
+    const prose="<p>Canonical (https://source.example.test/story/) Body (https://source.example.test/story/2/) Nested ((https://source.example.test/story/2/)), Relative (/story/2/).</p>";
+    const rewritten=remapImportedBlockReferences(prose,[],new Map(),{urls:new Map(mappings),bodyPages}).rawContent;
+    assert.ok(rewritten.includes("Canonical (https://destination.example.test/copy-story/)"));
+    assert.ok(rewritten.includes("Body (https://destination.example.test/copy-story/2/)"));
+    assert.ok(rewritten.includes("Nested ((https://destination.example.test/copy-story/2/)),"));
+    assert.ok(rewritten.includes("Relative (/copy-story/2/)."));
   });
 });
 
