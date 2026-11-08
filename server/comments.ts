@@ -44,7 +44,7 @@ router.get("/comments", async (req:AuthRequest, res) => {
       status: z
         .enum(["all", "approved", "pending", "spam", "trash"])
         .default("all"),
-      type: z.enum(["all","comment","pingback","trackback"]).default("all"),
+      type: z.enum(["all","comment","pings","pingback","trackback"]).default("all"),
       excludeTrashSpam: z.enum(["true", "false"]).default("false"),
       search: z.string().trim().max(300).optional(),
       postId: z.coerce.number().int().positive().max(2_147_483_647).optional(),
@@ -65,7 +65,9 @@ router.get("/comments", async (req:AuthRequest, res) => {
   const editable=editableCommentPostsSQL(user,parameter);
   where.push(`(${editable} OR (p.status='publish' AND p.password_hash IS NULL))`);
   if (input.postId) where.push(`c.post_id=${parameter(input.postId)}`);
-  if(input.type!=="all")where.push(`c.type=${parameter(input.type)}`);
+  const typeParams=params.slice(),typeWhere=where.join(" AND ");
+  if(input.type==="pings")where.push("c.type IN('pingback','trackback')");
+  else if(input.type!=="all")where.push(`c.type=${parameter(input.type)}`);
   const countParams=params.slice(),countWhere=where.join(" AND ");
   if (input.mine === "true") where.push(`c.user_id=${parameter(user.id)}`);
   if (input.status !== "all") where.push(`c.status=${parameter(input.status)}`);
@@ -83,7 +85,7 @@ router.get("/comments", async (req:AuthRequest, res) => {
     author: "c.author_name",
     post: "p.title",
   }[input.orderby];
-  const [total, rows, counts] = await Promise.all([
+  const [total, rows, counts, typeCounts] = await Promise.all([
     pool.query(
       `SELECT count(*)::int AS total FROM comments c JOIN posts p ON p.id=c.post_id ${predicate}`,
       params,
@@ -96,6 +98,10 @@ router.get("/comments", async (req:AuthRequest, res) => {
       `SELECT c.status,count(*)::int AS total,count(*) FILTER(WHERE c.user_id=$${countParams.length+1} AND c.status NOT IN('trash','spam'))::int AS mine FROM comments c JOIN posts p ON p.id=c.post_id WHERE ${countWhere} GROUP BY c.status`,
       [...countParams,user.id],
     ),
+    pool.query(
+      `SELECT CASE WHEN c.type='comment' THEN 'comment' ELSE 'pings' END AS type,count(*)::int AS total FROM comments c JOIN posts p ON p.id=c.post_id WHERE ${typeWhere} GROUP BY 1`,
+      typeParams,
+    ),
   ]);
   res.json({
     comments: rows.rows.map(({postAuthorId,postType,postStatus,postPreTrashStatus,...comment})=>{
@@ -104,6 +110,7 @@ router.get("/comments", async (req:AuthRequest, res) => {
       return {...comment,permissions:{edit,reply:edit && !["spam","trash"].includes(comment.status),moderate:edit,delete:edit}};
     }),
     permissions:{bulk:canModerateAllComments(user),empty:canModerateAllComments(user)},
+    typeCounts: {comment:0,pings:0,...Object.fromEntries(typeCounts.rows.map(row=>[row.type,row.total]))},
     counts: {...Object.fromEntries(
       counts.rows.map((row) => [row.status, row.total]),
     ),mine:counts.rows.reduce((total,row)=>total+row.mine,0)},
