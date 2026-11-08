@@ -99,6 +99,8 @@ The combined Image/connector/outgoing batch passed 463 source checks across 108 
 
 The cross-site archive check runs twice on **different fresh databases** after source files have been deleted:
 
+The incoming-notification composite passed 482 source checks across 110 files (six conditional-stage skips), 105 related compiled checks across 20 files (two skips), production build, and separate source-export/fresh-compiled-restore site archives. Its final transaction uses comment hierarchy → post → settings locks and rechecks wall-clock verification leases after real waits. Guarded checks cover concurrent duplicates, live pool availability during I/O, bounded HTTP admission, typed REST/moderation and fresh-ID JSON/WXR preservation. The preceding Image/publication composite also passed both GitHub Node 22/24 jobs, including fresh archive stages.
+
 ```sh
 SITE_ARCHIVE_STAGE=export SITE_ARCHIVE_PATH=/tmp/worldact-archive.json npm run test:isolated -- tests/portability-site.test.ts
 SITE_ARCHIVE_STAGE=restore SITE_ARCHIVE_PATH=/tmp/worldact-archive.json npm run test:isolated -- tests/portability-site.test.ts
