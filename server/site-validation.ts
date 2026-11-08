@@ -1,3 +1,4 @@
+import {pingServicesSchema} from "./outgoing-ping-settings.js";
 import { z } from "zod";
 import { templatePartAreas } from "../shared/template-areas.js";
 import { postFormats } from "../shared/post-formats.js";
@@ -56,6 +57,8 @@ export const settingSchema = z
       "classic",
     ]),
     defaultCategoryId: nullableId,
+    defaultPingbackFlag: z.boolean(),
+    pingServices: pingServicesSchema,
     defaultPostFormat: z.enum(postFormats),
     frontPageMode: z.enum(["posts", "page"]),
     frontPageId: nullableId,

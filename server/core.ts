@@ -1,3 +1,4 @@
+import {enqueuePublicationPings} from "./outgoing-pings.js";
 import {checkAkismetComment,recordAkismetCheck,type AkismetComment} from "./bundled-plugins.js";
 import { Router, type Request, type Response } from "express";
 import { createHash, randomBytes } from "node:crypto";
@@ -565,6 +566,7 @@ async function savePost(
       "DELETE FROM post_autosaves WHERE post_id=$1 AND user_id=$2",
       [id, user.id],
     );
+    await enqueuePublicationPings(client,id);
     return getPost(id, client);
   }
   throw new HttpError(409, "Please choose a different permalink.");
@@ -574,11 +576,13 @@ export async function publishDuePosts(
   now: Date = new Date(),
   postIds?: number[],
 ) {
-  const result = await pool.query(
-    "UPDATE posts SET status='publish',published_at=scheduled_at,updated_at=now(),version=version+1 WHERE status='future' AND scheduled_at <= $1 AND ($2::int[] IS NULL OR id=ANY($2::int[])) RETURNING id",
-    [now, postIds ?? null],
-  );
-  return result.rows.map((row) => row.id as number);
+  const client=await pool.connect();
+  try{
+    await client.query("BEGIN");
+    const result=await client.query("UPDATE posts SET status='publish',published_at=scheduled_at,updated_at=now(),version=version+1 WHERE status='future' AND scheduled_at <= $1 AND ($2::int[] IS NULL OR id=ANY($2::int[])) RETURNING id",[now,postIds ?? null]);
+    for(const row of result.rows)await enqueuePublicationPings(client,row.id);
+    await client.query("COMMIT");return result.rows.map(row=>row.id as number);
+  }catch(error){await client.query("ROLLBACK");throw error;}finally{client.release();}
 }
 export function startScheduler(intervalMs = 30_000) {
   let lastPluginCleanup=0;
@@ -1342,7 +1346,7 @@ router.get("/public/site", async (req, res) => {
       { query: req.query, requestPath: "/", user: (req as AuthRequest).user, contentMode, canReadProtectedPost: postAccessReader(req) },
     );
   };
-  const { adminEmail: _adminEmail, commentModerationKeys: _moderationKeys, disallowedCommentKeys: _disallowedKeys, ...safeSettings } = settings;
+  const { defaultPingbackFlag: _outgoingFlag, pingServices: _pingServices, adminEmail: _adminEmail, commentModerationKeys: _moderationKeys, disallowedCommentKeys: _disallowedKeys, ...safeSettings } = settings;
   const author = filter.author ? (await pool.query("SELECT display_name AS name FROM users WHERE id=$1 AND EXISTS(SELECT 1 FROM posts WHERE author_id=$1 AND type='post' AND status='publish')", [filter.author])).rows[0] : null;
   const icon = settings.siteIconId
     ? (

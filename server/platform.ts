@@ -1100,7 +1100,7 @@ router.get("/tools/export", admin, async (_req, res) => {
   for (const records of [posts, terms, media, menus, docs, blockEntities]) if (records.rows.length > 1000) throw new HttpError(413, "Export at most 1000 records per section in a site archive.");
   if (comments.rows.length > 10000) throw new HttpError(413, "Export at most 10000 comments per archive.");
   const relations = await pool.query("SELECT * FROM post_terms ORDER BY post_id,term_id");
-  const settings = await getSettings(), { adminEmail: _contact, ...publicSettings } = settings;
+  const settings = await getSettings(), { defaultPingbackFlag: _outgoingFlag, pingServices: _pingServices, adminEmail: _contact, ...publicSettings } = settings;
   const embedded = await exportMediaFiles(media.rows);
   const fonts = await exportFontLibrary(pool, embedded.files.reduce((total, file) => total + file.size, 0));
   const themeDesigns = (await pool.query("SELECT to_regclass('theme_designs') present")).rows[0].present

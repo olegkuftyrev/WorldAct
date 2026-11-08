@@ -83,6 +83,8 @@ export const defaultSettings = {
     | "twentytwentythree"
     | "classic",
   defaultCategoryId: null as number | null,
+  defaultPingbackFlag: true,
+  pingServices: ["https://rpc.pingomatic.com/"],
   defaultPostFormat: "standard" as PostFormat,
   frontPageMode: "posts" as "posts" | "page",
   frontPageId: null as number | null,

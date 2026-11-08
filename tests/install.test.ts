@@ -36,7 +36,9 @@ test("local browser preparation creates a private fragment link without seeding 
     const link = first.stdout.split("\n").find(line => line.startsWith("http"))!; const url = new URL(link); assert.equal(url.pathname, "/install"); assert.equal(url.search, ""); assert.equal(url.hash, "#token=" + settings.WORLDACT_INSTALL_TOKEN);
     assert.equal(await readFile(log, "utf8"), "compose up -d --wait db\nrun db:migrate\n");
     const second = run(true); assert.equal(second.status, 0, second.stderr); const rotated = dotenv.parse(await readFile(envPath)); assert.notEqual(rotated.WORLDACT_INSTALL_TOKEN, settings.WORLDACT_INSTALL_TOKEN); assert.equal(rotated.ADMIN_PASSWORD, settings.ADMIN_PASSWORD);
-    const cli = run(false); assert.equal(cli.status, 0, cli.stderr); assert.ok((await readFile(log, "utf8")).endsWith("run db:seed\n")); assert.ok(!cli.stdout.includes(rotated.WORLDACT_INSTALL_TOKEN));
+    assert.equal(settings.WORLDACT_ENVIRONMENT_TYPE,"local");
+    await writeFile(envPath,(await readFile(envPath,"utf8")).replace(/^WORLDACT_ENVIRONMENT_TYPE=.*$/m," export WORLDACT_ENVIRONMENT_TYPE = staging"),{mode:0o600});
+    const cli = run(false); assert.equal(cli.status, 0, cli.stderr); assert.ok((await readFile(log, "utf8")).endsWith("run db:seed\n")); assert.ok(!cli.stdout.includes(rotated.WORLDACT_INSTALL_TOKEN));assert.equal(dotenv.parse(await readFile(envPath)).WORLDACT_ENVIRONMENT_TYPE,"staging");
     assert.equal((await stat(envPath)).mode & 0o777, 0o600);
   } finally { await rm(directory, { recursive: true, force: true }); }
 });

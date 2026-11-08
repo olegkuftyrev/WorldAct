@@ -19,7 +19,7 @@ const testURL=new URL(original);testURL.pathname='/'+database;
 const port=Number(process.env.ISOLATED_TEST_PORT || 3004);
 if(!Number.isInteger(port)||port<1||port>65535)throw new Error('ISOLATED_TEST_PORT must be an integer from 1 to 65535.');
 const testUploads=await mkdtemp(path.join(os.tmpdir(),'worldact-test-uploads-'));
-const env={...process.env,DATABASE_URL:testURL.href,ADMIN_EMAIL:'isolated-admin@example.test',ADMIN_PASSWORD:randomBytes(32).toString('base64url'),APP_ORIGIN:'http://127.0.0.1:5173',PORT:String(port),HOST:'127.0.0.1',TEST_API_URL:'http://127.0.0.1:'+port,WORLDACT_MAIL_MODE:'outbox',WORLDACT_UPLOADS_DIR:testUploads,WORLDACT_ISOLATED_TEST:'1',ARCHIVE_PLUGIN_TEST:'1',NODE_ENV:'test'};
+const env={...process.env,DATABASE_URL:testURL.href,ADMIN_EMAIL:'isolated-admin@example.test',ADMIN_PASSWORD:randomBytes(32).toString('base64url'),APP_ORIGIN:'http://127.0.0.1:5173',PORT:String(port),HOST:'127.0.0.1',TEST_API_URL:'http://127.0.0.1:'+port,WORLDACT_MAIL_MODE:'outbox',WORLDACT_ENVIRONMENT_TYPE:'local',WORLDACT_UPLOADS_DIR:testUploads,WORLDACT_ISOLATED_TEST:'1',ARCHIVE_PLUGIN_TEST:'1',NODE_ENV:'test'};
 if(unseeded)env.WORLDACT_INSTALL_TOKEN=randomBytes(32).toString('hex');
 const admin=new pg.Pool({connectionString:adminURL.href,connectionTimeoutMillis:5000});
 const processGroups=process.platform!=='win32',stops=new WeakMap();

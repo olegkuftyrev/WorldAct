@@ -147,7 +147,10 @@ export class SiteImport {
   private extensions: Array<{ slug: string; enabled: boolean; settings: unknown }> = [];
   constructor(private client: PoolClient, readonly input: Record<string, any>, private user: User, destination: Awaited<ReturnType<typeof getSettings>>) {
     this.destination = destination;
-    this.settings = settingSchema.parse(input.settings || {});
+    if(input.settings && (typeof input.settings!=="object" || Array.isArray(input.settings)))settingSchema.parse(input.settings);
+    const {defaultPingbackFlag: _outgoing, pingServices: _services, ...portableSettings}=input.settings || {};
+    this.settings = settingSchema.parse(portableSettings);
+    if(_outgoing!==undefined || _services!==undefined)this.warn("Destination outgoing notification configuration was retained.");
     this.styles = styleSchema.parse(input.styles || {});
     this.sourceTheme = this.settings.theme || destination.theme;
     const themeDesigns = z.array(z.record(z.string(), z.unknown())).max(4).parse(input.themeDesigns || []);

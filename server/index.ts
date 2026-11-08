@@ -1,3 +1,4 @@
+import outgoingPingsRouter,{startOutgoingPingWorker} from "./outgoing-pings.js";
 import "dotenv/config";
 import express, {
   type ErrorRequestHandler,
@@ -125,6 +126,7 @@ app.use("/api", fontsRouter);
 app.use("/api", postTemplatesRouter);
 app.use("/api", bundledPluginsRouter);
 app.use("/api", connectorsRouter);
+app.use("/api", outgoingPingsRouter);
 app.use("/api", platformRouter);
 app.use("/api", coreRouter);
 
@@ -291,19 +293,21 @@ if (
   path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)
 ) {
   const stopScheduler = startScheduler();
+  let stopPings=()=>{};
   const port = Number(process.env.PORT || 3001);
   const server = app.listen(port, "127.0.0.1", (error?:Error) => {
     if(error){
-      stopScheduler();
+      stopScheduler();stopPings();
       console.error("Could not start WorldAct API:",error.message);
       process.exitCode=1;
       void pool.end();
       return;
     }
+    stopPings=startOutgoingPingWorker();
     console.log(`WorldAct API listening on http://127.0.0.1:${port}`);
   });
   const stop = () => {
-    stopScheduler();
+    stopScheduler();stopPings();
     server.close(() => {
       void pool.end().then(() => process.exit(0));
     });

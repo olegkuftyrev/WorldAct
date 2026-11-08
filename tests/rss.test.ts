@@ -42,12 +42,13 @@ function fakeRequest(replies: Reply[], inspect?: (options: any) => void) {
   let requests = 0;
   return { get requests() { return requests; }, request: ((options: any, callback: (response: any) => void) => {
     inspect?.(options); const reply = replies[requests++] || { body: bytes };
-    const req = new EventEmitter() as any; req.setTimeout = () => req; req.destroy = () => { req.destroyed = true; }; req.end = () => {
+    const req = new EventEmitter() as any; req.setTimeout = () => req; req.destroy = () => { req.destroyed = true; setImmediate(()=>req.emit("close")); }; req.end = () => {
       setImmediate(() => {
         if (req.destroyed) return;
-        const socket = new EventEmitter() as any; socket.remoteAddress = reply.remote || "93.184.216.34"; req.emit("socket", socket); socket.emit("connect");
+        const socket = new EventEmitter() as any; socket.remoteAddress = reply.remote || "93.184.216.34"; req.once("close",()=>socket.emit("close")); req.emit("socket", socket); socket.emit("connect");
         if (req.destroyed || reply.never) return;
         const response = Readable.from(reply.chunks || [reply.body || Buffer.alloc(0)]) as any;
+        response.once("close",()=>req.emit("close"));
         response.statusCode = reply.status || 200; response.complete = true; response.headers = { ...(reply.location ? { location: reply.location } : {}), ...(reply.encoding ? { "content-encoding": reply.encoding } : {}), ...(reply.length ? { "content-length": reply.length } : {}) }; callback(response);
       });
     }; return req;

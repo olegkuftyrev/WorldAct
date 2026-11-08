@@ -18,6 +18,11 @@ if (!existsSync(resolve(root, ".env"))) {
   console.log("Created local .env with a unique administrator password.");
 }
 chmodSync(resolve(root, ".env"), 0o600);
+// Existing study configurations also get an explicit local network policy.
+{
+  const envPath=resolve(root,".env"),source=readFileSync(envPath,"utf8");
+  if(!/^\s*(?:export\s+)?WORLDACT_ENVIRONMENT_TYPE\s*=/m.test(source))writeFileSync(envPath,source.replace(/\s*$/, "\n")+"WORLDACT_ENVIRONMENT_TYPE=local\n",{mode:0o600});
+}
 let installationToken;
 if (browserInstall) {
   const envPath = resolve(root, ".env"), source = readFileSync(envPath, "utf8");
