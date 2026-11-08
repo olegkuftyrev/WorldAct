@@ -42,7 +42,7 @@ import { useEditorShortcuts } from "../editor/editorShortcuts";
 import type { EditorPreferencePatch } from "../editor/preferenceQueue";
 import { documentRecovery, editorOwnerMatches, editorTargetMatches } from "../editor/documentRecovery";
 import { formatPostCivil } from "../../shared/post-civil-date";
-import { publicationDateChange, publicationDatePayload, publicationInstant } from "../editor/publicationDate";
+import { publicationActionInstant, publicationDateChange, publicationDatePayload } from "../editor/publicationDate";
 
 type DocumentState = {
   title: string;
@@ -55,6 +55,7 @@ type DocumentState = {
   scheduledAt: string;
   postDate: string;
   postDateOriginal: string;
+  postDateGmt: string | null;
   postDateIntent?: string | null;
   visibility: "public" | "private" | "password";
   password?: string;
@@ -81,6 +82,7 @@ const emptyDocument = (): DocumentState => ({
   scheduledAt: "",
   postDate: "",
   postDateOriginal: "",
+  postDateGmt: null,
   visibility: "public",
   categoryIds: [],
   tagIds: [],
@@ -101,6 +103,7 @@ const postDocument = (post: Post): DocumentState => ({
   scheduledAt: post.scheduledAt || "",
   postDate: post.postDate,
   postDateOriginal: post.postDate,
+  postDateGmt: post.postDateGmt,
   visibility:
     post.status === "private"
       ? "private"
@@ -595,7 +598,7 @@ export default function Editor({ type }: { type: "post" | "page" }) {
         ? "private"
         : nextStatus;
     const { visibility: _visibility, password: _password, scheduledAt: _scheduledAt,
-      postDate: _postDate, postDateOriginal: _postDateOriginal, postDateIntent, ...fields } = current;
+      postDate: _postDate, postDateOriginal: _postDateOriginal, postDateGmt: _postDateGmt, postDateIntent, ...fields } = current;
     return {
       ...fields,
       blocks: current.blocks || [],
@@ -620,7 +623,7 @@ export default function Editor({ type }: { type: "post" | "page" }) {
       if(loadGeneration.current!==generation)return post.id;
       idRef.current=post.id;versionRef.current=post.version;
       setPostId(post.id);setVersion(post.version);setPermalink(postLink(post));
-      setDoc(current => ({ ...current, postDateOriginal: post.postDate,
+      setDoc(current => ({ ...current, postDateOriginal: post.postDate, postDateGmt: post.postDateGmt,
         ...(current.postDate === snapshot.postDate && current.postDateIntent === snapshot.postDateIntent
           ? { postDate: post.postDate, postDateIntent: undefined, scheduledAt: post.scheduledAt || "" }
           : publicationDateChange(current.postDate, post.postDate)) }));
@@ -761,6 +764,7 @@ export default function Editor({ type }: { type: "post" | "page" }) {
         slug: post.slug,
         scheduledAt: post.scheduledAt || "",
         postDateOriginal: post.postDate,
+        postDateGmt: post.postDateGmt,
         ...(current.postDate === snapshot.postDate && current.postDateIntent === snapshot.postDateIntent
           ? { postDate: post.postDate, postDateIntent: undefined }
           : publicationDateChange(current.postDate, post.postDate)),
@@ -957,8 +961,7 @@ export default function Editor({ type }: { type: "post" | "page" }) {
     }
     return candidate.id === postId;
   }
-  const scheduleInstant = doc.postDateIntent === undefined && doc.scheduledAt
-    ? doc.scheduledAt : timezone ? publicationInstant(doc.postDate, timezone) : null;
+  const scheduleInstant = publicationActionInstant(doc, timezone);
   const primaryStatus: Post["status"] = !canPublish
     ? doc.status === "private"
       ? "private"

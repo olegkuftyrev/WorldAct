@@ -23,3 +23,17 @@ export function publicationInstant(civil: string, timezone: string): string | nu
     return civilFromInstant(instant, timezone) === civil ? instant : null;
   } catch { return null; }
 }
+
+/** An unchanged fixed draft may have a chosen GMT but no legacy scheduledAt.
+ * A floating draft has no chosen instant, even if a legacy due value remains.
+ * Only a local edit asks the current site zone to select a new instant. */
+export function publicationActionInstant(value: {
+  postDate: string;
+  postDateGmt: string | null;
+  postDateIntent?: string | null;
+}, timezone?: string): string | null {
+  if (value.postDateIntent === undefined)
+    return value.postDateGmt && Number.isFinite(Date.parse(value.postDateGmt)) ? value.postDateGmt : null;
+  if (value.postDateIntent === null || !timezone) return null;
+  return publicationInstant(value.postDate, timezone);
+}
