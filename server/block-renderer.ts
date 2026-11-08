@@ -13,7 +13,8 @@ import { gridTemplateColumns, isResponsiveGrid } from "./block-layout.js";
 import { backgroundStyles } from "./background-styles.js";
 import { renderFootnotes } from "./footnotes.js";
 import { excerptText } from "./excerpts.js";
-import { renderInteractiveBlock, createInteractiveRenderState, INTERACTIVE_BLOCKS, type InteractiveRenderState, type AccordionContext, type AccordionItemContext, type TabsContext } from "./interactive-blocks.js";
+import { renderInteractiveBlock, createInteractiveRenderState, reserveInteractiveId, INTERACTIVE_BLOCKS, type InteractiveRenderState, type AccordionContext, type AccordionItemContext, type TabsContext } from "./interactive-blocks.js";
+import { postHasPassword, postNeedsPassword, postPasswordForm, protectedPostExcerpt, publicPostTitle } from "./post-passwords.js";
 import { renderNavigationWithOverlay, renderNavigationOverlayClose, NAVIGATION_OVERLAY_BLOCKS, type NavigationOverlayContext } from "./navigation-overlays.js";
 
 export type BlockDatabase = Pick<pg.Pool, "query"> | pg.PoolClient;
@@ -44,6 +45,7 @@ export type RenderOptions = {
   preview?:boolean;
   db?: BlockDatabase;
   user?: { id: number; role: string; displayName: string };
+  canReadProtectedPost?: (postId: number, db: BlockDatabase) => Promise<boolean>;
 };
 export type Node = {
   name: string | null;
@@ -386,6 +388,17 @@ async function author(post: RenderPost, state: State) {
       ).rows[0] || { id, name: post.authorName || "", profile: {} },
   );
 }
+async function postForRender(post: RenderPost | null | undefined, state: State): Promise<RenderPost | null> {
+  if(!post)return null;
+  let locked=postNeedsPassword(post);
+  if(locked && post.locked !== true){
+    const sameUnlockedPost=state.options.post?.id===post.id && state.options.post?.locked===false;
+    const permitted=sameUnlockedPost || (state.options.canReadProtectedPost
+      ? await cached(state,`post-access:${post.id}`,()=>state.options.canReadProtectedPost!(post.id,state.db)):false);
+    locked=!permitted;
+  }
+  return locked?{...post,locked:true,content:"",rawContent:"",raw_content:"",blocks:[],excerpt:"",footnotes:[]}: {...post,locked:false};
+}
 async function queryPosts(
   attrs: Record<string, any>,
   context: Context,
@@ -416,7 +429,7 @@ async function queryPosts(
     ? input.postType
     : "post";
   const args: unknown[] = [postType];
-  const where = ["p.type=$1", "p.status='publish'", "p.password_hash IS NULL"];
+  const where = ["p.type=$1", "p.status='publish'"];
   const dateArchive = input.inherit ? parseDateArchiveQuery(inherited) : null;
   appendDateArchiveSQL(where, args, "coalesce(p.published_at,p.created_at)", dateArchive, state.settings.timezone, state.settings.weekStartsOn);
   const add = (sql: string, value: unknown) => {
@@ -431,6 +444,7 @@ async function queryPosts(
       "?",
       "$" + args.length,
     );
+  if (search && !state.options.user) where.push("p.password_hash IS NULL");
   const authorIds = ids(input.author || inherited.author);
   if (authorIds.length) add("p.author_id=ANY(?::int[])", authorIds);
   const include = ids(input.include);
@@ -505,12 +519,13 @@ async function queryPosts(
         )
       ).rows[0].total,
     );
-    const posts = (
+    const rows = (
       await state.db.query(
         `SELECT ${postFields},p.raw_content AS "rawContent" FROM posts p JOIN users u ON u.id=p.author_id WHERE ${where.join(" AND ")} ORDER BY ${sticky}${orderBy} ${order},p.id ${order} LIMIT $${args.length + 1} OFFSET $${args.length + 2}`,
         [...args, perPage, offset],
       )
     ).rows;
+    const posts = await Promise.all(rows.map(async post => (await postForRender(post,state))!));
     const mediaIds = [
       ...new Set(posts.map((post) => post.featuredMediaId).filter(Boolean)),
     ];
@@ -801,7 +816,7 @@ async function renderNode(
     const items = [];
     for (const post of context.loop.posts)
       items.push(
-        `<li class="wp-block-post post-${integer(post.id, 0, 0, 2147483647)} type-${esc(post.type)}">${await renderChildren(node.children, { ...context, post }, state)}</li>`,
+        `<li class="wp-block-post post-${integer(post.id, 0, 0, 2147483647)} type-${esc(post.type)}${postNeedsPassword(post) ? " post-password-required" : postHasPassword(post) ? " post-password-protected" : ""}">${await renderChildren(node.children, { ...context, post }, state)}</li>`,
       );
     const legacyGrid=!a.layout && context.queryDisplayLayout?.type === "flex";
     return `<ul${attr(a.layout?.type === "grid" ? `is-layout-grid columns-${integer(a.layout.columnCount, 3, 1, 1000)}` : legacyGrid?`is-flex-container columns-${integer(context.queryDisplayLayout?.columns,3,1,1000)}`:"is-layout-flow")}>${items.join("")}</ul>`;
@@ -1136,11 +1151,11 @@ async function renderNode(
     const url = await postURL(p, state);
     if (name === "core/post-title") {
       const tag = Number(a.level) === 0 ? "p" : "h" + integer(a.level, 2, 1, 6),
-        title = esc(p.title || "(no title)");
+        title = esc(publicPostTitle(p));
       return `<${tag}${attr()}>${a.isLink ? `<a href="${esc(url)}"${a.linkTarget === "_blank" ? ' target="_blank" rel="noopener noreferrer"' : ""}>${title}</a>` : title}</${tag}>`;
     }
     if (name === "core/post-content") {
-      if(p.locked)return `<div${attr()}><form class="post-password-form worldact-native-password-form" action="/post-password" method="post"><p>This content is password protected. To view it please enter your password below:</p><p><label for="post-password-${p.id}">Password: <input id="post-password-${p.id}" type="password" name="password" maxlength="1024" required></label><input type="hidden" name="postSlug" value="${esc(p.slug)}"><button class="wp-element-button" type="submit">Enter</button></p><p class="worldact-native-password-notice" role="status"></p></form></div>`;
+      if(postNeedsPassword(p))return `<div${attr()}>${postPasswordForm(p,reserveInteractiveId(state,"","post-password"))}</div>`;
       if (context.contentIds.has(p.id))
         return cleanContent(String(p.content || ""));
       const inner = await renderChildren(
@@ -1151,7 +1166,7 @@ async function renderNode(
       return `<${safeTag(a.tagName)}${attr()}>${inner}</${safeTag(a.tagName)}>`;
     }
     if (name === "core/post-excerpt") {
-      if(p.locked)return `<div${attr()}><p>There is no excerpt because this is a protected post.</p></div>`;
+      if(postNeedsPassword(p))return `<div${attr()}><p>${protectedPostExcerpt}</p></div>`;
       const words = (p.excerpt ? plainText(String(p.excerpt)) : excerptText(String(p.content || "")))
           .trim()
           .split(/\s+/)
@@ -1266,7 +1281,7 @@ export async function renderSiteDocument(
     await renderChildren(
       parseRenderNodes(document),
       {
-        post: options.post || null,
+        post: await postForRender(options.post,state),
         depth: 0,
         refs: new Set(),
         contentIds: new Set(),
@@ -1279,9 +1294,15 @@ export async function renderPublicContent(
   post: RenderPost,
   options: RenderOptions = {},
 ): Promise<string> {
+  let state:State|undefined;
+  if(postNeedsPassword(post)){
+    state=await createState({...options,placeholderBindings:false},post);
+    post=(await postForRender(post,state))!;
+    if(postNeedsPassword(post))return cleanContent(postPasswordForm(post,reserveInteractiveId(state,"","post-password")),true);
+  }
   const stored = storedStaticHTML(post);
   if (stored !== undefined) return stored;
-  const state = await createState({ ...options, placeholderBindings: false }, post);
+  state ||= await createState({ ...options, placeholderBindings: false }, post);
   if (!state.options.requestPath)
     state.options.requestPath = await postURL(post, state);
   return cleanContent(
@@ -1304,7 +1325,7 @@ export async function renderBlock(
     await render(
       { name, attrs: attributes, children: [] },
       {
-        post: options.post || null,
+        post: await postForRender(options.post,state),
         depth: 0,
         refs: new Set(),
         contentIds: new Set(),

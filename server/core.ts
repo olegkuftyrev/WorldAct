@@ -23,6 +23,7 @@ import {
 import { enhancePublicPost, classifySpam } from "./design.js";
 import { withPermalink } from "./permalinks.js";
 import { renderPublicContent, type RenderOptions } from "./block-renderer.js";
+import { postAccessReader } from "./post-passwords.js";
 import { queueMail, deliverMail } from "./accounts.js";
 import {validatePostTemplate} from "./post-templates.js";
 import { avatarURL } from "./avatars.js";
@@ -1282,7 +1283,7 @@ router.get(
     res.setHeader("X-Robots-Tag", "noindex, nofollow");
     res.setHeader("Cache-Control", "private, no-store");
     res.json({
-      post: await publicPost(post, false, { query: req.query, preview: true, user: needUser(req) }),
+      post: await publicPost(post, false, { query: req.query, preview: true, user: needUser(req), canReadProtectedPost: postAccessReader(req) }),
       ...(await commentResponse(post.id, req)),
     });
   },
@@ -1304,7 +1305,8 @@ router.get("/public/site", async (req, res) => {
   if (filter.author) { args.push(filter.author); where += ` AND p.author_id=$${args.length}`; }
   if (filter.search) {
     args.push(`%${filter.search}%`);
-    where += ` AND (p.title ILIKE $${args.length} OR (p.password_hash IS NULL AND (p.content ILIKE $${args.length} OR p.excerpt ILIKE $${args.length})))`;
+    where += ` AND (p.title ILIKE $${args.length} OR p.content ILIKE $${args.length} OR p.excerpt ILIKE $${args.length})`;
+    if (!(req as AuthRequest).user) where += " AND p.password_hash IS NULL";
   }
   for (const taxonomy of ["category", "tag"] as const)
     if (filter[taxonomy]) {
@@ -1333,7 +1335,7 @@ router.get("/public/site", async (req, res) => {
     return publicPost(
       safe,
       !(await hasPostAccess(req, post.id, _passwordHash)),
-      { query: req.query, requestPath: "/", user: (req as AuthRequest).user },
+      { query: req.query, requestPath: "/", user: (req as AuthRequest).user, canReadProtectedPost: postAccessReader(req) },
     );
   };
   const { adminEmail: _adminEmail, commentModerationKeys: _moderationKeys, disallowedCommentKeys: _disallowedKeys, ...safeSettings } = settings;
@@ -1397,7 +1399,7 @@ router.get("/public/posts/:slug", async (req, res) => {
   const locked = !(await hasPostAccess(req, post.id, _passwordHash));
   await setRobots(res);
   res.json({
-    post: await publicPost(post, locked, { query: req.query, user: (req as AuthRequest).user }),
+    post: await publicPost(post, locked, { query: req.query, user: (req as AuthRequest).user, canReadProtectedPost: postAccessReader(req) }),
     ...(await commentResponse(post.id, req, locked)),
   });
 });

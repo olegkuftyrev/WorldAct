@@ -7,6 +7,7 @@ import { cleanContent, plainText, HttpError } from "./utils.js";
 import { excerptText } from "./excerpts.js";
 import { dateArchiveSQLBounds, dateArchiveLocalSQL, dateArchivePath, dateArchiveWeekSQL, parseDateArchiveQuery } from "./date-archives.js";
 import { gridColumnCount } from "./block-layout.js";
+import { postHasPassword, postNeedsPassword as protectedPost, publicPostTitle as titleOf } from "./post-passwords.js";
 
 export const WIDGET_BLOCKS = [
   "core/latest-posts", "core/latest-comments", "core/archives", "core/calendar", "core/tag-cloud",
@@ -28,8 +29,6 @@ const postDate = (value: unknown, state: State) => {
   return date.isValid() ? formatDate(state.settings.dateFormat, date.toISOString(), state.settings.timezone) : "";
 };
 const permalink = (post: RenderPost, state: State) => cached(state, `link:${post.id}`, () => postPermalink(post, state.settings, state.db));
-const protectedPost = (post: RenderPost) => post.locked === false ? false : Boolean(post.locked || post.hasPassword || post.password_hash || post._passwordHash);
-const titleOf = (post: RenderPost) => (protectedPost(post) ? "Protected: " : "") + (post.title || "(no title)");
 const excerpt = (value: string, limit: number) => {
   const words = plainText(value).trim().split(/\s+/).filter(Boolean);
   return { text: words.slice(0, limit).join(" "), trimmed: words.length > limit };
@@ -90,7 +89,13 @@ async function latestPosts(node: Node, context: Context, state: State, attribute
     if (ids.length) images = await cached(state, `widget-featured:${ids.join(",")}`, async () => new Map((await state.db.query("SELECT id,alt,width,height,sizes,'/uploads/'||filename AS url FROM media WHERE id=ANY($1::int[]) AND mime_type LIKE 'image/%'", [ids])).rows.map(row => [row.id, row])));
   }
   const items: string[] = [];
-  for (const post of posts) {
+  for (const record of posts) {
+    let post=record;
+    if(a.displayPostContent && postHasPassword(post)){
+      const sameUnlockedPost=state.options.post?.id===post.id && state.options.post?.locked===false;
+      const granted=sameUnlockedPost || (state.options.canReadProtectedPost ? await cached(state,`post-access:${post.id}`,()=>state.options.canReadProtectedPost!(post.id,state.db)):false);
+      post={...post,locked:!granted};
+    }
     const url = await permalink(post, state), title = titleOf(post); let item = "";
     const image = images.get(post.featuredMediaId);
     if (image) {

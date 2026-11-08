@@ -46,6 +46,7 @@ import { assertCommentAccess, canEditPostComments, contributorCanEditPostStatus 
 import { appendDateArchiveSQL, dateArchiveDTO, parseDateArchivePath } from "./date-archives.js";
 import { parseFootnotes, serializeFootnotes, freshFootnoteIds, MAX_FOOTNOTES_BYTES } from "./footnotes.js";
 import { excerptText } from "./excerpts.js";
+import { postAccessReader, postHasPassword, protectedPostExcerpt, publicPostTitle } from "./post-passwords.js";
 const router = express.Router();
 const admin = requireRole("administrator");
 const esc = (value: unknown) =>
@@ -194,30 +195,33 @@ router.get("/api/public/resolve", async (req, res) => {
   );
   res.json(result.data);
 });
-async function feedPosts() {
+async function feedPosts(req: Request) {
   const settings = await getSettings();
   const posts = (
     await pool.query(
-      `SELECT ${postFields} FROM posts p JOIN users u ON u.id=p.author_id WHERE p.type='post' AND p.status='publish' AND p.password_hash IS NULL ORDER BY p.published_at DESC,p.id DESC LIMIT $1`,
+      `SELECT ${postFields} FROM posts p JOIN users u ON u.id=p.author_id WHERE p.type='post' AND p.status='publish' ORDER BY p.published_at DESC,p.id DESC LIMIT $1`,
       [settings.feedItems],
     )
   ).rows;
+  const canReadProtectedPost = postAccessReader(req);
   return {
     settings,
     posts: await Promise.all(
-      posts.map(async (p) =>
-        withPermalink(
-          { ...p, content: await renderPublicContent(p) },
+      posts.map(async (p) => {
+        const locked = postHasPassword(p) && !(await canReadProtectedPost(p.id, pool));
+        return withPermalink(
+          { ...p, title: publicPostTitle(p), excerpt: locked ? protectedPostExcerpt : p.excerpt, content: await renderPublicContent({ ...p, locked }, { canReadProtectedPost }) },
           settings,
-        ),
-      ),
+        );
+      }),
     ),
   };
 }
 router.get(
   ["/feed", "/feed/", "/feed/rss2", "/feed/rss2/", "/rss.xml"],
-  async (_req, res) => {
-    const { settings, posts } = await feedPosts();
+  async (req, res) => {
+    res.vary("Cookie"); if (req.headers.cookie) res.setHeader("Cache-Control", "private, no-store");
+    const { settings, posts } = await feedPosts(req);
     const feed = absolute("/feed/", settings.siteUrl);
     res
       .type("application/rss+xml")
@@ -226,8 +230,9 @@ router.get(
       );
   },
 );
-router.get(["/feed/atom", "/feed/atom/", "/atom.xml"], async (_req, res) => {
-  const { settings, posts } = await feedPosts();
+router.get(["/feed/atom", "/feed/atom/", "/atom.xml"], async (req, res) => {
+  res.vary("Cookie"); if (req.headers.cookie) res.setHeader("Cache-Control", "private, no-store");
+  const { settings, posts } = await feedPosts(req);
   res
     .type("application/atom+xml")
     .send(
@@ -381,7 +386,7 @@ async function wpPost(post: any, req: AuthRequest, edit = false) {
   const protectedPost = !!post.hasPassword;
   const own = canEdit(req.user, post);
   const raw = edit && own ? post.rawContent || post.content : undefined;
-  const rendered = protectedPost && !own ? "" : await renderPublicContent({ ...post, locked: false }, { user: req.user, requestPath: await postPermalink(post, settings), query: req.query, preview: edit });
+  const rendered = protectedPost && !own ? "" : await renderPublicContent({ ...post, locked: false }, { user: req.user, requestPath: await postPermalink(post, settings), query: req.query, preview: edit, canReadProtectedPost: postAccessReader(req) });
   const excerptWords = excerptText(rendered).trim().split(/\s+/).filter(Boolean);
   const excerpt = protectedPost && !own ? "" : post.excerpt
     ? `<p>${esc(post.excerpt)}</p>`

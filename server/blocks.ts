@@ -27,6 +27,7 @@ import {
 import { themeIds, readThemeDesign, getBundledTheme, resetBundledDocument } from "./themes.js";
 import { templatePartAreas, sourceTemplatePartArea } from "../shared/template-areas.js";
 import {hasPostAccess,assertPostAccess} from "./core.js";
+import { postAccessReader } from "./post-passwords.js";
 import { withPreviewAutosave } from "./post-preview.js";
 import { postFormats } from "../shared/post-formats.js";
 import { postPermalink } from "./permalinks.js";
@@ -780,7 +781,7 @@ router.all(
       const value=req.query[key];if(typeof value==="string" && value.length<=2000)query[key]=value;
     }
     const requestPath=post?await postPermalink(post,await getSettings()):"/";
-    res.json({ rendered: await renderBlock(name, attributes, { post, user, preview:true, requestPath, query }) });
+    res.json({ rendered: await renderBlock(name, attributes, { post, user, preview:true, requestPath, query, canReadProtectedPost: postAccessReader(req) }) });
   },
 );
 router.get("/api/public/templates/:slug", async (req:AuthRequest, res) => {
@@ -844,6 +845,7 @@ router.get("/api/public/templates/:slug", async (req:AuthRequest, res) => {
       placeholderBindings: false,
       user: (req as AuthRequest).user,
       preview,
+      canReadProtectedPost: postAccessReader(req),
     }),
   });
 });
