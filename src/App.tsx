@@ -11,7 +11,7 @@ import {
   PrivacyRequests,
   RegistrationLink,
 } from "./screens/Accounts";
-import PublicSite, { PermalinkResolver } from "./screens/PublicSite";
+import PublicSite, { PermalinkResolver, PublicRoot } from "./screens/PublicSite";
 import Dashboard from "./screens/Dashboard";
 import MediaLibrary from "./screens/Media";
 import {
@@ -300,7 +300,7 @@ export default function App() {
               )
             }
           />
-          <Route path="/" element={<PublicSite />} />
+          <Route path="/" element={<PublicRoot />} />
           <Route
             path="/preview/:id"
             element={

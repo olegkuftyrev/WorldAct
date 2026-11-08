@@ -24,6 +24,7 @@ import { renderPlaylistBlock, type PlaylistContext } from "./playlist-blocks.js"
 import { prepareShortcodeDocument } from "./shortcodes.js";
 import { hasShortcodes } from "./shortcode-parser.js";
 import { applyBlockBindings, patternOverrides, type PatternOverrides } from "./block-bindings.js";
+import { publicPaginationLocation } from "./public-pagination.js";
 
 export type BlockDatabase = Pick<pg.Pool, "query"> | pg.PoolClient;
 export type RenderPost = Record<string, any>;
@@ -550,15 +551,7 @@ async function queryPosts(
   });
 }
 function paginationURL(page: number, loop: QueryResult, state: State) {
-  const path =
-    state.options.requestPath?.startsWith("/") &&
-    !state.options.requestPath.startsWith("//")
-      ? state.options.requestPath.split("?")[0]
-      : "/";
-  const query = new URLSearchParams();
-  for (const [key, value] of Object.entries(state.options.query || {}))
-    if (typeof value === "string" || typeof value === "number")
-      query.set(key.slice(0, 80), String(value).slice(0, 300));
+  const {path,query}=publicPaginationLocation(state.options.requestPath,state.options.query);
   query.set(`query-${loop.queryId}-page`, String(page));
   return path + "?" + query.toString();
 }

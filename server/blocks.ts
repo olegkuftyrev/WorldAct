@@ -35,6 +35,7 @@ import { postFormats } from "../shared/post-formats.js";
 import { postPermalink, resolvePublicPath } from "./permalinks.js";
 import iconsRouter from "./icons.js";
 import { normalizeBlockRenderAttributes } from "./block-render-attributes.js";
+import { isPublicRequestPath } from "./public-pagination.js";
 
 const escapeHTML = (value: unknown) =>
   String(value ?? "").replace(
@@ -826,7 +827,7 @@ router.get("/api/public/templates/:slug", async (req:AuthRequest, res) => {
   }
   if(!preview && post){const pingback=pingbackHeader(post,settings);if(pingback)res.setHeader("X-Pingback",pingback);}
   const requestPath = String(req.query.requestPath || "/").slice(0, 2000);
-  if (!requestPath.startsWith("/") || requestPath.startsWith("//"))
+  if (!isPublicRequestPath(requestPath))
     throw new HttpError(400, "Use a site-relative request path.");
   let contentPage = parseContentPage(req.query.contentPage ?? (post ? req.query.page : undefined));
   if (post && req.query.contentPage === undefined && req.query.page === undefined) {
@@ -856,7 +857,9 @@ router.get("/api/public/templates/:slug", async (req:AuthRequest, res) => {
       requestPath,
       templateSlug: doc.slug,
       query,
-      page: Number(req.query.page) || 1,
+      // On a singular request page selects the document body, not an inherited
+      // Query Loop. Its explicit query-N-page remains independently authoritative.
+      page: post ? 1 : Number(req.query.page) || 1,
       contentPage,
       placeholderBindings: false,
       user: (req as AuthRequest).user,

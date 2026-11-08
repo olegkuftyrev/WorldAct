@@ -8,6 +8,7 @@ import { cleanContent, plainText } from "./utils.js";
 import {avatarURL} from "./avatars.js";
 import {canEditPostComments} from "./comment-access.js";
 import {normalizeLoginRedirect} from "../shared/login-redirect.js";
+import {publicPaginationLocation} from "./public-pagination.js";
 
 import { THEME_BLOCKS } from "../shared/dynamic-blocks.js";
 export { THEME_BLOCKS };
@@ -17,10 +18,9 @@ async function cached<T>(state: State,key:string,fn:()=>Promise<T>):Promise<T> {
   if(!state.cache.has(key))state.cache.set(key,fn());return state.cache.get(key)!;
 }
 function pageLink(state:State,page:number,anchor="comments") {
-  const query=new URLSearchParams();
-  for(const [key,value] of Object.entries(state.options.query || {}))if(typeof value==="string" && !["postId","requestPath","type"].includes(key))query.set(key,value);
+  const {path,query}=publicPaginationLocation(state.options.requestPath,state.options.query);
   query.set("commentPage",String(page));
-  return `${state.options.requestPath || "/"}?${query}#${anchor}`;
+  return `${path}?${query}#${anchor}`;
 }
 function safeUrl(value:unknown) {
   const input=String(value || "").trim();

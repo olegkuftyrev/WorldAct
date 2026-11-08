@@ -4,6 +4,8 @@ import { parseVideoEmbed } from "../embeds";
 import { enhanceInteractiveBlocks } from "../interactiveBlocks";
 import { enhanceNavigationOverlays } from "../navigationOverlays";
 import { contentPageQuery } from "../contentPages";
+import { readPlainPermalinkQuery } from "../../shared/plain-permalink-query";
+import { shouldResolveStaticFrontPage } from "../plainPermalinkRouting";
 import { scrollToMoreFragment } from "../contentFragments";
 import {enhancePlaylists} from "../playlists";
 import "@wordpress/block-library/build-style/style.css";
@@ -68,6 +70,7 @@ export default function PublicSite({
   archive,
   notFound = false,
   contentPage,
+  resolvedPostId,
 }: {
   detail?: boolean;
   page?: boolean;
@@ -76,10 +79,12 @@ export default function PublicSite({
   archive?: PublicArchive;
   notFound?: boolean;
   contentPage?: number;
+  resolvedPostId?: number;
 }) {
   const { slug: routeSlug, id: previewId } = useParams(),
     { user, setUser } = useContext(Session);
   const slug = slugOverride || routeSlug;
+  const requestLocation = useLocation();
   const [params, setParams] = useSearchParams();
   const searchTerm = params.get("search") || params.get("s") || "";
   const categoryFilter =
@@ -122,7 +127,11 @@ export default function PublicSite({
     publicQuery.set(key, value);
   for (const [key, value] of dateQuery) publicQuery.set(key, value);
   const templateQuery=new URLSearchParams(publicQuery);
-  if(detail)templateQuery.set("contentPage",String(bodyPagination.page));
+  if(detail){
+    templateQuery.delete("page");
+    if(params.has("page"))templateQuery.set("page",String(bodyPagination.page));
+    templateQuery.set("contentPage",String(bodyPagination.page));
+  }
   const design = useResource<PublicDesign>("/public/design");
   const site = useResource<{
     settings: Partial<Settings>;
@@ -154,6 +163,7 @@ export default function PublicSite({
     [publicSearch, setPublicSearch] = useState(searchTerm || "");
   useEffect(() => {
     if (!detail || (!slug && !previewId)) return;
+    let active = true;
     setLoading(true);
     setMissingPost(false);
     setError("");
@@ -171,6 +181,9 @@ export default function PublicSite({
         : `/public/posts/${encodeURIComponent(slug!)}${commentQuery ? "?" + commentQuery : ""}`,
     )
       .then((data) => {
+        if (!active) return;
+        if (resolvedPostId && data.post.id !== resolvedPostId)
+          throw new ApiError("Post not found.", 404);
         if (!preview && data.post.type !== (page ? "page" : "post"))
           throw new Error("This page could not be found.");
         setPost(data.post);
@@ -178,12 +191,14 @@ export default function PublicSite({
         setCommentsPagination(data.commentsPagination || null);
       })
       .catch((e) => {
+        if (!active) return;
         setPost(null);
         setMissingPost(e instanceof ApiError && e.status === 404);
         setError(errorText(e));
       })
-      .finally(() => setLoading(false));
-  }, [detail, slug, page, preview, previewId, commentQuery, blockQuery]);
+      .finally(() => { if (active) setLoading(false); });
+    return () => { active = false; };
+  }, [detail, slug, page, preview, previewId, commentQuery, blockQuery, resolvedPostId]);
   const settings = site.data?.settings,
     title = settings?.siteTitle || "WorldAct",
     posts = site.data?.posts || [];
@@ -216,8 +231,9 @@ export default function PublicSite({
     hasDateFilter ||
     params.get("page"),
   );
-  const frontPage = !detail && !hasArchiveFilter ? site.data?.frontPage : null;
-  const isPostsPage = detail && post?.id === site.data?.postsPage?.id;
+  const frontPage = !detail && !notFound && !hasArchiveFilter ? site.data?.frontPage : null;
+  const isFrontPage = Boolean(frontPage || (detail && post && settings?.frontPageMode === "page" && post.id === site.data?.frontPage?.id));
+  const isPostsPage = detail && settings?.frontPageMode === "page" && post?.id === site.data?.postsPage?.id;
   const displaySingle = (detail && !isPostsPage) || Boolean(frontPage);
   const displayedPost = frontPage || post;
   const primaryMenu = design.data?.menus.find(
@@ -406,14 +422,17 @@ export default function PublicSite({
         comments: Comment[];
         commentsPagination?: CommentPagination;
       }>(
-        `/public/posts/${encodeURIComponent(post?.slug || slug || "")}/unlock${commentQuery ? "?" + commentQuery : ""}`,
+        `/public/posts/${encodeURIComponent(displayedPost?.slug || slug || "")}/unlock${commentQuery ? "?" + commentQuery : ""}`,
         json("POST", { password }),
       );
+      if (data.post.id !== displayedPost?.id) throw new ApiError("Post not found.", 404);
       setPost(data.post);
       setComments(data.comments);
       setCommentsPagination(data.commentsPagination || null);
       setPassword("");
+      if (frontPage) await site.reload();
     } catch (error) {
+      if (error instanceof ApiError && error.status === 404) setMissingPost(true);
       setError(errorText(error));
     } finally {
       setBusy(false);
@@ -468,7 +487,7 @@ export default function PublicSite({
     notFound: notFound || missingPost,
     single: displaySingle,
     post: displayedPost,
-    frontPage: Boolean(frontPage),
+    frontPage: isFrontPage || (!detail && !hasArchiveFilter && settings?.frontPageMode !== "page"),
     home: !detail && !hasArchiveFilter,
     search: Boolean(searchTerm),
     category: categoryFilter || undefined,
@@ -476,6 +495,8 @@ export default function PublicSite({
     author: Boolean(params.get("author")),
     date: hasDateFilter,
   });
+  if (!detail && !notFound && shouldResolveStaticFrontPage(requestLocation.pathname, params, site.data))
+    return <PermalinkResolver />;
   if (design.data?.theme?.themeJSON && sourceTemplate) {
     return (
       <div className="public-site worldact-theme" data-theme={design.data.theme.id}>
@@ -484,7 +505,7 @@ export default function PublicSite({
         <ResourceState loading={site.loading || loading} error={site.error || (missingPost ? "" : error)} retry={site.error ? site.reload : undefined} />
         {!loading && !site.loading && !site.error && (!error || missingPost) && <SourceThemeDocument
           document={sourceTemplate}
-          postId={displayedPost?.id}
+          postId={displaySingle ? displayedPost?.id : undefined}
           query={templateQuery.toString()}
           commentPage={commentPageParam ? commentPage : undefined}
           userName={user?.displayName}
@@ -537,7 +558,13 @@ export default function PublicSite({
           error={site.error || error}
           retry={site.error ? site.reload : undefined}
         />
-        {displaySingle ? (
+        {notFound || missingPost ? (
+          <section className="public-not-found">
+            <h1>Page not found</h1>
+            <p>It looks like nothing was found at this location.</p>
+            <Link to="/">Return to home</Link>
+          </section>
+        ) : displaySingle ? (
           displayedPost &&
           ((post) => (
             <>
@@ -1040,7 +1067,7 @@ function RenderedTemplate({
   const requestQuery = new URLSearchParams(location.search);
   for (const [key, value] of new URLSearchParams(query))
     requestQuery.set(key, value);
-  requestQuery.set("requestPath", location.pathname);
+  requestQuery.set("requestPath", location.pathname + location.search);
   if (postId) requestQuery.set("postId", String(postId));
   if (document.type === "template-part")
     requestQuery.set("type", "template-part");
@@ -1102,12 +1129,12 @@ function selectSourceTemplate(documents: SiteTemplate[] | undefined, context: {
     : context.author ? ["author", "archive", "index"]
     : context.date ? ["date", "archive", "index"]
     : context.single && context.post ? [
-        ...(context.post.templateSlug ? [context.post.templateSlug] : []),
         ...(context.frontPage ? ["front-page"] : []),
+        ...(context.post.templateSlug ? [context.post.templateSlug] : []),
         ...(context.post.type === "page" ? [`page-${context.post.slug}`, `page-${context.post.id}`, "page"] : [`single-post-${context.post.slug}`, "single-post", "single"]),
         "singular", "index",
       ]
-    : [...(context.home ? ["front-page"] : []), "home", "index"];
+    : [...(context.frontPage ? ["front-page"] : []), "home", "index"];
   for (const slug of candidates) {
     const document = documents?.find((item) => item.slug === slug);
     if (document) return document;
@@ -1163,7 +1190,7 @@ function SourceThemeDocument({ document: template, postId, query, commentPage, u
   const [notice, setNotice] = useState(new URLSearchParams(location.search).get("comment-status") === "pending" ? "Your comment is awaiting moderation." : ""), [revision, setRevision] = useState(0), [busy, setBusy] = useState(false);
   const requestQuery = new URLSearchParams(location.search);
   for (const [key, value] of new URLSearchParams(query)) requestQuery.set(key, value);
-  requestQuery.set("requestPath", location.pathname);
+  requestQuery.set("requestPath", location.pathname + location.search);
   if(preview) requestQuery.set("preview","true");
   if(commentPage) requestQuery.set("commentPage", String(commentPage));
   if (postId) requestQuery.set("postId", String(postId));
@@ -1198,7 +1225,10 @@ function SourceThemeDocument({ document: template, postId, query, commentPage, u
     if(form.matches("form.worldact-native-password-form")){
       event.preventDefault();if(busy)return;const data=new FormData(form);
       setBusy(true);setError("");
-      try{await api(`/public/posts/${encodeURIComponent(String(data.get("postSlug") || ""))}/unlock`,json("POST",{password:String(data.get("password") || "")}));setRevision((value)=>value+1);}catch(reason){setError(errorText(reason));}finally{setBusy(false);}return;
+      const unlockQuery = new URLSearchParams([...requestQuery].filter(([key]) => key === "commentPage" || /^query-\d+-page$/.test(key)));
+      const body = contentPageQuery(new URLSearchParams(location.search), Number(requestQuery.get("contentPage")) || undefined);
+      for (const [key,value] of body.query) unlockQuery.set(key,value);
+      try{const unlocked=await api<{post:Post}>(`/public/posts/${encodeURIComponent(String(data.get("postSlug") || ""))}/unlock${unlockQuery.size ? "?"+unlockQuery : ""}`,json("POST",{password:String(data.get("password") || "")}));if(postId && unlocked.post.id!==postId)throw new ApiError("Post not found.",404);setRevision((value)=>value+1);}catch(reason){setError(errorText(reason));}finally{setBusy(false);}return;
     }
     if (!form.matches("form.worldact-native-comment-form, .wp-block-post-comments-form form, form.comment-form")) return;
     event.preventDefault();
@@ -1335,7 +1365,7 @@ export function PermalinkResolver() {
     post?: Post;
     archive?: PublicArchive;
     contentPage?: number;
-  }>(`/public/resolve?path=${encodeURIComponent(location.pathname)}`);
+  }>(`/public/resolve?path=${encodeURIComponent(location.pathname + location.search)}`);
   if (resource.error === "This page could not be found." || resource.error === "Page not found." || resource.error === "Post not found.") return <PublicSite notFound />;
   if (resource.loading || resource.error)
     return (
@@ -1359,9 +1389,16 @@ export function PermalinkResolver() {
         page={resource.data.post.type === "page"}
         slugOverride={resource.data.post.slug}
         contentPage={resource.data.contentPage}
+        resolvedPostId={resource.data.post.id}
       />
     );
   return <PublicSite notFound />;
+}
+
+export function PublicRoot() {
+  const location = useLocation();
+  const identity = readPlainPermalinkQuery(new URLSearchParams(location.search));
+  return identity.kind === "none" ? <PublicSite /> : <PermalinkResolver />;
 }
 
 type CommentPagination = {
