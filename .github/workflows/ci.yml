@@ -88,6 +88,7 @@ jobs:
           tests/native-media-code-rebase.test.ts
           tests/native-caption-initialization.test.ts
           tests/classic-editor.test.ts tests/classic-persistence.test.ts
+          tests/classic-initial-caption.test.ts
           tests/classic-parser.test.ts tests/block-history.test.ts
           tests/account-tools-ui.test.ts
           tests/legacy-routes.test.ts tests/login-remember.test.ts tests/media-details-state.test.ts
