@@ -23,12 +23,15 @@ import {
   useResource,
 } from "../components/AdminUI";
 import { commentShortcut } from "../commentShortcuts";
+import { commentTypeFilter, commentTypeLabel, commentTypeOptions, isNotification } from "../commentTypes";
+import { ConnectorOperation } from "../connectors";
 import "../comments.css";
 
 type Status = Comment["status"] | "all";
 type CommentList = {
   comments: Comment[];
   counts: Partial<Record<Status | "mine", number>>;
+  typeCounts: {comment: number; pings: number};
   permissions: { bulk: boolean; empty: boolean };
   pagination: {
     page: number;
@@ -55,6 +58,7 @@ export default function Comments() {
     ? requestedStatus
     : "all";
   const mine = params.get("mine") === "true";
+  const type = commentTypeFilter(params.get("type"));
   const page = Math.max(1, Number(params.get("page")) || 1);
   const search = params.get("search") || "";
   const orderby = ["date", "author", "post"].includes(
@@ -70,6 +74,7 @@ export default function Comments() {
     perPage: String(tablePreferences.value.perPage),
     orderby,
     order,
+    type,
   });
   if (mine) query.set("mine", "true");
   if (search) query.set("search", search);
@@ -80,6 +85,7 @@ export default function Comments() {
   const [searchDraft, setSearchDraft] = useState(search),
     [selected, setSelected] = useState<number[]>([]),
     [bulk, setBulk] = useState("");
+  const [typeDraft, setTypeDraft] = useState(type);
   const [editing, setEditing] = useState<Editing | null>(null),
     [deleting, setDeleting] = useState<number[] | null>(null);
   const [emptyReview, setEmptyReview] = useState<"spam" | "trash" | null>(null);
@@ -89,13 +95,16 @@ export default function Comments() {
     [busy, setBusy] = useState(false);
   useEffect(() => {
     setSearchDraft(search);
+    setTypeDraft(type);
     setSelected([]);
     setEditing(null);
-  }, [search, status, mine, page, postId]);
+  }, [search, status, mine, page, postId, type]);
   const canBulk = resource.data?.permissions.bulk === true;
   const columnCount = canBulk ? 5 : 4;
   const comments = resource.data?.comments || [];
   const counts = resource.data?.counts || {};
+  const typeOptions = commentTypeOptions(resource.data?.typeCounts || {}, typeDraft, resource.loading);
+  const displayedType = typeOptions.some(option => option.value === typeDraft) ? typeDraft : "all";
   const totalPages = resource.data?.pagination.totalPages || 1;
   const [currentId, setCurrentId] = useState<number | null>(null);
   const pendingEdge = useRef<"first" | "last" | null>(null);
@@ -521,6 +530,13 @@ export default function Comments() {
                 {status === "spam" ? "Empty Spam" : "Empty Trash"}
               </button>
             )}
+          <form className="alignleft actions comment-type-filter" onSubmit={event => {event.preventDefault(); change({type: displayedType === "all" ? "" : displayedType});}}>
+            <label className="screen-reader-text" htmlFor="filter-by-comment-type">Filter by comment type</label>
+            <select id="filter-by-comment-type" value={displayedType} onChange={event => setTypeDraft(commentTypeFilter(event.target.value))}>
+              {typeOptions.map(option => <option key={option.value} value={option.value}>{option.label}</option>)}
+            </select>
+            <button className="button" disabled={busy || resource.loading}>Filter</button>
+          </form>
           {paging}
         </div>
         <table
@@ -615,7 +631,7 @@ export default function Comments() {
                         </a>
                       </>
                     )}
-                    {comment.authorEmail && (
+                    {!isNotification(comment) && comment.authorEmail && (
                       <>
                         <br />
                         <a href={`mailto:${comment.authorEmail}`}>
@@ -628,6 +644,7 @@ export default function Comments() {
                     <strong className="comment-mobile-author">
                       {comment.authorName}
                     </strong>
+                    {isNotification(comment) && <p className="comment-type"><strong>{commentTypeLabel(comment)}:</strong></p>}
                     {comment.parentId && (
                       <p className="description">
                         In reply to comment #{comment.parentId}
@@ -655,7 +672,7 @@ export default function Comments() {
                       <strong>{comment.postTitle}</strong>
                     )}
                     <br />
-                    <Link to={`?postId=${comment.postId}`}>
+                    <Link to={`?${new URLSearchParams({...Object.fromEntries(params), postId: String(comment.postId), page: "1"})}`}>
                       View all comments for this post
                     </Link>
                   </td>
@@ -723,6 +740,7 @@ export default function Comments() {
                   This includes comments outside the current search results.
                 </p>
               )}
+              {type !== "all" && <p>This includes all comment types, including types outside the current filter.</p>}
               {busy && (
                 <p role="status">Deleting comments… {emptyProgress} deleted.</p>
               )}
@@ -865,7 +883,7 @@ function CommentForm({
   const reply = mode === "reply";
   const [form, setForm] = useState({
     authorName: comment.authorName,
-    authorEmail: comment.authorEmail || "",
+    authorEmail: isNotification(comment) ? "" : comment.authorEmail || "",
     authorUrl: comment.authorUrl || "",
     content: reply ? "" : comment.content,
     status: reply ? "approved" : comment.status,
@@ -875,6 +893,11 @@ function CommentForm({
     [conflict, setConflict] = useState(false);
   const textarea = useRef<HTMLTextAreaElement>(null);
   const contextMenu = useRef(false);
+  const operation = useRef(new ConnectorOperation()), formRef = useRef(form);
+  const version = useRef(comment.version);
+  const [notice, setNotice] = useState("");
+  formRef.current = form;
+  useEffect(() => () => operation.current.cancel(), []);
   function wrap(start: string, end: string) {
     const area = textarea.current;
     if (!area) return;
@@ -894,10 +917,12 @@ function CommentForm({
     setError("");
     setBusy(true);
     setConflict(false);
+    setNotice("");
+    const owner = operation.current.start(), submitted = form;
     try {
-      await api(
+      const result = await api<{comment: Comment}>(
         reply ? "/comments" : `/comments/${comment.id}`,
-        json(
+        {...json(
           reply ? "POST" : "PUT",
           reply
             ? {
@@ -908,18 +933,26 @@ function CommentForm({
               }
             : {
                 ...form,
-                ...(comment.version ? { version: comment.version } : {}),
+                ...(isNotification(comment) ? {authorEmail: ""} : {}),
+                ...(version.current ? { version: version.current } : {}),
               },
-        ),
+        ), signal: owner.signal},
       );
+      if (!owner.current()) return;
+      if (!reply) version.current = result.comment.version;
+      if (formRef.current !== submitted) {
+        setNotice(reply ? "Reply added. Your newer text is still here." : "Comment updated. Your newer changes are still unsaved.");
+        return;
+      }
       await saved(reply ? "Reply added." : "Comment updated.");
     } catch (error) {
+      if (!owner.current()) return;
       setError(errorText(error));
       const changed = error instanceof ApiError && error.status === 409;
       setConflict(changed);
       if (changed) await onConflict();
     } finally {
-      setBusy(false);
+      if (owner.current()) setBusy(false);
     }
   }
   return (
@@ -953,6 +986,8 @@ function CommentForm({
             ? "Quick Edit"
             : "Author"}
       </h2>
+      {!reply && isNotification(comment) && <p className="description"><strong>{commentTypeLabel(comment)}.</strong> The notification type is fixed; it has no email address or account identity.</p>}
+      {notice && <Notice>{notice}</Notice>}
       {error && (
         <Notice error>
           {error}
@@ -979,7 +1014,7 @@ function CommentForm({
               }
             />
           </label>
-          <label>
+          {!isNotification(comment) && <label>
             Email
             <input
               type="email"
@@ -989,7 +1024,7 @@ function CommentForm({
                 setForm({ ...form, authorEmail: event.target.value })
               }
             />
-          </label>
+          </label>}
           <label>
             URL
             <input

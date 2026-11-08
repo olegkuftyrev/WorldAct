@@ -148,6 +148,7 @@ export type Media = {
   commentStatus?: "open" | "closed";
 };
 export type Comment = {
+  type?: "comment" | "pingback" | "trackback";
   permissions?: { edit: boolean; reply: boolean; moderate: boolean; delete: boolean };
   id: number;
   authorName: string;
@@ -197,6 +198,7 @@ export type Settings = {
   feedItems?: number;
   feedExcerpt?: boolean;
   defaultCommentStatus?: "open" | "closed";
+  defaultPingStatus?: "open" | "closed";
   defaultPingbackFlag?: boolean;
   pingServices?: string[];
   requireCommentNameEmail?: boolean;

@@ -1,6 +1,6 @@
 # Configured Post via email backend
 
-The supplied `wp-mail.php`, `class-pop3.php`, Writing settings, and `xmlrpc_getposttitle` are reference data. The implementation is Node/TypeScript with PostgreSQL; it executes no PHP or MySQL. Browser Writing configuration is a separate pending UI batch.
+The supplied `wp-mail.php`, `class-pop3.php`, Writing settings, and `xmlrpc_getposttitle` are reference data. The implementation is Node/TypeScript with PostgreSQL; it executes no PHP or MySQL. Writing settings provide the real private configuration and saved-mailbox check controls.
 
 ## Administrator contract
 
@@ -26,4 +26,6 @@ The lease renews using separate short pool queries and cannot revive an expired 
 
 Meaningful isolated checks cover actual administrator API/secret privacy, stale configuration, capability/sender order, sanitation/category/date, commit-before-DELE, failed QUIT/deleted-post/credential-rotation idempotence, unsupported/oversized/bounded rotating work, full pool availability during retrieval, held generation/session/lease changes, actual post-lock waits past expiry and physical-close admission. POP/MIME tests use injected socket/resolver peers and service tests inject only internal transports; no real DNS, mailbox, Akismet or SMTP is contacted. All fixtures use the mandatory disposable database runner and local outbox.
 
-Browser UI and the legacy anonymous`wp-mail.php` trigger are not implemented in this backend batch. Arbitrary ports, STLS/APOP/SASL, non-ASCII POP credentials, attachment ingestion and other MIME multipart types remain explicit unsupported boundaries. Normal archives intentionally do not transfer destination-local mailbox credentials, receipts or polling configuration.
+Writing settings use a separate **Save Mail Settings** action so mailbox versions and credentials remain separate from ordinary site settings. Blank passwords retain the saved credential; explicit clearing also disables both check settings. **Check mail now** is available only for the saved enabled configuration, with no unsaved draft or active throttle. Status refresh preserves form input. Results distinguish deletion requested from deletion committed, and a completed earlier request never closes or replaces a later opening, account or draft. Automatic checks are suppressed outside production; an explicit manual check can connect in local environments.
+
+The legacy anonymous`wp-mail.php` trigger is not implemented. Arbitrary ports, STLS/APOP/SASL, non-ASCII POP credentials, attachment ingestion and other MIME multipart types remain explicit unsupported boundaries. Normal archives intentionally do not transfer destination-local mailbox credentials, receipts or polling configuration. Native browser outcome fixtures exercise presentation only; actual POP, import and deletion behavior is verified separately with controlled internal peers, without external mailbox traffic.

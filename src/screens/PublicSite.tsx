@@ -1,4 +1,5 @@
 import { renderTemplate } from "../template";
+import { commentTypeLabel, isNotification } from "../commentTypes";
 import { parseVideoEmbed } from "../embeds";
 import { enhanceInteractiveBlocks } from "../interactiveBlocks";
 import { enhanceNavigationOverlays } from "../navigationOverlays";
@@ -1401,14 +1402,14 @@ function CommentThread({
     return (
       <div className="public-comment-node" key={item.id}>
         <article id={`comment-${item.id}`} className="public-comment">
-          {(item as Comment & {avatarUrl?:string|null}).avatarUrl && <div className="public-comment-avatar">
+          {!isNotification(item) && (item as Comment & {avatarUrl?:string|null}).avatarUrl && <div className="public-comment-avatar">
             <img src={(item as Comment & {avatarUrl:string}).avatarUrl} alt="" width={48} height={48} loading="lazy" referrerPolicy="no-referrer"/>
           </div>}
           <div>
-            <strong>{item.authorName}</strong>
+            {isNotification(item) ? <p className="comment-notification"><strong>{commentTypeLabel(item)}:</strong>{" "}{item.authorUrl ? <a href={item.authorUrl} rel="external nofollow ugc">{item.authorName}</a> : item.authorName}</p> : <strong>{item.authorName}</strong>}
             <p className="comment-date">{displayDate(item.createdAt)}</p>
             <div dangerouslySetInnerHTML={{ __html: item.content }} />
-            {threaded && canReply && depth < maxDepth - 1 && (
+            {!isNotification(item) && threaded && canReply && depth < maxDepth - 1 && (
               <button
                 className="button-link public-comment-reply"
                 onClick={() => onReply(item)}

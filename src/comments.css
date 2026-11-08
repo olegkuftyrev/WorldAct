@@ -192,6 +192,8 @@
   float: left;
   margin-right: 8px;
 }
+.worldact-comments .comment-type-filter { display: flex; gap: 5px; }
+.worldact-comments .comment-type { margin: 0 0 6px; }
 .wa-modal:has(.comment-empty-review) {
   max-width: 620px;
 }

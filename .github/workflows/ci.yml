@@ -58,6 +58,7 @@ jobs:
           tests/mail-intake.test.ts tests/mail-message.test.ts tests/pop3.test.ts
           tests/comment-capabilities.test.ts tests/template-access.test.ts tests/server-startup.test.ts
           tests/comment-types.test.ts
+          tests/notification-mail-ui.test.ts
           tests/widget-blocks.test.ts tests/widget-layout.test.ts tests/date-archives.test.ts
           tests/footnotes.test.ts tests/term-blocks.test.ts tests/loginout.test.ts tests/auth-reset.test.ts
           tests/interactive-blocks.test.ts tests/background-styles.test.ts tests/template-areas.test.ts

@@ -1,6 +1,7 @@
 import {postFormats} from "../../shared/post-formats";
 import AkismetSettings from "../components/AkismetSettings";
 import OutgoingNotifications from "../components/OutgoingNotifications";
+import MailIntakeSettings from "../components/MailIntakeSettings";
 import { ConnectorOperation, pingServiceLines } from "../connectors";
 import ApplicationPasswords from "./ApplicationPasswords";
 import ExportContent from "./ExportContent";
@@ -585,6 +586,7 @@ const settingKeys: Record<string, string[]> = {
   ],
   discussion: [
     "defaultPingbackFlag",
+    "defaultPingStatus",
     "defaultCommentStatus",
     "requireCommentNameEmail",
     "commentRegistration",
@@ -629,7 +631,7 @@ export function SettingsSuite() {
   const resource = useResource<{ settings: Settings; pendingAdminEmail?: PendingAdminEmail | null }>("/settings");
   const pages = useResource<{ pages: Post[] }>("/public/site");
   const policyPages = useResource<{ posts: Post[] }>(tab === "privacy" ? "/posts?type=page&status=all&perPage=100" : null);
-  const terms = useResource<{ terms: { id: number; name: string }[] }>(
+  const terms = useResource<{ terms: { id: number; name: string; parentId?: number | null }[] }>(
     "/terms?taxonomy=category",
   );
   const [form, setForm] = useState<SettingValues>({});
@@ -926,6 +928,11 @@ export function SettingsSuite() {
                     <div className="worldact-stacked-fields">
                     {check("defaultPingbackFlag", "Attempt to notify any blogs linked to from the post")}
                     <label>
+                      <input type="checkbox" checked={form.defaultPingStatus !== "closed"}
+                        onChange={e => set("defaultPingStatus", e.target.checked ? "open" : "closed")} />{" "}
+                      Allow link notifications from other blogs (pingbacks and trackbacks) on new posts
+                    </label>
+                    <label>
                       <input
                         type="checkbox"
                         checked={form.defaultCommentStatus !== "closed"}
@@ -939,6 +946,8 @@ export function SettingsSuite() {
                       Allow people to submit comments on new posts
                     </label>
                     </div>
+                    <p className="description">Individual posts may override these settings. Changes here will only be applied to new posts.</p>
+                    <p className="description">Incoming link notifications are received only in production.</p>
                   </Field>
                   <Field label="Other comment settings">
                     <div className="worldact-stacked-fields">
@@ -1120,7 +1129,10 @@ export function SettingsSuite() {
               )}
             </tbody>
           </table>
-          {tab === "writing" && <OutgoingNotifications hidden={Boolean(form.discourageSearchEngines)} value={pingText} onChange={setPingText} />}
+          {tab === "writing" && <>
+            <MailIntakeSettings categories={terms.data?.terms || []} />
+            <OutgoingNotifications hidden={Boolean(form.discourageSearchEngines)} value={pingText} onChange={setPingText} />
+          </>}
           <p className="submit">
             <button className="button button-primary" disabled={action.busy}>
               {action.busy ? "Saving…" : "Save Changes"}

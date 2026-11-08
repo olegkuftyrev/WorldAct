@@ -1,0 +1,12 @@
+.worldact-mail-intake .mailserver-address { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.worldact-mail-intake .mailserver-address .description { flex-basis: 100%; margin-top: 0; }
+.worldact-mail-intake .mail-intake-actions { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+.worldact-mail-intake .mail-intake-status { margin-top: 16px; }
+.worldact-mail-intake .mail-intake-summary { display: flex; flex-wrap: wrap; gap: 10px 24px; }
+.worldact-mail-intake .mail-intake-summary > div { display: flex; gap: 6px; }
+.worldact-mail-intake .mail-intake-summary dd { margin: 0; font-weight: 600; }
+.worldact-mail-intake input.regular-text { max-width: 100%; box-sizing: border-box; }
+.worldact-mail-intake select { max-width: 100%; }
+@media (max-width: 782px) {
+  .worldact-mail-intake .mailserver-address input.regular-text { flex-basis: 100%; width: 100%; }
+}
