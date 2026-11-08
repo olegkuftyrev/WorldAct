@@ -47,11 +47,21 @@ Body pagination, Query Loop pagination and comment pagination remain independent
 The helper returns flat rows: their null-parent subsequence is in display-root
 order, and each parent's child subsequence is chronological. Every reachable
 approved descendant is included, even beyond display depth. The source renderer
-uses this contract with an iterative walk. The existing Classic React
-`CommentThread` still stops descending at depth 10; its separate UI continuation
-must render all supplied descendants iteratively and flatten presentation beyond
-the configured depth. Backend completion does not establish Classic thread
-parity until that authored continuation and native review pass.
+uses this contract with an iterative walk. Classic now builds its parent map,
+tree and JSX iteratively as well, rendering every supplied descendant and
+flattening indentation beyond the configured depth. Independent native review
+on `9153e04` passed chronological root paging/order, source/Classic comparison,
+a complete2500-comment tail, configured depths, real Reply/focus, privacy,
+responsive controls and immediate protected body-page2 unlock in both themes.
+
+Source Reply eligibility follows actual ancestry independently of presentation
+flattening: a human comment at or beyond the configured maximum has no Reply
+control. Supplied `wp-includes/blocks/comment-reply-link.php:31–49` computes
+ancestry before passing depth/max_depth to the source reply-link helper.
+The render walk carries that actual depth without per-comment SQL or recursion.
+The focused follow-up build and36 source/36 compiled checks across seven files
+pass; independent backend/native depth rechecks remain pending, separate from
+the earlier native gate.
 
 ## Reference provenance
 

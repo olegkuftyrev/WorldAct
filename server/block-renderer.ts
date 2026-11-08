@@ -82,6 +82,7 @@ export type Context = {
   termQuery?: Record<string, any>;
   term?: RenderTerm;
   comment?: Record<string, any>;
+  commentDepth?: number;
   commentLoop?: { comments: any[]; total: number; page: number; perPage: number; totalPages: number };
   social?: { openInNewTab: boolean; showLabels: boolean };
   queryDisplayLayout?: { type?: string; columns?: number };

@@ -21,6 +21,12 @@ test('source theme blocks preserve layout, comments, source SVG and safe generat
   const threaded=await render(template),parsed=dom(threaded);
   for(let i=0;i<3;i++)assert.equal(parsed.querySelectorAll('#comment-'+ids[i]).length,1);
   assert.equal(parsed.querySelectorAll('ol.children ol.children').length,0);assert.doesNotMatch(threaded,/secret@example|Comment body3|Author3/);assert.match(threaded,/3 responses/);
+  const replyIds=(document:ReturnType<typeof dom>)=>Array.from(document.querySelectorAll('[data-comment-reply]')).map((node:any)=>Number(node.getAttribute('data-comment-reply')));
+  assert.deepEqual(replyIds(parsed),[ids[0]],'source Reply stops at actual configured ancestry, including flattened historical descendants');
+  await db.query("UPDATE settings SET data=data || '{\"threadDepth\":3}'::jsonb WHERE id=1");
+  assert.deepEqual(replyIds(dom(await render(template))),ids.slice(0,2));
+  await db.query("UPDATE settings SET data=data || '{\"threadDepth\":1}'::jsonb WHERE id=1");
+  assert.deepEqual(replyIds(dom(await render(template))),[]);
   assert.equal(parsed.querySelector('form')!.getAttribute('action'),'/wp-comments-post.php');assert.equal(parsed.querySelector('[name=authorEmail]')!.hasAttribute('required'),true);assert.equal(parsed.querySelector('input[name=postId]')!.getAttribute('value'),String(postId));
   await db.query("UPDATE settings SET data=data || '{\"threadComments\":false}'::jsonb WHERE id=1");
   const flat=dom(await render(template));assert.equal(flat.querySelectorAll('li.comment').length,3);assert.equal(flat.querySelectorAll('ol.children').length,0);

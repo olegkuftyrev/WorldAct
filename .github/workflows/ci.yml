@@ -60,6 +60,7 @@ jobs:
           tests/comment-types.test.ts
           tests/comment-duplicates.test.ts
           tests/comment-approval-history.test.ts tests/comment-approval-actors.test.ts tests/comment-approval-waits.test.ts
+          tests/compat.test.ts tests/theme-blocks.test.ts
           tests/notification-mail-ui.test.ts
           tests/comment-avatar-context.test.ts
           tests/comment-window.test.ts

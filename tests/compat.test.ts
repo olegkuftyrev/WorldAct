@@ -43,7 +43,7 @@ test("portable WXR, feeds, sitemap, permalink resolver and WordPress REST workfl
   let cookie = "";
   const posts: number[] = [],
     terms: number[] = [],
-    media: number[] = [];
+    media: number[] = [], users: number[] = [];
   let previousPattern: string | undefined;
   async function request(
     path: string,
@@ -399,13 +399,19 @@ test("portable WXR, feeds, sitemap, permalink resolver and WordPress REST workfl
             )
           ).data.some((x: any) => x.id === posts[0]),
         );
+        // This case exercises ordinary moderation and the later admin approve
+        // transition. A source-trusted administrator is approved immediately.
+        const reader = (await ok("/api/users", "POST", { username: stamp + "-reader", email: stamp + "-reader@example.test", displayName: "Compat tester", role: "subscriber", password: "Compat-reader-password-" + stamp })).data.user;
+        users.push(reader.id);
+        const signedReader = await ok("/api/auth/login", "POST", { login: reader.username, password: "Compat-reader-password-" + stamp }, "");
+        const readerCookie = signedReader.response.headers.get("set-cookie")!.split(";")[0];
         const comment = (
           await ok("/wp-json/wp/v2/comments", "POST", {
             post: posts[0],
             author_name: "Compat tester",
             author_email: "compat@example.com",
             content: "Compat comment",
-          })
+          }, readerCookie)
         ).data;
         assert.equal(comment.status, "hold");
         await ok("/wp-json/wp/v2/comments/" + comment.id, "POST", {
@@ -594,6 +600,7 @@ test("portable WXR, feeds, sitemap, permalink resolver and WordPress REST workfl
       await pool.query("DELETE FROM terms WHERE id=ANY($1::int[])", [terms]);
     for (const id of media)
       await request("/wp-json/wp/v2/media/" + id + "?force=true", "DELETE");
+    for (const id of users) await request("/api/users/" + id, "DELETE");
     await pool.end();
   }
 });

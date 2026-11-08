@@ -104,18 +104,18 @@ export async function renderThemeBlock(
     }
     // Historical depth must not become JavaScript call-stack depth. Keep the
     // source depth-limit flattening and sibling order with an explicit stack.
-    const stack:Array<string|{comment:any;depth:number}>=roots.map(comment=>({comment,depth:0})).reverse(),out:string[]=[];
+    const stack:Array<string|{comment:any;depth:number;actualDepth:number}>=roots.map(comment=>({comment,depth:0,actualDepth:1})).reverse(),out:string[]=[];
     while(stack.length){
       const next=stack.pop()!;
       if(typeof next==="string"){out.push(next);continue;}
-      const {comment,depth}=next;if(visited.has(comment.id))continue;visited.add(comment.id);
-      const rendered=await body({...context,comment,commentLoop:loop});
+      const {comment,depth,actualDepth}=next;if(visited.has(comment.id))continue;visited.add(comment.id);
+      const rendered=await body({...context,comment,commentDepth:actualDepth,commentLoop:loop});
       if(state.nodes>MAX_RENDER_NODES)throw new HttpError(413,"The complete comment window exceeds the rendering node limit. Reduce comments per page or simplify the comment template.");
       out.push(`<li id="comment-${comment.id}" class="${comment.type || "comment"} ${depth%2?"odd":"even"}">${rendered}`);
       const nested=state.settings.threadComments?byParent.get(comment.id) || []:[],atLimit=depth>=state.settings.threadDepth-1;
       if(!nested.length || atLimit)out.push("</li>");
       else {out.push('<ol class="children">');stack.push("</ol></li>");}
-      for(let i=nested.length-1;i>=0;i--)stack.push({comment:nested[i],depth:atLimit?depth:depth+1});
+      for(let i=nested.length-1;i>=0;i--)stack.push({comment:nested[i],depth:atLimit?depth:depth+1,actualDepth:actualDepth+1});
     }
     return `<ol${attributes()}>${out.join("")}</ol>`;
   }
@@ -131,7 +131,7 @@ export async function renderThemeBlock(
   }
   if(name==="core/comment-content")return c?`<div${attributes()}>${cleanContent(renderedCommentContent(c.content,c.type))}</div>`:"";
   if(name==="core/comment-edit-link")return c && p && state.options.user && canEditPostComments(state.options.user,{authorId:Number(p.authorId ?? p.author_id),type:p.type,status:p.status,preTrashStatus:p.preTrashStatus ?? p.pre_trash_status})?`<div${attributes()}><a href="/admin/comments?commentId=${c.id}">Edit</a></div>`:"";
-  if(name==="core/comment-reply-link")return c && (!c.type || c.type==="comment") && p?.commentStatus!=="closed" && state.settings.threadComments?`<div${attributes()}><a href="#respond" data-comment-reply="${int(c.id,0)}" data-comment-author="${esc(c.authorName)}">Reply</a></div>`:"";
+  if(name==="core/comment-reply-link")return c && (!c.type || c.type==="comment") && p?.commentStatus!=="closed" && state.settings.threadComments && context.commentDepth!==undefined && context.commentDepth<state.settings.threadDepth?`<div${attributes()}><a href="#respond" data-comment-reply="${int(c.id,0)}" data-comment-author="${esc(c.authorName)}">Reply</a></div>`:"";
   if(name==="core/comments-pagination")return `<nav${attributes("is-layout-flex")} aria-label="Comments pagination">${await body({...context,commentLoop:await comments(context,state)})}</nav>`;
   if(name?.startsWith("core/comments-pagination-")) {
     const loop=await comments(context,state);if(loop.totalPages<=1)return "";
