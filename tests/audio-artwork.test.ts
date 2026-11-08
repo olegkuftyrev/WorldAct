@@ -2,6 +2,7 @@ import "dotenv/config";
 import assert from "node:assert/strict";
 import test, { after } from "node:test";
 import sharp from "sharp";
+import { DOMParser } from "linkedom";
 import { inspectAudio, inspectAudioWithArtwork, MAX_AUDIO_ARTWORK_BYTES } from "../server/audio-metadata.js";
 import { pool } from "../server/db.js";
 
@@ -55,6 +56,51 @@ test("audio artwork creates one verified owned image, deduplicates and remaps ac
     assert.equal((await api(`/api/media/${first.id}`)).data.media.artworkMediaId, null); assert.equal((await api(`/api/media/${second.id}`)).data.media.image, null);
   } finally {
     for (const id of ids) await api(`/api/media/${id}`, "DELETE");
+    if (cookie) await api("/api/auth/logout", "POST", {});
+  }
+});
+
+test("legacy playlist public and native previews retain verified covers after a full-site copy", async () => {
+  const base = process.env.TEST_API_URL || "http://127.0.0.1:3001", origin = process.env.APP_ORIGIN || "http://127.0.0.1:5173";
+  const mediaIds = new Set<number>(), postIds = new Set<number>(); let cookie = "";
+  const api = async (route: string, method = "GET", body?: unknown, auth = cookie) => {
+    const response = await fetch(base + route, { method, headers: { Origin: origin, "Content-Type": "application/json", ...(auth ? { Cookie: auth } : {}) }, ...(body === undefined ? {} : { body: JSON.stringify(body) }) });
+    const data = await response.json(); assert.ok(response.ok, `${route}: ${response.status} ${JSON.stringify(data)}`); return { response, data };
+  };
+  const document = (html: string) => new DOMParser().parseFromString("<!doctype html><html><body>" + html + "</body></html>", "text/html");
+  const tracks = (html: string) => JSON.parse(document(html).querySelector("[data-worldact-playlist]")!.getAttribute("data-worldact-playlist")!);
+  try {
+    const signed = await api("/api/auth/login", "POST", { login: process.env.ADMIN_EMAIL, password: process.env.ADMIN_PASSWORD }, ""); cookie = signed.response.headers.get("set-cookie")!.split(";")[0];
+    const form = new FormData(); form.append("file", new Blob([new Uint8Array(wave(await image()))], { type: "audio/wav" }), "shortcode-artwork.wav");
+    const uploaded = await fetch(base + "/api/media", { method: "POST", headers: { Origin: origin, Cookie: cookie }, body: form }); const upload = await uploaded.json(); assert.equal(uploaded.status, 201, JSON.stringify(upload));
+    const audio = upload.media; mediaIds.add(audio.id); if (audio.artworkMediaId) mediaIds.add(audio.artworkMediaId); assert.ok(audio.artworkMediaId);
+    const cover = (await api(`/api/media/${audio.artworkMediaId}`, "PUT", { alt: "Verified cover" })).data.media;
+    const source = `[playlist ids="${audio.id}"]`;
+    const post = (await api("/api/posts", "POST", { title: "Shortcode artwork " + Date.now().toString(36), status: "publish", content: source })).data.post; postIds.add(post.id);
+    const publicHTML = (await api("/api/public/posts/" + post.slug, "GET", undefined, "")).data.post.content;
+    assert.equal(tracks(publicHTML)[0].image, cover.url); assert.equal(tracks(publicHTML)[0].imageAlt, "Verified cover");
+    assert.equal(document(publicHTML).querySelector(".wp-block-playlist-track__image")!.getAttribute("src"), cover.url);
+    const preview = (await api("/wp-json/wp/v2/block-renderer/core/shortcode", "POST", { attributes: { text: source }, post_id: post.id })).data.rendered;
+    assert.equal(tracks(preview)[0].image, cover.url);
+    const hiddenPreview = (await api("/wp-json/wp/v2/block-renderer/core/shortcode", "POST", { attributes: { text: `[playlist ids="${audio.id}" images="false"]` }, post_id: post.id })).data.rendered;
+    assert.equal(document(hiddenPreview).querySelector(".wp-block-playlist-track__image"), null);
+    const archive = (await api("/api/tools/export")).data, records = archive.media.filter((item: any) => mediaIds.has(item.id));
+    const names = new Set(records.flatMap((item: any) => [item.filename, ...Object.values(item.sizes || {}).map((size: any) => size.filename)]));
+    const copied = (await api("/api/tools/import", "POST", { application: "WorldAct", version: 3, posts: archive.posts.filter((item: any) => item.id === post.id), media: records, mediaFiles: archive.mediaFiles.filter((file: any) => names.has(file.filename)) })).data;
+    copied.mediaIds.forEach((id: number) => mediaIds.add(id)); copied.postIds.forEach((id: number) => postIds.add(id));
+    const copies = await Promise.all(copied.mediaIds.map(async (id: number) => (await api(`/api/media/${id}`)).data.media));
+    const newAudio = copies.find((item: any) => item.mimeType === "audio/wav"), newCover = copies.find((item: any) => item.mimeType === "image/png");
+    assert.ok(newAudio && newCover); assert.equal(newAudio.artworkMediaId, newCover.id); assert.notEqual(newCover.url, cover.url);
+    const copy = (await api(`/api/posts/${copied.postIds[0]}`)).data.post;
+    assert.match(copy.rawContent, new RegExp(`ids="${newAudio.id}"`));
+    const copiedHTML = (await api("/api/public/posts/" + copy.slug, "GET", undefined, "")).data.post.content;
+    assert.equal(tracks(copiedHTML)[0].image, newCover.url); assert.equal(tracks(copiedHTML)[0].imageAlt, "Verified cover");
+    await api(`/api/media/${newCover.id}`, "DELETE"); mediaIds.delete(newCover.id);
+    const detachedHTML = (await api("/api/public/posts/" + copy.slug, "GET", undefined, "")).data.post.content;
+    assert.equal(tracks(detachedHTML)[0].image, ""); assert.equal(document(detachedHTML).querySelector(".wp-block-playlist-track__image"), null);
+  } finally {
+    for (const id of postIds) { await api(`/api/posts/${id}`, "PUT", { status: "trash" }); await api(`/api/posts/${id}`, "DELETE"); }
+    for (const id of mediaIds) await api(`/api/media/${id}`, "DELETE");
     if (cookie) await api("/api/auth/logout", "POST", {});
   }
 });

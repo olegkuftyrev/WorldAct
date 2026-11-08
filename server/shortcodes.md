@@ -30,8 +30,11 @@ formats, native controls, fallback links, preload/loop/autoplay/muted, video
 dimensions/poster and safe caption tracks. Audio playlists reuse the trusted
 core playlist contract, with literal escaped row labels and separate stripped
 player metadata. Video playlists provide a native video player and direct track
-links; track switching can be added by the shared client runtime. Embedded album
-art extraction is outside the metadata contract.
+links; track switching can be added by the shared client runtime. Audio playlist
+covers use only the verified owned image descriptor created by the audio upload
+service. Archive copies resolve their remapped local cover; absent or rejected
+embedded art supplies no image. Shortcode rendering never extracts artwork or
+fetches an external cover URL.
 
 Known YouTube/Vimeo URLs use the existing fixed embed wrapper. Other valid
 HTTP(S) embed URLs become links. There is no oEmbed discovery, server HTTP
