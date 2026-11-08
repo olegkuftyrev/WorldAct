@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { permalinkTokenHelp } from "../../shared/permalink-tokens";
 
 // wp-admin/options-permalink.php default_structures; old /posts/%postname%/
 // remains a custom value and is never rewritten by opening this screen.
@@ -44,7 +45,7 @@ export default function PermalinkSettings({ value, siteURL, onChange }: { value:
           <code id="permalink-custom">{base}</code>{" "}
           <input ref={input} id="permalink_structure" className="regular-text code" aria-describedby="permalink-custom permalink-tags"
             value={value} onChange={event => change(event.target.value, true)} /></p>
-        <p id="permalink-tags" className="description">Available tags: %year%, %monthnum%, %day%, %post_id%, %postname%, %category%.</p>
+        <p id="permalink-tags" className="description">Available tags: {permalinkTokenHelp}.</p>
       </div>
     </div>
   </fieldset>;

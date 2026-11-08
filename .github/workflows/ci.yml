@@ -74,6 +74,8 @@ jobs:
           tests/navigation-overlays.test.ts tests/password-listings.test.ts tests/legacy-content.test.ts
           tests/math-blocks.test.ts tests/icons.test.ts tests/protected-metadata.test.ts
           tests/category-permalinks.test.ts
+          tests/permalink-time-tokens.test.ts
+          tests/permalink-time-portability.test.ts
           tests/page-delete-reparent.test.ts tests/post-mutation-locks.test.ts
           tests/media-post-locks.test.ts
           tests/db-client-lifecycle.test.ts
@@ -147,6 +149,19 @@ jobs:
           SITE_ARCHIVE_LINK_MODE: plain
           SITE_ARCHIVE_PATH: ${{ runner.temp }}/worldact-plain-site.json
         run: node scripts/test-isolated.mjs tests/portability-site.test.ts
+      - name: Export time-token permalink archive
+        if: matrix.node == 24
+        env:
+          TIME_PERMALINK_ARCHIVE_STAGE: export
+          TIME_PERMALINK_ARCHIVE_PATH: ${{ runner.temp }}/worldact-time-permalinks.json
+        run: node scripts/test-isolated.mjs tests/permalink-time-portability.test.ts
+      - name: Restore time-token archive on a fresh compiled server
+        if: matrix.node == 24
+        env:
+          ISOLATED_TEST_COMPILED: "true"
+          TIME_PERMALINK_ARCHIVE_STAGE: restore
+          TIME_PERMALINK_ARCHIVE_PATH: ${{ runner.temp }}/worldact-time-permalinks.json
+        run: node scripts/test-isolated.mjs tests/permalink-time-portability.test.ts
       - name: Export image format archive
         if: matrix.node == 24
         env:

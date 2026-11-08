@@ -2,6 +2,8 @@ import { pool, getSettings } from "./db.js";
 import type pg from "pg";
 import { readPlainPermalinkQuery } from "../shared/plain-permalink-query.js";
 import { readPublicPath } from "./public-path.js";
+import { restLocalDate } from "./date.js";
+import { permalinkTokenCaptures, permalinkTokenPattern, type PermalinkToken } from "../shared/permalink-tokens.js";
 type Database = Pick<pg.Pool, "query"> | pg.PoolClient;
 type Settings = Awaited<ReturnType<typeof getSettings>>;
 const segment = (value: string) => encodeURIComponent(value);
@@ -72,24 +74,19 @@ export async function postPermalink(
       post.created_at ??
       Date.now(),
   );
-  const parts = new Intl.DateTimeFormat("en", {
-    timeZone: settings.timezone,
-    year: "numeric",
-    month: "2-digit",
-    day: "2-digit",
-  }).formatToParts(date);
-  const values: Record<string, string> = {
+  // One chosen instant/current-site-clock conversion supplies all six fields.
+  // Historical stored local publication dates are a separate fidelity contract.
+  const [year, monthnum, day, hour, minute, second] = restLocalDate(date, settings.timezone).split(/[-T:]/);
+  const values: Record<PermalinkToken, string> = {
     postname: segment(post.slug),
     post_id: String(post.id),
-    year: parts.find((p) => p.type === "year")!.value,
-    monthnum: parts.find((p) => p.type === "month")!.value,
-    day: parts.find((p) => p.type === "day")!.value,
+    year, monthnum, day, hour, minute, second,
     category: settings.permalinkStructure.includes("%category%")
       ? await categoryPermalinkPath(post.id,settings,db) : "",
   };
   return settings.permalinkStructure.replace(
-    /%(postname|post_id|year|monthnum|day|category)%/g,
-    (_match, key: string) => values[key],
+    permalinkTokenPattern(),
+    (_match, key: PermalinkToken) => values[key],
   );
 }
 export async function withPermalink<T extends Record<string, any>>(
@@ -117,10 +114,10 @@ async function resolveExactPublicPath(path: string, settings: Settings) {
   );
   const tokens: string[] = [];
   const pattern = escaped.replace(
-    /%(postname|post_id|year|monthnum|day|category)%/g,
-    (_match, key: string) => {
+    permalinkTokenPattern(),
+    (_match, key: PermalinkToken) => {
       tokens.push(key);
-      return key === "category" ? "(.+?)" : key === "postname" ? "([^/]+)" : "(\\d+)";
+      return permalinkTokenCaptures[key];
     },
   );
   const match = new RegExp("^" + (pattern.endsWith("/") ? pattern.slice(0,-1) : pattern) + "/?$").exec(

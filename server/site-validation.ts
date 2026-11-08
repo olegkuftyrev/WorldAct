@@ -4,6 +4,7 @@ import { templatePartAreas } from "../shared/template-areas.js";
 import { postFormats } from "../shared/post-formats.js";
 import { HttpError, plainText } from "./utils.js";
 import { normalizeFixedTimezone } from "./timezone.js";
+import { permalinkIdentityPattern, permalinkTokenHelp, permalinkTokenPattern } from "../shared/permalink-tokens.js";
 const text = (min: number, max: number) => z.string().trim().min(min).max(max);
 const id = z.number().int().positive().max(2147483647);
 const nullableId = id.nullable();
@@ -98,14 +99,14 @@ export const settingSchema = z
         !/^\/(api|admin|uploads|wp-json|login|lost-password|reset-password)(\/|$)/.test(
           s,
         ) &&
-        /%(postname|post_id)%/.test(s) &&
+        permalinkIdentityPattern.test(s) &&
         new Set(tokens).size === tokens.length &&
         !/%[^%]+%%/.test(s) &&
         !s
-          .replace(/%(postname|post_id|year|monthnum|day|category)%/g, "")
+          .replace(permalinkTokenPattern(), "")
           .includes("%")
       );
-    }, "Use an empty structure for Plain links, or a unique path beginning with / and containing %postname% or %post_id%. Supported tokens: %postname%, %post_id%, %year%, %monthnum%, %day%, %category%."),
+    }, `Use an empty structure for Plain links, or a unique path beginning with / and containing %postname% or %post_id%. Supported tokens: ${permalinkTokenHelp}.`),
     categoryBase: text(1, 80).regex(/^[a-z0-9-]+$/),
     tagBase: text(1, 80).regex(/^[a-z0-9-]+$/),
     thumbnailWidth: z.number().int().min(0).max(4096),

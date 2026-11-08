@@ -1,5 +1,28 @@
 # Canonical category paths
 
+Custom structures also support `%hour%`, `%minute%`, and `%second%`, alongside
+`%year%`, `%monthnum%`, `%day%`, `%post_id%`, `%postname%`, and `%category%`.
+The shared token inventory supplies settings help, validation, generation, and
+resolver captures. A structure still needs `%postname%` or `%post_id%`; a complete
+timestamp alone does not establish a unique post identity in this implementation.
+
+All six date/time fields come from the chosen publication instant, with the
+existing creation-date fallback, converted once through the same site-clock
+helper used for REST local dates. Hours, minutes and seconds are two digits,
+including midnight `00`, named-zone DST folds, and fractional fixed offsets.
+Resolution retains exact canonical path matching and the existing published
+post/type/ID fences. Numeric time captures accept one or two digits, but only
+the generated two-digit canonical value resolves; alias redirects remain a
+separate routing contract. Pages keep their existing hierarchy and body-page
+rules independently of post time tags.
+
+This is the existing **current site timezone** contract. It does not preserve a
+historical stored local publication date when the site timezone changes, and it
+does not implement `%author%`, timestamp-only identities, additional rewrite
+tags, or source canonical redirects. The supplied source's `post_date` storage
+semantics require a separate data-model change. No publication instants are
+rewritten by saving a custom structure.
+
 When the configured structure contains `%category%`, permalink generation selects
 the assigned category with the lowest term ID, then includes its ancestor slugs.
 This follows the supplied `wp-includes/link-template.php` category selection and
