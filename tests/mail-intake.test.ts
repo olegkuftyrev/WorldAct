@@ -238,3 +238,42 @@ test("bounded checks rotate past unsupported messages so an unchanged mailbox ca
   const second = await checkMailIntake(actor, open); assert.equal(second.imported, 1); assert.deepEqual(removed, [21]);
   const config = await readMailIntakeConfiguration(); assert.ok(!JSON.stringify(config).includes("rotation-"));
 });
+
+async function waitForMailboxLock() {
+  for (let index = 0; index < 100; index++) {
+    if ((await pool.query("SELECT 1 FROM pg_stat_activity WHERE datname=current_database() AND wait_event_type='Lock' AND query LIKE 'SELECT * FROM mail_intake_configuration WHERE id=1 FOR UPDATE%' AND pid<>pg_backend_pid() LIMIT 1")).rowCount) return;
+    await new Promise(resolve => setTimeout(resolve, 5));
+  }
+  assert.fail("The mailbox mutation did not reach its held configuration lock.");
+}
+test("configuration, claim and remote-command authorization recheck authentication after a held mailbox lock", async () => {
+  for (const operation of ["save", "claim", "command"] as const) {
+    await allowCheck(); await enable();
+    const fresh = await login(), req = requestActor(fresh), blocker = await pool.connect();
+    let releaseList!: () => void, atList!: () => void;
+    const listBarrier = new Promise<void>(resolve => { releaseList = resolve; }), listEntered = new Promise<void>(resolve => { atList = resolve; });
+    const f = peer(message(people[0].email), { uid: operation });
+    let opened = 0;
+    const open = async () => {
+      opened++; const session = await f.open();
+      return { ...session, list: async () => { atList(); await listBarrier; return session.list(); } };
+    };
+    let pending: Promise<unknown> | undefined;
+    try {
+      if (operation === "command") {
+        pending = checkMailIntake(req, open); await listEntered;
+      }
+      await blocker.query("BEGIN"); await blocker.query("SELECT id FROM mail_intake_configuration WHERE id=1 FOR UPDATE");
+      if (operation === "save") pending = updateMailIntakeConfiguration(req, { username: "retired-session" });
+      if (operation === "claim") pending = checkMailIntake(req, open);
+      const rejected = assert.rejects(pending!, (error: any) => error.status === 401);
+      if (operation === "command") releaseList();
+      await waitForMailboxLock();
+      await pool.query("DELETE FROM sessions WHERE token_hash=$1", [createHash("sha256").update(fresh.cookie.split("=")[1]).digest("hex")]);
+      await blocker.query("COMMIT"); await rejected;
+      assert.equal((await receipts()).length, 0); assert.ok(!f.calls.includes("RETR")); assert.ok(!f.calls.includes("DELE"));
+      if (operation === "claim") assert.equal(opened, 0);
+      if (operation === "save") assert.equal((await readMailIntakeConfiguration()).username, configuration.username);
+    } finally { releaseList(); await blocker.query("ROLLBACK"); blocker.release(); await pending?.catch(() => {}); }
+  }
+});

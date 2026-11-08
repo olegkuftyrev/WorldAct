@@ -82,10 +82,12 @@ export async function updateMailIntakeConfiguration(req: AuthRequest, value: unk
     if ((next.enabled || next.polling) && (!next.host || !next.username || !next.password)) throw new HttpError(400, "Configure the mailbox before enabling post by email.");
     if (next.category_id !== null && !(await client.query("SELECT 1 FROM terms WHERE id=$1 AND taxonomy='category'", [next.category_id])).rowCount)
       throw new HttpError(400, "Choose an existing email category.");
+    await assertActiveAccountAuthentication(req, client);
     const updated = (await client.query<Configuration>(
       `UPDATE mail_intake_configuration SET generation=$1,host=$2,username=$3,password=$4,port=$5,secure=$6,enabled=$7,polling=$8,category_id=$9,configured_by=$10,outcome='',summary='{}'::jsonb,cursor_uid_hash='' WHERE id=1 RETURNING *`,
       [randomUUID(), next.host, next.username, next.password, next.port, next.secure, next.enabled, next.polling, next.category_id, operator],
     )).rows[0];
+    await assertActiveAccountAuthentication(req, client);
     return projection(updated);
   });
 }
@@ -99,12 +101,14 @@ async function claim(req: AuthRequest | undefined, automatic: boolean): Promise<
     if (!config.enabled || (automatic && (!config.polling || environmentType() !== "production" || config.configured_by !== operator)))
       throw new HttpError(409, "Post by email is not enabled for this check.");
     normalizePOP3Configuration(config);
+    if (req) await assertActiveAccountAuthentication(req, client);
     const token = randomUUID();
     const claimed = await client.query<Configuration>(
       `UPDATE mail_intake_configuration SET last_checked=clock_timestamp(),lease_token=$1,lease_until=clock_timestamp()+interval '90 seconds',outcome='running',summary='{}'::jsonb
        WHERE id=1 AND (lease_until IS NULL OR lease_until<=clock_timestamp()) AND (last_checked IS NULL OR last_checked<=clock_timestamp()-interval '5 minutes') RETURNING *`, [token],
     );
     if (!claimed.rowCount) throw new HttpError(429, "Email checks are limited to once every five minutes and one active check.");
+    if (req) await assertActiveAccountAuthentication(req, client);
     return { configuration: claimed.rows[0], token, operator };
   });
 }
@@ -148,7 +152,10 @@ async function importMessage(run: Run, req: AuthRequest | undefined, uidHash: st
   });
 }
 async function beforeDeletion(run: Run, req: AuthRequest | undefined) {
-  await transaction(async client => { await lockOperator(client, req, run.operator); await assertRun(client, run); });
+  await transaction(async client => {
+    await lockOperator(client, req, run.operator); await assertRun(client, run);
+    if (req) await assertActiveAccountAuthentication(req, client);
+  });
 }
 let active = false;
 /** Fixed bounded mailbox intake. Test peers are injectable, never an API bypass. */
