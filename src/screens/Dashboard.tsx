@@ -1,16 +1,16 @@
 import {
   useContext,
   useEffect,
+  useLayoutEffect,
   useRef,
   useState,
   type FormEvent,
   type ReactNode,
 } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import {
   api,
   json,
-  date,
   type Post,
   type Comment,
   type Settings,
@@ -24,6 +24,20 @@ import {
   useResource,
   errorText,
 } from "../components/AdminUI";
+import { dashboardActivityDate, dashboardDraftDate } from "../dashboardDates";
+import { decodeEntities } from "@wordpress/html-entities";
+
+type DashboardEntry = Pick<Post, "id" | "title" | "publishedAt" | "createdAt" | "updatedAt" | "scheduledAt"> & { permalink: string; canEdit: boolean; preview?: string };
+type DashboardComment = Comment & { type?: "comment" | "pingback" | "trackback"; canEdit: boolean; postPermalink: string };
+type DashboardData = {
+  counts: Record<string, number>;
+  recentPublished: DashboardEntry[];
+  publishingSoon: DashboardEntry[];
+  recentDrafts: DashboardEntry[];
+  recentComments: DashboardComment[];
+  application: { name: string; version: string };
+  theme: { id: string; name: string; version: string };
+};
 
 type WidgetId = "glance" | "activity" | "draft" | "news";
 type DashboardPreferences = {
@@ -46,13 +60,18 @@ const widgetDOMIds: Record<WidgetId, string> = {
 };
 export default function Dashboard() {
   const { user } = useContext(Session);
+  const route = useLocation();
+  const actor = user ? `${user.id}:${user.role}` : "anonymous";
+  const scopeRef = useRef({ actor, key: route.key, active: true });
+  if (scopeRef.current.actor !== actor || scopeRef.current.key !== route.key) {
+    scopeRef.current.active = false;
+    scopeRef.current = { actor, key: route.key, active: true };
+  }
+  const scope = scopeRef.current;
+  const isCurrent = () => scope.active && scopeRef.current === scope;
   const canPages = user?.role === "administrator" || user?.role === "editor";
-  const site = useResource<{ settings: Partial<Settings> }>("/public/site");
-  const { data, loading, error, reload } = useResource<{
-    counts: Record<string, number>;
-    recentPosts: Post[];
-    recentComments: Comment[];
-  }>("/dashboard");
+  const site = useResource<{ settings: Partial<Settings> & { showAvatars?: boolean } }>("/public/site");
+  const { data, loading, error, reload } = useResource<DashboardData>("/dashboard");
   const [welcome, setWelcome] = useState(true),
     [order, setOrder] = useState<WidgetId[]>(widgetIds),
     [hidden, setHidden] = useState<WidgetId[]>([]);
@@ -63,11 +82,26 @@ export default function Dashboard() {
     [busy, setBusy] = useState(false),
     [preferencesLoading, setPreferencesLoading] = useState(true);
   const preferenceQueue = useRef(Promise.resolve());
+  const draftRevision = useRef(0);
+  const draftOperation = useRef<symbol | null>(null);
+  const draftActor = useRef(actor);
+  const moveFocus = useRef<{ id: WidgetId; direction: -1 | 1 } | null>(null);
+  useEffect(() => {
+    scope.active = true;
+    draftOperation.current = null;
+    setBusy(false); setNotice(""); setSaveError("");
+    if (draftActor.current !== actor) {
+      draftActor.current = actor; draftRevision.current++;
+      setDraftTitle(""); setDraftContent("");
+    }
+    return () => { scope.active = false; };
+  }, [scope]);
   useEffect(() => {
     let cancelled = false;
+    setPreferencesLoading(true);
     api<{ preferences: DashboardPreferences }>("/profile")
       .then(({ preferences }) => {
-        if (cancelled) return;
+        if (cancelled || !isCurrent()) return;
         setWelcome(preferences.welcome !== false);
         const saved = (preferences.dashboardWidgets || []).filter(
           (id): id is WidgetId => widgetIds.includes(id as WidgetId),
@@ -82,20 +116,21 @@ export default function Dashboard() {
           ),
         );
       })
-      .catch((e) => setSaveError(errorText(e)))
+      .catch((e) => { if (!cancelled && isCurrent()) setSaveError(errorText(e)); })
       .finally(() => {
         if (!cancelled) setPreferencesLoading(false);
       });
     return () => {
       cancelled = true;
     };
-  }, []);
+  }, [scope]);
   async function persist(patch: DashboardPreferences) {
     preferenceQueue.current = preferenceQueue.current.then(async () => {
+      if (!isCurrent()) return;
       try {
         await api("/preferences", json("PUT", patch));
       } catch (e) {
-        setSaveError(
+        if (isCurrent()) setSaveError(
           `Your dashboard preferences could not be saved: ${errorText(e)}`,
         );
       }
@@ -115,13 +150,28 @@ export default function Dashboard() {
       target = index + direction;
     if (target < 0 || target >= next.length) return;
     [next[index], next[target]] = [next[target], next[index]];
+    moveFocus.current = { id, direction };
     setOrder(next);
     void persist({ dashboardWidgets: next });
   }
+  useLayoutEffect(() => {
+    const moved = moveFocus.current;
+    if (!moved) return;
+    const widget = document.getElementById(widgetDOMIds[moved.id]);
+    const buttons = widget?.querySelectorAll<HTMLButtonElement>(".dashboard-move-widget");
+    const preferred = buttons?.[moved.direction === -1 ? 0 : 1], fallback = buttons?.[moved.direction === -1 ? 1 : 0];
+    (preferred && !preferred.disabled ? preferred : fallback)?.focus();
+    moveFocus.current = null;
+  }, [order]);
   async function saveDraft(event: FormEvent) {
     event.preventDefault();
+    if (draftOperation.current || !isCurrent()) return;
+    const operation = Symbol("quick-draft");
+    draftOperation.current = operation;
+    const submittedRevision = draftRevision.current;
     setBusy(true);
     setSaveError("");
+    setNotice("");
     try {
       await api(
         "/posts",
@@ -133,14 +183,21 @@ export default function Dashboard() {
           excerpt: "",
         }),
       );
+      if (!isCurrent()) return;
       setNotice("Draft saved.");
-      setDraftTitle("");
-      setDraftContent("");
+      if (draftRevision.current === submittedRevision) {
+        draftRevision.current++;
+        setDraftTitle("");
+        setDraftContent("");
+      }
       await reload();
     } catch (e) {
-      setSaveError(errorText(e));
+      if (isCurrent()) setSaveError(errorText(e));
     } finally {
-      setBusy(false);
+      if (isCurrent() && draftOperation.current === operation) {
+        draftOperation.current = null;
+        setBusy(false);
+      }
     }
   }
   const widgetContent: Record<WidgetId, ReactNode> = {
@@ -172,21 +229,15 @@ export default function Dashboard() {
             )}
           </ul>
           <p>
-            WorldAct 0.3.0 running{" "}
+            {data?.application.name || "WorldAct"}{data ? ` ${data.application.version} running ` : ""}
             {user?.role === "administrator" ? (
               <Link to="/admin/appearance">
-                {site.data?.settings.theme === "classic"
-                  ? "WorldAct Classic"
-                  : "Twenty Twenty-Five"}
+                {data?.theme.name}
               </Link>
             ) : (
-              <span>
-                {site.data?.settings.theme === "classic"
-                  ? "WorldAct Classic"
-                  : "Twenty Twenty-Five"}
-              </span>
+              <span>{data?.theme.name}</span>
             )}{" "}
-            theme.
+            {data ? "theme." : ""}
           </p>
         </div>
       </>
@@ -194,53 +245,30 @@ export default function Dashboard() {
     activity: (
       <>
         <div id="activity-widget">
-          <h3>Recently Published</h3>
-          {data?.recentPosts.filter(
-            (post) => post.type === "post" && post.status === "publish",
-          ).length ? (
-            <ul className="activity-posts">
-              {data.recentPosts
-                .filter(
-                  (post) => post.type === "post" && post.status === "publish",
-                )
-                .slice(0, 5)
-                .map((post) => (
-                  <li key={post.id}>
-                    <span>{date(post.publishedAt)}</span>{" "}
-                    <Link to={`/admin/posts/${post.id}`}>
-                      {post.title || "(no title)"}
-                    </Link>
-                  </li>
-                ))}
-            </ul>
-          ) : (
-            <p>No published posts yet.</p>
-          )}
-          {canPages && <h3>Recent Comments</h3>}
-          {canPages &&
-            (data?.recentComments.length ? (
-              data.recentComments.slice(0, 3).map((comment) => (
-                <div className="dashboard-comment" key={comment.id}>
-                  <span className="comment-avatar">
-                    <Icon name="admin-users" />
-                  </span>
-                  <div>
-                    <p>
-                      From <strong>{comment.authorName}</strong> on{" "}
-                      <Link to={`/admin/posts/${comment.postId}`}>
-                        {comment.postTitle}
-                      </Link>
+          <ActivityPosts id="future-posts" title="Publishing Soon" posts={data?.publishingSoon || []} future settings={site.data?.settings} />
+          <ActivityPosts id="published-posts" title="Recently Published" posts={data?.recentPublished || []} settings={site.data?.settings} />
+          {Boolean(data?.recentComments.length) && <div id="latest-comments" className="activity-block table-view-list">
+            <h3>Recent Comments</h3>
+            <ul id="the-comment-list">
+              {data!.recentComments.map(comment => {
+                const human = !comment.type || comment.type === "comment";
+                return <li className={`dashboard-comment comment-item ${human ? "comment" : comment.type} ${comment.status === "pending" ? "unapproved" : comment.status}`} key={comment.id}>
+                  {human && site.data?.settings.showAvatars !== false && <span className="comment-avatar"><Icon name="admin-users" /></span>}
+                  <div className="dashboard-comment-wrap">
+                    <p className="comment-meta">
+                      {human ? <>From <strong>{comment.authorName}</strong></> : <strong>{comment.type === "pingback" ? "Pingback" : "Trackback"}</strong>} on{" "}
+                      <Link to={comment.postPermalink}>{comment.postTitle || "(no title)"}</Link>
+                      {comment.status === "pending" && <span className="approve"> [Pending]</span>}
                     </p>
-                    <p>
-                      {comment.content.replace(/<[^>]+>/g, "").slice(0, 120)}
-                    </p>
-                    <Link to="/admin/comments">Moderate comments</Link>
+                    {!human && <p className="comment-author">{comment.authorName}</p>}
+                    <blockquote><p>{decodeEntities(comment.content.replace(/<[^>]+>/g, "")).slice(0, 120)}</p></blockquote>
+                    {comment.canEdit && <p className="row-actions"><Link to={`/admin/comments?postId=${comment.postId}`}>Moderate comments</Link></p>}
                   </div>
-                </div>
-              ))
-            ) : (
-              <p>No comments yet.</p>
-            ))}
+                </li>;
+              })}
+            </ul>
+          </div>}
+          {data && !data.publishingSoon.length && !data.recentPublished.length && !data.recentComments.length && <div className="no-activity"><p>No activity yet!</p></div>}
         </div>
       </>
     ),
@@ -253,7 +281,7 @@ export default function Dashboard() {
               type="text"
               id="quick-title"
               value={draftTitle}
-              onChange={(e) => setDraftTitle(e.target.value)}
+              onChange={(e) => { draftRevision.current++; setDraftTitle(e.target.value); }}
               required
             />
           </div>
@@ -265,7 +293,7 @@ export default function Dashboard() {
               id="quick-content"
               placeholder="What’s on your mind?"
               value={draftContent}
-              onChange={(e) => setDraftContent(e.target.value)}
+              onChange={(e) => { draftRevision.current++; setDraftContent(e.target.value); }}
               rows={4}
             />
           </div>
@@ -275,23 +303,20 @@ export default function Dashboard() {
             </button>
           </p>
         </form>
-        {data?.recentPosts.some(
-          (post) => post.type === "post" && post.status === "draft",
-        ) && (
+        {Boolean(data?.recentDrafts.length) && (
           <div className="drafts">
+            {data!.recentDrafts.length > 3 && <p className="view-all"><Link to={`/admin/posts?status=draft&author=${user!.id}`}>View all drafts</Link></p>}
             <h2>Your Recent Drafts</h2>
             <ul>
-              {data.recentPosts
-                .filter(
-                  (post) => post.type === "post" && post.status === "draft",
-                )
+              {data!.recentDrafts
                 .slice(0, 3)
                 .map((post) => (
                   <li key={post.id}>
-                    <Link to={`/admin/posts/${post.id}`}>
+                    <div className="draft-title"><Link to={`/admin/posts/${post.id}`} aria-label={`Edit “${post.title || "(no title)"}”`}>
                       {post.title || "(no title)"}
                     </Link>{" "}
-                    <span>{date(post.updatedAt)}</span>
+                    <time dateTime={post.updatedAt}>{site.data && dashboardDraftDate(post.updatedAt, site.data.settings.timezone)}</time></div>
+                    {post.preview && <p className="draft-content">{post.preview}</p>}
                   </li>
                 ))}
             </ul>
@@ -396,7 +421,7 @@ export default function Dashboard() {
                   <h2>Welcome to WorldAct!</h2>
                   <p>
                     <Link to="/admin/about">
-                      Learn more about the 0.3.0 version.
+                      {data ? `Learn more about the ${data.application.version} version.` : "Learn more about WorldAct."}
                     </Link>
                   </p>
                 </div>
@@ -489,6 +514,17 @@ export default function Dashboard() {
     </>
   );
 }
+function ActivityPosts({ id, title, posts, future = false, settings }: { id: string; title: string; posts: DashboardEntry[]; future?: boolean; settings?: Partial<Settings> }) {
+  if (!posts.length) return null;
+  return <div id={id} className="activity-block">
+    <h3>{title}</h3>
+    <ul>{posts.map(post => <li key={post.id}>
+      <span>{settings && dashboardActivityDate(future ? post.scheduledAt : post.publishedAt || post.createdAt, settings)}</span>{" "}
+      <Link to={post.canEdit ? `/admin/posts/${post.id}` : post.permalink} aria-label={`${post.canEdit ? "Edit" : "View"} “${post.title || "(no title)"}”`}>{post.title || "(no title)"}</Link>
+    </li>)}</ul>
+  </div>;
+}
+
 function DashboardWidget({
   id,
   title,

@@ -285,18 +285,10 @@ button:focus-visible {
 #dashboard_quick_press .drafts {
   padding: 0 0 12px;
 }
-#dashboard_activity h3 {
-  font-size: 14px;
-  font-weight: 600;
-  margin: 12px 0;
-}
-.activity-posts li {
-  display: flex;
-  gap: 8px;
-}
-.activity-posts span {
-  min-width: 92px;
-  color: #646970;
+#dashboard_activity .activity-block a,
+#dashboard_activity .dashboard-comment-wrap {
+  min-width: 0;
+  overflow-wrap: anywhere;
 }
 .wp-list-table .row-actions .button-link {
   font-size: 13px;
