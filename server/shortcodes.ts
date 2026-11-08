@@ -116,7 +116,7 @@ async function renderShortcode(shortcode: Shortcode, context: Context, state: St
       if (state.options.contentMode === "feed") return link;
       return `<${item} class="gallery-item"><${icon} class="gallery-icon ${row.height > row.width ? "portrait" : "landscape"}">${link}</${icon}>${caption && row.caption ? `<${caption} class="wp-caption-text gallery-caption" id="${captionId}">${cleanContent(row.caption)}</${caption}>` : ""}</${item}>`;
     }).join("");
-    return state.options.contentMode === "feed" ? items : `<div id="${galleryId}" class="gallery galleryid-${number(a.id, Number(context.post?.id || 0))} gallery-columns-${columns} gallery-size-${size}" style="display:grid;grid-template-columns:repeat(${Math.max(1, columns)},minmax(0,1fr));gap:1rem">${items}</div>`;
+    return state.options.contentMode === "feed" ? items : `<div id="${galleryId}" class="gallery galleryid-${number(a.id, Number(context.post?.id || 0))} gallery-columns-${columns} gallery-size-${size}">${items}</div>`;
   }
   const type = a.type === "video" ? "video" : "audio", list = boolean(a.tracklist, true), artists = boolean(a.artists, true), numbers = boolean(a.tracknumbers, true);
   if (type === "video") return `<div class="wp-playlist wp-video-playlist wp-playlist-${a.style === "dark" ? "dark" : "light"}">${await renderMedia("video", { src: rows[0].url }, null, context, state)}<${numbers ? "ol" : "ul"}${list ? "" : ' class="screen-reader-text"'}>${rows.map(row => `<li><a href="${escape(row.url)}">${escape(row.title)}</a></li>`).join("")}</${numbers ? "ol" : "ul"}></div>`;

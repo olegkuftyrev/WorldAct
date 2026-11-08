@@ -21,7 +21,9 @@ Gallery and playlist selection supports ordered `ids`, include/exclude,
 parent/default attachments, fixed ordering choices, source display options and
 metadata only. Explicit lists, including empty or detached lists, never fall
 back to destination attachments. Gallery HTML5 captions, selected image sizes,
-columns and file/none links are generated safely. WorldAct currently exposes
+columns and file/none links are generated safely. The source HTML5 gallery
+classes leave layout to theme styles; the renderer adds no grid or gap styles.
+WorldAct currently exposes
 media files directly, so attachment/default links also use the public file URL;
 there is no fabricated attachment detail page. Audio/video support fixed source
 formats, native controls, fallback links, preload/loop/autoplay/muted, video

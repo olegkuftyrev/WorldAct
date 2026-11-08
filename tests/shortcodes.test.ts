@@ -51,6 +51,7 @@ test("classic, canonical paragraphs and shortcode JSON render once with safe sou
   const output = dom(await renderSiteDocument({ content: cleanRawContent(source) }, { db: data.db }));
   assert.deepEqual([...output.querySelectorAll(".gallery img")].map(image => image.getAttribute("alt")), ["Alternative 2", "Alternative 1"]);
   assert.equal(output.querySelector(".gallery a"), null); assert.ok(output.querySelector(".gallery-columns-2"));
+  assert.equal(output.querySelector(".gallery")!.getAttribute("style"), null, "the source HTML5 gallery leaves layout to theme CSS");
   assert.equal(output.querySelector("audio")!.hasAttribute("autoplay"), false); assert.ok(output.querySelector("audio")!.hasAttribute("loop")); assert.equal(output.querySelector("audio")!.getAttribute("preload"), "metadata");
   assert.equal(dom(await renderSiteDocument({ content: '[audio src="/sound.wav" autoplay="FALSE"]' }, { db: data.db })).querySelector("audio")!.hasAttribute("autoplay"), false);
   assert.equal(output.querySelector("video")!.getAttribute("width"), "320"); assert.match(output.querySelector("video")!.textContent!, /Safe fallback/);
