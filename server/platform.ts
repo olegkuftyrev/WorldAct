@@ -55,6 +55,7 @@ import { dateArchiveLocalSQL } from "./date-archives.js";
 import { parseFootnotes, freshFootnoteIds } from "./footnotes.js";
 import { inspectAudioWithArtwork } from "./audio-metadata.js";
 import { storeAudioArtwork } from "./audio-artwork.js";
+import { lockPageHierarchy, reparentDeletedPages } from "./page-hierarchy.js";
 
 import { settingSchema, menuSchema, validMenu, styleSchema, documentSchema, validateExtensionSettings } from "./site-validation.js";
 import { readThemeDesign, validateThemeDesign, resetBundledDocument } from "./themes.js";
@@ -311,11 +312,16 @@ export async function deleteUser(req: AuthRequest, target: number, options: {rea
   const files: string[] = [];
   try {
     await client.query("BEGIN");
-    const exists = await client.query(
-      "SELECT id FROM users WHERE id=ANY($1::int[]) ORDER BY id FOR UPDATE",
-      [[target, replacement]],
+    const exists = await client.query<{id:number;role:string}>(
+      "SELECT id,role FROM users WHERE id=ANY($1::int[]) ORDER BY id FOR UPDATE",
+      [[...new Set([user.id, target, replacement])].sort((a,b)=>a-b)],
     );
-    if (exists.rowCount !== 2) throw new HttpError(404, "User not found.");
+    const actor=exists.rows.find(person=>person.id===user.id);
+    if (!actor) throw new HttpError(401, "Your account is no longer available. Sign in again.");
+    if (actor.role!==user.role || actor.role!=="administrator") throw new HttpError(409, "Your permissions changed. Reload before deleting an account.");
+    await assertActiveAccountAuthentication(req,client);
+    if (!exists.rows.some(person=>person.id===target) || !exists.rows.some(person=>person.id===replacement)) throw new HttpError(404, "User not found.");
+    await lockPageHierarchy(client);
     if (options.deleteContent === "true") {
       const media = await client.query(
         "SELECT id,filename,original_filename,derivatives,sizes FROM media WHERE author_id=$1 ORDER BY id FOR UPDATE",
@@ -329,6 +335,8 @@ export async function deleteUser(req: AuthRequest, target: number, options: {rea
           ...Object.values(item.sizes || {}).map((size: any) => size.filename),
         ])
           if (safeStoredFile(value)) files.push(value);
+      const doomed=await client.query<{id:number}>("SELECT id FROM posts WHERE author_id=$1 ORDER BY id FOR NO KEY UPDATE",[target]);
+      await reparentDeletedPages(client,doomed.rows.map(post=>post.id));
       await client.query("DELETE FROM posts WHERE author_id=$1", [target]);
       await client.query("DELETE FROM media WHERE author_id=$1", [target]);
       await clearDeletedSiteImages(client, media.rows.map(item => item.id));

@@ -41,6 +41,7 @@ import { parseFootnotes } from "./footnotes.js";
 import { withPreviewAutosave } from "./post-preview.js";
 import { contentPagination, parseContentPage } from "./legacy-content.js";
 import { publicCommentWindow } from "./comment-window.js";
+import { lockPageHierarchy, reparentDeletedPages } from "./page-hierarchy.js";
 
 const router = Router();
 const contentRoles = requireRole(
@@ -188,6 +189,7 @@ async function transaction<T>(work: (client: PoolClient) => Promise<T>) {
 }
 async function lockedPost(client: PoolClient, id: number, user: User, authorId?: number) {
   await lockPostMutationUsers(client, user, authorId);
+  await lockPageHierarchy(client);
   const locked = await client.query(
     "SELECT id,password_hash FROM posts WHERE id=$1 FOR NO KEY UPDATE",
     [id],
@@ -214,10 +216,7 @@ async function validateParent(
   if (parentId === null) return;
   if (type !== "page")
     throw new HttpError(400, "Only pages can have a parent page.");
-  // All parent edits share a lock, preventing simultaneous edits from forming a cycle.
-  await client.query(
-    "SELECT pg_advisory_xact_lock(hashtext('worldact-page-hierarchy'))",
-  );
+  // The caller holds hierarchy before the post row, including parent removal.
   const parent = await client.query("SELECT type FROM posts WHERE id=$1", [
     parentId,
   ]);
@@ -373,6 +372,9 @@ async function savePost(
     const account = (await client.query("SELECT role FROM users WHERE id=$1 FOR SHARE", [authorId])).rows[0];
     if (!account || account.role !== user.role) throw new HttpError(409, "The mail author changed. Check mail again.");
   } else if (!existing || input.authorId !== undefined) await validateAuthor(client, authorId, user);
+  // Existing posts already own hierarchy from lockedPost; new posts have now
+  // locked their author/actor. Never acquire a new lock after an existing row.
+  if (!existing) await lockPageHierarchy(client);
   let status = input.status ?? existing?.status ?? "draft";
   assertNewAccess(user, type, status, existing?.status);
   if (input.sticky !== undefined && input.sticky !== (existing?.sticky ?? false) && ownOnly(user))
@@ -429,9 +431,6 @@ async function savePost(
       ? input.featuredMediaId
       : (existing?.featuredMediaId ?? null);
   if (existing?.type === "page" && type !== "page") {
-    await client.query(
-      "SELECT pg_advisory_xact_lock(hashtext('worldact-page-hierarchy'))",
-    );
     const children = await client.query(
       "SELECT 1 FROM posts WHERE parent_id=$1 LIMIT 1",
       [existing.id],
@@ -614,6 +613,7 @@ export async function publishDuePosts(
   const client=await pool.connect();
   try{
     await client.query("BEGIN");
+    await lockPageHierarchy(client);
     const result=await client.query("UPDATE posts SET status='publish',published_at=scheduled_at,updated_at=now(),version=version+1 WHERE status='future' AND scheduled_at <= $1 AND ($2::int[] IS NULL OR id=ANY($2::int[])) RETURNING id",[now,postIds ?? null]);
     for(const row of result.rows)await enqueuePublicationPings(client,row.id);
     await client.query("COMMIT");return result.rows.map(row=>row.id as number);
@@ -833,6 +833,7 @@ router.delete("/posts/:id", contentRoles, async (req: AuthRequest, res) => {
         409,
         "Move the post to Trash before deleting it permanently.",
       );
+    await reparentDeletedPages(client, [post.id]);
     await client.query("DELETE FROM posts WHERE id=$1", [post.id]);
   });
   res.json({ ok: true });
