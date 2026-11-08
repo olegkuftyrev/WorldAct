@@ -26,6 +26,7 @@ import {
 } from "./block-renderer.js";
 import { themeIds, readThemeDesign, getBundledTheme, resetBundledDocument } from "./themes.js";
 import { templatePartAreas, sourceTemplatePartArea } from "../shared/template-areas.js";
+import { parseContentPage } from "./legacy-content.js";
 import {hasPostAccess,assertPostAccess} from "./core.js";
 import { postAccessReader } from "./post-passwords.js";
 import { withPreviewAutosave } from "./post-preview.js";
@@ -842,6 +843,7 @@ router.get("/api/public/templates/:slug", async (req:AuthRequest, res) => {
       templateSlug: doc.slug,
       query,
       page: Number(req.query.page) || 1,
+      contentPage: parseContentPage(req.query.contentPage ?? (post ? req.query.page : undefined)),
       placeholderBindings: false,
       user: (req as AuthRequest).user,
       preview,

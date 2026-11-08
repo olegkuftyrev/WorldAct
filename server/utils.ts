@@ -1,6 +1,7 @@
 import sanitizeHtml from "sanitize-html";
 import type { AuthRequest } from "./auth.js";
 import { gridTemplateColumnsPattern } from "./block-layout.js";
+import { LEGACY_CONTENT_MARKER, canonicalLegacyMarker } from "./legacy-content.js";
 import { backgroundImagePattern, backgroundSizePattern, backgroundPositionPattern, backgroundRepeatPattern, backgroundAttachmentPattern } from "./background-styles.js";
 
 export class HttpError extends Error {
@@ -384,12 +385,13 @@ export function cleanBlocks(input: unknown): StoredBlock[] {
   return walk(input, 0);
 }
 
-// Retain only canonical Gutenberg comments. Public HTML is always cleanContent(raw).
+// Retain canonical Gutenberg delimiters and the three source content separators.
+// Public HTML is always cleanContent(raw), so arbitrary comments never survive.
 export function cleanRawContent(content: string) {
   const nonce = `WORLDActBLOCK${Math.random().toString(36).slice(2)}X`;
   const comments: string[] = [];
   const stack: string[] = [];
-  const replaced = content.replace(
+  const withBlockMarkers = content.replace(
     /<!--\s*(\/?)wp:([a-z\d_-]+(?:\/[a-z\d_-]+)?)\s*(\{[\s\S]*?\})?\s*(\/?)\s*-->/gi,
     (
       _match,
@@ -444,6 +446,13 @@ export function cleanRawContent(content: string) {
   );
   if (stack.length)
     throw new HttpError(400, "Gutenberg block markers must be balanced.");
+  const replaced = withBlockMarkers.replace(LEGACY_CONTENT_MARKER, value => {
+    const marker = canonicalLegacyMarker(value);
+    if (!marker) return "";
+    if (comments.length >= 4000) throw new HttpError(400, "Too many content markers.");
+    const index = comments.push(marker) - 1;
+    return `${nonce}${index}END`;
+  });
   const safe = cleanContent(replaced, false, true);
   // Markers can be restored only in text, never inside an HTML attribute.
   let inTag = false,

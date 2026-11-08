@@ -47,6 +47,7 @@ import { appendDateArchiveSQL, dateArchiveDTO, parseDateArchivePath } from "./da
 import { parseFootnotes, serializeFootnotes, freshFootnoteIds, MAX_FOOTNOTES_BYTES } from "./footnotes.js";
 import { excerptText } from "./excerpts.js";
 import { postAccessReader, postHasPassword, protectedPostExcerpt, publicPostTitle } from "./post-passwords.js";
+import { legacyExcerptSource, parseContentPage } from "./legacy-content.js";
 const router = express.Router();
 const admin = requireRole("administrator");
 const esc = (value: unknown) =>
@@ -191,9 +192,9 @@ router.get("/api/public/resolve", async (req, res) => {
   }
   const result = await forward(
     req,
-    "/public/posts/" + encodeURIComponent(resolved.slug),
+    "/public/posts/" + encodeURIComponent(resolved.slug) + "?page=" + parseContentPage(resolved.contentPage ?? req.query.page),
   );
-  res.json(result.data);
+  res.json({ ...result.data, ...(resolved.contentPage ? { contentPage: resolved.contentPage } : {}) });
 });
 async function feedPosts(req: Request) {
   const settings = await getSettings();
@@ -210,7 +211,7 @@ async function feedPosts(req: Request) {
       posts.map(async (p) => {
         const locked = postHasPassword(p) && !(await canReadProtectedPost(p.id, pool));
         return withPermalink(
-          { ...p, title: publicPostTitle(p), excerpt: locked ? protectedPostExcerpt : p.excerpt, content: await renderPublicContent({ ...p, locked }, { canReadProtectedPost }) },
+          { ...p, title: publicPostTitle(p), excerpt: locked ? protectedPostExcerpt : p.excerpt, content: await renderPublicContent({ ...p, locked }, { canReadProtectedPost, contentMode: "feed" }) },
           settings,
         );
       }),
@@ -386,8 +387,8 @@ async function wpPost(post: any, req: AuthRequest, edit = false) {
   const protectedPost = !!post.hasPassword;
   const own = canEdit(req.user, post);
   const raw = edit && own ? post.rawContent || post.content : undefined;
-  const rendered = protectedPost && !own ? "" : await renderPublicContent({ ...post, locked: false }, { user: req.user, requestPath: await postPermalink(post, settings), query: req.query, preview: edit, canReadProtectedPost: postAccessReader(req) });
-  const excerptWords = excerptText(rendered).trim().split(/\s+/).filter(Boolean);
+  const rendered = protectedPost && !own ? "" : await renderPublicContent({ ...post, locked: false }, { user: req.user, requestPath: await postPermalink(post, settings), query: req.query, preview: edit, contentMode: "complete", canReadProtectedPost: postAccessReader(req) });
+  const excerptWords = excerptText(legacyExcerptSource(post)).trim().split(/\s+/).filter(Boolean);
   const excerpt = protectedPost && !own ? "" : post.excerpt
     ? `<p>${esc(post.excerpt)}</p>`
     : excerptWords.length ? `<p>${esc(excerptWords.slice(0, 55).join(" "))}${excerptWords.length > 55 ? " […]" : ""}</p>` : "";

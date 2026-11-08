@@ -33,6 +33,7 @@ import { contributorCanEditPostStatus } from "./comment-access.js";
 import { appendDateArchiveSQL, dateArchiveDTO, parseDateArchiveQuery } from "./date-archives.js";
 import { parseFootnotes } from "./footnotes.js";
 import { withPreviewAutosave } from "./post-preview.js";
+import { contentPagination, parseContentPage } from "./legacy-content.js";
 
 const router = Router();
 const contentRoles = requireRole(
@@ -1227,6 +1228,7 @@ async function publicPost(post: any, locked = false, options: RenderOptions = {}
     commentCount: safe.approvedCommentCount ?? safe.commentCount ?? 0,
     locked,
     footnotes: locked ? [] : safe.footnotes ?? [],
+    ...(!locked ? { contentPagination: contentPagination(post, linked.permalink, options.contentPage || 1, options.preview) } : {}),
     content: locked ? "" : await renderPublicContent({ ...post, locked }, { requestPath: linked.permalink, ...options }),
     excerpt: locked ? "" : safe.excerpt,
   };
@@ -1283,7 +1285,7 @@ router.get(
     res.setHeader("X-Robots-Tag", "noindex, nofollow");
     res.setHeader("Cache-Control", "private, no-store");
     res.json({
-      post: await publicPost(post, false, { query: req.query, preview: true, user: needUser(req), canReadProtectedPost: postAccessReader(req) }),
+      post: await publicPost(post, false, { query: req.query, preview: true, user: needUser(req), contentPage: parseContentPage(req.query.page), canReadProtectedPost: postAccessReader(req) }),
       ...(await commentResponse(post.id, req)),
     });
   },
@@ -1330,12 +1332,12 @@ router.get("/public/site", async (req, res) => {
       `SELECT ${postFields},p.password_hash AS "_passwordHash" FROM posts p JOIN users u ON u.id=p.author_id WHERE p.type='page' AND p.status='publish' ORDER BY p.menu_order,p.title,p.id`,
     ),
   ]);
-  const sanitize = async (post: any) => {
+  const sanitize = async (post: any, contentMode: "singular" | "archive" = "singular") => {
     const { _passwordHash, ...safe } = post;
     return publicPost(
       safe,
       !(await hasPostAccess(req, post.id, _passwordHash)),
-      { query: req.query, requestPath: "/", user: (req as AuthRequest).user, canReadProtectedPost: postAccessReader(req) },
+      { query: req.query, requestPath: "/", user: (req as AuthRequest).user, contentMode, canReadProtectedPost: postAccessReader(req) },
     );
   };
   const { adminEmail: _adminEmail, commentModerationKeys: _moderationKeys, disallowedCommentKeys: _disallowedKeys, ...safeSettings } = settings;
@@ -1349,7 +1351,7 @@ router.get("/public/site", async (req, res) => {
       ).rows[0]
     : null;
   const totalPosts = count.rows[0].total;
-  const safePages = await Promise.all(pages.rows.map(sanitize));
+  const safePages = await Promise.all(pages.rows.map(post => sanitize(post)));
   const frontPage =
     settings.frontPageMode === "page"
       ? (safePages.find((page) => page.id === settings.frontPageId) ?? null)
@@ -1364,7 +1366,7 @@ router.get("/public/site", async (req, res) => {
       siteIconSizes:icon?.sizes || {},
     },
     archive: dateArchive ? dateArchiveDTO(dateArchive) : author ? { type: "author", name: author.name, authorId: filter.author } : null,
-    posts: await Promise.all(posts.rows.map(sanitize)),
+    posts: await Promise.all(posts.rows.map(post => sanitize(post, "archive"))),
     pages: safePages,
     frontPage,
     postsPage,
@@ -1399,7 +1401,7 @@ router.get("/public/posts/:slug", async (req, res) => {
   const locked = !(await hasPostAccess(req, post.id, _passwordHash));
   await setRobots(res);
   res.json({
-    post: await publicPost(post, locked, { query: req.query, user: (req as AuthRequest).user, canReadProtectedPost: postAccessReader(req) }),
+    post: await publicPost(post, locked, { query: req.query, user: (req as AuthRequest).user, contentPage: parseContentPage(req.query.page), canReadProtectedPost: postAccessReader(req) }),
     ...(await commentResponse(post.id, req, locked)),
   });
 });

@@ -16,6 +16,7 @@ import { excerptText } from "./excerpts.js";
 import { renderInteractiveBlock, createInteractiveRenderState, reserveInteractiveId, INTERACTIVE_BLOCKS, type InteractiveRenderState, type AccordionContext, type AccordionItemContext, type TabsContext } from "./interactive-blocks.js";
 import { postHasPassword, postNeedsPassword, postPasswordForm, protectedPostExcerpt, publicPostTitle } from "./post-passwords.js";
 import { renderNavigationWithOverlay, renderNavigationOverlayClose, NAVIGATION_OVERLAY_BLOCKS, type NavigationOverlayContext } from "./navigation-overlays.js";
+import { hasLegacyContent, legacyExcerptSource, selectLegacyContent, type ContentMode } from "./legacy-content.js";
 
 export type BlockDatabase = Pick<pg.Pool, "query"> | pg.PoolClient;
 export type RenderPost = Record<string, any>;
@@ -41,6 +42,8 @@ export type RenderOptions = {
   instanceKey?: string;
   query?: Record<string, unknown>;
   page?: number;
+  contentPage?: number;
+  contentMode?: ContentMode;
   placeholderBindings?: boolean;
   preview?:boolean;
   db?: BlockDatabase;
@@ -754,6 +757,14 @@ async function renderChildren(nodes: Node[], context: Context, state: State) {
   for (const node of nodes) out.push(await render(node, context, state));
   return out.join("");
 }
+async function renderPostBody(post: RenderPost, context: Context, state: State, mode: ContentMode, page = 1) {
+  const selected = selectLegacyContent(post, post, await postURL(post, state), mode, page, state.options.preview);
+  const body = await renderChildren(parseRenderNodes(selected.document), context, state), extra = selected.moreLink + selected.navigation;
+  const bytes = Buffer.byteLength(extra, "utf8");
+  if (state.outputBytes + bytes > MAX_RENDER_BYTES) throw new HttpError(413, "Rendered content exceeds the 8 MiB limit. Reduce repeated patterns or query output.");
+  state.outputBytes += bytes;
+  return body + extra;
+}
 export const MAX_RENDER_BYTES = 8 * 1024 * 1024;
 async function render(
   node: Node | undefined,
@@ -789,6 +800,7 @@ async function renderNode(
   const attr = (extra = "") => attrsHTML(node, extra);
   const overlayClose = renderNavigationOverlayClose(node, context, attr);
   if (overlayClose !== undefined) return overlayClose;
+  if (name === "core/more" || name === "core/nextpage") return "";
   const interactiveBlock = await renderInteractiveBlock(node, context, state,
     (nodes, next) => renderChildren(nodes, next, state),
     (extra = "", override = a) => attrsHTML({ ...node, attrs: override }, extra), blockStyle);
@@ -797,7 +809,7 @@ async function renderNode(
     (nodes, next) => renderChildren(nodes, next, state), attr);
   if (themeBlock !== undefined) return themeBlock;
   const widgetBlock = await renderWidgetBlock(node, context, state, attr,
-    (post, next) => renderChildren(parseRenderNodes(post), next, state));
+    (post, next) => renderPostBody(post, next, state, "complete"));
   if (widgetBlock !== undefined) return widgetBlock;
   if (name === "core/footnotes") return renderFootnotes(context.post, attr);
   const termBlock = await renderTermBlock(node, context, state,
@@ -1158,16 +1170,13 @@ async function renderNode(
       if(postNeedsPassword(p))return `<div${attr()}>${postPasswordForm(p,reserveInteractiveId(state,"","post-password"))}</div>`;
       if (context.contentIds.has(p.id))
         return cleanContent(String(p.content || ""));
-      const inner = await renderChildren(
-        parseRenderNodes(p),
-        { ...context, contentIds: new Set([...context.contentIds, p.id]) },
-        state,
-      );
-      return `<${safeTag(a.tagName)}${attr()}>${inner}</${safeTag(a.tagName)}>`;
+      const content = await renderPostBody(p, { ...context, contentIds: new Set([...context.contentIds, p.id]) }, state,
+        context.loop ? "archive" : state.options.contentMode || "singular", context.loop ? 1 : state.options.contentPage || 1);
+      return `<${safeTag(a.tagName)}${attr()}>${content}</${safeTag(a.tagName)}>`;
     }
     if (name === "core/post-excerpt") {
       if(postNeedsPassword(p))return `<div${attr()}><p>${protectedPostExcerpt}</p></div>`;
-      const words = (p.excerpt ? plainText(String(p.excerpt)) : excerptText(String(p.content || "")))
+      const words = (p.excerpt ? plainText(String(p.excerpt)) : excerptText(legacyExcerptSource(p)))
           .trim()
           .split(/\s+/)
           .filter(Boolean),
@@ -1263,7 +1272,7 @@ function hasDynamicBlocks(
 function storedStaticHTML(document: RenderDocument): string | undefined {
   const raw =
     document.rawContent || document.raw_content || document.content || "";
-  return !raw.includes("<!-- wp:") && !hasDynamicBlocks(document.blocks)
+  return !hasLegacyContent(document) && !raw.includes("<!-- wp:") && !hasDynamicBlocks(document.blocks)
     ? cleanContent(raw)
     : undefined;
 }
@@ -1306,11 +1315,8 @@ export async function renderPublicContent(
   if (!state.options.requestPath)
     state.options.requestPath = await postURL(post, state);
   return cleanContent(
-    await renderChildren(
-      parseRenderNodes(post),
-      { post, depth: 0, refs: new Set(), contentIds: new Set([post.id]) },
-      state,
-    ), true,
+    await renderPostBody(post, { post, depth: 0, refs: new Set(), contentIds: new Set([post.id]) }, state,
+      options.contentMode || "singular", options.contentPage || 1), true,
   );
 }
 /** Render a single official dynamic block for authenticated editor previews. */

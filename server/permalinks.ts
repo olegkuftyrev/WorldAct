@@ -65,8 +65,7 @@ export async function withPermalink<T extends Record<string, any>>(
 ) {
   return { ...post, permalink: await postPermalink(post, settings, db) };
 }
-export async function resolvePublicPath(path: string) {
-  const settings = await getSettings();
+async function resolveExactPublicPath(path: string, settings: Settings) {
   const normalized = "/" + path.split("?")[0].replace(/^\/+|\/+$/g, "") + "/";
   if (normalized === "//" || normalized === "/") {
     if (settings.frontPageMode === "page" && settings.frontPageId) {
@@ -145,4 +144,15 @@ export async function resolvePublicPath(path: string) {
   }
   if (current?.status === "publish") return current;
   return null;
+}
+/** Exact post/page identities win before the source's numeric content-page suffix. */
+export async function resolvePublicPath(path: string) {
+  const settings = await getSettings(), exact = await resolveExactPublicPath(path, settings);
+  if (exact) return exact;
+  const normalized = "/" + path.split("?")[0].replace(/^\/+|\/+$/g, "") + "/";
+  const suffix = /^(.*\/)([1-9]\d{0,9})\/$/.exec(normalized);
+  if (!suffix || Number(suffix[2]) > 2147483647) return null;
+  const front = /^\/page\/[1-9]\d*\/$/.test(normalized) && settings.frontPageMode === "page" && settings.frontPageId;
+  const post = await resolveExactPublicPath(front ? "/" : suffix[1], settings);
+  return post ? { ...post, contentPage: Number(suffix[2]) } : null;
 }

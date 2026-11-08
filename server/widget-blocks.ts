@@ -5,6 +5,7 @@ import { postPermalink } from "./permalinks.js";
 import { avatarURL } from "./avatars.js";
 import { cleanContent, plainText, HttpError } from "./utils.js";
 import { excerptText } from "./excerpts.js";
+import { legacyExcerptSource } from "./legacy-content.js";
 import { dateArchiveSQLBounds, dateArchiveLocalSQL, dateArchivePath, dateArchiveWeekSQL, parseDateArchiveQuery } from "./date-archives.js";
 import { gridColumnCount } from "./block-layout.js";
 import { postHasPassword, postNeedsPassword as protectedPost, publicPostTitle as titleOf } from "./post-passwords.js";
@@ -114,7 +115,7 @@ async function latestPosts(node: Node, context: Context, state: State, attribute
         item += `<div class="wp-block-latest-posts__post-full-content">${content}</div>`;
       } else {
         const manual = String(post.excerpt || "").trim();
-        const text = manual ? { text: plainText(manual), trimmed: false } : excerpt(excerptText(String(post.content || "")), number(a.excerptLength, 55, 1, 1000));
+        const text = manual ? { text: plainText(manual), trimmed: false } : excerpt(excerptText(legacyExcerptSource(post)), number(a.excerptLength, 55, 1, 1000));
         item += `<div class="wp-block-latest-posts__post-excerpt">${protectedPost(post) ? "This content is password protected." : escape(text.text) + (text.trimmed ? `… <a class="wp-block-latest-posts__read-more" href="${escape(url)}">Read more<span class="screen-reader-text">: ${escape(title)}</span></a>` : "")}</div>`;
       }
     }
