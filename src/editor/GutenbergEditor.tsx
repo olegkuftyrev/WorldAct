@@ -69,7 +69,7 @@ import themeCSS from "@wordpress/block-library/build-style/theme.css?inline";
 import formatCSS from "../../node_modules/@wordpress/format-library/build-style/style.css?inline";
 import { api, type Media, type Footnote } from "../api";
 import { readFootnotes, synchronizeFootnotes } from "./footnotes";
-import { setEditorPreview, removeEditorPreview } from "./editorPreviewStore";
+import { setEditorPreview, removeEditorPreview, activateEditorPreview } from "./editorPreviewStore";
 import { OwnedFootnoteFormat } from "./OwnedFootnoteFormat";
 import { footnoteEntityBoundaries } from "./footnoteScope";
 import type { SerializedBlock } from "./types";
@@ -1155,6 +1155,10 @@ const GutenbergSession = forwardRef<
     return record && record.meta?.footnotes || "[]";
   },[props.postId,props.postType,!!props.onMetadataChange]);
   const previewOwner=useRef(Symbol("editor-preview"));
+  const closeEntityEditor=()=>{
+    activateEditorPreview(previewOwner.current);
+    setEditingPattern(null);
+  };
   const entityKey=props.entityContext===undefined?"post-preview":props.entityContext?`${props.entityContext.type}:${props.entityContext.id}:${props.entityContext.record.area || ""}`:"site-pattern";
   const [readyEntity,setReadyEntity]=useState(props.entityContext===undefined?"post-preview":"");
   useEffect(()=>{
@@ -1163,8 +1167,8 @@ const GutenbergSession = forwardRef<
     if(props.entityContext)void dispatch(coreDataStore).receiveEntityRecords("postType",props.entityContext.type,props.entityContext.record);
     setEditorPreview(previewOwner.current,editorSelectorContext(props.entityContext,{id,type,attributes:record || {}}));
     setReadyEntity(entityKey);
-    return()=>removeEditorPreview(previewOwner.current);
   },[previewContext,nativeFootnotes,entityKey]);
+  useEffect(()=>()=>removeEditorPreview(previewOwner.current),[]);
   const history = useRef({ items: [{blocks,footnotes:footnotesRef.current}], index: 0, lastInput: 0 });
   const signature = useRef(JSON.stringify([toStored(blocks),footnotesRef.current]));
   const writeNativeFootnotes=useCallback(async (footnotes:Footnote[])=>{
@@ -1677,6 +1681,10 @@ const GutenbergSession = forwardRef<
               className={`worldact-gutenberg ${props.inspectorOpen ? "has-block-inspector" : ""}`}
               onKeyDownCapture={keyDown}
             >
+              {/* Official entity hooks use the global core/editor bridge.
+                  Keep only the active canvas mounted while a nested entity is
+                  edited, so its source effects cannot rewrite outer blocks. */}
+              {!editingPattern && <>
               {error && (
                 <Notice
                   status="error"
@@ -1771,6 +1779,7 @@ const GutenbergSession = forwardRef<
               <div className="worldact-gutenberg-breadcrumb">
                 <BlockBreadcrumb />
               </div>
+              </>}
             </div>
           </BlockContextProvider>
           {patternsOpen && (
@@ -1784,7 +1793,7 @@ const GutenbergSession = forwardRef<
               }
               onRequestClose={() => {
                 setPatternsOpen(false);
-                setEditingPattern(null);
+                closeEntityEditor();
               }}
               size="large"
               className="worldact-synced-patterns"
@@ -1847,7 +1856,7 @@ const GutenbergSession = forwardRef<
                           undefined,
                           false,
                         );
-                        setEditingPattern(null);
+                        closeEntityEditor();
                         await reloadReusable();
                         props.onEntitySaved?.();
                       } catch (reason) {
@@ -1861,7 +1870,7 @@ const GutenbergSession = forwardRef<
                       ? "Save template part"
                       : "Save pattern"}
                   </Button>
-                  <Button onClick={() => setEditingPattern(null)}>
+                  <Button onClick={closeEntityEditor}>
                     Back to patterns
                   </Button>
                 </>

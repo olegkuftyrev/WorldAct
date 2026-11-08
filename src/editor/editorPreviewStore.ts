@@ -15,11 +15,19 @@ const store=createReduxStore("core/editor",{
 });
 register(store);
 const owners=new Map<symbol,Preview>();
+let activeOwner:symbol|undefined;
+const publish=()=>void dispatch(store).setPreview(activeOwner?owners.get(activeOwner) || {}:{});
 export function setEditorPreview(owner:symbol,value:Preview) {
+  if(!owners.has(owner))activeOwner=owner;
   owners.set(owner,value);
-  void dispatch(store).setPreview([...owners.values()].at(-1) || {});
+  publish();
 }
 export function removeEditorPreview(owner:symbol) {
   owners.delete(owner);
-  void dispatch(store).setPreview([...owners.values()].at(-1) || {});
+  if(activeOwner===owner)activeOwner=[...owners.keys()].at(-1);
+  publish();
+}
+/** Restore the outer identity before its native blocks are mounted again. */
+export function activateEditorPreview(owner:symbol) {
+  if(owners.has(owner)){activeOwner=owner;publish();}
 }
