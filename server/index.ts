@@ -16,9 +16,7 @@ import {
   pool,
   rootDir,
   uploadsDir,
-  postFields,
   mediaFields,
-  commentFields,
   getSettings,
   type User,
 } from "./db.js";
@@ -50,6 +48,7 @@ import fontsRouter from "./fonts.js";
 import postTemplatesRouter from "./post-templates.js";
 import bundledPluginsRouter from "./bundled-plugins.js";
 import connectorsRouter from "./connectors.js";
+import { readDashboard } from "./dashboard.js";
 import mailIntakeRouter, { startMailIntakeWorker } from "./mail-intake.js";
 import { plainText, HttpError, parseId, needUser } from "./utils.js";
 
@@ -175,32 +174,7 @@ app.post("/api/auth/logout", async (req, res) => {
 });
 
 app.get("/api/dashboard", dashboardRoles, async (req: AuthRequest, res) => {
-  const user = needUser(req);
-  const own = user.role === "author" || user.role === "contributor";
-  const params = own ? [user.id] : [];
-  const [counts, recentPosts, recentComments] = await Promise.all([
-    pool.query(
-      `SELECT
-      (SELECT count(*)::int FROM posts WHERE type = 'post' AND status = 'publish' ${own ? "AND author_id = $1" : ""}) AS posts,
-      (SELECT count(*)::int FROM posts WHERE type = 'page' AND status = 'publish' ${own ? "AND author_id = $1" : ""}) AS pages,
-      (SELECT count(*)::int FROM comments c JOIN posts p ON p.id = c.post_id WHERE c.status NOT IN ('trash', 'spam') ${own ? "AND p.author_id = $1" : ""}) AS comments,
-      (SELECT count(*)::int FROM media ${own ? "WHERE author_id = $1" : ""}) AS media`,
-      params,
-    ),
-    pool.query(
-      `SELECT ${postFields} FROM posts p JOIN users u ON u.id = p.author_id WHERE p.status <> 'trash' ${own ? "AND p.author_id = $1" : ""} ORDER BY p.updated_at DESC LIMIT 5`,
-      params,
-    ),
-    pool.query(
-      `SELECT ${commentFields} FROM comments c JOIN posts p ON p.id = c.post_id WHERE c.status NOT IN ('trash', 'spam') ${own ? "AND p.author_id = $1" : ""} ORDER BY c.created_at DESC LIMIT 5`,
-      params,
-    ),
-  ]);
-  res.json({
-    counts: counts.rows[0],
-    recentPosts: recentPosts.rows,
-    recentComments: recentComments.rows,
-  });
+  res.json(await readDashboard(needUser(req)));
 });
 
 app.use("/api", (_req, res) =>
