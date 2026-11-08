@@ -20,6 +20,14 @@ export const pool = new pg.Pool({
   connectionTimeoutMillis: 5_000,
   idleTimeoutMillis: 30_000,
 });
+// Pool's idle listener is removed on checkout. A dead checked-out Client also
+// emits error after rejecting its queries; observe that event so request catches
+// can roll back/release. pg marks it nonqueryable and evicts it on release.
+// Register once per physical connection, never once per borrow, and log no SQL,
+// credentials or server-provided error detail here. Query errors still reject.
+pool.on("connect", (client) => {
+  client.on("error", () => console.error("Database client connection failed."));
+});
 pool.on("error", (error) =>
   console.error("Database pool error:", error.message),
 );

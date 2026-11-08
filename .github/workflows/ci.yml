@@ -75,6 +75,7 @@ jobs:
           tests/category-permalinks.test.ts
           tests/page-delete-reparent.test.ts tests/post-mutation-locks.test.ts
           tests/media-post-locks.test.ts
+          tests/db-client-lifecycle.test.ts
           tests/plain-permalinks.test.ts
           tests/plain-permalink-routing.test.ts tests/plain-source-pagination.test.ts
           tests/front-page-availability.test.ts
