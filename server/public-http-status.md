@@ -71,6 +71,9 @@ Direct and encoded `index.html` openings use the same document classifier and
 private policy, so the preceding static handler cannot bypass these headers.
 
 Actual HTTP tests cover anonymous/session/expired/password-cookie contexts,
-framework/protected/missing routes, GET/HEAD and conditional requests. This
-header correction still requires independent native logout/history evaluation;
-HTTP assertions alone do not establish browser back/forward-cache behavior.
+framework/protected/missing routes, GET/HEAD and conditional requests. Independent
+native review passed exact `fc8e33e`: actual held-site response, logout, release
+and browser Back/Forward retain the current anonymous404 without stale body or
+account toolbar in source TT25 and Classic. An initially anonymous direct-index
+document also passed real SPA login followed by the same history/logout flow.
+HTTP assertions and actual native history evidence are recorded separately.
