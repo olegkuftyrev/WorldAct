@@ -4,6 +4,7 @@ import assert from "node:assert/strict";
 import { writeFile, readFile, readdir } from "node:fs/promises";
 import path from "node:path";
 import sharp from "sharp";
+import { DOMParser } from "linkedom";
 import {createHash} from "node:crypto";
 import {uploadsDir,pool} from "../server/db.js";
 import {after} from "./isolated-test.js";
@@ -47,7 +48,7 @@ test("complete site archive crosses fresh databases with media, design and setti
       const edited = (await ok(`/api/media/${image.id}/edit`, "POST", { rotate: 90 })).media;
       const category = (await ok("/api/terms", "POST", { taxonomy: "category", name: stamp + " Category", slug: stamp + "-category" })).term;
       const childCategory = (await ok("/api/terms", "POST", { taxonomy: "category", name: stamp + " Child Category", slug: stamp + "-child-category", parentId: category.id })).term;
-      const reusable = await ok("/wp-json/wp/v2/blocks", "POST", { title: stamp + " Reusable", status: "publish", content: block("paragraph", {}, "<p>Portable reusable payload</p>") });
+      const reusable = await ok("/wp-json/wp/v2/blocks", "POST", { title: stamp + " Reusable", status: "publish", content: block("paragraph", {}, "<p>Portable reusable payload</p>") + block("shortcode", {}, `[gallery ids="${image.id}" link="none"]`) + `<code>[[gallery ids="${image.id}"]]</code>` });
       const nested = await ok("/wp-json/wp/v2/blocks", "POST", { title: stamp + " Nested", status: "publish", content: block("block", { ref: reusable.id }) });
       const nav = await ok("/wp-json/wp/v2/navigation", "POST", { title: stamp + " Navigation", status: "publish", content: block("navigation-link", { label: "Portable navigation payload", url: "/" }) });
       const part = (await ok("/api/site-editor/documents", "POST", { title: stamp + " Part", slug: stamp + "-part", type: "template-part", area: "navigation-overlay", content: block("group", {}, "<section>" + block("block", { ref: nested.id }) + "</section>") })).document;
@@ -109,6 +110,10 @@ test("complete site archive crosses fresh databases with media, design and setti
       const rendered = (await ok(`/api/public/posts/${post.slug}`)).post.content;
       assert.match(rendered, /Portable reusable payload/); assert.match(rendered, /Portable navigation payload/); assert.doesNotMatch(rendered, /archive-source\.example\.invalid/);
       assert.match(rendered, new RegExp(`wp-image-${media.id}`));
+      const body = new DOMParser().parseFromString("<!doctype html><html><body>" + rendered + "</body></html>", "text/html");
+      assert.equal(body.querySelectorAll(".gallery img").length, 1, "Nested reusable shortcode resolves the restored graph only");
+      assert.ok(body.querySelector(".gallery img")!.classList.contains(`wp-image-${media.id}`));
+      assert.equal(body.querySelector("code")!.textContent, `[[gallery ids="${fixture.mediaId}"]]`, "Inert escaped source is not rebound during archive restore");
       assert.ok(rendered.includes(`background-image:url(&quot;/uploads/${media.filename}&quot;)`));
       const imageResponse = await fetch(base + "/uploads/" + media.filename); assert.equal(imageResponse.status, 200); assert.match(imageResponse.headers.get("content-type") || "", /image\/png/);
       const sourceMedia=archive.media.find((item:any)=>item.id===fixture.mediaId);

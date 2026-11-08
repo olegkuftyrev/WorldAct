@@ -63,6 +63,7 @@ jobs:
           tests/audio-artwork.test.ts
           tests/media-file-references.test.ts
           tests/wxr-media.test.ts
+          tests/shortcodes.test.ts
       - name: Export site archive
         if: matrix.node == 24
         env:
