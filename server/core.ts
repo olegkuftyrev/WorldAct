@@ -319,7 +319,6 @@ function metadata(post: any) {
     commentStatus: post.commentStatus,
     pingStatus: post.pingStatus,
     sticky: post.sticky,
-    scheduledAt: post.scheduledAt,
     categoryIds: [...(post.categoryIds ?? [])].sort(
       (a: number, b: number) => a - b,
     ),

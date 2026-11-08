@@ -41,6 +41,7 @@ export function postCivilInstant(civil: string, timezone: string): string {
 }
 export function postCivilZoned(civil: string,timezone:string):string{return postCivilMoment(civil,timezone).format("YYYY-MM-DDTHH:mm:ssZ");}
 export function formatPostCivil(civil: string, format: string, timezone: string): string {
+  timezone=publicationTimezone(timezone);
   const date=postCivilMoment(civil,timezone);
   return format==="human-diff"?humanTimeDiff(date.toDate()):phpDate(format,date.toISOString(),timezone);
 }

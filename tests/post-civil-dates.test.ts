@@ -48,6 +48,7 @@ test("additive civil migration preserves every old column, backfills once and re
   assert.match(pairs[0].gmt,/123456/);assert.match(pairs[1].gmt,/987654/);assert.equal(pairs[2].gmt,null);
   await db.query("UPDATE settings SET data='{"+'"timezone":"+05:45"'+"}'");
   await db.query("BEGIN");await migratePostDates(db);await db.query("COMMIT");assert.deepEqual((await db.query("SELECT id,post_date,post_date_gmt::text AS gmt FROM posts ORDER BY id")).rows,pairs);
+  await db.query("BEGIN");await db.query("SET LOCAL TimeZone TO 'Pacific/Auckland'");assert.deepEqual((await db.query("SELECT post_date FROM posts ORDER BY id")).rows.map(row=>row.post_date),pairs.map(row=>row.post_date));assert.equal((await db.query("SELECT to_char(post_date::timestamp without time zone,'YYYY-MM') AS month FROM posts WHERE id=1")).rows[0].month,"2024-02");await db.query("ROLLBACK");
   for(const value of ["0000-01-01T00:00:00","2023-02-29T00:00:00","2024-01-01T24:00:00","2024-01-01T00:00:60","infinity","2024-01-01T00:00:00Z"]){
    await db.query("BEGIN");await assert.rejects(db.query("UPDATE posts SET post_date=$1 WHERE id=1",[value]),{code:"23514"});await db.query("ROLLBACK");
   }
@@ -102,6 +103,21 @@ test("persisted civil dates survive zones, REST edits, real post waits, revision
    assert.equal(restored.postDate,current.postDate);assert.equal(restored.postDateGmt,current.postDateGmt);
    await ok(`/api/posts/${post.id}/autosave`,"PUT",{version:restored.version,content:"<p>CIVIL AUTOSAVE PREVIEW</p>"});
    const preview=(await ok(`/api/posts/${post.id}/preview`)).post;assert.equal(preview.postDate,restored.postDate);assert.equal(preview.postDateGmt,restored.postDateGmt);assert.match(preview.content,/CIVIL AUTOSAVE PREVIEW/);
+  });
+  await t.test("date-only reschedules create no content revision and restoring content retains the current schedule",async()=>{
+   const post=await make({status:"future",postDate:"2100-02-03T04:05:06"});
+   const before=(await ok(`/api/posts/${post.id}/revisions`)).revisions.length;
+   const first=(await ok(`/api/posts/${post.id}`,"PUT",{postDate:"2101-03-04T05:06:07",version:post.version})).post;
+   assert.equal((await ok(`/api/posts/${post.id}/revisions`)).revisions.length,before);
+   await ok(`/api/posts/${post.id}`,"PUT",{content:"<p>Scheduled content revision.</p>"});
+   const revision=(await ok(`/api/posts/${post.id}/revisions`)).revisions[0];
+   const metadata=(await pool.query("SELECT metadata FROM post_revisions WHERE id=$1",[revision.id])).rows[0].metadata;
+   for(const field of ["postDate","postDateGmt","publishedAt","scheduledAt"])assert.equal(Object.hasOwn(metadata,field),false);
+   const current=(await ok(`/api/posts/${post.id}`,"PUT",{postDate:"2102-04-05T06:07:08"})).post;
+   const restored=(await ok(`/api/posts/${post.id}/revisions/${revision.id}/restore`,"POST",{version:current.version})).post;
+   assert.equal(restored.postDate,current.postDate);assert.equal(restored.postDateGmt,current.postDateGmt);assert.equal(restored.scheduledAt,current.scheduledAt);assert.notEqual(restored.scheduledAt,first.scheduledAt);
+   const draft=await make({status:"draft"});await ok(`/api/posts/${draft.id}`,"PUT",{content:"<p>Floating content revision.</p>"});const draftRevision=(await ok(`/api/posts/${draft.id}/revisions`)).revisions[0];await pool.query("UPDATE posts SET post_date='2000-01-01T00:00:00' WHERE id=$1",[draft.id]);
+   const floated=(await ok(`/api/posts/${draft.id}/revisions/${draftRevision.id}/restore`,"POST",{})).post;assert.equal(floated.postDateGmt,null);assert.notEqual(floated.postDate,"2000-01-01T00:00:00");
   });
   await t.test("initial SSR and native password continuation retain stored date, body page and query counters",async()=>{
    const post=await make({password:"Civil native password",postDate:"2003-04-05T06:07:08"});
