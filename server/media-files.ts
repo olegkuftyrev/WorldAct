@@ -5,6 +5,7 @@ import { randomBytes } from "node:crypto";
 import type { Pool } from "pg";
 import { pool, uploadsDir } from "./db.js";
 import { HttpError } from "./utils.js";
+import { rasterOutput, encodeRaster } from "./image-formats.js";
 export type ImageSize = {
   filename: string;
   url: string;
@@ -132,6 +133,7 @@ export async function buildSizes(
 ) {
   const result: Record<string, ImageSize> = {};
   const metadata = await sharp(buffer, { limitInputPixels: 80_000_000 }).metadata();
+  const output = await rasterOutput(buffer, metadata);
   // Geometry uses the same automatic EXIF orientation applied by the pipeline.
   const swapped = metadata.orientation !== undefined && metadata.orientation >= 5 && metadata.orientation <= 8;
   const originalWidth = swapped ? metadata.height : metadata.width;
@@ -165,7 +167,7 @@ export async function buildSizes(
       }
       const geometry = imageResizeGeometry(originalWidth, originalHeight, w, h, crop);
       if (!geometry) continue;
-      const { data, info } = await sharp(buffer, {
+      const pipeline = sharp(buffer, {
         limitInputPixels: 80_000_000,
       })
         .rotate()
@@ -175,17 +177,16 @@ export async function buildSizes(
           height: geometry.height,
           fit: "fill",
           withoutEnlargement: true,
-        })
-        .png()
-        .toBuffer({ resolveWithObject: true });
-      const filename = `${prefix}${randomBytes(20).toString("hex")}-${info.width}x${info.height}.png`;
+        });
+      const { data, info } = await encodeRaster(pipeline, output).toBuffer({ resolveWithObject: true });
+      const filename = `${prefix}${randomBytes(20).toString("hex")}-${info.width}x${info.height}.${output.extension}`;
       await writeFile(path.join(uploadsDir, filename), data, { flag: "wx" });
       result[name] = {
         filename,
         url: `/uploads/${filename}`,
         width: info.width,
         height: info.height,
-        mimeType: "image/png",
+        mimeType: output.mimeType,
       };
     }
     return result;

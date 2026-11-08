@@ -36,7 +36,8 @@ test("real Sharp sub-sizes preserve source crops, orientation, defaults, and fai
   const owned = new Set<string>();
   const build = async (bytes: Buffer, settings: Record<string, unknown>) => {
     const sizes = await buildSizes(bytes, "", settings); Object.values(sizes).forEach(size => owned.add(size.filename));
-    for (const size of Object.values(sizes)) { const metadata = await sharp(await readFile(path.join(uploadsDir, size.filename))).metadata(); assert.deepEqual(shape(metadata), shape(size)); assert.equal(metadata.format, "png"); }
+    const sourceFormat = (await sharp(bytes).metadata()).format;
+    for (const size of Object.values(sizes)) { const metadata = await sharp(await readFile(path.join(uploadsDir, size.filename))).metadata(); assert.deepEqual(shape(metadata), shape(size)); assert.equal(metadata.format, sourceFormat); }
     return sizes;
   };
   try {

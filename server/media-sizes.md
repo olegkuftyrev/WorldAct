@@ -24,7 +24,8 @@ Defaults remain 150×150, 300×300, and 1024×1024 when values are absent.
 
 The shared generator applies on new uploads, image edits, restore-original,
 and extracted audio covers. Its geometry accounts for automatic EXIF
-orientation. Existing output format behavior stays PNG for generated sizes.
+orientation. Generated sizes preserve their supported verified raster format;
+see `image-formats.md` for the source-derived encoder policy.
 Changing settings does not regenerate existing attachments or remove historical
 files; subsequent edit/restore uses the current settings. Permanent deletion
 still removes all unreferenced original, edited, and historical size files.

@@ -42,6 +42,7 @@ import {
   unlinkUnreferencedMediaFiles,
   mediaBackups,
 } from "./media-files.js";
+import { rasterOutput, encodeRaster } from "./image-formats.js";
 import { remapImportedBlockReferences } from "./block-portability.js";
 import { SiteImport, allocateImportedBlockEntities, exportMediaFiles, exportFontLibrary, MAX_ARCHIVE_JSON_BYTES, MAX_STORED_CONTENT_BYTES } from "./site-portability.js";
 import { postPermalink } from "./permalinks.js";
@@ -889,9 +890,11 @@ router.post("/media/:id/edit", creators, async (req: AuthRequest, res) => {
   ownsMedia(req, item.author_id);
   if (!item.mime_type.startsWith("image/"))
     throw new HttpError(400, "Only images can be edited.");
-  let pipeline = sharp(path.join(uploadsDir, item.filename), {
+  const source = await readFile(path.join(uploadsDir, item.filename));
+  const output = await rasterOutput(source);
+  let pipeline = sharp(source, {
     limitInputPixels: 80_000_000,
-  });
+  }).autoOrient();
   if (input.crop) pipeline = pipeline.extract(input.crop);
   if (input.rotate) pipeline = pipeline.rotate(input.rotate);
   if (input.flip) pipeline = pipeline.flip();
@@ -903,8 +906,7 @@ router.post("/media/:id/edit", creators, async (req: AuthRequest, res) => {
       fit: "inside",
       withoutEnlargement: true,
     });
-  const { data, info } = await pipeline
-    .png()
+  const { data, info } = await encodeRaster(pipeline, output)
     .toBuffer({ resolveWithObject: true })
     .catch(() => {
       throw new HttpError(
@@ -916,12 +918,12 @@ router.post("/media/:id/edit", creators, async (req: AuthRequest, res) => {
     path.dirname(item.filename) === "."
       ? ""
       : path.dirname(item.filename) + "/";
-  const filename = `${prefix}${randomBytes(20).toString("hex")}.png`;
+  const filename = `${prefix}${randomBytes(20).toString("hex")}.${output.extension}`;
   const sizes = await buildSizes(data, prefix, await getSettings());
   await writeFile(path.join(uploadsDir, filename), data, { flag: "wx" });
   try {
     const result = await pool.query(
-      `UPDATE media SET filename=$1,mime_type='image/png',size=$2,width=$3,height=$4,original_filename=coalesce(original_filename,$5),derivatives=derivatives || $7::jsonb || jsonb_build_object($8::text,$5::text),sizes=$9::jsonb WHERE id=$6 AND filename=$5 RETURNING ${expandedMediaFields}`,
+      `UPDATE media SET filename=$1,mime_type=$10,size=$2,width=$3,height=$4,original_filename=coalesce(original_filename,$5),derivatives=derivatives || $7::jsonb || jsonb_build_object($8::text,$5::text),sizes=$9::jsonb WHERE id=$6 AND filename=$5 RETURNING ${expandedMediaFields}`,
       [
         filename,
         data.length,
@@ -932,6 +934,7 @@ router.post("/media/:id/edit", creators, async (req: AuthRequest, res) => {
         JSON.stringify(mediaBackups(item)),
         `backup-${randomBytes(8).toString("hex")}`,
         JSON.stringify(sizes),
+        output.mimeType,
       ],
     );
     if (!result.rowCount)
@@ -962,8 +965,8 @@ router.post("/media/:id/restore", creators, async (req: AuthRequest, res) => {
   if (!item.original_filename)
     throw new HttpError(400, "This image has no original to restore.");
   const buffer = await readFile(path.join(uploadsDir, item.original_filename)),
-    type = await detectMediaType(buffer),
-    metadata = await sharp(buffer).metadata();
+    metadata = await sharp(buffer, { limitInputPixels: 80_000_000 }).metadata(),
+    output = await rasterOutput(buffer, metadata);
   const prefix =
     path.dirname(item.original_filename) === "."
       ? ""
@@ -973,7 +976,7 @@ router.post("/media/:id/restore", creators, async (req: AuthRequest, res) => {
     const result = await pool.query(
       `UPDATE media SET filename=original_filename,original_filename=NULL,mime_type=$1,size=$2,width=$3,height=$4,derivatives=derivatives || $7::jsonb || jsonb_build_object($8::text,filename),sizes=$9::jsonb WHERE id=$5 AND filename=$6 RETURNING ${expandedMediaFields}`,
       [
-        type?.mime || "image/png",
+        output.mimeType,
         buffer.length,
         metadata.width,
         metadata.height,

@@ -257,7 +257,15 @@ export class SiteImport {
       const inputDerivatives = z.record(z.string().max(200), filename).parse(item.derivatives || {});
       for (const [key, name] of Object.entries(inputDerivatives)) { const file = await copy(name); if (file) derivatives[key] = file.filename; }
       const inputSizes = z.record(z.string().max(100), z.object({ filename, width: z.number().int().positive().max(20000), height: z.number().int().positive().max(20000) }).passthrough()).parse(item.sizes || {});
-      for (const [key, size] of Object.entries(inputSizes)) { const file = await copy(size.filename); if (file) sizes[key] = { filename: file.filename, url: "/uploads/" + file.filename, width: size.width, height: size.height, mimeType: file.mime }; }
+      for (const [key, size] of Object.entries(inputSizes)) {
+        const file = await copy(size.filename);
+        if (!file) continue;
+        if (!file.mime.startsWith("image/")) throw new HttpError(400, "An image sub-size must contain a supported raster image.");
+        const decoded = await sharp(file.data, { limitInputPixels: 80_000_000 }).metadata();
+        if (!decoded.width || !decoded.height) throw new HttpError(400, "An image sub-size could not be decoded safely.");
+        if (size.width !== decoded.width || size.height !== decoded.height) this.warn(`Image sub-size ${key} dimensions were recomputed from its verified bytes.`);
+        sizes[key] = { filename: file.filename, url: "/uploads/" + file.filename, width: decoded.width, height: decoded.height, mimeType: file.mime };
+      }
       let width = null, height = null;
       if (main.mime.startsWith("image/")) { const metadata = await sharp(main.data, { limitInputPixels: 80_000_000 }).metadata(); width = metadata.width ?? null; height = metadata.height ?? null; }
       const row = await this.client.query("INSERT INTO media(author_id,title,filename,mime_type,alt,caption,size,width,height,original_filename,derivatives,sizes,created_at) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11::jsonb,$12::jsonb,coalesce($13::timestamptz,now())) RETURNING id", [this.user.id, plainText(z.string().max(300).parse(item.title)), main.filename, main.mime, plainText(z.string().max(1000).parse(item.alt || "")), plainText(z.string().max(20000).parse(item.caption || "")), main.data.length, width, height, original?.filename || null, JSON.stringify(derivatives), JSON.stringify(sizes), z.iso.datetime({ offset: true }).optional().parse(item.created_at) ?? null]);
