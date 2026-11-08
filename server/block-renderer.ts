@@ -7,6 +7,7 @@ import { restDateToUTC } from "./date.js";
 import { date as formatBlockDate, humanTimeDiff } from "@wordpress/date";
 import { renderThemeBlock } from "./theme-blocks.js";
 import { renderWidgetBlock } from "./widget-blocks.js";
+import { renderRSSBlock } from "./rss-block.js";
 import { renderTermBlock, type RenderTerm } from "./term-blocks.js";
 import { appendDateArchiveSQL, dateArchiveTitle, parseDateArchiveQuery } from "./date-archives.js";
 import { gridTemplateColumns, isResponsiveGrid } from "./block-layout.js";
@@ -93,6 +94,7 @@ export type State = {
   queries: number;
   cache: Map<string, Promise<any>>;
   interactive?: InteractiveRenderState;
+  rssRequests?: number;
 };
 export { CORE_DYNAMIC_BLOCKS, SUPPORTED_DYNAMIC_BLOCKS };
 const esc = (value: unknown) =>
@@ -785,6 +787,8 @@ async function renderNode(
   const widgetBlock = await renderWidgetBlock(node, context, state, attr,
     (post, next) => renderPostBody(post, next, state, "complete"));
   if (widgetBlock !== undefined) return widgetBlock;
+  const rssBlock = await renderRSSBlock(node, state, attr);
+  if (rssBlock !== undefined) return rssBlock;
   if (name === "core/footnotes") return renderFootnotes(context.post, attr);
   const termBlock = await renderTermBlock(node, context, state,
     (nodes, next) => renderChildren(nodes, next, state), attr);
