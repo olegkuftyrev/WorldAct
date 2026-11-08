@@ -68,10 +68,12 @@ jobs:
           tests/wxr-export.test.ts
           tests/profile-email.test.ts tests/media-zero-dimensions.test.ts
           tests/profile-options.test.ts
+          tests/editor-preferences.test.ts
           tests/media-format-preservation.test.ts
           tests/full-image-uploads.test.ts tests/media-upload-cleanup.test.ts
           tests/media-edit-transforms.test.ts tests/media-edit-copy.test.ts
           tests/media-native-rest.test.ts tests/rest-fields.test.ts
+          tests/media-captions.test.ts
           tests/classic-editor.test.ts tests/classic-persistence.test.ts
           tests/classic-parser.test.ts tests/block-history.test.ts
           tests/account-tools-ui.test.ts
@@ -119,6 +121,19 @@ jobs:
           FULL_IMAGE_ARCHIVE_STAGE: restore
           FULL_IMAGE_ARCHIVE_PATH: ${{ runner.temp }}/worldact-full-images.json
         run: node scripts/test-isolated.mjs tests/full-image-uploads.test.ts
+      - name: Export rich and literal media captions
+        if: matrix.node == 24
+        env:
+          CAPTION_ARCHIVE_STAGE: export
+          CAPTION_ARCHIVE_PATH: ${{ runner.temp }}/worldact-captions.json
+        run: node scripts/test-isolated.mjs tests/media-captions.test.ts
+      - name: Restore media captions on a fresh compiled server
+        if: matrix.node == 24
+        env:
+          ISOLATED_TEST_COMPILED: "true"
+          CAPTION_ARCHIVE_STAGE: restore
+          CAPTION_ARCHIVE_PATH: ${{ runner.temp }}/worldact-captions.json
+        run: node scripts/test-isolated.mjs tests/media-captions.test.ts
       - name: Export font archive
         if: matrix.node == 24
         env:
