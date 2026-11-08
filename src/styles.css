@@ -1218,7 +1218,8 @@ body.public-body {
   color: #111;
 }
 .public-comment-form button,
-.public-pagination button {
+.public-pagination button,
+.public-pagination .public-page-link {
   align-self: flex-start;
   background: #111;
   color: #fff;
@@ -1229,7 +1230,8 @@ body.public-body {
   margin-top: 15px;
 }
 .public-comment-form button:disabled,
-.public-pagination button:disabled {
+.public-pagination button:disabled,
+.public-pagination .public-page-link[aria-disabled="true"] {
   opacity: 0.4;
 }
 .public-pagination {
@@ -2403,3 +2405,7 @@ body.public-body {
   padding: 0 12px 12px;
   margin-top: 12px;
 }
+
+/* Native public controls retain the existing button geometry. */
+.public-pagination .public-page-link {display:inline-block;text-decoration:none;line-height:normal;text-align:center;}
+.public-logout-form {display:contents;}

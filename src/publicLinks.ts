@@ -5,7 +5,7 @@ export function postLink(
 ): string {
   if (post.permalink) {
     try {
-      const url = new URL(post.permalink, window.location.origin);
+      const url = new URL(post.permalink, "https://worldact.invalid");
       return `${url.pathname}${url.search}${url.hash}`;
     } catch {
       /* Fall back to the permanent legacy URL for malformed imported data. */

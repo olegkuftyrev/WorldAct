@@ -1,0 +1,3 @@
+/** Fixed dependency-free head script. It contains no request/account data. */
+export const PUBLIC_LIFECYCLE_STYLE = 'html[data-worldact-public-gated] #root{visibility:hidden}';
+export const PUBLIC_LIFECYCLE_SCRIPT = `(()=>{const state={generation:0};const gate=()=>{document.documentElement.setAttribute("data-worldact-public-gated","");const root=document.getElementById("root");if(root)root.inert=true;};window.__worldactPublicLifecycle=state;gate();window.addEventListener("pagehide",()=>{state.generation++;gate();window.dispatchEvent(new Event("worldact-public-retire"));});window.addEventListener("pageshow",event=>{if(event.persisted){gate();window.dispatchEvent(new Event("worldact-public-restore"));}});})();`;
