@@ -7,8 +7,69 @@ import { readPlainPermalinkQuery } from "../shared/plain-permalink-query.js";
 import { createIncomingPings, IncomingPingError } from "../server/incoming-pings.js";
 import { createOutgoingPingWorker, enqueuePublicationPings } from "../server/outgoing-pings.js";
 import { remapImportedBlockReferences, remapImportedURL } from "../server/block-portability.js";
+import type { ImportedBodyPages } from "../server/block-portability.js";
 const base=process.env.TEST_API_URL!,origin=process.env.APP_ORIGIN!;
 after(async()=>{await pool.end();});
+
+test("known imported body-page URLs retain identity, boundaries, counters and one-pass mapping", async t => {
+  const metadata = (target:string,permalinkStructure="/%postname%/",totalPages=3):ImportedBodyPages => ({target,totalPages,targetPost:{id:90,status:"publish"},permalinkStructure});
+  const mappings = [
+    ["/parent/","/copy-parent/"], ["/parent/2/","/?page_id=80"],
+    ["/story/","/copy-story/"], ["https://source.example.test/story/","https://destination.example.test/copy-story/"],
+    ["/category/topic/","/destination-category/topic/"], ["/uploads/source.png","/uploads/copy.png"],
+    ["/fonts/source.woff2","/fonts/copy.woff2"], ["/copy-story/2/","/must-not-cascade/"],
+  ] as const;
+  const bodyPages = new Map([
+    ["/parent/",metadata("/copy-parent/")], ["/story/",metadata("/copy-story/")],
+    ["https://source.example.test/story/",metadata("https://destination.example.test/copy-story/")],
+  ]);
+  const remap = (url:string) => remapImportedURL(url,mappings,bodyPages);
+  await t.test("complete numeric child identity wins across the entire unsorted map", () => {
+    assert.equal(remap("/parent/2/"),"/?page_id=80");
+    assert.equal(remap("/parent/2/?query-4-page=3#child"),"/?page_id=80&query-4-page=3#child");
+    const aliasMaps = [["/parent/","/copy-parent/"],["/parent/2","/?page_id=81"]] as const;
+    assert.equal(remapImportedURL("/parent/2/",aliasMaps,bodyPages),"/parent/2/","An alternate child slash must not become parent body 2.");
+  });
+  await t.test("a valid known page preserves query/hash, canonical destination style and source origin", () => {
+    assert.equal(remap("/story/2/?query-4-page=3&commentPage=2#keep"),"/copy-story/2/?query-4-page=3&commentPage=2#keep");
+    assert.equal(remap("/story/3#keep"),"/copy-story/3/#keep");
+    assert.equal(remap("https://source.example.test/story/2/?x=1#keep"),"https://destination.example.test/copy-story/2/?x=1#keep");
+    assert.equal(remapImportedURL("/story/2/?x=1#keep",[["/story/","/destination/90"]],new Map([["/story/",metadata("/destination/90","/destination/%post_id%")]])),"/destination/90/2?x=1#keep");
+  });
+  await t.test("Plain destinations keep the body counter and join independent queries without two question marks", () => {
+    const plain = new Map([["/story/",metadata("/?p=90","")]]), map = [["/story/","/?p=90"]] as const;
+    assert.equal(remapImportedURL("/story/2/?query-4-page=3&commentPage=2#keep",map,plain),"/?p=90&page=2&query-4-page=3&commentPage=2#keep");
+    assert.equal(remapImportedURL("/story/2/#keep",map,plain),"/?p=90&page=2#keep");
+    for(const query of ["page=3","page[]=3","p=91","page_id=91","%70=91","x=1&amp;page=3"]){
+      const source="/story/2/?"+query+"#keep";assert.equal(remapImportedURL(source,map,plain),source,query);
+    }
+    assert.equal(remapImportedURL("/?p=12&page=2#keep",[["/?p=1","/?p=2"],["/?p=12","/?p=1"]]),"/?p=1&page=2#keep");
+    assert.equal(remapImportedURL("/?p=123&page=2",[["/?p=12","/?p=1"]]),"/?p=123&page=2");
+  });
+  await t.test("invalid or unexported body-page identities are never inferred from a path prefix", () => {
+    for(const suffix of ["0/","1/","02/","+2/","-2/","2.0/","2147483648/","4/","2/extra/","2//","%32/","2%2F","2&x=1"]){
+      const source="/story/"+suffix;assert.equal(remap(source),source,source);
+    }
+    for(const source of ["/stories/2/","/story-more/2/","/unknown/2/","//source.example.test/story/2/","http://source.example.test/story/2/","https://source.example.test.evil/story/2/","https://foreign.example.test/?next=/story/2/","https://foreign.example.test/https://source.example.test/story/2/"]){assert.equal(remap(source),source,source);}
+    assert.equal(remapImportedURL("/story/2/",mappings),"/story/2/");
+    assert.equal(remapImportedURL("/story/2/",[["/story/","/shadowing-term/"]],bodyPages),"/story/2/");
+  });
+  await t.test("mixed term, media and font mappings never authorize numeric body suffixes", () => {
+    for(const source of ["/category/topic/2/?x=1#keep","/uploads/source.png/2/","/fonts/source.woff2/2/"]){assert.equal(remap(source),source,source);}
+    assert.equal(remap("/category/topic/?x=1#keep"),"/destination-category/topic/?x=1#keep");
+    assert.equal(remap("/uploads/source.png?size=2#keep"),"/uploads/copy.png?size=2#keep");
+    assert.equal(remap("/story/2/"),"/copy-story/2/","A newly generated target must not be remapped again.");
+  });
+  await t.test("raw/JSON links keep whole-URL boundaries and inert escaped text", () => {
+    const foreign="https://foreign.example.test/?next=/story/2/",literal='&lt;!--nextpage--&gt; [gallery ids="5"]';
+    const raw='<p><a href="/story/2/?query-4-page=3&amp;commentPage=2#keep">Second</a><a href="'+foreign+'">Foreign</a></p><pre>'+literal+'</pre>';
+    const value=remapImportedBlockReferences(raw,[{name:"core/navigation-link",attributes:{url:"/story/2/?x=1#keep"},innerBlocks:[]}],new Map(),{urls:new Map(mappings),bodyPages});
+    const document=new DOMParser().parseFromString(value.rawContent,"text/html");
+    assert.equal(document.querySelector("a")!.getAttribute("href"),"/copy-story/2/?query-4-page=3&commentPage=2#keep");
+    assert.equal(document.querySelectorAll("a")[1].getAttribute("href"),foreign);
+    assert.ok(value.rawContent.includes(literal));assert.equal(value.blocks[0].attributes.url,"/copy-story/2/?x=1#keep");
+  });
+});
 
 test("Plain and numeric permalinks preserve public identity, protected access, pagination, notifications and archive references",async t=>{
   const initial=(await pool.query("SELECT data FROM settings WHERE id=1")).rows[0].data,posts:number[]=[],menus:number[]=[],stamp="plain-"+Date.now();let cookie="";

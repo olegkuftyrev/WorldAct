@@ -8,7 +8,8 @@ import type { PoolClient } from "pg";
 import { uploadsDir, rootDir, type User, getSettings, getPost } from "./db.js";
 import { cleanContent, plainText, slugify, HttpError } from "./utils.js";
 import { safeStoredFile } from "./media-files.js";
-import { remapImportedBlockReferences, remapImportedURL, type ImportedBlockEntity, type BlockReferenceOptions } from "./block-portability.js";
+import { remapImportedBlockReferences, remapImportedURL, type ImportedBlockEntity, type BlockReferenceOptions, type ImportedBodyPages } from "./block-portability.js";
+import { legacyPageCount } from "./legacy-content.js";
 import { settingSchema, styleSchema, menuSchema, validMenu, documentSchema, normalizedText, validateExtensionSettings } from "./site-validation.js";
 import { postPermalink } from "./permalinks.js";
 import { validateThemeDesign, getBundledTheme } from "./themes.js";
@@ -131,6 +132,7 @@ export class SiteImport {
   private hasFontArchive = false;
   readonly documents = new Map<string, string>();
   readonly urls = new Map<string, string>();
+  readonly bodyPages = new Map<string, ImportedBodyPages>();
   readonly documentIds: number[] = [];
   readonly menuIds: number[] = [];
   readonly createdFiles = new Set<string>();
@@ -171,7 +173,7 @@ export class SiteImport {
   }
   warn(message: string) { if (this.warnings.has(message)) return; if (this.warnings.size < 99) this.warnings.add(message); else this.suppressedWarnings++; }
   get importWarnings() { return [...this.warnings, ...(this.suppressedWarnings ? [`${this.suppressedWarnings} additional import warnings were omitted; some missing references or files could not be restored.`] : [])]; }
-  get options(): BlockReferenceOptions { return { media: this.media, documents: this.documents, documentTheme: this.sourceTheme, urls: this.urls, detachMissingShortcodeMediaURLs: true, fontFamilies: this.fontNames, fontSlugs: this.fontSlugs }; }
+  get options(): BlockReferenceOptions { return { media: this.media, documents: this.documents, documentTheme: this.sourceTheme, urls: this.urls, bodyPages: this.bodyPages, detachMissingShortcodeMediaURLs: true, fontFamilies: this.fontNames, fontSlugs: this.fontSlugs }; }
   mapPostTemplate(slug: string) {
     if (!slug) return "";
     const mapped = this.documents.get(`${this.sourceTheme}:template:${slug}`);
@@ -412,6 +414,16 @@ export class SiteImport {
       if ((/^\/(?!\/)[^?#<>\\]*$/.test(oldPost.permalink) || /^\/\?(p|page_id)=[1-9]\d{0,9}$/.test(oldPost.permalink)) && oldPost.permalink !== "/") {
         this.urls.set(oldPost.permalink, url);
         if (this.settings.siteUrl) this.urls.set(new URL(oldPost.permalink, this.settings.siteUrl).href, new URL(url, this.destination.siteUrl).href);
+        // Only known published singular identities with an exported body can
+        // authorize a pretty body suffix. Mixed media/term URL mappings cannot.
+        if(["post","page"].includes(oldPost.type)&&oldPost.status==="publish"&&post.status==="publish"&&!oldPost.permalink.includes("?")){
+          const totalPages=legacyPageCount(post);
+          if(totalPages>1){
+            const metadata:ImportedBodyPages={target:url,totalPages,targetPost:{id:post.id,status:"publish"},permalinkStructure:this.destination.permalinkStructure};
+            this.bodyPages.set(oldPost.permalink,metadata);
+            if(this.settings.siteUrl)this.bodyPages.set(new URL(oldPost.permalink,this.settings.siteUrl).href,{...metadata,target:new URL(url,this.destination.siteUrl).href});
+          }
+        }
       }
     }
     for (const oldTerm of this.input.terms || []) {
@@ -438,7 +450,7 @@ export class SiteImport {
         if (assigned.has(menu.location)) throw new HttpError(400, "An archive may assign only one menu to each theme location.");
         assigned.add(menu.location); await this.client.query("UPDATE navigation_menus SET location='',updated_at=now() WHERE location=$1", [menu.location]);
       } else if (menu.location) this.warn(`Menu ${menu.name} imported without changing the existing ${menu.location} assignment.`);
-      const items = menu.items.map((item: any) => ({ ...item, url: remapImportedURL(item.url,menuURLs) }));
+      const items = menu.items.map((item: any) => ({ ...item, url: remapImportedURL(item.url,menuURLs,this.bodyPages) }));
       validMenu(menuSchema.parse({ ...menu, items }).items);
       const row = await this.client.query("INSERT INTO navigation_menus(name,location,items) VALUES($1,$2,$3::jsonb) RETURNING id", [menu.name, this.input.replaceDesign === true ? menu.location : "", JSON.stringify(items)]); this.menuIds.push(row.rows[0].id);
     }

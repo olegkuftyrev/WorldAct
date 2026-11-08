@@ -1,6 +1,14 @@
 import { parse } from "@wordpress/block-serialization-default-parser";
 import { cleanBlocks, cleanContent, cleanRawContent, HttpError, type StoredBlock } from "./utils.js";
 import { remapShortcodeReferences } from "./shortcode-portability.js";
+import { contentPageURL } from "./legacy-content.js";
+
+export type ImportedBodyPages = {
+  target: string;
+  totalPages: number;
+  targetPost: { id: number; status: "publish" };
+  permalinkStructure: string;
+};
 
 export type ImportedBlockEntity = {
   id: number;
@@ -14,6 +22,7 @@ export type BlockReferenceOptions = {
   terms?: ReadonlyMap<number, number>;
   authors?: ReadonlyMap<number, number>;
   urls?: ReadonlyMap<string, string>;
+  bodyPages?: ReadonlyMap<string, ImportedBodyPages>;
   detachMissingShortcodeMediaURLs?: boolean;
   fontFamilies?: ReadonlyMap<string, string | null>;
   fontSlugs?: ReadonlyMap<string, string | null>;
@@ -21,11 +30,41 @@ export type BlockReferenceOptions = {
   footnoteSelfURLs?: ReadonlySet<string>;
 };
 
-/** Apply the longest complete URL mapping once. Query-ID prefixes must not
- * rewrite another post ID, an unrelated host, or a freshly remapped target. */
-export function remapImportedURL(token:string,mappings:readonly (readonly [string,string])[]) {
-  const mapping=mappings.find(([source])=>source&&(token===source||(token.startsWith(source)&&(/^[?#&]/.test(token.slice(source.length))||/^\)+[,.;]?$/.test(token.slice(source.length))))));
-  return mapping?mapping[1]+token.slice(mapping[0].length):token;
+function mappedContinuation(target:string,continuation:string):string|null {
+  if(!target.includes("?")||!continuation.startsWith("?"))return target+continuation;
+  const hash=continuation.indexOf("#"),query=continuation.slice(1,hash<0?undefined:hash);
+  const decodeSeparators=(value:string)=>value.replace(/&(?:amp|#38|#x26);/gi,"&");
+  const existing=new URLSearchParams(decodeSeparators(target.slice(target.indexOf("?")+1)));
+  const params=new URLSearchParams(decodeSeparators(query));
+  // Do not introduce a second fixed identity or a duplicate body-page counter.
+  if([...params.keys()].some(key=>/^(?:p|page_id)(?:\[|$)/.test(key)||existing.has("page")&&/^page(?:\[|$)/.test(key)))return null;
+  return target+"&"+query+(hash<0?"":continuation.slice(hash));
+}
+
+/** Apply one known identity mapping. Complete canonicals across the entire map
+ * win before a numeric suffix can be interpreted as a singular body page. */
+export function remapImportedURL(token:string,mappings:readonly (readonly [string,string])[],bodyPages?:ReadonlyMap<string,ImportedBodyPages>) {
+  let complete: readonly [string,string] | undefined;
+  for(const mapping of mappings){
+    const [source]=mapping;
+    if(!source)continue;
+    if(token===source)return mapping[1];
+    if(token.startsWith(source)&&(/^[?#&]/.test(token.slice(source.length))||/^\)+[,.;]?$/.test(token.slice(source.length)))&&(!complete||source.length>complete[0].length))complete=mapping;
+  }
+  if(complete)return mappedContinuation(complete[1],token.slice(complete[0].length))??token;
+  if(!bodyPages?.size)return token;
+  const match=/^([^?#]+\/)([1-9]\d{0,9})\/?((?:\?[^#]*)?(?:#.*)?)$/.exec(token);
+  if(!match)return token;
+  const page=Number(match[2]);
+  if(page<2||page>2147483647)return token;
+  const pathname=token.split(/[?#]/,1)[0];
+  // A known numeric child's alternate trailing slash must not become its
+  // parent's body page. Existing exact canonical matching remains authoritative.
+  if(mappings.some(([source])=>source&&!/[?#]/.test(source)&&source.replace(/\/$/,"")===pathname.replace(/\/$/,"")))return token;
+  const canonical=bodyPages.has(match[1])?match[1]:match[1].slice(0,-1), metadata=bodyPages.get(canonical);
+  if(!metadata||page>metadata.totalPages||!mappings.some(([source,target])=>source===canonical&&target===metadata.target))return token;
+  const target=contentPageURL(metadata.targetPost,metadata.target,page,false,metadata.permalinkStructure);
+  return mappedContinuation(target,match[3])??token;
 }
 
 /** Imported references must resolve only inside the imported entity graph. */
@@ -84,7 +123,7 @@ export function remapImportedBlockReferences(
     // hierarchical URLs and the opaque schemes used by content separately.
     if (urls.length) value = value.replace(/(?:[a-z][a-z0-9+.-]*:\/\/|\/\/|(?:mailto|tel|data|blob|javascript):)[^\s"'<>]+|(^|[\s"'(=]|&(?:quot|apos|#34|#39|#x22|#x27);)(\/[^\s"'<>),]*)/gi, (match, prefix: string | undefined, local: string | undefined) => {
       const token = local === undefined ? match : local;
-      const rewritten = remapImportedURL(token,urls);
+      const rewritten = remapImportedURL(token,urls,options.bodyPages);
       return local === undefined ? rewritten : prefix + rewritten;
     });
     if (options.media) value = value.replace(/\bwp-image-(\d+)\b/g, (_match, id) => options.media!.has(Number(id)) ? `wp-image-${options.media!.get(Number(id))}` : "wp-image-missing");
