@@ -58,6 +58,7 @@ jobs:
           tests/mail-intake.test.ts tests/mail-message.test.ts tests/pop3.test.ts
           tests/comment-capabilities.test.ts tests/template-access.test.ts tests/server-startup.test.ts
           tests/comment-types.test.ts
+          tests/comment-duplicates.test.ts
           tests/notification-mail-ui.test.ts
           tests/comment-avatar-context.test.ts
           tests/comment-window.test.ts

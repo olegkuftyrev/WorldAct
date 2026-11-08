@@ -1600,6 +1600,13 @@ export async function submitPublicComment(req: Request, res: Response) {
       if (ancestors.rows[0].depth >= settings.threadDepth)
         throw new HttpError(400, "This comment thread has reached its maximum depth.");
     }
+    // The hierarchy lock also serializes public admission across processes.
+    // Reject a retry before external filters, author tokens or notifications.
+    const duplicate = await client.query(
+      "SELECT 1 FROM comments WHERE post_id=$1 AND parent_id IS NOT DISTINCT FROM $2::int AND status<>'trash' AND author_name=$3 AND ($4='' OR lower(author_email)=$4) AND content=$5 LIMIT 1",
+      [post.id, input.parentId ?? null, authorName, submittedEmail, content],
+    );
+    if (duplicate.rowCount) throw new HttpError(409, "Duplicate comment detected; it looks as though you've already said that!");
     let status = await moderateComment({type:"comment",authorName,authorEmail:submittedEmail,authorUrl,content,rawContent:input.content,ip:req.ip || ""},client,settings);
     const akismetInput:AkismetComment={userIP:req.ip || "",userAgent:req.get("user-agent") || "",referrer:req.get("referer") || "",authorName,authorEmail:submittedEmail,authorURL:input.authorUrl || "",content,permalink:new URL((await withPermalink(post,settings,client)).permalink,settings.siteUrl).href,userRole:user?.role};
     const akismetResult=["trash","spam"].includes(status)?"skipped":await checkAkismetComment(akismetInput,client);

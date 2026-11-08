@@ -31,8 +31,9 @@ test("Discussion controls enforce moderation, safe mail, private consent prefere
   };
   const settings = async (values: Record<string, unknown>) => { await ok("/settings", "PUT", values); };
   const mail = async () => (await pool.query("SELECT id,recipient,subject,body,delivered FROM mail_outbox WHERE subject LIKE $1 ORDER BY id", ["%" + stamp + "%"])).rows;
+  let submissionSequence = 0;
   const submit = async (post: any, values: Record<string, unknown> = {}, cookie = "") => {
-    const result = await ok("/public/comments", "POST", { postId: post.id, authorName: "Temporary reader", authorEmail: email, content: "A useful comment", ...values }, cookie);
+    const result = await ok("/public/comments", "POST", { postId: post.id, authorName: "Temporary reader", authorEmail: email, content: "A useful comment " + ++submissionSequence, ...values }, cookie);
     comments.push(result.data.comment.id); return result;
   };
   let rememberedCookie = "";
@@ -75,7 +76,7 @@ test("Discussion controls enforce moderation, safe mail, private consent prefere
       const linked = '<p><a href="https://one.invalid">https://one.invalid</a> https://two.invalid</p>';
       assert.equal((await submit(posts[1], { content: linked })).data.comment.status, "pending");
       await settings({ commentMaxLinks: 0 });
-      const unbounded = await submit(posts[1], { content: linked, rememberAuthor: true }); assert.equal(unbounded.data.comment.status, "approved"); rememberedCookie = cookieOf(unbounded.response);
+      const unbounded = await submit(posts[1], { content: linked + "<p>Threshold disabled.</p>", rememberAuthor: true }); assert.equal(unbounded.data.comment.status, "approved"); rememberedCookie = cookieOf(unbounded.response);
       const token = rememberedCookie.split("=")[1], hash = createHash("sha256").update(token).digest("hex");
       const preference = (await pool.query("SELECT * FROM comment_author_tokens WHERE token_hash=$1", [hash])).rows[0]; assert.equal(preference.comment_id, unbounded.data.comment.id); assert.ok(!JSON.stringify(preference).includes(email));
       await pool.query("UPDATE comment_author_tokens SET expires_at=now()-interval '1 second' WHERE token_hash=$1", [hash]); assert.equal((await ok("/public/comment-author", "GET", undefined, rememberedCookie)).data.author, null);
