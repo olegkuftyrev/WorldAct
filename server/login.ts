@@ -1,6 +1,7 @@
 import type { NextFunction, Request, Response } from "express";
 import { pool, userFields, type User } from "./db.js";
 import { createSession, purgeExpiredSessions, verifyPassword } from "./auth.js";
+import { profileOptionsSQL } from "./profile-options.js";
 
 // Both the JSON login and public block form share one bounded attempt bucket.
 const attempts = new Map<string, { count: number; expires: number }>();
@@ -46,7 +47,7 @@ export async function authenticateLogin(
     // sessions. Recheck the verified snapshot while blocking those changes until
     // the replacement session has committed; never hold the lock during scrypt.
     const current = (await client.query<User & { password_hash: string }>(
-      `SELECT ${userFields}, password_hash FROM users WHERE id=$1 FOR SHARE`, [record.id],
+      `SELECT ${userFields},${profileOptionsSQL()}, password_hash FROM users WHERE id=$1 FOR SHARE`, [record.id],
     )).rows[0];
     if (!current || current.password_hash !== record.password_hash || ![current.username.toLowerCase(), current.email.toLowerCase()].includes(input.login.toLowerCase())) {
       await client.query("ROLLBACK"); return null;

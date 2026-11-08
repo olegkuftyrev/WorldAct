@@ -36,6 +36,8 @@ export interface User {
   displayName: string;
   role: Role;
   createdAt: Date;
+  showAdminBar?: boolean;
+  commentShortcuts?: boolean;
 }
 export const userFields = `id, username, email, display_name AS "displayName", role, created_at AS "createdAt"`;
 export const postMetadataFields = `p.id,p.type,p.title,p.slug,p.status,p.parent_id AS "parentId",p.published_at AS "publishedAt",p.created_at AS "createdAt",p.updated_at AS "updatedAt",p.author_id AS "authorId",(p.password_hash IS NOT NULL) AS "hasPassword",

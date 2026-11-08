@@ -55,6 +55,7 @@ import { readThemeDesign, validateThemeDesign, resetBundledDocument } from "./th
 import {pendingAdminEmail,queueAdminEmailChange} from "./site-identity.js";
 import {deliverMail,queueMail} from "./accounts.js";
 import {pendingProfileEmail,queueProfileEmailChange,assertAvailableProfileEmail} from "./profile-email.js";
+import { profileOptionsSQL } from "./profile-options.js";
 
 const router = express.Router();
 const admin = requireRole("administrator");
@@ -178,6 +179,8 @@ const profileSchema = z
       ])
       .optional(),
     locale: text(1, 40).optional(),
+    showAdminBar: z.boolean().optional(),
+    commentShortcuts: z.boolean().optional(),
     password: z.string().min(12).max(1024).optional(),
     currentPassword: z.string().max(1024).optional(),
     role: z
@@ -188,7 +191,7 @@ const profileSchema = z
 router.get("/profile", auth, async (req: AuthRequest, res) => {
   const user = needUser(req);
   const result = await pool.query(
-    `SELECT ${userFields},profile,preferences FROM users WHERE id=$1`,
+    `SELECT ${userFields},${profileOptionsSQL()},profile,preferences FROM users WHERE id=$1`,
     [user.id],
   );
   const row = result.rows[0];
@@ -267,7 +270,7 @@ async function updateUserResult(req: AuthRequest, target: number) {
     );
   }
   const result = await client.query(
-    `SELECT ${userFields},profile FROM users WHERE id=$1`,
+    `SELECT ${userFields},${profileOptionsSQL()},profile FROM users WHERE id=$1`,
     [target],
   );
   await client.query("COMMIT");
@@ -281,7 +284,7 @@ router.put("/profile", auth, async (req: AuthRequest, res) =>
 );
 router.get("/users/:id", admin, async (req, res) => {
   const result = await pool.query(
-    `SELECT ${userFields},profile FROM users WHERE id=$1`,
+    `SELECT ${userFields},${profileOptionsSQL()},profile FROM users WHERE id=$1`,
     [parseId(req.params.id)],
   );
   if (!result.rowCount) throw new HttpError(404, "User not found.");

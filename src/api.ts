@@ -19,6 +19,8 @@ export type User = {
   website?: string;
   adminColor?: string;
   locale?: string;
+  showAdminBar?: boolean;
+  commentShortcuts?: boolean;
 };
 export type SerializedBlock = {
   name: string;

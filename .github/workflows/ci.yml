@@ -67,6 +67,7 @@ jobs:
           tests/wxr-media.test.ts
           tests/wxr-export.test.ts
           tests/profile-email.test.ts tests/media-zero-dimensions.test.ts
+          tests/profile-options.test.ts
           tests/shortcodes.test.ts
       - name: Export site archive
         if: matrix.node == 24
