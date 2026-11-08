@@ -147,3 +147,40 @@ test("actual bundled Twenty Twenty-Five HTTP template gives neither notification
     await pool.query("UPDATE settings SET data=$1::jsonb WHERE id=1", [JSON.stringify(previous)]);
   }
 });
+
+test("Classic public comment responses use current account avatar identity, stored-email fallback, and no notification avatar", async () => {
+  const previous = (await pool.query("SELECT data FROM settings WHERE id=1")).rows[0].data;
+  let f: Awaited<ReturnType<typeof fixture>> | undefined;
+  try {
+    await pool.query("UPDATE settings SET data=data || $1::jsonb WHERE id=1", [JSON.stringify({...settings, theme: "classic"})]);
+    f = await fixture(pool);
+    const route = `${process.env.TEST_API_URL}/api/public/posts/${f.post.slug}`;
+    const read = async () => {
+      const response = await fetch(route); assert.equal(response.status, 200);
+      const data = await response.json();
+      for (const comment of data.comments) {
+        for (const key of ["authorEmail", "_authorEmail", "_avatarEmail", "email", "password_hash"]) assert.equal(Object.hasOwn(comment, key), false);
+      }
+      for (const email of [f!.owner.email, f!.member.email, f!.anonymous.email, f!.registered.email, f!.deleted.email]) assert.equal(JSON.stringify(data.comments).includes(email), false);
+      assert.doesNotMatch(JSON.stringify(data.comments), /PRIVATE-AVATAR-PASSWORD-HASH|FORGED-PRIVATE-EMAIL/);
+      return new Map<number, {avatarUrl: string | null; authorName: string}>(data.comments.map((comment: {id: number; avatarUrl: string | null; authorName: string}) => [comment.id, comment]));
+    };
+    const initial = await read();
+    for (const [comment, email] of [[f.anonymous, f.anonymous.email], [f.registered, f.member.email], [f.deleted, f.deleted.email], [f.noEmail, ""]]) {
+      assert.equal(initial.get(comment.id)?.avatarUrl, avatarURL(email, settings));
+      assert.equal(initial.get(comment.id)?.authorName, comment.name);
+    }
+    for (const notification of [f.pingback, f.trackback]) assert.equal(initial.get(notification.id)?.avatarUrl, null);
+    const currentEmail = f.member.email + ".changed";
+    await pool.query("UPDATE users SET email=$2 WHERE id=$1", [f.member.id, currentEmail]);
+    assert.equal((await read()).get(f.registered.id)?.avatarUrl, avatarURL(currentEmail, settings));
+    assert.equal((await pool.query("SELECT author_email FROM comments WHERE id=$1", [f.registered.id])).rows[0].author_email, f.registered.email);
+    await pool.query("DELETE FROM users WHERE id=$1", [f.member.id]);
+    assert.equal((await read()).get(f.registered.id)?.avatarUrl, avatarURL(f.registered.email, settings));
+    await pool.query("UPDATE settings SET data=data || '{\"showAvatars\":false}'::jsonb WHERE id=1");
+    assert.ok([...(await read()).values()].every(comment => comment.avatarUrl === null));
+  } finally {
+    if (f) {await pool.query("DELETE FROM posts WHERE id=$1", [f.post.id]); await pool.query("DELETE FROM users WHERE id=ANY($1::int[])", [f.users]);}
+    await pool.query("UPDATE settings SET data=$1::jsonb WHERE id=1", [JSON.stringify(previous)]);
+  }
+});

@@ -13,4 +13,6 @@ Supplied source SHA-256:
 - `wp-includes/blocks/avatar.php`: `d6e8344abc5c2fbf77ad0fa205cb8361cbebe083dda4ed87bc16da8168308dc6`
 - `wp-includes/link-template.php`: `3e79919111e913b311343c498f30f0cb08b820ff80fd6005218d9e17a258867c`
 
-This correction changes Avatar rendering semantics only. It adds no dependency, schema, stylesheet, asset or other widget change. Independent focused native review is a separate shipping gate.
+The Classic public-comment response uses the same source account-email precedence in one bounded left join, falling back to the stored comment email for anonymous or deleted accounts. Only the resulting avatar URL leaves the server; neither email nor other private account fields are returned. Pingbacks and trackbacks have no avatar URL. The real HTTP regression also checks account email changes, deletion fallback, retained stored names and global suppression.
+
+This correction changes Avatar identity semantics only. It adds no dependency, schema, stylesheet, asset or other widget change. Independent focused native review is a separate shipping gate.

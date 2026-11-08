@@ -1275,10 +1275,10 @@ async function publicPost(post: any, locked = false, options: RenderOptions = {}
 async function publicComments(postId: number, page: number, settings: Awaited<ReturnType<typeof getSettings>>) {
   return (
     await pool.query(
-      `SELECT c.id,c.author_name AS "authorName",c.author_url AS "authorUrl",c.author_email AS "_authorEmail",c.user_id AS "userId",c.content,c.type,c.status,c.parent_id AS "parentId",c.post_id AS "postId",p.title AS "postTitle",c.created_at AS "createdAt" FROM comments c JOIN posts p ON p.id=c.post_id WHERE c.post_id=$1 AND c.status='approved' ORDER BY c.created_at ${settings.commentOrder === "desc" ? "DESC" : "ASC"},c.id ${settings.commentOrder === "desc" ? "DESC" : "ASC"}${settings.paginateComments ? " LIMIT $2 OFFSET $3" : ""}`,
+      `SELECT c.id,c.author_name AS "authorName",c.author_url AS "authorUrl",coalesce(avatar_user.email,c.author_email) AS "_avatarEmail",c.user_id AS "userId",c.content,c.type,c.status,c.parent_id AS "parentId",c.post_id AS "postId",p.title AS "postTitle",c.created_at AS "createdAt" FROM comments c JOIN posts p ON p.id=c.post_id LEFT JOIN users avatar_user ON avatar_user.id=c.user_id WHERE c.post_id=$1 AND c.status='approved' ORDER BY c.created_at ${settings.commentOrder === "desc" ? "DESC" : "ASC"},c.id ${settings.commentOrder === "desc" ? "DESC" : "ASC"}${settings.paginateComments ? " LIMIT $2 OFFSET $3" : ""}`,
       settings.paginateComments ? [postId, settings.commentsPerPage, (page - 1) * settings.commentsPerPage] : [postId],
     )
-  ).rows.map(({ _authorEmail, ...comment }) => ({ ...comment, content:renderedCommentContent(comment.content,comment.type), avatarUrl: avatarURL(_authorEmail, settings) }));
+  ).rows.map(({ _avatarEmail, ...comment }) => ({ ...comment, content:renderedCommentContent(comment.content,comment.type), avatarUrl: comment.type === "comment" ? avatarURL(_avatarEmail, settings) : null }));
 }
 async function commentResponse(postId: number, req: Request, locked = false) {
   const requestedPage = z.coerce
