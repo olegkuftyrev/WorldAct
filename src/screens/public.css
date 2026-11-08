@@ -398,6 +398,10 @@
 .worldact-theme .wp-block-comments-title { overflow-wrap: anywhere; }
 .worldact-theme .wp-block-comment-template { list-style: none; padding: 0; }
 .worldact-theme .wp-block-comment-template .children { list-style: none; padding-inline-start: 2rem; }
+/* Source comment-template lists assume normal zero inline margins. Undo the
+   imported admin common.css ol margin without changing source indentation. */
+.worldact-theme .wp-block-comment-template:where(:not(.aligncenter)),
+.worldact-theme .wp-block-comment-template .children { margin-left: 0; }
 .worldact-theme .wp-block-avatar img { display: block; max-width: 100%; }
 .worldact-theme .wp-block-post-comments-form :is(textarea,input:not([type=checkbox]):not([type=submit])) { border: 1px solid #949494; background: transparent; color: inherit; padding: calc(.667em + 2px); font: inherit; width: 100%; }
 .worldact-theme .wp-block-post-comments-form textarea { display: block; min-height: 180px; resize: vertical; }
