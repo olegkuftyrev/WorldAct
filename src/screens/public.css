@@ -252,6 +252,16 @@
 .public-site .public-content .wp-block-image img {
   height: auto;
 }
+/* Retain the supplied wp-content.css caption/media constraints for the source
+   HTML5 caption output too; its saved pixel width remains the preferred width. */
+.public-site .wp-caption,
+.worldact-theme .wp-block-post-content .wp-caption {
+  max-width: 100%;
+}
+.public-site .wp-caption img {
+  max-width: 100%;
+  height: auto;
+}
 @media (max-width: 600px) {
   .public-site :is(.wp-block-latest-posts-is-layout-grid,.wp-block-post-template-is-layout-grid)[class*="columns-"]:not(.has-native-responsive-grid) {
     grid-template-columns: 1fr !important;

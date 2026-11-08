@@ -5,6 +5,8 @@ import {
   classicLinkQuery,
   classicMediaHTML,
   classicMediaURL,
+  classicImageCaption,
+  protectClassicCaptionAttributes,
 } from "../src/editor/classic/content.js";
 import {
   classicState,
@@ -40,6 +42,35 @@ test("Classic media uses escaped real media HTML and never treats absent or unsa
   assert.match(audio, /^<audio controls="controls" preload="none"/);
   assert.match(audio, /Tone &lt;Live&gt;/);
   assert.doesNotMatch(audio, /\[audio/);
+});
+test("initial Classic image captions use source shortcodes, safe inline HTML and literal boundaries", async () => {
+  const { next } = await import("@wordpress/shortcode");
+  const item = { id: 7, url: "/uploads/photo.png", mime: "image/png", width: 640, height: 480, alt: "A & B" };
+  const html = classicMediaHTML({ ...item, caption: { raw: '<p>Rich <strong>caption</strong> &amp; &lt;b&gt;literal&lt;/b&gt;</p><p><a href="/safe" onclick="bad()">link</a><script>bad()</script><img src="/unwanted.png"></p>', rendered: "<p>WRONG RENDERED VALUE</p>" } });
+  const match = next("caption", html)!; assert.ok(match); assert.equal(match.content, html);
+  assert.deepEqual(match.shortcode.attrs.named, { width: "640", id: "attachment_7", align: "alignnone" });
+  assert.match(match.shortcode.content!, /class="size-full wp-image-7"/);
+  assert.match(match.shortcode.content!, /Rich <strong>caption<\/strong> &amp; &lt;b&gt;literal&lt;\/b&gt;<br \/><a href="\/safe">link<\/a>/);
+  assert.doesNotMatch(html, /WRONG|onclick|script|unwanted|<p>|alignnone size/);
+  for (const caption of ["", "  \n", "<strong> </strong>", { raw: "", rendered: "<p>Do not use rendered HTML</p>" }]) {
+    const bare = classicMediaHTML({ ...item, caption }); assert.match(bare, /^<img /); assert.match(bare, /class="alignnone size-full wp-image-7"/); assert.doesNotMatch(bare, /\[caption/);
+  }
+  assert.equal(classicImageCaption('&amp;lt;b&amp;gt;old literal&amp;lt;/b&amp;gt;'), '&amp;lt;b&amp;gt;old literal&amp;lt;/b&amp;gt;');
+  const literal = classicMediaHTML({ ...item, caption: 'Literal [/caption] [gallery ids="1"] &lt;em&gt;not formatting&lt;/em&gt;' });
+  assert.match(literal, /worldact-classic-caption-literal/); assert.equal((literal.match(/\[\/caption\]/g) || []).length, 1, "only the real caption terminator is syntax");
+  assert.equal(classicMediaHTML({ ...item, url: "javascript:bad()", caption: "caption" }), "");
+  assert.equal(classicImageCaption('<a href="javascript:bad()" onfocus="bad()">safe text</a><iframe src="/bad"></iframe>'), '<a>safe text</a>');
+  const attributes = classicMediaHTML({ ...item, alt: "Literal [/caption] [gallery]", caption: '<a href="/safe?literal=[/caption]" title="Literal [/caption]">Caption</a>' });
+  assert.equal((attributes.match(/\[\/caption\]/g) || []).length, 1);
+  const markup = parseHTML('<html><body>' + next("caption", attributes)!.shortcode.content + '</body></html>').document;
+  assert.equal(markup.querySelector("img")!.getAttribute("alt"), "Literal [/caption] [gallery]");
+  assert.equal(markup.querySelector("a")!.getAttribute("title"), "Literal [/caption]");
+  assert.match(protectClassicCaptionAttributes('[caption width="1"]<img alt="[/caption]"> Caption[/caption]'), /alt="&#91;\/caption&#93;"/);
+  const normalized = '[caption width="640"]<img title="2 > 1 [/caption]" alt="[/caption]"> Caption[/caption]';
+  assert.notEqual(next("caption", normalized)!.content, normalized, "the source grammar alone sees literal attribute text as a terminator");
+  const guarded = protectClassicCaptionAttributes(normalized);
+  assert.equal(next("caption", guarded)!.content, guarded, "initialization and conversion pass the full caption to the source grammar");
+  assert.equal(parseHTML('<html><body>' + next("caption", guarded)!.shortcode.content + '</body></html>').document.querySelector("img")!.getAttribute("title"), "2 > 1 [/caption]");
 });
 test("Classic link transport queries only the fixed search endpoint and escapes river result labels", async () => {
   const controller = new AbortController();

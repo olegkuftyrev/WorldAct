@@ -678,7 +678,7 @@ async function staticHTML(
     const tag = node.attrs.ordered ? "ol" : "ul";
     return `<${tag}${attr}>${inner || node.attrs.values || ""}</${tag}>`;
   }
-  if (node.name === "core/html") return content;
+  if (node.name === "core/html" || node.name === "core/freeform") return content;
   if (node.name === "core/shortcode") return String(node.attrs.text ?? content);
   if (node.name === "core/math") {
     const latex=typeof node.attrs.latex==='string'?node.attrs.latex:'';

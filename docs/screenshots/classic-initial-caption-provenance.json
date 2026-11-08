@@ -1,0 +1,535 @@
+{
+  "featureCommit": "4222ab8",
+  "baseline": "c1bba987895eb66320c6c7373fdc06129b702e2e",
+  "method": "Author agent-browser native controls, genuine supplied TinyMCE; screenshots unmodified. Vite5180 + compiled Node API3010; additional compiled full-app public375 proof included. Local generated640x480 PNG fixture. No external network services or evaluator reports.",
+  "scope": "Author evidence only; independent review pending. Literal shortcode inert spans are deliberate hardening beyond blind source interpolation. Initial screenshot paths reflect separate actual editor scaffolds; public640 screenshots include final responsive CSS.",
+  "references": [
+    {
+      "file": "wp-includes/js/media-editor.js",
+      "sha256": "e27ab4d380e7936a1fa8fdc2d681cbe914d352691a51f0ca9883cbf885cf177b",
+      "purpose": "wp.media.string.image caption attributes and initial shortcode construction"
+    },
+    {
+      "file": "wp-includes/js/tinymce/plugins/wpeditimage/plugin.js",
+      "sha256": "8838b632abb00b12078f3715bf6e8c41ce2e109d941ad580d3c4f26f7651b583",
+      "purpose": "Caption transient DOM, serialization and inline paste cleanup"
+    },
+    {
+      "file": "wp-includes/js/tinymce/skins/wordpress/wp-content.css",
+      "sha256": "59dbd092a17ab5b77ad76d9e20955838432e69cd7cc166e24da1ecd69f8500db",
+      "purpose": "Source max-width100% caption/media and auto image height constraints reused for public HTML5 captions"
+    },
+    {
+      "file": "wp-includes/media.php",
+      "sha256": "5dcc6ca4f3e0edce9398387861c20e3fda8e0e61802352ac4ecf4ac8e6fcb260",
+      "purpose": "Read-only img_caption_shortcode reference for image/caption separation; never executed"
+    }
+  ],
+  "screenshots": [
+    {
+      "name": "classic-initial-caption-rich-desktop.png",
+      "scenario": "Genuine initial rich caption insertion; source TinyMCE modal",
+      "url": "/admin/posts/5",
+      "width": 1440,
+      "height": 1000,
+      "sha256": "1da7264e94e11369075ebfe9b92a3965aa5c759f0112f2cc237de6fc1c1ae84d",
+      "capturedAt": "2026-11-08T13:04:35.989Z",
+      "origin": "http://127.0.0.1:5180"
+    },
+    {
+      "name": "classic-initial-caption-literal-desktop.png",
+      "scenario": "Genuine literal caption insertion; inert closing/gallery/audio tokens",
+      "url": "/admin/posts/5",
+      "width": 1440,
+      "height": 1000,
+      "sha256": "9ad1405d9d8f7df3be02adb4b1f636a0441facb99c1e6c4dec670de253aaee1e",
+      "capturedAt": "2026-11-08T13:18:21.447Z",
+      "origin": "http://127.0.0.1:5180"
+    },
+    {
+      "name": "classic-initial-caption-public-rich640-desktop.png",
+      "scenario": "Original640 rich caption after actual native insertion/save/publish",
+      "url": "/posts/late-caption-ownership-checks/",
+      "width": 1440,
+      "height": 1000,
+      "sha256": "293e3f3d44b534fcb27dc9186895d82df7b18b9666a049f05d00a8a57fdc8c7e",
+      "capturedAt": "2026-11-08T13:20:35.459Z",
+      "origin": "http://127.0.0.1:5180"
+    },
+    {
+      "name": "classic-initial-caption-public-literal640-desktop.png",
+      "scenario": "Original640 literal caption after actual native insertion/save/publish",
+      "url": "/posts/initial-caption-width-checks/",
+      "width": 1440,
+      "height": 1000,
+      "sha256": "9f598ad06e207df619c25cbde8fec9b209441a4387be0cb07846d113c5a8dadc",
+      "capturedAt": "2026-11-08T13:19:53.842Z",
+      "origin": "http://127.0.0.1:5180"
+    },
+    {
+      "name": "classic-initial-caption-public-rich320-desktop.png",
+      "scenario": "Source image controls resized320, centered and linked; saved public caption",
+      "url": "/posts/caption-browser-checks/",
+      "width": 1440,
+      "height": 1000,
+      "sha256": "663487a302fca3fd9dc3de75c4dc71743568e1e8005a9508cc78ff6745739c5d",
+      "capturedAt": "2026-11-08T13:21:41.741Z",
+      "origin": "http://127.0.0.1:5180"
+    },
+    {
+      "name": "classic-initial-caption-public-converted-desktop.png",
+      "scenario": "Literal caption converted to native Image, saved and reloaded",
+      "url": "/posts/literal-caption-checks/",
+      "width": 1440,
+      "height": 1000,
+      "sha256": "f8191cea7dd2cce4a296f292bc6b22e11670ac0cdd3e56d64ed6e0350f824e4c",
+      "capturedAt": "2026-11-08T13:21:45.439Z",
+      "origin": "http://127.0.0.1:5180"
+    },
+    {
+      "name": "classic-initial-caption-rich-tablet.png",
+      "scenario": "Genuine initial rich caption insertion; source TinyMCE modal",
+      "url": "/admin/posts/5",
+      "width": 768,
+      "height": 1024,
+      "sha256": "d6ec15c4e3b8c0dcb2f40b8f9661268f92adc3f2e04b9e0f05487dcf7b08ab0f",
+      "capturedAt": "2026-11-08T13:05:28.529Z",
+      "origin": "http://127.0.0.1:5180"
+    },
+    {
+      "name": "classic-initial-caption-literal-tablet.png",
+      "scenario": "Genuine literal caption insertion; inert closing/gallery/audio tokens",
+      "url": "/admin/posts/6",
+      "width": 768,
+      "height": 1024,
+      "sha256": "59a3b5b55a28a0ca3e30f573b63bf333d8d1e7219b380bca9d0219922cff9462",
+      "capturedAt": "2026-11-08T13:12:18.673Z",
+      "origin": "http://127.0.0.1:5180"
+    },
+    {
+      "name": "classic-initial-caption-public-rich640-tablet.png",
+      "scenario": "Original640 rich caption after actual native insertion/save/publish",
+      "url": "/posts/late-caption-ownership-checks/",
+      "width": 768,
+      "height": 1024,
+      "sha256": "44fddbbacfa75d4cb229f88acca0ea0d744e26d5f79d55669495d89f0596d466",
+      "capturedAt": "2026-11-08T13:20:34.356Z",
+      "origin": "http://127.0.0.1:5180"
+    },
+    {
+      "name": "classic-initial-caption-public-literal640-tablet.png",
+      "scenario": "Original640 literal caption after actual native insertion/save/publish",
+      "url": "/posts/initial-caption-width-checks/",
+      "width": 768,
+      "height": 1024,
+      "sha256": "8dc227b69a4923d0e3f33330e81d083ba02ebe1be528bfa4a8efa9b866a5ce60",
+      "capturedAt": "2026-11-08T13:19:52.323Z",
+      "origin": "http://127.0.0.1:5180"
+    },
+    {
+      "name": "classic-initial-caption-public-rich320-tablet.png",
+      "scenario": "Source image controls resized320, centered and linked; saved public caption",
+      "url": "/posts/caption-browser-checks/",
+      "width": 768,
+      "height": 1024,
+      "sha256": "9d21089ae437ebca7492e4b4c71389e1e2a44e83e744401f07f91685a79c13f8",
+      "capturedAt": "2026-11-08T13:21:42.786Z",
+      "origin": "http://127.0.0.1:5180"
+    },
+    {
+      "name": "classic-initial-caption-public-converted-tablet.png",
+      "scenario": "Literal caption converted to native Image, saved and reloaded",
+      "url": "/posts/literal-caption-checks/",
+      "width": 768,
+      "height": 1024,
+      "sha256": "e0b9fecb00a8eaadb194ce6b25bc5d98704b872dec8e1b1144c87ff1a453203a",
+      "capturedAt": "2026-11-08T13:21:46.469Z",
+      "origin": "http://127.0.0.1:5180"
+    },
+    {
+      "name": "classic-initial-caption-rich-mobile.png",
+      "scenario": "Genuine initial rich caption insertion; source TinyMCE modal",
+      "url": "/admin/posts/5",
+      "width": 375,
+      "height": 812,
+      "sha256": "289f574574ed536dd97f6088dec1d0ae5959ab9f80c6883002089fd924758b7c",
+      "capturedAt": "2026-11-08T13:07:44.451Z",
+      "origin": "http://127.0.0.1:5180"
+    },
+    {
+      "name": "classic-initial-caption-literal-mobile.png",
+      "scenario": "Genuine literal caption insertion; inert closing/gallery/audio tokens",
+      "url": "/admin/posts/5",
+      "width": 375,
+      "height": 812,
+      "sha256": "0189993cecb9f3a8ba23bd883ea12afa4bb50924f463ff6c287e6bb903cbaba1",
+      "capturedAt": "2026-11-08T13:18:20.373Z",
+      "origin": "http://127.0.0.1:5180"
+    },
+    {
+      "name": "classic-initial-caption-public-rich640-mobile.png",
+      "scenario": "Original640 rich caption after actual native insertion/save/publish",
+      "url": "/posts/late-caption-ownership-checks/",
+      "width": 375,
+      "height": 812,
+      "sha256": "7d8c925b223b39cf17992547ebcbe0852441ab40c1cb316b80bed7ea90c40254",
+      "capturedAt": "2026-11-08T13:20:20.402Z",
+      "origin": "http://127.0.0.1:5180"
+    },
+    {
+      "name": "classic-initial-caption-public-literal640-mobile.png",
+      "scenario": "Original640 literal caption after actual native insertion/save/publish",
+      "url": "/posts/initial-caption-width-checks/",
+      "width": 375,
+      "height": 812,
+      "sha256": "ad048e9b02c80032ee729c8f38ed97d66538062d4587cc72fe6cde1b64e15abb",
+      "capturedAt": "2026-11-08T13:19:37.120Z",
+      "origin": "http://127.0.0.1:5180"
+    },
+    {
+      "name": "classic-initial-caption-public-rich320-mobile.png",
+      "scenario": "Source image controls resized320, centered and linked; saved public caption",
+      "url": "/posts/caption-browser-checks/",
+      "width": 375,
+      "height": 812,
+      "sha256": "4fdc17c55c51b71e3feef884ff69007c004a3bb926f5aab21a7f4e7de187cc46",
+      "capturedAt": "2026-11-08T13:21:43.832Z",
+      "origin": "http://127.0.0.1:5180"
+    },
+    {
+      "name": "classic-initial-caption-public-converted-mobile.png",
+      "scenario": "Literal caption converted to native Image, saved and reloaded",
+      "url": "/posts/literal-caption-checks/",
+      "width": 375,
+      "height": 812,
+      "sha256": "82f0a06ea0ae354b40828c7b9da4939602bd5d8ac496abbbe1766763eb4a44dd",
+      "capturedAt": "2026-11-08T13:21:47.581Z",
+      "origin": "http://127.0.0.1:5180"
+    },
+    {
+      "name": "classic-initial-caption-source-desktop.png",
+      "scenario": "Canonical source code after Classic Save; transient DOM absent",
+      "url": "/admin/posts/4",
+      "width": 1440,
+      "height": 1000,
+      "sha256": "76af2cd2b84284ec412860d2672b29a9684e706ad899fdd1186e3dd46ac6ad0e",
+      "capturedAt": "2026-11-08T12:58:58.191Z",
+      "origin": "http://127.0.0.1:5180"
+    },
+    {
+      "name": "classic-initial-caption-second-save-tablet.png",
+      "scenario": "Second source image-title edit/save/reload preserves inert caption and literal attribute tokens",
+      "url": "/admin/posts/6",
+      "width": 768,
+      "height": 1024,
+      "sha256": "11e084137defbea2564f4d976da1f867850f418ca82211cd0f8c7689be0baf96",
+      "capturedAt": "2026-11-08T13:12:56.838Z",
+      "origin": "http://127.0.0.1:5180"
+    },
+    {
+      "name": "classic-initial-caption-image-mobile.png",
+      "scenario": "Genuine source image window with width320/height240 and Cancel controls",
+      "url": "/admin/posts/4",
+      "width": 375,
+      "height": 812,
+      "sha256": "001bab9d7c38691d938c950e3e6f44606ff942908796b6c72976e2fab921b73d",
+      "capturedAt": "2026-11-08T13:03:56.679Z",
+      "origin": "http://127.0.0.1:5180"
+    },
+    {
+      "name": "classic-initial-caption-held-upload-tablet.png",
+      "scenario": "Controlled proxy holds an actual201 upload response; then cancelled/reopened before release",
+      "url": "/admin/posts/7",
+      "width": 768,
+      "height": 1024,
+      "sha256": "0f13e707192194981ff54ebaf7c7ab0e4cf96b71d9b07cbf91a9f97b16cf98d7",
+      "capturedAt": "2026-11-08T13:15:29.066Z",
+      "origin": "http://127.0.0.1:5180"
+    },
+    {
+      "name": "classic-initial-caption-failed-upload-tablet.png",
+      "scenario": "Controlled503 fixture; actual error presentation, no insertion or history change",
+      "url": "/admin/posts/7",
+      "width": 768,
+      "height": 1024,
+      "sha256": "034f4dfc1a4faf23137e2a2c9d2f0910e4a917b70282bfff79204160c30f33a9",
+      "capturedAt": "2026-11-08T13:15:44.984Z",
+      "origin": "http://127.0.0.1:5180"
+    }
+  ],
+  "semanticProofs": {
+    "cancel-proof.json": [
+      {
+        "captions": 1,
+        "pending": false,
+        "source": "[caption id=\"attachment_1\" align=\"aligncenter\" width=\"320\"]<a href=\"/\" rel=\"noopener noreferrer\"><img class=\"size-full wp-image-1\" src=\"/uploads/2026/11/5e66defe6a4efef87126a9235c3c77610c8d2021.png\" alt=\"Caption fixture alternative\" width=\"320\" height=\"240\" /></a> Rich <strong>initial caption</strong> <em>emphasis</em> <a href=\"/safe\" rel=\"noopener noreferrer\">safe link</a> &lt;b&gt;literal markup&lt;/b&gt; &amp; 2 &lt; 3<br />Second caption line.[/caption]\n<p>Classic caption browser checks.</p>"
+      }
+    ],
+    "compiled-public-375-proof.json": {
+      "origin": "http://127.0.0.1:3010",
+      "viewport": 375,
+      "scroll": 375,
+      "imageWidth": 315,
+      "imageHeight": 236.25,
+      "captionText": "Literal [/caption] [gallery ids=\"1\"] [audio src=\"/not-executed.wav\"] <em>literal markup</em> & 2 < 3",
+      "resources": [
+        "/assets/index-DE1Syw0K.js",
+        "/assets/index-ClXscFiq.css",
+        "/vendor/wordpress/wp-content/themes/twentytwentyfive/assets/fonts/manrope/Manrope-VariableFont_wght.woff2",
+        "/vendor/wordpress/wp-content/themes/twentytwentyfive/assets/fonts/manrope/Manrope-VariableFont_wght.woff2",
+        "/vendor/wordpress/wp-content/themes/twentytwentyfive/assets/fonts/manrope/Manrope-VariableFont_wght.woff2"
+      ]
+    },
+    "conversion-proof.json": {
+      "blocks": [
+        {
+          "html": "<a href=\"/\" aria-disabled=\"true\" style=\"pointer-events: none; cursor: default; display: inline;\"><img alt=\"Caption fixture alternative\" class=\"\" src=\"/uploads/2026/11/5e66defe6a4efef87126a9235c3c77610c8d2021.png\" style=\"height: auto;\" width=\"640\" height=\"480\"></a><figcaption role=\"textbox\" aria-multiline=\"true\" aria-readonly=\"false\" class=\"block-editor-rich-text__editable wp-element-caption rich-text\" aria-label=\"Image caption text\" contenteditable=\"true\" data-wp-block-attribute-key=\"caption\" style=\"white-space: pre-wrap;\">Rich <strong>initial caption</strong> <em>emphasis</em> <a href=\"/safe\" rel=\"noopener noreferrer\">safe link</a> &lt;b&gt;literal markup&lt;/b&gt; &amp; 2 &lt; 3<br data-rich-text-line-break=\"true\">Second caption line.</figcaption><div class=\"components-drop-zone\" data-is-drop-zone=\"true\"><div class=\"components-drop-zone__content\"><div class=\"components-drop-zone__content-inner\"><svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\" stroke=\"currentColor\" stroke-width=\"1.5\" width=\"24\" height=\"24\" class=\"components-drop-zone__content-icon\" aria-hidden=\"true\" focusable=\"false\" style=\"fill: none;\"><path d=\"M4.75 15V19.25H12M12 19.25V4.5M12 19.25H19.25V15M17.5 10L12 4.5L6.5 10\"></path></svg><span class=\"components-drop-zone__content-text\">Drop files to upload</span></div></div></div>",
+          "text": "Rich initial caption emphasis safe link <b>literal markup</b> & 2 < 3\nSecond caption line.",
+          "type": "core/image"
+        },
+        {
+          "html": "Classic caption browser checks.",
+          "text": "Classic caption browser checks.",
+          "type": "core/paragraph"
+        }
+      ],
+      "invalid": []
+    },
+    "failure-after-proof.json": {
+      "source": "<p>Late caption ownership checks.</p>",
+      "images": 0,
+      "undo": false,
+      "redo": false
+    },
+    "initial-375-proof.json": [
+      {
+        "bodyScroll": 327,
+        "bodyWidth": 327,
+        "caption": "Rich <strong>initial caption</strong> <em>emphasis</em> <a href=\"/safe\" rel=\"noopener noreferrer\" data-mce-href=\"/safe\">safe link</a> &lt;b&gt;literal markup&lt;/b&gt; &amp; 2 &lt; 3<br>Second caption line.",
+        "captionWidth": 307,
+        "captions": 1,
+        "imageWidth": 307,
+        "images": 1,
+        "source": "[caption id=\"attachment_1\" align=\"alignnone\" width=\"640\"]<img class=\"size-full wp-image-1\" src=\"/uploads/2026/11/5e66defe6a4efef87126a9235c3c77610c8d2021.png\" alt=\"Caption fixture alternative\" width=\"640\" height=\"480\" /> Rich <strong>initial caption</strong> <em>emphasis</em> <a href=\"/safe\" rel=\"noopener noreferrer\">safe link</a> &lt;b&gt;literal markup&lt;/b&gt; &amp; 2 &lt; 3<br />Second caption line.[/caption]\n<p>Initial caption width checks.</p>",
+        "width": 375
+      }
+    ],
+    "late-after-proof.json": {
+      "source": "<p>Late caption ownership checks.</p>",
+      "images": 0,
+      "undo": false,
+      "redo": false
+    },
+    "late-before-proof.json": {
+      "source": "<p>Late caption ownership checks.</p>",
+      "images": 0,
+      "undo": false,
+      "redo": false
+    },
+    "literal-conversion-proof.json": {
+      "blocks": [
+        {
+          "type": "core/image",
+          "html": "<img alt=\"Literal [/caption] [gallery] alternative\" class=\"\" src=\"/uploads/2026/11/5e66defe6a4efef87126a9235c3c77610c8d2021.png\" style=\"height: auto;\" width=\"640\" height=\"480\"><figcaption role=\"textbox\" aria-multiline=\"true\" aria-readonly=\"false\" class=\"block-editor-rich-text__editable wp-element-caption rich-text\" aria-label=\"Image caption text\" contenteditable=\"true\" data-wp-block-attribute-key=\"caption\" style=\"white-space: pre-wrap;\">Literal [<span class=\"worldact-classic-caption-literal\">/caption</span>] [<span class=\"worldact-classic-caption-literal\">gallery</span> ids=\"1\"] [<span class=\"worldact-classic-caption-literal\">audio</span> src=\"/not-executed.wav\"] &lt;em&gt;literal markup&lt;/em&gt; &amp; 2 &lt; 3</figcaption><div class=\"components-drop-zone\" data-is-drop-zone=\"true\"><div class=\"components-drop-zone__content\"><div class=\"components-drop-zone__content-inner\"><svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\" stroke=\"currentColor\" stroke-width=\"1.5\" width=\"24\" height=\"24\" class=\"components-drop-zone__content-icon\" aria-hidden=\"true\" focusable=\"false\" style=\"fill: none;\"><path d=\"M4.75 15V19.25H12M12 19.25V4.5M12 19.25H19.25V15M17.5 10L12 4.5L6.5 10\"></path></svg><span class=\"components-drop-zone__content-text\">Drop files to upload</span></div></div></div>"
+        },
+        {
+          "type": "core/paragraph",
+          "html": "Literal caption checks."
+        }
+      ],
+      "invalid": 0
+    },
+    "literal-initial-375-proof.json": {
+      "viewport": 375,
+      "bodyWidth": 327,
+      "bodyScroll": 327,
+      "captionText": "Literal [/caption] [gallery ids=\"1\"] [audio src=\"/not-executed.wav\"] <em>literal markup</em> & 2 < 3",
+      "images": 1,
+      "captions": 1,
+      "alt": "Literal [/caption] [gallery] alternative",
+      "source": "[caption id=\"attachment_1\" align=\"alignnone\" width=\"640\"]<img class=\"size-full wp-image-1\" src=\"/uploads/2026/11/5e66defe6a4efef87126a9235c3c77610c8d2021.png\" alt=\"Literal [/caption] [gallery] alternative\" width=\"640\" height=\"480\" /> Literal [<span class=\"worldact-classic-caption-literal\">/caption</span>] [<span class=\"worldact-classic-caption-literal\">gallery</span> ids=\"1\"] [<span class=\"worldact-classic-caption-literal\">audio</span> src=\"/not-executed.wav\"] &lt;em&gt;literal markup&lt;/em&gt; &amp; 2 &lt; 3[/caption]\n<p>Initial caption width checks.</p>"
+    },
+    "literal-second-reload-proof.json": {
+      "body": "<div class=\"mceTemp\"><dl id=\"attachment_1\" class=\"wp-caption alignnone\" style=\"width: 640px;\" data-mce-style=\"width: 640px;\"><dt class=\"wp-caption-dt\"><img class=\"size-full wp-image-1\" title=\"Second edit [/caption] [gallery] title\" src=\"/uploads/2026/11/5e66defe6a4efef87126a9235c3c77610c8d2021.png\" alt=\"Literal [/caption] [gallery] alternative\" width=\"640\" height=\"480\" data-mce-src=\"/uploads/2026/11/5e66defe6a4efef87126a9235c3c77610c8d2021.png\"></dt><dd class=\"wp-caption-dd\">Literal [<span class=\"worldact-classic-caption-literal\">/caption</span>] [<span class=\"worldact-classic-caption-literal\">gallery</span> ids=\"1\"] [<span class=\"worldact-classic-caption-literal\">audio</span> src=\"/not-executed.wav\"] &lt;em&gt;literal markup&lt;/em&gt; &amp; 2 &lt; 3</dd></dl></div><p>Literal caption checks.</p>",
+      "source": "[caption id=\"attachment_1\" align=\"alignnone\" width=\"640\"]<img class=\"size-full wp-image-1\" title=\"Second edit [/caption] [gallery] title\" src=\"/uploads/2026/11/5e66defe6a4efef87126a9235c3c77610c8d2021.png\" alt=\"Literal [/caption] [gallery] alternative\" width=\"640\" height=\"480\" /> Literal [<span class=\"worldact-classic-caption-literal\">/caption</span>] [<span class=\"worldact-classic-caption-literal\">gallery</span> ids=\"1\"] [<span class=\"worldact-classic-caption-literal\">audio</span> src=\"/not-executed.wav\"] &lt;em&gt;literal markup&lt;/em&gt; &amp; 2 &lt; 3[/caption]\n<p>Literal caption checks.</p>",
+      "captionText": "Literal [/caption] [gallery ids=\"1\"] [audio src=\"/not-executed.wav\"] <em>literal markup</em> & 2 < 3",
+      "images": 1,
+      "captions": 1,
+      "alt": "Literal [/caption] [gallery] alternative",
+      "title": "Second edit [/caption] [gallery] title",
+      "activeMedia": 0
+    },
+    "public-literal-converted-proof.json": {
+      "captions": 1,
+      "captionText": "Literal [/caption] [gallery ids=\"1\"] [audio src=\"/not-executed.wav\"] <em>literal markup</em> & 2 < 3",
+      "captionHTML": "Literal [<span class=\"worldact-classic-caption-literal\">/caption</span>] [<span class=\"worldact-classic-caption-literal\">gallery</span> ids=\"1\"] [<span class=\"worldact-classic-caption-literal\">audio</span> src=\"/not-executed.wav\"] &lt;em&gt;literal markup&lt;/em&gt; &amp; 2 &lt; 3",
+      "activeMedia": 0
+    },
+    "responsive-converted640-1440-proof.json": {
+      "viewport": 1440,
+      "documentWidth": 1440,
+      "figureWidth": 645,
+      "imageWidth": 640,
+      "imageHeight": 480,
+      "captionText": "Literal [/caption] [gallery ids=\"1\"] [audio src=\"/not-executed.wav\"] <em>literal markup</em> & 2 < 3",
+      "captionHTML": "Literal [<span class=\"worldact-classic-caption-literal\">/caption</span>] [<span class=\"worldact-classic-caption-literal\">gallery</span> ids=\"1\"] [<span class=\"worldact-classic-caption-literal\">audio</span> src=\"/not-executed.wav\"] &lt;em&gt;literal markup&lt;/em&gt; &amp; 2 &lt; 3",
+      "preferredWidth": null,
+      "activeMedia": 0
+    },
+    "responsive-converted640-375-proof.json": {
+      "viewport": 375,
+      "documentWidth": 375,
+      "figureWidth": 315,
+      "imageWidth": 315,
+      "imageHeight": 236.25,
+      "captionText": "Literal [/caption] [gallery ids=\"1\"] [audio src=\"/not-executed.wav\"] <em>literal markup</em> & 2 < 3",
+      "captionHTML": "Literal [<span class=\"worldact-classic-caption-literal\">/caption</span>] [<span class=\"worldact-classic-caption-literal\">gallery</span> ids=\"1\"] [<span class=\"worldact-classic-caption-literal\">audio</span> src=\"/not-executed.wav\"] &lt;em&gt;literal markup&lt;/em&gt; &amp; 2 &lt; 3",
+      "preferredWidth": null,
+      "activeMedia": 0
+    },
+    "responsive-converted640-768-proof.json": {
+      "viewport": 768,
+      "documentWidth": 768,
+      "figureWidth": 645,
+      "imageWidth": 640,
+      "imageHeight": 480,
+      "captionText": "Literal [/caption] [gallery ids=\"1\"] [audio src=\"/not-executed.wav\"] <em>literal markup</em> & 2 < 3",
+      "captionHTML": "Literal [<span class=\"worldact-classic-caption-literal\">/caption</span>] [<span class=\"worldact-classic-caption-literal\">gallery</span> ids=\"1\"] [<span class=\"worldact-classic-caption-literal\">audio</span> src=\"/not-executed.wav\"] &lt;em&gt;literal markup&lt;/em&gt; &amp; 2 &lt; 3",
+      "preferredWidth": null,
+      "activeMedia": 0
+    },
+    "responsive-literal640-1440-proof.json": {
+      "viewport": 1440,
+      "documentWidth": 1440,
+      "figureWidth": 640,
+      "imageWidth": 640,
+      "imageHeight": 480,
+      "captionText": "Literal [/caption] [gallery ids=\"1\"] [audio src=\"/not-executed.wav\"] <em>literal markup</em> & 2 < 3",
+      "captionHTML": "Literal [<span class=\"worldact-classic-caption-literal\">/caption</span>] [<span class=\"worldact-classic-caption-literal\">gallery</span> ids=\"1\"] [<span class=\"worldact-classic-caption-literal\">audio</span> src=\"/not-executed.wav\"] &lt;em&gt;literal markup&lt;/em&gt; &amp; 2 &lt; 3",
+      "preferredWidth": "width:640px",
+      "activeMedia": 0
+    },
+    "responsive-literal640-375-proof.json": {
+      "viewport": 375,
+      "documentWidth": 375,
+      "figureWidth": 315,
+      "imageWidth": 315,
+      "imageHeight": 236.25,
+      "captionText": "Literal [/caption] [gallery ids=\"1\"] [audio src=\"/not-executed.wav\"] <em>literal markup</em> & 2 < 3",
+      "captionHTML": "Literal [<span class=\"worldact-classic-caption-literal\">/caption</span>] [<span class=\"worldact-classic-caption-literal\">gallery</span> ids=\"1\"] [<span class=\"worldact-classic-caption-literal\">audio</span> src=\"/not-executed.wav\"] &lt;em&gt;literal markup&lt;/em&gt; &amp; 2 &lt; 3",
+      "preferredWidth": "width:640px",
+      "activeMedia": 0
+    },
+    "responsive-literal640-768-proof.json": {
+      "viewport": 768,
+      "documentWidth": 768,
+      "figureWidth": 640,
+      "imageWidth": 640,
+      "imageHeight": 480,
+      "captionText": "Literal [/caption] [gallery ids=\"1\"] [audio src=\"/not-executed.wav\"] <em>literal markup</em> & 2 < 3",
+      "captionHTML": "Literal [<span class=\"worldact-classic-caption-literal\">/caption</span>] [<span class=\"worldact-classic-caption-literal\">gallery</span> ids=\"1\"] [<span class=\"worldact-classic-caption-literal\">audio</span> src=\"/not-executed.wav\"] &lt;em&gt;literal markup&lt;/em&gt; &amp; 2 &lt; 3",
+      "preferredWidth": "width:640px",
+      "activeMedia": 0
+    },
+    "responsive-rich320-1440-proof.json": {
+      "viewport": 1440,
+      "documentWidth": 1440,
+      "figureWidth": 320,
+      "imageWidth": 320,
+      "imageHeight": 240,
+      "captionText": "Rich initial caption emphasis safe link <b>literal markup</b> & 2 < 3Second caption line.",
+      "captionHTML": "Rich <strong>initial caption</strong> <em>emphasis</em> <a href=\"/safe\" rel=\"noopener noreferrer\">safe link</a> &lt;b&gt;literal markup&lt;/b&gt; &amp; 2 &lt; 3<br>Second caption line.",
+      "preferredWidth": "width:320px",
+      "activeMedia": 0
+    },
+    "responsive-rich320-375-proof.json": {
+      "viewport": 375,
+      "documentWidth": 375,
+      "figureWidth": 315,
+      "imageWidth": 315,
+      "imageHeight": 236.25,
+      "captionText": "Rich initial caption emphasis safe link <b>literal markup</b> & 2 < 3Second caption line.",
+      "captionHTML": "Rich <strong>initial caption</strong> <em>emphasis</em> <a href=\"/safe\" rel=\"noopener noreferrer\">safe link</a> &lt;b&gt;literal markup&lt;/b&gt; &amp; 2 &lt; 3<br>Second caption line.",
+      "preferredWidth": "width:320px",
+      "activeMedia": 0
+    },
+    "responsive-rich320-768-proof.json": {
+      "viewport": 768,
+      "documentWidth": 768,
+      "figureWidth": 320,
+      "imageWidth": 320,
+      "imageHeight": 240,
+      "captionText": "Rich initial caption emphasis safe link <b>literal markup</b> & 2 < 3Second caption line.",
+      "captionHTML": "Rich <strong>initial caption</strong> <em>emphasis</em> <a href=\"/safe\" rel=\"noopener noreferrer\">safe link</a> &lt;b&gt;literal markup&lt;/b&gt; &amp; 2 &lt; 3<br>Second caption line.",
+      "preferredWidth": "width:320px",
+      "activeMedia": 0
+    },
+    "responsive-rich640-1440-proof.json": {
+      "viewport": 1440,
+      "documentWidth": 1440,
+      "figureWidth": 640,
+      "imageWidth": 640,
+      "imageHeight": 480,
+      "captionText": "Rich initial caption emphasis safe link <b>literal markup</b> & 2 < 3Second caption line.",
+      "captionHTML": "Rich <strong>initial caption</strong> <em>emphasis</em> <a href=\"/safe\" rel=\"noopener noreferrer\">safe link</a> &lt;b&gt;literal markup&lt;/b&gt; &amp; 2 &lt; 3<br>Second caption line.",
+      "preferredWidth": "width:640px",
+      "activeMedia": 0
+    },
+    "responsive-rich640-375-proof.json": {
+      "viewport": 375,
+      "documentWidth": 375,
+      "figureWidth": 315,
+      "imageWidth": 315,
+      "imageHeight": 236.25,
+      "captionText": "Rich initial caption emphasis safe link <b>literal markup</b> & 2 < 3Second caption line.",
+      "captionHTML": "Rich <strong>initial caption</strong> <em>emphasis</em> <a href=\"/safe\" rel=\"noopener noreferrer\">safe link</a> &lt;b&gt;literal markup&lt;/b&gt; &amp; 2 &lt; 3<br>Second caption line.",
+      "preferredWidth": "width:640px",
+      "activeMedia": 0
+    },
+    "responsive-rich640-768-proof.json": {
+      "viewport": 768,
+      "documentWidth": 768,
+      "figureWidth": 640,
+      "imageWidth": 640,
+      "imageHeight": 480,
+      "captionText": "Rich initial caption emphasis safe link <b>literal markup</b> & 2 < 3Second caption line.",
+      "captionHTML": "Rich <strong>initial caption</strong> <em>emphasis</em> <a href=\"/safe\" rel=\"noopener noreferrer\">safe link</a> &lt;b&gt;literal markup&lt;/b&gt; &amp; 2 &lt; 3<br>Second caption line.",
+      "preferredWidth": "width:640px",
+      "activeMedia": 0
+    },
+    "rich-reload-proof.json": {
+      "editors": [
+        {
+          "bodyScroll": 613,
+          "bodyWidth": 613,
+          "captions": 1,
+          "images": 1,
+          "source": "[caption id=\"attachment_1\" align=\"aligncenter\" width=\"320\"]<a href=\"/\" rel=\"noopener noreferrer\"><img class=\"size-full wp-image-1\" src=\"/uploads/2026/11/5e66defe6a4efef87126a9235c3c77610c8d2021.png\" alt=\"Caption fixture alternative\" width=\"320\" height=\"240\" /></a> Rich <strong>initial caption</strong> <em>emphasis</em> <a href=\"/safe\" rel=\"noopener noreferrer\">safe link</a> &lt;b&gt;literal markup&lt;/b&gt; &amp; 2 &lt; 3<br />Second caption line.[/caption]\n<p>Classic caption browser checks.</p>"
+        }
+      ],
+      "focus": "DIV",
+      "width": 768
+    },
+    "rich-source-proof.json": {
+      "invalidBlocks": [],
+      "source": "[caption id=\"attachment_1\" align=\"aligncenter\" width=\"320\"]<a href=\"/\"><img class=\"size-full wp-image-1\" src=\"/uploads/2026/11/5e66defe6a4efef87126a9235c3c77610c8d2021.png\" alt=\"Caption fixture alternative\" width=\"320\" height=\"240\" /></a> Rich <strong>initial caption</strong> <em>emphasis</em> <a href=\"/safe\" rel=\"noopener noreferrer\">safe link</a> &lt;b&gt;literal markup&lt;/b&gt; &amp; 2 &lt; 3<br />Second caption line.[/caption]\n<p>Classic caption browser checks.</p>"
+    }
+  },
+  "controlledProxyEvents": [
+    {
+      "kind": "held-real-upload",
+      "path": "/api/media",
+      "status": 201
+    },
+    {
+      "kind": "released-real-upload",
+      "path": "/api/media",
+      "status": 201
+    },
+    {
+      "kind": "controlled-failure",
+      "path": "/api/media",
+      "status": 503
+    }
+  ]
+}

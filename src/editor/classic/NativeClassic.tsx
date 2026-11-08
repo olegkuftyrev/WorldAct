@@ -29,6 +29,7 @@ import { useViewportMatch } from "@wordpress/compose";
 import { ClassicMediaSlot } from "./ClassicSupport";
 import { classicImageWindow } from "./imageWindow";
 import { containClassicToolbar, containClassicWindow } from "./floating";
+import { protectClassicCaptionAttributes } from "./content";
 import type { ClassicWindow } from "./lifecycle";
 function ConvertToBlocks({ clientId }: { clientId: string }) {
   const { replaceBlocks } = useDispatch(blockEditorStore),
@@ -41,7 +42,7 @@ function ConvertToBlocks({ clientId }: { clientId: string }) {
       disabled={!block}
       onClick={() => {
         if (block)
-          replaceBlocks(block.clientId, rawHandler({ HTML: serialize(block) }));
+          replaceBlocks(block.clientId, rawHandler({ HTML: protectClassicCaptionAttributes(serialize(block)) }));
       }}
     >
       {__("Convert to blocks")}
@@ -95,6 +96,9 @@ function ClassicEdit({
       tinymce: {
         ...settings,
         setup(editor: any) {
+          editor.on("BeforeSetContent", (event: any) => {
+            if (event.format !== "raw") event.content = protectClassicCaptionAttributes(event.content);
+          }, true);
           editor.on("init", () => {
             const doc = editor.getDoc();
             const sourceOpen = editor.windowManager.open;
