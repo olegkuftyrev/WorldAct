@@ -1002,7 +1002,7 @@ export default function Editor({ type }: { type: "post" | "page" }) {
     }
   }
   return (
-    <div ref={editorRoot} className={`block-editor-screen ${sidebar && !options.distractionFree ? "with-sidebar" : ""} ${options.fullscreenMode || options.distractionFree ? "is-fullscreen-mode" : ""} ${options.distractionFree ? "is-distraction-free" : ""} ${options.distractionFree && typing && !optionsDialog ? "is-writing" : ""} ${options.showIconLabels ? "show-icon-labels" : ""} ${options.editorMode === "text" ? "is-code-mode" : ""}`} onMouseMove={() => { if (options.distractionFree) setTyping(false); }}>
+    <div ref={editorRoot} className={`block-editor-screen ${sidebar && !options.distractionFree ? "with-sidebar" : ""} ${options.fullscreenMode ? "is-fullscreen-mode" : ""} ${options.distractionFree ? "is-distraction-free" : ""} ${options.distractionFree && typing && !optionsDialog ? "is-writing" : ""} ${options.showIconLabels ? "show-icon-labels" : ""} ${options.editorMode === "text" ? "is-code-mode" : ""}`} onMouseMove={() => { if (options.distractionFree) setTyping(false); }}>
       <header className="editor-header" inert={options.distractionFree && typing && !optionsDialog}>
         <button
           className="editor-home"

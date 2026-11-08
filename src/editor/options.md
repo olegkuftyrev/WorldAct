@@ -53,4 +53,8 @@ containment, text labels). Broader source collaboration, starter patterns,
 pre-publish, block visibility and document-panel preferences are not displayed.
 Site Editor retains its existing independent entity canvas behavior.
 
+Source viewport conditions are retained: the post editor's Fullscreen menu
+choice appears at the native large breakpoint (960px); breadcrumbs and their
+preference appear at medium (782px), and are hidden during Distraction free.
+
 Independent native evaluation is required after the implementation freeze.

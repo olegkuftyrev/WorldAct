@@ -49,6 +49,7 @@ import {
   SlotFillProvider,
 } from "@wordpress/components";
 import { addFilter } from "@wordpress/hooks";
+import { useViewportMatch } from "@wordpress/compose";
 import { useEnableWpCompatOverlaySlot } from "@wordpress/ui";
 import { RichTextData, store as richTextStore, registerFormatType, unregisterFormatType } from "@wordpress/rich-text";
 import apiFetch from "@wordpress/api-fetch";
@@ -1011,6 +1012,7 @@ const GutenbergSession = forwardRef<
   GutenbergEditorHandle,
   GutenbergEditorProps
 >(function GutenbergSession(props, ref) {
+  const showBreadcrumbViewport = useViewportMatch("medium");
   const [blocks, setBlocks] = useState(() =>
     initialValue(props.initialBlocks, props.initialHTML),
   );
@@ -1735,7 +1737,7 @@ const GutenbergSession = forwardRef<
                   </aside>
                 )}
               </div>
-              {!codeMode && props.preferences?.showBlockBreadcrumbs !== false && !props.preferences?.distractionFree && <div className="worldact-gutenberg-breadcrumb">
+              {!codeMode && (!props.preferences || showBreadcrumbViewport) && props.preferences?.showBlockBreadcrumbs !== false && !props.preferences?.distractionFree && <div className="worldact-gutenberg-breadcrumb">
                 <BlockBreadcrumb />
               </div>}
               </>}
