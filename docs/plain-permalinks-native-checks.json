@@ -1,0 +1,617 @@
+{
+  "presets": [
+    {
+      "name": "Plain",
+      "value": "",
+      "canonical": "/?p=4",
+      "checkedAfterReload": true,
+      "actualResolvedId": 4,
+      "nativeCanonicalBody": true
+    },
+    {
+      "name": "Day and name",
+      "value": "/%year%/%monthnum%/%day%/%postname%/",
+      "canonical": "/2026/11/08/plain-study-story/",
+      "checkedAfterReload": true,
+      "actualResolvedId": 4,
+      "nativeCanonicalBody": true
+    },
+    {
+      "name": "Month and name",
+      "value": "/%year%/%monthnum%/%postname%/",
+      "canonical": "/2026/11/plain-study-story/",
+      "checkedAfterReload": true,
+      "actualResolvedId": 4,
+      "nativeCanonicalBody": true
+    },
+    {
+      "name": "Numeric",
+      "value": "/archives/%post_id%",
+      "canonical": "/archives/4",
+      "checkedAfterReload": true,
+      "actualResolvedId": 4,
+      "nativeCanonicalBody": true
+    },
+    {
+      "name": "Post name",
+      "value": "/%postname%/",
+      "canonical": "/plain-study-story/",
+      "checkedAfterReload": true,
+      "actualResolvedId": 4,
+      "nativeCanonicalBody": true
+    },
+    {
+      "customExact": "/study/%category%/%postname%/",
+      "checkedAfterReload": true
+    }
+  ],
+  "public": [
+    {
+      "path": "/?p=4",
+      "expected": "STORY FIRST BODY",
+      "excluded": [
+        "STORY SECOND BODY"
+      ],
+      "actual": "/?p=4",
+      "overflow": false
+    },
+    {
+      "theme": "twentytwentyfive",
+      "clientBodyLink": "/?p=4&page=2",
+      "excludedFirst": true
+    },
+    {
+      "path": "/?page_id=6&page=2",
+      "expected": "CHILD SECOND BODY",
+      "excluded": [
+        "CHILD FIRST BODY"
+      ],
+      "actual": "/?page_id=6&page=2",
+      "overflow": false
+    },
+    {
+      "path": "/?p=9&page=2",
+      "expected": "password",
+      "excluded": [
+        "SECRET FIRST BODY",
+        "SECRET SECOND BODY"
+      ],
+      "actual": "/?p=9&page=2",
+      "overflow": false
+    },
+    {
+      "path": "/?p=11",
+      "expected": "Page not found",
+      "excluded": [
+        "HIDDEN DRAFT BODY",
+        "HIDDEN PRIVATE BODY",
+        "HIDDEN FUTURE BODY",
+        "STORY FIRST BODY"
+      ],
+      "actual": "/?p=11",
+      "overflow": false
+    },
+    {
+      "path": "/?p=12",
+      "expected": "Page not found",
+      "excluded": [
+        "HIDDEN DRAFT BODY",
+        "HIDDEN PRIVATE BODY",
+        "HIDDEN FUTURE BODY",
+        "STORY FIRST BODY"
+      ],
+      "actual": "/?p=12",
+      "overflow": false
+    },
+    {
+      "path": "/?p=13",
+      "expected": "Page not found",
+      "excluded": [
+        "HIDDEN DRAFT BODY",
+        "HIDDEN PRIVATE BODY",
+        "HIDDEN FUTURE BODY",
+        "STORY FIRST BODY"
+      ],
+      "actual": "/?p=13",
+      "overflow": false
+    },
+    {
+      "path": "/?p=0",
+      "expected": "Page not found",
+      "excluded": [
+        "HIDDEN DRAFT BODY",
+        "HIDDEN PRIVATE BODY",
+        "HIDDEN FUTURE BODY",
+        "STORY FIRST BODY"
+      ],
+      "actual": "/?p=0",
+      "overflow": false
+    },
+    {
+      "path": "/?p[]=4",
+      "expected": "Page not found",
+      "excluded": [
+        "HIDDEN DRAFT BODY",
+        "HIDDEN PRIVATE BODY",
+        "HIDDEN FUTURE BODY",
+        "STORY FIRST BODY"
+      ],
+      "actual": "/?p[]=4",
+      "overflow": false
+    },
+    {
+      "path": "/?p=4&p=5",
+      "expected": "Page not found",
+      "excluded": [
+        "HIDDEN DRAFT BODY",
+        "HIDDEN PRIVATE BODY",
+        "HIDDEN FUTURE BODY",
+        "STORY FIRST BODY"
+      ],
+      "actual": "/?p=4&p=5",
+      "overflow": false
+    },
+    {
+      "path": "/?p=4&page=0",
+      "expected": "Page not found",
+      "excluded": [
+        "HIDDEN DRAFT BODY",
+        "HIDDEN PRIVATE BODY",
+        "HIDDEN FUTURE BODY",
+        "STORY FIRST BODY"
+      ],
+      "actual": "/?p=4&page=0",
+      "overflow": false
+    },
+    {
+      "path": "/?page_id=4",
+      "expected": "Page not found",
+      "excluded": [
+        "HIDDEN DRAFT BODY",
+        "HIDDEN PRIVATE BODY",
+        "HIDDEN FUTURE BODY",
+        "STORY FIRST BODY"
+      ],
+      "actual": "/?page_id=4",
+      "overflow": false
+    },
+    {
+      "path": "/?page=2",
+      "expected": "FRONT SECOND BODY",
+      "excluded": [
+        "FRONT FIRST BODY"
+      ],
+      "actual": "/?page=2",
+      "overflow": false
+    },
+    {
+      "path": "/?page_id=7&page=2",
+      "expected": "FRONT SECOND BODY",
+      "excluded": [
+        "FRONT FIRST BODY"
+      ],
+      "actual": "/?page_id=7&page=2",
+      "overflow": false
+    },
+    {
+      "path": "/?page_id=8",
+      "expected": "Archive page item",
+      "excluded": [
+        "POSTS PAGE EDITOR BODY MUST NEVER DISPLAY",
+        "FRONT FIRST BODY",
+        "FRONT SECOND BODY"
+      ],
+      "actual": "/?page_id=8",
+      "overflow": false
+    },
+    {
+      "path": "/?page=0",
+      "expected": "Page not found",
+      "excluded": [
+        "FRONT FIRST BODY"
+      ],
+      "actual": "/?page=0",
+      "overflow": false
+    },
+    {
+      "path": "/?page=2",
+      "expected": "Archive page item",
+      "excluded": [
+        "FRONT SECOND BODY",
+        "FRONT FIRST BODY"
+      ],
+      "actual": "/?page=2",
+      "overflow": false
+    },
+    {
+      "path": "/archives/4/2",
+      "expected": "STORY SECOND BODY",
+      "excluded": [
+        "STORY FIRST BODY"
+      ],
+      "actual": "/archives/4/2",
+      "overflow": false
+    },
+    {
+      "path": "/plain-parent/plain-child/2",
+      "expected": "CHILD SECOND BODY",
+      "excluded": [
+        "CHILD FIRST BODY"
+      ],
+      "actual": "/plain-parent/plain-child/2",
+      "overflow": false
+    },
+    {
+      "path": "/?p=4&page=2",
+      "expected": "STORY SECOND BODY",
+      "excluded": [
+        "STORY FIRST BODY"
+      ],
+      "actual": "/?p=4&page=2",
+      "overflow": false
+    },
+    {
+      "path": "/?p=4",
+      "expected": "STORY FIRST BODY",
+      "excluded": [
+        "STORY SECOND BODY"
+      ],
+      "actual": "/?p=4",
+      "overflow": false
+    },
+    {
+      "theme": "classic",
+      "clientBodyLink": "/?p=4&page=2",
+      "excludedFirst": true
+    },
+    {
+      "path": "/?page_id=6&page=2",
+      "expected": "CHILD SECOND BODY",
+      "excluded": [
+        "CHILD FIRST BODY"
+      ],
+      "actual": "/?page_id=6&page=2",
+      "overflow": false
+    },
+    {
+      "path": "/?p=9&page=2",
+      "expected": "password",
+      "excluded": [
+        "SECRET FIRST BODY",
+        "SECRET SECOND BODY"
+      ],
+      "actual": "/?p=9&page=2",
+      "overflow": false
+    },
+    {
+      "path": "/?p=11",
+      "expected": "Page not found",
+      "excluded": [
+        "HIDDEN DRAFT BODY",
+        "HIDDEN PRIVATE BODY",
+        "HIDDEN FUTURE BODY",
+        "STORY FIRST BODY"
+      ],
+      "actual": "/?p=11",
+      "overflow": false
+    },
+    {
+      "path": "/?p=12",
+      "expected": "Page not found",
+      "excluded": [
+        "HIDDEN DRAFT BODY",
+        "HIDDEN PRIVATE BODY",
+        "HIDDEN FUTURE BODY",
+        "STORY FIRST BODY"
+      ],
+      "actual": "/?p=12",
+      "overflow": false
+    },
+    {
+      "path": "/?p=13",
+      "expected": "Page not found",
+      "excluded": [
+        "HIDDEN DRAFT BODY",
+        "HIDDEN PRIVATE BODY",
+        "HIDDEN FUTURE BODY",
+        "STORY FIRST BODY"
+      ],
+      "actual": "/?p=13",
+      "overflow": false
+    },
+    {
+      "path": "/?p=0",
+      "expected": "Page not found",
+      "excluded": [
+        "HIDDEN DRAFT BODY",
+        "HIDDEN PRIVATE BODY",
+        "HIDDEN FUTURE BODY",
+        "STORY FIRST BODY"
+      ],
+      "actual": "/?p=0",
+      "overflow": false
+    },
+    {
+      "path": "/?p[]=4",
+      "expected": "Page not found",
+      "excluded": [
+        "HIDDEN DRAFT BODY",
+        "HIDDEN PRIVATE BODY",
+        "HIDDEN FUTURE BODY",
+        "STORY FIRST BODY"
+      ],
+      "actual": "/?p[]=4",
+      "overflow": false
+    },
+    {
+      "path": "/?p=4&p=5",
+      "expected": "Page not found",
+      "excluded": [
+        "HIDDEN DRAFT BODY",
+        "HIDDEN PRIVATE BODY",
+        "HIDDEN FUTURE BODY",
+        "STORY FIRST BODY"
+      ],
+      "actual": "/?p=4&p=5",
+      "overflow": false
+    },
+    {
+      "path": "/?p=4&page=0",
+      "expected": "Page not found",
+      "excluded": [
+        "HIDDEN DRAFT BODY",
+        "HIDDEN PRIVATE BODY",
+        "HIDDEN FUTURE BODY",
+        "STORY FIRST BODY"
+      ],
+      "actual": "/?p=4&page=0",
+      "overflow": false
+    },
+    {
+      "path": "/?page_id=4",
+      "expected": "Page not found",
+      "excluded": [
+        "HIDDEN DRAFT BODY",
+        "HIDDEN PRIVATE BODY",
+        "HIDDEN FUTURE BODY",
+        "STORY FIRST BODY"
+      ],
+      "actual": "/?page_id=4",
+      "overflow": false
+    },
+    {
+      "path": "/?page=2",
+      "expected": "FRONT SECOND BODY",
+      "excluded": [
+        "FRONT FIRST BODY"
+      ],
+      "actual": "/?page=2",
+      "overflow": false
+    },
+    {
+      "path": "/?page_id=7&page=2",
+      "expected": "FRONT SECOND BODY",
+      "excluded": [
+        "FRONT FIRST BODY"
+      ],
+      "actual": "/?page_id=7&page=2",
+      "overflow": false
+    },
+    {
+      "path": "/?page_id=8",
+      "expected": "Archive page item",
+      "excluded": [
+        "POSTS PAGE EDITOR BODY MUST NEVER DISPLAY",
+        "FRONT FIRST BODY",
+        "FRONT SECOND BODY"
+      ],
+      "actual": "/?page_id=8",
+      "overflow": false
+    },
+    {
+      "path": "/?page=0",
+      "expected": "Page not found",
+      "excluded": [
+        "FRONT FIRST BODY"
+      ],
+      "actual": "/?page=0",
+      "overflow": false
+    },
+    {
+      "path": "/?page=2",
+      "expected": "Archive page item",
+      "excluded": [
+        "FRONT SECOND BODY",
+        "FRONT FIRST BODY"
+      ],
+      "actual": "/?page=2",
+      "overflow": false
+    },
+    {
+      "path": "/archives/4/2",
+      "expected": "STORY SECOND BODY",
+      "excluded": [
+        "STORY FIRST BODY"
+      ],
+      "actual": "/archives/4/2",
+      "overflow": false
+    },
+    {
+      "path": "/plain-parent/plain-child/2",
+      "expected": "CHILD SECOND BODY",
+      "excluded": [
+        "CHILD FIRST BODY"
+      ],
+      "actual": "/plain-parent/plain-child/2",
+      "overflow": false
+    },
+    {
+      "path": "/?p=4&page=2",
+      "expected": "STORY SECOND BODY",
+      "excluded": [
+        "STORY FIRST BODY"
+      ],
+      "actual": "/?p=4&page=2",
+      "overflow": false
+    }
+  ],
+  "unlock": [
+    {
+      "theme": "twentytwentyfive",
+      "lockedBodyExcluded": true,
+      "actualSubmit": true,
+      "secondBodyOnly": true,
+      "queryPreserved": true
+    },
+    {
+      "theme": "classic",
+      "lockedBodyExcluded": true,
+      "actualSubmit": true,
+      "secondBodyOnly": true,
+      "queryPreserved": true
+    }
+  ],
+  "widths": [
+    {
+      "width": 1440,
+      "customInputFocused": true,
+      "tabDestination": {
+        "tag": "INPUT",
+        "id": "",
+        "value": "category"
+      },
+      "settings": {
+        "width": 1440,
+        "scroll": 1440,
+        "overflow": false,
+        "radios": 6,
+        "bodyFont": "-apple-system, \"system-ui\", \"Segoe UI\", Roboto, Oxygen-Sans, Ubuntu, Cantarell, \"Helvetica Neue\", sans-serif",
+        "bodySize": "13px"
+      },
+      "public": {
+        "width": 1440,
+        "scroll": 1440,
+        "overflow": false
+      }
+    },
+    {
+      "width": 768,
+      "customInputFocused": true,
+      "tabDestination": {
+        "tag": "INPUT",
+        "id": "",
+        "value": "category"
+      },
+      "settings": {
+        "width": 768,
+        "scroll": 768,
+        "overflow": false,
+        "radios": 6,
+        "bodyFont": "-apple-system, \"system-ui\", \"Segoe UI\", Roboto, Oxygen-Sans, Ubuntu, Cantarell, \"Helvetica Neue\", sans-serif",
+        "bodySize": "13px"
+      },
+      "public": {
+        "width": 768,
+        "scroll": 768,
+        "overflow": false
+      }
+    },
+    {
+      "width": 375,
+      "customInputFocused": true,
+      "tabDestination": {
+        "tag": "INPUT",
+        "id": "",
+        "value": "category"
+      },
+      "settings": {
+        "width": 375,
+        "scroll": 375,
+        "overflow": false,
+        "radios": 6,
+        "bodyFont": "-apple-system, \"system-ui\", \"Segoe UI\", Roboto, Oxygen-Sans, Ubuntu, Cantarell, \"Helvetica Neue\", sans-serif",
+        "bodySize": "13px"
+      },
+      "public": {
+        "width": 375,
+        "scroll": 375,
+        "overflow": false
+      }
+    }
+  ],
+  "sourceLinks": [
+    {
+      "defaultSourceCommentLink": "/?p=4&page=2&commentPage=2#comments",
+      "actualNativeDestination": "/?p=4&page=2&commentPage=2",
+      "secondBodyOnly": true,
+      "secondCommentPage": true
+    },
+    {
+      "nativeQueryLoopFirst": "Archive page item 5",
+      "nativeQueryLoopSecond": "Archive page item 4",
+      "link": "/?p=4&page=2&query-4-page=2",
+      "actual": "/?p=4&page=2&query-4-page=2",
+      "bodyPagePreserved": true
+    },
+    {
+      "staticFront": "/?page=2",
+      "frontPageTemplate": true,
+      "secondBodyOnly": true
+    },
+    {
+      "staticFront": "/?page_id=7&page=2",
+      "frontPageTemplate": true,
+      "secondBodyOnly": true
+    },
+    {
+      "postsPage": "/?page_id=8",
+      "actualHomeTemplate": true,
+      "noEditorBody": true
+    },
+    {
+      "numericStaticFront": "/page/2",
+      "secondBody": true
+    }
+  ],
+  "heldIdentity": {
+    "actualHeldResponse": {
+      "path": "/api/public/resolve",
+      "query": "?path=%2F%3Fp%3D10",
+      "method": "GET",
+      "status": 200,
+      "id": 10,
+      "slug": "reusable-slug-identity"
+    },
+    "renamedOriginalId": 10,
+    "reusedSlugId": 21,
+    "settledURL": "/?p=10",
+    "actual404": true,
+    "foreignBodyExcluded": true,
+    "explicitReopenOriginal": true
+  },
+  "keyboard": {
+    "nativeArrowDownDay": true,
+    "nativeArrowUpPlain": true,
+    "noSaveOnRadioChange": true,
+    "customInputFocusAndTabOrder": true,
+    "realEnterSave": true,
+    "oldCustomExactAfterReload": "/posts/%postname%/"
+  },
+  "classicWidths": [
+    {
+      "width": 1440,
+      "bodyPage2Only": true,
+      "noOverflow": true
+    },
+    {
+      "width": 768,
+      "bodyPage2Only": true,
+      "noOverflow": true
+    },
+    {
+      "width": 375,
+      "bodyPage2Only": true,
+      "noOverflow": true
+    }
+  ]
+}
