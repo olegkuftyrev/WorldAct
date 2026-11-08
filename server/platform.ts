@@ -75,7 +75,7 @@ const safeUrl = z
     "Use an HTTP(S), relative, or email URL.",
   );
 const docFields =
-  'id,slug,title,type,theme,source_hash AS "sourceHash",source_metadata AS "sourceMetadata",content,raw_content AS "rawContent",blocks,version,updated_at AS "updatedAt"';
+  'id,slug,title,type,theme,area,source_hash AS "sourceHash",source_metadata AS "sourceMetadata",content,raw_content AS "rawContent",blocks,version,updated_at AS "updatedAt"';
 const menuFields = 'id,name,location,items,updated_at AS "updatedAt"';
 function normalizedText(value: string) {
   const clean = plainText(value).trim();
@@ -598,7 +598,7 @@ router.post("/site-editor/documents", editors, async (req, res) => {
   const input = documentSchema.parse(req.body);
   const settings = await getSettings();
   const result = await pool.query(
-    `INSERT INTO site_documents(slug,title,type,content,blocks,raw_content,theme) VALUES($1,$2,$3,$4,$5,$6,$7) RETURNING ${docFields}`,
+    `INSERT INTO site_documents(slug,title,type,content,blocks,raw_content,theme,area) VALUES($1,$2,$3,$4,$5,$6,$7,$8) RETURNING ${docFields}`,
     [
       input.slug,
       normalizedText(input.title),
@@ -607,6 +607,7 @@ router.post("/site-editor/documents", editors, async (req, res) => {
       JSON.stringify(parseBlocks(input.blocks)),
       cleanRawContent(input.content),
       settings.theme,
+      input.type === "template-part" ? input.area ?? "uncategorized" : "uncategorized",
     ],
   );
   res.status(201).json({ document: result.rows[0] });
@@ -614,7 +615,7 @@ router.post("/site-editor/documents", editors, async (req, res) => {
 router.put("/site-editor/documents/:id", editors, async (req, res) => {
   const input = documentSchema.parse(req.body);
   const result = await pool.query(
-    `UPDATE site_documents SET slug=$1,title=$2,type=$3,content=$4,blocks=$5,raw_content=$6,version=version+1,updated_at=now() WHERE id=$7 ${input.version ? "AND version=$8" : ""} RETURNING ${docFields}`,
+    `UPDATE site_documents SET slug=$1,title=$2,type=$3,content=$4,blocks=$5,raw_content=$6,area=CASE WHEN $3::varchar='template-part' THEN COALESCE($8,area) ELSE 'uncategorized' END,source_hash=CASE WHEN slug<>$1::varchar OR type<>$3::varchar THEN NULL ELSE source_hash END,source_content=CASE WHEN slug<>$1::varchar OR type<>$3::varchar THEN NULL ELSE source_content END,source_metadata=CASE WHEN slug<>$1::varchar OR type<>$3::varchar THEN '{}'::jsonb ELSE source_metadata END,version=version+1,updated_at=now() WHERE id=$7 ${input.version ? "AND version=$9" : ""} RETURNING ${docFields}`,
     [
       input.slug,
       normalizedText(input.title),
@@ -623,6 +624,7 @@ router.put("/site-editor/documents/:id", editors, async (req, res) => {
       JSON.stringify(parseBlocks(input.blocks)),
       cleanRawContent(input.content),
       parseId(req.params.id),
+      input.area ?? null,
       ...(input.version ? [input.version] : []),
     ],
   );

@@ -24,7 +24,8 @@ import {
   renderBlock,
   renderSiteDocument,
 } from "./block-renderer.js";
-import { themeIds, readThemeDesign } from "./themes.js";
+import { themeIds, readThemeDesign, getBundledTheme, resetBundledDocument } from "./themes.js";
+import { templatePartAreas, sourceTemplatePartArea } from "../shared/template-areas.js";
 import {hasPostAccess,assertPostAccess} from "./core.js";
 import { withPreviewAutosave } from "./post-preview.js";
 import { postFormats } from "../shared/post-formats.js";
@@ -496,6 +497,7 @@ router.get("/wp-json/wp/v2/themes", contentReaders, async (_req, res) => {
         { area: "header", label: "Header", area_tag: "header" },
         { area: "footer", label: "Footer", area_tag: "footer" },
         { area: "uncategorized", label: "General", area_tag: "div" },
+        { area: "navigation-overlay", label: "Navigation Overlay", area_tag: "div" },
       ],
       theme_supports: {
         "block-templates": true,
@@ -522,6 +524,9 @@ for (const [name, base, label] of [
     }),
   );
 function templatePartRecord(row: any, theme: string) {
+  const area=row.area || "uncategorized";
+  const sourceArea=row.sourceMetadata?.area ?? sourceTemplatePartArea(getBundledTheme(theme)?.themeJSON || {},row.slug);
+  const custom=!row.sourceHash || row.rawContent !== row.sourceContent || area !== sourceArea;
   return {
     id: `${theme}//${row.slug}`,
     wp_id: row.id,
@@ -529,13 +534,13 @@ function templatePartRecord(row: any, theme: string) {
     theme,
     type: "wp_template_part",
     status: "publish",
-    source: row.sourceHash && row.rawContent === row.sourceContent ? "theme" : "custom",
+    source: custom ? "custom" : "theme",
     origin: row.sourceHash ? "theme" : "custom",
-    is_custom: !row.sourceHash || row.rawContent !== row.sourceContent,
+    is_custom: custom,
     has_theme_file: !!row.sourceHash,
     title: { raw: row.title, rendered: escapeHTML(row.title) },
     content: { raw: row.rawContent || row.content, rendered: row.content },
-    area: ["header", "footer"].includes(row.slug) ? row.slug : "uncategorized",
+    area,
     version: row.version,
   };
 }
@@ -546,7 +551,7 @@ router.options(
     allow(req, res, !req.params.id);
     res.json({
       schema: {
-        properties: { title: { type: "object" }, content: { type: "object" } },
+        properties: { title: { type: "object" }, content: { type: "object" }, area: { type: "string", enum: templatePartAreas, default: "uncategorized", context: ["view","edit"] } },
       },
     });
   },
@@ -555,6 +560,7 @@ router.get("/wp-json/wp/v2/template-parts{/*id}", admin, async (req, res) => {
   const settings = await getSettings();
   const requested = req.params.id ? (Array.isArray(req.params.id) ? req.params.id.join("/") : String(req.params.id)) : "";
   const theme = z.enum(themeIds).parse(requested.includes("//") ? requested.split("//")[0] : req.query.wp_theme || settings.theme);
+  const area=z.enum(templatePartAreas).optional().parse(req.query.area);
   const itemSlug = req.params.id
     ? (Array.isArray(req.params.id)
         ? req.params.id.join("/")
@@ -565,30 +571,52 @@ router.get("/wp-json/wp/v2/template-parts{/*id}", admin, async (req, res) => {
     : null;
   const docs = (
     await pool.query(
-      `SELECT id,slug,title,content,raw_content AS "rawContent",source_hash AS "sourceHash",source_content AS "sourceContent",version FROM site_documents WHERE type='template-part' AND theme=$2 AND ($1::text IS NULL OR slug=$1) ORDER BY title,id`,
-      [itemSlug,theme],
+      `SELECT id,slug,title,area,content,raw_content AS "rawContent",source_hash AS "sourceHash",source_content AS "sourceContent",source_metadata AS "sourceMetadata",version FROM site_documents WHERE type='template-part' AND theme=$2 AND ($1::text IS NULL OR slug=$1) AND ($3::text IS NULL OR area=$3) ORDER BY title,id`,
+      [itemSlug,theme,area ?? null],
     )
   ).rows;
   const records = docs.map((doc) => templatePartRecord(doc, theme));
   if (itemSlug) {
     if (!records[0]) throw new HttpError(404, "Template part not found.");
-    res.setHeader("Allow", "GET, POST, PUT");
+    res.setHeader("Allow", "GET, POST, PUT, PATCH, DELETE");
     res.json(records[0]);
   } else res.json(records);
+});
+router.delete("/wp-json/wp/v2/template-parts{/*id}",admin,async(req,res)=>{
+  if(!req.params.id)throw new HttpError(404,"Template part not found.");
+  if(req.query.force!=="true")throw new HttpError(501,"Template parts cannot be moved to Trash. Use force=true.");
+  const requested=Array.isArray(req.params.id)?req.params.id.join("/"):String(req.params.id);
+  const settings=await getSettings(),theme=z.enum(themeIds).parse(requested.includes("//")?requested.split("//")[0]:settings.theme),slug=requested.split("//").pop()!;
+  const version=z.coerce.number().int().positive().optional().parse(req.query.version);
+  const db=await pool.connect();
+  try{
+    await db.query("BEGIN");
+    const row=(await db.query("SELECT * FROM site_documents WHERE type='template-part' AND theme=$1 AND slug=$2 FOR UPDATE",[theme,slug])).rows[0];
+    if(!row)throw new HttpError(404,"Template part not found.");
+    if(version!==undefined && version!==row.version)throw new HttpError(409,"This template part was changed elsewhere. Reload before deleting.");
+    const previous=templatePartRecord({...row,rawContent:row.raw_content,sourceHash:row.source_hash,sourceContent:row.source_content,sourceMetadata:row.source_metadata},theme);
+    if(row.source_hash){
+      if(!previous.is_custom)throw new HttpError(400,"This template part is supplied by the theme and has no customizations to clear.");
+      await resetBundledDocument(row.id,db);
+    }else await db.query("DELETE FROM site_documents WHERE id=$1",[row.id]);
+    await db.query("COMMIT");res.json({deleted:true,previous});
+  }catch(error){await db.query("ROLLBACK");throw error;}
+  finally{db.release();}
 });
 router.all(
   "/wp-json/wp/v2/template-parts{/*id}",
   admin,
   async (req: AuthRequest, res, next) => {
     if (!["POST", "PUT", "PATCH"].includes(req.method)) return next();
-    const input = entityInput.parse(req.body),
+    const input = entityInput.extend({area:z.enum(templatePartAreas).optional(),theme:z.enum(themeIds).optional()}).parse(req.body),
       settings = await getSettings(),
       raw =
         input.content === undefined
           ? undefined
           : cleanRawContent(input.content);
     const requested = req.params.id ? (Array.isArray(req.params.id) ? req.params.id.join("/") : String(req.params.id)) : "";
-    const theme = z.enum(themeIds).parse(requested.includes("//") ? requested.split("//")[0] : settings.theme);
+    const theme = z.enum(themeIds).parse(requested.includes("//") ? requested.split("//")[0] : input.theme || settings.theme);
+    if(input.theme && input.theme!==theme)throw new HttpError(400,"The template part theme must match its identifier.");
     const itemSlug = req.params.id
       ? (Array.isArray(req.params.id)
           ? req.params.id.join("/")
@@ -616,7 +644,7 @@ router.all(
           );
         doc = (
           await db.query(
-            "UPDATE site_documents SET title=$1,content=$2,raw_content=$3,blocks=$4::jsonb,version=version+1,updated_at=now() WHERE id=$5 RETURNING *",
+            "UPDATE site_documents SET title=$1,content=$2,raw_content=$3,blocks=$4::jsonb,area=COALESCE($6,area),version=version+1,updated_at=now() WHERE id=$5 RETURNING *",
             [
               input.title === undefined ? doc.title : plainText(input.title),
               raw === undefined ? doc.content : cleanContent(raw),
@@ -625,6 +653,7 @@ router.all(
                 raw === undefined ? doc.blocks : durableBlocks(raw),
               ),
               doc.id,
+              input.area ?? null,
             ],
           )
         ).rows[0];
@@ -633,7 +662,7 @@ router.all(
         const value = raw || "";
         doc = (
           await db.query(
-            "INSERT INTO site_documents(slug,title,type,content,raw_content,blocks,theme) VALUES($1,$2,'template-part',$3,$4,$5::jsonb,$6) RETURNING *",
+            "INSERT INTO site_documents(slug,title,type,content,raw_content,blocks,theme,area) VALUES($1,$2,'template-part',$3,$4,$5::jsonb,$6,$7) RETURNING *",
             [
               itemSlug,
               plainText(input.title || "Template part"),
@@ -641,6 +670,7 @@ router.all(
               value,
               JSON.stringify(durableBlocks(value)),
               theme,
+              input.area ?? "uncategorized",
             ],
           )
         ).rows[0];
@@ -649,7 +679,7 @@ router.all(
       await db.query("COMMIT");
       res.json(
         templatePartRecord(
-          { ...doc, rawContent: doc.raw_content, sourceHash: doc.source_hash, sourceContent: doc.source_content },
+          { ...doc, rawContent: doc.raw_content, sourceHash: doc.source_hash, sourceContent: doc.source_content, sourceMetadata: doc.source_metadata },
           theme,
         ),
       );

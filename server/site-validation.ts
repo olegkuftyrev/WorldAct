@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { templatePartAreas } from "../shared/template-areas.js";
 import { postFormats } from "../shared/post-formats.js";
 import { HttpError, plainText } from "./utils.js";
 import { normalizeFixedTimezone } from "./timezone.js";
@@ -173,6 +174,7 @@ export const documentSchema = z
     slug: text(1, 160).regex(/^[a-z0-9-]+$/),
     title: text(1, 200),
     type: z.enum(["template", "template-part", "pattern"]),
+    area: z.enum(templatePartAreas).optional(),
     content: z.string().max(1_000_000).default(""),
     blocks: z.unknown().optional(),
     version: z.number().int().positive().optional(),

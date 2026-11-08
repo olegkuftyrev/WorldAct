@@ -82,7 +82,7 @@ export async function readDesign() {
   const [styles, documents, menus, plugins] = await Promise.all([
     pool.query("SELECT data FROM site_styles WHERE id=1"),
     pool.query(
-      'SELECT id,slug,title,type,theme,source_hash AS "sourceHash",source_metadata AS "sourceMetadata",content,raw_content AS "rawContent",blocks,version,updated_at AS "updatedAt" FROM site_documents WHERE theme=$1 ORDER BY type,title',
+      'SELECT id,slug,title,type,theme,area,source_hash AS "sourceHash",source_metadata AS "sourceMetadata",content,raw_content AS "rawContent",blocks,version,updated_at AS "updatedAt" FROM site_documents WHERE theme=$1 ORDER BY type,title',
       [settings.theme],
     ),
     pool.query(

@@ -238,6 +238,7 @@ export type SiteTemplate = {
   slug: string;
   title: string;
   type: "template" | "template-part" | "pattern";
+  area?: "uncategorized" | "header" | "footer" | "navigation-overlay";
   content: string;
   rawContent?: string;
   permalink?: string;

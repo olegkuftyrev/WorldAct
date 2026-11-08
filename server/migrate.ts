@@ -23,6 +23,7 @@ export async function migrate() {
       "blocks-schema.sql",
       "application-passwords-schema.sql",
       "themes-schema.sql",
+      "template-areas-schema.sql",
       "media-schema.sql",
       "edit-locks-schema.sql",
       "site-identity-schema.sql",

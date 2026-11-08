@@ -11,7 +11,8 @@ import { safeStoredFile } from "./media-files.js";
 import { remapImportedBlockReferences, type ImportedBlockEntity, type BlockReferenceOptions } from "./block-portability.js";
 import { settingSchema, styleSchema, menuSchema, validMenu, documentSchema, normalizedText, validateExtensionSettings } from "./site-validation.js";
 import { postPermalink } from "./permalinks.js";
-import { validateThemeDesign } from "./themes.js";
+import { validateThemeDesign, getBundledTheme } from "./themes.js";
+import { sourceTemplatePartArea } from "../shared/template-areas.js";
 import { inspectFont, bundledFontCollection, validateFontChoices } from "./fonts.js";
 
 export const MAX_ARCHIVE_FILE_BYTES = 32 * 1024 * 1024;
@@ -180,8 +181,9 @@ export class SiteImport {
     const docs = z.array(z.record(z.string(), z.unknown())).max(1000).parse(this.input.documents || []);
     const keys = new Set<string>();
     for (const item of docs) {
-      const doc = documentSchema.extend({ content: z.string().max(MAX_STORED_CONTENT_BYTES) }).parse({ slug: item.slug, title: item.title, type: item.type, content: item.content, blocks: item.blocks });
+      const doc = documentSchema.extend({ content: z.string().max(MAX_STORED_CONTENT_BYTES) }).parse({ slug: item.slug, title: item.title, type: item.type, content: item.content, blocks: item.blocks, area: item.area });
       const theme = themes.parse(item.theme || this.sourceTheme);
+      if(doc.type==='template-part' && doc.area===undefined)doc.area=sourceTemplatePartArea(getBundledTheme(theme)?.themeJSON || {},doc.slug);
       const key = `${theme}:${doc.type}:${doc.slug}`;
       if (keys.has(key)) throw new HttpError(400, "Imported design document keys must be unique.");
       keys.add(key);
@@ -400,7 +402,7 @@ export class SiteImport {
     for (const doc of this.docs) {
       const value = remapImportedBlockReferences(doc.raw_content, doc.blocks, entities, { ...options, documentTheme: doc.theme });
       for (const warning of value.warnings) this.warn(warning);
-      await this.client.query("UPDATE site_documents SET slug=$1,title=$2,content=$3,raw_content=$4,blocks=$5::jsonb,version=version+1,updated_at=now() WHERE id=$6", [doc.slug, normalizedText(doc.title), value.content, value.rawContent, JSON.stringify(value.blocks), doc.id]);
+      await this.client.query("UPDATE site_documents SET slug=$1,title=$2,content=$3,raw_content=$4,blocks=$5::jsonb,area=$7,version=version+1,updated_at=now() WHERE id=$6", [doc.slug, normalizedText(doc.title), value.content, value.rawContent, JSON.stringify(value.blocks), doc.id,doc.type==='template-part'?doc.area ?? 'uncategorized':'uncategorized']);
     }
     await this.client.query("SELECT pg_advisory_xact_lock(hashtext('worldact-menu-locations'))");
     const assigned = new Set<string>();

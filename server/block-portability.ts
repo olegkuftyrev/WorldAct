@@ -115,6 +115,14 @@ export function remapImportedBlockReferences(
   };
   const reference = (name: string, attributes: Record<string, unknown>) => {
     attributes = rewriteValues(attributes) as Record<string, unknown>;
+    if(options.documents && name==='core/navigation' && typeof attributes.overlay==='string' && attributes.overlay){
+      const overlay=attributes.overlay, separator=overlay.includes('//')?'//':'/';
+      const pieces=overlay.split(separator), sourceSlug=pieces.pop() || '';
+      const theme=pieces.join(separator) || String(attributes.theme || options.documentTheme || '');
+      const target=options.documents.get(`${theme}:template-part:${sourceSlug}`) || (!theme?options.documents.get(`template-part:${sourceSlug}`):undefined);
+      if(target)attributes.overlay=theme?`${theme}//${target}`:target;
+      else {warn(`Detached navigation overlay ${sourceSlug}: its template part is not included in this import.`);delete attributes.overlay;}
+    }
     if (options.documents && ["core/template-part", "core/pattern"].includes(name)) {
       const type = name === "core/template-part" ? "template-part" : "pattern";
       const sourceSlug = String(attributes.slug || "").split("/").pop() || "";
