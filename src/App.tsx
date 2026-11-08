@@ -22,6 +22,7 @@ import {
   SiteEditor,
   ToolsSuite,
   Themes,
+  Fonts,
   LostPassword,
   ResetPassword,
 } from "./screens/Platform";
@@ -238,6 +239,7 @@ export default function App() {
             <Route path="appearance" element={user?.role === "administrator" ? <Themes /> : <Navigate to="/admin" replace />} />
             <Route path="appearance/editor" element={user?.role === "administrator" ? <SiteEditor /> : <Navigate to="/admin" replace />} />
             <Route path="appearance/menus" element={user?.role === "administrator" ? <Menus /> : <Navigate to="/admin" replace />} />
+            <Route path="appearance/fonts" element={user?.role === "administrator" ? <Fonts /> : <Navigate to="/admin" replace />} />
             <Route path="plugins" element={<Plugins />} />
             <Route path="tools" element={<ToolsRoute />} />
             <Route path="about" element={<About />} />
@@ -362,6 +364,7 @@ function Login({ serverError }: { serverError: string }) {
     location = useLocation();
   const [login, setLogin] = useState(""),
     [password, setPassword] = useState(""),
+    [remember, setRemember] = useState(false),
     [visible, setVisible] = useState(false),
     [error, setError] = useState(serverError || (new URLSearchParams(location.search).get("login_error")==="1"?"The username or password is incorrect. Please try again.":"")),
     [busy, setBusy] = useState(false);
@@ -372,7 +375,7 @@ function Login({ serverError }: { serverError: string }) {
     try {
       const data = await api<{ user: User }>(
         "/auth/login",
-        json("POST", { login, password }),
+        json("POST", { login, password, remember }),
       );
       setUser(data.user);
       navigate(
@@ -450,6 +453,11 @@ function Login({ serverError }: { serverError: string }) {
             </button>
           </div>
         </div>
+        <p className="forgetmenot">
+          <input name="rememberme" type="checkbox" id="rememberme" value="forever"
+            checked={remember} onChange={event => setRemember(event.target.checked)} />
+          <label htmlFor="rememberme">Remember Me</label>
+        </p>
         <p className="submit">
           <button
             className="button button-primary button-large"
@@ -482,7 +490,15 @@ function AdminShell({ children, editor = false }: { children?: ReactNode; editor
     [error, setError] = useState("");
   const settings = useResource<{ settings: Partial<Settings> }>("/public/site");
   const administrator = user?.role === "administrator",
-    canPages = administrator || user?.role === "editor";
+    canPages = administrator || user?.role === "editor",
+    canCreatePosts = Boolean(user && user.role !== "subscriber"),
+    canUpload = Boolean(user && user.role !== "subscriber" && user.role !== "contributor");
+  const newActions = [
+    ...(canCreatePosts ? [["Post", "/admin/posts/new"]] : []),
+    ...(canUpload ? [["Media", "/admin/media?upload=1"]] : []),
+    ...(canPages ? [["Page", "/admin/pages/new"]] : []),
+    ...(administrator ? [["User", "/admin/users?new=1"]] : []),
+  ];
   useEffect(() => {
     api<{ preferences: { collapsedMenu?: boolean } }>("/profile")
       .then(({ preferences }) =>
@@ -527,7 +543,7 @@ function AdminShell({ children, editor = false }: { children?: ReactNode; editor
       to: "/admin/media",
       label: "Media",
       icon: "admin-media",
-      sub: [["Library", "/admin/media"]],
+      sub: [["Library", "/admin/media"], ["Add Media File", "/admin/media?upload=1"]],
     },
     {
       to: "/admin/pages",
@@ -547,15 +563,17 @@ function AdminShell({ children, editor = false }: { children?: ReactNode; editor
         ...(administrator ? [["Themes", "/admin/appearance"]] : []),
         ["Editor", "/admin/appearance/editor"],
         ["Menus", "/admin/appearance/menus"],
+        ...(administrator ? [["Fonts", "/admin/appearance/fonts"]] : []),
       ],
     },
-    { to: "/admin/plugins", label: "Plugins", icon: "admin-plugins" },
+    { to: "/admin/plugins", label: "Plugins", icon: "admin-plugins", sub: [["Installed Plugins", "/admin/plugins"], ["Add Plugin", "/admin/plugins?tab=add"]] },
     {
       to: "/admin/users",
       label: "Users",
       icon: "admin-users",
       sub: [
         ["All Users", "/admin/users"],
+        ["Add User", "/admin/users?new=1"],
         ["Profile", "/admin/profile"],
       ],
     },
@@ -646,33 +664,17 @@ function AdminShell({ children, editor = false }: { children?: ReactNode; editor
                 </Link>
               </li>
             )}
-            <li className="menupop">
-              <Link className="ab-item" to="/admin/posts/new">
+            {newActions.length > 0 && <li className="menupop">
+              <Link className="ab-item" to={newActions[0][1]} aria-haspopup="true">
                 <Icon name="plus" />
                 <span>New</span>
               </Link>
               <div className="ab-sub-wrapper">
                 <ul className="ab-submenu">
-                  <li>
-                    <Link className="ab-item" to="/admin/posts/new">
-                      Post
-                    </Link>
-                  </li>
-                  {canPages && (
-                    <li>
-                      <Link className="ab-item" to="/admin/pages/new">
-                        Page
-                      </Link>
-                    </li>
-                  )}
-                  <li>
-                    <Link className="ab-item" to="/admin/media">
-                      Media
-                    </Link>
-                  </li>
+                  {newActions.map(([label, to]) => <li key={to}><Link className="ab-item" to={to}>{label}</Link></li>)}
                 </ul>
               </div>
-            </li>
+            </li>}
           </ul>
           <ul className="ab-top-secondary ab-top-menu">
             <li className={`menupop ${menu ? "hover" : ""}`}>

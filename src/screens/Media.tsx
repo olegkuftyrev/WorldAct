@@ -4,6 +4,7 @@ import {
   useNavigate,
   useParams,
   useSearchParams,
+  useLocation,
 } from "react-router-dom";
 import { api, json, date, type Media, type Post } from "../api";
 import {
@@ -21,6 +22,7 @@ import {
   useListTablePreferences,
 } from "../components/ScreenOptions";
 import MediaImageEditor from "../components/MediaImageEditor";
+import { mediaMetadataDraft, mergeMediaDetails, type MediaMetadataDraft } from "../mediaDetailsState";
 import "../media.css";
 
 type MediaItem = Media & {
@@ -46,6 +48,7 @@ type BulkResult = {
   updated: number;
   errors: { id: number; message: string }[];
 };
+const canUploadMedia = (role: string | undefined) => Boolean(role && role !== "contributor" && role !== "subscriber");
 export function MediaPreview({
   item,
   full = false,
@@ -87,7 +90,17 @@ export function MediaPreview({
 export default function MediaLibrary() {
   const { user } = useContext(Session),
     { id } = useParams(),
+    route = useLocation(),
     navigate = useNavigate();
+  const actor = user ? `${user.id}:${user.role}` : "anonymous";
+  const scopeRef = useRef({ key: route.key, actor, active: true });
+  if (scopeRef.current.key !== route.key || scopeRef.current.actor !== actor) {
+    scopeRef.current.active = false;
+    scopeRef.current = { key: route.key, actor, active: true };
+  }
+  const scope = scopeRef.current;
+  const ownsOpening = () => scope.active && scopeRef.current === scope;
+  useEffect(() => { scope.active = true; return () => { scope.active = false; }; }, [scope]);
   const [params, setParams] = useSearchParams();
   const preferences = useListTablePreferences("media");
   const type = ["image", "audio", "video", "document"].includes(
@@ -120,8 +133,8 @@ export default function MediaLibrary() {
   const detail = useResource<{ media: MediaItem }>(
     id ? `/media/${encodeURIComponent(id)}` : null,
   );
-  const [uploader, setUploader] = useState(false),
-    [selected, setSelected] = useState<MediaItem | null>(null);
+  const uploader = canUploadMedia(user?.role) && params.get("upload") === "1";
+  const [selected, setSelected] = useState<MediaItem | null>(null);
   const [searchDraft, setSearchDraft] = useState(search),
     [monthDraft, setMonthDraft] = useState(month);
   const [checked, setChecked] = useState<number[]>([]),
@@ -133,10 +146,19 @@ export default function MediaLibrary() {
   const [deleting, setDeleting] = useState<number[] | null>(null),
     [attaching, setAttaching] = useState<number[] | null>(null);
   const fileInput = useRef<HTMLInputElement>(null);
+  const navigationDrafts = useRef(new Map<number, MediaMetadataDraft>());
+  const navigationSet = useRef({ actor, query: query.toString() });
+  if (navigationSet.current.actor !== actor || navigationSet.current.query !== query.toString()) {
+    navigationDrafts.current.clear();
+    navigationSet.current = { actor, query: query.toString() };
+  }
+  const detailBaseline = useRef<MediaItem | null>(null);
+  const navigationFocus = useRef<"previous" | "next" | null>(null);
+  const previousButton = useRef<HTMLButtonElement>(null), nextButton = useRef<HTMLButtonElement>(null);
   const items = resource.data?.media || [],
     pagination = resource.data?.pagination;
   const currentPage = pagination?.page || page;
-  const canUpload = user?.role !== "contributor" && user?.role !== "subscriber";
+  const canUpload = canUploadMedia(user?.role);
   useEffect(() => {
     setSearchDraft(search);
     setMonthDraft(month);
@@ -144,8 +166,14 @@ export default function MediaLibrary() {
     setSelecting(false);
   }, [search, month, type, unattached, page]);
   useEffect(() => {
-    setSelected(detail.data?.media || null);
+    const loaded = detail.data?.media.id === Number(id) ? detail.data.media : null;
+    detailBaseline.current = loaded;
+    const draft = loaded && navigationDrafts.current.get(loaded.id);
+    setSelected(loaded && draft ? { ...loaded, ...draft } : loaded);
   }, [detail.data, id]);
+  useEffect(() => {
+    setBusy(false); setError(""); setNotice(""); setDeleting(null); setAttaching(null);
+  }, [scope]);
   function change(values: Record<string, string>) {
     const next = new URLSearchParams(params);
     for (const [key, value] of Object.entries(values))
@@ -154,11 +182,15 @@ export default function MediaLibrary() {
     setParams(next);
     setChecked([]);
   }
-  function open(item: MediaItem) {
+  function open(item: MediaItem, adjacent = false) {
+    if (!adjacent) navigationDrafts.current.clear();
+    scope.active = false;
     navigate(`/admin/media/${item.id}${params.size ? `?${params}` : ""}`);
   }
   function close() {
     if (!busy) {
+      navigationDrafts.current.clear();
+      scope.active = false;
       setSelected(null);
       navigate(`/admin/media${params.size ? `?${params}` : ""}`);
     }
@@ -174,17 +206,22 @@ export default function MediaLibrary() {
         body.append("file", file);
         await api("/media", { method: "POST", body });
         uploaded++;
+        if (!ownsOpening()) return;
       }
+      if (!ownsOpening()) return;
       setNotice(`${uploaded} ${uploaded === 1 ? "file" : "files"} uploaded.`);
       await resource.reload();
     } catch (reason) {
+      if (!ownsOpening()) return;
       setError(
         `${uploaded ? `${uploaded} files uploaded. ` : ""}${errorText(reason)}`,
       );
       await resource.reload();
     } finally {
-      setBusy(false);
-      if (fileInput.current) fileInput.current.value = "";
+      if (ownsOpening()) {
+        setBusy(false);
+        if (fileInput.current) fileInput.current.value = "";
+      }
     }
   }
   async function save(event: FormEvent) {
@@ -192,8 +229,9 @@ export default function MediaLibrary() {
     if (!selected) return;
     setBusy(true);
     setError("");
+    const submitted = selected;
     try {
-      await api(
+      const { media: updated } = await api<{ media: MediaItem }>(
         `/media/${selected.id}`,
         json("PUT", {
           title: selected.title,
@@ -203,12 +241,17 @@ export default function MediaLibrary() {
           commentStatus: selected.commentStatus || "open",
         }),
       );
+      if (!ownsOpening()) return;
+      if (updated.id !== submitted.id) return;
+      detailBaseline.current = updated;
+      setSelected(current => mergeMediaDetails(current, submitted, updated));
+      navigationDrafts.current.delete(submitted.id);
       setNotice("Attachment details saved.");
-      await Promise.all([resource.reload(), detail.reload()]);
+      await resource.reload();
     } catch (reason) {
-      setError(errorText(reason));
+      if (ownsOpening()) setError(errorText(reason));
     } finally {
-      setBusy(false);
+      if (ownsOpening()) setBusy(false);
     }
   }
   async function apply(
@@ -223,6 +266,7 @@ export default function MediaLibrary() {
         "/media/bulk",
         json("POST", { ids, action, ...(postId ? { postId } : {}) }),
       );
+      if (!ownsOpening()) return;
       setNotice(
         `${result.updated} ${result.updated === 1 ? "item" : "items"} ${action === "delete" ? "permanently deleted" : action === "attach" ? "attached" : "detached"}.`,
       );
@@ -235,6 +279,7 @@ export default function MediaLibrary() {
       setDeleting(null);
       setAttaching(null);
       await resource.reload();
+      if (!ownsOpening()) return;
       if (id && ids.includes(Number(id))) {
         if (
           action === "delete" &&
@@ -245,10 +290,10 @@ export default function MediaLibrary() {
         } else await detail.reload();
       }
     } catch (reason) {
-      setError(errorText(reason));
+      if (ownsOpening()) setError(errorText(reason));
       throw reason;
     } finally {
-      setBusy(false);
+      if (ownsOpening()) setBusy(false);
     }
   }
   function runBulk() {
@@ -272,6 +317,41 @@ export default function MediaLibrary() {
   }
   const allChecked =
     items.length > 0 && items.every((item) => checked.includes(item.id));
+  const selectedIndex = items.findIndex(item => item.id === Number(id));
+  const hasPrevious = selectedIndex > 0, hasNext = selectedIndex >= 0 && selectedIndex < items.length - 1;
+  function adjacent(direction: "previous" | "next") {
+    if (busy || detail.loading || !selected || (direction === "previous" ? !hasPrevious : !hasNext)) return;
+    // Keep unsaved fields while browsing this filtered page. Closing details
+    // retains the existing discard behavior; navigation never submits a draft.
+    if (detailBaseline.current?.id === selected.id)
+      navigationDrafts.current.set(selected.id, mediaMetadataDraft(selected, detailBaseline.current));
+    navigationFocus.current = direction;
+    open(items[selectedIndex + (direction === "previous" ? -1 : 1)], true);
+  }
+  useEffect(() => {
+    if (!id) navigationDrafts.current.clear();
+    if (!navigationFocus.current || !selected || selected.id !== Number(id) || detail.loading) return;
+    navigationFocus.current = null;
+  }, [id, selected?.id, detail.loading, scope]);
+  useEffect(() => {
+    if (!id || !selected || attaching || deleting) return;
+    const keydown = (event: KeyboardEvent) => {
+      const target = event.target instanceof Element ? event.target : null;
+      if (event.defaultPrevented || event.isComposing || !event.altKey || event.ctrlKey || event.metaKey || event.shiftKey ||
+        target?.closest('input,textarea,select,[contenteditable="true"],[role="textbox"]')) return;
+      if (event.key === "ArrowLeft" || event.key === "ArrowRight") {
+        event.preventDefault(); adjacent(event.key === "ArrowLeft" ? "previous" : "next");
+      }
+    };
+    window.addEventListener("keydown", keydown);
+    return () => window.removeEventListener("keydown", keydown);
+  });
+  const detailNavigation = <div className="media-details-navigation" aria-label="Attachment navigation">
+    <button ref={previousButton} type="button" className="editor-icon-button" aria-label="Previous media item" disabled={!hasPrevious || busy || detail.loading} onClick={() => adjacent("previous")}><Icon name="arrow-left-alt2" /></button>
+    <button ref={nextButton} type="button" className="editor-icon-button" aria-label="Next media item" disabled={!hasNext || busy || detail.loading} onClick={() => adjacent("next")}><Icon name="arrow-right-alt2" /></button>
+  </div>;
+  const initialNavigationFocus = navigationFocus.current === null ? undefined :
+    navigationFocus.current === "previous" ? (hasPrevious ? previousButton : nextButton) : (hasNext ? nextButton : previousButton);
   const pager = (
     <div className="tablenav-pages">
       <span className="displaying-num">
@@ -367,7 +447,7 @@ export default function MediaLibrary() {
         {canUpload && (
           <button
             className="page-title-action"
-            onClick={() => setUploader(!uploader)}
+            onClick={() => change({ upload: uploader ? "" : "1" })}
           >
             Add New Media File
           </button>
@@ -387,7 +467,7 @@ export default function MediaLibrary() {
           hidden
           onChange={(event) => void upload(event.target.files)}
         />
-        {uploader && (
+        {uploader && canUpload && (
           <div
             className="upload-ui"
             onDragOver={(event) => event.preventDefault()}
@@ -572,7 +652,7 @@ export default function MediaLibrary() {
               <button
                 className="button button-primary"
                 onClick={() => {
-                  setUploader(true);
+                  change({ upload: "1" });
                   fileInput.current?.click();
                 }}
               >
@@ -700,7 +780,7 @@ export default function MediaLibrary() {
         )}
         <div className="tablenav bottom">{pager}</div>
         {id && !attaching && !deleting && (detail.loading || detail.error) && (
-          <Modal title="Attachment details" close={close}>
+          <Modal title="Attachment details" close={close} actions={detailNavigation}>
             <ResourceState
               loading={detail.loading}
               error={detail.error}
@@ -709,21 +789,26 @@ export default function MediaLibrary() {
           </Modal>
         )}
         {selected &&
+          selected.id === Number(id) &&
           id &&
           !attaching &&
           !deleting &&
           !detail.loading &&
           !detail.error && (
-            <Modal title="Attachment details" close={close}>
+            <Modal key={route.key} title="Attachment details" close={close} actions={detailNavigation} initialFocus={initialNavigationFocus}>
+              <p className="screen-reader-text" role="status" aria-live="polite">
+                {selected.title}. {selectedIndex >= 0 ? `Item ${selectedIndex + 1} of ${items.length} on page ${currentPage}.` : ""}
+              </p>
               <form onSubmit={save} className="attachment-details-layout">
                 <div className="attachment-preview">
                   <MediaPreview item={selected} full />
                   <MediaImageEditor
+                    key={route.key}
                     media={selected}
                     onUpdate={(item) => {
-                      setSelected((current) =>
-                        current ? { ...current, ...item } : item,
-                      );
+                      if (!ownsOpening() || item.id !== Number(id)) return;
+                      detailBaseline.current = { ...detailBaseline.current, ...item };
+                      setSelected(current => mergeMediaDetails(current, null, item));
                       void resource.reload();
                     }}
                   />
@@ -869,9 +954,9 @@ export default function MediaLibrary() {
                         await navigator.clipboard.writeText(
                           new URL(selected.url, location.origin).href,
                         );
-                        setNotice("File URL copied.");
+                        if (ownsOpening()) setNotice("File URL copied.");
                       } catch {
-                        setError(
+                        if (ownsOpening()) setError(
                           "Select the file URL and copy it with your keyboard.",
                         );
                       }

@@ -125,6 +125,9 @@
 .worldact-media-library .attachment-details-layout {
   grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
 }
+.media-details-navigation { display: flex; margin-left: auto; }
+.media-details-navigation .editor-icon-button { border-right: 1px solid #dcdcde; border-radius: 0; }
+.media-details-navigation .editor-icon-button:disabled { color: #a7aaad; cursor: default; }
 .worldact-media-library .attachment-preview {
   flex-direction: column;
   gap: 16px;

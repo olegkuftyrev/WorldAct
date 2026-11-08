@@ -5,6 +5,10 @@ import {
   useCallback,
   useEffect,
   useRef,
+  useContext,
+  type Dispatch,
+  type SetStateAction,
+  type RefObject,
   type ReactNode,
 } from "react";
 import { api, type User } from "../api";
@@ -35,33 +39,47 @@ export const errorText = (error: unknown) =>
     ? error.message
     : "Something went wrong. Please try again.";
 export function useResource<T>(path: string | null) {
+  const { user } = useContext(Session);
+  const actor = user ? `${user.id}:${user.role}` : "anonymous";
+  const ownerRef = useRef({ path, actor });
+  if (ownerRef.current.path !== path || ownerRef.current.actor !== actor)
+    ownerRef.current = { path, actor };
+  const owner = ownerRef.current;
+  const mounted = useRef(false);
   const requestId = useRef(0);
-  const [data, setData] = useState<T | null>(null),
-    [error, setError] = useState(""),
-    [loading, setLoading] = useState(true);
+  const [state, setState] = useState({ owner, data: null as T | null, error: "", loading: Boolean(path) });
+  useEffect(() => {
+    mounted.current = true;
+    return () => { mounted.current = false; requestId.current++; };
+  }, []);
   const reload = useCallback(async () => {
+    // A captured reload from a departed route/account must not acquire a new
+    // request number and supersede the current resource.
+    if (!mounted.current || ownerRef.current !== owner) return;
     const currentRequest = ++requestId.current;
+    const current = () => mounted.current && ownerRef.current === owner && currentRequest === requestId.current;
     if (!path) {
-      setData(null);
-      setError("");
-      setLoading(false);
+      setState({ owner, data: null, error: "", loading: false });
       return;
     }
-    setLoading(true);
-    setError("");
+    setState(previous => ({ owner, data: previous.owner === owner ? previous.data : null, error: "", loading: true }));
     try {
       const value = await api<T>(path);
-      if (currentRequest === requestId.current) setData(value);
+      if (current()) setState({ owner, data: value, error: "", loading: false });
     } catch (e) {
-      if (currentRequest === requestId.current) setError(errorText(e));
-    } finally {
-      if (currentRequest === requestId.current) setLoading(false);
+      if (current()) setState(previous => ({ ...previous, error: errorText(e), loading: false }));
     }
-  }, [path]);
+  }, [path, owner]);
+  const setData: Dispatch<SetStateAction<T | null>> = useCallback(value => {
+    if (!mounted.current || ownerRef.current !== owner) return;
+    setState(previous => ({ owner, data: typeof value === "function" ? (value as (previous: T | null) => T | null)(previous.owner === owner ? previous.data : null) : value, error: "", loading: false }));
+  }, [owner]);
   useEffect(() => {
     void reload();
   }, [reload]);
-  return { data, setData, error, loading, reload };
+  return { data: state.owner === owner ? state.data : null, setData,
+    error: state.owner === owner ? state.error : "",
+    loading: state.owner === owner ? state.loading : Boolean(path), reload };
 }
 export function Notice({
   children,
@@ -150,17 +168,22 @@ export function Modal({
   title,
   close,
   children,
+  actions,
+  initialFocus,
 }: {
   title: string;
   close: () => void;
   children: ReactNode;
+  actions?: ReactNode;
+  initialFocus?: RefObject<HTMLElement | null>;
 }) {
   const ref = useRef<HTMLDivElement>(null),
     closeRef = useRef(close);
   closeRef.current = close;
   useEffect(() => {
     const previous = document.activeElement as HTMLElement | null;
-    ref.current?.focus();
+    const preferred = initialFocus?.current;
+    (preferred && !preferred.matches(":disabled") ? preferred : ref.current)?.focus();
     const keydown = (e: KeyboardEvent) => {
       if (e.key === "Escape" && !e.isComposing && !e.defaultPrevented) closeRef.current();
       if (e.key === "Tab" && ref.current) {
@@ -203,6 +226,7 @@ export function Modal({
       >
         <header>
           <h1>{title}</h1>
+          {actions}
           <button
             className="editor-icon-button"
             aria-label="Close dialog"

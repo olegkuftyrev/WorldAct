@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import {
   Modal,
   Button,
@@ -40,10 +40,12 @@ export default function FontLibrary({
   theme,
   onClose,
   onChange,
+  embedded = false,
 }: {
   theme: string;
   onClose: () => void;
   onChange: () => void;
+  embedded?: boolean;
 }) {
   const [library, setLibrary] = useState<Library | null>(null);
   const [selected, setSelected] = useState<number | null>(null);
@@ -94,12 +96,7 @@ export default function FontLibrary({
       )
       .join("\n");
   return (
-    <Modal
-      title="Font Library"
-      onRequestClose={onClose}
-      className="worldact-font-library"
-      shouldCloseOnClickOutside={!busy}
-    >
+    <FontLibraryFrame embedded={embedded} close={onClose} busy={busy}>
       <p>
         Manage the fonts available to this theme. Activated fonts appear in
         typography settings.
@@ -379,6 +376,11 @@ export default function FontLibrary({
           <Spinner /> Saving font changes…
         </div>
       )}
-    </Modal>
+    </FontLibraryFrame>
   );
+}
+
+function FontLibraryFrame({ embedded, close, busy, children }: { embedded: boolean; close: () => void; busy: boolean; children: ReactNode }) {
+  return embedded ? <section className="worldact-font-library worldact-font-library-page" aria-label="Font Library">{children}</section> :
+    <Modal title="Font Library" onRequestClose={close} className="worldact-font-library" shouldCloseOnClickOutside={!busy}>{children}</Modal>;
 }

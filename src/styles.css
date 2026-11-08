@@ -119,7 +119,8 @@ button:focus-visible {
   padding: 0;
   color: #787c82;
 }
-#wpadminbar .menupop:hover > .ab-sub-wrapper {
+#wpadminbar .menupop:hover > .ab-sub-wrapper,
+#wpadminbar .menupop:focus-within > .ab-sub-wrapper {
   display: block;
 }
 #wpadminbar .mobile-menu-toggle {

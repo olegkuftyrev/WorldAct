@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { api, json, type Media } from "../api";
 import { Icon, Notice, errorText } from "./AdminUI";
 
@@ -22,6 +22,8 @@ export default function MediaImageEditor({
   media: ImageMedia;
   onUpdate: (media: Media) => void;
 }) {
+  const mounted = useRef(false);
+  useEffect(() => { mounted.current = true; return () => { mounted.current = false; }; }, []);
   const [open, setOpen] = useState(false),
     [busy, setBusy] = useState(false),
     [error, setError] = useState(""),
@@ -51,14 +53,15 @@ export default function MediaImageEditor({
         `/media/${media.id}/${patch === "restore" ? "restore" : "edit"}`,
         json("POST", patch === "restore" ? {} : patch),
       );
+      if (!mounted.current || updated.id !== media.id) return;
       onUpdate(updated);
       setNotice(
         patch === "restore" ? "Original image restored." : "Image saved.",
       );
     } catch (e) {
-      setError(errorText(e));
+      if (mounted.current) setError(errorText(e));
     } finally {
-      setBusy(false);
+      if (mounted.current) setBusy(false);
     }
   }
   function updateWidth(value: number) {

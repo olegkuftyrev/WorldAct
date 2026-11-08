@@ -21,7 +21,7 @@ import {
   type FormEvent,
   type ReactNode,
 } from "react";
-import { Link, useParams, useSearchParams } from "react-router-dom";
+import { Link, Navigate, useParams, useSearchParams } from "react-router-dom";
 import {
   api,
   json,
@@ -1563,7 +1563,15 @@ function PluginSettings({
 
 export function Plugins() {
   const resource = useResource<{ plugins: Plugin[] }>("/plugins");
-  const [view, setView] = useState("all");
+  const [params, setParams] = useSearchParams();
+  const view = params.get("tab") === "add" ? "catalog" :
+    ["active", "inactive"].includes(params.get("plugin_status") || "") ? params.get("plugin_status")! : "all";
+  function setView(value: string) {
+    const next = new URLSearchParams(params);
+    if (value === "catalog") { next.set("tab", "add"); next.delete("plugin_status"); }
+    else { next.delete("tab"); value === "all" ? next.delete("plugin_status") : next.set("plugin_status", value); }
+    setParams(next);
+  }
   const [query, setQuery] = useState("");
   const [expanded, setExpanded] = useState("");
   const action = useAction();
@@ -1772,6 +1780,18 @@ export function Plugins() {
       </table>
     </Screen>
   );
+}
+
+export function Fonts() {
+  const resource = useResource<{ settings: Settings }>("/settings");
+  const { user } = useContext(Session);
+  if (user?.role !== "administrator") return <Navigate to="/admin" replace />;
+  return <Screen title="Fonts">
+    <ResourceState {...resource} retry={resource.reload} />
+    {resource.data && <Suspense fallback={<p>Loading Font Library…</p>}>
+      <FontLibrary embedded theme={resource.data.settings.theme} onClose={() => {}} onChange={() => { void resource.reload(); window.dispatchEvent(new Event("worldact-settings-updated")); }} />
+    </Suspense>}
+  </Screen>;
 }
 
 type Theme = {
