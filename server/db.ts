@@ -41,7 +41,7 @@ export const userFields = `id, username, email, display_name AS "displayName", r
 export const postFields = `p.id, p.type, p.title, p.slug, p.content,p.raw_content AS "rawContent", p.excerpt, p.status, p.pre_trash_status AS "preTrashStatus", p.format,
   p.author_id AS "authorId", u.display_name AS "authorName", p.created_at AS "createdAt",
   p.updated_at AS "updatedAt", p.published_at AS "publishedAt", p.scheduled_at AS "scheduledAt",
-  p.blocks, p.version, p.parent_id AS "parentId", p.menu_order AS "menuOrder",p.template_slug AS "templateSlug",
+  p.blocks, p.footnotes, p.version, p.parent_id AS "parentId", p.menu_order AS "menuOrder",p.template_slug AS "templateSlug",
   p.featured_media_id AS "featuredMediaId", p.comment_status AS "commentStatus", p.ping_status AS "pingStatus", p.sticky,
   (p.password_hash IS NOT NULL) AS "hasPassword",
   (SELECT count(*)::int FROM comments c WHERE c.post_id=p.id AND c.status IN('approved','pending')) AS "commentCount",

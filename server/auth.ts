@@ -1,6 +1,7 @@
 import { createHash, randomBytes, scrypt, timingSafeEqual } from "node:crypto";
 import { promisify } from "node:util";
 import type { NextFunction, Request, Response } from "express";
+import type { PoolClient } from "pg";
 import { pool, userFields, type Role, type User } from "./db.js";
 
 const scryptAsync = promisify(scrypt);
@@ -98,25 +99,34 @@ export async function createSession(
   req: Request,
   res: Response,
   userId: number,
+  options: { remember?: boolean; client?: PoolClient; deferCookie?: boolean } = {},
 ) {
+  const seconds = options.remember === undefined ? SESSION_SECONDS : 60 * 60 * 24 * (options.remember ? 14 : 2);
+  const db = options.client || pool;
   const existingToken = readToken(req);
   if (existingToken)
-    await pool.query("DELETE FROM sessions WHERE token_hash = $1", [
+    await db.query("DELETE FROM sessions WHERE token_hash = $1", [
       tokenHash(existingToken),
     ]);
   const token = randomBytes(32).toString("hex");
-  await pool.query(
-    `INSERT INTO sessions (token_hash, user_id, expires_at) VALUES ($1, $2, now() + interval '7 days')`,
-    [tokenHash(token), userId],
+  await db.query(
+    `INSERT INTO sessions (token_hash, user_id, expires_at) VALUES ($1, $2, now() + $3 * interval '1 second')`,
+    [tokenHash(token), userId, seconds],
   );
-  await pool.query("DELETE FROM sessions WHERE expires_at <= now()");
-  res.cookie(COOKIE, token, {
+  // The caller holding a user lock performs global cleanup after committing.
+  if (!options.client) await purgeExpiredSessions();
+  const setCookie = () => res.cookie(COOKIE, token, {
     httpOnly: true,
     sameSite: "lax",
     secure: process.env.NODE_ENV === "production",
     path: "/",
-    maxAge: SESSION_SECONDS * 1000,
+    ...(options.remember === false ? {} : { maxAge: seconds * 1000 }),
   });
+  if (!options.deferCookie) setCookie();
+  return setCookie;
+}
+export async function purgeExpiredSessions() {
+  await pool.query("DELETE FROM sessions WHERE expires_at <= now()");
 }
 export async function destroySession(req: Request, res: Response) {
   const token = readToken(req);

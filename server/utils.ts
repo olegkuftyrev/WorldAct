@@ -34,6 +34,7 @@ const color =
 const border =
   /^(?:0|none|(?:\d+(?:\.\d+)?)(?:px|em|rem)?\s+(?:solid|dashed|dotted|double)\s+(?:#[a-f\d]{3,8}|[a-z]+|var\(--wp--[a-z\d-]+\)))$/i;
 const allowedStyles: Record<string, RegExp[]> = {
+  "--separator": [/^"[^"\\\u0000-\u001f]{0,40}"$/u],
   border: [border],
   "border-top": [border],
   "border-right": [border],
@@ -207,6 +208,7 @@ export function cleanContent(content: string, generatedBlocks = false) {
       abbr: ["title"],
       blockquote: ["cite"],
       time: ["datetime"],
+      sup: ["data-fn"],
       ...(generatedBlocks ? {
         form: ["action", "method", "autocomplete"],
         input: ["type", "name", "value", "placeholder", "required", "checked", "disabled", "maxlength", "minlength", "autocomplete"],
@@ -228,8 +230,12 @@ export function cleanContent(content: string, generatedBlocks = false) {
     },
     allowProtocolRelative: false,
     transformTags: {
+      sup: (_tag: string, attrs: Record<string, string>) => {
+        const { "data-fn": id, ...safe } = attrs;
+        return { tagName: "sup", attribs: { ...safe, ...(id && /^[a-z0-9_-]{1,100}$/.test(id) ? { "data-fn": id } : {}) } };
+      },
       ...(generatedBlocks ? { form: (_tag: string, attrs: Record<string,string>) => ({
-        tagName: "form", attribs: { ...attrs, action: ["/", "/wp-comments-post.php", "/login", "/logout", "/post-password"].includes(attrs.action) ? attrs.action : "/", method: attrs.method?.toLowerCase() === "post" ? "post" : "get" },
+        tagName: "form", attribs: { ...attrs, action: ["/", "/wp-comments-post.php", "/login", "/logout", "/post-password", "/public-login"].includes(attrs.action) ? attrs.action : "/", method: attrs.method?.toLowerCase() === "post" ? "post" : "get" },
       }) } : {}),
       a: (_tag, attrs) => ({
         tagName: "a",

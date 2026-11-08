@@ -50,7 +50,7 @@ jobs:
       - name: Compiled Node server regression
         env:
           ISOLATED_TEST_COMPILED: "true"
-        run: node scripts/test-isolated.mjs tests/fonts.test.ts tests/site-identity.test.ts tests/bundled-plugins-api.test.ts tests/comment-capabilities.test.ts tests/template-access.test.ts tests/server-startup.test.ts tests/widget-blocks.test.ts tests/widget-layout.test.ts tests/date-archives.test.ts
+        run: node scripts/test-isolated.mjs tests/fonts.test.ts tests/site-identity.test.ts tests/bundled-plugins-api.test.ts tests/comment-capabilities.test.ts tests/template-access.test.ts tests/server-startup.test.ts tests/widget-blocks.test.ts tests/widget-layout.test.ts tests/date-archives.test.ts tests/footnotes.test.ts tests/term-blocks.test.ts tests/loginout.test.ts tests/auth-reset.test.ts
       - name: Export site archive
         if: matrix.node == 24
         env:

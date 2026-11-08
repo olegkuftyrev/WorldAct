@@ -15,6 +15,8 @@ export type BlockReferenceOptions = {
   urls?: ReadonlyMap<string, string>;
   fontFamilies?: ReadonlyMap<string, string | null>;
   fontSlugs?: ReadonlyMap<string, string | null>;
+  footnotes?: ReadonlyMap<string, string>;
+  footnoteSelfURLs?: ReadonlySet<string>;
 };
 
 /** Imported references must resolve only inside the imported entity graph. */
@@ -63,9 +65,32 @@ export function remapImportedBlockReferences(
     warn(`Detached unavailable imported font preset ${slug}.`); return "";
   }).trim();
   const urls = [...(options.urls || [])].sort((a, b) => b[0].length - a[0].length);
+  for (const [source, target] of options.footnotes || []) if (!/^[a-z0-9_-]{1,100}$/.test(source) || !/^[a-z0-9_-]{1,100}$/.test(target))
+    throw new HttpError(400, "Invalid imported footnote reference mapping.");
   const rewriteText = (value: string) => {
-    for (const [source, target] of urls) if (source) value = value.split(source).join(target);
+    // Match a whole URL, never a local-looking path or mapped origin nested
+    // inside an unrelated URL's path/query. Apply each mapping only once.
+    if (urls.length) value = value.replace(/(?:[a-z][a-z0-9+.-]*:|\/\/)[^\s"'<>]+|(^|[\s"'(=])(\/[^\s"'<>),]*)/gi, (match, prefix: string | undefined, local: string | undefined) => {
+      const token = local === undefined ? match : local;
+      const mapping = urls.find(([source]) => source && (token === source || (token.startsWith(source) && (/^[?#&]/.test(token.slice(source.length)) || /^\)+[,.;]?$/.test(token.slice(source.length))))));
+      const rewritten = mapping ? mapping[1] + token.slice(mapping[0].length) : token;
+      return local === undefined ? rewritten : prefix + rewritten;
+    });
     if (options.media) value = value.replace(/\bwp-image-(\d+)\b/g, (_match, id) => options.media!.has(Number(id)) ? `wp-image-${options.media!.get(Number(id))}` : "wp-image-missing");
+    if (options.footnotes?.size) value = value.replace(/<(?:sup|a)\b[^>]*>/gi, (tag) => tag.replace(/\b(data-fn|id|href)\s*=\s*(["'])([^"']*)\2/gi, (original, field: string, quote: string, input: string) => {
+      let hash = "";
+      if (field.toLowerCase() === "href") {
+        const index = input.lastIndexOf("#");
+        if (index < 0) return original;
+        const prefix = input.slice(0, index);
+        if (prefix && !options.footnoteSelfURLs?.has(prefix)) return original;
+        hash = input.slice(0, index + 1);
+      }
+      const id = hash ? input.slice(hash.length) : input;
+      const direct = options.footnotes!.get(id), back = id.endsWith("-link") ? options.footnotes!.get(id.slice(0, -5)) : undefined;
+      const target = direct || (back ? back + "-link" : null);
+      return target ? `${field}=${quote}${hash}${target}${quote}` : original;
+    }));
     if (fontFamilies.size || fontSlugs) value = value
       .replace(/(\bclass\s*=\s*)(["'])([\s\S]*?)\2/gi, (_match, prefix, quote, classes) => prefix + quote + rewriteFontClasses(classes) + quote)
       .replace(/(\bstyle\s*=\s*)(["'])([\s\S]*?)\2/gi, (_match, prefix, quote, style) => prefix + quote + style.replace(/(\bfont-family\s*:\s*)((?:&(?:quot|apos|#39|#34|#x22|#x27);|[^;])*)/gi, (_declaration: string, property: string, family: string) => property + rewriteFontFamily(family).replace(/"/g, "&quot;").replace(/'/g, "&#39;")) + quote);

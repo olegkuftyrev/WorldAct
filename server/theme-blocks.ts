@@ -6,6 +6,7 @@ import { postPermalink } from "./permalinks.js";
 import { cleanContent, plainText } from "./utils.js";
 import {avatarURL} from "./avatars.js";
 import {canEditPostComments} from "./comment-access.js";
+import {normalizeLoginRedirect} from "../shared/login-redirect.js";
 
 export const THEME_BLOCKS = [
   "core/term-description", "core/social-links", "core/social-link", "core/avatar", "core/post-navigation-link", "core/search",
@@ -50,6 +51,7 @@ export async function renderThemeBlock(
   const name=node.name,a=node.attrs,p=context.post,c=context.comment;
   const body=(next=context)=>children(node.children,next);
   if(name==="core/term-description") {
+    if(context.term)return context.term.description?`<div${attributes()}>${cleanContent(context.term.description)}</div>`:"";
     const query=state.options.query || {},taxonomy=query.tag?"tag":"category",slug=String(query.tag || query.category || "");
     if(!slug)return "";
     const term=await cached(state,`description:${taxonomy}:${slug}`,async()=>(await state.db.query("SELECT description FROM terms WHERE taxonomy=$1 AND slug=$2",[taxonomy,slug])).rows[0]);
@@ -156,6 +158,20 @@ export async function renderThemeBlock(
     const list=(parent:number|null,depth=0):string=>depth>20?"":shown.filter((term:any)=>!a.showHierarchy || depth===0?!a.showHierarchy || !term.parentId:term.parentId===parent).map((term:any)=>`<li class="cat-item cat-item-${term.id}"><a href="${esc(url(term))}">${esc(term.name)}</a>${a.showPostCounts?` (${term.count})`:""}${a.showHierarchy && shown.some((child:any)=>child.parentId===term.id)?`<ul class="children">${list(term.id,depth+1)}</ul>`:""}</li>`).join("");
     return `<ul${attributes()}>${list(null)}</ul>`;
   }
-  if(name==="core/loginout")return `<div${attributes()}>${state.options.user?`<form method="post" action="/logout"><input type="hidden" name="redirect_to" value="${esc(state.options.requestPath || "/")}"><button type="submit">Log out</button></form>`:`<a href="/login?redirect_to=${esc(encodeURIComponent(state.options.requestPath || "/"))}">Log in</a>`}</div>`;
+  if(name==="core/loginout") {
+    const origin=new URL(process.env.APP_ORIGIN || "http://127.0.0.1:5173").origin;
+    const current=new URL(normalizeLoginRedirect(state.options.requestPath,origin) || "/",origin);
+    // The rendering API also carries public query variables separately from the path.
+    for(const [key,value] of Object.entries(state.options.query || {}))
+      if(!["postId","post_id","requestPath","type","preview","templateSlug","context","attributes"].includes(key) &&
+        (typeof value==="string" || typeof value==="number")) current.searchParams.set(key,String(value));
+    const currentPath=normalizeLoginRedirect(current.pathname+current.search+current.hash,origin) || "/";
+    const redirectToCurrent=a.redirectToCurrent !== false;
+    if(state.options.user)return `<div${attributes("logged-in")}><form method="post" action="/logout"><input type="hidden" name="redirect_to" value="${esc(redirectToCurrent?currentPath:"/")}"><button type="submit">Log out</button></form></div>`;
+    if(!a.displayLoginAsForm)return `<div${attributes("logged-out")}><a href="/login${redirectToCurrent?"?redirect_to="+esc(encodeURIComponent(currentPath)):""}">Log in</a></div>`;
+    // wp_login_form defaults to the current request URL regardless of the link toggle.
+    const id="wp-loginout-"+state.nodes;
+    return `<div${attributes("logged-out has-login-form")}><form id="${id}" class="loginform" method="post" action="/public-login"><p class="login-username"><label for="${id}-user">Username or Email Address</label><input type="text" name="log" id="${id}-user" class="input" value="" autocomplete="username" maxlength="254" required></p><p class="login-password"><label for="${id}-password">Password</label><input type="password" name="pwd" id="${id}-password" class="input" value="" autocomplete="current-password" maxlength="1024" required></p><p class="login-remember"><label for="${id}-remember"><input name="rememberme" type="checkbox" id="${id}-remember" value="forever"> Remember Me</label></p><p class="login-submit"><input type="submit" name="wp-submit" class="button button-primary wp-block-button__link wp-element-button" value="Log In"><input type="hidden" name="redirect_to" value="${esc(currentPath)}"></p></form></div>`;
+  }
   return undefined;
 }

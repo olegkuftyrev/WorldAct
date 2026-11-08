@@ -5,10 +5,12 @@ import {destroySession,type AuthRequest} from "./auth.js";
 import {getPost,getSettings} from "./db.js";
 import {postPermalink} from "./permalinks.js";
 import {HttpError} from "./utils.js";
+import {authenticateLogin,loginRateLimit} from "./login.js";
+import {normalizeLoginRedirect} from "../shared/login-redirect.js";
 const router=express.Router();
 const origin=()=>new URL(process.env.APP_ORIGIN || "http://127.0.0.1:5173").origin;
-function localPath(value:unknown){return typeof value==="string" && value.startsWith("/") && !value.startsWith("//") && !/[\\\u0000-\u0020]/.test(value)?value:"/";}
-router.use(["/wp-comments-post.php","/logout","/post-password"],(req,res,next)=>{
+function localPath(value:unknown){return normalizeLoginRedirect(value,origin()) || "/";}
+router.use(["/wp-comments-post.php","/logout","/post-password","/public-login"],(req,res,next)=>{
   if(req.method!=="POST"){next();return;}
   let valid=req.headers.origin===origin();
   if(!req.headers.origin && req.headers.referer){try{valid=new URL(req.headers.referer).origin===origin();}catch{}}
@@ -36,6 +38,20 @@ router.post("/wp-comments-post.php",async(req:AuthRequest,res)=>{
   if(result.comment.status!=="approved")url.searchParams.set("comment-status","pending");
   url.hash=result.comment.status==="approved"?"comment-"+result.comment.id:"respond";
   res.redirect(303,url.pathname+url.search+url.hash);
+});
+router.post("/public-login",loginRateLimit,async(req,res)=>{
+  const input=z.object({
+    log:z.string().trim().min(1).max(254),pwd:z.string().min(1).max(1024),
+    rememberme:z.enum(["forever","on"]).optional(),
+    redirect_to:z.string().max(2000).optional(),"wp-submit":z.string().max(100).optional(),
+  }).strict().parse(req.body);
+  const target=normalizeLoginRedirect(input.redirect_to,origin()) || "/admin";
+  const user=await authenticateLogin(req,res,{login:input.log,password:input.pwd,remember:!!input.rememberme});
+  if(!user){
+    const query=new URLSearchParams({login_error:"1",redirect_to:target});
+    res.redirect(303,"/login?"+query);return;
+  }
+  res.redirect(303,target);
 });
 router.post("/logout",async(req,res)=>{
   const input=z.object({redirect_to:z.string().max(2000).optional()}).parse(req.body);

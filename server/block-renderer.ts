@@ -7,8 +7,11 @@ import { restDateToUTC } from "./date.js";
 import { date as formatBlockDate, humanTimeDiff } from "@wordpress/date";
 import { renderThemeBlock, THEME_BLOCKS } from "./theme-blocks.js";
 import { renderWidgetBlock, WIDGET_BLOCKS } from "./widget-blocks.js";
+import { renderTermBlock, TERM_BLOCKS, type RenderTerm } from "./term-blocks.js";
 import { appendDateArchiveSQL, dateArchiveTitle, parseDateArchiveQuery } from "./date-archives.js";
 import { gridTemplateColumns, isResponsiveGrid } from "./block-layout.js";
+import { renderFootnotes } from "./footnotes.js";
+import { excerptText } from "./excerpts.js";
 
 export type BlockDatabase = Pick<pg.Pool, "query"> | pg.PoolClient;
 export type RenderPost = Record<string, any>;
@@ -26,6 +29,7 @@ export type RenderDocument = {
 export type RenderOptions = {
   post?: RenderPost | null;
   requestPath?: string;
+  templateSlug?: string;
   query?: Record<string, unknown>;
   page?: number;
   placeholderBindings?: boolean;
@@ -54,6 +58,8 @@ export type Context = {
   depth: number;
   refs: Set<string>;
   contentIds: Set<number>;
+  termQuery?: Record<string, any>;
+  term?: RenderTerm;
   comment?: Record<string, any>;
   commentLoop?: { comments: any[]; total: number; page: number; perPage: number; totalPages: number };
   social?: { openInNewTab: boolean; showLabels: boolean };
@@ -71,6 +77,8 @@ export type State = {
 export const CORE_DYNAMIC_BLOCKS = [
   ...THEME_BLOCKS,
   ...WIDGET_BLOCKS,
+  "core/footnotes",
+  ...TERM_BLOCKS,
   "core/query",
   "core/post-template",
   "core/post-title",
@@ -562,7 +570,8 @@ async function navigationItems(
           const href = safeBlockURL(item.url),
             children = await navigationItems(items, state, item.id, depth + 1);
           const label = esc(item.label);
-          return `<li class="wp-block-navigation-item">${children ? `<details><summary>${label}</summary><ul class="wp-block-navigation__submenu-container">${children}</ul></details>` : `<a class="wp-block-navigation-item__content" href="${esc(href || "#")}"${item.target === "_blank" ? ' target="_blank" rel="noopener noreferrer"' : ""}>${label}</a>`}</li>`;
+          const link=`<a class="wp-block-navigation-item__content" href="${esc(href || "#")}"${item.target === "_blank" ? ' target="_blank" rel="noopener noreferrer"' : ""}>${label}</a>`;
+          return `<li class="wp-block-navigation-item">${children ? `<details><summary>${link}</summary><ul class="wp-block-navigation__submenu-container">${children}</ul></details>` : link}</li>`;
         }),
     )
   ).join("");
@@ -753,6 +762,10 @@ async function renderNode(
   const widgetBlock = await renderWidgetBlock(node, context, state, attr,
     (post, next) => renderChildren(parseRenderNodes(post), next, state));
   if (widgetBlock !== undefined) return widgetBlock;
+  if (name === "core/footnotes") return renderFootnotes(context.post, attr);
+  const termBlock = await renderTermBlock(node, context, state,
+    (nodes, next) => renderChildren(nodes, next, state), attr);
+  if (termBlock !== undefined) return termBlock;
   const body = () => renderChildren(node.children, context, state);
   const wrap = async (tag = "div", extra = "") =>
     `<${safeTag(tag)}${attr(extra)}>${await body()}</${safeTag(tag)}>`;
@@ -1115,7 +1128,7 @@ async function renderNode(
     }
     if (name === "core/post-excerpt") {
       if(p.locked)return `<div${attr()}><p>There is no excerpt because this is a protected post.</p></div>`;
-      const words = plainText(String(p.excerpt || p.content || ""))
+      const words = (p.excerpt ? plainText(String(p.excerpt)) : excerptText(String(p.content || "")))
           .trim()
           .split(/\s+/)
           .filter(Boolean),

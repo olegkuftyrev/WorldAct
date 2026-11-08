@@ -21,6 +21,7 @@ import {
   type Revision,
   type Autosave,
   type SerializedBlock,
+  type Footnote,
 } from "../api";
 import {
   Session,
@@ -31,12 +32,13 @@ import {
   Modal,
   errorText,
 } from "../components/AdminUI";
-import GutenbergEditor from "../editor/GutenbergEditor";
+import GutenbergEditor, {type GutenbergEditorHandle} from "../editor/GutenbergEditor";
 
 type DocumentState = {
   title: string;
   content: string;
   blocks: SerializedBlock[] | null;
+  footnotes: Footnote[];
   excerpt: string;
   slug: string;
   status: Post["status"];
@@ -59,6 +61,7 @@ const emptyDocument = (): DocumentState => ({
   title: "",
   content: "",
   blocks: null,
+  footnotes: [],
   excerpt: "",
   slug: "",
   status: "draft",
@@ -76,6 +79,7 @@ const postDocument = (post: Post): DocumentState => ({
   title: post.title,
   content: (post as Post & { rawContent?: string }).rawContent || post.content,
   blocks: post.blocks || null,
+  footnotes: post.footnotes || [],
   excerpt: post.excerpt,
   slug: post.slug,
   status: post.status,
@@ -334,11 +338,13 @@ export default function Editor({ type }: { type: "post" | "page" }) {
     }
   }, [doc.title, loading]);
   const docRef = useRef(doc),
+    blockEditor = useRef<GutenbergEditorHandle>(null),
     idRef = useRef(postId),
     versionRef = useRef(version),
     busyRef = useRef(false),
     dirtyRef = useRef(dirty),
     savedFingerprint = useRef(""),
+    draftCreation = useRef<Promise<number> | null>(null),
     loadGeneration = useRef(0),
     createdRoute = useRef<number | null>(null);
   docRef.current = doc;
@@ -350,6 +356,7 @@ export default function Editor({ type }: { type: "post" | "page" }) {
       `worldact-editor-${user?.id}-${type}-${recordId || "new"}`,
     [user?.id, type],
   );
+  useEffect(()=>()=>{loadGeneration.current++;},[]);
   const change = useCallback((patch: Partial<DocumentState>) => {
     setDoc((current) => ({ ...current, ...patch }));
     setDirty(true);
@@ -419,7 +426,8 @@ export default function Editor({ type }: { type: "post" | "page" }) {
               new Date(post.updatedAt).getTime() &&
             (autosave.content !== post.content ||
               autosave.title !== post.title ||
-              autosave.excerpt !== post.excerpt)
+              autosave.excerpt !== post.excerpt ||
+              JSON.stringify(autosave.footnotes || []) !== JSON.stringify(post.footnotes || []))
           )
             latest = { ...autosave, source: "server" };
         } catch {
@@ -504,6 +512,7 @@ export default function Editor({ type }: { type: "post" | "page" }) {
             content: current.content,
             excerpt: current.excerpt,
             blocks: current.blocks,
+            footnotes: current.footnotes,
             savedAt: new Date().toISOString(),
             version: versionRef.current,
           }),
@@ -536,6 +545,29 @@ export default function Editor({ type }: { type: "post" | "page" }) {
       type,
     };
   }
+  const ensureDraft = useCallback((): Promise<number> => {
+    if(idRef.current)return Promise.resolve(idRef.current);
+    if(draftCreation.current)return draftCreation.current;
+    const snapshot=docRef.current,generation=loadGeneration.current;
+    draftCreation.current=api<{post:Post}>("/posts",json("POST",payload(snapshot,"draft"))).then(({post})=>{
+      if(loadGeneration.current!==generation)return post.id;
+      idRef.current=post.id;versionRef.current=post.version;
+      setPostId(post.id);setVersion(post.version);setPermalink(postLink(post));
+      createdRoute.current=post.id;
+      localStorage.removeItem(storageKey(null));
+      navigate(`${base}/${post.id}`,{replace:true});
+      return post.id;
+    }).finally(()=>{draftCreation.current=null;});
+    return draftCreation.current;
+  },[base,navigate,storageKey,type]);
+  useEffect(()=>{
+    if(loading || !dirty || recovery || idRef.current)return;
+    const current=docRef.current;
+    const text=current.content.replace(/<!--[\s\S]*?-->/g,"").replace(/<[^>]*>/g,"").replace(/&nbsp;/g,"").trim();
+    const hasBlock=current.blocks?.some(block=>!["core/paragraph","core/heading"].includes(block.name));
+    if(!current.title.trim() && !text && !hasBlock)return;
+    void ensureDraft().catch(reason=>setAutosaveError(`Autosave failed: ${errorText(reason)} Your changes are stored in this browser.`));
+  },[doc,dirty,loading,recovery,ensureDraft]);
   useEffect(() => {
     if (loading || !dirty || recovery || !lease.ready) return;
     const timeout = window.setTimeout(async () => {
@@ -546,18 +578,7 @@ export default function Editor({ type }: { type: "post" | "page" }) {
       setAutosaveError("");
       try {
         if (!idRef.current) {
-          const { post } = await api<{ post: Post }>(
-            "/posts",
-            json("POST", payload(current, "draft")),
-          );
-          setPostId(post.id);
-          idRef.current = post.id;
-          setVersion(post.version);
-          versionRef.current = post.version;
-          createdRoute.current = post.id;
-          setDoc((value) => ({ ...value, slug: post.slug }));
-          localStorage.removeItem(storageKey(null));
-          navigate(`${base}/${post.id}`, { replace: true });
+          await ensureDraft();
         }
         if (idRef.current && !leaseReady.current && !(await lease.retry()))
           return;
@@ -569,6 +590,7 @@ export default function Editor({ type }: { type: "post" | "page" }) {
             content: latest.content,
             excerpt: latest.excerpt,
             blocks: latest.blocks || [],
+            footnotes: latest.footnotes,
             version: versionRef.current,
           }),
         );
@@ -595,6 +617,7 @@ export default function Editor({ type }: { type: "post" | "page" }) {
     lease.ready,
     lease.retry,
     lease.checkConflict,
+    ensureDraft,
   ]);
   const loadRevisions = useCallback(async () => {
     if (!idRef.current) return;
@@ -636,8 +659,9 @@ export default function Editor({ type }: { type: "post" | "page" }) {
     setConflict(false);
     const snapshot = docRef.current,
       fingerprint = JSON.stringify(snapshot),
-      currentId = idRef.current;
+      wasNew = !idRef.current;
     try {
+      const currentId = idRef.current || await ensureDraft();
       const { post } = await api<{ post: Post }>(
         currentId ? `/posts/${currentId}` : "/posts",
         json(currentId ? "PUT" : "POST", payload(snapshot, nextStatus)),
@@ -649,10 +673,12 @@ export default function Editor({ type }: { type: "post" | "page" }) {
       versionRef.current = post.version;
       setDoc((current) => ({
         ...current,
+        footnotes:JSON.stringify(current.footnotes)===JSON.stringify(snapshot.footnotes)?post.footnotes || []:current.footnotes,
         status: post.status,
         slug: post.slug,
         scheduledAt: post.scheduledAt || "",
       }));
+      blockEditor.current?.acknowledgeFootnotes(post.footnotes || [],snapshot.footnotes);
       const unchanged = JSON.stringify(docRef.current) === fingerprint;
       setDirty(!unchanged);
       savedFingerprint.current = fingerprint;
@@ -675,7 +701,7 @@ export default function Editor({ type }: { type: "post" | "page" }) {
         localStorage.removeItem(storageKey(post.id));
         await api(`/posts/${post.id}/autosave`, json("DELETE")).catch(() => {});
       }
-      if (!currentId) {
+      if (wasNew) {
         createdRoute.current = post.id;
         navigate(`${base}/${post.id}`, { replace: true });
       }
@@ -693,6 +719,20 @@ export default function Editor({ type }: { type: "post" | "page" }) {
     if (!dirty || window.confirm("You have unsaved changes. Leave the editor?"))
       navigate(base);
   }
+  async function previewChanges() {
+    if(busyRef.current || !leaseReady.current || !idRef.current)return;
+    const tab=window.open("about:blank","_blank");
+    if(tab)tab.opener=null;
+    busyRef.current=true;setBusy(true);setError("");
+    try {
+      const snapshot=docRef.current;
+      const {autosave}=await api<{autosave:Autosave}>(`/posts/${idRef.current}/autosave`,json("PUT",{title:snapshot.title,content:snapshot.content,excerpt:snapshot.excerpt,blocks:snapshot.blocks || [],footnotes:snapshot.footnotes,version:versionRef.current}));
+      setAutosavedAt(autosave.savedAt);
+      if(tab)tab.location.replace(`/preview/${idRef.current}`);
+      else window.open(`/preview/${idRef.current}`,"_blank","noopener,noreferrer");
+    } catch(reason){tab?.close();setError(errorText(reason));if(reason instanceof ApiError && reason.status===409)await lease.checkConflict();}
+    finally{busyRef.current=false;setBusy(false);}
+  }
   async function recover() {
     if (!recovery) return;
     change({
@@ -702,6 +742,7 @@ export default function Editor({ type }: { type: "post" | "page" }) {
         recovery.content,
       excerpt: recovery.excerpt,
       blocks: recovery.blocks,
+      footnotes: recovery.footnotes || [],
     });
     setResetKey((key) => key + 1);
     setRecovery(null);
@@ -931,13 +972,8 @@ export default function Editor({ type }: { type: "post" | "page" }) {
             <button
               className="editor-icon-button"
               aria-label="Preview"
-              onClick={() =>
-                window.open(
-                  `/preview/${postId}`,
-                  "_blank",
-                  "noopener,noreferrer",
-                )
-              }
+              disabled={busy || !lease.ready}
+              onClick={() => void previewChanges()}
             >
               <Icon name="visibility" />
             </button>
@@ -1088,11 +1124,16 @@ export default function Editor({ type }: { type: "post" | "page" }) {
                 />
               </div>
               <GutenbergEditor
+                ref={blockEditor}
                 postId={postId || undefined}
                 postType={type}
                 initialBlocks={doc.blocks}
                 initialHTML={doc.content}
-                resetKey={`${postId || "new"}-${resetKey}`}
+                initialFootnotes={doc.footnotes}
+                onMetadataChange={(footnotes) => {
+                  if(JSON.stringify(footnotes)!==JSON.stringify(docRef.current.footnotes))change({footnotes});
+                }}
+                resetKey={resetKey}
                 onChange={(blocks, content) => {
                   if (
                     content !== docRef.current.content ||
@@ -1687,6 +1728,8 @@ export default function Editor({ type }: { type: "post" | "page" }) {
                     />
                     <h4>Excerpt</h4>
                     <p>{revision.excerpt || "—"}</p>
+                    <h4>Footnotes</h4>
+                    {revision.footnotes?.length ? <ol>{revision.footnotes.map(note=><li key={note.id}>{note.content.replace(/<[^>]+>/g," ")}</li>)}</ol> : <p>—</p>}
                   </section>
                   <section>
                     <h2>Current document</h2>
@@ -1701,6 +1744,8 @@ export default function Editor({ type }: { type: "post" | "page" }) {
                     />
                     <h4>Excerpt</h4>
                     <p>{doc.excerpt || "—"}</p>
+                    <h4>Footnotes</h4>
+                    {doc.footnotes.length ? <ol>{doc.footnotes.map(note=><li key={note.id}>{note.content.replace(/<[^>]+>/g," ")}</li>)}</ol> : <p>—</p>}
                   </section>
                 </div>
               )}

@@ -4,6 +4,7 @@ import type { Context, Node, RenderPost, State } from "./block-renderer.js";
 import { postPermalink } from "./permalinks.js";
 import { avatarURL } from "./avatars.js";
 import { cleanContent, plainText, HttpError } from "./utils.js";
+import { excerptText } from "./excerpts.js";
 import { dateArchiveSQLBounds, dateArchiveLocalSQL, dateArchivePath, dateArchiveWeekSQL, parseDateArchiveQuery } from "./date-archives.js";
 import { gridColumnCount } from "./block-layout.js";
 
@@ -82,7 +83,7 @@ async function latestPosts(node: Node, context: Context, state: State, attribute
   const sort = ({ date: publication, modified: "p.updated_at", title: "p.title", id: "p.id", ID: "p.id", author: "u.display_name" } as Record<string, string>)[a.orderBy] || publication;
   const order = String(a.order).toLowerCase() === "asc" ? "ASC" : "DESC";
   const key = JSON.stringify([where, args, limit, sort, order, Boolean(a.displayPostContent)]);
-  const posts: RenderPost[] = await cached(state, `widget-latest-posts:${key}`, async () => (await state.db.query(`SELECT ${widgetPostFields}${a.displayPostContent ? ",p.content,p.excerpt,p.raw_content AS \"rawContent\",p.blocks" : ""} FROM posts p JOIN users u ON u.id=p.author_id WHERE ${where.join(" AND ")} ORDER BY ${sort} ${order},p.id ${order} LIMIT $${args.length + 1}`, [...args, limit])).rows);
+  const posts: RenderPost[] = await cached(state, `widget-latest-posts:${key}`, async () => (await state.db.query(`SELECT ${widgetPostFields}${a.displayPostContent ? ",p.content,p.excerpt,p.raw_content AS \"rawContent\",p.blocks,p.footnotes" : ""} FROM posts p JOIN users u ON u.id=p.author_id WHERE ${where.join(" AND ")} ORDER BY ${sort} ${order},p.id ${order} LIMIT $${args.length + 1}`, [...args, limit])).rows);
   let images = new Map<number, any>();
   if (a.displayFeaturedImage) {
     const ids = [...new Set(posts.map(post => post.featuredMediaId).filter(Boolean))];
@@ -108,7 +109,7 @@ async function latestPosts(node: Node, context: Context, state: State, attribute
         item += `<div class="wp-block-latest-posts__post-full-content">${content}</div>`;
       } else {
         const manual = String(post.excerpt || "").trim();
-        const text = manual ? { text: plainText(manual), trimmed: false } : excerpt(String(post.content || ""), number(a.excerptLength, 55, 1, 1000));
+        const text = manual ? { text: plainText(manual), trimmed: false } : excerpt(excerptText(String(post.content || "")), number(a.excerptLength, 55, 1, 1000));
         item += `<div class="wp-block-latest-posts__post-excerpt">${protectedPost(post) ? "This content is password protected." : escape(text.text) + (text.trimmed ? `… <a class="wp-block-latest-posts__read-more" href="${escape(url)}">Read more<span class="screen-reader-text">: ${escape(title)}</span></a>` : "")}</div>`;
       }
     }

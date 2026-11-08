@@ -1,4 +1,5 @@
 import Users from "./screens/Users";
+import { normalizeLoginRedirect } from "./loginRedirect";
 import { AdminEmailConfirmation } from "./screens/SiteIdentity";
 import Comments from "./screens/Comments";
 import {
@@ -342,22 +343,7 @@ function ToolsRoute() {
     );
   return <ToolsSuite />;
 }
-function safeLoginRedirect(value: unknown): string | null {
-  if (
-    typeof value !== "string" ||
-    !/^\/(?:admin(?:\/|[?#]|$)|preview\/)/.test(value) ||
-    /[\\\u0000-\u0020]/.test(value)
-  )
-    return null;
-  try {
-    const url = new URL(value, window.location.origin);
-    return url.origin === window.location.origin
-      ? url.pathname + url.search + url.hash
-      : null;
-  } catch {
-    return null;
-  }
-}
+function safeLoginRedirect(value: unknown): string | null {return normalizeLoginRedirect(value,window.location.origin);}
 function Login({ serverError }: { serverError: string }) {
   const { user, setUser } = useContext(Session),
     navigate = useNavigate(),
@@ -365,7 +351,7 @@ function Login({ serverError }: { serverError: string }) {
   const [login, setLogin] = useState(""),
     [password, setPassword] = useState(""),
     [visible, setVisible] = useState(false),
-    [error, setError] = useState(serverError),
+    [error, setError] = useState(serverError || (new URLSearchParams(location.search).get("login_error")==="1"?"The username or password is incorrect. Please try again.":"")),
     [busy, setBusy] = useState(false);
   async function submit(event: FormEvent) {
     event.preventDefault();

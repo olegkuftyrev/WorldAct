@@ -48,6 +48,7 @@ import {
 } from "@wordpress/components";
 import { addFilter } from "@wordpress/hooks";
 import { useEnableWpCompatOverlaySlot } from "@wordpress/ui";
+import { RichTextData, store as richTextStore, registerFormatType, unregisterFormatType } from "@wordpress/rich-text";
 import apiFetch from "@wordpress/api-fetch";
 import {
   getSettings as getDateSettings,
@@ -66,7 +67,11 @@ import libraryEditorCSS from "@wordpress/block-library/build-style/editor.css?in
 import editorContentCSS from "@wordpress/block-editor/build-style/content.css?inline";
 import themeCSS from "@wordpress/block-library/build-style/theme.css?inline";
 import formatCSS from "../../node_modules/@wordpress/format-library/build-style/style.css?inline";
-import { api, type Media } from "../api";
+import { api, type Media, type Footnote } from "../api";
+import { readFootnotes, synchronizeFootnotes } from "./footnotes";
+import { setEditorPreview, removeEditorPreview } from "./editorPreviewStore";
+import { OwnedFootnoteFormat } from "./OwnedFootnoteFormat";
+import { footnoteEntityBoundaries } from "./footnoteScope";
 import type { SerializedBlock } from "./types";
 import { parseVideoEmbed } from "../embeds";
 import { compileThemeStyles, type ThemeJSON, type ThemeStyleOverrides } from "../themeStyles";
@@ -155,6 +160,15 @@ export const WORLDAct_DYNAMIC_BLOCKS = [
   "core/post-comments-link",
   "core/post-time-to-read",
   "core/query-total",
+  "core/footnotes",
+  "core/terms-query",
+  "core/term-template",
+  "core/term-name",
+  "core/term-count",
+  "core/breadcrumbs",
+  "core/loginout",
+  "core/page-list",
+  "core/page-list-item",
 ];
 export const WORLDAct_SITE_BLOCKS = [
   "core/site-title",
@@ -169,7 +183,31 @@ export const WORLDAct_SITE_BLOCKS = [
   "core/pattern",
 ];
 
+type FootnoteOwner={postId?:number;postType:string};
+const AtomicFootnotesContext=createContext<FootnoteOwner|null>(null);
+const ownsFootnotes=(owner:FootnoteOwner|null,context:{postId?:number;postType?:string}|undefined)=>!!owner?.postId && Number(context?.postId)===owner.postId && context?.postType===owner.postType;
 if (!getBlockType("core/paragraph")) registerCoreBlocks();
+const nativeFootnoteFormat=select(richTextStore).getFormatType("core/footnote");
+if(nativeFootnoteFormat?.edit){
+  function AtomicFootnoteFormat(props:any){return ownsFootnotes(useContext(AtomicFootnotesContext),props.context)?<OwnedFootnoteFormat {...props}/>:null;}
+  unregisterFormatType("core/footnote");
+  registerFormatType("core/footnote",{...nativeFootnoteFormat,edit:AtomicFootnoteFormat});
+}
+function ReadOnlyFootnotes({context}:{context:{postId?:number;postType?:string}}){
+  const serialized=useSelect((select)=>{
+    if(!context.postId || !context.postType)return "[]";
+    const store=select(coreDataStore),record=store.getEntityRecord("postType",context.postType,context.postId) as any;
+    return record?.meta?.footnotes || "[]";
+  },[context.postId,context.postType]);
+  let notes:Footnote[]=[];try{notes=readFootnotes(serialized);}catch{/* Invalid imported metadata remains a readable placeholder. */}
+  const blockProps=useBlockProps();
+  return notes.length?<ol {...blockProps}>{notes.map(note=><li key={note.id}><span id={note.id} dangerouslySetInnerHTML={{__html:note.content}}/> <a href={`#${note.id}-link`} onClick={event=>event.preventDefault()}>↩︎</a></li>)}</ol>:<div {...blockProps}><p>Footnotes found in blocks within this document will be displayed here.</p></div>;
+}
+addFilter("editor.BlockEdit","worldact/atomic-footnote-editing",(BlockEdit:any)=>function FootnoteScope(props:any){
+  const owner=useContext(AtomicFootnotesContext);
+  const foreignBoundary=useSelect(select=>props.name==="core/footnotes" && select(blockEditorStore).getBlockParents(props.clientId).some(id=>footnoteEntityBoundaries.has(select(blockEditorStore).getBlockName(id)||"")),[props.name,props.clientId]);
+  return props.name==="core/footnotes" && (!ownsFootnotes(owner,props.context)||foreignBoundary)?<ReadOnlyFootnotes context={props.context || {}}/>:<BlockEdit {...props}/>;
+});
 if (!getBlockBindingsSource("core/post-data"))
   registerBlockBindingsSource({
     name: "core/post-data",
@@ -922,6 +960,8 @@ export type GutenbergEditorHandle = {
   redo: () => void;
   getBlocks: () => SerializedBlock[];
   getHTML: () => string;
+  getFootnotes: () => Footnote[];
+  acknowledgeFootnotes: (saved:Footnote[],sent:Footnote[]) => void;
   insertBlocks: (blocks: SerializedBlock[]) => void;
   flushEntities: () => Promise<void>;
 };
@@ -930,6 +970,8 @@ export type GutenbergEditorProps = {
   initialHTML: string;
   resetKey: string | number;
   onChange: (blocks: SerializedBlock[], html: string) => void;
+  initialFootnotes?: Footnote[];
+  onMetadataChange?: (footnotes: Footnote[]) => void;
   media: Media[];
   onUpload?: (files: File[]) => Promise<Media[]>;
   onError?: (message: string) => void;
@@ -961,12 +1003,13 @@ function UndoIcon({ redo = false }: { redo?: boolean }) {
   );
 }
 
-function EntityEditsObserver({ onDirty }: { onDirty: () => void }) {
+function EntityEditsObserver({ onDirty, postId, postType }: { onDirty: () => void; postId?:number;postType?:string }) {
   const changes = useSelect(
     (select) =>
       JSON.stringify(
         select(coreDataStore)
           .__experimentalGetDirtyEntityRecords()
+          .filter((record) => !(record.kind === "postType" && ["post","page"].includes(record.name)))
           .map((record) => ({
             kind: record.kind,
             name: record.name,
@@ -978,7 +1021,7 @@ function EntityEditsObserver({ onDirty }: { onDirty: () => void }) {
             ),
           })),
       ),
-    [],
+    [postId,postType],
   );
   const last = useRef(changes);
   useEffect(() => {
@@ -1009,7 +1052,7 @@ const GutenbergSession = forwardRef<
       undo: select(coreDataStore).hasUndo(),
       redo: select(coreDataStore).hasRedo(),
       dirty:
-        select(coreDataStore).__experimentalGetDirtyEntityRecords().length > 0,
+        select(coreDataStore).__experimentalGetDirtyEntityRecords().some(record=>!(record.kind==="postType" && ["post","page"].includes(record.name))),
     }),
     [],
   );
@@ -1070,8 +1113,36 @@ const GutenbergSession = forwardRef<
   const containerRef = useRef<HTMLDivElement>(null);
   const onChangeRef = useRef(props.onChange);
   onChangeRef.current = props.onChange;
-  const history = useRef({ items: [blocks], index: 0, lastInput: 0 });
-  const signature = useRef(JSON.stringify(toStored(blocks)));
+  const metadataRef = useRef(props.onMetadataChange);
+  metadataRef.current = props.onMetadataChange;
+  const footnotesRef = useRef(readFootnotes(props.initialFootnotes));
+  const deletedFootnotes = useRef(new Map<string,Footnote>());
+  const currentPost = useRef({id:props.postId,type:props.postType || "post"});
+  currentPost.current={id:props.postId,type:props.postType || "post"};
+  const metadataSeeded = useRef(false);
+  const [metadataReady,setMetadataReady]=useState(!props.onMetadataChange || !(props.initialFootnotes?.length || serialize(blocks).includes("<!-- wp:footnotes")));
+  const nativeFootnotes = useSelect((select) => {
+    if(!props.onMetadataChange || !props.postId)return null;
+    const store=select(coreDataStore);
+    if(!store.getEntityRecord("postType",props.postType || "post",props.postId))return null;
+    const record=store.getEditedEntityRecord("postType",props.postType || "post",props.postId) as {meta?:{footnotes?:string}} | false;
+    return record && record.meta?.footnotes || "[]";
+  },[props.postId,props.postType,!!props.onMetadataChange]);
+  const previewOwner=useRef(Symbol("editor-preview"));
+  useEffect(()=>{
+    const id=previewContext.postId as number|undefined,type=previewContext.postType as string|undefined;
+    const record=id && type?select(coreDataStore).getEditedEntityRecord("postType",type,id) as any:null;
+    setEditorPreview(previewOwner.current,{id,type,attributes:record || {}});
+    return()=>removeEditorPreview(previewOwner.current);
+  },[previewContext,nativeFootnotes]);
+  const history = useRef({ items: [{blocks,footnotes:footnotesRef.current}], index: 0, lastInput: 0 });
+  const signature = useRef(JSON.stringify([toStored(blocks),footnotesRef.current]));
+  const writeNativeFootnotes=useCallback(async (footnotes:Footnote[])=>{
+    const {id,type}=currentPost.current;if(!id || !metadataRef.current)return;
+    const record=select(coreDataStore).getEditedEntityRecord("postType",type,id) as {meta?:Record<string,unknown>} | false;
+    const serialized=JSON.stringify(footnotes);
+    if(record && record.meta?.footnotes!==serialized)await dispatch(coreDataStore).editEntityRecord("postType",type,id,{meta:{...record.meta,footnotes:serialized}},{isCached:true,undoIgnore:true});
+  },[]);
   const allMedia = useMemo(
     () => [
       ...new Map(
@@ -1089,13 +1160,22 @@ const GutenbergSession = forwardRef<
   );
 
   const emit = useCallback(
-    (next: Block[], kind: "input" | "change" | "history") => {
+    (next: Block[], kind: "input" | "change" | "history", noteSnapshot?:Footnote[]) => {
+      let footnotes=noteSnapshot || footnotesRef.current;
+      if(metadataRef.current) {
+        try {
+          const synchronized=synchronizeFootnotes(next,serialize(next),footnotes,deletedFootnotes.current,(html)=>new DOMParser().parseFromString(html,"text/html"),{read:(value)=>value instanceof RichTextData?value.toHTMLString():null,write:(html)=>RichTextData.fromHTMLString(html)});
+          next=synchronized.blocks;footnotes=synchronized.footnotes;
+        } catch(reason){reportError(reason instanceof Error?reason.message:"Footnotes could not be updated.");return;}
+      }
       setBlocks(next);
       blocksRef.current = next;
       const stored = toStored(next);
-      const nextSignature = JSON.stringify(stored);
+      const nextSignature = JSON.stringify([stored,footnotes]);
       if (signature.current === nextSignature) return;
       signature.current = nextSignature;
+      footnotesRef.current=footnotes;
+      void writeNativeFootnotes(footnotes);
       if (kind !== "history") {
         const state = history.current;
         const now = Date.now();
@@ -1104,10 +1184,10 @@ const GutenbergSession = forwardRef<
           state.index === state.items.length - 1 &&
           state.index > 0 &&
           now - state.lastInput < 800;
-        if (mergeTyping) state.items[state.index] = next;
+        if (mergeTyping) state.items[state.index] = {blocks:next,footnotes};
         else {
           state.items = state.items.slice(0, state.index + 1);
-          state.items.push(next);
+          state.items.push({blocks:next,footnotes});
           if (state.items.length > 100) state.items.shift();
           state.index = state.items.length - 1;
         }
@@ -1115,9 +1195,17 @@ const GutenbergSession = forwardRef<
       }
       setHistoryVersion((value) => value + 1);
       onChangeRef.current(stored, serialize(next));
+      metadataRef.current?.(footnotes);
     },
-    [],
+    [reportError,writeNativeFootnotes],
   );
+  useEffect(()=>{
+    if(nativeFootnotes===null)return;
+    if(!metadataSeeded.current){metadataSeeded.current=true;void writeNativeFootnotes(footnotesRef.current).then(()=>setMetadataReady(true)).catch(reason=>reportError(reason.message));return;}
+    if(!metadataReady)return;
+    try {const notes=readFootnotes(nativeFootnotes);if(JSON.stringify(notes)!==JSON.stringify(footnotesRef.current))emit(blocksRef.current,"input",notes);}
+    catch(reason){reportError(reason instanceof Error?reason.message:"Footnotes could not be updated.");}
+  },[nativeFootnotes,metadataReady,emit,writeNativeFootnotes,reportError]);
 
   const travel = useCallback(
     (direction: -1 | 1) => {
@@ -1127,6 +1215,7 @@ const GutenbergSession = forwardRef<
       const name = active?.closest("[data-type]")?.getAttribute("data-type");
       const entities = select(coreDataStore),
         canTravel = direction === -1 ? entities.hasUndo() : entities.hasRedo();
+      const hasEntityEdits=entities.__experimentalGetDirtyEntityRecords().some(record=>!(record.kind==="postType" && ["post","page"].includes(record.name)));
       const inEntity = [
         "core/site-title",
         "core/site-tagline",
@@ -1136,7 +1225,7 @@ const GutenbergSession = forwardRef<
         "core/navigation-submenu",
         "core/template-part",
       ].includes(name || "");
-      if (inEntity && canTravel) {
+      if (inEntity && canTravel && hasEntityEdits) {
         if (direction === -1) dispatch(coreDataStore).undo();
         else dispatch(coreDataStore).redo();
         return;
@@ -1146,7 +1235,7 @@ const GutenbergSession = forwardRef<
       if (nextIndex < 0 || nextIndex >= state.items.length) {
         if (
           canTravel &&
-          entities.__experimentalGetDirtyEntityRecords().length
+          hasEntityEdits
         ) {
           if (direction === -1) dispatch(coreDataStore).undo();
           else dispatch(coreDataStore).redo();
@@ -1155,7 +1244,7 @@ const GutenbergSession = forwardRef<
       }
       state.index = nextIndex;
       state.lastInput = 0;
-      emit(state.items[nextIndex], "history");
+      emit(state.items[nextIndex].blocks, "history",state.items[nextIndex].footnotes);
     },
     [emit],
   );
@@ -1200,6 +1289,16 @@ const GutenbergSession = forwardRef<
       redo: () => travel(1),
       getBlocks: () => toStored(blocksRef.current),
       getHTML: () => serialize(blocksRef.current),
+      getFootnotes: () => footnotesRef.current.map(note=>({...note})),
+      acknowledgeFootnotes:(saved,sent)=>{
+        const {id,type}=currentPost.current;if(!id)return;
+        const record=select(coreDataStore).getEntityRecord("postType",type,id) as any;if(!record)return;
+        if(JSON.stringify(footnotesRef.current)===JSON.stringify(sent)){
+          footnotesRef.current=readFootnotes(saved);
+          signature.current=JSON.stringify([toStored(blocksRef.current),footnotesRef.current]);
+        }
+        void dispatch(coreDataStore).receiveEntityRecords("postType",type,{...record,meta:{...record.meta,footnotes:JSON.stringify(saved)}},undefined,false,{meta:{...record.meta,footnotes:JSON.stringify(sent)}});
+      },
       insertBlocks: (next) =>
         emit([...blocksRef.current, ...restoreBlocks(next)], "change"),
       flushEntities: async () => {
@@ -1382,7 +1481,7 @@ const GutenbergSession = forwardRef<
 
   const settings = useMemo(
     () => ({
-      allowedBlockTypes:
+      allowedBlockTypes: (
         props.context === "site"
           ? [
               ...WORLDAct_CONTENT_BLOCKS,
@@ -1390,7 +1489,7 @@ const GutenbergSession = forwardRef<
               ...WORLDAct_SITE_BLOCKS,
               ...siteBindings.map((binding) => `worldact/${binding.name}`),
             ]
-          : [...WORLDAct_CONTENT_BLOCKS, ...WORLDAct_DYNAMIC_BLOCKS],
+          : [...WORLDAct_CONTENT_BLOCKS, ...WORLDAct_DYNAMIC_BLOCKS]),
       alignWide: true,
       supportsLayout: true,
       hasFixedToolbar: true,
@@ -1492,7 +1591,7 @@ const GutenbergSession = forwardRef<
       mediaUpload,
       styles: canvasStyles,
     }),
-    [mediaUpload, patterns, reusable, props.context, reportError, themeDocument],
+    [mediaUpload, patterns, reusable, props.context, !!props.onMetadataChange, reportError, themeDocument],
   );
 
   const keyDown = (event: KeyboardEvent<HTMLDivElement>) => {
@@ -1515,6 +1614,7 @@ const GutenbergSession = forwardRef<
     <MediaContext.Provider
       value={{ media: allMedia, upload, onError: reportError }}
     >
+      <AtomicFootnotesContext.Provider value={props.onMetadataChange?{postId:props.postId,postType:props.postType || "post"}:null}>
       <SlotFillProvider>
         <BlockEditorProvider
           value={blocks}
@@ -1523,6 +1623,8 @@ const GutenbergSession = forwardRef<
           settings={settings}
         >
           <EntityEditsObserver
+            postId={props.postId}
+            postType={props.postType || "post"}
             onDirty={() =>
               onChangeRef.current(
                 toStored(blocksRef.current),
@@ -1609,14 +1711,14 @@ const GutenbergSession = forwardRef<
                   </aside>
                 )}
                 <div className="worldact-gutenberg-canvas">
-                  <BlockCanvas
+                  {metadataReady ? <BlockCanvas
                     height="min(72vh, 900px)"
                     styles={
                       props.canvasCSS
                         ? [...canvasStyles, ...(themeDocument ? [{css:compileThemeStyles(themeDocument, "body.editor-styles-wrapper",themeOverrides)}] : []), { css: props.canvasCSS }]
                         : [...canvasStyles, ...(themeDocument ? [{css:compileThemeStyles(themeDocument, "body.editor-styles-wrapper",themeOverrides)}] : [])]
                     }
-                  />
+                  /> : <p className="worldact-public-loading" role="status">Loading…</p>}
                 </div>
                 {props.inspectorOpen && (
                   <aside
@@ -1829,6 +1931,7 @@ const GutenbergSession = forwardRef<
           <Popover.Slot />
         </BlockEditorProvider>
       </SlotFillProvider>
+      </AtomicFootnotesContext.Provider>
     </MediaContext.Provider>
   );
 });

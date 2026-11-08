@@ -1,9 +1,6 @@
 import "dotenv/config";
 import express, {
   type ErrorRequestHandler,
-  type NextFunction,
-  type Request,
-  type Response,
 } from "express";
 import multer from "multer";
 import { z } from "zod";
@@ -15,7 +12,6 @@ import {
   pool,
   rootDir,
   uploadsDir,
-  userFields,
   postFields,
   mediaFields,
   commentFields,
@@ -23,11 +19,8 @@ import {
 } from "./db.js";
 import {
   attachUser,
-  createSession,
   destroySession,
-  hashPassword,
   requireRole,
-  verifyPassword,
   type AuthRequest,
 } from "./auth.js";
 
@@ -41,6 +34,7 @@ import blocksRouter from "./blocks.js";
 import applicationPasswordsRouter from "./application-passwords.js";
 import usersRouter from "./users.js";
 import nativeFormsRouter from "./native-forms.js";
+import { authenticateLogin, loginRateLimit } from "./login.js";
 import editLocksRouter from "./edit-locks.js";
 import siteIdentityRouter from "./site-identity.js";
 import diagnosticsRouter from "./diagnostics.js";
@@ -71,7 +65,7 @@ app.use((_req, res, next) => {
   res.setHeader("Referrer-Policy", "strict-origin-when-cross-origin");
   next();
 });
-app.use(["/api", "/wp-json", "/wp-comments-post.php", "/logout", "/post-password"], attachUser);
+app.use(["/api", "/wp-json", "/wp-comments-post.php", "/logout", "/post-password", "/public-login"], attachUser);
 app.use("/api", (_req, res, next) => {
   res.setHeader("Cache-Control", "no-store");
   next();
@@ -140,62 +134,24 @@ function assertOwner(user: User, authorId: number) {
   if (["author", "contributor"].includes(user.role) && user.id !== authorId)
     throw new HttpError(403, "You can only edit your own content.");
 }
-function rateLimit(max: number, duration: number) {
-  const attempts = new Map<string, { count: number; expires: number }>();
-  return (req: Request, res: Response, next: NextFunction) => {
-    const now = Date.now();
-    if (attempts.size >= 10_000)
-      for (const [key, value] of attempts)
-        if (value.expires <= now) attempts.delete(key);
-    if (attempts.size >= 10_000 && !attempts.has(req.ip || "unknown")) {
-      res
-        .status(429)
-        .json({ error: "Too many requests. Please try again later." });
-      return;
-    }
-    const key = req.ip || "unknown";
-    let attempt = attempts.get(key);
-    if (!attempt || attempt.expires <= now) {
-      attempt = { count: 0, expires: now + duration };
-      attempts.set(key, attempt);
-    }
-    attempt.count++;
-    if (attempt.count > max) {
-      res.setHeader("Retry-After", Math.ceil((attempt.expires - now) / 1000));
-      res
-        .status(429)
-        .json({ error: "Too many requests. Please try again later." });
-      return;
-    }
-    next();
-  };
-}
 
 app.get("/api/session", (req: AuthRequest, res) =>
   res.json({ user: req.user || null }),
 );
-app.post("/api/auth/login", rateLimit(30, 15 * 60_000), async (req, res) => {
+app.post("/api/auth/login", loginRateLimit, async (req, res) => {
   const input = z
     .object({
       login: z.string().trim().min(1).max(254),
       password: z.string().min(1).max(1024),
+      remember: z.boolean().optional(),
     })
     .strict()
     .parse(req.body);
-  const result = await pool.query<User & { password_hash: string }>(
-    `SELECT ${userFields}, password_hash FROM users WHERE lower(username) = lower($1) OR lower(email) = lower($1) LIMIT 1`,
-    [input.login],
-  );
-  const record = result.rows[0];
-  if (
-    !record ||
-    !(await verifyPassword(input.password, record.password_hash))
-  ) {
+  const user = await authenticateLogin(req, res, input);
+  if (!user) {
     res.status(401).json({ error: "The username or password is incorrect." });
     return;
   }
-  const { password_hash: _password, ...user } = record;
-  await createSession(req, res, user.id);
   res.json({ user });
 });
 app.post("/api/auth/logout", async (req, res) => {

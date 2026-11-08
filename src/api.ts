@@ -42,7 +42,9 @@ export type Term = {
   count: number;
   isDefault?: boolean;
 };
+export type Footnote = { id: string; content: string };
 export type Post = {
+  footnotes?: Footnote[];
   templateSlug?:string;
   id: number;
   type: "post" | "page";
@@ -81,6 +83,7 @@ export type Post = {
   readingTime?: number;
 };
 export type Revision = {
+  footnotes?: Footnote[];
   id: number;
   postId: number;
   title: string;
@@ -96,6 +99,7 @@ export type Revision = {
   status: PostStatus;
 };
 export type Autosave = {
+  footnotes?: Footnote[];
   title: string;
   content: string;
   rawContent?: string;

@@ -30,6 +30,7 @@ export async function migrate() {
       "post-templates-schema.sql",
       "post-trash-schema.sql",
       "bundled-plugins-schema.sql",
+      "footnotes-schema.sql",
     ]) {
       const extension = await readFile(
         path.join(rootDir, "server", schema),

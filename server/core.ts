@@ -30,6 +30,8 @@ import { assertEditLease } from "./edit-lease.js";
 import { postFormats } from "../shared/post-formats.js";
 import { contributorCanEditPostStatus } from "./comment-access.js";
 import { appendDateArchiveSQL, dateArchiveDTO, parseDateArchiveQuery } from "./date-archives.js";
+import { parseFootnotes } from "./footnotes.js";
+import { withPreviewAutosave } from "./post-preview.js";
 
 const router = Router();
 const contentRoles = requireRole(
@@ -63,6 +65,7 @@ const postShape = {
   status: z.enum(statuses).optional(),
   slug: z.string().max(220).optional(),
   blocks: z.array(z.unknown()).max(2000).optional(),
+  footnotes: z.unknown().transform(parseFootnotes).optional(),
   version: idSchema.optional(),
   scheduledAt: dateSchema.optional(),
   publishedAt: dateSchema.optional(),
@@ -288,6 +291,7 @@ async function setTerms(client: PoolClient, postId: number, ids: number[]) {
 }
 function metadata(post: any) {
   return {
+    footnotes: post.footnotes ?? [],
     preTrashStatus: post.preTrashStatus ?? null,
     authorId: post.authorId,
     format: post.format ?? "standard",
@@ -457,6 +461,7 @@ async function savePost(
     content,
     excerpt,
     blocks,
+    footnotes: input.footnotes ?? existing?.footnotes ?? [],
     parentId,
     featuredMediaId,
     status,
@@ -546,7 +551,7 @@ async function savePost(
       );
       id = created.rows[0].id;
     }
-    await client.query("UPDATE posts SET template_slug=$1,pre_trash_status=$2 WHERE id=$3",[templateSlug,preTrashStatus,id]);
+    await client.query("UPDATE posts SET template_slug=$1,pre_trash_status=$2,footnotes=$3::jsonb WHERE id=$4",[templateSlug,preTrashStatus,JSON.stringify(values.footnotes),id]);
     await setTerms(client, id, termIds);
     if (input.password !== undefined)
       await client.query("DELETE FROM post_access_tokens WHERE post_id=$1", [
@@ -778,7 +783,7 @@ router.delete("/posts/:id", contentRoles, async (req: AuthRequest, res) => {
   res.json({ ok: true });
 });
 
-const revisionFields = `r.id,r.post_id AS "postId",r.title,r.content,r.raw_content AS "rawContent",r.excerpt,r.blocks,r.slug,r.status,r.version,r.metadata,r.created_at AS "createdAt",coalesce(u.display_name,'Deleted user') AS "authorName"`;
+const revisionFields = `r.id,r.post_id AS "postId",r.title,r.content,r.raw_content AS "rawContent",r.excerpt,r.blocks,coalesce(r.metadata->'footnotes','[]'::jsonb) AS footnotes,r.slug,r.status,r.version,r.metadata,r.created_at AS "createdAt",coalesce(u.display_name,'Deleted user') AS "authorName"`;
 async function authorizedPost(req: AuthRequest) {
   const post = await getPost(parseId(req.params.id));
   if (!post) throw new HttpError(404, "Post not found.");
@@ -838,6 +843,7 @@ router.post(
           content: revision.raw_content || revision.content,
           excerpt: revision.excerpt,
           blocks: revision.blocks,
+          footnotes: parseFootnotes(revision.metadata?.footnotes ?? []),
           slug: revision.slug,
           format:
             post.type === "post"
@@ -857,9 +863,10 @@ const autosaveShape = {
   content: z.string().max(1_000_000).optional(),
   excerpt: z.string().max(20_000).optional(),
   blocks: z.array(z.unknown()).max(2000).optional(),
+  footnotes: z.unknown().transform(parseFootnotes).optional(),
   version: idSchema.optional(),
 };
-const autosaveFields = `title,content,raw_content AS "rawContent",excerpt,blocks,saved_at AS "savedAt",version`;
+const autosaveFields = `title,content,raw_content AS "rawContent",excerpt,blocks,footnotes,saved_at AS "savedAt",version`;
 router.get(
   "/posts/:id/autosave",
   contentRoles,
@@ -882,7 +889,7 @@ router.put(
       const { post } = await lockedPost(client, parseId(req.params.id), user);
       checkVersion(input, post);
       const result = await client.query(
-        `INSERT INTO post_autosaves(post_id,user_id,title,content,excerpt,blocks,version,raw_content) VALUES($1,$2,$3,$4,$5,$6::jsonb,$7,$8) ON CONFLICT(post_id,user_id) DO UPDATE SET title=EXCLUDED.title,content=EXCLUDED.content,excerpt=EXCLUDED.excerpt,blocks=EXCLUDED.blocks,version=EXCLUDED.version,raw_content=EXCLUDED.raw_content,saved_at=now() RETURNING ${autosaveFields}`,
+        `INSERT INTO post_autosaves(post_id,user_id,title,content,excerpt,blocks,version,raw_content,footnotes) VALUES($1,$2,$3,$4,$5,$6::jsonb,$7,$8,$9::jsonb) ON CONFLICT(post_id,user_id) DO UPDATE SET title=EXCLUDED.title,content=EXCLUDED.content,excerpt=EXCLUDED.excerpt,blocks=EXCLUDED.blocks,version=EXCLUDED.version,raw_content=EXCLUDED.raw_content,footnotes=EXCLUDED.footnotes,saved_at=now() RETURNING ${autosaveFields}`,
         [
           post.id,
           user.id,
@@ -902,6 +909,7 @@ router.put(
           input.content === undefined
             ? (post.rawContent ?? "")
             : cleanRawContent(input.content),
+          JSON.stringify(input.footnotes ?? post.footnotes ?? []),
         ],
       );
       return result.rows[0];
@@ -1212,15 +1220,16 @@ async function publicPost(post: any, locked = false, options: RenderOptions = {}
     pendingCommentCount: _pendingCommentCount,
     ...safe
   } = decoratePost(post);
+  const linked = await withPermalink(safe);
   const result = {
-    ...safe,
+    ...linked,
     commentCount: safe.approvedCommentCount ?? safe.commentCount ?? 0,
     locked,
-    content: locked ? "" : await renderPublicContent(post, options),
+    footnotes: locked ? [] : safe.footnotes ?? [],
+    content: locked ? "" : await renderPublicContent({ ...post, locked }, { requestPath: linked.permalink, ...options }),
     excerpt: locked ? "" : safe.excerpt,
   };
-  const linked = await withPermalink(result);
-  return locked ? linked : enhancePublicPost(linked);
+  return locked ? result : enhancePublicPost(result);
 }
 async function publicComments(postId: number, page: number, settings: Awaited<ReturnType<typeof getSettings>>) {
   return (
@@ -1269,10 +1278,11 @@ router.get(
   "/posts/:id/preview",
   contentRoles,
   async (req: AuthRequest, res) => {
-    const post = await authorizedPost(req);
+    const post = await withPreviewAutosave(await authorizedPost(req), needUser(req).id);
     res.setHeader("X-Robots-Tag", "noindex, nofollow");
+    res.setHeader("Cache-Control", "private, no-store");
     res.json({
-      post: await publicPost(post, false, { query: req.query }),
+      post: await publicPost(post, false, { query: req.query, preview: true, user: needUser(req) }),
       ...(await commentResponse(post.id, req)),
     });
   },
@@ -1323,7 +1333,7 @@ router.get("/public/site", async (req, res) => {
     return publicPost(
       safe,
       !(await hasPostAccess(req, post.id, _passwordHash)),
-      { query: req.query },
+      { query: req.query, requestPath: "/", user: (req as AuthRequest).user },
     );
   };
   const { adminEmail: _adminEmail, commentModerationKeys: _moderationKeys, disallowedCommentKeys: _disallowedKeys, ...safeSettings } = settings;
@@ -1387,7 +1397,7 @@ router.get("/public/posts/:slug", async (req, res) => {
   const locked = !(await hasPostAccess(req, post.id, _passwordHash));
   await setRobots(res);
   res.json({
-    post: await publicPost(post, locked, { query: req.query }),
+    post: await publicPost(post, locked, { query: req.query, user: (req as AuthRequest).user }),
     ...(await commentResponse(post.id, req, locked)),
   });
 });
@@ -1439,7 +1449,7 @@ export async function unlockPublicPost(req:Request,res:Response) {
     });
   }
   res.json({
-    post: await publicPost(post, false, { query: req.query }),
+    post: await publicPost(post, false, { query: req.query, user: (req as AuthRequest).user }),
     ...(await commentResponse(post.id, req)),
   });
 }

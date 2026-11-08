@@ -26,7 +26,9 @@ import {
 } from "./block-renderer.js";
 import { themeIds, readThemeDesign } from "./themes.js";
 import {hasPostAccess,assertPostAccess} from "./core.js";
+import { withPreviewAutosave } from "./post-preview.js";
 import { postFormats } from "../shared/post-formats.js";
+import { postPermalink } from "./permalinks.js";
 
 const escapeHTML = (value: unknown) =>
   String(value ?? "").replace(
@@ -738,13 +740,15 @@ router.all(
         )
       ).rows[0];
       if (!post) throw new HttpError(404, "Post not found.");
-      if (
-        !["administrator", "editor"].includes(user.role) &&
-        post.authorId !== user.id
-      )
-        throw new HttpError(403, "You cannot edit this post.");
+      assertPostAccess(user, post);
+      post.locked = false;
     }
-    res.json({ rendered: await renderBlock(name, attributes, { post }) });
+    const query:Record<string,string>={};
+    for(const key of ["search","s","category","tag","author","page","paged","commentPage","year","month","monthnum","day","m","w"]){
+      const value=req.query[key];if(typeof value==="string" && value.length<=2000)query[key]=value;
+    }
+    const requestPath=post?await postPermalink(post,await getSettings()):"/";
+    res.json({ rendered: await renderBlock(name, attributes, { post, user, preview:true, requestPath, query }) });
   },
 );
 router.get("/api/public/templates/:slug", async (req:AuthRequest, res) => {
@@ -773,7 +777,7 @@ router.get("/api/public/templates/:slug", async (req:AuthRequest, res) => {
       )
     ).rows[0];
     if (!post) throw new HttpError(404, "Post not found.");
-    if(preview)assertPostAccess(needUser(req),post);
+    if(preview){const user=needUser(req);assertPostAccess(user,post);post=await withPreviewAutosave(post,user.id);}
     if (post.hasPassword) {
       post.locked=!preview && !(await hasPostAccess(req,id,post.passwordHash));
       if(post.locked){post.content="";post.rawContent="";post.raw_content="";post.blocks=[];post.excerpt="";}
@@ -802,6 +806,7 @@ router.get("/api/public/templates/:slug", async (req:AuthRequest, res) => {
     content: await renderSiteDocument(doc, {
       post,
       requestPath,
+      templateSlug: doc.slug,
       query,
       page: Number(req.query.page) || 1,
       placeholderBindings: false,

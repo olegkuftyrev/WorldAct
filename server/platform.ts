@@ -4,7 +4,6 @@ import express from "express";
 import multer from "multer";
 import sharp from "sharp";
 import { fileTypeFromBuffer } from "file-type";
-import nodemailer from "nodemailer";
 import { z } from "zod";
 import { postFormats } from "../shared/post-formats.js";
 import { createHash, randomBytes } from "node:crypto";
@@ -45,11 +44,12 @@ import { remapImportedBlockReferences } from "./block-portability.js";
 import { SiteImport, allocateImportedBlockEntities, exportMediaFiles, exportFontLibrary, MAX_ARCHIVE_JSON_BYTES, MAX_STORED_CONTENT_BYTES } from "./site-portability.js";
 import { postPermalink } from "./permalinks.js";
 import { dateArchiveLocalSQL } from "./date-archives.js";
+import { parseFootnotes, freshFootnoteIds } from "./footnotes.js";
 
 import { settingSchema, menuSchema, validMenu, styleSchema, documentSchema, validateExtensionSettings } from "./site-validation.js";
 import { readThemeDesign, validateThemeDesign, resetBundledDocument } from "./themes.js";
 import {pendingAdminEmail,queueAdminEmailChange} from "./site-identity.js";
-import {deliverMail} from "./accounts.js";
+import {deliverMail,queueMail} from "./accounts.js";
 
 const router = express.Router();
 const admin = requireRole("administrator");
@@ -418,53 +418,33 @@ router.post("/auth/forgot-password", async (req, res) => {
     "SELECT id,email FROM users WHERE lower(username)=lower($1) OR lower(email)=lower($1)",
     [login],
   );
-  const mode = process.env.SMTP_HOST ? "queued" : "local-outbox";
+  const mode = process.env.SMTP_HOST && process.env.NODE_ENV !== "test" && process.env.WORLDACT_MAIL_MODE !== "outbox" ? "queued" : "local-outbox";
   if (user.rows[0]) {
     const token = randomBytes(32).toString("hex");
-    await pool.query(
-      "DELETE FROM password_resets WHERE user_id=$1 OR expires_at<now()",
-      [user.rows[0].id],
-    );
-    await pool.query(
-      "INSERT INTO password_resets(token_hash,user_id,expires_at) VALUES($1,$2,now()+interval '30 minutes')",
-      [createHash("sha256").update(token).digest("hex"), user.rows[0].id],
-    );
     const link = `${process.env.APP_ORIGIN || "http://127.0.0.1:5173"}/reset-password?token=${token}`,
       body = `Someone requested a password reset for your WorldAct account.\n\nReset your password within 30 minutes:\n${link}\n\nIgnore this message if you did not request a reset.`;
-    const saved = await pool.query(
-      "INSERT INTO mail_outbox(recipient,subject,body) VALUES($1,$2,$3) RETURNING id",
-      [user.rows[0].email, "Reset your WorldAct password", body],
-    );
-    if (process.env.SMTP_HOST) {
-      const transport = nodemailer.createTransport({
-        host: process.env.SMTP_HOST,
-        port: Number(process.env.SMTP_PORT || 587),
-        secure: process.env.SMTP_SECURE === "true",
-        auth: process.env.SMTP_USER
-          ? { user: process.env.SMTP_USER, pass: process.env.SMTP_PASSWORD }
-          : undefined,
-      });
-      try {
-        await transport.sendMail({
-          from: process.env.SMTP_FROM || "WorldAct <worldact@localhost>",
-          to: user.rows[0].email,
-          subject: "Reset your WorldAct password",
-          text: body,
-        });
-        await pool.query("UPDATE mail_outbox SET delivered=true WHERE id=$1", [
-          saved.rows[0].id,
-        ]);
-      } catch {
-        console.error(
-          "SMTP delivery failed; the message remains in the local mail outbox.",
-        );
+    // Global expiry cleanup holds no user lock. Token replacement and its
+    // outbox message then share the user-first order used by login/reset.
+    await pool.query("DELETE FROM password_resets WHERE expires_at<now()");
+    const client=await pool.connect();
+    let mail: Awaited<ReturnType<typeof queueMail>> | null=null;
+    try {
+      await client.query("BEGIN");
+      const current=(await client.query("SELECT id,email FROM users WHERE id=$1 FOR UPDATE",[user.rows[0].id])).rows[0];
+      if(current){
+        await client.query("DELETE FROM password_resets WHERE user_id=$1",[current.id]);
+        await client.query("INSERT INTO password_resets(token_hash,user_id,expires_at) VALUES($1,$2,now()+interval '30 minutes')",[createHash("sha256").update(token).digest("hex"),current.id]);
+        mail=await queueMail(client,current.email,"Reset your WorldAct password",body);
       }
-    }
+      await client.query("COMMIT");
+    }catch(error){await client.query("ROLLBACK");throw error;}
+    finally{client.release();}
+    await deliverMail(mail);
   }
   res.json({
     ok: true,
     delivery: mode,
-    message: process.env.SMTP_HOST
+    message: mode === "queued"
       ? "If the account exists, a password reset request has been recorded."
       : "If the account exists, a reset link is in the local mail outbox. An administrator can read it in Tools → Mail.",
   });
@@ -477,13 +457,20 @@ router.post("/auth/reset-password", async (req, res) => {
     })
     .strict()
     .parse(req.body);
-  const hash = createHash("sha256").update(input.token).digest("hex"),
+  const hash = createHash("sha256").update(input.token).digest("hex");
+  const candidate = (await pool.query("SELECT user_id FROM password_resets WHERE token_hash=$1 AND expires_at>now()", [hash])).rows[0];
+  if (!candidate) throw new HttpError(400, "This password reset link has expired or has already been used.");
+  const passwordHash = await hashPassword(input.password),
     client = await pool.connect();
   try {
     await client.query("BEGIN");
+    // Match login, profile and account deletion: lock the user before any
+    // reset/session rows, then consume the still-valid token under that lock.
+    if (!(await client.query("SELECT id FROM users WHERE id=$1 FOR UPDATE", [candidate.user_id])).rowCount)
+      throw new HttpError(400, "This password reset link has expired or has already been used.");
     const result = await client.query(
-      "DELETE FROM password_resets WHERE token_hash=$1 AND expires_at>now() RETURNING user_id",
-      [hash],
+      "DELETE FROM password_resets WHERE token_hash=$1 AND user_id=$2 AND expires_at>now() RETURNING user_id",
+      [hash, candidate.user_id],
     );
     if (!result.rowCount)
       throw new HttpError(
@@ -491,7 +478,7 @@ router.post("/auth/reset-password", async (req, res) => {
         "This password reset link has expired or has already been used.",
       );
     await client.query("UPDATE users SET password_hash=$1 WHERE id=$2", [
-      await hashPassword(input.password),
+      passwordHash,
       result.rows[0].user_id,
     ]);
     await client.query("DELETE FROM sessions WHERE user_id=$1", [
@@ -1240,6 +1227,7 @@ router.post("/tools/import", admin, async (req: AuthRequest, res) => {
             .enum(["publish", "draft", "pending", "future", "private", "trash"])
             .default("draft"),
           blocks: z.unknown().optional(),
+          footnotes: z.unknown().transform(parseFootnotes).optional(),
           scheduled_at: z.iso.datetime({ offset: true }).nullable().optional(),
           featured_media_id: nullableId.optional(),
           created_at: z.iso.datetime({ offset: true }).optional(),
@@ -1296,6 +1284,7 @@ router.post("/tools/import", admin, async (req: AuthRequest, res) => {
           post.status === "trash" ? post.pre_trash_status ?? null : null,
         ],
       );
+      await client.query("UPDATE posts SET footnotes=$1::jsonb WHERE id=$2", [JSON.stringify(post.footnotes ?? []), r.rows[0].id]);
       if (post.featured_media_id && !site.media.has(post.featured_media_id)) site.warn(`Featured media ${post.featured_media_id} was missing and detached from imported post ${post.id}.`);
       if (post.status === "future") site.warn("Scheduled content was imported as a draft for review; its scheduled date was retained.");
       if (post.passwordProtected) site.warn("Password-protected content was imported as a draft. Set a new password before publishing it.");
@@ -1425,9 +1414,19 @@ router.post("/tools/import", admin, async (req: AuthRequest, res) => {
     for (const item of input.posts) {
       const post = postMap.get(Number(item.id));
       if (!post) continue;
-      const rewritten = remapImportedBlockReferences(String(item.raw_content || item.content), item.blocks, blockEntityMap, references);
+      const rawContent = String(item.raw_content || item.content), notes = parseFootnotes(item.footnotes ?? []);
+      const footnotes = freshFootnoteIds(notes, rawContent), footnoteSelfURLs = new Set<string>();
+      const sourceURL = typeof item.permalink === "string" ? item.permalink : "", targetURL = references.urls?.get(sourceURL);
+      if (targetURL) for (const [source, target] of references.urls || []) {
+        let samePost = target === targetURL;
+        if (!samePost && /^https?:\/\//i.test(target)) { try { samePost = new URL(target).pathname === targetURL; } catch {} }
+        if (samePost) { footnoteSelfURLs.add(source); footnoteSelfURLs.add(target); }
+      }
+      const options = { ...references, footnotes, footnoteSelfURLs };
+      const rewritten = remapImportedBlockReferences(rawContent, item.blocks, blockEntityMap, options);
       addWarnings(rewritten.warnings);
-      await client.query("UPDATE posts SET content=$1,raw_content=$2,blocks=$3::jsonb WHERE id=$4", [rewritten.content, rewritten.rawContent, JSON.stringify(rewritten.blocks), post]);
+      const copiedNotes = notes.map(note => ({ id: footnotes.get(note.id)!, content: remapImportedBlockReferences(note.content, [], blockEntityMap, options).content }));
+      await client.query("UPDATE posts SET content=$1,raw_content=$2,blocks=$3::jsonb,footnotes=$4::jsonb WHERE id=$5", [rewritten.content, rewritten.rawContent, JSON.stringify(rewritten.blocks), JSON.stringify(copiedNotes), post]);
     }
     const defaultCategory = (await getSettings(client)).defaultCategoryId;
     await client.query("INSERT INTO post_terms(post_id,term_id) SELECT p.id,t.id FROM posts p JOIN terms t ON t.id=COALESCE($2::int,(SELECT id FROM terms WHERE is_default LIMIT 1)) WHERE p.id=ANY($1::int[]) AND p.type='post' AND NOT EXISTS(SELECT 1 FROM post_terms pt JOIN terms x ON x.id=pt.term_id WHERE pt.post_id=p.id AND x.taxonomy='category') ON CONFLICT DO NOTHING", [[...postMap.values()], defaultCategory]);

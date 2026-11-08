@@ -39,9 +39,13 @@ import {
   withPermalink,
 } from "./permalinks.js";
 import { z } from "zod";
+import { readTermQuery } from "./term-blocks.js";
+import { assertPostAccess } from "./core.js";
 import { postFormats } from "../shared/post-formats.js";
-import { assertCommentAccess, canEditPostComments } from "./comment-access.js";
+import { assertCommentAccess, canEditPostComments, contributorCanEditPostStatus } from "./comment-access.js";
 import { appendDateArchiveSQL, dateArchiveDTO, parseDateArchivePath } from "./date-archives.js";
+import { parseFootnotes, serializeFootnotes, freshFootnoteIds, MAX_FOOTNOTES_BYTES } from "./footnotes.js";
+import { excerptText } from "./excerpts.js";
 const router = express.Router();
 const admin = requireRole("administrator");
 const esc = (value: unknown) =>
@@ -218,7 +222,7 @@ router.get(
     res
       .type("application/rss+xml")
       .send(
-        `<?xml version="1.0" encoding="UTF-8"?><rss version="2.0" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>${esc(settings.siteTitle)}</title><link>${esc(settings.siteUrl)}</link><description>${esc(settings.tagline)}</description><language>en-US</language><atom:link href="${esc(feed)}" rel="self" type="application/rss+xml"/>${posts.map((p) => `<item><title>${esc(p.title)}</title><link>${esc(absolute(p.permalink, settings.siteUrl))}</link><guid isPermaLink="false">worldact:${p.id}</guid><pubDate>${new Date(p.publishedAt).toUTCString()}</pubDate><dc:creator>${cdata(p.authorName)}</dc:creator><description>${cdata(p.excerpt || plainText(p.content).slice(0, 400))}</description><content:encoded>${cdata(settings.feedExcerpt ? p.excerpt || "<p>" + esc(plainText(p.content).slice(0, 400)) + "</p>" : p.content)}</content:encoded>${p.terms.map((t: any) => `<category>${cdata(t.name)}</category>`).join("")}</item>`).join("")}</channel></rss>`,
+        `<?xml version="1.0" encoding="UTF-8"?><rss version="2.0" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>${esc(settings.siteTitle)}</title><link>${esc(settings.siteUrl)}</link><description>${esc(settings.tagline)}</description><language>en-US</language><atom:link href="${esc(feed)}" rel="self" type="application/rss+xml"/>${posts.map((p) => `<item><title>${esc(p.title)}</title><link>${esc(absolute(p.permalink, settings.siteUrl))}</link><guid isPermaLink="false">worldact:${p.id}</guid><pubDate>${new Date(p.publishedAt).toUTCString()}</pubDate><dc:creator>${cdata(p.authorName)}</dc:creator><description>${cdata(p.excerpt || excerptText(p.content).slice(0, 400))}</description><content:encoded>${cdata(settings.feedExcerpt ? p.excerpt || "<p>" + esc(excerptText(p.content).slice(0, 400)) + "</p>" : p.content)}</content:encoded>${p.terms.map((t: any) => `<category>${cdata(t.name)}</category>`).join("")}</item>`).join("")}</channel></rss>`,
       );
   },
 );
@@ -227,7 +231,7 @@ router.get(["/feed/atom", "/feed/atom/", "/atom.xml"], async (_req, res) => {
   res
     .type("application/atom+xml")
     .send(
-      `<?xml version="1.0" encoding="UTF-8"?><feed xmlns="http://www.w3.org/2005/Atom"><title>${esc(settings.siteTitle)}</title><subtitle>${esc(settings.tagline)}</subtitle><id>${esc(settings.siteUrl)}</id><link href="${esc(absolute("/feed/atom/", settings.siteUrl))}" rel="self"/><link href="${esc(settings.siteUrl)}"/><updated>${posts[0] ? iso(posts[0].updatedAt) : new Date().toISOString()}</updated>${posts.map((p) => `<entry><title>${esc(p.title)}</title><id>urn:worldact:post:${p.id}</id><link href="${esc(absolute(p.permalink, settings.siteUrl))}"/><published>${iso(p.publishedAt)}</published><updated>${iso(p.updatedAt)}</updated><author><name>${esc(p.authorName)}</name></author><summary>${esc(p.excerpt || plainText(p.content).slice(0, 400))}</summary><content type="html">${esc(settings.feedExcerpt ? p.excerpt || plainText(p.content).slice(0, 400) : p.content)}</content></entry>`).join("")}</feed>`,
+      `<?xml version="1.0" encoding="UTF-8"?><feed xmlns="http://www.w3.org/2005/Atom"><title>${esc(settings.siteTitle)}</title><subtitle>${esc(settings.tagline)}</subtitle><id>${esc(settings.siteUrl)}</id><link href="${esc(absolute("/feed/atom/", settings.siteUrl))}" rel="self"/><link href="${esc(settings.siteUrl)}"/><updated>${posts[0] ? iso(posts[0].updatedAt) : new Date().toISOString()}</updated>${posts.map((p) => `<entry><title>${esc(p.title)}</title><id>urn:worldact:post:${p.id}</id><link href="${esc(absolute(p.permalink, settings.siteUrl))}"/><published>${iso(p.publishedAt)}</published><updated>${iso(p.updatedAt)}</updated><author><name>${esc(p.authorName)}</name></author><summary>${esc(p.excerpt || excerptText(p.content).slice(0, 400))}</summary><content type="html">${esc(settings.feedExcerpt ? p.excerpt || excerptText(p.content).slice(0, 400) : p.content)}</content></entry>`).join("")}</feed>`,
     );
 });
 router.get(["/comments/feed", "/comments/feed/"], async (_req, res) => {
@@ -377,8 +381,8 @@ async function wpPost(post: any, req: AuthRequest, edit = false) {
   const protectedPost = !!post.hasPassword;
   const own = canEdit(req.user, post);
   const raw = edit && own ? post.rawContent || post.content : undefined;
-  const rendered = protectedPost && !own ? "" : await renderPublicContent(post);
-  const excerptWords = plainText(rendered).trim().split(/\s+/).filter(Boolean);
+  const rendered = protectedPost && !own ? "" : await renderPublicContent({ ...post, locked: false }, { user: req.user, requestPath: await postPermalink(post, settings), query: req.query, preview: edit });
+  const excerptWords = excerptText(rendered).trim().split(/\s+/).filter(Boolean);
   const excerpt = protectedPost && !own ? "" : post.excerpt
     ? `<p>${esc(post.excerpt)}</p>`
     : excerptWords.length ? `<p>${esc(excerptWords.slice(0, 55).join(" "))}${excerptWords.length > 55 ? " […]" : ""}</p>` : "";
@@ -416,7 +420,7 @@ async function wpPost(post: any, req: AuthRequest, edit = false) {
     sticky: post.sticky,
     template: post.templateSlug || "",
     format: post.format || "standard",
-    meta: {},
+    meta: { footnotes: protectedPost && !own ? "[]" : serializeFootnotes(post.footnotes ?? []) },
     ...(await postEmbeddings(post, req)),
     categories:
       post.categoryIds ||
@@ -458,7 +462,7 @@ function canEdit(user: User | undefined, post: any) {
       (user.id === post.authorId &&
         post.type === "post" &&
         (user.role !== "contributor" ||
-          ["draft", "pending", "trash"].includes(post.status))))
+          contributorCanEditPostStatus(post))))
   );
 }
 router.get(["/wp-json", "/wp-json/"], async (_req, res) => {
@@ -501,19 +505,20 @@ const integerList = (value: unknown, allowZero = false) => {
   if (ids.length > 1000) throw new HttpError(400, "Select at most 1000 identifiers.");
   return ids.map((item) => allowZero && item.trim() === "0" ? 0 : parseId(item.trim()));
 };
+const postRestSchema = { properties: { title: { type: "object" }, content: { type: "object" }, excerpt: { type: "object" }, status: { type: "string" }, meta: { type: "object", properties: { footnotes: { type: "string", default: "[]", context: ["view", "edit"], maxLength: MAX_FOOTNOTES_BYTES } } } } };
 for (const collection of ["posts", "pages"] as const) {
   const type = collection === "pages" ? "page" : "post";
   const createAllowed = (user: User | undefined) => !!user && (["administrator", "editor"].includes(user.role) || (type === "post" && ["author", "contributor"].includes(user.role)));
   router.options("/wp-json/wp/v2/" + collection, (req: AuthRequest, res) => {
     res.setHeader("Allow", createAllowed(req.user) ? "GET, POST" : "GET");
-    res.json({ namespace: "wp/v2", methods: createAllowed(req.user) ? ["GET", "POST"] : ["GET"], schema: { properties: { title: { type: "object" }, content: { type: "object" }, excerpt: { type: "object" }, status: { type: "string" } } } });
+    res.json({ namespace: "wp/v2", methods: createAllowed(req.user) ? ["GET", "POST"] : ["GET"], schema: postRestSchema });
   });
   router.options("/wp-json/wp/v2/" + collection + "/:id", async (req: AuthRequest, res) => {
     const post = await getPost(parseId(req.params.id));
     if (!post || post.type !== type || (post.status !== "publish" && !canEdit(req.user, post))) throw new HttpError(404, "Post not found.");
     const methods = canEdit(req.user, post) ? ["GET", "POST", "PUT", "PATCH", "DELETE"] : ["GET"];
     res.setHeader("Allow", methods.join(", "));
-    res.json({ namespace: "wp/v2", methods, schema: { properties: { title: { type: "object" }, content: { type: "object" }, excerpt: { type: "object" }, status: { type: "string" } } } });
+    res.json({ namespace: "wp/v2", methods, schema: postRestSchema });
   });
   router.get("/wp-json/wp/v2/" + collection, async (req: AuthRequest, res) => {
     res.setHeader("Allow", createAllowed(req.user) ? "GET, POST" : "GET");
@@ -713,13 +718,14 @@ for (const collection of ["posts", "pages"] as const) {
         categories: z.array(z.number().int().positive()).optional(),
         tags: z.array(z.number().int().positive()).optional(),
         author: z.number().int().positive().optional(),
-        meta: z.record(z.string(), z.unknown()).optional(),
+        meta: z.object({ footnotes: z.string().max(MAX_FOOTNOTES_BYTES).optional() }).strict().optional(),
         template: z.string().optional(),
         format: z.enum(postFormats).optional(),
       })
       .strict()
       .parse(req.body);
     const body: Record<string, unknown> = {};
+    if (data.meta?.footnotes !== undefined) body.footnotes = parseFootnotes(data.meta.footnotes);
     if (!req.params.id) body.type = type;
     for (const field of ["title", "content", "excerpt"] as const)
       if (data[field] !== undefined)
@@ -910,52 +916,34 @@ const wpTerm = (term: any, siteUrl: string, base: string) => ({
 });
 for (const collection of ["categories", "tags"] as const) {
   const taxonomy = collection === "tags" ? "tag" : "category";
-  router.get("/wp-json/wp/v2/" + collection, async (req, res) => {
-    const settings = await getSettings(),
-      args: unknown[] = [taxonomy];
-    let where = "t.taxonomy=$1";
-    if (req.query.slug !== undefined) {
-      args.push(z.string().max(2000).parse(req.query.slug).split(","));
-      where += ` AND t.slug=ANY($${args.length}::text[])`;
-    }
-    if (req.query.search !== undefined) {
-      args.push("%" + z.string().max(200).parse(req.query.search) + "%");
-      where += ` AND t.name ILIKE $${args.length}`;
-    }
-    for (const field of ["include", "exclude"] as const)
-      if (req.query[field] !== undefined) {
-        args.push(integerList(req.query[field]));
-        where += ` AND ${field === "exclude" ? "NOT " : ""}(t.id=ANY($${args.length}::int[]))`;
+  router.get("/wp-json/wp/v2/" + collection, async (req: AuthRequest, res) => {
+    const settings = await getSettings();
+    const input = z.object({
+      page: z.coerce.number().int().positive().max(10000).default(1),
+      per_page: z.coerce.number().int().positive().max(100).default(10),
+      search: z.string().max(200).optional(),
+      order: z.enum(["asc","desc"]).default("asc"),
+      orderby: z.enum(["name","slug","id","count","include","description","term_group","include_slugs"]).default("name"),
+      parent: z.coerce.number().int().min(0).max(2147483647).optional(),
+      post: z.coerce.number().int().positive().max(2147483647).optional(),
+      hide_empty: z.enum(["true","false","1","0"]).optional(),
+    }).parse(req.query);
+    if (input.post) {
+      const post = await getPost(input.post);
+      if (!post) throw new HttpError(404,"Post not found.");
+      if (post.status!=="publish") {
+        if (!req.user || !["administrator","editor","author","contributor"].includes(req.user.role)) throw new HttpError(404,"Post not found.");
+        try { assertPostAccess(req.user,post); } catch { throw new HttpError(404,"Post not found."); }
       }
-    if (req.query.hide_empty === "true")
-      where +=
-        " AND EXISTS(SELECT 1 FROM post_terms pt JOIN posts p ON p.id=pt.post_id WHERE pt.term_id=t.id AND p.status='publish')";
-    const total = (
-      await pool.query(
-        `SELECT count(*)::int AS total FROM terms t WHERE ${where}`,
-        args,
-      )
-    ).rows[0].total;
-    const { perPage, offset } = pagination(req, res, total);
-    args.push(perPage, offset);
-    const terms = (
-      await pool.query(
-        `SELECT t.id,t.taxonomy,t.name,t.slug,t.description,t.parent_id AS "parentId",(SELECT count(*)::int FROM post_terms pt JOIN posts p ON p.id=pt.post_id WHERE pt.term_id=t.id AND p.status='publish') AS count FROM terms t WHERE ${where} ORDER BY t.name,t.id LIMIT $${args.length - 1} OFFSET $${args.length}`,
-        args,
-      )
-    ).rows;
-    res.json(
-      wpFields(
-        req,
-        terms.map((t) =>
-          wpTerm(
-            t,
-            settings.siteUrl,
-            taxonomy === "category" ? settings.categoryBase : settings.tagBase,
-          ),
-        ),
-      ),
-    );
+    }
+    const slugs = req.query.slug===undefined ? undefined : (Array.isArray(req.query.slug) ? z.array(z.string().max(220)).max(200).parse(req.query.slug) : z.string().max(2000).parse(req.query.slug).split(","));
+    const result = await readTermQuery(pool,{
+      taxonomy,page:input.page,perPage:input.per_page,search:input.search,order:input.order,orderBy:input.orderby,
+      parent:input.parent,postId:input.post,slugs,hideEmpty:input.hide_empty==="true" || input.hide_empty==="1",
+      include:req.query.include===undefined?undefined:integerList(req.query.include),exclude:req.query.exclude===undefined?undefined:integerList(req.query.exclude),
+    });
+    pagination(req,res,result.total);
+    res.json(wpFields(req,result.terms.map(term=>wpTerm(term,settings.siteUrl,taxonomy==="category"?settings.categoryBase:settings.tagBase))));
   });
   router.get("/wp-json/wp/v2/" + collection + "/:id", async (req, res) => {
     const settings = await getSettings(),
@@ -1474,7 +1462,7 @@ router.get("/api/tools/export", admin, async (req, res, next) => {
             (c) =>
               `<wp:comment><wp:comment_id>${c.id}</wp:comment_id><wp:comment_author>${cdata(c.author_name)}</wp:comment_author><wp:comment_author_email>${esc(c.author_email)}</wp:comment_author_email><wp:comment_author_url>${esc(c.author_url || "")}</wp:comment_author_url><wp:comment_date>${wpDate(c.created_at)}</wp:comment_date><wp:comment_date_gmt>${wpDate(c.created_at)}</wp:comment_date_gmt><wp:comment_content>${cdata(c.content)}</wp:comment_content><wp:comment_approved>${c.status === "approved" ? "1" : c.status === "pending" ? "0" : c.status}</wp:comment_approved><wp:comment_type/><wp:comment_parent>${c.parent_id || 0}</wp:comment_parent><wp:comment_user_id>0</wp:comment_user_id></wp:comment>`,
           )
-          .join("")}</item>`,
+          .join("")}${p.footnotes?.length ? `<wp:postmeta><wp:meta_key>footnotes</wp:meta_key><wp:meta_value>${cdata(serializeFootnotes(p.footnotes))}</wp:meta_value></wp:postmeta>` : ""}</item>`,
     ),
   );
   const entityXml=entities.rows.map(entity=>`<item><title>${cdata(entity.title)}</title><dc:creator>${cdata(entity.username)}</dc:creator><content:encoded>${cdata(exportedContent(entity))}</content:encoded><wp:post_id>${entityIds.get(entity.id)!.id}</wp:post_id><wp:post_type>${entity.kind==="reusable"?"wp_block":"wp_navigation"}</wp:post_type><wp:status>${entity.status}</wp:status><wp:post_name>${cdata(entity.slug)}</wp:post_name><wp:post_date_gmt>${wpDate(entity.created_at)}</wp:post_date_gmt><wp:post_modified_gmt>${wpDate(entity.updated_at)}</wp:post_modified_gmt></item>`).join("");
@@ -1874,8 +1862,18 @@ router.post("/api/tools/import", admin, async (req: AuthRequest, res, next) => {
     // Resolve forward post references only after every destination ID exists.
     for(let index=0;index<contentItems.length;index++){
       const item=contentItems[index],oldId=zero(item["wp:post_id"]) || index+1;
-      const value=remapImportedBlockReferences(text(item["content:encoded"]),[],entityGraph.map,{posts:postMap});
-      await client.query("UPDATE posts SET content=$1,raw_content=$2,blocks=$3::jsonb WHERE id=$4",[value.content,value.rawContent,JSON.stringify(value.blocks),postMap.get(oldId)]);
+      const rawContent = text(item["content:encoded"]), meta = list(item["wp:postmeta"]).find((meta: any) => text(meta["wp:meta_key"]) === "footnotes");
+      const notes = parseFootnotes(meta ? text(meta["wp:meta_value"]) : []), footnotes = freshFootnoteIds(notes, rawContent);
+      const urls = new Map<string, string>(), footnoteSelfURLs = new Set<string>();
+      const sourceURL = text(item.link), destination = (await getPost(postMap.get(oldId)!, client))?.permalink;
+      if (destination && sourceURL.length <= 2000 && /^(?:https?:\/\/|\/(?!\/))/i.test(sourceURL)) {
+        urls.set(sourceURL, destination); footnoteSelfURLs.add(sourceURL); footnoteSelfURLs.add(destination);
+        if (/^https?:\/\//i.test(sourceURL)) { try { const path = new URL(sourceURL).pathname + new URL(sourceURL).search; urls.set(path, destination); footnoteSelfURLs.add(path); } catch {} }
+      }
+      const options = { posts: postMap, footnotes, urls, footnoteSelfURLs };
+      const value=remapImportedBlockReferences(rawContent,[],entityGraph.map,options);
+      const copiedNotes = notes.map(note => ({ id: footnotes.get(note.id)!, content: remapImportedBlockReferences(note.content, [], entityGraph.map, options).content }));
+      await client.query("UPDATE posts SET content=$1,raw_content=$2,blocks=$3::jsonb,footnotes=$4::jsonb WHERE id=$5",[value.content,value.rawContent,JSON.stringify(value.blocks),JSON.stringify(copiedNotes),postMap.get(oldId)]);
       for(const warning of value.warnings)if(referenceWarnings.size<100)referenceWarnings.add(warning);
     }
     for(const warning of await entityGraph.finalize({posts:postMap}))if(referenceWarnings.size<100)referenceWarnings.add(warning);
