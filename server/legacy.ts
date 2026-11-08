@@ -45,9 +45,10 @@ router.get(
       "freedoms.php": "/admin/about",
       "privacy.php": "/admin/about",
       "upload.php": "/admin/media",
-      "media-new.php": "/admin/media",
+      "media-new.php": "/admin/media?upload=1",
       "media.php": "/admin/media",
       "themes.php": "/admin/appearance",
+      "font-library.php": "/admin/appearance/fonts",
       "site-editor.php": "/admin/appearance/editor",
       "nav-menus.php": "/admin/appearance/menus",
       "plugins.php": "/admin/plugins",
@@ -58,6 +59,7 @@ router.get(
       "import.php": "/admin/tools?tab=import",
       "export.php": "/admin/tools?tab=export",
       "site-health.php": "/admin/tools?tab=health",
+      "options-connectors.php": "/admin/settings/connectors",
     };
     let target = simple[file];
     const attachment=query.attachment_id ?? query.item;
@@ -110,6 +112,8 @@ router.get(
       if (status) params.set("status", status);
       if (typeof query.s === "string")
         params.set("search", query.s.slice(0, 300));
+      if (typeof query.comment_type === "string" && ["all", "comment", "pings", "pingback", "trackback"].includes(query.comment_type))
+        params.set("type", query.comment_type);
     } else if (file === "tools.php") {
       target =
         query.page === "export_personal_data"
