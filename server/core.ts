@@ -34,7 +34,8 @@ import { avatarURL } from "./avatars.js";
 import { assertEditLease } from "./edit-lease.js";
 import { postFormats } from "../shared/post-formats.js";
 import { contributorCanEditPostStatus } from "./comment-access.js";
-import { appendDateArchiveSQL, dateArchiveDTO, parseDateArchiveQuery } from "./date-archives.js";
+import { appendDateArchiveSQL, dateArchiveDTO, dateArchiveLocalSQL, parseDateArchiveQuery } from "./date-archives.js";
+import { POST_DATE_SQL } from "./post-date.js";
 import { parseFootnotes } from "./footnotes.js";
 import { withPreviewAutosave } from "./post-preview.js";
 import { contentPagination, parseContentPage } from "./legacy-content.js";
@@ -658,12 +659,17 @@ router.get("/posts", contentRoles, async (req: AuthRequest, res) => {
       403,
       "Editing pages requires an editor or administrator.",
     );
+  const settings = await getSettings();
   const args: unknown[] = [filter.type];
   let where = "p.type=$1";
   if (ownOnly(user)) {
     args.push(user.id);
     where += ` AND p.author_id=$${args.length}`;
   }
+  // Source month choices belong to the accessible post type and Trash view,
+  // independently of the currently selected search/month/category filters.
+  const monthArgs = [...args], monthWhere = where + (filter.status === "trash" ? " AND p.status='trash'" : " AND p.status<>'trash'");
+  const monthDate = dateArchiveLocalSQL(POST_DATE_SQL, monthArgs, settings.timezone);
   if (filter.search) {
     args.push(`%${filter.search}%`);
     where += ` AND (p.title ILIKE $${args.length} OR p.content ILIKE $${args.length})`;
@@ -680,7 +686,9 @@ router.get("/posts", contentRoles, async (req: AuthRequest, res) => {
     }
   if (filter.month) {
     args.push(filter.month);
-    where += ` AND to_char(p.created_at AT TIME ZONE 'UTC','YYYY-MM')=$${args.length}`;
+    const monthParameter = args.length;
+    const localDate = dateArchiveLocalSQL(POST_DATE_SQL, args, settings.timezone);
+    where += ` AND to_char(${localDate},'YYYY-MM')=$${monthParameter}`;
   }
   const counts = await pool.query(
     `SELECT count(*) FILTER(WHERE status<>'trash')::int AS all,${statuses.map((status) => `count(*) FILTER(WHERE status='${status}')::int AS ${status}`).join(",")} FROM posts p WHERE ${where}`,
@@ -706,19 +714,24 @@ router.get("/posts", contentRoles, async (req: AuthRequest, res) => {
   }
   const column = {
     title: "p.title",
-    date: "p.created_at",
+    date: POST_DATE_SQL,
     modified: "p.updated_at",
     menuOrder: "p.menu_order",
   }[filter.orderby];
-  const posts = await pool.query(
-    `SELECT ${postFields} FROM posts p JOIN users u ON u.id=p.author_id WHERE ${where} ORDER BY ${column} ${filter.order},p.id ${filter.order}${limit}`,
-    args,
-  );
+  const [posts, months] = await Promise.all([
+    pool.query(
+      `SELECT ${postFields},${POST_DATE_SQL} AS "postDate" FROM posts p JOIN users u ON u.id=p.author_id WHERE ${where} ORDER BY ${column} ${filter.order},p.id ${filter.order}${limit}`,
+      args,
+    ),
+    pool.query(`SELECT DISTINCT to_char(${monthDate},'YYYY-MM') AS month FROM posts p WHERE ${monthWhere} ORDER BY month DESC`, monthArgs),
+  ]);
   res.json({
     posts: await Promise.all(
-      posts.rows.map((post) => withPermalink(decoratePost(post))),
+      posts.rows.map((post) => withPermalink(decoratePost(post), settings)),
     ),
     counts: counts.rows[0],
+    months: months.rows.map(row => row.month),
+    timezone: settings.timezone,
     pagination: {
       page,
       perPage,

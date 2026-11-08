@@ -50,6 +50,7 @@ import { assertPostAccess } from "./core.js";
 import { postFormats } from "../shared/post-formats.js";
 import { assertCommentAccess, canEditPostComments, contributorCanEditPostStatus } from "./comment-access.js";
 import { resolvePublicArchive } from "./public-path.js";
+import { POST_DATE_SQL } from "./post-date.js";
 import { parseFootnotes, serializeFootnotes, freshFootnoteIds, MAX_FOOTNOTES_BYTES } from "./footnotes.js";
 import { excerptText } from "./excerpts.js";
 import { postAccessReader, postHasPassword, protectedPostExcerpt, publicPostTitle } from "./post-passwords.js";
@@ -1505,7 +1506,7 @@ router.get("/wp-json/wp/v2/statuses", (req: AuthRequest, res) =>
 
 router.get("/api/tools/export/options", admin, async (_req, res) => {
   const settings = await getSettings(), dateArgs: unknown[] = [], mediaDateArgs: unknown[] = [];
-  const local = dateArchiveLocalSQL("COALESCE(p.published_at,p.scheduled_at,p.created_at)", dateArgs, settings.timezone);
+  const local = dateArchiveLocalSQL(POST_DATE_SQL, dateArgs, settings.timezone);
   const mediaLocal = dateArchiveLocalSQL("m.created_at", mediaDateArgs, settings.timezone);
   const [authors, categories, months, mediaMonths] = await Promise.all([
     pool.query('SELECT id,display_name AS "displayName" FROM users WHERE EXISTS(SELECT 1 FROM posts WHERE author_id=users.id) OR EXISTS(SELECT 1 FROM media WHERE author_id=users.id) ORDER BY display_name,id'),
