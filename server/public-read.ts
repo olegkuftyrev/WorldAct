@@ -26,7 +26,17 @@ export async function publicPost(post: any, locked = false, options: RenderOptio
     pendingCommentCount: _pendingCommentCount,
     ...safe
   } = decoratePost(post);
-  const settings=await getSettings(),linked = await withPermalink(safe,settings);
+  const db=options.db || pool,settings=await getSettings(db),linked = await withPermalink(safe,settings,db);
+  // Author structures add an asynchronous metadata read after body selection.
+  // Recheck current public identity and password access after that wait, before
+  // returning or rendering any selected body. Preview keeps its editor policy.
+  if(!options.preview && post.type==="post" && settings.permalinkStructure.includes("%author%")){
+    const current=(await db.query(`SELECT password_hash IS NOT NULL AS "hasPassword" FROM posts
+      WHERE id=$1 AND type='post' AND status='publish'`,[post.id])).rows[0];
+    if(!current)throw new HttpError(404,"Post not found.");
+    linked.hasPassword=current.hasPassword;
+    locked=Boolean(current.hasPassword) && !(options.canReadProtectedPost && await options.canReadProtectedPost(post.id,db));
+  }
   const result = {
     ...linked,
     commentCount: safe.approvedCommentCount ?? safe.commentCount ?? 0,
@@ -158,5 +168,6 @@ export async function readPublishedPostById(id: number, type: "post" | "page", c
   if(!row) throw new HttpError(404,"Post not found.");
   const {_passwordHash,...post}=row;
   const locked=Boolean(_passwordHash) && !(await context.canReadProtectedPost(id,pool));
-  return {post:await publicPost(post,locked,{query:context.query,user:context.user,requestPath:context.requestPath,contentPage:parseContentPage(context.query.page),canReadProtectedPost:context.canReadProtectedPost}),...(await commentResponse(id,context,locked)),rawPost:{...post,locked,...(locked?{content:"",rawContent:"",raw_content:"",blocks:[],excerpt:"",footnotes:[]}: {})}};
+  const visible=await publicPost(post,locked,{query:context.query,user:context.user,requestPath:context.requestPath,contentPage:parseContentPage(context.query.page),canReadProtectedPost:context.canReadProtectedPost});
+  return {post:visible,...(await commentResponse(id,context,visible.locked)),rawPost:{...post,hasPassword:visible.hasPassword,locked:visible.locked,...(visible.locked?{content:"",rawContent:"",raw_content:"",blocks:[],excerpt:"",footnotes:[]}: {})}};
 }

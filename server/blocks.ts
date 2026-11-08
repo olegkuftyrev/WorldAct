@@ -395,9 +395,10 @@ router.all(
 );
 router.get("/wp-json/wp/v2/users/me", async (req: AuthRequest, res) => {
   const user = needUser(req);
-  const record = (await pool.query("SELECT profile,created_at FROM users WHERE id=$1",[user.id])).rows[0];
+  const record = (await pool.query("SELECT profile,created_at,nicename FROM users WHERE id=$1",[user.id])).rows[0];
+  if (!record) throw new HttpError(401,"This account is no longer available.");
   const profile = record?.profile || {};
-  res.json({ id:user.id, username:user.username, name:user.displayName, slug:user.username, email:user.email,
+  res.json({ id:user.id, username:user.username, name:user.displayName, slug:record.nicename, email:user.email,
     first_name:profile.firstName || "",last_name:profile.lastName || "",nickname:profile.nickname || user.username,
     description:profile.bio || "",url:profile.website || "",link:`/?author=${user.id}`,roles:[user.role],
     locale:profile.locale || "en_US",registered_date:record?.created_at,avatar_urls:{24:"/vendor/wordpress/avatar.svg",48:"/vendor/wordpress/avatar.svg",96:"/vendor/wordpress/avatar.svg"},
@@ -422,8 +423,8 @@ router.get("/wp-json/wp/v2/users{/:id}", async (req: AuthRequest, res) => {
   if (input.search) { args.push(`%${input.search.replace(/[\\%_]/g,"\\$&")}%`); where.push(`(u.display_name ILIKE $${args.length} OR u.username ILIKE $${args.length})`); }
   const total = (await pool.query(`SELECT count(*)::int AS total FROM users u WHERE ${where.join(" AND ")}`, args)).rows[0].total;
   if (input.page > 1 && (input.page - 1) * input.per_page >= total) throw new HttpError(400, "The page number requested is larger than the number of pages available.");
-  const rows = (await pool.query(`SELECT u.id,u.username,u.display_name,u.profile FROM users u WHERE ${where.join(" AND ")} ORDER BY u.display_name,u.id LIMIT $${args.length + 1} OFFSET $${args.length + 2}`, [...args, input.per_page, (input.page - 1) * input.per_page])).rows;
-  const records = rows.map(u => ({ id:u.id,name:u.display_name,slug:u.username,description:u.profile?.bio || "",url:u.profile?.website || "",link:`/?author=${u.id}`,avatar_urls:{} }));
+  const rows = (await pool.query(`SELECT u.id,u.username,u.nicename,u.display_name,u.profile FROM users u WHERE ${where.join(" AND ")} ORDER BY u.display_name,u.id LIMIT $${args.length + 1} OFFSET $${args.length + 2}`, [...args, input.per_page, (input.page - 1) * input.per_page])).rows;
+  const records = rows.map(u => ({ id:u.id,name:u.display_name,slug:u.nicename,description:u.profile?.bio || "",url:u.profile?.website || "",link:`/?author=${u.id}`,avatar_urls:{} }));
   if (id) { if (!records[0]) throw new HttpError(404,"Author not found."); res.json(records[0]); }
   else {
     res.setHeader("X-WP-Total",total); res.setHeader("X-WP-TotalPages",Math.ceil(total/input.per_page));

@@ -5,6 +5,7 @@ import type { PoolClient } from "pg";
 import { pool, postFields } from "../server/db.js";
 import { renderSiteDocument } from "../server/block-renderer.js";
 import { avatarURL } from "../server/avatars.js";
+import { fixtureUserNicename } from "./helpers/user-fixtures.js";
 
 const block = (name: string, attrs: Record<string, unknown> = {}, body = "") => `<!-- wp:${name} ${JSON.stringify(attrs)}${body ? " -->" + body + `<!-- /wp:${name} -->` : " /-->"}`;
 const dom = (html: string) => new DOMParser().parseFromString(html, "text/html");
@@ -15,7 +16,7 @@ async function fixture(db: Database) {
   const users: number[] = [];
   async function user(label: string) {
     const email = `${stamp}-${label}-private@example.test`;
-    const record = (await db.query("INSERT INTO users(username,email,display_name,password_hash,role) VALUES($1,$2,$3,'PRIVATE-AVATAR-PASSWORD-HASH','author') RETURNING id,email,display_name AS name", [stamp + "-" + label, email, label + " account name"])).rows[0];
+    const record = (await db.query("INSERT INTO users(username,email,display_name,password_hash,role,nicename) VALUES($1,$2,$3,'PRIVATE-AVATAR-PASSWORD-HASH','author',$4) RETURNING id,email,display_name AS name", [stamp + "-" + label, email, label + " account name", fixtureUserNicename(stamp + "-" + label)])).rows[0];
     users.push(record.id); return record;
   }
   const owner = await user("PostOwner"), member = await user("Member"), departed = await user("Departed");

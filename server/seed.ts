@@ -2,6 +2,7 @@ import { pool, defaultSettings } from "./db.js";
 import { hashPassword } from "./auth.js";
 import { migrate } from "./migrate.js";
 import { seedInitialContent } from "./initial-content.js";
+import { allocateUserNicename, lockUserCreation } from "./user-nicenames.js";
 
 export async function seed() {
   const email = process.env.ADMIN_EMAIL?.trim().toLowerCase();
@@ -20,16 +21,18 @@ export async function seed() {
     await client.query(
       "SELECT pg_advisory_xact_lock(hashtext('worldact-seed'))",
     );
+    await lockUserCreation(client);
     const existing = await client.query(
-      "SELECT id FROM users WHERE role = $1 ORDER BY id LIMIT 1",
+      "SELECT id FROM users WHERE role = $1 ORDER BY id LIMIT 1 FOR UPDATE",
       ["administrator"],
     );
+    await client.query("SELECT pg_advisory_xact_lock(hashtext('worldact-account-identity'))");
     let adminId: number = existing.rows[0]?.id;
     if (!adminId) {
       const result = await client.query(
-        `INSERT INTO users (username, email, display_name, password_hash, role)
-        VALUES ('admin', $1, 'Administrator', $2, 'administrator') RETURNING id`,
-        [email, passwordHash],
+        `INSERT INTO users (username, email, display_name, password_hash, role,nicename)
+        VALUES ('admin', $1, 'Administrator', $2, 'administrator',$3) RETURNING id`,
+        [email, passwordHash,await allocateUserNicename(client,"admin")],
       );
       adminId = result.rows[0].id;
     }

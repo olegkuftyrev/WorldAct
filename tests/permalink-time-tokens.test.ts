@@ -49,7 +49,7 @@ test("saved custom time tags share chosen site-clock dates without weakening pub
     });
 
     await t.test("the full timestamp alone, unknown and repeated tags, and reserved paths remain rejected", async () => {
-      for (const structure of ["/%year%/%monthnum%/%day%/%hour%/%minute%/%second%/", "/%hour%/", "/%postname%/%hour%/%hour%/", "/%author%/%postname%/", "/%milliseconds%/%post_id%/", "/api/%hour%/%post_id%/"]) {
+      for (const structure of ["/%year%/%monthnum%/%day%/%hour%/%minute%/%second%/", "/%hour%/", "/%postname%/%hour%/%hour%/", "/prefix-%author%/%postname%/", "/%milliseconds%/%post_id%/", "/api/%hour%/%post_id%/"]) {
         const before = (await getSettings()).permalinkStructure;
         assert.equal((await request("/api/settings", "PUT", { permalinkStructure: structure })).response.status, 400, structure);
         assert.equal((await getSettings()).permalinkStructure, before);

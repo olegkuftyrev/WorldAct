@@ -4,6 +4,7 @@ import sharp from "sharp";
 import { XMLParser } from "fast-xml-parser";
 import { pool } from "../server/db.js";
 import { readWxrExportFilters, wxrExportWhere, wxrEntityReferences } from "../server/wxr-export.js";
+import { fixtureUserNicename } from "./helpers/user-fixtures.js";
 
 after(async () => { await pool.end(); });
 const block = (name: string, attrs: Record<string, unknown>) => `<!-- wp:${name} ${JSON.stringify(attrs)} /-->`;
@@ -41,7 +42,7 @@ test("actual WXR exports select posts/pages/media with related data and preserve
   try {
     const login = await api("/api/auth/login", "POST", { login: process.env.ADMIN_EMAIL, password: process.env.ADMIN_PASSWORD }); assert.equal(login.response.status, 200); cookie = login.response.headers.get("set-cookie")!.split(";")[0]; const adminId = login.data.user.id;
     await pool.query("UPDATE settings SET data=jsonb_set(data,'{timezone}','\"America/Los_Angeles\"') WHERE id=1");
-    const other = (await pool.query("INSERT INTO users(username,email,password_hash,display_name,role) VALUES($1,$2,'unusable',$1,'author') RETURNING id", [stamp, stamp + "@example.test"])).rows[0].id; userIds.push(other);
+    const other = (await pool.query("INSERT INTO users(username,email,password_hash,display_name,role,nicename) VALUES($1,$2,'unusable',$1,'author',$3) RETURNING id", [stamp, stamp + "@example.test", fixtureUserNicename(stamp)])).rows[0].id; userIds.push(other);
     async function entity(kind: "reusable" | "navigation", suffix: string, raw: string) {
       const id = (await pool.query("INSERT INTO block_entities(kind,slug,title,raw_content,content,author_id,status) VALUES($1,$2,$2,$3,$3,$4,'publish') RETURNING id", [kind, stamp + suffix, raw, adminId])).rows[0].id; entityIds.push(id); return id;
     }

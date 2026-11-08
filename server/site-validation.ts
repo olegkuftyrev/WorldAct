@@ -101,6 +101,7 @@ export const settingSchema = z
         ) &&
         permalinkIdentityPattern.test(s) &&
         new Set(tokens).size === tokens.length &&
+        (!s.includes("%author%") || s.split("/").includes("%author%")) &&
         !/%[^%]+%%/.test(s) &&
         !s
           .replace(permalinkTokenPattern(), "")

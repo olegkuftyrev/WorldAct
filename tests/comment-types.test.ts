@@ -1,6 +1,7 @@
 import test, { before, after } from "./isolated-test.js";
 import assert from "node:assert/strict";
 import { pool } from "../server/db.js";
+import { fixtureUserNicename } from "./helpers/user-fixtures.js";
 const base=process.env.TEST_API_URL!,origin=process.env.APP_ORIGIN!;
 let adminCookie="",authorCookie="",authorId:number,publicId:number,privateId:number;
 async function login(login:string){
@@ -14,7 +15,7 @@ before(async()=>{
   adminCookie=await login(process.env.ADMIN_EMAIL!);
   const admin=(await pool.query("SELECT id,password_hash FROM users WHERE lower(email)=lower($1)",[process.env.ADMIN_EMAIL])).rows[0];
   const email="type-author-"+Date.now()+"@example.test";
-  authorId=(await pool.query("INSERT INTO users(username,email,display_name,password_hash,role) VALUES($1,$1,'Type fixture author',$2,'author') RETURNING id",[email,admin.password_hash])).rows[0].id;
+  authorId=(await pool.query("INSERT INTO users(username,email,display_name,password_hash,role,nicename) VALUES($1,$1,'Type fixture author',$2,'author',$3) RETURNING id",[email,admin.password_hash,fixtureUserNicename(email)])).rows[0].id;
   authorCookie=await login(email);
   for(const status of ["publish","private"]){
     const post=(await pool.query("INSERT INTO posts(type,title,slug,status,author_id) VALUES('post',$1,$2,$3,$4) RETURNING id",["Type fixture "+status,"type-fixture-"+status,status,admin.id])).rows[0].id;

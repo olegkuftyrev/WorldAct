@@ -7,6 +7,7 @@ import { seedInitialContent } from "./initial-content.js";
 import { HttpError, plainText } from "./utils.js";
 import { queueMail, deliverMail } from "./accounts.js";
 import { isInstalled } from "./installation-state.js";
+import { allocateUserNicename, lockUserCreation, requireDefaultUserNicename } from "./user-nicenames.js";
 export { isInstalled } from "./installation-state.js";
 
 const router = Router();
@@ -36,6 +37,7 @@ router.post("/install", async (req, res) => {
   if (!installationTokenMatches(input.token)) throw new HttpError(403, "Open the installation link created on this server to continue.");
   const siteTitle = plainText(input.siteTitle).trim();
   if (!siteTitle) throw new HttpError(400, "Enter a site title.");
+  requireDefaultUserNicename(input.username);
   // No password work or account creation is allowed without the local bootstrap token.
   const passwordHash = await hashPassword(input.password), client = await pool.connect();
   let user, mail: Awaited<ReturnType<typeof queueMail>> | null = null;
@@ -43,9 +45,11 @@ router.post("/install", async (req, res) => {
     await client.query("BEGIN");
     // CLI seed uses this same lock. Any concurrent seed/install wins once.
     await client.query("SELECT pg_advisory_xact_lock(hashtext('worldact-seed'))");
+    await lockUserCreation(client);
     await client.query("SELECT pg_advisory_xact_lock(hashtext('worldact-account-identity'))");
     if (await isInstalled(client)) throw new HttpError(409, "WorldAct is already installed. Sign in to your existing account.");
-    user = (await client.query(`INSERT INTO users(username,email,display_name,password_hash,role) VALUES($1,$2,$1,$3,'administrator') RETURNING ${userFields}`, [input.username, input.email.toLowerCase(), passwordHash])).rows[0];
+    const nicename=await allocateUserNicename(client,input.username);
+    user = (await client.query(`INSERT INTO users(username,email,display_name,password_hash,role,nicename) VALUES($1,$2,$1,$3,'administrator',$4) RETURNING ${userFields}`, [input.username, input.email.toLowerCase(), passwordHash,nicename])).rows[0];
     await client.query("INSERT INTO settings(id,data) VALUES(1,$1) ON CONFLICT(id) DO UPDATE SET data=excluded.data", [JSON.stringify({ ...defaultSettings, siteTitle, siteUrl: new URL(process.env.APP_ORIGIN || "http://127.0.0.1:5173").origin, adminEmail: input.email.toLowerCase(), discourageSearchEngines: input.discourageSearchEngines })]);
     await seedInitialContent(client, user.id);
     await client.query("INSERT INTO seed_markers(name) VALUES('browser-install-v1')");

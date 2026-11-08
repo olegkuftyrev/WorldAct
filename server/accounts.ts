@@ -12,6 +12,7 @@ import { pool, getSettings, type Role } from "./db.js";
 import { hashPassword, requireRole, type AuthRequest } from "./auth.js";
 import { HttpError, parseId, needUser } from "./utils.js";
 import { lockPageHierarchy } from "./page-hierarchy.js";
+import { allocateUserNicename, lockUserCreation, requireDefaultUserNicename } from "./user-nicenames.js";
 const router = Router(),
   admin = requireRole("administrator");
 const CONFIRM_HOURS = 24,
@@ -199,9 +200,11 @@ router.post("/auth/register", rateLimit(20, 60 * 60_000), async (req, res) => {
     })
     .strict()
     .parse(req.body);
+  requireDefaultUserNicename(input.username);
   let mail: QueuedMail;
   try {
     mail = await transaction(async (client) => {
+      await lockUserCreation(client);
       const settings = await getSettings(client);
       if (!settings.usersCanRegister)
         throw new HttpError(403, "User registration is currently not allowed.");
@@ -215,8 +218,8 @@ router.post("/auth/register", rateLimit(20, 60 * 60_000), async (req, res) => {
         randomBytes(48).toString("base64url"),
       );
       const inserted = await client.query(
-        "INSERT INTO users(username,email,display_name,password_hash,role) VALUES($1,$2,$1,$3,$4) RETURNING id",
-        [input.username, input.email.toLowerCase(), passwordHash, role],
+        "INSERT INTO users(username,email,display_name,password_hash,role,nicename) VALUES($1,$2,$1,$3,$4,$5) RETURNING id",
+        [input.username, input.email.toLowerCase(), passwordHash, role,await allocateUserNicename(client,input.username)],
       );
       const token = randomBytes(32).toString("hex");
       await client.query(
@@ -231,7 +234,7 @@ router.post("/auth/register", rateLimit(20, 60 * 60_000), async (req, res) => {
       );
     });
   } catch (error) {
-    if ((error as { code?: string }).code === "23505")
+    if ((error as { code?: string }).code === "23505" && ["users_username_lower","users_email_lower"].includes((error as { constraint?: string }).constraint || ""))
       throw new HttpError(
         409,
         "That username or email address is already registered.",

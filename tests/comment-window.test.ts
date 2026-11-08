@@ -6,6 +6,7 @@ import { renderSiteDocument } from "../server/block-renderer.js";
 import { hashPassword } from "../server/auth.js";
 import { avatarURL } from "../server/avatars.js";
 import { MAX_PUBLIC_COMMENT_BYTES, MAX_PUBLIC_COMMENT_RECORDS } from "../server/comment-window.js";
+import { fixtureUserNicename } from "./helpers/user-fixtures.js";
 
 const base = process.env.TEST_API_URL!;
 const block = (name: string, attrs: Record<string, unknown> = {}, body = "") => `<!-- wp:${name} ${JSON.stringify(attrs)}${body ? " -->" + body + `<!-- /wp:${name} -->` : " /-->"}`;
@@ -174,7 +175,7 @@ test("hidden parents, unapproved branches, cross-post links and detached cycles 
 test("threaded human/ping identity and password grants preserve private avatar semantics and complete windows", async () => {
   const f = await fixture();
   try {
-    const member = (await pool.query("INSERT INTO users(username,email,display_name,password_hash,role) VALUES($1,$2,'Member','PRIVATE-HASH','subscriber') RETURNING id,email", [f.p.slug + "-member", f.p.slug + "-current-private@example.test"])).rows[0]; f.users.push(member.id);
+    const member = (await pool.query("INSERT INTO users(username,email,display_name,password_hash,role,nicename) VALUES($1,$2,'Member','PRIVATE-HASH','subscriber',$3) RETURNING id,email", [f.p.slug + "-member", f.p.slug + "-current-private@example.test", fixtureUserNicename(f.p.slug + "-member")])).rows[0]; f.users.push(member.id);
     const registered = await f.comment("Registered", f.a, 7, "approved", "comment", f.p.id, member.id);
     const ping = await f.comment("Pingback", null, 8, "approved", "pingback"), trackback = await f.comment("Trackback", null, 9, "approved", "trackback");
     await f.settings({paginateComments: false});

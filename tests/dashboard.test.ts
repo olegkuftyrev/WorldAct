@@ -2,6 +2,7 @@ import test, { before, after } from "./isolated-test.js";
 import assert from "node:assert/strict";
 import { pool, getSettings } from "../server/db.js";
 import { version } from "../package.json";
+import { fixtureUserNicename } from "./helpers/user-fixtures.js";
 const base=process.env.TEST_API_URL!,origin=process.env.APP_ORIGIN!;
 let admin:any,initialSettings:any,adminCookie="",authorCookie="",contributorCookie="",subscriberCookie="";
 const users:number[]=[],posts:number[]=[],ownDrafts:number[]=[],otherDrafts:number[]=[],published:number[]=[],future:number[]=[];
@@ -16,7 +17,7 @@ async function post(author:number,status:string,type="post",date=new Date(),upda
 }
 before(async()=>{
   initialSettings=await getSettings();admin=(await pool.query("SELECT * FROM users WHERE lower(email)=lower($1)",[process.env.ADMIN_EMAIL])).rows[0];adminCookie=await login(process.env.ADMIN_EMAIL!);
-  for(const role of ["author","contributor","subscriber"]){const email="dashboard-"+role+"-"+Date.now()+"@example.test";const id=(await pool.query("INSERT INTO users(username,email,display_name,password_hash,role) VALUES($1,$1,$2,$3,$4) RETURNING id",[email,role,admin.password_hash,role])).rows[0].id;users.push(id);const cookie=await login(email);if(role==="author")authorCookie=cookie;else if(role==="contributor")contributorCookie=cookie;else subscriberCookie=cookie;}
+  for(const role of ["author","contributor","subscriber"]){const email="dashboard-"+role+"-"+Date.now()+"@example.test";const id=(await pool.query("INSERT INTO users(username,email,display_name,password_hash,role,nicename) VALUES($1,$1,$2,$3,$4,$5) RETURNING id",[email,role,admin.password_hash,role,fixtureUserNicename(email)])).rows[0].id;users.push(id);const cookie=await login(email);if(role==="author")authorCookie=cookie;else if(role==="contributor")contributorCookie=cookie;else subscriberCookie=cookie;}
   const old=new Date("2020-01-01T00:00:00Z");
   published.push(await post(admin.id,"publish","post",old),await post(users[0],"publish","post",new Date("2021-01-01T00:00:00Z")));
   for(let i=0;i<6;i++){ownDrafts.push(await post(admin.id,"draft","post",old,new Date(Date.now()+i*1000)));otherDrafts.push(await post(users[0],"draft","post",old,new Date(Date.now()+i*1000+500)));}

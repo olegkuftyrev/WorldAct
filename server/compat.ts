@@ -338,8 +338,8 @@ async function postEmbeddings(post: any, req: Request) {
   const embedded: Record<string, any[]> = {};
   if (embeddingRequested(req, "author")) {
     const person = await embeddedRecord(req, `author:${post.authorId}`, async () => {
-      const row = (await pool.query("SELECT id,username,display_name,profile FROM users WHERE id=$1", [post.authorId])).rows[0];
-      return row ? { id: row.id, name: row.display_name, slug: row.username, description: row.profile?.bio || "", url: row.profile?.website || "", link: `/?author=${row.id}`, avatar_urls: {} } : null;
+      const row = (await pool.query("SELECT id,nicename,display_name,profile FROM users WHERE id=$1", [post.authorId])).rows[0];
+      return row ? { id: row.id, name: row.display_name, slug: row.nicename, description: row.profile?.bio || "", url: row.profile?.website || "", link: `/?author=${row.id}`, avatar_urls: {} } : null;
     });
     if (person) embedded.author = [person];
   }
@@ -810,11 +810,11 @@ async function mediaEmbeddings(item: any, req: AuthRequest, settings: Awaited<Re
   const authorId = item.authorId || item.author_id;
   if (authorId && names.has("author")) {
     const person = await embeddedRecord(req, `media-author:${authorId}`, async () => {
-      const row = (await pool.query("SELECT id,username,display_name,email,profile FROM users WHERE id=$1", [authorId])).rows[0];
+      const row = (await pool.query("SELECT id,nicename,display_name,email,profile FROM users WHERE id=$1", [authorId])).rows[0];
       if (!row) return null;
       const avatar = avatarURL(row.email, settings, 48);
       return {
-        id: row.id, name: row.display_name, slug: row.username,
+        id: row.id, name: row.display_name, slug: row.nicename,
         description: row.profile?.bio || "", url: row.profile?.website || "",
         link: absolute(`/?author=${row.id}`, settings.siteUrl),
         avatar_urls: avatar ? Object.fromEntries([24, 48, 96].map(size => [size, avatarURL(row.email, settings, size)])) : {},

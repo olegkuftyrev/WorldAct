@@ -337,14 +337,14 @@ export async function reportAkismetTransition(
     return "skipped";
   const row = (
     await database.query(
-      "SELECT c.*,c.type AS comment_type,m.user_ip,m.user_agent,m.referrer,p.type,p.slug,p.parent_id AS post_parent_id,p.published_at FROM comments c JOIN akismet_comment_checks m ON m.comment_id=c.id AND m.expires_at>now() JOIN posts p ON p.id=c.post_id WHERE c.id=$1",
+      "SELECT c.*,c.type AS comment_type,m.user_ip,m.user_agent,m.referrer,p.type,p.status AS post_status,p.slug,p.parent_id AS post_parent_id,p.published_at FROM comments c JOIN akismet_comment_checks m ON m.comment_id=c.id AND m.expires_at>now() JOIN posts p ON p.id=c.post_id WHERE c.id=$1",
       [commentId],
     )
   ).rows[0];
   if (!row || !isIP(row.user_ip)) return "skipped";
   const permalink = new URL(
     await postPermalink(
-      { ...row, id: row.post_id, parent_id: row.post_parent_id },
+      { ...row, id: row.post_id, status: row.post_status, parent_id: row.post_parent_id },
       settings,
       database,
     ),
@@ -411,7 +411,7 @@ bundledPluginsRouter.post(
     const commentId = parseId(req.params.id),
       row = (
         await pool.query(
-          "SELECT c.*,c.type AS comment_type,p.slug,p.type,p.parent_id AS post_parent_id,p.published_at FROM comments c JOIN posts p ON p.id=c.post_id WHERE c.id=$1",
+          "SELECT c.*,c.type AS comment_type,p.slug,p.type,p.status AS post_status,p.parent_id AS post_parent_id,p.published_at FROM comments c JOIN posts p ON p.id=c.post_id WHERE c.id=$1",
           [commentId],
         )
       ).rows[0],
@@ -440,7 +440,7 @@ bundledPluginsRouter.post(
       createdAt: new Date(row.created_at).toISOString(),
       permalink: new URL(
         await postPermalink(
-          { ...row, id: row.post_id, parent_id: row.post_parent_id },
+          { ...row, id: row.post_id, status: row.post_status, parent_id: row.post_parent_id },
           settings,
           pool,
         ),

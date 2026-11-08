@@ -2,7 +2,8 @@ import { Router } from "express";
 import { createHash, randomBytes } from "node:crypto";
 import { z } from "zod";
 import { pool, getSettings, userFields } from "./db.js";
-import { requireRole, hashPassword, type AuthRequest } from "./auth.js";
+import { requireRole, hashPassword, assertActiveAccountAuthentication, type AuthRequest } from "./auth.js";
+import { allocateUserNicename, lockUserCreation, requireDefaultUserNicename } from "./user-nicenames.js";
 import { HttpError, plainText } from "./utils.js";
 import { queueMail, deliverMail } from "./accounts.js";
 import { updateUser, deleteUser } from "./platform.js";
@@ -36,7 +37,7 @@ router.get("/users", admin, async (req, res) => {
   const result=await pool.query(`SELECT u.id,u.username,u.email,u.display_name AS "displayName",u.role,u.created_at AS "createdAt",coalesce(u.profile->>'firstName','') AS "firstName",coalesce(u.profile->>'lastName','') AS "lastName",coalesce(u.profile->>'website','') AS website,(SELECT count(*)::int FROM posts p WHERE p.author_id=u.id AND p.type='post' AND p.status<>'trash') AS "postCount" FROM users u ${filteredWhere} ORDER BY ${sort} ${input.order.toUpperCase()},u.id LIMIT $${values.length-1} OFFSET $${values.length}`,values);
   res.json({users:result.rows,counts,pagination:{page,perPage:input.perPage,total,totalPages}});
 });
-router.post("/users",admin,async(req,res)=>{
+router.post("/users",admin,async(req:AuthRequest,res)=>{
   const input=z.object({
     username:z.string().trim().min(1).max(60).regex(/^[a-zA-Z0-9_.@-]+$/),email:z.email().max(254),
     displayName:z.string().trim().min(1).max(160),password:z.string().min(12).max(1024),role,
@@ -46,15 +47,22 @@ router.post("/users",admin,async(req,res)=>{
   }).strict().parse(req.body);
   const displayName=plainText(input.displayName).trim();
   if(!displayName)throw new HttpError(400,"Enter a display name containing text.");
+  requireDefaultUserNicename(input.username);
   const passwordHash=await hashPassword(input.password),client=await pool.connect();
   let mail:Awaited<ReturnType<typeof queueMail>>|null=null, user:any;
   try{
     await client.query("BEGIN");
+    await lockUserCreation(client);
+    const actor=(await client.query("SELECT id,role FROM users WHERE id=$1 FOR UPDATE",[req.user!.id])).rows[0];
+    if(!actor)throw new HttpError(401,"This account is no longer available.");
+    if(actor.role!=="administrator")throw new HttpError(403,"You cannot create users.");
     await client.query("SELECT pg_advisory_xact_lock(hashtext('worldact-account-identity'))");
+    await assertActiveAccountAuthentication(req,client);
     const collision=await client.query("SELECT id FROM users WHERE lower(username)=ANY($1::text[]) OR lower(email)=ANY($1::text[])",[[input.username.toLowerCase(),input.email.toLowerCase()]]);
     if(collision.rowCount)throw new HttpError(409,"That username or email address is already registered.");
     const profile={firstName:plainText(input.firstName),lastName:plainText(input.lastName),website:input.website,nickname:input.username};
-    const inserted=await client.query(`INSERT INTO users(username,email,display_name,password_hash,role,profile) VALUES($1,$2,$3,$4,$5,$6) RETURNING ${userFields}`,[input.username,input.email.toLowerCase(),displayName,passwordHash,input.role,JSON.stringify(profile)]);
+    const nicename=await allocateUserNicename(client,input.username);
+    const inserted=await client.query(`INSERT INTO users(username,email,display_name,password_hash,role,profile,nicename) VALUES($1,$2,$3,$4,$5,$6,$7) RETURNING ${userFields}`,[input.username,input.email.toLowerCase(),displayName,passwordHash,input.role,JSON.stringify(profile),nicename]);
     user={...inserted.rows[0],...profile,postCount:0};
     if(input.sendNotification){
       const token=randomBytes(32).toString("hex"),settings=await getSettings(client);

@@ -10,6 +10,7 @@ export const permalinkTokens = [
   { name: "post_id", capture: "(\\d+)", identity: true },
   { name: "postname", capture: "([^/]+)", identity: true },
   { name: "category", capture: "(.+?)", identity: false },
+  { name: "author", capture: "([^/]+)", identity: false },
 ] as const;
 
 export type PermalinkToken = (typeof permalinkTokens)[number]["name"];

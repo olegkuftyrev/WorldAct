@@ -63,7 +63,7 @@ test("a fresh migrated PostgreSQL site installs atomically once through its loca
     assert.equal((await api("/api/install", "POST", { ...input, token: "0".repeat(64) })).response.status, 403);
     const { token: _ignored, ...without } = input; assert.equal((await api("/api/install", "POST", without)).response.status, 400);
     assert.equal((await api("/api/install", "POST", input, "https://foreign.invalid")).response.status, 403);
-    for (const patch of [{ username: "bad user" }, { email: "invalid" }, { password: "short" }, { siteTitle: "<script></script>" }, { role: "administrator" }]) assert.equal((await api("/api/install", "POST", { ...input, ...patch })).response.status, 400);
+    for (const patch of [{ username: "bad user" },{username:"0"},{username:"@"},{username:"@".repeat(50)+"valid"}, { email: "invalid" }, { password: "short" }, { siteTitle: "<script></script>" }, { role: "administrator" }]) assert.equal((await api("/api/install", "POST", { ...input, ...patch })).response.status, 400);
     assert.equal((await pool.query("SELECT count(*)::int AS count FROM users")).rows[0].count, 0);
   });
   await t.test("a late initialization failure rolls back account, settings, content, markers and welcome mail", async () => {
@@ -78,6 +78,9 @@ test("a fresh migrated PostgreSQL site installs atomically once through its loca
   let userId = 0;
   await t.test("two concurrent installers create one administrator and one sample site", async () => {
     const responses = await Promise.all([api("/api/install", "POST", input), api("/api/install", "POST", { ...input, username: stamp + "-other" })]);
+    const created=responses.find(result=>result.response.status===201)!;
+    const identity=(await pool.query("SELECT username,nicename FROM users WHERE id=$1",[created.data.user.id])).rows[0];
+    assert.equal(identity.nicename,identity.username.toLowerCase());
     assert.deepEqual(responses.map(result => result.response.status).sort(), [201, 409]);
     const result = responses.find(result => result.response.status === 201)!; userId = result.data.user.id;
     assert.equal(result.data.user.role, "administrator"); assert.equal(result.data.delivery, "local-outbox"); assert.equal(result.data.loginUrl, "/login"); assert.doesNotMatch(JSON.stringify(result.data), /password_hash|token_hash/); assert.ok(!JSON.stringify(result.data).includes(token));

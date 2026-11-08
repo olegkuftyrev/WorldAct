@@ -1302,9 +1302,10 @@ router.get("/public/posts/:slug", async (req, res) => {
   const locked = !(await hasPostAccess(req, post.id, _passwordHash));
   const pingback=pingbackHeader(post,await getSettings());if(pingback)res.setHeader("X-Pingback",pingback);
   await setRobots(res);
+  const visible=await publicPost(post, locked, { query: req.query, user: (req as AuthRequest).user, contentPage: parseContentPage(req.query.page), canReadProtectedPost: postAccessReader(req) });
   res.json({
-    post: await publicPost(post, locked, { query: req.query, user: (req as AuthRequest).user, contentPage: parseContentPage(req.query.page), canReadProtectedPost: postAccessReader(req) }),
-    ...(await commentResponse(post.id, {query:req.query,user:(req as AuthRequest).user,canReadProtectedPost:postAccessReader(req)}, locked)),
+    post: visible,
+    ...(await commentResponse(post.id, {query:req.query,user:(req as AuthRequest).user,canReadProtectedPost:postAccessReader(req)}, visible.locked)),
   });
 });
 const passwordAttempts = new Map<string, { count: number; expires: number }>();
@@ -1340,8 +1341,10 @@ export async function unlockPublicPost(req:Request,res:Response) {
   const { _passwordHash, ...post } = row;
   if (_passwordHash && !(await verifyPassword(password, _passwordHash)))
     throw new HttpError(403, "The post password is incorrect.");
+  let grantedToken:string|undefined;
   if (_passwordHash) {
     const token = randomBytes(32).toString("hex");
+    grantedToken=token;
     await pool.query(
       "INSERT INTO post_access_tokens(token_hash,post_id,password_hash,expires_at) VALUES($1,$2,$3,now()+interval '7 days')",
       [tokenHash(token), post.id, _passwordHash],
@@ -1355,9 +1358,11 @@ export async function unlockPublicPost(req:Request,res:Response) {
       maxAge: 7 * 24 * 60 * 60_000,
     });
   }
+  const canReadProtectedPost=postAccessReader({headers:{cookie:grantedToken?`worldact_post_${post.id}=${grantedToken}`:req.headers.cookie}});
+  const visible=await publicPost(post, false, { query: req.query, user: (req as AuthRequest).user, contentPage,canReadProtectedPost });
   res.json({
-    post: await publicPost(post, false, { query: req.query, user: (req as AuthRequest).user, contentPage }),
-    ...(await commentResponse(post.id, {query:req.query,user:(req as AuthRequest).user,canReadProtectedPost:postAccessReader(req)})),
+    post: visible,
+    ...(await commentResponse(post.id, {query:req.query,user:(req as AuthRequest).user,canReadProtectedPost},visible.locked)),
   });
 }
 router.post("/public/posts/:slug/unlock",unlockPublicPost);

@@ -3,10 +3,20 @@ import type pg from "pg";
 import { readPlainPermalinkQuery } from "../shared/plain-permalink-query.js";
 import { readPublicPath } from "./public-path.js";
 import { restLocalDate } from "./date.js";
+import { HttpError } from "./utils.js";
 import { permalinkTokenCaptures, permalinkTokenPattern, type PermalinkToken } from "../shared/permalink-tokens.js";
 type Database = Pick<pg.Pool, "query"> | pg.PoolClient;
 type Settings = Awaited<ReturnType<typeof getSettings>>;
 const segment = (value: string) => encodeURIComponent(value);
+/** Persisted association, never a supplied author DTO. Public metadata callers
+ * retain their publication/type fence across this additional database read.
+ * Authenticated private editors supply the current explicit status instead. */
+export async function authorPermalinkNicename(post: Record<string, any>, db: Database = pool): Promise<string> {
+  const row=(await db.query(`SELECT u.nicename FROM posts p JOIN users u ON u.id=p.author_id
+    WHERE p.id=$1 AND p.type='post' AND p.status=$2`,[post.id,post.status ?? "publish"])).rows[0];
+  if (!row?.nicename) throw new HttpError(404,"Post author identity is no longer available.");
+  return row.nicename;
+}
 /** Select the source's lowest-ID assigned category and its ancestors in one
  * statement snapshot. Supplied DTO terms can be partial or stale. UNION visits
  * each persisted ancestor once, including malformed historical cycles. */
@@ -83,6 +93,8 @@ export async function postPermalink(
     year, monthnum, day, hour, minute, second,
     category: settings.permalinkStructure.includes("%category%")
       ? await categoryPermalinkPath(post.id,settings,db) : "",
+    author: settings.permalinkStructure.includes("%author%")
+      ? segment(await authorPermalinkNicename(post,db)) : "",
   };
   return settings.permalinkStructure.replace(
     permalinkTokenPattern(),

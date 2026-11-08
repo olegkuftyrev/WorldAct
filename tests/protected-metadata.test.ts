@@ -5,6 +5,7 @@ import { DOMParser } from "linkedom";
 import { pool, postMetadataFields } from "../server/db.js";
 import { renderSiteDocument } from "../server/block-renderer.js";
 import { postPermalink } from "../server/permalinks.js";
+import { fixtureUserNicename } from "./helpers/user-fixtures.js";
 
 const block = (name: string, attributes: Record<string, unknown> = {}) => `<!-- wp:${name} ${JSON.stringify(attributes)} /-->`;
 const dom = (html: string) => new DOMParser().parseFromString("<!doctype html><html><body>" + html + "</body></html>", "text/html");
@@ -14,7 +15,7 @@ test("published protected metadata remains discoverable while private records an
   const base = process.env.TEST_API_URL || "http://127.0.0.1:3001", stamp = "protected-meta-" + Date.now().toString(36);
   const ids: number[] = [], terms: number[] = []; let userId: number | undefined;
   try {
-    userId = (await pool.query("INSERT INTO users(username,email,display_name,password_hash,role) VALUES($1,$2,$3,'inert-fixture-hash','author') RETURNING id", [stamp, stamp + "@example.test", "Protected-only public author"])).rows[0].id;
+    userId = (await pool.query("INSERT INTO users(username,email,display_name,password_hash,role,nicename) VALUES($1,$2,$3,'inert-fixture-hash','author',$4) RETURNING id", [stamp, stamp + "@example.test", "Protected-only public author", fixtureUserNicename(stamp)])).rows[0].id;
     const create = async (label: string, type: string, status: string, password: boolean, date = "2000-01-02T00:00:00Z") => {
       const row = (await pool.query("INSERT INTO posts(type,title,slug,status,password_hash,author_id,published_at,content,raw_content,excerpt,footnotes) VALUES($1,$2,$3,$4,$5,$6,$7,'<p>SECRET-METADATA-BODY</p>','<p>SECRET-METADATA-RAW</p>','SECRET-METADATA-EXCERPT',$8::jsonb) RETURNING id,type,title,slug,status,parent_id AS \"parentId\",published_at AS \"publishedAt\",created_at AS \"createdAt\"", [type, label, stamp + "-" + ids.length, status, password ? "inert-post-password" : null, userId, date, JSON.stringify([{ id: "secret-note", content: "SECRET-METADATA-NOTE" }])])).rows[0]; ids.push(row.id); return row;
     };

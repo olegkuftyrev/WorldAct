@@ -2,6 +2,8 @@ import { readFile } from "node:fs/promises";
 import path from "node:path";
 import { pool, rootDir } from "./db.js";
 import { syncBundledThemes } from "./themes.js";
+import { lockUserCreation } from "./user-nicenames.js";
+import { migrateUserNicenames } from "./user-nicenames-migration.js";
 
 export async function migrate() {
   const sql = await readFile(
@@ -14,7 +16,14 @@ export async function migrate() {
     await client.query(
       "SELECT pg_advisory_xact_lock(hashtext('worldact-migration'))",
     );
+    await lockUserCreation(client);
+    // First application relation lock: creators hold no relations while waiting
+    // at the barrier; existing profile row -> identity mutations can finish.
+    // Deployment still quiesces unrelated writers before schema migration.
+    if ((await client.query("SELECT to_regclass('users') AS present")).rows[0].present)
+      await client.query("LOCK TABLE users IN ACCESS EXCLUSIVE MODE");
     await client.query(sql);
+    await migrateUserNicenames(client);
     // Platform extensions are optional during bootstrap and migrate atomically.
     for (const schema of [
       "platform-schema.sql",
