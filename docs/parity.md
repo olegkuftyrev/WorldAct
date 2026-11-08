@@ -88,6 +88,8 @@ Fresh CLI and browser installation share once-only source defaults: the complete
 
 Native attachment captions now retain sanitized HTML in raw fields and apply the source paragraph formatter in rendered fields. A once-only format migration escapes old plaintext without reinterpreting literal tags or losing long captions; old/new JSON archives carry explicit format semantics. Metadata saves, independent image copies, public galleries and WXR caption/description fields share that contract. The combined application passed 37 focused source and 37 compiled checks across eight files (two conditional-stage skips), a production build, and separate source-export/fresh-compiled-restore caption archives with five checks each after deleting source files. Private editor preference storage also passed independent code review and three focused source/compiled checks; its visual integration continues separately. See [caption migration and archive rules](../server/media-captions.md) and [editor preference contract](../server/editor-preferences.md).
 
+The complete reviewed Classic/account/install/image-backend batch passed 429 source checks across 104 files (six conditional-stage skips), 114 compiled-server checks across 23 files (three conditional-stage skips), and a production build. Independent Classic, account/tools/install and fresh-default native reviews passed. Native Image-modal and editor Options/Code-mode implementation and review continue separately.
+
 The cross-site archive check runs twice on **different fresh databases** after source files have been deleted:
 
 ```sh
