@@ -86,6 +86,33 @@ test("time-token settings and known body-page links cross fresh archive database
       assert.equal(result.data.post.contentPagination.links[1].url,expectedBody);
       const exactChild=await resolve(href("child")!);assert.equal(exactChild.data.post.id,child.id);assert.match(exactChild.data.post.content,/BODY-CHILD-FIRST/);assert.doesNotMatch(exactChild.data.post.content,/BODY-PARENT/);
       const childSecond=await resolve(href("childBody")!);assert.equal(childSecond.data.post.id,child.id);assert.match(childSecond.data.post.content,/BODY-CHILD-SECOND/);
+      // Exercise the actual Node document and native continuation after fresh-ID
+      // rebasing, rather than proving only the legacy JSON resolver in isolation.
+      const previousTheme=settings.theme;
+      try {
+        for(const theme of ["twentytwentyfive","classic"]){
+          await api("/api/settings","PUT",{theme});
+          const documentFor=async(link:string,id:number,page:number,content:string)=>{
+            const target=new URL(link,base),response=await fetch(base+target.pathname+target.search,{headers:{Cookie:cookie}});
+            assert.equal(response.status,200,theme+" "+target.pathname+target.search);assert.match(response.headers.get("content-type") || "",/text\/html/);
+            const html=await response.text(),document=new DOMParser().parseFromString(html,"text/html"),bootstrap=document.querySelector("#worldact-public-document");assert.ok(bootstrap);
+            const model=JSON.parse(bootstrap.textContent!);assert.equal(model.post.id,id);assert.equal(model.route.query.contentPage,page);assert.ok(document.querySelector("#root")!.textContent!.includes(content));
+            if(target.searchParams.has("query-4-page"))assert.equal(model.route.query.blockPages["query-4-page"],Number(target.searchParams.get("query-4-page")));
+            assert.doesNotMatch(html,/BODY-PRIVATE-FIRST|BODY-PROTECTED-FIRST|Body-archive-password-123/);
+            return {document,model};
+          };
+          const initial=await documentFor(href("body")!,post.id,2,"TIME-ARCHIVE-SECOND");
+          await documentFor(href("child")!,child.id,1,"BODY-CHILD-FIRST");
+          await documentFor(href("childBody")!,child.id,2,"BODY-CHILD-SECOND");
+          const form=initial.document.querySelector('form[action="/wp-comments-post.php"]')!;assert.ok(form);assert.ok(form.querySelector('[name="redirect_to"]'));
+          const fields=new URLSearchParams();for(const input of form.querySelectorAll('input[type="hidden"]'))fields.append(input.getAttribute("name")!,input.getAttribute("value") || "");
+          const text="Time-body actual native "+post.id+" "+theme;fields.set("content",text);
+          const saved=await fetch(base+form.getAttribute("action"),{method:"POST",redirect:"manual",headers:{Origin:origin,Cookie:cookie},body:fields});assert.equal(saved.status,303,await saved.text());
+          const returned=new URL(saved.headers.get("location")!,base);assert.equal(returned.searchParams.get("query-4-page"),"3");assert.match(returned.hash,/^#comment-[1-9]\d*$/);
+          const after=await documentFor(returned.pathname+returned.search,post.id,2,"TIME-ARCHIVE-SECOND");
+          assert.ok(after.model.comments.some((record:any)=>record.content.includes(text)));assert.ok(after.document.querySelector(returned.hash));
+        }
+      }finally{await api("/api/settings","PUT",{theme:previousTheme});}
       for(const title of ["Body archive private","Body archive protected"]){const hidden=await imported(title);assert.equal(hidden.status,title.endsWith("private")?"private":"draft");const denied=await fetch(base+"/api/public/resolve?"+new URLSearchParams({path:bodyURL(hidden)}));assert.equal(denied.status,404);assert.doesNotMatch(await denied.text(),/BODY-PRIVATE|BODY-PROTECTED|Body-archive-password/);}
       const exported=(await api("/api/tools/export")).data;
       assert.equal(exported.posts.find((record:any)=>record.id===post.id).published_at,"2024-12-31T18:15:39.000Z");
