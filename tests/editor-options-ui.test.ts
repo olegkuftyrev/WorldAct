@@ -35,6 +35,7 @@ test("source distraction settings and platform shortcuts preserve their actual m
   assert.deepEqual(preferencePatch(defaults, { fixedToolbar: true }), { fixedToolbar: true, distractionFree: false });
   const event = { key: "m", code: "KeyM", metaKey: true, ctrlKey: false, shiftKey: true, altKey: true, repeat: false, isComposing: false, defaultPrevented: false };
   assert.equal(editorShortcut(event, true), "mode"); assert.equal(editorShortcut(event, false), null);
+  assert.equal(editorShortcut({ ...event, key: "µ" }, true), "mode", "Option-modified Mac letters still use the source physical key");
   for (const patch of [{ repeat: true }, { isComposing: true }, { defaultPrevented: true }, { shiftKey: false }]) assert.equal(editorShortcut({ ...event, ...patch }, true), null);
   assert.equal(editorShortcut({ ...event, key: "|", code: "Backslash", altKey: false }, true), "distraction");
   assert.equal(editorShortcut({ ...event, key: "h", metaKey: false, ctrlKey: true, shiftKey: false }, true), "help");

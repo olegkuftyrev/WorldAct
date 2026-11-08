@@ -4,9 +4,9 @@ export type EditorShortcut = "mode" | "distraction" | "help" | "reveal";
 export function editorShortcut(event: Pick<KeyboardEvent, "key" | "code" | "metaKey" | "ctrlKey" | "shiftKey" | "altKey" | "repeat" | "isComposing" | "defaultPrevented">, apple: boolean): EditorShortcut | null {
   if (event.repeat || event.isComposing || event.defaultPrevented) return null;
   const primary = apple ? event.metaKey && !event.ctrlKey : event.ctrlKey && !event.metaKey;
-  if (primary && event.shiftKey && event.altKey && event.key.toLowerCase() === "m") return "mode";
+  if (primary && event.shiftKey && event.altKey && (event.code === "KeyM" || event.key.toLowerCase() === "m")) return "mode";
   if (primary && event.shiftKey && !event.altKey && (event.code === "Backslash" || event.key === "\\")) return "distraction";
-  if ((apple ? event.ctrlKey && event.altKey && !event.metaKey && !event.shiftKey : event.altKey && event.shiftKey && !event.ctrlKey && !event.metaKey) && event.key.toLowerCase() === "h") return "help";
+  if ((apple ? event.ctrlKey && event.altKey && !event.metaKey && !event.shiftKey : event.altKey && event.shiftKey && !event.ctrlKey && !event.metaKey) && (event.code === "KeyH" || event.key.toLowerCase() === "h")) return "help";
   if (event.key === "F6" && !event.altKey && !event.metaKey && !event.ctrlKey && !event.shiftKey) return "reveal";
   return null;
 }
@@ -18,9 +18,12 @@ export function useEditorShortcuts(root: RefObject<HTMLElement | null>, onShortc
     if (!active || !root.current) return;
     const documents = new Map<Document, MutationObserver | null>(), apple = /Mac|iPod|iPhone|iPad/.test(navigator.platform);
     const keyDown = (event: KeyboardEvent) => {
-      if (document.querySelector('[role="dialog"], [role="alertdialog"]')) return;
+      // Classic keeps its link dialog mounted with display:none. Only an open
+      // dialog owns the keyboard; its dormant source markup must not disable
+      // every global editor shortcut.
+      if ([...document.querySelectorAll<HTMLElement>('[role="dialog"], [role="alertdialog"]')].some(dialog => dialog.getClientRects().length && getComputedStyle(dialog).visibility !== "hidden")) return;
       const target = event.target as HTMLElement;
-      if (target.closest('[role="dialog"], .components-popover, .tox-dialog') || target.matches('input, select') || target.matches('textarea:not(.editor-post-text-editor):not(.editor-title)')) return;
+      if (target.closest('[role="dialog"], .components-popover, .tox-dialog') || target.matches('input, select') || (target.matches('textarea:not(.editor-post-text-editor):not(.editor-title)') && !target.closest('.block-editor-block-list__block'))) return;
       const action = editorShortcut(event, apple);
       if (!action) return;
       if (handler.current(action) === false) return;
