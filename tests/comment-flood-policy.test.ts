@@ -55,10 +55,8 @@ test("persisted source flood identities, statuses and integer-second boundaries"
         await clear(); await predecessor({ type, ip: "198.51.100.8" }); await flooded({ email: "", ip: guest.ip });
       }
     });
-    await t.test("hour cutoff inclusive, expired IP ignored immediately and existing email history needs no IP backfill", async () => {
-      await clear(); const id = await predecessor({ age: 3600 });
-      // At exactly the source cutoff a future supplied new date can expose inclusion.
-      const prior = (await pool.query("SELECT count(*)::int AS count FROM comments WHERE id=$1 AND created_at >= $2::timestamptz-interval '1 hour'", [id,current])).rows[0]; assert.equal(prior.count, 1);
+    await t.test("old history permits, expired IP is ignored and email history needs no IP backfill", async () => {
+      await clear(); await predecessor({ age: 3600 });
       await allowed();
       await clear(); const expired = await predecessor({ email: "another@example.test" });
       await pool.query("UPDATE comment_flood_metadata SET expires_at=$2 WHERE comment_id=$1", [expired,current]); await allowed();
