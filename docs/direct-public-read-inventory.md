@@ -1,0 +1,35 @@
+# Direct public identity and local excerpt consumers
+
+This inventory covers every `postPermalink`/`withPermalink` call site in `server/*.ts` at this successor, plus the local RSS and cached attached-parent paths. It concerns current post/page publication, immutable type/owner and applicable body/password policy. It does not promise serializable refresh of arbitrary titles, term/user records, counts, settings, media relationships or external snapshots. Public readers use the existing complete-attempt collector; editor previews and authorized private editorial reads keep their established permission policy.
+
+| Consumer | Observation and complete output boundary |
+| --- | --- |
+| `theme-blocks.ts` previous/next post links | The independently selected neighbor's metadata identity is observed before its direct canonical lookup. Its whole owning source/Classic document or template result is retried, never just the link string. |
+| `term-blocks.ts` page lookup, breadcrumbs, JSON page-list item | `loadPage` selects actual type/owner and observes published page metadata even on cache hits; selected breadcrumb context is also observed. Ancestors, configured posts page and dynamic item share this path. Literal authored fragments/HTML retain their stored structure; they do not acquire live page metadata. |
+| `rss.ts` local `readInternalFeed` | Each local published row includes its actual author ID. An unprotected local excerpt registers full body policy; an already protected entry registers metadata only because its description is always generic, regardless of the viewer's request grant. Parallel canonical tasks settle before final validation. Local feeds are freshly acquired inside the owning render, without external HTTP or forwarding a grant to a feed endpoint. |
+| `rss.ts` external feed service | External HTTP, parsing, cache and inflight snapshots stay separate. An external feed may itself contain historical third-party text; this collector does not reinterpret those strings as current local post identities. Existing transport, cache, limits and error behavior remain unchanged. |
+| `compat.ts` RSS/Atom and comments feed | Already observed by the predecessor: complete rendered collection/XML, with all canonical tasks settled. Unprotected comment bodies observe the parent body policy. |
+| `compat.ts` sitemap | Every acquired published metadata row joins one complete XML attempt before its canonical lookup. A changed identity reacquires the list once. The existing50,000-row bound remains unchanged. |
+| `compat.ts` REST search | Public metadata-only SELECT and observations precede canonical lookup; the complete selected/paginated result is reacquired once. No post body is needed for title search. |
+| `compat.ts` media attached-parent embedding | Actual published parent metadata is observed before canonical lookup. Media GET collections/singles own complete acquisition/embedding attempts. Request embedding cache is reset at the start of each owning attempt, so a retired parent cannot survive via an earlier cached DTO. Standalone metadata rendering after an existing media write retries only that read, not the write. Authorized nonpublic parent metadata retains its existing `canEdit` rule. |
+| `compat.ts` REST post/page view | Already observed by the predecessor, including owner-selected editorial scope and full collection/single boundary. `wpPost` observes before direct canonical lookup; unrelated nested public bodies keep their public policy. Edit/mutation responses retain established editorial behavior. |
+| `block-renderer.ts` `postURL` | Already observes metadata for content, title/date/link/navigation, selected post, and page-list traversal. `postForRender`/public-content paths observe body policy. Each renderer shares its outer complete attempt. |
+| `widget-blocks.ts` permalink helper | Already observes link identities for LatestPosts, LatestComments and post-by-post archives; body/excerpt/comment sites register relevant policy separately. Query counters and grouped aggregate counts are not individual acquired title/body results. |
+| `block-bindings.ts` post-data | Already observes the actual readable post identity before date/modified/link binding. Only fixed source fields are supported; editor preview remains separate. |
+| `shortcodes.ts` parent permission | Already observes actual public parent type/owner/body policy for implicit or explicit attached-media access; authorized preview remains separate. |
+| `public-read.ts` `publicPost`, site and immutable single | Already observes initial and post-author policies, preserving earlier conflicts, through supplied clients. Complete site/document/single boundaries own all acquired bodies/comments and nested render observations. |
+| `public-presentation.ts` / `blocks.ts` template API | The template operation uses the shared renderer; the API owns complete acquisition and rendering. Authenticated block/editor preview is intentionally separate. |
+
+The remaining direct callers are different policy domains and are not replayed as public complete-read operations:
+
+| Call site | Existing boundary retained |
+| --- | --- |
+| `permalinks.ts` implementation, `withPermalink`, resolver comparison | Canonical helper pins actual persisted post author and rechecks current type/status/owner after the nicename expression. Resolver/body acquisition and final public output have independent fences. No implicit global collector is introduced here. |
+| `native-post-return.ts` | Dedicated immutable post/type/owner/publication checks after canonical generation and later continuation/comment-page work. Native comment admission is not retried. |
+| `incoming-pings.ts`, `outgoing-pings.ts` | Protocol target/source validation and transaction/admission/job policy. Read retries must not replay ping delivery or incoming comment admission. |
+| `bundled-plugins.ts` | Authorized Akismet feedback/recheck external-service inputs with explicit post status/type. These are side effects, not public body collections. |
+| `core.ts` post listing/comment submission | Authorized administrative listing and transactional comment/anti-spam inputs. Public reads use `public-read.ts`; submission writes are not replayed. |
+| `db.ts` decorated post getter; `dashboard.ts` summaries | Administrative/editorial hydration and dashboard permissions. Public body services independently read and validate their immutable selections. |
+| `compat.ts` WXR export; `platform.ts` archive export; `site-portability.ts` import finalization | Authorized archive operations and supplied import transaction. Their intentionally privileged content graph is separate from public publication/grant output. |
+
+The narrow corrected navigation regression distinguishes a retired previous-POST presentation from a fresh current public PAGE with the same database ID. The former disappears; the latter remains discoverable in the newly acquired page metadata with its current canonical. The original global-text-absence expectation was too broad for that type transition and remains preserved as historical evidence rather than being silently changed or marked green.

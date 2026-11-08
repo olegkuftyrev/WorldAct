@@ -80,6 +80,8 @@ jobs:
           tests/author-nicename-independent-waits.test.ts tests/author-document-waits.test.ts
           tests/author-archive-independent-waits.test.ts tests/author-query-accumulation-independent-waits.test.ts
           tests/public-read-accumulation.test.ts tests/author-feed-accumulation-root.test.ts
+          tests/author-navigation-identity-corrected-expectation.test.ts tests/author-internal-rss-independent-waits.test.ts
+          tests/public-direct-metadata.test.ts
           tests/user-creation-concurrency.test.ts tests/user-nicenames-migration.test.ts
           tests/author-permalink-portability.test.ts
           tests/page-delete-reparent.test.ts tests/post-mutation-locks.test.ts
