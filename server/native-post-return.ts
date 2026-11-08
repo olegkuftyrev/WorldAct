@@ -78,7 +78,9 @@ export async function nativePostReturn(postId: number, requested: unknown, refer
   // Continuation resolution and chronological comment paging can await more
   // database work after canonical generation. Fence the immutable selection at
   // the final metadata boundary too; no body or password is needed here.
-  if(!(await pool.query("SELECT 1 FROM posts WHERE id=$1 AND type=$2 AND status='publish' AND author_id=$3",[post.id,post.type,post.authorId])).rowCount)
-    throw new HttpError(404,"Post not found.");
+  try{
+    if(!(await pool.query("SELECT 1 FROM posts WHERE id=$1 AND type=$2 AND status='publish' AND author_id=$3 AND post_date=$4 FOR SHARE NOWAIT",[post.id,post.type,post.authorId,post.postDate])).rowCount)
+      throw new HttpError(404,"Post not found.");
+  }catch(error){if(["55P03","40001"].includes((error as {code?:string}).code || ""))throw new HttpError(409,"The post publication changed while its return path was being read. Reload to continue.");throw error;}
   return url.pathname + url.search + url.hash;
 }
