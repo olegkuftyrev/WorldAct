@@ -21,6 +21,7 @@ import {
   hashPassword,
   verifyPassword,
   requireRole,
+  assertActiveAccountAuthentication,
   type AuthRequest,
 } from "./auth.js";
 import {
@@ -53,6 +54,7 @@ import { settingSchema, menuSchema, validMenu, styleSchema, documentSchema, vali
 import { readThemeDesign, validateThemeDesign, resetBundledDocument } from "./themes.js";
 import {pendingAdminEmail,queueAdminEmailChange} from "./site-identity.js";
 import {deliverMail,queueMail} from "./accounts.js";
+import {pendingProfileEmail,queueProfileEmailChange,assertAvailableProfileEmail} from "./profile-email.js";
 
 const router = express.Router();
 const admin = requireRole("administrator");
@@ -190,26 +192,30 @@ router.get("/profile", auth, async (req: AuthRequest, res) => {
     [user.id],
   );
   const row = result.rows[0];
-  res.json({ user: { ...row, ...row.profile }, preferences: row.preferences });
+  if(!row)throw new HttpError(401,"This account is no longer available.");
+  res.json({ user: { ...row, ...row.profile }, preferences: row.preferences, pendingEmail: await pendingProfileEmail(user.id) });
 });
-export async function updateUser(req: AuthRequest, target: number) {
+async function updateUserResult(req: AuthRequest, target: number) {
   const user = needUser(req),
     input = profileSchema.parse(req.body);
   if (target !== user.id && user.role !== "administrator")
     throw new HttpError(403, "You cannot edit this user.");
-  const client=await pool.connect();
+  const client=await pool.connect();let mail:Awaited<ReturnType<typeof queueMail>>|null=null,resultUser:any;
   try {
   await client.query("BEGIN");
-  await client.query("SELECT pg_advisory_xact_lock(hashtext('worldact-account-identity'))");
-  const existing = await client.query("SELECT * FROM users WHERE id=$1 FOR UPDATE", [
-    target,
+  const existing = await client.query("SELECT * FROM users WHERE id=ANY($1::int[]) ORDER BY id FOR UPDATE", [
+    [...new Set([user.id,target])],
   ]);
-  const row = existing.rows[0];
+  const actor=existing.rows.find(row=>row.id===user.id),row=existing.rows.find(row=>row.id===target);
+  if(!actor)throw new HttpError(401,"This account is no longer available.");
   if (!row) throw new HttpError(404, "User not found.");
+  await assertActiveAccountAuthentication(req,client);
+  if(target!==user.id && actor.role!=="administrator")throw new HttpError(403,"You cannot edit this user.");
+  await client.query("SELECT pg_advisory_xact_lock(hashtext('worldact-account-identity'))");
   if (
     input.role &&
     input.role !== row.role &&
-    (user.role !== "administrator" || user.id === target)
+    (actor.role !== "administrator" || user.id === target)
   )
     throw new HttpError(403, "You cannot change this account role.");
   if (
@@ -219,7 +225,7 @@ export async function updateUser(req: AuthRequest, target: number) {
       !(await verifyPassword(input.currentPassword, row.password_hash)))
   )
     throw new HttpError(400, "Your current password is incorrect.");
-  if(input.email && input.email.toLowerCase()!==row.email.toLowerCase() && (await client.query("SELECT id FROM users WHERE id<>$1 AND (lower(email)=lower($2) OR lower(username)=lower($2))",[target,input.email])).rowCount)throw new HttpError(409,"That email address is already registered.");
+  if(input.email && input.email.toLowerCase()!==row.email.toLowerCase())await assertAvailableProfileEmail(client,target,input.email);
   const {
     email,
     displayName,
@@ -230,10 +236,16 @@ export async function updateUser(req: AuthRequest, target: number) {
   } = input;
   for (const key of ["firstName", "lastName", "nickname", "bio"] as const)
     if (profile[key] !== undefined) profile[key] = plainText(profile[key]!);
+  const emailChanged=email!==undefined && email.toLowerCase()!==row.email.toLowerCase();
+  if(password || (emailChanged && target!==user.id)){
+    await client.query("DELETE FROM user_email_changes WHERE user_id=$1",[target]);
+    await client.query("DELETE FROM password_resets WHERE user_id=$1",[target]);
+  }
+  if(emailChanged && target===user.id)mail=await queueProfileEmailChange(client,row,email!);
   await client.query(
     "UPDATE users SET email=$1,display_name=$2,password_hash=$3,role=$4,profile=profile || $5::jsonb WHERE id=$6",
     [
-      email?.toLowerCase() ?? row.email,
+      target===user.id ? row.email : email?.toLowerCase() ?? row.email,
       displayName !== undefined
         ? normalizedText(displayName)
         : row.display_name,
@@ -259,11 +271,13 @@ export async function updateUser(req: AuthRequest, target: number) {
     [target],
   );
   await client.query("COMMIT");
-  return { ...result.rows[0], ...result.rows[0].profile };
+  resultUser={ ...result.rows[0], ...result.rows[0].profile };
   } catch(error){await client.query("ROLLBACK");throw error;}finally{client.release();}
+  return {user:resultUser,pendingEmail:target===user.id?await pendingProfileEmail(target):null,delivery:await deliverMail(mail)};
 }
+export async function updateUser(req:AuthRequest,target:number){return (await updateUserResult(req,target)).user;}
 router.put("/profile", auth, async (req: AuthRequest, res) =>
-  res.json({ user: await updateUser(req, needUser(req).id) }),
+  res.json(await updateUserResult(req, needUser(req).id)),
 );
 router.get("/users/:id", admin, async (req, res) => {
   const result = await pool.query(
@@ -342,10 +356,10 @@ router.delete("/users/:id", admin, async (req: AuthRequest, res) => {
   res.json({ok:true});
 });
 router.put("/users/:id", admin, async (req: AuthRequest, res) =>
-  res.json({ user: await updateUser(req, parseId(req.params.id)) }),
+  res.json(await updateUserResult(req, parseId(req.params.id))),
 );
 router.patch("/users/:id", admin, async (req: AuthRequest, res) =>
-  res.json({ user: await updateUser(req, parseId(req.params.id)) }),
+  res.json(await updateUserResult(req, parseId(req.params.id))),
 );
 router.put("/preferences", auth, async (req: AuthRequest, res) => {
   const preferences = z
@@ -414,7 +428,7 @@ router.post("/auth/forgot-password", async (req, res) => {
     .strict()
     .parse(req.body);
   const user = await pool.query(
-    "SELECT id,email FROM users WHERE lower(username)=lower($1) OR lower(email)=lower($1)",
+    "SELECT id,email,username FROM users WHERE lower(username)=lower($1) OR lower(email)=lower($1)",
     [login],
   );
   const mode = process.env.SMTP_HOST && process.env.NODE_ENV !== "test" && process.env.WORLDACT_MAIL_MODE !== "outbox" ? "queued" : "local-outbox";
@@ -430,7 +444,7 @@ router.post("/auth/forgot-password", async (req, res) => {
     try {
       await client.query("BEGIN");
       const current=(await client.query("SELECT id,email FROM users WHERE id=$1 FOR UPDATE",[user.rows[0].id])).rows[0];
-      if(current){
+      if(current && [current.email.toLowerCase(),user.rows[0].username.toLowerCase()].includes(login.toLowerCase())){
         await client.query("DELETE FROM password_resets WHERE user_id=$1",[current.id]);
         await client.query("INSERT INTO password_resets(token_hash,user_id,expires_at) VALUES($1,$2,now()+interval '30 minutes')",[createHash("sha256").update(token).digest("hex"),current.id]);
         mail=await queueMail(client,current.email,"Reset your WorldAct password",body);
@@ -486,6 +500,7 @@ router.post("/auth/reset-password", async (req, res) => {
     await client.query("DELETE FROM password_resets WHERE user_id=$1", [
       result.rows[0].user_id,
     ]);
+    await client.query("DELETE FROM user_email_changes WHERE user_id=$1", [result.rows[0].user_id]);
     await client.query("COMMIT");
     res.json({ ok: true });
   } catch (e) {

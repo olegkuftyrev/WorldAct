@@ -48,7 +48,7 @@ export async function authenticateLogin(
     const current = (await client.query<User & { password_hash: string }>(
       `SELECT ${userFields}, password_hash FROM users WHERE id=$1 FOR SHARE`, [record.id],
     )).rows[0];
-    if (!current || current.password_hash !== record.password_hash) {
+    if (!current || current.password_hash !== record.password_hash || ![current.username.toLowerCase(), current.email.toLowerCase()].includes(input.login.toLowerCase())) {
       await client.query("ROLLBACK"); return null;
     }
     const { password_hash: _password, ...account } = current;

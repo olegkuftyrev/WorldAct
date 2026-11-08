@@ -3,6 +3,7 @@ import { promisify } from "node:util";
 import type { NextFunction, Request, Response } from "express";
 import type { PoolClient } from "pg";
 import { pool, userFields, type Role, type User } from "./db.js";
+import { HttpError } from "./utils.js";
 
 const scryptAsync = promisify(scrypt);
 const COOKIE = "worldact_session";
@@ -39,6 +40,14 @@ function readToken(req: Request) {
     .find((value) => value.startsWith(`${COOKIE}=`));
   const token = item?.slice(COOKIE.length + 1);
   return token && /^[a-f0-9]{64}$/.test(token) ? token : undefined;
+}
+/** Recheck a waiting mutation after locking its actor, before changing identity. */
+export async function assertActiveAccountAuthentication(req: AuthRequest, db: PoolClient) {
+  const userId = req.user?.id;
+  const exists = req.authenticationMethod === "application-password"
+    ? await db.query("SELECT 1 FROM application_passwords WHERE user_id=$1 AND uuid=$2", [userId, req.applicationPasswordUuid])
+    : await db.query("SELECT 1 FROM sessions WHERE user_id=$1 AND token_hash=$2 AND expires_at>now()", [userId, tokenHash(readToken(req) || "")]);
+  if (!exists.rowCount) throw new HttpError(401, "Your sign-in has expired. Sign in again to update this account.");
 }
 export async function attachUser(
   req: AuthRequest,

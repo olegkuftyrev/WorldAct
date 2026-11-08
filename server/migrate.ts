@@ -27,6 +27,7 @@ export async function migrate() {
       "media-schema.sql",
       "edit-locks-schema.sql",
       "site-identity-schema.sql",
+      "profile-email-schema.sql",
       "fonts-schema.sql",
       "post-templates-schema.sql",
       "post-trash-schema.sql",
