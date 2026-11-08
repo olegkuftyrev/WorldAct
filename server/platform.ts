@@ -842,7 +842,10 @@ router.post(
       await mediaClient.query("COMMIT");
       res.status(201).json({ media: result.rows[0] });
     } catch (e) {
-      if (mediaClient) await mediaClient.query("ROLLBACK").catch(() => {});
+      if (mediaClient) {
+        await mediaClient.query("ROLLBACK").catch(() => {});
+        mediaClient.release(); mediaClient = undefined;
+      }
       await unlinkUnreferencedMediaFiles(createdFiles);
       throw e;
     } finally { mediaClient?.release(); }

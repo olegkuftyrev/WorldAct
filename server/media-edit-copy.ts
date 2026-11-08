@@ -45,22 +45,22 @@ export async function editMediaCopy(req: AuthRequest, sourceId: number, body: un
   let released = false;
   try {
     await database.query("BEGIN");
-    // Match the account -> post -> media order used by account deletion. Keep
+    // Match the account -> media -> post order used by account deletion. Keep
     // credentials/role stable while waiting for the source file or image work.
     const actor = (await database.query("SELECT id,role FROM users WHERE id=$1 FOR SHARE", [actorId])).rows[0];
     if (!actor) throw new HttpError(401, "Your account is unavailable. Sign in again.");
     await assertActiveAccountAuthentication(req, database);
     if (!["administrator", "editor", "author"].includes(actor.role)) throw new HttpError(403, "You are not allowed to edit images.");
-    if (input.post) {
-      const post = (await database.query("SELECT id,author_id,type FROM posts WHERE id=$1 AND status<>'trash' FOR KEY SHARE", [input.post])).rows[0];
-      if (!post) throw new HttpError(400, "Choose an existing post or page.");
-      if (actor.role === "author" && (post.author_id !== actorId || post.type !== "post")) throw new HttpError(403, "You can only attach files to your own posts.");
-    }
     const item = (await database.query("SELECT * FROM media WHERE id=$1 FOR SHARE", [sourceId])).rows[0];
     if (!item) throw new HttpError(404, "Media not found.");
     if (actor.role === "author" && item.author_id !== actorId) throw new HttpError(403, "You can only edit your own media.");
     if (!String(item.mime_type).startsWith("image/")) throw new HttpError(400, "Only images can be edited.");
     if (!matchesEditableMediaSource(input.src, item, settings.siteUrl)) throw new HttpError(404, "This image URL does not belong to the attachment.");
+    if (input.post) {
+      const post = (await database.query("SELECT id,author_id,type FROM posts WHERE id=$1 AND status<>'trash' FOR KEY SHARE", [input.post])).rows[0];
+      if (!post) throw new HttpError(400, "Choose an existing post or page.");
+      if (actor.role === "author" && (post.author_id !== actorId || post.type !== "post")) throw new HttpError(403, "You can only attach files to your own posts.");
+    }
     // Source metadata chooses its raw upload for quality. A missing local file
     // is an error; never fall back to a request-controlled network address.
     const original = Object.hasOwn(item.derivatives || {}, "original-upload") ? item.derivatives["original-upload"] : item.filename;
