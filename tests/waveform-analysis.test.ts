@@ -187,3 +187,62 @@ test("aborted decode reservations remain held until actual decode and context cl
   assert.deepEqual(await Promise.all(pending), ["aborted", "ok", "ok"]);
   assert.equal(live, 0);
 });
+
+test("WAV alternate size authorities must agree or decline analysis before decode", () => {
+  const pcm = Buffer.from(wave());
+  pcm.writeUInt16LE(3, 20);
+  pcm.writeUInt16LE(32, 34);
+  pcm.writeUInt16LE(4, 32);
+  pcm.writeUInt32LE(32000, 28);
+  const chunk = (name: string, data: Buffer) => {
+    const b = Buffer.alloc(8 + data.length + (data.length & 1));
+    b.write(name);
+    b.writeUInt32LE(data.length, 4);
+    data.copy(b, 8);
+    return b;
+  };
+  const appended = (...chunks: Buffer[]) => {
+    const result = Buffer.concat([pcm, ...chunks]);
+    result.writeUInt32LE(result.length - 8, 4);
+    return new Uint8Array(result).buffer;
+  };
+  const fact = Buffer.alloc(4);
+  fact.writeUInt32LE(4000);
+  assert.equal(
+    boundedAudioFrames(appended(chunk("fact", fact)), 32 * 1024 * 1024),
+    true,
+  );
+  const huge = Buffer.alloc(4);
+  huge.writeUInt32LE(0xffffffff);
+  assert.equal(
+    boundedAudioFrames(appended(chunk("fact", huge)), 32 * 1024 * 1024),
+    false,
+    "fact cannot advertise a huge allocation over tiny data",
+  );
+  assert.equal(
+    boundedAudioFrames(
+      appended(chunk("fact", fact), chunk("fact", fact)),
+      32 * 1024 * 1024,
+    ),
+    false,
+  );
+  for (const alternate of [
+    chunk("ds64", Buffer.alloc(28)),
+    chunk("LIST", Buffer.from("wavl")),
+    chunk("slnt", huge),
+    chunk("plst", huge),
+  ]) {
+    assert.equal(
+      boundedAudioFrames(appended(alternate), 32 * 1024 * 1024),
+      false,
+      "unsupported alternate audio stays playable only through native fallback",
+    );
+  }
+  assert.equal(
+    boundedAudioFrames(
+      appended(chunk("LIST", Buffer.from("INFO"))),
+      32 * 1024 * 1024,
+    ),
+    true,
+  );
+});

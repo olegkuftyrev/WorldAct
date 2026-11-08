@@ -20,14 +20,42 @@ export function boundedAudioFrames(
       data = 0,
       formats = 0,
       dataChunks = 0,
+      factFrames: number | undefined,
       at = 12;
     for (; at + 8 <= b.length; ) {
       const size = v.getUint32(at + 4, true),
-        end = at + 8 + size;
+        end = at + 8 + size,
+        chunk = text(at, 4);
       if (end > b.length) return false;
+      // Only flat audio plus known descriptive/padding chunks are analyzed.
+      // Alternate audio layouts and size authorities remain native-audio only.
+      if (
+        ![
+          "fmt ",
+          "data",
+          "fact",
+          "id3 ",
+          "ID3 ",
+          "JUNK",
+          "PAD ",
+          "bext",
+          "iXML",
+          "axml",
+          "LIST",
+        ].includes(chunk)
+      )
+        return false;
+      if (chunk === "LIST" && (size < 4 || text(at + 8, 4) !== "INFO"))
+        return false;
+      if (chunk === "fact") {
+        if (size !== 4 || factFrames !== undefined) return false;
+        factFrames = v.getUint32(at + 8, true);
+      }
       if (text(at, 4) === "fmt " && (size < 16 || ++formats !== 1))
         return false;
       if (text(at, 4) === "fmt " && size >= 16) {
+        if (size !== 16 && !(size === 18 && v.getUint16(at + 24, true) === 0))
+          return false;
         format = v.getUint16(at + 8, true);
         channels = v.getUint16(at + 10, true);
         rate = v.getUint32(at + 12, true);
@@ -52,7 +80,8 @@ export function boundedAudioFrames(
       align !== (channels * bits) / 8 ||
       byteRate !== rate * align ||
       !data ||
-      data % align
+      data % align ||
+      (factFrames !== undefined && factFrames !== data / align)
     )
       return false;
     return (
