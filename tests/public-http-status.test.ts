@@ -9,7 +9,14 @@ import { pool, rootDir, uploadsDir } from "../server/db.js";
 import { postPermalink } from "../server/permalinks.js";
 
 const base = process.env.TEST_API_URL!, origin = process.env.APP_ORIGIN!;
+const documentCacheControl = "no-cache, must-revalidate, max-age=0, no-store, private";
 after(() => pool.end());
+
+function assertPrivateDocument(response: Response) {
+  assert.equal(response.headers.get("cache-control"), documentCacheControl);
+  assert.equal(response.headers.get("expires"), "Wed, 11 Jan 1984 05:00:00 GMT");
+  assert.equal(response.headers.get("last-modified"), null);
+}
 
 test("Node serves the React document with actual public identity status and preserves other HTTP handlers", async t => {
   const original = (await pool.query("SELECT data FROM settings WHERE id=1")).rows[0].data;
@@ -30,6 +37,7 @@ test("Node serves the React document with actual public identity status and pres
     const response = await fetch(base + route);
     assert.equal(response.status, status, route);
     assert.match(response.headers.get("content-type")!, /text\/html/);
+    assertPrivateDocument(response);
     assert.equal(await response.text(), index, route + " must retain the real React index");
     assert.equal(response.headers.get("x-pingback"), null, "local servers never advertise ping reception");
     return response;
@@ -55,6 +63,33 @@ test("Node serves the React document with actual public identity status and pres
     const locked = await post({ type: "page", password: "HTTP-status-private-password", content: "<p>HTTP-PRIVATE-BODY</p>" });
     const draft = await post({ status: "draft" }), privatePost = await post({ status: "private" });
     const future = await post({ status: "future", scheduledAt: new Date(Date.now() + 86400000).toISOString() });
+    await t.test("HTML bootstraps remain private across anonymous, session and password contexts without changing authentication", async () => {
+      // An anonymous bootstrap can later log in through React, so its HTTP
+      // cache policy must already cover the eventual authenticated document.
+      for (const context of [undefined, cookie, "worldact_session=expired", "worldact_post_" + locked.id + "=expired"]) {
+        for (const route of ["/", "/login", "/admin/posts", "/preview/" + draft.id, "/?page_id=" + locked.id, "/missing-" + stamp]) {
+          const response = await fetch(base + route, { headers: context ? { Cookie: context } : {} });
+          assert.equal(response.status, route.startsWith("/missing-") ? 404 : 200);
+          assertPrivateDocument(response);
+          assert.equal(await response.text(), index);
+        }
+      }
+      const conditional = await fetch(base + "/", { headers: { "If-Modified-Since": new Date(Date.now() + 86400000).toUTCString() } });
+      assert.equal(conditional.status, 200); assertPrivateDocument(conditional);
+      assert.equal(await conditional.text(), index);
+      // Classifying HTML must not start application-password authentication or
+      // update credential usage merely to choose cache headers.
+      const basic = await fetch(base + "/", { headers: { Authorization: "Basic invalid" } });
+      assert.equal(basic.status, 200); assertPrivateDocument(basic);
+      assert.equal(await basic.text(), index);
+      const head = await fetch(base + "/", { method: "HEAD", headers: { Cookie: cookie } });
+      assert.equal(head.status, 200); assertPrivateDocument(head); assert.equal(await head.text(), "");
+      const asset = /src="([^"]+\.js)"/.exec(index)![1];
+      const staticResponse = await fetch(base + asset, { headers: { Cookie: cookie } });
+      assert.equal(staticResponse.status, 200);
+      assert.doesNotMatch(staticResponse.headers.get("cache-control") || "", /no-store|private/);
+      assert.ok(staticResponse.headers.get("last-modified"));
+    });
     await t.test("all source presets, hierarchical pages, aliases, fixed IDs and clamped body pages keep public identity", async () => {
       for (const structure of ["", "/%year%/%monthnum%/%day%/%postname%/", "/%year%/%monthnum%/%postname%/", "/archives/%post_id%", "/%postname%/"]) {
         await api("/api/settings", "PUT", { permalinkStructure: structure });
@@ -114,7 +149,7 @@ test("Node serves the React document with actual public identity status and pres
         ...["p=0", "p=-1", "p=1.5", "p=2147483648", "p=9999999999999999999", "p[]=1", "p[x]=1", "p=1&p=2", "p=1&page_id=2", "page_id=bad", "p=" + story.id + "&page=0", "p=" + story.id + "&page[]=2", "p=" + story.id + "&page=2&page=3"].map(query => "/?" + query),
         "/wrong/?p=" + story.id]) await html(route, 404);
       const head = await fetch(base + "/missing-" + stamp, { method: "HEAD" });
-      assert.equal(head.status, 404); assert.match(head.headers.get("content-type")!, /text\/html/); assert.equal(await head.text(), "");
+      assert.equal(head.status, 404); assertPrivateDocument(head); assert.match(head.headers.get("content-type")!, /text\/html/); assert.equal(await head.text(), "");
     });
     await t.test("taxonomy and date archives share actual existence and local dates with the API resolver", async () => {
       await api("/api/settings", "PUT", { categoryBase: "topics", tagBase: "labels" });

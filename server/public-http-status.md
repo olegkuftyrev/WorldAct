@@ -57,3 +57,18 @@ imports, temporarily make the body column unavailable to prove metadata-only
 status, and separately test a missing index and an unavailable database relation.
 All fixtures, databases, files and child listeners are owned by the isolated run;
 mail uses its local outbox and imported production-policy apps start no workers.
+
+The HTML bootstrap now uses the supplied `wp_get_nocache_headers()` policy from
+`wp-includes/functions.php` (approximately1508–1529): private, no-store,
+must-revalidate and a past Expires value, with no Last-Modified validator.
+`class-wp.php::send_headers()` applies that source policy to logged-in documents
+and anonymous404s. WorldAct applies it to every React bootstrap because even an
+initially anonymous document can acquire account or password state through
+in-app navigation. Static scripts, styles and uploads retain their existing
+independent cache policy. Choosing these headers does not authenticate Basic
+credentials, write application-password usage, or fetch private document bodies.
+
+Actual HTTP tests cover anonymous/session/expired/password-cookie contexts,
+framework/protected/missing routes, GET/HEAD and conditional requests. This
+header correction still requires independent native logout/history evaluation;
+HTTP assertions alone do not establish browser back/forward-cache behavior.

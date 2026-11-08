@@ -203,7 +203,12 @@ app.get("/{*splat}", async (req, res) => {
     throw error;
   });
   if (document.pingback) res.setHeader("X-Pingback", document.pingback);
-  res.status(document.status).sendFile(index);
+  // A React document can acquire account/password state without a new HTML
+  // navigation. Keep every bootstrap private, including an anonymous opening
+  // followed by an in-app login; assets retain their own static-file policy.
+  res.setHeader("Cache-Control", "no-cache, must-revalidate, max-age=0, no-store, private");
+  res.setHeader("Expires", "Wed, 11 Jan 1984 05:00:00 GMT");
+  res.status(document.status).sendFile(index, { cacheControl: false, lastModified: false });
 });
 
 const errorHandler: ErrorRequestHandler = (error, _req, res, _next) => {
