@@ -21,6 +21,7 @@ export const INTERACTIVE_BLOCKS = [
 export const NAVIGATION_OVERLAY_BLOCKS = ["core/navigation-overlay-close"];
 
 export const CORE_DYNAMIC_BLOCKS = [
+  "core/playlist", "core/playlist-track",
   "core/icon",
   "core/rss",
   ...THEME_BLOCKS,

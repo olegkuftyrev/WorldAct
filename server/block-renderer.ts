@@ -20,6 +20,7 @@ import { renderNavigationWithOverlay, renderNavigationOverlayClose, type Navigat
 import { hasLegacyContent, legacyExcerptSource, selectLegacyContent, type ContentMode } from "./legacy-content.js";
 import { CORE_DYNAMIC_BLOCKS, SUPPORTED_DYNAMIC_BLOCKS, hasDynamicBlocks } from "../shared/dynamic-blocks.js";
 import { renderIconBlock } from "./icons.js";
+import { renderPlaylistBlock, type PlaylistContext } from "./playlist-blocks.js";
 
 export type BlockDatabase = Pick<pg.Pool, "query"> | pg.PoolClient;
 export type RenderPost = Record<string, any>;
@@ -84,6 +85,7 @@ export type Context = {
   accordionItem?: AccordionItemContext;
   tabs?: TabsContext;
   navigationOverlay?: NavigationOverlayContext;
+  playlist?: PlaylistContext;
 };
 export type State = {
   db: BlockDatabase;
@@ -781,6 +783,10 @@ async function renderNode(
   const iconBlock = renderIconBlock(node,
     (extra = "", override = a) => attrsHTML({ ...node, attrs: override }, extra), blockStyle);
   if (iconBlock !== undefined) return iconBlock;
+  const playlistBlock = await renderPlaylistBlock(node, context, state,
+    (nodes, next) => renderChildren(nodes, next, state),
+    (extra = "", override = a) => attrsHTML({ ...node, attrs: override }, extra));
+  if (playlistBlock !== undefined) return playlistBlock;
   const themeBlock = await renderThemeBlock(node, context, state,
     (nodes, next) => renderChildren(nodes, next, state), attr);
   if (themeBlock !== undefined) return themeBlock;

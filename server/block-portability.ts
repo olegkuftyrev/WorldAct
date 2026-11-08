@@ -137,7 +137,7 @@ export function remapImportedBlockReferences(
     }
     if (options.media) {
       if (name === "core/gallery" && Array.isArray(attributes.ids)) attributes.ids = attributes.ids.map(Number).map(id => options.media!.get(id)).filter(Boolean);
-      const fields = ["core/image", "core/audio", "core/video", "core/file", "core/cover"].includes(name) ? ["id"] : name === "core/media-text" ? ["mediaId"] : [];
+      const fields = ["core/image", "core/audio", "core/video", "core/file", "core/cover", "core/playlist-track"].includes(name) ? ["id"] : name === "core/media-text" ? ["mediaId"] : [];
       for (const field of fields) if (attributes[field]) {
         const target = options.media.get(Number(attributes[field]));
         if (target) attributes[field] = target;
