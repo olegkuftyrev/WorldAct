@@ -113,18 +113,24 @@ test("message and line bounds close the connection and never issue automatic del
 });
 
 test("logical timeout keeps the single connection reservation until actual socket close", async () => {
+  // AbortSignal.timeout is unref'ed. Real sockets keep Node alive; these inert
+  // peers intentionally have no handle, so the fixture must own that lifetime.
+  const keepAlive = setInterval(() => {}, 1000);
   let calls = 0;
   const peer = new Peer(command => command.startsWith("PASS ") ? undefined : defaultReply(command)); peer.holdClose = true;
   const open = createPOP3Transport({ resolve: async () => [address], connect: () => { calls++; return peer.ready(); }, deadlineMs: 25 });
-  await assert.rejects(open(configuration), is("unavailable"));
-  assert.equal(peer.destroyed, true);
-  await assert.rejects(open(configuration), is("busy")); assert.equal(calls, 1);
-  peer.emit("close");
-  // A closed old socket releases capacity; a subsequent attempt may connect.
-  await assert.rejects(open(configuration), is("unavailable")); assert.equal(calls, 2); peer.emit("close");
+  try {
+    await assert.rejects(open(configuration), is("unavailable"));
+    assert.equal(peer.destroyed, true);
+    await assert.rejects(open(configuration), is("busy")); assert.equal(calls, 1);
+    peer.emit("close");
+    // A closed old socket releases capacity; a subsequent attempt may connect.
+    await assert.rejects(open(configuration), is("unavailable")); assert.equal(calls, 2);
+  } finally { peer.emit("close"); clearInterval(keepAlive); }
 });
 
 test("timed-out DNS keeps its physical lookup slots and never starts a socket", async () => {
+  const keepAlive = setInterval(() => {}, 1000);
   const resolvers: Array<(value: typeof address[]) => void> = [];
   let calls = 0, sockets = 0;
   const open = createPOP3Transport({ resolve: async () => { calls++; return new Promise(resolve => resolvers.push(resolve)); }, connect: () => { sockets++; throw Error(); }, deadlineMs: 15 });
@@ -133,7 +139,7 @@ test("timed-out DNS keeps its physical lookup slots and never starts a socket", 
     await assert.rejects(open(configuration), is("unavailable"));
     await assert.rejects(open(configuration), is("busy"));
     assert.equal(calls, 2); assert.equal(sockets, 0);
-  } finally { resolvers.forEach(resolve => resolve([address])); }
+  } finally { resolvers.forEach(resolve => resolve([address])); clearInterval(keepAlive); }
 });
 
 test("mail intake can retain ownership of a failed opening until its physical socket closes", async () => {
