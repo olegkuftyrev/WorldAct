@@ -76,6 +76,7 @@ import type { SerializedBlock } from "./types";
 import { persistentBlockAttributes } from "./blockAttributes";
 import { editorBackgroundSettings } from "./backgroundSettings";
 import { editorSelectorContext, isNavigationOverlayEntity, ownsEntityEdit, type EditorEntityContext } from "./entityContext";
+import { overlayPickerReference } from "./navigationOverlayReference";
 import { parseVideoEmbed } from "../embeds";
 import { compileThemeStyles, type ThemeJSON, type ThemeStyleOverrides } from "../themeStyles";
 import "./gutenberg.css";
@@ -218,6 +219,15 @@ addFilter("editor.BlockEdit","worldact/atomic-footnote-editing",(BlockEdit:any)=
   const owner=useContext(AtomicFootnotesContext);
   const foreignBoundary=useSelect(select=>props.name==="core/footnotes" && select(blockEditorStore).getBlockParents(props.clientId).some(id=>footnoteEntityBoundaries.has(select(blockEditorStore).getBlockName(id)||"")),[props.name,props.clientId]);
   return props.name==="core/footnotes" && (!ownsFootnotes(owner,props.context)||foreignBoundary)?<ReadOnlyFootnotes context={props.context || {}}/>:<BlockEdit {...props}/>;
+});
+addFilter("editor.BlockEdit","worldact/navigation-overlay-picker-reference",(BlockEdit:any)=>function NavigationOverlayReference(props:any){
+  const theme=useSelect(select=>props.name==="core/navigation"?select(coreDataStore).getCurrentTheme()?.stylesheet:undefined,[props.name]);
+  const overlay=overlayPickerReference(props.attributes?.overlay,theme);
+  // Present the compatible alias to the official controls without creating an
+  // edit or changing a foreign-theme reference's fallback behavior.
+  return props.name==="core/navigation" && overlay!==props.attributes?.overlay
+    ? <BlockEdit {...props} attributes={{...props.attributes,overlay}}/>
+    : <BlockEdit {...props}/>;
 });
 if (!getBlockBindingsSource("core/post-data"))
   registerBlockBindingsSource({
