@@ -38,6 +38,7 @@ import {
   buildSizes,
   uploadPrefix,
   safeStoredFile,
+  unlinkUnreferencedMediaFiles,
   mediaBackups,
 } from "./media-files.js";
 import { remapImportedBlockReferences } from "./block-portability.js";
@@ -333,11 +334,7 @@ export async function deleteUser(req: AuthRequest, target: number, options: {rea
   } finally {
     client.release();
   }
-  await Promise.all(
-    files.map((filename) =>
-      unlink(path.join(uploadsDir, filename)).catch(() => {}),
-    ),
-  );
+  await unlinkUnreferencedMediaFiles(files);
 }
 router.delete("/users/:id", admin, async (req: AuthRequest, res) => {
   const options = z.object({reassignTo:z.coerce.number().int().positive().optional(),deleteContent:z.enum(["true","false"]).optional()}).parse(req.query);
@@ -1005,18 +1002,12 @@ async function deleteMedia(req: AuthRequest,id:number) {
   } finally {
     client.release();
   }
-  for (const filename of [
+  await unlinkUnreferencedMediaFiles([
     item.filename,
     item.original_filename,
     ...Object.values(item.derivatives || {}),
-  ])
-    if (safeStoredFile(filename))
-      await unlink(path.join(uploadsDir, filename)).catch(() => {});
-  for (const size of Object.values(item.sizes || {}))
-    if (safeStoredFile((size as any).filename))
-      await unlink(path.join(uploadsDir, (size as any).filename)).catch(
-        () => {},
-      );
+    ...Object.values(item.sizes || {}).map((size: any) => size.filename),
+  ]);
 }
 router.delete("/media/:id", creators, async (req: AuthRequest, res) => {
   await deleteMedia(req,parseId(req.params.id));res.json({ok:true});

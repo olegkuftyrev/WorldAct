@@ -2,7 +2,8 @@ import sharp from "sharp";
 import path from "node:path";
 import { mkdir, writeFile, unlink } from "node:fs/promises";
 import { randomBytes } from "node:crypto";
-import { uploadsDir } from "./db.js";
+import type { Pool } from "pg";
+import { pool, uploadsDir } from "./db.js";
 export type ImageSize = {
   filename: string;
   url: string;
@@ -16,6 +17,43 @@ export function safeStoredFile(filename: unknown): filename is string {
     !path.isAbsolute(filename) &&
     !filename.includes("\\") &&
     path.resolve(uploadsDir, filename).startsWith(uploadsDir + path.sep)
+  );
+}
+
+/** Run after the deleting transaction commits. Archives can share physical files. */
+export async function unlinkUnreferencedMediaFiles(
+  candidates: Iterable<unknown>,
+  database: Pick<Pool, "query"> = pool,
+) {
+  const files = [...new Set([...candidates].filter(safeStoredFile))];
+  if (!files.length) return;
+  const referenced = new Set<string>();
+  try {
+    // Read every batch before unlinking anything. A failed ownership check must
+    // retain files, including those in earlier, successfully checked batches.
+    for (let offset = 0; offset < files.length; offset += 256) {
+      const result = await database.query<{ filename: string }>(
+        `SELECT DISTINCT referenced.filename FROM (
+          SELECT filename FROM media
+          UNION ALL SELECT original_filename FROM media
+          UNION ALL SELECT entry.value FROM media
+            CROSS JOIN LATERAL jsonb_each_text(CASE WHEN jsonb_typeof(derivatives)='object' THEN derivatives ELSE '{}'::jsonb END) entry
+          UNION ALL SELECT entry.value->>'filename' FROM media
+            CROSS JOIN LATERAL jsonb_each(CASE WHEN jsonb_typeof(sizes)='object' THEN sizes ELSE '{}'::jsonb END) entry
+        ) referenced WHERE referenced.filename=ANY($1::text[])`,
+        [files.slice(offset, offset + 256)],
+      );
+      for (const row of result.rows) referenced.add(row.filename);
+    }
+  } catch {
+    // The media deletion is already committed; a database outage must not turn
+    // best-effort file cleanup into deletion of another attachment's bytes.
+    return;
+  }
+  await Promise.all(
+    files.filter(filename => !referenced.has(filename)).map(filename =>
+      unlink(path.join(uploadsDir, filename)).catch(() => {}),
+    ),
   );
 }
 export function uploadPrefix(settings: {
