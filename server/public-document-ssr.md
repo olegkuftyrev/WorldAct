@@ -60,15 +60,33 @@ gates immediately; persisted pageshow asks the controller to revalidate before
 exposure. Script/boot/revalidation failures keep the root suppressed and expose
 a fixed safe retry outside it. No-JavaScript requests receive their authorized
 request-time HTML normally. Already delivered no-JavaScript bytes cannot be
-retroactively revoked. This lifecycle design must pass actual browser held-HTML,
-logout/account/grant/publication and BFCache tests; server HTTP tests alone do
-not establish that evidence.
+retroactively revoked. Actual independent browser review exercised held HTML across logout, account
+changes, grants and publication changes, plus real pagehide and Back/Forward.
+This browser reported persisted:false and refused BFCache admission because of
+no-store resources and browsing-instance policy. Genuine BFCache restoration
+is therefore not certified; no synthetic persisted event substitutes for it.
 
-The browser controller/boot stage must adopt tagged head/gate nodes, consume and
-remove the bootstrap once, use the same shared view/prefix and retire stale route
-or account owners before displaying fresh data. It must retain the reviewed
-source comment form-local error behavior, Reply drafts/focus/counters, native
-actions and source enhancer cleanup. Integration of that separate stage and
-independent native visual/hydration/history acceptance is required before this
-feature is ready for release. This document records architecture and server
-boundaries, not full WordPress parity or a completed CMS.
+The browser controller adopts tagged head/gate nodes, consumes and removes the
+bootstrap once, uses the shared view/prefix and retires stale route/account
+owners before exposing fresh data. It preserves source form-local errors,
+Reply drafts/focus/counters, native actions and scoped enhancer cleanup. Actual
+missing built JS and CSS leave a visible, keyboard-reachable outside-root retry.
+A model failure clears the old tree and offers fresh recovery. See
+[browser ownership](../src/public/README.md) and the [author evidence with exact
+stage hashes and preserved failures](../docs/evidence/public-ssr/README.md).
+
+Native comment/password forms include an optional local return target. The
+server validates current public immutable post identity/type and recognized
+query fields; invalid explicit targets never borrow a Referer. Approved comment
+returns select the actual chronological page containing the saved root/reply,
+including explicit page1 when newest is the default. Pending returns preserve
+valid context without exposing the pending body. Password returns preserve only
+positive Reply intent for fresh eligibility validation. Body-page and block-query
+counters remain independent. The endpoints still use the existing actual
+submission/unlock policies before calculating a303; JSON mutations are unchanged.
+
+The final runtime at207 (fixture-only successor f2) passed the full local source
+and actual compiled CI selector, fresh Plain archive restore, clean install and
+separate independent backend/native review. See the [verification record](../docs/evidence/public-ssr/integrated-review.md) for exact counts and remaining bounds.
+Standalone React login/admin/editor remain JavaScript shells. This records a
+reviewed public-document scope, not complete WordPress equivalence.
