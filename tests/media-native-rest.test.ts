@@ -97,3 +97,64 @@ test("native media filter validation rejects nested IDs, excessive lists and SQL
     assert.equal((await api("/wp-json/wp/v2/media?" + query)).response.status, 400, query);
   }
 });
+
+test("native Details embeds real authors and readable attached-post metadata without exposing private records or bodies", async () => {
+  const item = await upload(author, stamp + "-embedded");
+  const initialSettings = (await pool.query("SELECT data FROM settings WHERE id=1")).rows[0].data;
+  const createParent = async (title: string, status: string, cookie = admin, extra: Record<string, unknown> = {}) => {
+    const result = await api("/api/posts", "POST", { title, status, content: "Private relation body must never appear", ...extra }, cookie);
+    assert.equal(result.response.status, 201, JSON.stringify(result.data)); parents.push(result.data.post.id); return result.data.post;
+  };
+  try {
+    const hidden = await createParent(stamp + " confidential parent", "draft");
+    assert.equal((await api(`/wp-json/wp/v2/media/${item.id}`, "POST", { post: hidden.id })).response.status, 200);
+    const own = await api(`/wp-json/wp/v2/media/${item.id}?context=edit&_embed=author,wp:attached-to`, "GET", undefined, author);
+    assert.equal(own.response.status, 200); assert.equal(own.data._embedded.author[0].id, authorId);
+    assert.equal(own.data._embedded.author[0].name, "Native media author");
+    assert.equal(Object.hasOwn(own.data._embedded, "wp:attached-to"), false);
+    assert.ok(!JSON.stringify(own.data).includes(hidden.title));
+    const publicView = await api(`/wp-json/wp/v2/media/${item.id}?_embed=true`, "GET", undefined, "");
+    assert.equal(publicView.response.status, 200); assert.equal(publicView.data._embedded.author[0].id, authorId);
+    assert.equal(Object.hasOwn(publicView.data._embedded, "wp:attached-to"), false);
+    assert.doesNotMatch(JSON.stringify(publicView.data._embedded), /email|preferences|password|showAdminBar|commentShortcuts/);
+    assert.match(publicView.data._embedded.author[0].avatar_urls[48], /^https:\/\/secure\.gravatar\.com\/avatar\/[a-f0-9]{64}\?s=48/);
+    const administrator = await api(`/wp-json/wp/v2/media/${item.id}?context=edit&_embed=author,wp:attached-to`);
+    assert.equal(administrator.response.status, 200);
+    assert.deepEqual(Object.keys(administrator.data._embedded["wp:attached-to"][0]).sort(), ["id", "link", "slug", "title", "type"]);
+    assert.equal(administrator.data._embedded["wp:attached-to"][0].title.rendered, hidden.title);
+    assert.ok(!JSON.stringify(administrator.data._embedded).includes("Private relation body"));
+    const ownDraft = await createParent(stamp + " own parent", "draft", author);
+    assert.equal((await api(`/wp-json/wp/v2/media/${item.id}`, "POST", { post: ownDraft.id }, author)).response.status, 200);
+    assert.equal((await api(`/wp-json/wp/v2/media/${item.id}?context=edit&_embed=wp:attached-to`, "GET", undefined, author)).data._embedded["wp:attached-to"][0].id, ownDraft.id);
+    const published = await createParent(stamp + " public protected parent", "publish", admin, { password: "Only-a-relation-test" });
+    const changed = await api(`/wp-json/wp/v2/media/${item.id}?_embed=author,wp:attached-to`, "POST", { post: published.id });
+    assert.equal(changed.response.status, 200); assert.equal(changed.data._embedded["wp:attached-to"][0].id, published.id);
+    for (const query of ["_embed", "_embed=true", "_embed=1", "_embed=author,wp:attached-to"]) {
+      const view = await api(`/wp-json/wp/v2/media/${item.id}?${query}`, "GET", undefined, "");
+      assert.equal(view.response.status, 200); assert.equal(view.data._embedded["wp:attached-to"][0].id, published.id);
+      assert.ok(!JSON.stringify(view.data._embedded).includes("Private relation body"));
+      assert.ok(!JSON.stringify(view.data._embedded).includes("Only-a-relation-test"));
+    }
+    const selected = await api(`/wp-json/wp/v2/media?include=${item.id}&_embed=author,wp:attached-to&_fields=id,media_details.filesize,_embedded.author.name,_embedded.wp:attached-to.title.rendered`);
+    assert.equal(selected.response.status, 200);
+    assert.deepEqual(selected.data[0]._embedded, { author: [{ name: "Native media author" }], "wp:attached-to": [{ title: { rendered: published.title } }] });
+    const bytes = await fetch(base + new URL(item.source_url).pathname); assert.equal(bytes.status, 200);
+    assert.equal(selected.data[0].media_details.filesize, (await bytes.arrayBuffer()).byteLength);
+    for (const query of ["", "?_embed=false", "?_embed=0", "?_embed=unknown"]) {
+      assert.equal(Object.hasOwn((await api(`/wp-json/wp/v2/media/${item.id}${query}`)).data, "_embedded"), false);
+    }
+    assert.equal((await api("/api/settings", "PUT", { showAvatars: false })).response.status, 200);
+    assert.deepEqual((await api(`/wp-json/wp/v2/media/${item.id}?_embed=author`)).data._embedded.author[0].avatar_urls, {});
+  } finally { await api("/api/settings", "PUT", { showAvatars: initialSettings.showAvatars }); }
+});
+
+test("invalid native embedding and field projections fail before metadata writes or edit-copy staging", async () => {
+  const item = await upload(admin, stamp + "-embed-validation");
+  const count = Number((await pool.query("SELECT count(*) AS n FROM media")).rows[0].n);
+  for (const query of ["_embed[bad]=author", "_embed[]=author", "_embed=" + "a".repeat(2001), "_embed=" + Array(21).fill("author").join(","), "_fields=title..raw"]) {
+    assert.equal((await api(`/wp-json/wp/v2/media/${item.id}?${query}`, "POST", { title: "Must stay unchanged" })).response.status, 400, query.slice(0, 50));
+    assert.equal((await api(`/wp-json/wp/v2/media/${item.id}/edit?${query}`, "POST", { src: item.source_url, modifiers: [{ type: "rotate", args: { angle: 90 } }] })).response.status, 400);
+    assert.equal(Number((await pool.query("SELECT count(*) AS n FROM media")).rows[0].n), count);
+    assert.equal((await api(`/api/media/${item.id}`)).data.media.title, item.title.raw);
+  }
+});

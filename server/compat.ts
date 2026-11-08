@@ -42,6 +42,7 @@ import {
 import { z } from "zod";
 import { projectRestFields } from "./rest-fields.js";
 import { mediaCaptionHTML, renderedMediaCaption, mediaCaptionSchema } from "./media-captions.js";
+import { avatarURL } from "./avatars.js";
 import { readTermQuery } from "./term-blocks.js";
 import { assertPostAccess } from "./core.js";
 import { postFormats } from "../shared/post-formats.js";
@@ -815,8 +816,53 @@ function mediaQueryIds(value: unknown, zero = false): number[] | undefined {
   const values = typeof value === "string" ? (value.trim() ? value.split(",") : []) : Array.isArray(value) ? value : [value];
   return [...new Set(z.array(scalar).max(100).parse(values))];
 }
-async function wpMedia(item: any, edit = false) {
-  const s = await getSettings(),
+const mediaEmbedRequests = new WeakMap<Request, Set<string>>();
+function mediaEmbedNames(req: Request): Set<string> {
+  const cached = mediaEmbedRequests.get(req);
+  if (cached) return cached;
+  const value = req.query._embed === undefined ? undefined : z.string().max(2000).parse(req.query._embed);
+  const names = value === undefined || value === "false" || value === "0" ? []
+    : ["", "true", "1"].includes(value) ? ["author", "wp:attached-to"]
+    : z.array(z.string()).max(20).parse(value.split(",").map(name => name.trim()));
+  const selected = new Set(names.filter(name => ["author", "wp:attached-to"].includes(name)));
+  mediaEmbedRequests.set(req, selected);
+  return selected;
+}
+async function mediaEmbeddings(item: any, req: AuthRequest, settings: Awaited<ReturnType<typeof getSettings>>) {
+  const names = mediaEmbedNames(req), embedded: Record<string, any[]> = {};
+  const authorId = item.authorId || item.author_id;
+  if (authorId && names.has("author")) {
+    const person = await embeddedRecord(req, `media-author:${authorId}`, async () => {
+      const row = (await pool.query("SELECT id,username,display_name,email,profile FROM users WHERE id=$1", [authorId])).rows[0];
+      if (!row) return null;
+      const avatar = avatarURL(row.email, settings, 48);
+      return {
+        id: row.id, name: row.display_name, slug: row.username,
+        description: row.profile?.bio || "", url: row.profile?.website || "",
+        link: absolute(`/?author=${row.id}`, settings.siteUrl),
+        avatar_urls: avatar ? Object.fromEntries([24, 48, 96].map(size => [size, avatarURL(row.email, settings, size)])) : {},
+      };
+    });
+    if (person) embedded.author = [person];
+  }
+  const parentId = item.attachedPostId || item.attached_post_id;
+  if (parentId && names.has("wp:attached-to")) {
+    const parent = await embeddedRecord(req, `media-parent:${parentId}`, async () => {
+      // Context=embed exposes fixed relation metadata, never a post body. A
+      // public attachment must not disclose an unreadable draft/private title.
+      const post = (await pool.query(`SELECT ${postMetadataFields} FROM posts p WHERE p.id=$1`, [parentId])).rows[0];
+      if (!post || (post.status !== "publish" && !canEdit(req.user, post))) return null;
+      return { id: post.id, type: post.type, slug: post.slug,
+        link: absolute(await postPermalink(post, settings), settings.siteUrl),
+        title: { rendered: esc(post.title) } };
+    });
+    if (parent) embedded["wp:attached-to"] = [parent];
+  }
+  return Object.keys(embedded).length ? { _embedded: embedded } : {};
+}
+async function wpMedia(item: any, edit = false, req?: AuthRequest) {
+  if (req) mediaEmbedNames(req);
+  const s = req ? await embeddedRecord(req, "media-settings", () => getSettings()) : await getSettings(),
     url = absolute(item.url || "/uploads/" + item.filename, s.siteUrl),
     caption = mediaCaptionHTML(item.caption || "");
   return {
@@ -840,6 +886,7 @@ async function wpMedia(item: any, edit = false) {
     ...(item.originalUploadUrl ? { original_image_url: absolute(item.originalUploadUrl, s.siteUrl) } : {}),
     media_details: {
       ...(item.audioMetadata || item.audio_metadata || {}),
+      ...(Number.isSafeInteger(item.size) && item.size >= 0 ? { filesize: item.size } : {}),
       width: item.width,
       height: item.height,
       file: item.filename,
@@ -855,6 +902,7 @@ async function wpMedia(item: any, edit = false) {
     post: item.attachedPostId || item.attached_post_id || 0,
     comment_status:item.commentStatus || item.comment_status || "closed",
     source_url: url,
+    ...(req ? await mediaEmbeddings(item, req, s) : {}),
   };
 }
 router.get("/wp-json/wp/v2/media", async (req: AuthRequest, res) => {
@@ -893,7 +941,7 @@ router.get("/wp-json/wp/v2/media", async (req: AuthRequest, res) => {
       values,
     )
   ).rows;
-  res.json(wpFields(req, await Promise.all(rows.map(item => wpMedia(item, edit)))));
+  res.json(wpFields(req, await Promise.all(rows.map(item => wpMedia(item, edit, req)))));
 });
 router.get("/wp-json/wp/v2/media/:id", async (req: AuthRequest, res) => {
   const edit = mediaContext(req) === "edit";
@@ -906,15 +954,17 @@ router.get("/wp-json/wp/v2/media/:id", async (req: AuthRequest, res) => {
   ).rows[0];
   if (!item) throw new HttpError(404, "Media not found.");
   if (edit) requireMediaEditContext(req, item);
-  res.json(wpFields(req, await wpMedia(item, edit)));
+  res.json(wpFields(req, await wpMedia(item, edit, req)));
 });
 router.post("/wp-json/wp/v2/media", async (req: AuthRequest, res) => {
   needUser(req);
+  mediaEmbedNames(req); wpFields(req, {});
   const result = await forward(req, "/media", "POST", undefined, true);
-  res.status(result.status).json(await wpMedia(result.data.media, true));
+  res.status(result.status).json(wpFields(req, await wpMedia(result.data.media, true, req)));
 });
 router.post("/wp-json/wp/v2/media/:id", async (req: AuthRequest, res) => {
   needUser(req);
+  mediaEmbedNames(req); wpFields(req, {});
   const routeId = parseId(req.params.id);
   const input = z
     .object({
@@ -937,12 +987,13 @@ router.post("/wp-json/wp/v2/media/:id", async (req: AuthRequest, res) => {
     ...(input.post === undefined ? {} : {attachedPostId:input.post || null}),
     ...(input.comment_status === undefined ? {} : {commentStatus:input.comment_status}),
   });
-  res.json(await wpMedia(result.data.media, true));
+  res.json(wpFields(req, await wpMedia(result.data.media, true, req)));
 });
 router.post("/wp-json/wp/v2/media/:id/edit", async (req: AuthRequest, res) => {
   needUser(req);
+  mediaEmbedNames(req); wpFields(req, {});
   const result = await forward(req, "/media/" + parseId(req.params.id) + "/edit-copy", "POST", req.body);
-  const media = await wpMedia(result.data.media, true);
+  const media = await wpMedia(result.data.media, true, req);
   res.status(201).location(`/wp-json/wp/v2/media/${media.id}`).json(wpFields(req, media));
 });
 router.delete("/wp-json/wp/v2/media/:id", async (req: AuthRequest, res) => {

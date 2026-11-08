@@ -38,6 +38,23 @@ prototype/inherited properties are never followed. It projects only the DTO
 already permitted by the endpoint and cannot expose edit-only raw values from
 a view response. Empty selectors retain the whole permitted response.
 
+The native Details fields request `_embed=author,wp:attached-to`. Media
+collections, single records and native mutations now supply those real fixed
+relations when explicitly requested. Empty/true/1 requests select both; false/0
+select neither. The selector is bounded to 2000 characters and 20 names;
+nested/array values fail. Authors contain public name/profile metadata and
+source-compatible avatar URLs, never email, credentials or personal options.
+Disabling avatars removes those URLs. Attached-post relations contain only
+ID/type/slug/link/rendered title: published metadata is public, while other
+states require that authenticated account's existing content authority. Bodies,
+passwords and raw fields are never embedded. Per-request caching bounds repeated
+relation reads, and embedding does not recurse through attached posts.
+
+`media_details.filesize` uses the stored verified current file size. It does
+not guess raw-original or historical backup sizes. Native mutations validate
+embedding/field selectors before uploads, metadata writes or copy staging, so
+a malformed projection cannot report an error after committing a change.
+
 Actual API checks cover raw/edit mutation roundtrips, escaped literal captions,
 public versus author/subscriber reads, filters and bracket IDs, parent0,
 include ordering, multiple real pages/headers, nested fields, malformed and
