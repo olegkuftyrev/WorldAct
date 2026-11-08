@@ -913,8 +913,10 @@ router.post("/wp-json/wp/v2/media", async (req: AuthRequest, res) => {
 });
 router.post("/wp-json/wp/v2/media/:id", async (req: AuthRequest, res) => {
   needUser(req);
+  const routeId = parseId(req.params.id);
   const input = z
     .object({
+      id: z.number().int().positive().max(2147483647).optional(),
       title: z.string().optional(),
       caption: z.string().optional(),
       description:z.string().optional(),
@@ -924,7 +926,8 @@ router.post("/wp-json/wp/v2/media/:id", async (req: AuthRequest, res) => {
     })
     .strict()
     .parse(req.body);
-  const result = await forward(req, "/media/" + parseId(req.params.id), "PUT", {
+  if (input.id !== undefined && input.id !== routeId) throw new HttpError(400, "The attachment ID does not match the requested route.");
+  const result = await forward(req, "/media/" + routeId, "PUT", {
     ...(input.title === undefined ? {} : { title: input.title }),
     ...(input.caption === undefined ? {} : { caption: input.caption }),
     ...(input.alt_text === undefined ? {} : { alt: input.alt_text }),

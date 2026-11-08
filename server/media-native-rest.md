@@ -14,6 +14,9 @@ administrator/editor reads use existing media authority. Public view access
 continues to follow the existing public-upload policy. Native mutation origin,
 cookie/application-password and ownership checks remain in the existing
 adapter and ordinary Media routes.
+The native core-data metadata-save body may include its numeric `id`; it must
+match the route ID and is not forwarded as an editable field. Mismatches fail
+before changing either attachment.
 
 The collection now performs real parameterized filtering before pagination for
 `include`, `exclude`, `author`, `parent`, `search`, `media_type` and `mime_type`.

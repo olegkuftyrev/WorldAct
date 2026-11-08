@@ -40,12 +40,14 @@ test("native media edit responses expose saved raw fields to permitted editors w
   const item = await upload(admin, stamp + "-raw");
   for (const key of ["title", "caption", "description"]) assert.equal(typeof item[key].raw, "string", key);
   const updated = await api(`/wp-json/wp/v2/media/${item.id}`, "POST", {
-    title: "Image &amp; title", caption: "Caption &amp; &lt;img src=x onerror=bad()&gt;", description: "<p>Real <strong>description</strong><script>bad()</script></p>",
+    id: item.id, title: "Image &amp; title", caption: "Caption &amp; &lt;img src=x onerror=bad()&gt;", description: "<p>Real <strong>description</strong><script>bad()</script></p>",
   });
   assert.equal(updated.response.status, 200); assert.equal(updated.data.title.raw, "Image & title"); assert.equal(updated.data.title.rendered, "Image &amp; title");
   assert.equal(updated.data.caption.raw, "Caption & <img src=x onerror=bad()>");
   assert.equal(parseHTML("<body>" + updated.data.caption.rendered + "</body>").document.querySelectorAll("img,script").length, 0);
   assert.equal(updated.data.description.raw, "<p>Real <strong>description</strong></p>"); assert.equal(updated.data.description.rendered, updated.data.description.raw);
+  const mismatched = await api(`/wp-json/wp/v2/media/${item.id}`, "POST", { id: item.id + 1, title: "Must not replace" }); assert.equal(mismatched.response.status, 400);
+  assert.equal((await api(`/api/media/${item.id}`)).data.media.title, "Image & title");
   const edited = await api(`/wp-json/wp/v2/media/${item.id}?context=edit`); assert.equal(edited.response.status, 200);
   for (const key of ["title", "caption", "description"]) assert.deepEqual(edited.data[key], updated.data[key]);
   for (const context of ["view", "embed"]) {
