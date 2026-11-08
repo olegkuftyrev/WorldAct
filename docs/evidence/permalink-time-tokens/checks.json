@@ -1,0 +1,112 @@
+{
+  "codeSha": "b63c0beb8564a306216f5bca57f9fcaf6d86f5a1",
+  "baseSha": "bcc5e1bce2b91844adf660be1efdaba8d7fb3ef9",
+  "source": {
+    "path": "/tmp/worldact-permalink-time-tokens-source.log",
+    "sha256": "55712593750a2846c5241a110f5240117b8174c7ec66285966be06471e7cc32f",
+    "tests": 71,
+    "pass": 71,
+    "fail": 0,
+    "cancelled": 0,
+    "skipped": 0
+  },
+  "compiled": {
+    "path": "/tmp/worldact-permalink-time-tokens-compiled.log",
+    "sha256": "068e06f2344153b9992282c9f09bdf737ed4ddd28808d6a5a8ed61a82d4effa2",
+    "tests": 71,
+    "pass": 71,
+    "fail": 0,
+    "cancelled": 0,
+    "skipped": 0
+  },
+  "sourceFiles": 10,
+  "compiledFiles": 10,
+  "native": {
+    "path": "/tmp/worldact-permalink-time-native-proof.log",
+    "sha256": "36f7140d43302008b8e0e093928d954f6e8c24cd78d73f88b132b31cdb9bc748",
+    "tests": 1,
+    "pass": 1,
+    "fail": 0,
+    "cancelled": 0,
+    "skipped": 0
+  },
+  "nativeServer": {
+    "isolated": true,
+    "compiled": true,
+    "postId": 4,
+    "savedStructure": "/%year%/%monthnum%/%day%/%hour%/%minute%/%second%/%postname%/",
+    "canonical": "/2024/01/02/03/04/05/time-token-native/",
+    "resolvedStatus": 200,
+    "resolvedId": 4
+  },
+  "archiveExport": {
+    "path": "/tmp/worldact-permalink-time-archive-export.log",
+    "sha256": "375e0d118b045d6ca5ad0a8ee1ee564af5ecf306260eee13dc7f7f231cd9a17d",
+    "tests": 1,
+    "pass": 1,
+    "fail": 0,
+    "cancelled": 0,
+    "skipped": 0
+  },
+  "archiveRestore": {
+    "path": "/tmp/worldact-permalink-time-archive-restore.log",
+    "sha256": "244bea97132029a9dc4370524d3e4b1d1c7855469a14e0f1966a38b0bb595c72",
+    "tests": 1,
+    "pass": 1,
+    "fail": 0,
+    "cancelled": 0,
+    "skipped": 0
+  },
+  "build": {
+    "typecheck": true,
+    "browserProduction": true,
+    "serverProduction": true,
+    "path": "/tmp/worldact-permalink-time-tokens-build.log",
+    "sha256": "b77ee9755733b13802e36f662b32e5cb50c17cef445fa44403aa46bd864df08b"
+  },
+  "knownGap": {
+    "resolved": false,
+    "countedAsGreen": false,
+    "description": "Pretty body-page suffix self-link is not rebased to the fresh destination ID; canonical #keep mapping is separately supported.",
+    "sourceFailure": {
+      "path": "/tmp/worldact-core-CScUR8yM/permalink-time-body-suffix-repro-restore-source.log",
+      "sha256": "9473867ae45120c4438d5eef965e7cef6d7cc7042dcdaabb9102aa7a0df2790f",
+      "tests": 1,
+      "pass": 0,
+      "fail": 1,
+      "cancelled": 0,
+      "skipped": 0
+    },
+    "compiledFailure": {
+      "path": "/tmp/worldact-core-CScUR8yM/permalink-time-body-suffix-repro-restore-compiled.log",
+      "sha256": "385bddedd9822d96e9581a64e6317193798d854d8f4408e83f92932cff3840a3",
+      "tests": 1,
+      "pass": 0,
+      "fail": 1,
+      "cancelled": 0,
+      "skipped": 0
+    }
+  },
+  "screenshots": [
+    {
+      "file": "public-link-1440.png",
+      "sha256": "b18154d312d0336da82e3309d9b68c5c7e2fad117be396423b325566e4e359c3",
+      "visuallyInspected": true
+    },
+    {
+      "file": "settings-1440.png",
+      "sha256": "638e5abec7f76acdf94b5b3a38f1886a78522a70330486e56c9eaf66ea701433",
+      "visuallyInspected": true
+    },
+    {
+      "file": "settings-375.png",
+      "sha256": "a8a5f07904618c522c66ffe54fa6f553addd899f9150c072ceadaedddb9e5b37",
+      "visuallyInspected": true
+    }
+  ],
+  "limitations": [
+    "Current site timezone conversion does not preserve historical source local dates after timezone changes.",
+    "No author/nicename, timestamp-only identity, extension-tag, canonical redirect or pagination policy change.",
+    "Independent review and integrated release gates remain pending."
+  ]
+}
