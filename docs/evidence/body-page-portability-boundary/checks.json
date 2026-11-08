@@ -1,0 +1,137 @@
+{
+  "codeSha": "57d2e2f31769954010e2e3fe4dc0ab6cb282578e",
+  "baseSha": "4711b83d346fd8d26b3b0a2f7539cf46b3efa5bf",
+  "source": {
+    "path": "/tmp/worldact-body-page-boundary-source.log",
+    "sha256": "930062504403647d1085b5ad6552c7aae0e7eef1d7feb08c1e0fab993a239a04",
+    "tests": 112,
+    "pass": 112,
+    "fail": 0,
+    "cancelled": 0,
+    "skipped": 0,
+    "dropFailure": false
+  },
+  "sourceFiles": 15,
+  "compiled": {
+    "path": "/tmp/worldact-body-page-boundary-compiled.log",
+    "sha256": "5b267f07e609067c82a622d76a304e1d11b86a18e1cdc126c771390cb08e2510",
+    "tests": 112,
+    "pass": 112,
+    "fail": 0,
+    "cancelled": 0,
+    "skipped": 0,
+    "dropFailure": false
+  },
+  "compiledFiles": 15,
+  "build": {
+    "typecheck": true,
+    "browserProduction": true,
+    "serverProduction": true,
+    "path": "/tmp/worldact-body-page-boundary-build.log",
+    "sha256": "90bf94ca17be860bf280d0b5b6b0a367e9c146fe22a687d882dd5a9a8ccd7bdb"
+  },
+  "independentBeforeFailure": {
+    "source": {
+      "path": "/tmp/worldact-core-CScUR8yM/body-page-boundary-independent-source.log",
+      "sha256": "c33d688650da4c2f0e66204a7f896adaaa20c72dadb004a4c2a423f639d9a964",
+      "tests": 1,
+      "pass": 0,
+      "fail": 1,
+      "cancelled": 0,
+      "skipped": 0,
+      "dropFailure": false
+    },
+    "compiled": {
+      "path": "/tmp/worldact-core-CScUR8yM/body-page-boundary-independent-compiled.log",
+      "sha256": "43e24e9c17398229b8c9e51c5948f00f5fd7435b921def0dd6e926ee0abf0922",
+      "tests": 1,
+      "pass": 0,
+      "fail": 1,
+      "cancelled": 0,
+      "skipped": 0,
+      "dropFailure": false
+    }
+  },
+  "unchangedIndependentAfterProbe": {
+    "archive": "/var/folders/cz/t18p82ps0l9_hz170k46nk3r0000gn/T/worldact-time-token-body-repro-_kp7qlhl/archive.json",
+    "archiveSha256": "a25d68ee60af2d78cb54ee325138b9c64a2534d481e6da12333307263cf7e5a7",
+    "archiveUnchanged": true,
+    "reviewerProbeSha256": "904f624b3d0da832777c410303f61dda24f18e14edd950f2a64d6a5a0d7c66a4",
+    "reviewerProbeUnchanged": true,
+    "results": [
+      {
+        "runtime": "source",
+        "exit": 0,
+        "log": "/tmp/worldact-core-CScUR8yM/body-page-boundary-successor-probe-source.log",
+        "sha256": "82dd4a37ed7eec35fd5aed3ad9e787c3bbbcc57a91a6abfc00778ea9fa18ef8f"
+      },
+      {
+        "runtime": "compiled",
+        "exit": 0,
+        "log": "/tmp/worldact-core-CScUR8yM/body-page-boundary-successor-probe-compiled.log",
+        "sha256": "09b6a77f5337811db797182f677fd616621d101f06bd9d24e8eabe1012714f2c"
+      }
+    ]
+  },
+  "originalRetainedProbe": {
+    "archive": "/var/folders/cz/t18p82ps0l9_hz170k46nk3r0000gn/T/worldact-time-token-body-repro-_kp7qlhl/archive.json",
+    "archiveSha256": "a25d68ee60af2d78cb54ee325138b9c64a2534d481e6da12333307263cf7e5a7",
+    "archiveUnchanged": true,
+    "originalProbeSha256": "b88b1c9081dc6247bf0dd9a23e82618258ce71511f122f0d69d0e970a570bd0e",
+    "results": [
+      {
+        "runtime": "source",
+        "exit": 0,
+        "log": "/tmp/worldact-core-CScUR8yM/body-page-boundary-successor-original-retained-source.log",
+        "sha256": "af2c45616213a55a6737572c7cd7af8ff8cba5a0ab3caf00aa204362101b90e5"
+      },
+      {
+        "runtime": "compiled",
+        "exit": 0,
+        "log": "/tmp/worldact-core-CScUR8yM/body-page-boundary-successor-original-retained-compiled.log",
+        "sha256": "ea7b7cede4308b9a625b64bc7204142e7e65894070cd2fe88aca9611759d3e4c"
+      }
+    ]
+  },
+  "expandedBoundaryArchive": {
+    "export-source": {
+      "path": "/tmp/worldact-body-page-boundary-archive-export-source.log",
+      "sha256": "0a80a9fc16a0690092d354a25e0e37d1ded9ceac372f09eeccb41072400cdc03",
+      "tests": 1,
+      "pass": 1,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "dropFailure": false
+    },
+    "restore-source": {
+      "path": "/tmp/worldact-body-page-boundary-archive-restore-source.log",
+      "sha256": "c3729dba426895e46df8ea2aec50f04a06eaa8bb71d6fbfa72cdc39a200f3dc7",
+      "tests": 1,
+      "pass": 1,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "dropFailure": false
+    },
+    "restore-compiled": {
+      "path": "/tmp/worldact-body-page-boundary-archive-restore-compiled.log",
+      "sha256": "8dbcfd3697900672a386457b7f049f84f8b22c741d403a09981158922588e084",
+      "tests": 1,
+      "pass": 1,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "dropFailure": false
+    }
+  },
+  "frozen82AndTokenCheckoutsUnchanged": true,
+  "originalFailureLogsAndRetainedArchiveHashesUnchanged": true,
+  "mainChanged": false,
+  "independentSuccessorReview": "pending",
+  "limitations": [
+    "An omitted numeric source child can be indistinguishable from a valid parent body-page spelling; no complete absent-identity ambiguity guarantee is claimed.",
+    "Existing eligibility/publication/type/body-page count/query identity boundaries remain unchanged.",
+    "No new manifest, root/front alias, source-Plain-to-Pretty conversion, SSR/native/hydration or performance claim."
+  ]
+}
