@@ -1142,7 +1142,7 @@ async function renderNode(
       return `<${tag}${attr()}>${a.isLink ? `<a href="${esc(url)}"${a.linkTarget === "_blank" ? ' target="_blank" rel="noopener noreferrer"' : ""}>${title}</a>` : title}</${tag}>`;
     }
     if (name === "core/post-content") {
-      if(postNeedsPassword(p))return `<div${attr()}>${postPasswordForm(p,reserveInteractiveId(state,"","post-password"))}</div>`;
+      if(postNeedsPassword(p))return `<div${attr()}>${postPasswordForm(p,reserveInteractiveId(state,"","post-password"),{requestPath:state.options.requestPath || url,query:state.options.query})}</div>`;
       if (context.contentIds.has(p.id))
         return cleanContent(String(p.content || ""));
       const content = await renderPostBody(p, { ...context, contentIds: new Set([...context.contentIds, p.id]) }, state,
@@ -1272,7 +1272,7 @@ export async function renderPublicContent(
   if(postNeedsPassword(post)){
     state=await createState({...options,placeholderBindings:false},post);
     post=(await postForRender(post,state))!;
-    if(postNeedsPassword(post))return cleanContent(postPasswordForm(post,reserveInteractiveId(state,"","post-password")),true);
+    if(postNeedsPassword(post))return cleanContent(postPasswordForm(post,reserveInteractiveId(state,"","post-password"),{requestPath:state.options.requestPath || await postURL(post,state),query:state.options.query}),true);
   }
   const stored = storedStaticHTML(post);
   if (stored !== undefined) return stored;

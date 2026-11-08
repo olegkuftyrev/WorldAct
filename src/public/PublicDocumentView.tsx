@@ -37,6 +37,7 @@ export function PublicDocumentView({model,state=initialPublicInteraction(model),
  const {search:searchTerm,category:categoryFilter,tag:tagFilter,date:dateArchive}=model.route.query;
  const archive=model.route.archive,hasDateFilter=Boolean(dateArchive),pagination=model.site.pagination;
  const replyReturn=model.controls.commentReturnPath;
+ const passwordReturn=commentReturnPath(model.requestPath,model.route.query.values,Number(model.route.query.values.replytocom)).split("#")[0];
  const primaryMenu=model.design.menus.find(menu=>menu.location==="primary"),footerMenu=model.design.menus.find(menu=>menu.location==="footer");
  const slots=model.presentation.kind==="classic" ? model.presentation.slots : {};
  const customHeader=slots.header,customFooter=slots.footer,customSingle=slots.single,customIndex=slots.index;
@@ -172,6 +173,7 @@ export function PublicDocumentView({model,state=initialPublicInteraction(model),
                       </p>
                       <label htmlFor="post-password">Password</label>
                       <input type="hidden" name="postSlug" value={post.slug} />
+                      <input type="hidden" name="redirect_to" value={passwordReturn} />
                       <input
                         name="password"
                         type="password"
@@ -283,6 +285,7 @@ export function PublicDocumentView({model,state=initialPublicInteraction(model),
                         <form className="public-comment-form" action="/wp-comments-post.php" method="post" onSubmit={actions.submit}>
                           <input type="hidden" name="postId" value={post.id} />
                           <input type="hidden" name="parentId" value={reply?.id || 0} />
+                          <input type="hidden" name="redirect_to" value={replyReturn} />
                           <label htmlFor="comment-content">Comment *</label>
                           <textarea
                             id="comment-content" name="content"

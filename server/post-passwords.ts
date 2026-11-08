@@ -2,6 +2,7 @@ import { pool } from "./db.js";
 import { createHash } from "node:crypto";
 import type { Request } from "express";
 import type { BlockDatabase, RenderPost } from "./block-renderer.js";
+import { commentReturnPath } from "../shared/comment-links.js";
 
 export const protectedPostExcerpt = "There is no excerpt because this is a protected post.";
 export const postHasPassword = (post: RenderPost) => Boolean(post.hasPassword || post.password_hash || post._passwordHash || post.passwordHash);
@@ -9,8 +10,11 @@ export const postNeedsPassword = (post: RenderPost) => post.locked !== false && 
 export const publicPostTitle = (post: RenderPost) => (postHasPassword(post) ? "Protected: " : post.status === "private" ? "Private: " : "") + (post.title || "(no title)");
 const escape = (value: unknown) => String(value ?? "").replace(/[&<>"']/g, character => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[character]!);
 
-export function postPasswordForm(post: RenderPost, inputId: string) {
-  return `<form class="post-password-form worldact-native-password-form" action="/post-password" method="post"><p>This content is password protected. To view it please enter your password below:</p><p><label for="${escape(inputId)}">Password: <input id="${escape(inputId)}" type="password" name="password" maxlength="1024" required></label><input type="hidden" name="postSlug" value="${escape(post.slug)}"><button class="wp-element-button" type="submit">Enter</button></p><p class="worldact-native-password-notice" role="status"></p></form>`;
+export function postPasswordForm(post: RenderPost, inputId: string, context: {requestPath?:string;query?:Record<string,unknown>} = {}) {
+  let replyId=Number(context.query?.replytocom);
+  if(!replyId)try{replyId=Number(new URL(context.requestPath || "/","https://worldact.invalid").searchParams.get("replytocom"));}catch{}
+  const redirect=context.requestPath?commentReturnPath(context.requestPath,context.query,replyId).split("#")[0]:"";
+  return `<form class="post-password-form worldact-native-password-form" action="/post-password" method="post"><p>This content is password protected. To view it please enter your password below:</p><p><label for="${escape(inputId)}">Password: <input id="${escape(inputId)}" type="password" name="password" maxlength="1024" required></label><input type="hidden" name="postSlug" value="${escape(post.slug)}">${redirect?`<input type="hidden" name="redirect_to" value="${escape(redirect)}">`:""}<button class="wp-element-button" type="submit">Enter</button></p><p class="worldact-native-password-notice" role="status"></p></form>`;
 }
 
 /** Trusted request-only grants: saved blocks and URL parameters cannot supply them. */
