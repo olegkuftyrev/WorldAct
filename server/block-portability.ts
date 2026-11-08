@@ -21,6 +21,13 @@ export type BlockReferenceOptions = {
   footnoteSelfURLs?: ReadonlySet<string>;
 };
 
+/** Apply the longest complete URL mapping once. Query-ID prefixes must not
+ * rewrite another post ID, an unrelated host, or a freshly remapped target. */
+export function remapImportedURL(token:string,mappings:readonly (readonly [string,string])[]) {
+  const mapping=mappings.find(([source])=>source&&(token===source||(token.startsWith(source)&&(/^[?#&]/.test(token.slice(source.length))||/^\)+[,.;]?$/.test(token.slice(source.length))))));
+  return mapping?mapping[1]+token.slice(mapping[0].length):token;
+}
+
 /** Imported references must resolve only inside the imported entity graph. */
 export function remapImportedBlockReferences(
   rawContent: string,
@@ -77,8 +84,7 @@ export function remapImportedBlockReferences(
     // hierarchical URLs and the opaque schemes used by content separately.
     if (urls.length) value = value.replace(/(?:[a-z][a-z0-9+.-]*:\/\/|\/\/|(?:mailto|tel|data|blob|javascript):)[^\s"'<>]+|(^|[\s"'(=]|&(?:quot|apos|#34|#39|#x22|#x27);)(\/[^\s"'<>),]*)/gi, (match, prefix: string | undefined, local: string | undefined) => {
       const token = local === undefined ? match : local;
-      const mapping = urls.find(([source]) => source && (token === source || (token.startsWith(source) && (/^[?#&]/.test(token.slice(source.length)) || /^\)+[,.;]?$/.test(token.slice(source.length))))));
-      const rewritten = mapping ? mapping[1] + token.slice(mapping[0].length) : token;
+      const rewritten = remapImportedURL(token,urls);
       return local === undefined ? rewritten : prefix + rewritten;
     });
     if (options.media) value = value.replace(/\bwp-image-(\d+)\b/g, (_match, id) => options.media!.has(Number(id)) ? `wp-image-${options.media!.get(Number(id))}` : "wp-image-missing");

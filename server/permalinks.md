@@ -44,4 +44,6 @@ worker source URLs with nested/multiple categories and timezone date tokens.
 Two-stage site archive coverage asserts nested source/destination URLs and menu
 rebasing on different fresh databases after source files are removed.
 
-Plain query-ID permalinks and additional source tokens remain separate work.
+The Plain query-ID backend is described in [its separate contract](plain-permalinks.md).
+Matching settings controls/React routing and additional source tokens remain
+separate integration work.

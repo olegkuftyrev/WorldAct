@@ -87,11 +87,11 @@ export const settingSchema = z
     threadDepth: z.number().int().min(1).max(10),
     closeCommentsDays: z.number().int().min(0).max(3650),
     commentOrder: z.enum(["asc", "desc"]),
-    permalinkStructure: text(1, 200).refine((s) => {
+    permalinkStructure: text(0, 200).refine((s) => {
+      if(s === "") return true;
       const tokens = s.match(/%[^%]+%/g) || [];
       return (
         s.startsWith("/") &&
-        s.endsWith("/") &&
         !/[?#<>\\\s]/.test(s) &&
         !s.includes("//") &&
         !s.split("/").includes("..") &&
@@ -105,7 +105,7 @@ export const settingSchema = z
           .replace(/%(postname|post_id|year|monthnum|day|category)%/g, "")
           .includes("%")
       );
-    }, "Use a unique path beginning and ending with / and containing %postname% or %post_id%. Supported tokens: %postname%, %post_id%, %year%, %monthnum%, %day%, %category%."),
+    }, "Use an empty structure for Plain links, or a unique path beginning with / and containing %postname% or %post_id%. Supported tokens: %postname%, %post_id%, %year%, %monthnum%, %day%, %category%."),
     categoryBase: text(1, 80).regex(/^[a-z0-9-]+$/),
     tagBase: text(1, 80).regex(/^[a-z0-9-]+$/),
     thumbnailWidth: z.number().int().min(0).max(4096),

@@ -1,5 +1,6 @@
 import { pool, getSettings } from "./db.js";
 import type pg from "pg";
+import { readPlainPermalinkQuery } from "../shared/plain-permalink-query.js";
 type Database = Pick<pg.Pool, "query"> | pg.PoolClient;
 type Settings = Awaited<ReturnType<typeof getSettings>>;
 const segment = (value: string) => encodeURIComponent(value);
@@ -45,6 +46,7 @@ export async function postPermalink(
   if (post.type === "page") {
     if (settings.frontPageMode === "page" && settings.frontPageId === post.id)
       return "/";
+    if (!settings.permalinkStructure) return "/?page_id="+post.id;
     const slugs = [post.slug],
       seen = new Set<number>([post.id]);
     let parent = post.parentId ?? post.parent_id;
@@ -61,6 +63,7 @@ export async function postPermalink(
     }
     return "/" + slugs.map(segment).join("/") + "/";
   }
+  if (!settings.permalinkStructure) return "/?p="+post.id;
   const date = new Date(
     post.publishedAt ??
       post.published_at ??
@@ -119,7 +122,7 @@ async function resolveExactPublicPath(path: string, settings: Settings) {
       return key === "category" ? "(.+?)" : key === "postname" ? "([^/]+)" : "(\\d+)";
     },
   );
-  const match = new RegExp("^" + pattern.replace(/\/$/, "/?") + "$").exec(
+  const match = new RegExp("^" + (pattern.endsWith("/") ? pattern.slice(0,-1) : pattern) + "/?$").exec(
     normalized,
   );
   if (match) {
@@ -151,7 +154,7 @@ async function resolveExactPublicPath(path: string, settings: Settings) {
         )
       ).rows;
     for (const row of rows) {
-      if ((await postPermalink(row, settings)) === normalized) return row;
+      if ((await postPermalink(row, settings)).replace(/\/$/,"") === normalized.replace(/\/$/,"")) return row;
     }
   }
   // Page hierarchy is resolved segment by segment, never by an ambiguous final slug.
@@ -172,6 +175,16 @@ async function resolveExactPublicPath(path: string, settings: Settings) {
 }
 /** Exact post/page identities win before the source's numeric content-page suffix. */
 export async function resolvePublicPath(path: string) {
+  const queryIndex=path.indexOf("?");
+  if(queryIndex>=0){
+    const identity=readPlainPermalinkQuery(new URLSearchParams(path.slice(queryIndex+1)));
+    if(identity.kind!=="none"){
+      if(path.slice(0,queryIndex)!=="/"||!("id" in identity))return null;
+      const rows=(await pool.query("SELECT id,slug,type FROM posts WHERE id=$1 AND type=$2 AND status='publish'",[identity.id,identity.kind])).rows;
+      const post=rows[0];if(!post)return null;
+      return identity.contentPage?{...post,contentPage:identity.contentPage}:post;
+    }
+  }
   const settings = await getSettings(), exact = await resolveExactPublicPath(path, settings);
   if (exact) return exact;
   const normalized = "/" + path.split("?")[0].replace(/^\/+|\/+$/g, "") + "/";

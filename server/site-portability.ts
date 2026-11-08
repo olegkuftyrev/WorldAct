@@ -8,7 +8,7 @@ import type { PoolClient } from "pg";
 import { uploadsDir, rootDir, type User, getSettings, getPost } from "./db.js";
 import { cleanContent, plainText, slugify, HttpError } from "./utils.js";
 import { safeStoredFile } from "./media-files.js";
-import { remapImportedBlockReferences, type ImportedBlockEntity, type BlockReferenceOptions } from "./block-portability.js";
+import { remapImportedBlockReferences, remapImportedURL, type ImportedBlockEntity, type BlockReferenceOptions } from "./block-portability.js";
 import { settingSchema, styleSchema, menuSchema, validMenu, documentSchema, normalizedText, validateExtensionSettings } from "./site-validation.js";
 import { postPermalink } from "./permalinks.js";
 import { validateThemeDesign, getBundledTheme } from "./themes.js";
@@ -409,7 +409,7 @@ export class SiteImport {
       if (!targetId || typeof oldPost.permalink !== "string") continue;
       const post = await getPost(targetId, this.client);
       const url = await postPermalink(post, this.destination, this.client);
-      if (/^\/(?!\/)[^?#<>\\]*$/.test(oldPost.permalink) && oldPost.permalink !== "/") {
+      if ((/^\/(?!\/)[^?#<>\\]*$/.test(oldPost.permalink) || /^\/\?(p|page_id)=[1-9]\d{0,9}$/.test(oldPost.permalink)) && oldPost.permalink !== "/") {
         this.urls.set(oldPost.permalink, url);
         if (this.settings.siteUrl) this.urls.set(new URL(oldPost.permalink, this.settings.siteUrl).href, new URL(url, this.destination.siteUrl).href);
       }
@@ -432,12 +432,13 @@ export class SiteImport {
     }
     await this.client.query("SELECT pg_advisory_xact_lock(hashtext('worldact-menu-locations'))");
     const assigned = new Set<string>();
+    const menuURLs=[...this.urls].sort((a,b)=>b[0].length-a[0].length);
     for (const menu of this.menus) {
       if (menu.location && this.input.replaceDesign === true) {
         if (assigned.has(menu.location)) throw new HttpError(400, "An archive may assign only one menu to each theme location.");
         assigned.add(menu.location); await this.client.query("UPDATE navigation_menus SET location='',updated_at=now() WHERE location=$1", [menu.location]);
       } else if (menu.location) this.warn(`Menu ${menu.name} imported without changing the existing ${menu.location} assignment.`);
-      const items = menu.items.map((item: any) => ({ ...item, url: [...this.urls].sort((a,b) => b[0].length-a[0].length).reduce((value, [source,target]) => value.split(source).join(target), item.url) }));
+      const items = menu.items.map((item: any) => ({ ...item, url: remapImportedURL(item.url,menuURLs) }));
       validMenu(menuSchema.parse({ ...menu, items }).items);
       const row = await this.client.query("INSERT INTO navigation_menus(name,location,items) VALUES($1,$2,$3::jsonb) RETURNING id", [menu.name, this.input.replaceDesign === true ? menu.location : "", JSON.stringify(items)]); this.menuIds.push(row.rows[0].id);
     }

@@ -200,7 +200,7 @@ app.get("/{*splat}", async (req, res, next) => {
   try {
     await access(path.join(distDir, "index.html"));
     if(!/^\/(api|admin|wp-json|uploads)(?:\/|$)/.test(req.path)){
-      const identity=await resolvePublicPath(req.path);
+      const identity=await resolvePublicPath(req.originalUrl);
       if(identity){const post=(await pool.query('SELECT id,type,status,ping_status AS "pingStatus",published_at AS "publishedAt",password_hash IS NOT NULL AS "hasPassword" FROM posts WHERE id=$1',[identity.id])).rows[0];const pingback=pingbackHeader(post,await getSettings());if(pingback)res.setHeader("X-Pingback",pingback);}
     }
     res.sendFile(path.join(distDir, "index.html"));

@@ -54,7 +54,7 @@ async function configuration(db:Pick<pg.Pool,'query'>|pg.PoolClient=pool){
 async function targetPost(target:string,settings:Awaited<ReturnType<typeof getSettings>>){
  let url:URL;try{url=normalizePublicURL(target);}catch{throw new IncomingPingError(33);}
  if(url.origin!==new URL(settings.siteUrl).origin)throw new IncomingPingError(33);
- const resolved=await resolvePublicPath(url.pathname);if(!resolved)throw new IncomingPingError(33);
+ const resolved=await resolvePublicPath(url.pathname+url.search);if(!resolved)throw new IncomingPingError(33);
  const post=(await pool.query(`SELECT ${meta} FROM posts WHERE id=$1`,[resolved.id])).rows[0];
  if(!pingsOpen(post,settings))throw new IncomingPingError(33);
  post.terms=(await pool.query("SELECT t.taxonomy,t.slug FROM post_terms pt JOIN terms t ON t.id=pt.term_id WHERE pt.post_id=$1 ORDER BY t.name,t.id",[post.id])).rows;
