@@ -525,15 +525,21 @@ async function savePost(
     if (collision.rowCount) continue;
     const dateSettings=await getSettings(client),dateNow=new Date();
     const pair=resolvePostDate(input,existing,status,dateSettings.timezone,dateNow);
+    const civilIntent=input.postDate!==undefined || input.restDate!==undefined && input.restDate!=="" || input.restDateGmt!==undefined && input.restDateGmt!=="";
+    const changedSchedule=input.scheduledAt!==undefined && input.scheduledAt!==null && (!existing?.scheduledAt || new Date(input.scheduledAt).valueOf()!==new Date(existing.scheduledAt).valueOf());
+    const clearedDate=input.postDate===null || input.restDate===null || input.restDateGmt===null || status!=="future" && input.publishedAt===null;
     if(status==="future"){
-      if(input.postDate!==undefined || input.restDate!==undefined || input.restDateGmt!==undefined)scheduledAt=pair.postDateGmt;
+      // No date intent must not synthesize a new schedule. A saved fixed draft
+      // reuses its selected GMT, overriding an inactive legacy due value; a
+      // genuinely changed explicit UTC schedule retains its existing priority.
+      if(!civilIntent && (input.scheduledAt===null || !changedSchedule && !existing?.postDateGmt))throw new HttpError(400,"Choose a publication date before scheduling this post.");
+      if(civilIntent || existing?.status!=="future" && !changedSchedule && existing?.postDateGmt)scheduledAt=pair.postDateGmt;
       if(!scheduledAt && input.scheduledAt===undefined && existing?.postDateGmt)scheduledAt=pair.postDateGmt;
       if(!scheduledAt || !pair.postDateGmt)throw new HttpError(400,"Choose a publication date before scheduling this post.");
       if(new Date(scheduledAt).valueOf()<=dateNow.valueOf()){status="publish";assertNewAccess(user,type,status,existing?.status);}
     }
-    if(input.postDate!==undefined || input.restDate!==undefined || input.restDateGmt!==undefined){
-      if(status!=="future")publishedAt=pair.postDateGmt;
-    }
+    if(civilIntent && status!=="future")publishedAt=pair.postDateGmt;
+    if(clearedDate && status!=="future")scheduledAt=null;
     if(status==="publish" && !publishedAt)publishedAt=pair.postDateGmt || dateNow;
 
     const args: unknown[] = [
