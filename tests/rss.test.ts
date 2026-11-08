@@ -10,6 +10,7 @@ import { pool, defaultSettings } from "../server/db.js";
 import { normalizeFeedURL, isPublicFeedAddress, createFeedTransport, FeedError, MAX_FEED_XML_BYTES, MAX_FEED_WIRE_BYTES } from "../server/rss-transport.js";
 import { parseFeedDocument, createFeedService, type ParsedFeed } from "../server/rss.js";
 import { renderSiteDocument, SUPPORTED_DYNAMIC_BLOCKS, type State } from "../server/block-renderer.js";
+import { cleanContent } from "../server/utils.js";
 const xml = `<?xml version="1.0"?><rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/"><channel><title>Fixture</title><item><title><![CDATA[ <b>RSS &amp; safe</b><script>injected()</script> ]]></title><link>https://articles.example.test/story?one=1&amp;two=2</link><dc:creator><![CDATA[Reader <b>Name</b>]]></dc:creator><pubDate>Sat, 07 Nov 2026 12:00:00 GMT</pubDate><description><![CDATA[<p>one two three &amp; four <img src="https://evil.invalid/x" onerror="bad()"></p>]]></description></item></channel></rss>`;
 const atom = `<?xml version="1.0"?><feed xmlns="http://www.w3.org/2005/Atom"><title>Atom</title><author><name>Feed Author</name></author><entry><title type="xhtml"><div xmlns="http://www.w3.org/1999/xhtml">Atom <strong>Title</strong></div></title><link rel="self" href="/feed-entry.xml" type="application/atom+xml"/><link rel="alternate" href="../story"/><updated>2026-11-07T12:00:00Z</updated><summary><![CDATA[<p>Atom summary</p>]]></summary></entry></feed>`;
 const bytes = Buffer.from(xml);
@@ -17,6 +18,16 @@ const dom = (html: string) => new DOMParser().parseFromString("<!doctype html><h
 const state = (db: any = pool): State => ({ db, settings: { ...defaultSettings, siteUrl: "https://own.example.test" }, options: {}, nodes: 0, outputBytes: 0, queries: 0, cache: new Map() });
 const block = (attrs: Record<string, unknown>) => `<!-- wp:rss ${JSON.stringify(attrs)} /-->`;
 after(async () => { await pool.end(); });
+
+test("link sanitization preserves bounded safe rel tokens without allowing attributes, opener or script schemes", () => {
+  const parsed = dom(cleanContent('<a href="https://example.test/" rel="NOFOLLOW ugc nofollow opener javascript:bad() &quot; onclick=&quot;bad()">Safe</a><a href="javascript:bad()" rel="sponsored external">Unsafe</a><a href="/local" rel="' + 'x'.repeat(501) + ' ugc">Bounded</a>'));
+  const links = parsed.querySelectorAll("a");
+  assert.equal(links[0].getAttribute("rel"), "nofollow ugc noopener noreferrer");
+  assert.equal(links[1].getAttribute("href"), null);
+  assert.equal(links[1].getAttribute("rel"), "sponsored external noopener noreferrer");
+  assert.equal(links[2].getAttribute("rel"), "noopener noreferrer");
+  assert.equal(parsed.querySelector("[onclick]"), null);
+});
 
 test("RSS URL and public-address validation rejects private, encoded and transitional destinations", () => {
   for (const input of ["//example.com/feed", "file:///etc/passwd", "ftp://example.com/feed", "https://user:password@example.com/feed", "https://example.com/has space", "https://example.com/\\private", " https://example.com/feed", "https://[fe80::1%25lo0]/feed"]) assert.throws(() => normalizeFeedURL(input), FeedError);
@@ -128,6 +139,8 @@ test("renderer uses source defaults/grid/options and escapes remote content with
   assert.ok(SUPPORTED_DYNAMIC_BLOCKS.has("core/rss")); const defaults = dom(await renderSiteDocument({ rawContent: block({ feedURL: url }) }, { db })); assert.equal(defaults.querySelectorAll("li").length, 5); assert.equal(defaults.querySelector("time"), null); assert.equal(defaults.querySelector(".wp-block-rss__item-excerpt"), null);
   const output = await renderSiteDocument({ rawContent: block({ feedURL: url, blockLayout: "grid", columns: 2, itemsToShow: 1, displayAuthor: true, displayDate: true, displayExcerpt: true, excerptLength: 3, openInNewTab: true, rel: 'nofollow \" onclick=\"bad()' }) }, { db });
   const parsed = dom(output); assert.ok(parsed.querySelector("ul.is-grid.columns-2.has-authors.has-dates.has-excerpts")); assert.equal(parsed.querySelector("a")!.getAttribute("target"), "_blank"); assert.equal(parsed.querySelector("[onclick]"), null); assert.equal(parsed.querySelector(".wp-block-rss__item-author")!.textContent, "by Reader Name"); assert.equal(parsed.querySelector(".wp-block-rss__item-excerpt")!.textContent, "one two three […]"); assert.match(parsed.querySelector("time")!.getAttribute("datetime")!, /-08:00$/); assert.doesNotMatch(output, /<img|<script|injected\(\)/);
+  assert.equal(parsed.querySelector("a")!.getAttribute("rel"), "nofollow noopener noreferrer");
+  const zero = dom(await renderSiteDocument({ rawContent: block({ feedURL: url, displayExcerpt: true, excerptLength: 0 }) }, { db })); assert.equal(zero.querySelector(".wp-block-rss__item-excerpt")!.textContent, " […]");
   const empty = { query: async (sql: string) => ({ rows: sql.includes("FROM settings") ? [{ data: settings }] : [{ data: { items: [] }, error: "" }] }) } as any;
   assert.match(await renderSiteDocument({ rawContent: block({ feedURL: url }) }, { db: empty }), /feed is down/);
   assert.match(await renderSiteDocument({ rawContent: block({ feedURL: "javascript:bad()" }) }, { db }), /RSS Error/);
@@ -142,7 +155,7 @@ test("actual native SSR/public persistence and internal own feeds never recurse,
     const login = await ok("/api/auth/login", "POST", { login: process.env.ADMIN_EMAIL, password: process.env.ADMIN_PASSWORD }, ""); cookie = login.response.headers.get("set-cookie")!.split(";")[0];
     const data = parseFeedDocument(bytes, fixtureURL); await pool.query("INSERT INTO rss_feed_cache(cache_key,url,data,bytes,expires_at) VALUES($1,$2,$3,$4,now()+interval '12 hours')", [createHash("sha256").update(fixtureURL).digest("hex"), fixtureURL, JSON.stringify(data), Buffer.byteLength(JSON.stringify(data))]);
     const metadata = (await ok("/wp-json/wp/v2/block-types/core/rss")).data; assert.equal(metadata.attributes.itemsToShow.default, 5); assert.equal(metadata.is_dynamic, true);
-    const preview = (await ok("/wp-json/wp/v2/block-renderer/core/rss", "POST", { attributes: { feedURL: fixtureURL, displayAuthor: true } })).data.rendered; assert.match(preview, /RSS &amp; safe/); assert.match(preview, /by Reader Name/);
+    const preview = (await ok("/wp-json/wp/v2/block-renderer/core/rss", "POST", { attributes: { feedURL: fixtureURL, displayAuthor: true, rel: 'nofollow ugc \" onclick=\"bad() javascript:bad()', openInNewTab: true } })).data.rendered; assert.match(preview, /RSS &amp; safe/); assert.match(preview, /by Reader Name/); assert.equal(dom(preview).querySelector("a")!.getAttribute("rel"), "nofollow ugc noopener noreferrer"); assert.equal(dom(preview).querySelector("[onclick]"), null);
     assert.equal((await api("/wp-json/wp/v2/block-renderer/core/rss", "POST", { attributes: { feedURL: fixtureURL } }, "")).response.status, 401);
     const settings = (await ok("/api/settings")).data.settings, localURL = new URL("/feed/", settings.siteUrl).href;
     for (const [title, status, extra] of [["Public", "publish", {}], ["Protected", "publish", { password: "Safe-RSS-password" }], ["Draft", "draft", {}]] as const) {
@@ -153,8 +166,9 @@ test("actual native SSR/public persistence and internal own feeds never recurse,
     assert.match(internal, new RegExp(stamp + "-Public-teaser")); assert.match(internal, new RegExp("Protected: " + stamp + "Protected")); assert.match(internal, /There is no excerpt because this is a protected post/); assert.doesNotMatch(internal, /CONFIDENTIAL|Draft-teaser|scrypt:|password_hash|rawContent|author_email/);
     assert.equal((await pool.query("SELECT count(*)::int AS n FROM rss_feed_cache WHERE url=$1", [localURL])).rows[0].n, 0);
     const home = (await ok("/wp-json/wp/v2/block-renderer/core/rss", "POST", { attributes: { feedURL: settings.siteUrl + "/#ignored" } })).data.rendered; assert.match(home, /homepage is not supported/);
-    const external = (await ok("/api/posts", "POST", { title: stamp + " embedded", status: "publish", content: block({ feedURL: fixtureURL, displayExcerpt: true }) })).data.post; posts.push(external.id);
+    const external = (await ok("/api/posts", "POST", { title: stamp + " embedded", status: "publish", content: block({ feedURL: fixtureURL, displayExcerpt: true, rel: "nofollow ugc", openInNewTab: true }) })).data.post; posts.push(external.id);
     const publicResponse = (await ok("/api/public/posts/" + external.slug, "GET", undefined, "")).data.post; assert.match(publicResponse.content, /wp-block-rss/); assert.match(publicResponse.content, /RSS &amp; safe/);
+    assert.equal(dom(publicResponse.content).querySelector("a")!.getAttribute("rel"), "nofollow ugc noopener noreferrer");
     const changed = await ok("/api/posts/" + posts[0], "PUT", { password: "New-protection-password" }); assert.ok(changed.data.post.hasPassword);
     const nowLocked = (await ok("/wp-json/wp/v2/block-renderer/core/rss", "POST", { attributes: { feedURL: localURL, displayExcerpt: true, itemsToShow: 100 } })).data.rendered; assert.doesNotMatch(nowLocked, new RegExp(stamp + "-Public-teaser"));
   } finally {

@@ -36,6 +36,15 @@ const color =
   /^(?:#[a-f\d]{3,8}|[a-z]+|(?:rgb|hsl)a?\([\d\s,.%/+\-]+\)|var\(--wp--[a-z\d-]+\))$/i;
 const border =
   /^(?:0|none|(?:\d+(?:\.\d+)?)(?:px|em|rem)?\s+(?:solid|dashed|dotted|double)\s+(?:#[a-f\d]{3,8}|[a-z]+|var\(--wp--[a-z\d-]+\)))$/i;
+const safeLinkRelations = new Set([
+  "alternate", "author", "bookmark", "external", "help", "license", "me", "next",
+  "nofollow", "noopener", "noreferrer", "prev", "privacy-policy", "search", "sponsored",
+  "tag", "terms-of-service", "ugc",
+]);
+function cleanLinkRelations(value: string | undefined) {
+  const relations = (value || "").slice(0, 500).toLowerCase().split(/\s+/u).filter(token => safeLinkRelations.has(token));
+  return [...new Set([...relations, "noopener", "noreferrer"])].join(" ");
+}
 const allowedStyles: Record<string, RegExp[]> = {
   rotate: [/^-?(?:\d{1,5}|[12]\d{5}|3[0-5]\d{4}|360000)deg$/],
   "--separator": [/^"[^"\\\u0000-\u001f]{0,40}"$/u],
@@ -275,7 +284,7 @@ export function cleanContent(content: string, generatedBlocks = false, canonical
       },
       a: (_tag, attrs) => ({
         tagName: "a",
-        attribs: { ...attrs, rel: "noopener noreferrer" },
+        attribs: { ...attrs, rel: cleanLinkRelations(attrs.rel) },
       }),
     },
   });
