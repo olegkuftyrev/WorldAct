@@ -56,9 +56,15 @@ export function synchronizeFootnotes<T extends FootnoteBlock>(blocks: T[], seria
     if(value && typeof value==="object"){const entries=Object.entries(value),next=entries.map(([key,item])=>[key,rewrite(item,depth+1)] as const);return next.some(([,item],i)=>item!==entries[i][1])?Object.fromEntries(next):value;}
     return value;
   };
-  const visit=(items:FootnoteBlock[]):FootnoteBlock[]=>items.map(block=>{
-    const attributes=rewrite(block.attributes) as Record<string,unknown>, innerBlocks=visit(block.innerBlocks||[]);
-    return attributes===block.attributes && innerBlocks.every((item,i)=>item===block.innerBlocks[i])?block:{...block,attributes,innerBlocks};
-  });
+  const visit=(items:FootnoteBlock[]):FootnoteBlock[]=>{
+    const next=items.map(block=>{
+      const attributes=rewrite(block.attributes) as Record<string,unknown>, innerBlocks=visit(block.innerBlocks||[]);
+      return attributes===block.attributes && innerBlocks===block.innerBlocks?block:{...block,attributes,innerBlocks};
+    });
+    // BlockEditorProvider recognizes its own outgoing update by array identity.
+    // Replacing an unchanged array makes it reset selection between keystrokes,
+    // which also closes selection-driven containers such as Accordion Panels.
+    return next.every((block,index)=>block===items[index])?items:next;
+  };
   return {blocks:visit(blocks) as T[],footnotes:notes};
 }

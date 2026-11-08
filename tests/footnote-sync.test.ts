@@ -30,6 +30,10 @@ test("footnote metadata is bounded, malformed imports are recoverable and unchan
   const cache=new Map();rememberFootnotes(cache,Array.from({length:1100},(_,i)=>({id:"fn-"+i,content:"x"})));
   assert.equal(cache.size,1000);
   const blocks=[block("Plain <em>content</em>")];
-  assert.equal(synchronizeFootnotes(blocks,"<p>Plain</p>",[],cache,parseHTML).blocks[0],blocks[0]);
+  assert.equal(synchronizeFootnotes(blocks,"<p>Plain</p>",[],cache,parseHTML).blocks,blocks);
+  const accordion=[block("",[block("",[block("First typed characters")])])];
+  assert.equal(synchronizeFootnotes(accordion,"<p>First typed characters</p>",[],cache,parseHTML).blocks,accordion);
+  const numbered=[block(reference("fn-a","1"))];
+  assert.equal(synchronizeFootnotes(numbered,reference("fn-a","1"),[{id:"fn-a",content:"Source"}],cache,parseHTML).blocks,numbered);
   assert.throws(()=>synchronizeFootnotes([],Array.from({length:501},(_,i)=>reference("fn-"+i)).join(""),[],cache,parseHTML),/500/);
 });
