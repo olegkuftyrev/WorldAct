@@ -31,6 +31,8 @@ test("category canonical links share lowest-ID hierarchy across metadata, resolu
       assert.ok(document.includes(`href="${expected}"`));
       const sitemap=await(await fetch(base+"/sitemap.xml")).text(),feed=await(await fetch(base+"/feed/")).text();
       assert.ok(sitemap.includes(expected));assert.ok(feed.includes(expected));
+      const malformed=await fetch(base+"/api/public/resolve?"+new URLSearchParams({path:"/%E0%A4%A/"}));
+      assert.equal(malformed.status,400);assert.match((await malformed.json()).error,/malformed/);
     });
     await t.test("an ancestor rename is one coherent snapshot and invalidates a verified stale incoming target",async()=>{
       let release!:()=>void,started!:()=>void;const entered=new Promise<void>(resolve=>started=resolve),held=new Promise<void>(resolve=>release=resolve);

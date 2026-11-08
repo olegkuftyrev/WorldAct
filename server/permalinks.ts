@@ -123,13 +123,12 @@ async function resolveExactPublicPath(path: string, settings: Settings) {
     normalized,
   );
   if (match) {
-    let captures: Record<string,string>;
-    try { captures = Object.fromEntries(
+    const captures = Object.fromEntries(
       tokens.map((token, index) => [
         token,
         decodeURIComponent(match[index + 1]),
       ]),
-    ); } catch { return null; }
+    );
     let rows: any[] = [];
     if (
       captures.post_id &&
@@ -159,8 +158,7 @@ async function resolveExactPublicPath(path: string, settings: Settings) {
   let parent: number | null = null;
   let current: any;
   for (const part of normalized.split("/").filter(Boolean)) {
-    let slug: string;
-    try { slug = decodeURIComponent(part); } catch { return null; }
+    const slug = decodeURIComponent(part);
     const rows = await pool.query(
       "SELECT id,slug,parent_id,status FROM posts WHERE type='page' AND slug=$1 AND parent_id IS NOT DISTINCT FROM $2",
       [slug, parent],
