@@ -2,14 +2,14 @@ import {Router} from "express";
 import type {PoolClient} from "pg";
 import {z} from "zod";
 import {createHash,randomBytes} from "node:crypto";
-import {mkdir,readFile,stat,writeFile,unlink} from "node:fs/promises";
+import {mkdir,readFile,stat} from "node:fs/promises";
 import path from "node:path";
 import sharp from "sharp";
 import {pool,getSettings,uploadsDir} from "./db.js";
 import {requireRole,assertActiveAccountAuthentication,type AuthRequest} from "./auth.js";
 import {lockMediaMutation} from "./media-mutations.js";
 import {queueMail,deliverMail} from "./accounts.js";
-import {safeStoredFile,uploadPrefix} from "./media-files.js";
+import {safeStoredFile,uploadPrefix,writeNewMediaFile,unlinkUnreferencedMediaFiles} from "./media-files.js";
 import {HttpError,needUser} from "./utils.js";
 const router=Router(),admin=requireRole("administrator"),hash=(token:string)=>createHash("sha256").update(token).digest("hex");
 const tokenSchema=z.string().regex(/^[a-f0-9]{64}$/, "This confirmation link is invalid.");
@@ -44,7 +44,7 @@ router.post("/settings/admin-email/confirmation",async(req,res)=>{
 });
 router.post("/settings/site-icon",admin,async(req:AuthRequest,res)=>{
   const input=z.object({mediaId:z.number().int().positive().max(2147483647),crop:z.object({left:z.number().int().min(0),top:z.number().int().min(0),width:z.number().int().min(512).max(20000),height:z.number().int().min(512).max(20000)}).strict().optional()}).strict().parse(req.body);
-  const db=await pool.connect(),created:string[]=[];
+  const db=await pool.connect(),created=new Set<string>();let released=false;
   try{
     await db.query("BEGIN");await lockMediaMutation(db,req);const item=(await db.query("SELECT * FROM media WHERE id=$1 FOR SHARE",[input.mediaId])).rows[0];
     if(!item?.mime_type.startsWith("image/") || !safeStoredFile(item.filename))throw new HttpError(400,"Choose an existing image.");
@@ -58,12 +58,17 @@ router.post("/settings/site-icon",admin,async(req:AuthRequest,res)=>{
     let filename="",bytes=0;
     for(const size of [512,270,192,180,32,16]){
       const data=await sharp(metadata.data,{limitInputPixels:80_000_000}).extract(crop).resize(size,size).png().toBuffer(),name=prefix+randomBytes(20).toString("hex")+"-icon-"+size+".png";
-      await writeFile(path.join(uploadsDir,name),data,{flag:"wx"});created.push(name);
+      await writeNewMediaFile(name,data,created);
       if(size===512){filename=name;bytes=data.length;}else sizes["icon-"+size]={filename:name,url:"/uploads/"+name,width:size,height:size,mimeType:"image/png"};
     }
     const row=(await db.query("INSERT INTO media(author_id,title,filename,mime_type,size,width,height,sizes) VALUES($1,$2,$3,'image/png',$4,512,512,$5::jsonb) RETURNING id",[needUser(req).id,("Site Icon — "+item.title).slice(0,300),filename,bytes,JSON.stringify(sizes)])).rows[0];
     await db.query("UPDATE settings SET data=data || $1::jsonb WHERE id=1",[JSON.stringify({siteIconId:row.id})]);await assertActiveAccountAuthentication(req,db);await db.query("COMMIT");
     res.status(201).json({siteIconId:row.id,url:"/uploads/"+filename,sizes});
-  }catch(error){await db.query("ROLLBACK");await Promise.all(created.map(name=>unlink(path.join(uploadsDir,name)).catch(()=>{})));throw error;}finally{db.release();}
+  }catch(error){
+    await db.query("ROLLBACK").catch(()=>{});db.release();released=true;
+    // COMMIT may have succeeded despite its failed acknowledgement. Check live
+    // references after releasing the transaction, retaining unverifiable files.
+    await unlinkUnreferencedMediaFiles(created);throw error;
+  }finally{if(!released)db.release();}
 });
 export default router;

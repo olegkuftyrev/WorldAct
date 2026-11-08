@@ -52,7 +52,7 @@ jobs:
           ISOLATED_TEST_COMPILED: "true"
         run: >-
           node scripts/test-isolated.mjs
-          tests/fonts.test.ts tests/font-worker-lifecycle.test.ts tests/site-identity.test.ts tests/bundled-plugins-api.test.ts
+          tests/fonts.test.ts tests/font-worker-lifecycle.test.ts tests/site-identity.test.ts tests/site-icon-cleanup.test.ts tests/bundled-plugins-api.test.ts
           tests/connectors.test.ts
           tests/connector-ui.test.ts
           tests/mail-intake.test.ts tests/mail-message.test.ts tests/pop3.test.ts
