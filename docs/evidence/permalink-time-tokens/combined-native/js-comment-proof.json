@@ -1,0 +1,85 @@
+{
+  "reviewedCommit": "23c6a55413bd37ccd64b6826de42f80a75bb1849",
+  "sanitizedFromReceipt": {
+    "filename": "time-body-combined-js-comment-proof.json",
+    "sha256": "165893d8fb05fafd807858e887e1f2b0cc5be2640e96c467be63e5a116c074ee"
+  },
+  "rows": [
+    {
+      "theme": "twentytwentyfive",
+      "width": 375,
+      "before": {
+        "length": 50,
+        "push": 0
+      },
+      "after": {
+        "body2": true,
+        "commentPage": "2",
+        "errors": [],
+        "length": 50,
+        "push": 0,
+        "query2": true,
+        "scroll": 375,
+        "url": "/clock/2024/01/02/03/04/05/4/combined-native-clock-post/2/?query-4-page=2&commentPage=2&replytocom=4",
+        "width": 375
+      },
+      "saved": {
+        "id": 14,
+        "parent_id": 4,
+        "user_id": 1,
+        "status": "approved"
+      },
+      "requests": [
+        {
+          "method": "POST",
+          "path": "/api/public/comments",
+          "status": 201
+        },
+        {
+          "method": "GET",
+          "path": "/api/public/document?path=%2Fclock%2F2024%2F01%2F02%2F03%2F04%2F05%2F4%2Fcombined-native-clock-post%2F2%2F%3Fquery-4-page%3D2%26commentPage%3D2%26replytocom%3D4",
+          "status": 200
+        }
+      ],
+      "screenshot": "js-comment-twentytwentyfive-375.png"
+    },
+    {
+      "theme": "classic",
+      "width": 375,
+      "before": {
+        "length": 50,
+        "push": 0
+      },
+      "after": {
+        "body2": true,
+        "commentPage": "2",
+        "errors": [],
+        "length": 50,
+        "push": 0,
+        "query2": true,
+        "scroll": 375,
+        "url": "/clock/2024/01/02/03/04/05/4/combined-native-clock-post/2/?query-4-page=2&commentPage=2&replytocom=4",
+        "width": 375
+      },
+      "saved": {
+        "id": 15,
+        "parent_id": 4,
+        "user_id": 1,
+        "status": "approved"
+      },
+      "requests": [
+        {
+          "method": "POST",
+          "path": "/api/public/comments",
+          "status": 201
+        },
+        {
+          "method": "GET",
+          "path": "/api/public/document?path=%2Fclock%2F2024%2F01%2F02%2F03%2F04%2F05%2F4%2Fcombined-native-clock-post%2F2%2F%3Fquery-4-page%3D2%26commentPage%3D2%26replytocom%3D4",
+          "status": 200
+        }
+      ],
+      "screenshot": "js-comment-classic-375.png"
+    }
+  ]
+}

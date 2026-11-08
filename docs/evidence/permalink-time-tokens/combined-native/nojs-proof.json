@@ -1,0 +1,345 @@
+{
+  "reviewedCommit": "23c6a55413bd37ccd64b6826de42f80a75bb1849",
+  "sanitizedFromReceipt": {
+    "filename": "time-body-combined-nojs-proof.json",
+    "sha256": "bd9bbb745ffdcccc1c686b9ad86b047e1804d3602c7b257790e37ffe46ce6adf"
+  },
+  "rows": [
+    {
+      "theme": "twentytwentyfive",
+      "width": 1440,
+      "before": {
+        "body2": true,
+        "bootstrap": true,
+        "gate": false,
+        "lifecycle": false,
+        "parent": "4",
+        "query2": true,
+        "scriptRan": false
+      },
+      "after": {
+        "body1": false,
+        "body2": true,
+        "commentPage": "2",
+        "query2": true,
+        "queryPage": "2",
+        "reply": null,
+        "scriptRan": false,
+        "scroll": 1440,
+        "text": true,
+        "url": "/clock/2024/01/02/03/04/05/4/combined-native-clock-post/2/?query-4-page=2&commentPage=2#comment-7",
+        "visible": true,
+        "width": 1440
+      },
+      "saved": {
+        "id": 7,
+        "parent_id": 4,
+        "user_id": 1,
+        "status": "approved"
+      },
+      "requests": [
+        {
+          "method": "POST",
+          "path": "/wp-comments-post.php",
+          "status": 303
+        },
+        {
+          "method": "GET",
+          "path": "/clock/2024/01/02/03/04/05/4/combined-native-clock-post/2/?query-4-page=2&commentPage=2",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/assets/index-BsgYOWhl.css",
+          "status": 304
+        },
+        {
+          "method": "GET",
+          "path": "/vendor/wordpress/wp-content/themes/twentytwentyfive/assets/fonts/manrope/Manrope-VariableFont_wght.woff2",
+          "status": 304
+        }
+      ],
+      "screenshot": "nojs-twentytwentyfive-1440.png"
+    },
+    {
+      "theme": "twentytwentyfive",
+      "width": 768,
+      "before": {
+        "body2": true,
+        "bootstrap": true,
+        "gate": false,
+        "lifecycle": false,
+        "parent": "4",
+        "query2": true,
+        "scriptRan": false
+      },
+      "after": {
+        "body1": false,
+        "body2": true,
+        "commentPage": "2",
+        "query2": true,
+        "queryPage": "2",
+        "reply": null,
+        "scriptRan": false,
+        "scroll": 768,
+        "text": true,
+        "url": "/clock/2024/01/02/03/04/05/4/combined-native-clock-post/2/?query-4-page=2&commentPage=2#comment-8",
+        "visible": true,
+        "width": 768
+      },
+      "saved": {
+        "id": 8,
+        "parent_id": 4,
+        "user_id": 1,
+        "status": "approved"
+      },
+      "requests": [
+        {
+          "method": "POST",
+          "path": "/wp-comments-post.php",
+          "status": 303
+        },
+        {
+          "method": "GET",
+          "path": "/clock/2024/01/02/03/04/05/4/combined-native-clock-post/2/?query-4-page=2&commentPage=2",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/assets/index-BsgYOWhl.css",
+          "status": 304
+        },
+        {
+          "method": "GET",
+          "path": "/vendor/wordpress/wp-content/themes/twentytwentyfive/assets/fonts/manrope/Manrope-VariableFont_wght.woff2",
+          "status": 304
+        }
+      ],
+      "screenshot": "nojs-twentytwentyfive-768.png"
+    },
+    {
+      "theme": "twentytwentyfive",
+      "width": 375,
+      "before": {
+        "body2": true,
+        "bootstrap": true,
+        "gate": false,
+        "lifecycle": false,
+        "parent": "4",
+        "query2": true,
+        "scriptRan": false
+      },
+      "after": {
+        "body1": false,
+        "body2": true,
+        "commentPage": "2",
+        "query2": true,
+        "queryPage": "2",
+        "reply": null,
+        "scriptRan": false,
+        "scroll": 375,
+        "text": true,
+        "url": "/clock/2024/01/02/03/04/05/4/combined-native-clock-post/2/?query-4-page=2&commentPage=2#comment-9",
+        "visible": true,
+        "width": 375
+      },
+      "saved": {
+        "id": 9,
+        "parent_id": 4,
+        "user_id": 1,
+        "status": "approved"
+      },
+      "requests": [
+        {
+          "method": "POST",
+          "path": "/wp-comments-post.php",
+          "status": 303
+        },
+        {
+          "method": "GET",
+          "path": "/clock/2024/01/02/03/04/05/4/combined-native-clock-post/2/?query-4-page=2&commentPage=2",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/assets/index-BsgYOWhl.css",
+          "status": 304
+        },
+        {
+          "method": "GET",
+          "path": "/vendor/wordpress/wp-content/themes/twentytwentyfive/assets/fonts/manrope/Manrope-VariableFont_wght.woff2",
+          "status": 304
+        }
+      ],
+      "screenshot": "nojs-twentytwentyfive-375.png"
+    },
+    {
+      "theme": "classic",
+      "width": 1440,
+      "before": {
+        "body2": true,
+        "bootstrap": true,
+        "gate": false,
+        "lifecycle": false,
+        "parent": "4",
+        "query2": true,
+        "scriptRan": false
+      },
+      "after": {
+        "body1": false,
+        "body2": true,
+        "commentPage": "2",
+        "query2": true,
+        "queryPage": "2",
+        "reply": null,
+        "scriptRan": false,
+        "scroll": 1440,
+        "text": true,
+        "url": "/clock/2024/01/02/03/04/05/4/combined-native-clock-post/2/?query-4-page=2&commentPage=2#comment-10",
+        "visible": true,
+        "width": 1440
+      },
+      "saved": {
+        "id": 10,
+        "parent_id": 4,
+        "user_id": 1,
+        "status": "approved"
+      },
+      "requests": [
+        {
+          "method": "POST",
+          "path": "/wp-comments-post.php",
+          "status": 303
+        },
+        {
+          "method": "GET",
+          "path": "/clock/2024/01/02/03/04/05/4/combined-native-clock-post/2/?query-4-page=2&commentPage=2",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/assets/index-BsgYOWhl.css",
+          "status": 304
+        },
+        {
+          "method": "GET",
+          "path": "/vendor/wordpress/wp-content/themes/twentytwentyfive/assets/fonts/manrope/Manrope-VariableFont_wght.woff2",
+          "status": 304
+        }
+      ],
+      "screenshot": "nojs-classic-1440.png"
+    },
+    {
+      "theme": "classic",
+      "width": 768,
+      "before": {
+        "body2": true,
+        "bootstrap": true,
+        "gate": false,
+        "lifecycle": false,
+        "parent": "4",
+        "query2": true,
+        "scriptRan": false
+      },
+      "after": {
+        "body1": false,
+        "body2": true,
+        "commentPage": "2",
+        "query2": true,
+        "queryPage": "2",
+        "reply": null,
+        "scriptRan": false,
+        "scroll": 768,
+        "text": true,
+        "url": "/clock/2024/01/02/03/04/05/4/combined-native-clock-post/2/?query-4-page=2&commentPage=2#comment-11",
+        "visible": true,
+        "width": 768
+      },
+      "saved": {
+        "id": 11,
+        "parent_id": 4,
+        "user_id": 1,
+        "status": "approved"
+      },
+      "requests": [
+        {
+          "method": "POST",
+          "path": "/wp-comments-post.php",
+          "status": 303
+        },
+        {
+          "method": "GET",
+          "path": "/clock/2024/01/02/03/04/05/4/combined-native-clock-post/2/?query-4-page=2&commentPage=2",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/assets/index-BsgYOWhl.css",
+          "status": 304
+        },
+        {
+          "method": "GET",
+          "path": "/vendor/wordpress/wp-content/themes/twentytwentyfive/assets/fonts/manrope/Manrope-VariableFont_wght.woff2",
+          "status": 304
+        }
+      ],
+      "screenshot": "nojs-classic-768.png"
+    },
+    {
+      "theme": "classic",
+      "width": 375,
+      "before": {
+        "body2": true,
+        "bootstrap": true,
+        "gate": false,
+        "lifecycle": false,
+        "parent": "4",
+        "query2": true,
+        "scriptRan": false
+      },
+      "after": {
+        "body1": false,
+        "body2": true,
+        "commentPage": "2",
+        "query2": true,
+        "queryPage": "2",
+        "reply": null,
+        "scriptRan": false,
+        "scroll": 375,
+        "text": true,
+        "url": "/clock/2024/01/02/03/04/05/4/combined-native-clock-post/2/?query-4-page=2&commentPage=2#comment-12",
+        "visible": true,
+        "width": 375
+      },
+      "saved": {
+        "id": 12,
+        "parent_id": 4,
+        "user_id": 1,
+        "status": "approved"
+      },
+      "requests": [
+        {
+          "method": "POST",
+          "path": "/wp-comments-post.php",
+          "status": 303
+        },
+        {
+          "method": "GET",
+          "path": "/clock/2024/01/02/03/04/05/4/combined-native-clock-post/2/?query-4-page=2&commentPage=2",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/assets/index-BsgYOWhl.css",
+          "status": 304
+        },
+        {
+          "method": "GET",
+          "path": "/vendor/wordpress/wp-content/themes/twentytwentyfive/assets/fonts/manrope/Manrope-VariableFont_wght.woff2",
+          "status": 304
+        }
+      ],
+      "screenshot": "nojs-classic-375.png"
+    }
+  ]
+}

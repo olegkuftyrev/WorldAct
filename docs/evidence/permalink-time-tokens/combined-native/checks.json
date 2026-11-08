@@ -1,0 +1,144 @@
+{
+  "reviewedCommit": "23c6a55413bd37ccd64b6826de42f80a75bb1849",
+  "verdict": "PASS for scoped combined integration",
+  "build": {
+    "typecheck": "PASS",
+    "viteProductionWithRunnerLoader": "PASS",
+    "compiledServerBundle": "PASS"
+  },
+  "guardedTests": {
+    "source": {
+      "pass": 60,
+      "fail": 0,
+      "skipped": 0,
+      "files": 5
+    },
+    "compiled": {
+      "pass": 60,
+      "fail": 0,
+      "skipped": 0,
+      "files": 5
+    }
+  },
+  "selectedFiles": [
+    "permalink-time-tokens",
+    "public-document-data",
+    "public-document-ssr",
+    "public-document-view",
+    "native-continuation"
+  ],
+  "browserRows": {
+    "settingsKeyboard": 3,
+    "normalJSHydrationRoutesPaging": 6,
+    "genuineNoJSNative303": 6,
+    "singleJSComment201": 2
+  },
+  "settingsKeyboardObservations": [
+    {
+      "checked": true,
+      "describedBy": "permalink-custom permalink-tags",
+      "help": "Available tags: %year%, %monthnum%, %day%, %hour%, %minute%, %second%, %post_id%, %postname%, %category%.",
+      "scroll": 1440,
+      "value": "/clock/%year%/%monthnum%/%day%/%hour%/%minute%/%second%/%post_id%/%postname%/",
+      "width": 1440,
+      "screenshot": "settings-1440.png"
+    },
+    {
+      "checked": true,
+      "describedBy": "permalink-custom permalink-tags",
+      "help": "Available tags: %year%, %monthnum%, %day%, %hour%, %minute%, %second%, %post_id%, %postname%, %category%.",
+      "scroll": 768,
+      "value": "/clock/%year%/%monthnum%/%day%/%hour%/%minute%/%second%/%post_id%/%postname%/",
+      "width": 768,
+      "screenshot": "settings-768.png"
+    },
+    {
+      "checked": true,
+      "describedBy": "permalink-custom permalink-tags",
+      "help": "Available tags: %year%, %monthnum%, %day%, %hour%, %minute%, %second%, %post_id%, %postname%, %category%.",
+      "scroll": 375,
+      "value": "/clock/%year%/%monthnum%/%day%/%hour%/%minute%/%second%/%post_id%/%postname%/",
+      "width": 375,
+      "screenshot": "settings-375.png"
+    }
+  ],
+  "directlyInspectedScreenshots": [
+    "js-classic-1440.png",
+    "js-classic-375.png",
+    "js-classic-768.png",
+    "js-comment-classic-375.png",
+    "js-comment-twentytwentyfive-375.png",
+    "js-twentytwentyfive-1440.png",
+    "js-twentytwentyfive-375.png",
+    "js-twentytwentyfive-768.png",
+    "nojs-classic-1440.png",
+    "nojs-classic-375.png",
+    "nojs-classic-768.png",
+    "nojs-twentytwentyfive-1440.png",
+    "nojs-twentytwentyfive-375.png",
+    "nojs-twentytwentyfive-768.png",
+    "settings-1440.png",
+    "settings-375.png",
+    "settings-768.png"
+  ],
+  "screenSHA256": {
+    "js-classic-1440.png": "81326420a53b5552ebd67bb4b81192b4d56eaea0d3507f25c047c0ef3b40eb8e",
+    "js-classic-375.png": "a7ee8f415e9470fd79a55bd85a87bed40a20521fd2318a380f423aa975d580e5",
+    "js-classic-768.png": "76237642980b68c3c0d04f270d316c3f3130d8a878f18d15b7b75b2e43daf862",
+    "js-comment-classic-375.png": "7617e2b0fe09f1637a2d5bc53b26603c65a39beb8b8058a7d2e2bd6395cd081f",
+    "js-comment-twentytwentyfive-375.png": "66e8e5498ce17e0aa5ace08dec2f75b8e70d51f577f62ab3f6d8949dee78a9a7",
+    "js-twentytwentyfive-1440.png": "ce48a90409482ccf5917564997d105f57516ef334a653991bb8e1432978f76c9",
+    "js-twentytwentyfive-375.png": "f36594cc5ed779875da720faa3706fa15bc35489edd35914b7a8c048f3e24bf9",
+    "js-twentytwentyfive-768.png": "954e3dcf70ad8e1843755c02c1b7c8d78af2ce66b3f10f44d2eae7338ee4668c",
+    "nojs-classic-1440.png": "0950a2bcd23d696927ccc9d03fb7557971802e3e9774a695a616bc36b18a77a2",
+    "nojs-classic-375.png": "45f659460cc7852b40e31d0c9b54f62e57b29f4aa36d7582e3ff050a47f16012",
+    "nojs-classic-768.png": "179f17973a256c4f2ea33671a2538bbcee1894e3c9853dcc1cc01f3efdae430e",
+    "nojs-twentytwentyfive-1440.png": "79d508e9f5218958983e657c16d12ff512fd1d5eceeff48cb018f589074d8196",
+    "nojs-twentytwentyfive-375.png": "39e218ee28d2db2ba43f6afce2ae642b03ec6ac33b5c9eeed42762b07545f9d0",
+    "nojs-twentytwentyfive-768.png": "e012c56554526864f0af69386cdcad070234b5b4d432cece4332061f5ed8be93",
+    "settings-1440.png": "3495f7c8120e305d2e4901b6b5702aa7c930b0e016e8801b98c737f719e0858d",
+    "settings-375.png": "c1d44f2d363d929ad1624257d634d2a69ee934797db3ecf864d1de1d96ce8d7f",
+    "settings-768.png": "80adb1ebc4f8ab3115a52cbc12d7a4e7f72cd9cca8f1438bbc81f16a0d40a7f0"
+  },
+  "originalReceiptSHA256": {
+    "time-body-combined-js-proof.json": "f38dd1316c589a26ddad77849e9c770aaf22844d186b1852c1ad7491f7ce931d",
+    "time-body-combined-nojs-proof.json": "bd9bbb745ffdcccc1c686b9ad86b047e1804d3602c7b257790e37ffe46ce6adf",
+    "time-body-combined-js-comment-proof.json": "165893d8fb05fafd807858e887e1f2b0cc5be2640e96c467be63e5a116c074ee",
+    "time-body-combined-settings-proof.json": "47990dc41b5a03e03003563fe952a18582c97446ac48ea439d59dea613a10401",
+    "time-body-native-independent-checks.json": "0ecc1662983327bad4ea5b09894a7705bbbd67f49d16993bb3ecad6aa024352b",
+    "time-body-combined-native-independent-review.md": "67a88b291c738fb14a1a2cddeb136fddfd07d4af899c37bf808bdeaed2cacd93"
+  },
+  "originalLogSHA256": {
+    "worldact-time-body-native-build.log": "03303c806b8d33fd8d18e77074a558185fb05bfb9e02c669d6711c09fd0c41de",
+    "worldact-time-body-native-source.log": "c0f75db349a204ee7681600145d469e17c76fa8636eea88eff2641e304b3e466",
+    "worldact-time-body-native-compiled.log": "da4f6ab7b504a202804812320298c415115b6ad8d9223a1cb06fc9f208b48f72"
+  },
+  "cleanup": {
+    "vaultsRemoved": true,
+    "browserSessionsClosed": true,
+    "ownedDatabaseAbsent": true,
+    "ownedUploadsAbsent": true,
+    "privateConfigsRemoved": true,
+    "onlyOwnedDependencyLinkRemoved": true,
+    "fullDependencyOwnerRetained": true,
+    "cleanCheckout": true,
+    "vaultNamesIndependentlyAbsent": true,
+    "browserSocketsAbsent": true
+  },
+  "ownedPortsAfterCleanup": {
+    "3035": "free",
+    "3036": "free",
+    "3037": "free",
+    "5195": "free"
+  },
+  "mainReadOnlyHealthAfterCleanup": 200,
+  "limits": [
+    "Scoped combined smoke only; not whole-CMS or release completion.",
+    "Fresh changed-ID archive phases were executed separately by root and are not added to this reviewer's counts.",
+    "No genuine BFCache admission/restoration certificate; the earlier environment limitation remains.",
+    "Two themes and one browser engine; custom minimal Query Loop fixtures do not certify every default bundled layout.",
+    "Current-site-clock chosen-instant policy, not historical stored-local-date fidelity.",
+    "Guest/pending/password/new-root native cases and private-history/asset-recovery matrices are earlier evidence, not newly counted native scenes here.",
+    "Standalone no-JavaScript admin/login, author identity/archives, canonical repair and benchmarks remain outside this scope."
+  ]
+}

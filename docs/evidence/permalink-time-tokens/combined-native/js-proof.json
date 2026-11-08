@@ -1,0 +1,210 @@
+{
+  "reviewedCommit": "23c6a55413bd37ccd64b6826de42f80a75bb1849",
+  "sanitizedFromReceipt": {
+    "filename": "time-body-combined-js-proof.json",
+    "sha256": "f38dd1316c589a26ddad77849e9c770aaf22844d186b1852c1ad7491f7ce931d"
+  },
+  "rows": [
+    {
+      "theme": "twentytwentyfive",
+      "width": 1440,
+      "initial": {
+        "body1": false,
+        "body2": true,
+        "canonical": 1,
+        "errors": [],
+        "query2": true,
+        "same": true,
+        "scroll": 1440,
+        "titles": 1,
+        "width": 1440
+      },
+      "after": {
+        "body2": true,
+        "errors": [],
+        "length": 11,
+        "push": 1,
+        "query2": true,
+        "url": "/clock/2024/01/02/03/04/05/4/combined-native-clock-post/2/?query-4-page=2&commentPage=3&replytocom=4"
+      },
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/public/document?path=%2Fclock%2F2024%2F01%2F02%2F03%2F04%2F05%2F4%2Fcombined-native-clock-post%2F2%2F%3Fquery-4-page%3D2%26commentPage%3D3%26replytocom%3D4",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/vendor/wordpress/wp-content/themes/twentytwentyfive/assets/fonts/manrope/Manrope-VariableFont_wght.woff2",
+          "status": 304
+        }
+      ],
+      "screenshot": "js-twentytwentyfive-1440.png"
+    },
+    {
+      "theme": "twentytwentyfive",
+      "width": 768,
+      "initial": {
+        "body1": false,
+        "body2": true,
+        "canonical": 1,
+        "errors": [],
+        "query2": true,
+        "same": true,
+        "scroll": 768,
+        "titles": 1,
+        "width": 768
+      },
+      "after": {
+        "body2": true,
+        "errors": [],
+        "length": 19,
+        "push": 1,
+        "query2": true,
+        "url": "/clock/2024/01/02/03/04/05/4/combined-native-clock-post/2/?query-4-page=2&commentPage=3&replytocom=4"
+      },
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/public/document?path=%2Fclock%2F2024%2F01%2F02%2F03%2F04%2F05%2F4%2Fcombined-native-clock-post%2F2%2F%3Fquery-4-page%3D2%26commentPage%3D3%26replytocom%3D4",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/vendor/wordpress/wp-content/themes/twentytwentyfive/assets/fonts/manrope/Manrope-VariableFont_wght.woff2",
+          "status": 304
+        }
+      ],
+      "screenshot": "js-twentytwentyfive-768.png"
+    },
+    {
+      "theme": "twentytwentyfive",
+      "width": 375,
+      "initial": {
+        "body1": false,
+        "body2": true,
+        "canonical": 1,
+        "errors": [],
+        "query2": true,
+        "same": true,
+        "scroll": 375,
+        "titles": 1,
+        "width": 375
+      },
+      "after": {
+        "body2": true,
+        "errors": [],
+        "length": 27,
+        "push": 1,
+        "query2": true,
+        "url": "/clock/2024/01/02/03/04/05/4/combined-native-clock-post/2/?query-4-page=2&commentPage=3&replytocom=4"
+      },
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/public/document?path=%2Fclock%2F2024%2F01%2F02%2F03%2F04%2F05%2F4%2Fcombined-native-clock-post%2F2%2F%3Fquery-4-page%3D2%26commentPage%3D3%26replytocom%3D4",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/vendor/wordpress/wp-content/themes/twentytwentyfive/assets/fonts/manrope/Manrope-VariableFont_wght.woff2",
+          "status": 304
+        }
+      ],
+      "screenshot": "js-twentytwentyfive-375.png"
+    },
+    {
+      "theme": "classic",
+      "width": 1440,
+      "initial": {
+        "body1": false,
+        "body2": true,
+        "canonical": 1,
+        "errors": [],
+        "query2": true,
+        "same": true,
+        "scroll": 1440,
+        "titles": 1,
+        "width": 1440
+      },
+      "after": {
+        "body2": true,
+        "errors": [],
+        "length": 34,
+        "push": 1,
+        "query2": true,
+        "url": "/clock/2024/01/02/03/04/05/4/combined-native-clock-post/2/?query-4-page=2&commentPage=3&replytocom=4"
+      },
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/public/document?path=%2Fclock%2F2024%2F01%2F02%2F03%2F04%2F05%2F4%2Fcombined-native-clock-post%2F2%2F%3Fquery-4-page%3D2%26commentPage%3D3%26replytocom%3D4",
+          "status": 200
+        }
+      ],
+      "screenshot": "js-classic-1440.png"
+    },
+    {
+      "theme": "classic",
+      "width": 768,
+      "initial": {
+        "body1": false,
+        "body2": true,
+        "canonical": 1,
+        "errors": [],
+        "query2": true,
+        "same": true,
+        "scroll": 768,
+        "titles": 1,
+        "width": 768
+      },
+      "after": {
+        "body2": true,
+        "errors": [],
+        "length": 41,
+        "push": 1,
+        "query2": true,
+        "url": "/clock/2024/01/02/03/04/05/4/combined-native-clock-post/2/?query-4-page=2&commentPage=3&replytocom=4"
+      },
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/public/document?path=%2Fclock%2F2024%2F01%2F02%2F03%2F04%2F05%2F4%2Fcombined-native-clock-post%2F2%2F%3Fquery-4-page%3D2%26commentPage%3D3%26replytocom%3D4",
+          "status": 200
+        }
+      ],
+      "screenshot": "js-classic-768.png"
+    },
+    {
+      "theme": "classic",
+      "width": 375,
+      "initial": {
+        "body1": false,
+        "body2": true,
+        "canonical": 1,
+        "errors": [],
+        "query2": true,
+        "same": true,
+        "scroll": 375,
+        "titles": 1,
+        "width": 375
+      },
+      "after": {
+        "body2": true,
+        "errors": [],
+        "length": 48,
+        "push": 1,
+        "query2": true,
+        "url": "/clock/2024/01/02/03/04/05/4/combined-native-clock-post/2/?query-4-page=2&commentPage=3&replytocom=4"
+      },
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/public/document?path=%2Fclock%2F2024%2F01%2F02%2F03%2F04%2F05%2F4%2Fcombined-native-clock-post%2F2%2F%3Fquery-4-page%3D2%26commentPage%3D3%26replytocom%3D4",
+          "status": 200
+        }
+      ],
+      "screenshot": "js-classic-375.png"
+    }
+  ]
+}
