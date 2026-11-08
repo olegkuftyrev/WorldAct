@@ -50,7 +50,7 @@ test("POP configuration permits only explicit source plaintext110 or TLS995 with
   assert.equal(normalizePOP3Configuration({ ...configuration, host: "MAIL.Example.TEST." }).host, configuration.host);
   assert.equal(normalizePOP3Configuration({ ...configuration, port: 110, secure: false }).port, 110);
   assert.equal(normalizePOP3Configuration({ ...configuration, host: "2606:4700:4700::1111" }).host, "2606:4700:4700::1111");
-  for (const host of ["127.0.0.1", "localhost", "mail.internal", "[::1]", "user:pass@public.test", "public.test:995", "public.test/other", "2130706433", "0x7f000001", "[::ffff:127.0.0.1]"])
+  for (const host of ["127.0.0.1", "localhost", "mail.internal", "[::1]", "user:pass@public.test", "public.test:995", "public.test:443", "[2606:4700:4700::1111]:443", "public.test/other", "2130706433", "0x7f000001", "[::ffff:127.0.0.1]"])
     assert.throws(() => normalizePOP3Configuration({ ...configuration, host }), is("configuration"));
   for (const patch of [{ username: "reader\r\nDELE 1" }, { password: "secret\nQUIT" }, { password: "" }, { port: 110 }, { secure: false }, { host: "mail.example.test\u0000" }])
     assert.throws(() => normalizePOP3Configuration({ ...configuration, ...patch } as any), is("configuration"));

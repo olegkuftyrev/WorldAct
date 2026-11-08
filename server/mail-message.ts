@@ -1,4 +1,5 @@
 import { MAX_POP3_MESSAGE_BYTES } from "./pop3.js";
+import { z } from "zod";
 export class MailMessageError extends Error {
   constructor(readonly outcome: "limits" | "invalid_message" | "unsupported_message") { super("Mailbox message could not be imported: " + outcome.replaceAll("_", " ") + "."); }
 }
@@ -26,13 +27,9 @@ function splitMessage(raw: Buffer): Part {
   return { headers, body: raw.subarray(end + 4) };
 }
 const get = (part: Part, name: string) => part.headers.find(item => item.name === name)?.value || "";
-function contentType(value: string) {
-  if (!value) return { type: "text/plain", parameters: new Map<string, string>() };
+function headerParameters(value: string, index: number) {
   if (value.length > 2048) throw new MailMessageError("limits");
-  const match = /^([A-Za-z0-9!#$&^_.+-]+\/[A-Za-z0-9!#$&^_.+-]+)/.exec(value);
-  if (!match) throw new MailMessageError("invalid_message");
-  const parameters = new Map<string, string>(), parameter = /\s*;\s*([A-Za-z0-9_-]+)\s*=\s*(?:"((?:[^"\\]|\\.)*)"|([^;\s]+))\s*/y;
-  let index = match[0].length;
+  const parameters = new Map<string, string>(), parameter = /\s*;\s*([A-Za-z0-9_*.-]+)\s*=\s*(?:"((?:[^"\\]|\\.)*)"|([!#$%&'*+.^_`{|}~A-Za-z0-9-]+))\s*/y;
   while (index < value.length) {
     parameter.lastIndex = index;
     const item = parameter.exec(value);
@@ -40,7 +37,13 @@ function contentType(value: string) {
     parameters.set(item[1].toLowerCase(), item[2] === undefined ? item[3] : item[2].replace(/\\(.)/g, "$1"));
     index = parameter.lastIndex;
   }
-  return { type: match[1].toLowerCase(), parameters };
+  return parameters;
+}
+function contentType(value: string) {
+  if (!value) return { type: "text/plain", parameters: new Map<string, string>() };
+  const match = /^([A-Za-z0-9!#$&^_.+-]+\/[A-Za-z0-9!#$&^_.+-]+)/.exec(value);
+  if (!match) throw new MailMessageError("invalid_message");
+  return { type: match[1].toLowerCase(), parameters: headerParameters(value, match[0].length) };
 }
 function quotedPrintable(input: Buffer) {
   const result = Buffer.allocUnsafe(input.length); let length = 0;
@@ -89,7 +92,14 @@ function selectBody(part: Part, budget: { nodes: number; bytes: number }, depth 
   if (++budget.nodes > 16 || depth > 4) throw new MailMessageError("limits");
   const format = contentType(get(part, "content-type"));
   const disposition = get(part, "content-disposition");
-  if (disposition && (!/^inline(?:;|$)/i.test(disposition) || /(?:^|;)\s*filename\*?\s*=/i.test(disposition))) throw new MailMessageError("unsupported_message");
+  if (disposition) {
+    const kind = /^inline(?=\s*(?:;|$))/i.exec(disposition);
+    if (!kind) throw new MailMessageError("unsupported_message");
+    let parameters: Map<string, string>;
+    try { parameters = headerParameters(disposition, kind[0].length); }
+    catch { throw new MailMessageError("unsupported_message"); }
+    if ([...parameters.keys()].some(key => /^filename(?:\*|$)/.test(key))) throw new MailMessageError("unsupported_message");
+  }
   if (format.type === "multipart/alternative") {
     const encoding = get(part, "content-transfer-encoding").toLowerCase();
     if (encoding && !["7bit", "8bit", "binary"].includes(encoding)) throw new MailMessageError("unsupported_message");
@@ -109,7 +119,7 @@ function selectBody(part: Part, budget: { nodes: number; bytes: number }, depth 
     if (!ended || !choice) throw new MailMessageError("invalid_message");
     return choice;
   }
-  if (!["text/plain", "text/html"].includes(format.type) || format.parameters.has("name")) throw new MailMessageError("unsupported_message");
+  if (!["text/plain", "text/html"].includes(format.type) || [...format.parameters.keys()].some(key => /^(?:name|charset)(?:\*|$)/.test(key) && key !== "charset")) throw new MailMessageError("unsupported_message");
   const decoded = transfer(part.body, get(part, "content-transfer-encoding"));
   budget.bytes += decoded.length;
   if (budget.bytes > MAX_POP3_MESSAGE_BYTES) throw new MailMessageError("limits");
@@ -123,8 +133,14 @@ export function parseMailMessage(raw: Buffer) {
   const part = splitMessage(raw), body = selectBody(part, { nodes: 0, bytes: 0 });
   if (!body.body) throw new MailMessageError("invalid_message");
   const senders = part.headers.filter(item => ["from", "reply-to"].includes(item.name)).flatMap(item => {
-    const matches = item.value.match(/[A-Za-z0-9.!#$%&'*+/=?^_`{|}~-]+@[A-Za-z0-9](?:[A-Za-z0-9.-]*[A-Za-z0-9])?/g) || [];
-    return matches.length === 1 && matches[0].length <= 254 ? [matches[0].toLowerCase()] : [];
+    const value = item.value.trim(), mailbox = z.email().max(254);
+    if (mailbox.safeParse(value).success) return [value.toLowerCase()];
+    const angle = /^(.*?)<([^<>]+)>$/.exec(value);
+    if (!angle) return [];
+    const display = angle[1].trim();
+    if (display && !(/^"(?:[^"\\]|\\[\x20-\x7e])*"$/.test(display) || /^[^<>,@()"\\]+$/.test(display))) return [];
+    const address = angle[2].trim();
+    return mailbox.safeParse(address).success ? [address.toLowerCase()] : [];
   });
   const originalSubject = decodeMailSubject(get(part, "subject")), delimiter = originalSubject.indexOf("::");
   const subject = (delimiter < 0 ? originalSubject : originalSubject.slice(0, delimiter)).trim();

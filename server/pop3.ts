@@ -22,6 +22,8 @@ export function normalizePOP3Configuration(input: POP3Configuration): POP3Config
     throw new POP3Error("configuration");
   let host: string;
   try {
+    const ipv6 = isIP(input.host) === 6 || (input.host.startsWith("[") && input.host.endsWith("]") && isIP(input.host.slice(1, -1)) === 6);
+    if (input.host.includes(":") && !ipv6) throw new Error();
     const url = new URL("https://" + (isIP(input.host) === 6 ? "[" + input.host + "]" : input.host));
     if (url.port || url.pathname !== "/" || url.username || url.password) throw new Error();
     host = url.hostname.replace(/^\[|\]$/g, "").replace(/\.$/, "");

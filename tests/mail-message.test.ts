@@ -33,10 +33,18 @@ test("bounded multipart alternative selects actual HTML and retains plain fallba
 });
 
 test("unsupported attachment/MIME/charset/encoding stays an explicit safe failure rather than silently dropping data", () => {
-  for (const headers of ["Content-Type: multipart/mixed; boundary=bound", "Content-Type: application/pdf", "Content-Type: text/plain; name=attached.txt", "Content-Disposition: attachment; filename=file.txt", "Content-Disposition: inline; filename=file.txt", "Content-Transfer-Encoding: x-garbage", "Content-Type: text/plain; charset=made-up-charset"])
+  for (const headers of ["Content-Type: multipart/mixed; boundary=bound", "Content-Type: application/pdf", "Content-Type: text/plain; name=attached.txt", "Content-Type: text/plain; name*0*=utf-8''file; name*1*=txt", "Content-Disposition: attachment; filename=file.txt", "Content-Disposition: inline; filename=file.txt", "Content-Disposition: inline; filename*0*=utf-8''report.; filename*1*=txt", "Content-Disposition: inline; malformed", "Content-Disposition: inline; size=", 'Content-Disposition: inline; other="unterminated', "Content-Disposition: inline; other=malformed(value)", "Content-Transfer-Encoding: x-garbage", "Content-Type: text/plain; charset=made-up-charset"])
     assert.throws(() => parseMailMessage(message(headers, "Secret body must not appear in error")), (error: unknown) => {
       assert.ok(error instanceof MailMessageError); assert.ok(!String(error).includes("Secret body")); return true;
     });
+});
+
+test("sender candidates come from an actual single mailbox, never display names or comment substrings", () => {
+  for (const header of ['"admin@example.test" <invalid>', 'nobody (admin@example.test)', 'admin@example.test, other@example.test', 'First <admin@example.test>, Second <other@example.test>', '<admin@example.test> (comment)', 'admin@example.test <invalid>']) {
+    assert.deepEqual(parseMailMessage(message("From: " + header, "Body")).senderCandidates, [], header);
+  }
+  assert.deepEqual(parseMailMessage(message('From: "admin@example.test" <reader@example.test>', 'Body')).senderCandidates, ['reader@example.test']);
+  assert.deepEqual(parseMailMessage(message('From: "Last, First" <reader@example.test>\r\nReply-To: actual@example.test', 'Body')).senderCandidates, ['reader@example.test', 'actual@example.test']);
 });
 
 test("ambiguous headers, invalid transfer bytes, malformed MIME boundaries and NUL content are rejected", () => {
