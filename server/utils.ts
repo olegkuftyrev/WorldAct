@@ -3,6 +3,7 @@ import type { AuthRequest } from "./auth.js";
 import { gridTemplateColumnsPattern } from "./block-layout.js";
 import { LEGACY_CONTENT_MARKER, canonicalLegacyMarker } from "./legacy-content.js";
 import { backgroundImagePattern, backgroundSizePattern, backgroundPositionPattern, backgroundRepeatPattern, backgroundAttachmentPattern } from "./background-styles.js";
+import { mathMLTags, mathMLAttributes, mathMLTransforms } from "./mathml.js";
 
 export class HttpError extends Error {
   constructor(
@@ -177,6 +178,7 @@ export function cleanContent(content: string, generatedBlocks = false, canonical
       "cite",
       "abbr",
       "time",
+      ...mathMLTags,
       ...(canonicalInteractive && !generatedBlocks ? ["button"] : []),
       ...(generatedBlocks ? ["form", "input", "label", "button", "textarea", "select", "option", "svg", "path", "circle", "rect", "g"] : []),
     ],
@@ -218,6 +220,7 @@ export function cleanContent(content: string, generatedBlocks = false, canonical
       blockquote: ["cite"],
       time: ["datetime"],
       sup: ["data-fn"],
+      ...mathMLAttributes,
       ...(canonicalInteractive && !generatedBlocks ? { button: ["type"] } : {}),
       ...(generatedBlocks ? {
         form: ["action", "method", "autocomplete"],
@@ -240,6 +243,7 @@ export function cleanContent(content: string, generatedBlocks = false, canonical
     },
     allowProtocolRelative: false,
     transformTags: {
+      ...mathMLTransforms,
       sup: (_tag: string, attrs: Record<string, string>) => {
         const { "data-fn": id, ...safe } = attrs;
         return { tagName: "sup", attribs: { ...safe, ...(id && /^[a-z0-9_-]{1,100}$/.test(id) ? { "data-fn": id } : {}) } };
@@ -372,12 +376,14 @@ export function cleanBlocks(input: unknown): StoredBlock[] {
         throw new HttpError(400, "Block attributes must be an object.");
       if (block.innerBlocks !== undefined && !Array.isArray(block.innerBlocks))
         throw new HttpError(400, "Inner blocks must be an array.");
+      const safeAttributes=attributes(block.attributes ?? {}, 0) as Record<string,unknown>;
+      // LaTeX is plain source text, including literal comparisons such as x<y.
+      // It is escaped as annotation text when rendered, never parsed as HTML.
+      if(block.name==='core/math' && typeof (block.attributes as Record<string,unknown> | undefined)?.latex==='string')
+        safeAttributes.latex=(block.attributes as Record<string,unknown>).latex;
       return {
         name: block.name,
-        attributes: attributes(block.attributes ?? {}, 0) as Record<
-          string,
-          unknown
-        >,
+        attributes: safeAttributes,
         innerBlocks: walk((block.innerBlocks ?? []) as unknown[], depth + 1),
       };
     });

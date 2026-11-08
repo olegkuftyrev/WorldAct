@@ -664,7 +664,7 @@ async function staticHTML(
     while (child < node.children.length)
       out.push(await render(node.children[child++], context, state));
     const html = out.join("");
-    if (!node.name || !["core/group", "core/columns", "core/column", "core/buttons"].includes(node.name)) return html;
+    if (!node.name || !["core/group", "core/columns", "core/column", "core/buttons", "core/math"].includes(node.name)) return html;
     return html.replace(/^(\s*<[a-z][a-z\d-]*)([^>]*)(>)/i, (_match, tag, original, end) => {
       const classes = esc(classNames(node.name!, node.attrs));
       const style = esc(blockStyle(node.attrs));
@@ -707,6 +707,12 @@ async function staticHTML(
     return `<${tag}${attr}>${inner || node.attrs.values || ""}</${tag}>`;
   }
   if (node.name === "core/html") return content;
+  if (node.name === "core/math") {
+    const latex=typeof node.attrs.latex==='string'?node.attrs.latex:'';
+    if(!latex)return '';
+    const mathML=typeof node.attrs.mathML==='string'?cleanContent(node.attrs.mathML):'';
+    return `<div${attr}><math display="block">${mathML || `<semantics><annotation encoding="application/x-tex">${esc(latex)}</annotation></semantics>`}</math></div>`;
+  }
   if (node.name === "core/code" || node.name === "core/preformatted")
     return `<pre${attr}>${node.name === "core/code" ? `<code>${content}</code>` : content}</pre>`;
   if (node.name === "core/separator") return `<hr${attr}>`;
@@ -1272,7 +1278,7 @@ function hasDynamicBlocks(
 function storedStaticHTML(document: RenderDocument): string | undefined {
   const raw =
     document.rawContent || document.raw_content || document.content || "";
-  return !hasLegacyContent(document) && !raw.includes("<!-- wp:") && !hasDynamicBlocks(document.blocks)
+  return !hasLegacyContent(document) && !raw.includes("<!-- wp:") && !hasDynamicBlocks(document.blocks) && (raw.length>0 || !document.blocks?.length)
     ? cleanContent(raw)
     : undefined;
 }
