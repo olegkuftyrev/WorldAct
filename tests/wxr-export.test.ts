@@ -13,7 +13,7 @@ test("WXR filters accept fixed typed values and parameterize local month boundar
   assert.deepEqual(query.args, ["post", 7, "private", 9, "+05:30", "2025-01-01", "2025-02-01"]);
   assert.match(query.sql, /timezone\(\$5::interval/); assert.match(query.sql, /interval '1 month'/);
   assert.equal(readWxrExportFilters({ format: "wxr", startDate: "0001-01", endDate: "0999-12" }).startDate, "0001-01");
-  for (const extra of [{ author: "1 OR true" }, { author: ["1", "2"] }, { category: -1 }, { startDate: "0000-01" }, { startDate: "2025-13" }, { endDate: "2025-00" }, { startDate: "2025-02", endDate: "2025-01" }, { status: "inherit" }, { content: "users" }, { executable: "anything" }])
+  for (const extra of [{ author: "1 OR true" }, { author: ["1", "2"] }, { author: ["1"] }, { category: ["1"] }, { author: true }, { category: -1 }, { startDate: "0000-01" }, { startDate: "2025-13" }, { endDate: "2025-00" }, { startDate: "2025-02", endDate: "2025-01" }, { status: "inherit" }, { content: "users" }, { executable: "anything" }])
     assert.throws(() => readWxrExportFilters({ format: "wxr", ...extra }));
   assert.deepEqual(wxrExportWhere(readWxrExportFilters({ format: "wxr", author: "7" }), "UTC"), { sql: "TRUE", args: [] }, "All content retains the full-site selection");
 });
@@ -136,7 +136,7 @@ test("actual WXR exports select posts/pages/media with related data and preserve
       } finally { await pool.query("UPDATE posts SET raw_content=$1 WHERE id=$2", [originalRaw, selected]); }
     });
     await t.test("untrusted filters and unauthorized exports cannot read content", async () => {
-      for (const query of ["&format=wxr", "&format[]=wxr", "&format[nested]=wxr", "&author=1%20OR%20true", "&author=1&author=2", "&startDate=2025-14", "&startDate=2025-03&endDate=2025-01", "&status=invalid", "&content=users", "&extra=1"]) assert.equal((await fetch(base + "/api/tools/export?format=wxr" + query, { headers: { Cookie: cookie } })).status, 400);
+      for (const query of ["&format=wxr", "&format[]=wxr", "&format[nested]=wxr", "&author=1%20OR%20true", "&author=1&author=2", "&author[]=1", "&category[]=1", "&startDate=2025-14", "&startDate=2025-03&endDate=2025-01", "&status=invalid", "&content=users", "&extra=1"]) assert.equal((await fetch(base + "/api/tools/export?format=wxr" + query, { headers: { Cookie: cookie } })).status, 400);
       for (const path of ["/api/tools/export?format=wxr&content=posts", "/api/tools/export/options"]) assert.equal((await api(path, "GET", undefined, "")).response.status, 401);
     });
   } finally {
