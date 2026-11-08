@@ -10,6 +10,7 @@ type Attributes = (extra?: string, override?: Record<string, any>) => string;
 const escape = (value: unknown) => String(value ?? "").replace(/[&<>"']/g, character => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[character]!);
 const documentFor = (html: string) => new DOMParser().parseFromString("<!doctype html><html><body>" + html + "</body></html>", "text/html");
 const text = (value: unknown) => plainText(typeof value === "string" ? value.slice(0, 10000) : "");
+const displayText = (value: unknown) => typeof value === "string" ? value.slice(0, 10000) : "";
 const mediaURL = (value: unknown) => {
   const url = typeof value === "string" ? value.trim() : "";
   return url.length <= 8192 && /^(?:https?:\/\/|\/(?!\/))/i.test(url) && !/[\u0000-\u0020<>"'\\]/.test(url) ? url : "";
@@ -44,9 +45,11 @@ export async function renderPlaylistBlock(node: Node, context: Context, state: S
   if (node.name === "core/playlist-track") {
     if (!hasTrackID(node)) return "";
     const track = trackData(node), a = node.attrs, index = context.playlist?.tracks.get(node);
-    const image = context.playlist?.showImages !== false && track.image ? `<img class="wp-block-playlist-track__image" src="${escape(track.image)}" alt="${escape(track.imageAlt)}">` : "";
-    const length = text(a.length);
-    return `<li${attributes()}><button type="button" class="wp-block-playlist-track__button"${index !== undefined ? ` data-worldact-playlist-track="${index}" aria-current="${index === 0}"` : ""}>${image}<span class="wp-block-playlist-track__content"><span class="wp-block-playlist-track__title">${escape(track.title)}</span>${track.artist ? `<span class="wp-block-playlist-track__artist">${escape(track.artist)}</span>` : ""}</span>${length ? `<span class="wp-block-playlist-track__length"><span class="screen-reader-text">Duration: </span>${escape(length)}</span>` : ""}<span class="screen-reader-text" data-worldact-playlist-action>Play</span></button></li>`;
+    // Source playlist.php strips state labels, while playlist-track.php escapes
+    // the literal display strings. A title such as "Song <Live>" is text here.
+    const image = context.playlist?.showImages !== false && track.image ? `<img class="wp-block-playlist-track__image" src="${escape(track.image)}" alt="${escape(displayText(a.imageAlt))}">` : "";
+    const title = displayText(a.title) || "Unknown title", artist = displayText(a.artist), length = displayText(a.length);
+    return `<li${attributes()}><button type="button" class="wp-block-playlist-track__button"${index !== undefined ? ` data-worldact-playlist-track="${index}" aria-current="${index === 0}"` : ""}>${image}<span class="wp-block-playlist-track__content"><span class="wp-block-playlist-track__title">${escape(title)}</span>${artist ? `<span class="wp-block-playlist-track__artist">${escape(artist)}</span>` : ""}</span>${length ? `<span class="wp-block-playlist-track__length"><span class="screen-reader-text">Duration: </span>${escape(length)}</span>` : ""}<span class="screen-reader-text" data-worldact-playlist-action>Play</span></button></li>`;
   }
   if (node.name !== "core/playlist") return undefined;
   const trackNodes = node.children.filter(hasTrackID);

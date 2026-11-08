@@ -69,6 +69,17 @@ test("all six source waveform modes survive canonical rendering", async () => {
   }
 });
 
+test("track rows escape literal display labels while the separate player state strips markup", async () => {
+  const attributes = track(9, { title: "Song <Live>", artist: "Artist <Guest>", length: "2:00 <extended>", imageAlt: 'Artwork <Front> "quoted"' });
+  const output = dom(await renderSiteDocument({ blocks: [node("playlist", {}, [node("playlist-track", attributes)])] }, { db: settingsOnly }));
+  assert.equal(output.querySelector(".wp-block-playlist-track__title")!.textContent, attributes.title);
+  assert.equal(output.querySelector(".wp-block-playlist-track__artist")!.textContent, attributes.artist);
+  assert.equal(output.querySelector(".wp-block-playlist-track__length")!.textContent, "Duration: " + attributes.length);
+  assert.equal(output.querySelector(".wp-block-playlist-track__image")!.getAttribute("alt"), attributes.imageAlt);
+  assert.equal(JSON.parse(output.querySelector("figure")!.getAttribute("data-worldact-playlist")!)[0].title, "Song ");
+  assert.equal(output.querySelector("live"), null); assert.equal(output.querySelector("guest"), null);
+});
+
 test("playlist media import remaps canonical/JSON IDs and URLs, detaching unrelated local attachments", () => {
   const attrs = track(7, { src: "https://source.test/uploads/song.wav", image: "https://source.test/uploads/art.jpg" });
   const result = remapImportedBlockReferences(document({}, [attrs, track(8)]), [node("playlist", {}, [node("playlist-track", attrs), node("playlist-track", track(8))])], new Map(), { media: new Map([[7, 70]]), urls: new Map([[attrs.src, "/uploads/imported.wav"], [attrs.image, "/uploads/imported.jpg"]]) });
