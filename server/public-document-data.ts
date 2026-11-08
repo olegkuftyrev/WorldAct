@@ -42,7 +42,7 @@ function displayDate(value: string | Date | null, settings: PublicSettings) {
     if(settings.dateFormat==="Y-m-d")return `${part("year")}-${part("month")}-${part("day")}`;
     if(settings.dateFormat==="m/d/Y")return `${part("month")}/${part("day")}/${part("year")}`;
     if(settings.dateFormat==="d/m/Y")return `${part("day")}/${part("month")}/${part("year")}`;
-    return new Intl.DateTimeFormat("en-US",{...options,month:"long"}).format(date);
+    return new Intl.DateTimeFormat("en-US",{...options,month:"long",day:"numeric"}).format(date);
   }catch{return date.toLocaleDateString("en-US");}
 }
 function publicHead(model: Pick<PublicDocumentModel,"post"|"site"|"route"|"status"|"design"|"requestPath">): PublicHead {
