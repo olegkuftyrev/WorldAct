@@ -93,6 +93,7 @@ test("admin Date order, month membership and available months share publication/
       const item = chosen.items.find(item => Number(item["wp:post_id"]) === rescheduled.id);
       assert.ok(item, "the month offered for a rescheduled publication must export its record");
       assert.equal(item["wp:status"], "future");
+      assert.equal(item["wp:post_date"], "2100-06-30 23:30:00");
       assert.equal(item["wp:post_date_gmt"], "2100-07-01 06:30:00");
       assert.equal(item.pubDate, new Date("2100-07-01T06:30:00Z").toUTCString());
       assert.equal((await exported("2020-01")).items.some(item => Number(item["wp:post_id"]) === rescheduled.id), false);
@@ -108,7 +109,10 @@ test("admin Date order, month membership and available months share publication/
       try {
         const choices = await ok("/tools/export/options");
         assert.ok(choices.months.posts.includes("2100-07"));
-        assert.ok((await exported("2100-07")).items.some(item => Number(item["wp:post_id"]) === rescheduled.id));
+        const shifted = (await exported("2100-07")).items.find(item => Number(item["wp:post_id"]) === rescheduled.id);
+        assert.ok(shifted);
+        assert.equal(shifted["wp:post_date"], "2100-07-01 12:15:00");
+        assert.equal(shifted["wp:post_date_gmt"], "2100-07-01 06:30:00");
         assert.equal((await exported("2100-06")).items.some(item => Number(item["wp:post_id"]) === rescheduled.id), false);
       } finally { await ok("/settings", "PUT", { timezone: "America/Los_Angeles" }); }
     });

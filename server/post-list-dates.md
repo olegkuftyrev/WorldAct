@@ -13,3 +13,13 @@ The existing React date/month controls require a separate authored/native gate b
 Production build/TypeScript and41 guarded source plus41 compiled checks across four files passed (`post-list-dates`, `author-bulk`, `api`, `wxr-export`). Independent backend review and authored/native list controls remain separate gates.
 
 Independent review found and reproduced a mismatch between updated export choices and WXR selection. The follow-up uses the shared chosen date for selection and serialized dates; a real rescheduled-post export/import regression covers Los Angeles and +05:45 month membership. The final follow-up build and41 source/41 compiled checks pass; independent recheck remains pending.
+
+A further bounded WXR correction distinguishes existing local post/comment date
+fields from their GMT partners, as supplied `wp-admin/includes/export.php`
+around652–657 does. Publication, modification and comment local fields use the
+existing shared named/fixed-offset site clock; GMT fields and RSS pubDate retain
+the original instant. Real XML checks cover a Los Angeles midnight boundary and
+the same rescheduled post in +05:45, including unchanged export/import UTC
+schedule. This follows WorldAct's existing timestamp model rather than adding a
+persisted historical local-date column. Production build and23 source/23 compiled checks across three files pass;
+independent review of this serializer-only continuation remains pending.

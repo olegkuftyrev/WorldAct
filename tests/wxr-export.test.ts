@@ -57,6 +57,8 @@ test("actual WXR exports select posts/pages/media with related data and preserve
     const category = (await pool.query("INSERT INTO terms(taxonomy,name,slug,parent_id) VALUES('category',$1,$1,$2) RETURNING id", [stamp + "-child", parent])).rows[0].id; termIds.push(category);
     for (const id of [selected, draft, foreign]) await pool.query("INSERT INTO post_terms(post_id,term_id) VALUES($1,$2)", [id, category]);
     await pool.query("INSERT INTO comments(post_id,author_name,author_email,content,status) VALUES($1,$2,'private@example.test','Selected comment','approved'),($3,'Unrelated','unrelated@example.test','Unrelated comment','approved')", [selected, stamp, boundary]);
+    await pool.query("UPDATE posts SET updated_at='2025-02-01T07:45:00Z' WHERE id=$1", [selected]);
+    await pool.query("UPDATE comments SET created_at='2025-02-01T07:30:00Z' WHERE post_id=$1", [selected]);
     async function upload(suffix: string, date: string) {
       const bytes = await sharp({ create: { width: 8, height: 6, channels: 3, background: "#447799" } }).png().toBuffer(), form = new FormData(); form.append("file", new Blob([new Uint8Array(bytes)]), stamp + suffix + ".png");
       const response = await fetch(base + "/api/media", { method: "POST", headers: { Origin: origin, Cookie: cookie }, body: form }); assert.equal(response.status, 201); const media = (await response.json()).media; mediaIds.push(media.id); await pool.query("UPDATE media SET created_at=$1 WHERE id=$2", [date, media.id]); return media;
@@ -66,6 +68,14 @@ test("actual WXR exports select posts/pages/media with related data and preserve
     await t.test("combined filters select the local inclusive start/exclusive following-month boundary and only required dependencies", async () => {
       const result = await exported(`&content=posts&category=${category}&author=${adminId}&startDate=2025-01&endDate=2025-01&status=publish`);
       assert.deepEqual(result.items.filter(row => row["wp:post_type"] === "post").map(row => Number(row["wp:post_id"])), [selected]);
+      const selectedItem = result.items.find(row => Number(row["wp:post_id"]) === selected)!;
+      assert.equal(selectedItem["wp:post_date"], "2025-01-31 23:59:59");
+      assert.equal(selectedItem["wp:post_date_gmt"], "2025-02-01 07:59:59");
+      assert.equal(selectedItem["wp:post_modified"], "2025-01-31 23:45:00");
+      assert.equal(selectedItem["wp:post_modified_gmt"], "2025-02-01 07:45:00");
+      const selectedComment = selectedItem["wp:comment"].find((row: any) => row["wp:comment_content"] === "Selected comment")!;
+      assert.equal(selectedComment["wp:comment_date"], "2025-01-31 23:30:00");
+      assert.equal(selectedComment["wp:comment_date_gmt"], "2025-02-01 07:30:00");
       assert.equal(result.items.filter(row => row["wp:post_type"] === "wp_block").length, 2, "A later correct-kind reference resolves an earlier mismatched request");
       assert.equal(result.items.filter(row => row["wp:post_type"] === "wp_navigation").length, 1);
       assert.ok(!result.xml.includes(stamp + "-unrelated")); assert.ok(!result.xml.includes("Unrelated comment")); assert.ok(result.xml.includes("Selected comment"));
