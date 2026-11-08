@@ -1,79 +1,84 @@
-# Public React document HTTP status
+# Public document HTTP status and server rendering
 
-The production Node server serves the existing React `index.html` with status
-404 when a public document identity is missing. Published posts and pages,
-including password-protected records, keep status 200. This does not add server
-rendering or a no-JavaScript content response. Vite development fallback status
-is independent of this production Node behavior.
+The production Node server renders published public documents into the existing
+built React index using a safe request-scoped model and the narrow shared public
+view. Classic and the three bundled source themes have their actual content,
+navigation, native forms and theme styling in the HTML response before JavaScript
+runs. Browser controller integration and independent native hydration/history
+acceptance are separate gates; server rendering alone does not certify them.
+Vite development fallback status remains independent of production Node routing.
 
-`public-documents.ts` classifies metadata through the shared permalink resolver,
-including Plain fixed IDs, the selected static front page, hierarchical pages
-and the existing content-page aliases. It also preserves the actual React
-`/posts/:slug` and `/pages/:slug` routes independently of permalink settings.
-Status does not depend on stored content, block data or a full-content internal
-HTTP request. Body-page clamping remains the existing API contract.
+`public-documents.ts` retains metadata-only identity classification through the
+shared permalink resolver, including Plain fixed IDs, selected static fronts,
+hierarchical pages, numeric children and body-page aliases. It preserves actual
+`/posts/:slug` and `/pages/:slug` aliases independently of permalink settings.
+The selected immutable identity is rechecked by metadata; the subsequent body
+read independently requires that same ID, type and current publish status.
+Removing a body column leaves the direct metadata helper valid, while actual
+full HTML correctly fails through the generic500 handler. It must not return a
+successful empty shell when rendering fails.
 
-Ordinary root home/search/filter/paging requests remain 200, including an empty
-site or empty results. Selected static-front body paging still requires that
-actual public page, even when a stale selection becomes private or disappears.
-Invalid fixed IDs never become a home response. Framework
-routes mirror `src/App.tsx` and keep their existing client authentication and
-authorization; update that inventory when adding framework routes. The existing
-legacy redirects, JSON API fallbacks, static/upload handlers, feeds, robots,
-sitemaps and fixed incoming notification handlers run before document fallback.
+Ordinary home/search/filter/archive paging stays200 even with empty results.
+Selected static fronts require their actual public page; a stale private/missing
+selection yields404. Invalid fixed IDs never become home. Category/tag archives
+require existing terms, including empty terms; date directories require a
+published record in the existing site-local civil-date bounds. Root date queries
+retain `month`/`monthnum`/compact aliases and reject malformed or conflicting
+values. Date paths remain authoritative over unrelated date query values.
+Body, inherited Query Loop and comment paging retain independent counters;
+body-page clamping remains the existing contract. No author directory is added.
+Public paths stay bounded to2,000 characters before decoding/hierarchical work.
 
-`public-path.ts` shares archive identity between `/api/public/resolve` and Node:
-existing category/tag terms are valid even when empty; a date directory requires
-a published post within the existing site-local date bounds. It adds no author
-directory route. Public path input is bounded to 2,000 characters before decoding
-and hierarchical queries, with bounded malformed URI errors. Accepted category
-canonicals retain all their ancestors within that bound.
+Framework routes retain their client authorization and framework bootstrap.
+A genuinely unseeded migrated installation uses that bootstrap so the existing
+installer can run; readiness is read-only and uses the existing durable markers.
+No GET migrates/seeds or treats a database failure as successful installation
+readiness. Legacy redirects, JSON APIs, static/uploads, feeds, robots, sitemaps
+and notification handlers precede the HTML fallback as before.
 
-The existing production pingback policy still requires a published, open,
-unprotected post/page. Ordinary root filters/paging, archives and the configured
-posts listing do not acquire a singular `X-Pingback` header. Local environments
-never advertise receipt. No external notification service is contacted to choose
-a document status or header.
+HTML reads cookie sessions only. Valid or invalid Basic headers neither
+authenticate the document nor update application-password usage. Public password
+access requires the current matching request cookie grant, including for an
+administrator. Locked body/excerpt/comments/footnotes never enter model, nested
+render output or head. The model excludes administrative settings, raw blocks,
+pending counts, account/comment email, hashes and session/grant credentials.
+Remembered comment-author details remain a private browser request.
 
-Only a missing built index produces the existing “Build the React application”
-error. Database/classification failures propagate to the ordinary generic 500
-handler instead of being mislabeled as missing builds.
+All documents keep `Cache-Control: no-cache, must-revalidate, max-age=0, no-store,
+private` and `Expires: Wed, 11 Jan 1984 05:00:00 GMT`. Neither Last-Modified nor
+ETag is emitted for assembled HTML. GET/HEAD and conditional requests retain
+actual current-policy200/404 status; a conditional request cannot turn a newly
+private body into304 reuse. Direct/encoded index.html openings use the same
+classifier/private policy. Static JS/CSS/fonts and uploads keep their own cache
+policies. HEAD has the equivalent headers and no body.
 
-The supplied WordPress `wp-includes/class-wp.php::handle_404` (approximately
-724–804), the actual React route inventory, existing archive helpers and reviewed
-Plain permalink backend are reference inputs. PHP is not executed.
+Production X-Pingback retains the published/open/unprotected singular policy,
+computed from the final selected identity; ordinary root filters/paging,
+archives and selected posts listings do not gain it. Local environments never
+advertise receipt. No external notification service is contacted during reads.
 
-Validation uses the disposable local runner after a production build:
+The complete view, safe head and inert escaped JSON bootstrap are assembled
+before response headers are committed. Existing renderer4,000-node/8MiB and
+complete-comment-window budgets remain unchanged. The assembled document has a
+64MiB bound counting compiler index, React markup, head and escaped JSON,
+including escape expansion. Overflow is explicit413 without partial success;
+genuine data/render errors preserve generic500. Missing built index retains its
+specific Build the React application404 error. See public-document-ssr.md for
+module, lifecycle and serialization boundaries.
 
-```sh
-npm run build
-ISOLATED_TEST_PORT=3021 node scripts/test-isolated.mjs tests/public-http-status.test.ts tests/plain-permalinks.test.ts tests/category-permalinks.test.ts tests/date-archives.test.ts tests/incoming-pings.test.ts tests/template-access.test.ts tests/legacy-routes.test.ts tests/server-startup.test.ts
-ISOLATED_TEST_PORT=3021 ISOLATED_TEST_COMPILED=true node scripts/test-isolated.mjs tests/public-http-status.test.ts tests/plain-permalinks.test.ts tests/category-permalinks.test.ts tests/date-archives.test.ts tests/incoming-pings.test.ts tests/template-access.test.ts tests/legacy-routes.test.ts tests/server-startup.test.ts
-```
+`tests/public-http-status.test.ts` checks actual rendered model/presentation
+instead of equality with an empty index, retaining prior identity/header/static/
+framework/feed/missing-build tests. Its body-column fixture now separately tests
+the body-free helper and actual SSR500. `tests/public-document-ssr.test.ts` proves
+persisted content/native forms across all four themes, real generated-parent
+POST, protected grants/current cookie-only identity, header/conditional/HEAD
+behavior, hostile head/script/style/iframe/bootstrap boundaries and413 behavior.
+Use `scripts/test-isolated.mjs` after production build for source and compiled
+Node tests. Fresh compiled `tests/install.test.ts` with
+ISOLATED_TEST_UNSEEDED=true covers uninstalled HTML/install readiness.
 
-The status tests compare real HTTP bodies with the actual built React index,
-exercise HEAD and loopback production-header policy on source/compiled app
-imports, temporarily make the body column unavailable to prove metadata-only
-status, and separately test a missing index and an unavailable database relation.
-All fixtures, databases, files and child listeners are owned by the isolated run;
-mail uses its local outbox and imported production-policy apps start no workers.
-
-The HTML bootstrap now uses the supplied `wp_get_nocache_headers()` policy from
-`wp-includes/functions.php` (approximately1508–1529): private, no-store,
-must-revalidate and a past Expires value, with no Last-Modified validator.
-`class-wp.php::send_headers()` applies that source policy to logged-in documents
-and anonymous404s. WorldAct applies it to every React bootstrap because even an
-initially anonymous document can acquire account or password state through
-in-app navigation. Static scripts, styles and uploads retain their existing
-independent cache policy. Choosing these headers does not authenticate Basic
-credentials, write application-password usage, or fetch private document bodies.
-Direct and encoded `index.html` openings use the same document classifier and
-private policy, so the preceding static handler cannot bypass these headers.
-
-Actual HTTP tests cover anonymous/session/expired/password-cookie contexts,
-framework/protected/missing routes, GET/HEAD and conditional requests. Independent
-native review passed exact `fc8e33e`: actual held-site response, logout, release
-and browser Back/Forward retain the current anonymous404 without stale body or
-account toolbar in source TT25 and Classic. An initially anonymous direct-index
-document also passed real SPA login followed by the same history/logout flow.
-HTTP assertions and actual native history evidence are recorded separately.
+The earlier pre-SSR native history gate passed exactfc8e33e and later reviewed
+source/Classic stages, including initially anonymous SPA login. That historical
+proof is preserved; the new initial server bodies require a new independent
+native held-HTML/account/grant/publication/BFCache/hydration gate before release.
+PHP/MySQL are not used by this implementation.

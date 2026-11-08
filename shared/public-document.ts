@@ -51,6 +51,7 @@ export type PublicCommentsPagination = {
 export type PublicPresentation = { kind: "source"; document: PublicTemplateRef; html: string }
   | { kind: "classic"; slots: Partial<Record<"header" | "footer" | "single" | "index", { document: PublicTemplateRef; html: string }>> };
 export type PublicHead = {
+  pingback?: string | null;
   title: string; robots: string | null; canonical: string | null;
   seo: null | { description: string; title: string; type: "article" | "website"; url: string; image: string | null };
   icons: { rel: string; href: string; sizes?: string }[];
@@ -69,4 +70,4 @@ export type PublicDocumentModel = {
     dates: Record<string, string>;
   };
 };
-export type FrameworkDocument = { kind: "framework"; status: 200; requestPath: string };
+export type FrameworkDocument = { kind: "framework"; status: 200 | 404; requestPath: string };

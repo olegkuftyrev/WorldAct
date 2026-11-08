@@ -1,4 +1,5 @@
-import { publicDocumentIdentity } from "./public-documents.js";
+import { readPublicDocument, publicDocumentContext } from "./public-document-data.js";
+import { renderPublicDocument, renderFrameworkDocument } from "./render-public-document.js";
 import incomingPingsRouter from "./incoming-pings.js";
 import outgoingPingsRouter,{startOutgoingPingWorker} from "./outgoing-pings.js";
 import "dotenv/config";
@@ -8,7 +9,7 @@ import express, {
 import multer from "multer";
 import { z } from "zod";
 import qs from "qs";
-import { access } from "node:fs/promises";
+import { readFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import {
@@ -204,20 +205,24 @@ app.use((req, res, next) => {
   staticFiles(req, res, next);
 });
 app.get("/{*splat}", async (req, res) => {
-  const document = await publicDocumentIdentity(req.originalUrl);
-  const index = path.join(distDir, "index.html");
-  await access(index).catch(error => {
+  const document = await readPublicDocument(req.originalUrl,await publicDocumentContext(req,{cookieOnly:true}));
+  const index = await readFile(path.join(distDir,"index.html"),"utf8").catch(error => {
     if (error?.code === "ENOENT" || error?.code === "ENOTDIR")
       throw new HttpError(404, "Build the React application or use the development server.");
     throw error;
   });
-  if (document.pingback) res.setHeader("X-Pingback", document.pingback);
-  // A React document can acquire account/password state without a new HTML
-  // navigation. Keep every bootstrap private, including an anonymous opening
-  // followed by an in-app login; assets retain their own static-file policy.
+  // Render completely before committing headers: authorization, identity and
+  // fragment/escaped JSON/whole-document budgets can still fail here.
+  const html="kind" in document ? renderFrameworkDocument(index) : renderPublicDocument(index,document);
+  if (!("kind" in document) && document.head.pingback) res.setHeader("X-Pingback",document.head.pingback);
+  // Every document may acquire account/grant state during SPA navigation.
   res.setHeader("Cache-Control", "no-cache, must-revalidate, max-age=0, no-store, private");
   res.setHeader("Expires", "Wed, 11 Jan 1984 05:00:00 GMT");
-  res.status(document.status).sendFile(index, { cacheControl: false, lastModified: false });
+  // Conditional requests must not turn a newly private body into 304 reuse.
+  res.removeHeader("Last-Modified");
+  res.status(document.status).type("html");
+  res.setHeader("Content-Length",Buffer.byteLength(html));
+  res.end(req.method==="HEAD"?undefined:html);
 });
 
 const errorHandler: ErrorRequestHandler = (error, _req, res, _next) => {

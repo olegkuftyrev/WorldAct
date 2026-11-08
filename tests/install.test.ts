@@ -53,6 +53,12 @@ test("a fresh migrated PostgreSQL site installs atomically once through its loca
   const input = { token, siteTitle: "My <b>WorldAct</b> Site", username: stamp, email: process.env.ADMIN_EMAIL!, password: process.env.ADMIN_PASSWORD!, discourageSearchEngines: true };
   assert.equal((await pool.query("SELECT count(*)::int AS count FROM users")).rows[0].count, 0);
   await t.test("GET is read-only and omitted/invalid tokens or foreign origins create nothing", async () => {
+    for(const [route,status] of [["/",200],["/install",200],["/admin",200],["/missing-before-install",404]] as const){
+      const response=await fetch(base+route);assert.equal(response.status,status);
+      const html=await response.text();assert.match(html,/<div id="root"><\/div>/);assert.doesNotMatch(html,/id="worldact-public-document"|data-worldact-public-gate/);
+      assert.match(response.headers.get("cache-control") || "",/no-store.*private/);
+    }
+    const model=await api("/api/public/document?"+new URLSearchParams({path:"/"}));assert.equal(model.response.status,400);assert.equal(model.data.kind,"framework");
     const state = await api("/api/install"); assert.deepEqual(state.data, { installed: false, available: true, language: "en_US" }); assert.match(state.response.headers.get("cache-control") || "", /no-store/);
     assert.equal((await api("/api/install", "POST", { ...input, token: "0".repeat(64) })).response.status, 403);
     const { token: _ignored, ...without } = input; assert.equal((await api("/api/install", "POST", without)).response.status, 400);

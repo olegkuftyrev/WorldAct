@@ -66,7 +66,7 @@ function publicHead(model: Pick<PublicDocumentModel,"post"|"site"|"route"|"statu
 export async function readPublicDocument(path: string, context: PublicDocumentContext): Promise<PublicDocumentModel | FrameworkDocument> {
   let resolution=await resolvePublicDocumentRoute(path);
   if(resolution.kind==="framework")return {kind:"framework",status:200,requestPath:path};
-  if(!await isInstalled())return {kind:"framework",status:200,requestPath:path};
+  if(!await isInstalled())return {kind:"framework",status:resolution.status,requestPath:path};
   const rawQuery=readPublicPath(path).query;
   const selected=resolution.selectedId!==undefined && resolution.selectedType!==undefined;
   let query;
@@ -114,5 +114,6 @@ export async function readPublicDocument(path: string, context: PublicDocumentCo
     site,post,comments,commentsPagination:body?.commentsPagination || null,design,presentation,head:null as any,
     controls:{commentsOpen:open,replyParentId:parent?.id || 0,replyParentName:parent?.authorName || null,commentReturnPath:returnPath,loginHref:commentLoginHref(returnPath),sensitive:context.sensitive,dates}};
   model.head=publicHead(model);
+  model.head.pingback=model.status===200 ? resolution.pingback || null : null;
   return model;
 }

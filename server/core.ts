@@ -1271,7 +1271,7 @@ router.get(
 router.get("/public/document", async (req: AuthRequest, res) => {
   const path=z.string().min(1).max(2000).parse(req.query.path);
   const model=await readPublicDocument(path,await publicDocumentContext(req,{user:req.user}));
-  if("kind" in model) { res.status(400).json({error:"This path uses the application document."}); return; }
+  if("kind" in model) { res.status(400).json({kind:"framework",error:"This path uses the application document."}); return; }
   res.status(model.status).json(model);
 });
 router.get("/public/site", async (req: AuthRequest, res) => {

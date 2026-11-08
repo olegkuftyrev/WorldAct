@@ -1,5 +1,7 @@
 import test, { after } from "./isolated-test.js";
 import assert from "node:assert/strict";
+import { DOMParser } from "linkedom";
+import { publicDocumentIdentity } from "../server/public-documents.js";
 import { spawn } from "node:child_process";
 import { mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
@@ -18,7 +20,25 @@ function assertPrivateDocument(response: Response) {
   assert.equal(response.headers.get("last-modified"), null);
 }
 
-test("Node serves the React document with actual public identity status and preserves other HTTP handlers", async t => {
+function assertRenderedDocument(html: string, route: string, status = 200) {
+  const document = new DOMParser().parseFromString(html,"text/html"),root=document.querySelector("#root"),data=document.querySelector("#worldact-public-document");
+  assert.ok(root,route+" root");
+  assert.equal(document.querySelectorAll("title").length,1,route+" has one actual document title");
+  if(data){
+    const model=JSON.parse(data.textContent!);assert.equal(model.schema,1);assert.equal(model.requestPath,route);assert.equal(model.status,status);
+    assert.ok(root.innerHTML.length>0,route+" contains the rendered public presentation");
+    assert.ok(document.querySelector(".public-site"),route+" public view");
+    assert.doesNotMatch(root.textContent || "",/Loading WorldAct|Loading…/);
+    assert.equal(document.querySelectorAll("#worldact-public-document").length,1);
+    assert.ok(document.querySelector("style[data-worldact-public-gate]"));
+  }else{
+    const pathname=decodeURIComponent(new URL(route,base).pathname).toLowerCase();
+    assert.match(pathname,/^\/(?:login|register|check-email|privacy|confirm-admin-email|confirm-profile-email|install|lost-password|reset-password|preview|admin|wp-admin)(?:\/|$)/);
+    assert.equal(root.innerHTML,"");assert.equal(document.querySelector("style[data-worldact-public-gate]"),null);
+  }
+}
+
+test("Node renders real public documents with actual identity status and preserves other HTTP handlers", async t => {
   const original = (await pool.query("SELECT data FROM settings WHERE id=1")).rows[0].data;
   const ids: number[] = [], terms: number[] = [], stamp = "http-status-" + Date.now();
   const index = await readFile(path.join(rootDir, "dist/index.html"), "utf8");
@@ -38,7 +58,7 @@ test("Node serves the React document with actual public identity status and pres
     assert.equal(response.status, status, route);
     assert.match(response.headers.get("content-type")!, /text\/html/);
     assertPrivateDocument(response);
-    assert.equal(await response.text(), index, route + " must retain the real React index");
+    assertRenderedDocument(await response.text(),route,status);
     assert.equal(response.headers.get("x-pingback"), null, "local servers never advertise ping reception");
     return response;
   }
@@ -71,23 +91,23 @@ test("Node serves the React document with actual public identity status and pres
           const response = await fetch(base + route, { headers: context ? { Cookie: context } : {} });
           assert.equal(response.status, route.startsWith("/missing-") ? 404 : 200);
           assertPrivateDocument(response);
-          assert.equal(await response.text(), index);
+          assertRenderedDocument(await response.text(),route,route.startsWith("/missing-") ? 404 : 200);
         }
       }
       const conditional = await fetch(base + "/", { headers: { "If-Modified-Since": new Date(Date.now() + 86400000).toUTCString() } });
       assert.equal(conditional.status, 200); assertPrivateDocument(conditional);
-      assert.equal(await conditional.text(), index);
+      assertRenderedDocument(await conditional.text(),"/");
       // Classifying HTML must not start application-password authentication or
       // update credential usage merely to choose cache headers.
       const basic = await fetch(base + "/", { headers: { Authorization: "Basic invalid" } });
       assert.equal(basic.status, 200); assertPrivateDocument(basic);
-      assert.equal(await basic.text(), index);
+      assertRenderedDocument(await basic.text(),"/");
       const head = await fetch(base + "/", { method: "HEAD", headers: { Cookie: cookie } });
       assert.equal(head.status, 200); assertPrivateDocument(head); assert.equal(await head.text(), "");
       for (const route of ["/index.html", "/index%2Ehtml", "/%69ndex.html", "/INDEX.HTML"]) {
         const response = await fetch(base + route);
         assert.equal(response.status, 404, "a direct file opening retains the unknown public-route identity");
-        assertPrivateDocument(response); assert.equal(await response.text(), index);
+        assertPrivateDocument(response); assertRenderedDocument(await response.text(),route,404);
       }
       const asset = /src="([^"]+\.js)"/.exec(index)![1];
       const staticResponse = await fetch(base + asset, { headers: { Cookie: cookie } });
@@ -223,11 +243,16 @@ test("Node serves the React document with actual public identity status and pres
         await resolved(route, 400);
       }
       const long = await fetch(base + "/" + "x".repeat(2001)); assert.equal(long.status, 414); assert.doesNotMatch(await long.text(), /stack|node_modules/);
-      // Making the body column unavailable proves status classification uses
-      // persisted public metadata rather than an internal full-content request.
+      // Metadata status remains body-independent, while full SSR genuinely
+      // needs its body column and must preserve generic500 rather than a shell200.
       await pool.query("ALTER TABLE posts RENAME COLUMN content TO http_status_unavailable_content");
-      try { for (const route of ["/?p=" + story.id, "/posts/" + story.slug, "/?page_id=" + locked.id, await postPermalink(child)]) await html(route); }
-      finally { await pool.query("ALTER TABLE posts RENAME COLUMN http_status_unavailable_content TO content"); }
+      try {
+        for (const route of ["/?p=" + story.id, "/posts/" + story.slug, "/?page_id=" + locked.id, await postPermalink(child)]) {
+          assert.equal((await publicDocumentIdentity(route)).status,200);
+          const response=await fetch(base+route);assert.equal(response.status,500);
+          assert.deepEqual(await response.json(),{error:"Something went wrong. Please try again."});
+        }
+      } finally { await pool.query("ALTER TABLE posts RENAME COLUMN http_status_unavailable_content TO content"); }
       await pool.query("ALTER TABLE posts RENAME TO http_status_unavailable_posts");
       try {
         const response = await fetch(base + "/?p=" + story.id); assert.equal(response.status, 500);
