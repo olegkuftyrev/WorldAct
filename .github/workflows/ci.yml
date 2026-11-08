@@ -69,6 +69,9 @@ jobs:
           tests/profile-email.test.ts tests/media-zero-dimensions.test.ts
           tests/profile-options.test.ts
           tests/media-format-preservation.test.ts
+          tests/full-image-uploads.test.ts tests/media-upload-cleanup.test.ts
+          tests/media-edit-transforms.test.ts tests/media-edit-copy.test.ts
+          tests/classic-editor.test.ts tests/classic-persistence.test.ts
           tests/shortcodes.test.ts
       - name: Fresh browser installation on the compiled server
         env:
@@ -99,6 +102,19 @@ jobs:
           IMAGE_FORMAT_ARCHIVE_STAGE: restore
           IMAGE_FORMAT_ARCHIVE_PATH: ${{ runner.temp }}/worldact-images.json
         run: node scripts/test-isolated.mjs tests/media-format-preservation.test.ts
+      - name: Export normalized full-image archive
+        if: matrix.node == 24
+        env:
+          FULL_IMAGE_ARCHIVE_STAGE: export
+          FULL_IMAGE_ARCHIVE_PATH: ${{ runner.temp }}/worldact-full-images.json
+        run: node scripts/test-isolated.mjs tests/full-image-uploads.test.ts
+      - name: Restore normalized full-image archive on a fresh compiled server
+        if: matrix.node == 24
+        env:
+          ISOLATED_TEST_COMPILED: "true"
+          FULL_IMAGE_ARCHIVE_STAGE: restore
+          FULL_IMAGE_ARCHIVE_PATH: ${{ runner.temp }}/worldact-full-images.json
+        run: node scripts/test-isolated.mjs tests/full-image-uploads.test.ts
       - name: Export font archive
         if: matrix.node == 24
         env:
