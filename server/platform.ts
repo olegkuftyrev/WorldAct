@@ -45,7 +45,8 @@ import { SiteImport, allocateImportedBlockEntities, exportMediaFiles, exportFont
 import { postPermalink } from "./permalinks.js";
 import { dateArchiveLocalSQL } from "./date-archives.js";
 import { parseFootnotes, freshFootnoteIds } from "./footnotes.js";
-import { inspectAudio } from "./audio-metadata.js";
+import { inspectAudioWithArtwork } from "./audio-metadata.js";
+import { storeAudioArtwork } from "./audio-artwork.js";
 
 import { settingSchema, menuSchema, validMenu, styleSchema, documentSchema, validateExtensionSettings } from "./site-validation.js";
 import { readThemeDesign, validateThemeDesign, resetBundledDocument } from "./themes.js";
@@ -800,7 +801,7 @@ router.post(
       width = metadata.width;
       height = metadata.height;
     }
-    const audioMetadata = await inspectAudio(file.buffer, type.mime);
+    const inspection = await inspectAudioWithArtwork(file.buffer, type.mime), audioMetadata = inspection.metadata;
     const settings = await getSettings();
     const prefix = uploadPrefix(settings);
     await mkdir(path.join(uploadsDir, prefix), { recursive: true });
@@ -813,14 +814,18 @@ router.post(
     await writeFile(path.join(uploadsDir, filename), file.buffer, {
       flag: "wx",
     });
+    const createdFiles = new Set([filename, ...Object.values(sizes).map(size => size.filename)]);
+    let mediaClient: PoolClient | undefined;
     try {
-      const result = await pool.query(
-        `INSERT INTO media(author_id,title,filename,mime_type,size,width,height,sizes,audio_metadata) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9::jsonb) RETURNING ${expandedMediaFields}`,
+      mediaClient = await pool.connect(); await mediaClient.query("BEGIN");
+      const title = audioMetadata.title?.slice(0, 300) || plainText(path.basename(file.originalname).replace(/\.[^.]+$/, "")).slice(0, 300) || "Untitled file";
+      const artwork = await storeAudioArtwork(inspection.artwork, mediaClient, needUser(req).id, title, prefix, settings);
+      for (const file of artwork.files) createdFiles.add(file);
+      const result = await mediaClient.query(
+        `INSERT INTO media(author_id,title,filename,mime_type,size,width,height,sizes,audio_metadata,artwork_media_id) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9::jsonb,$10) RETURNING ${expandedMediaFields}`,
         [
           needUser(req).id,
-          audioMetadata.title?.slice(0, 300) || plainText(
-            path.basename(file.originalname).replace(/\.[^.]+$/, ""),
-          ).slice(0, 300) || "Untitled file",
+          title,
           filename,
           type.mime,
           file.size,
@@ -828,18 +833,16 @@ router.post(
           height,
           JSON.stringify(sizes),
           JSON.stringify(audioMetadata),
+          artwork.id,
         ],
       );
+      await mediaClient.query("COMMIT");
       res.status(201).json({ media: result.rows[0] });
     } catch (e) {
-      await unlink(path.join(uploadsDir, filename)).catch(() => {});
-      await Promise.all(
-        Object.values(sizes).map((size) =>
-          unlink(path.join(uploadsDir, size.filename)).catch(() => {}),
-        ),
-      );
+      if (mediaClient) await mediaClient.query("ROLLBACK").catch(() => {});
+      await Promise.all([...createdFiles].map(file => unlink(path.join(uploadsDir, file)).catch(() => {})));
       throw e;
-    }
+    } finally { mediaClient?.release(); }
   },
 );
 router.post("/media/:id/edit", creators, async (req: AuthRequest, res) => {

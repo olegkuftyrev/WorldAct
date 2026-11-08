@@ -52,7 +52,9 @@ export const postFields = `p.id, p.type, p.title, p.slug, p.content,p.raw_conten
   COALESCE((SELECT jsonb_agg(jsonb_build_object('id',t.id,'taxonomy',t.taxonomy,'name',t.name,'slug',t.slug,'description',t.description,'parentId',t.parent_id,'count',(SELECT count(*)::int FROM post_terms counted JOIN posts counted_post ON counted_post.id=counted.post_id WHERE counted.term_id=t.id AND counted_post.status='publish')) ORDER BY t.name,t.id)
     FROM post_terms pt JOIN terms t ON t.id=pt.term_id WHERE pt.post_id=p.id), '[]'::jsonb) AS terms`;
 export const mediaFields = `id, title, '/uploads/' || filename AS url, mime_type AS "mimeType", filename,
-  alt, caption, size, audio_metadata AS "audioMetadata", created_at AS "createdAt"`;
+  alt, caption, size, audio_metadata AS "audioMetadata", artwork_media_id AS "artworkMediaId",
+  (SELECT jsonb_build_object('id',art.id,'src','/uploads/' || art.filename,'alt',art.alt,'width',art.width,'height',art.height) FROM media art WHERE art.id=media.artwork_media_id AND art.mime_type LIKE 'image/%') AS image,
+  created_at AS "createdAt"`;
 export const commentFields = `c.id, c.author_name AS "authorName", c.author_email AS "authorEmail",
   c.author_url AS "authorUrl",c.user_id AS "userId",c.content, c.status, c.version,c.updated_at AS "updatedAt",c.parent_id AS "parentId", c.post_id AS "postId", p.title AS "postTitle", c.created_at AS "createdAt"`;
 

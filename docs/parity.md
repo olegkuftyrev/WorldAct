@@ -42,7 +42,7 @@ The renderer preserves canonical MathML through a source-derived element/attribu
 
 RSS/Atom blocks use a bounded public-only transport, parsed PostgreSQL cache, source list/grid controls, dates/authors/excerpts and safe link relationships. Known local feeds use direct published-data reads, never loopback HTTP or nested rendering; password grants are not forwarded. See [transport/cache boundaries](../server/rss-security.md). Playlist server rendering rebuilds trusted track state, source visibility/artwork labels and six waveform choices; native audio controls and media links remain available without script. The dedicated client playlist runtime and native editing review remain work.
 
-Audio uploads expose bounded descriptive tags and duration through native `media_details`. Archive restore recomputes those fields from verified bytes. Worker reservations remain held until physical exit, including failed termination, for both audio and fonts. Embedded audio cover extraction and automatic rescanning of existing uploads are not implemented; see [audio metadata boundaries](../server/audio-metadata.md).
+Audio uploads expose bounded descriptive tags and duration through native `media_details`, plus verified embedded artwork as ordinary owned images. Archive restore recomputes metadata and remaps artwork inside its restored media graph. Worker reservations remain held until physical exit, including failed termination, for both audio and fonts. Existing uploads are not automatically rescanned; see [audio metadata boundaries](../server/audio-metadata.md).
 
 ## Portability
 

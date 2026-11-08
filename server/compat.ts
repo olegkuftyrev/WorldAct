@@ -825,6 +825,7 @@ async function wpMedia(item: any) {
     description: { rendered: item.description || "" },
     caption: { rendered: item.caption || "" },
     alt_text: item.alt,
+    ...(item.image ? { image: { ...item.image, src: absolute(item.image.src, s.siteUrl) } } : {}),
     media_type: String(item.mimeType || item.mime_type).startsWith("image/")
       ? "image"
       : "file",

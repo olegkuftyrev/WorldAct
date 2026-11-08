@@ -265,7 +265,8 @@ export class SiteImport {
       // Recompute descriptive metadata from the verified restored bytes;
       // imported JSON fields cannot inject tags, paths or fabricated durations.
       const audioMetadata = await inspectAudio(main.data, main.mime);
-      await this.client.query("UPDATE media SET description=$1,comment_status=$2,audio_metadata=$4::jsonb WHERE id=$3",[cleanContent(z.string().max(20000).parse(item.description || "")),z.enum(["open","closed"]).parse(item.comment_status || "closed"),row.rows[0].id,JSON.stringify(audioMetadata)]);
+      const coverHash = main.mime.startsWith("image/") && item.cover_hash === createHash("sha256").update(main.data).digest("hex") ? item.cover_hash : null;
+      await this.client.query("UPDATE media SET description=$1,comment_status=$2,audio_metadata=$4::jsonb,cover_hash=$5 WHERE id=$3",[cleanContent(z.string().max(20000).parse(item.description || "")),z.enum(["open","closed"]).parse(item.comment_status || "closed"),row.rows[0].id,JSON.stringify(audioMetadata),coverHash]);
     }
     this.decodedBytes = byteCount;
     const unused = [...embedded.keys()].filter(name => !copied.has(name));
@@ -346,6 +347,13 @@ export class SiteImport {
     return value;
   }
   async finalize(posts: ReadonlyMap<number, number>, terms: ReadonlyMap<number, number>, entities: ReadonlyMap<number, ImportedBlockEntity>) {
+    for (const item of this.input.media || []) {
+      const target = this.media.get(Number(item.id));
+      if (!target || !item.artwork_media_id) continue;
+      const source = id.parse(item.artwork_media_id), artwork = this.media.get(source);
+      if (artwork && (await this.client.query("SELECT id FROM media WHERE id=$1 AND mime_type LIKE 'image/%'", [artwork])).rowCount) await this.client.query("UPDATE media SET artwork_media_id=$1 WHERE id=$2", [artwork, target]);
+      else this.warn(`Audio artwork ${source} was not included as an image and was detached.`);
+    }
     for(const item of this.input.media || []){
       const target=this.media.get(Number(item.id));if(!target || !item.attached_post_id)continue;
       const source=id.parse(item.attached_post_id),post=posts.get(source);
