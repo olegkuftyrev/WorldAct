@@ -1,6 +1,6 @@
+import test, { after } from "./isolated-test.js";
 import "dotenv/config";
 import assert from "node:assert/strict";
-import test, { after } from "node:test";
 import { EventEmitter } from "node:events";
 import { Readable } from "node:stream";
 import { gzipSync, deflateSync, brotliCompressSync } from "node:zlib";

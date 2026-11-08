@@ -1,6 +1,6 @@
+import test, { after } from "./isolated-test.js";
 import "dotenv/config";
 import assert from "node:assert/strict";
-import test, { after } from "node:test";
 import { mkdtemp, mkdir, readFile, rm, writeFile } from "node:fs/promises";
 import path from "node:path";
 import sharp from "sharp";

@@ -1,6 +1,6 @@
+import test from './isolated-test.js';
 import 'dotenv/config';
 import assert from 'node:assert/strict';
-import test from 'node:test';
 import {XMLParser} from 'fast-xml-parser';
 import {parse} from '@wordpress/block-serialization-default-parser';
 import {pool} from '../server/db.js';

@@ -1,5 +1,5 @@
+import { test } from "./isolated-test.js";
 import assert from "node:assert/strict";
-import { test } from "node:test";
 import { XMLParser, XMLValidator } from "fast-xml-parser";
 import sharp from "sharp";
 import { pool } from "../server/db.js";

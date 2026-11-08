@@ -1,6 +1,6 @@
+import test, { after } from "./isolated-test.js";
 import "dotenv/config";
 import assert from "node:assert/strict";
-import test, { after } from "node:test";
 import { DOMParser } from "linkedom";
 import { pool, postFields, defaultSettings } from "../server/db.js";
 import { renderSiteDocument, SUPPORTED_DYNAMIC_BLOCKS } from "../server/block-renderer.js";

@@ -1,6 +1,6 @@
+import { test, after } from "./isolated-test.js";
 import "dotenv/config";
 import assert from "node:assert/strict";
-import { test, after } from "node:test";
 import { parse } from "@wordpress/block-serialization-default-parser";
 import { DOMParser } from "linkedom";
 import { pool, postFields, getSettings } from "../server/db.js";

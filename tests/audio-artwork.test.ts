@@ -1,6 +1,6 @@
+import test, { after } from "./isolated-test.js";
 import "dotenv/config";
 import assert from "node:assert/strict";
-import test, { after } from "node:test";
 import sharp from "sharp";
 import { DOMParser } from "linkedom";
 import { inspectAudio, inspectAudioWithArtwork, MAX_AUDIO_ARTWORK_BYTES } from "../server/audio-metadata.js";

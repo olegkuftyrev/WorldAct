@@ -1,5 +1,5 @@
+import test, { after } from "./isolated-test.js";
 import "dotenv/config";
-import test, { after } from "node:test";
 import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
 import { readFile, writeFile, readdir } from "node:fs/promises";

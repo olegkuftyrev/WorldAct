@@ -1,6 +1,6 @@
+import test, { after } from "./isolated-test.js";
 import "dotenv/config";
 import assert from "node:assert/strict";
-import test, { after } from "node:test";
 import { createRequire, syncBuiltinESMExports } from "node:module";
 import { EventEmitter } from "node:events";
 import { readFile } from "node:fs/promises";

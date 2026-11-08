@@ -1,4 +1,4 @@
-import test from "node:test";
+import test from "./isolated-test.js";
 import assert from "node:assert/strict";
 const base = process.env.TEST_API_URL || "http://127.0.0.1:3001";
 test("legacy CMS URLs redirect to equivalent React screens without executing PHP", async () => {

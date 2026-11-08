@@ -1,5 +1,5 @@
+import test from "./isolated-test.js";
 import "dotenv/config";
-import test from "node:test";
 import assert from "node:assert/strict";
 
 const base = process.env.TEST_API_URL || "http://127.0.0.1:3001";

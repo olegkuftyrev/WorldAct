@@ -1,6 +1,6 @@
+import test, { after } from "./isolated-test.js";
 import "dotenv/config";
 import assert from "node:assert/strict";
-import test, { after } from "node:test";
 import { DOMParser } from "linkedom";
 import { backgroundStyles, safeBackgroundURL } from "../server/background-styles.js";
 import { cleanContent, cleanRawContent } from "../server/utils.js";

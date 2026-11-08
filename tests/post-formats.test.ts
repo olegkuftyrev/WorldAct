@@ -1,6 +1,6 @@
+import test from "./isolated-test.js";
 import "dotenv/config";
 import assert from "node:assert/strict";
-import test from "node:test";
 import { pool } from "../server/db.js";
 import { renderPublicContent } from "../server/block-renderer.js";
 import { postFormats } from "../shared/post-formats.js";

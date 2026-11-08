@@ -1,4 +1,4 @@
-import test from "node:test";
+import test from "./isolated-test.js";
 import assert from "node:assert/strict";
 import { spawn } from "node:child_process";
 import { rootDir } from "../server/db.js";

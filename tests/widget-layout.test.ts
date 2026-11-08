@@ -1,6 +1,6 @@
+import { after, test } from "./isolated-test.js";
 import "dotenv/config";
 import assert from "node:assert/strict";
-import { after, test } from "node:test";
 import { DOMParser } from "linkedom";
 import { pool } from "../server/db.js";
 import { renderSiteDocument } from "../server/block-renderer.js";

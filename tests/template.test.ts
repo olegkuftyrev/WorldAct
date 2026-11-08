@@ -1,4 +1,4 @@
-import test from "node:test";
+import test from "./isolated-test.js";
 import assert from "node:assert/strict";
 import { DOMParser as TestDOMParser } from "linkedom";
 import { renderTemplate } from "../src/template.js";

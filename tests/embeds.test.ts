@@ -1,5 +1,5 @@
+import test from "./isolated-test.js";
 import assert from "node:assert/strict";
-import test from "node:test";
 import { parseVideoEmbed } from "../src/embeds.js";
 
 test("video embeds derive player URLs only from recognized providers and IDs", () => {

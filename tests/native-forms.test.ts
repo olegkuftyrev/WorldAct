@@ -1,6 +1,6 @@
+import test from './isolated-test.js';
 import 'dotenv/config';
 import assert from 'node:assert/strict';
-import test from 'node:test';
 import {pool} from '../server/db.js';
 const root=process.env.TEST_API_URL||'http://127.0.0.1:3001',origin=process.env.APP_ORIGIN||'http://127.0.0.1:5173';
 async function api(path:string,method='GET',body?:unknown,cookie=''){

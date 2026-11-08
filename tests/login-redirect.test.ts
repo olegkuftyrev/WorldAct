@@ -1,5 +1,5 @@
+import { test } from "./isolated-test.js";
 import assert from "node:assert/strict";
-import { test } from "node:test";
 import { normalizeLoginRedirect } from "../src/loginRedirect.js";
 test("public login returns stay on this site and reject encoded external prefixes and auth loops",()=>{
   const origin="https://worldact.example";

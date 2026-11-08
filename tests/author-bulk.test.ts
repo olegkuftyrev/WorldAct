@@ -1,6 +1,6 @@
+import test from "./isolated-test.js";
 import "dotenv/config";
 import assert from "node:assert/strict";
-import test from "node:test";
 const base = process.env.TEST_API_URL || "http://127.0.0.1:3001";
 const origin = process.env.APP_ORIGIN || "http://127.0.0.1:5173";
 const cookieOf = (response: Response) => (response.headers.get("set-cookie") || "").split(";")[0];

@@ -1,5 +1,5 @@
+import test from "./isolated-test.js";
 import "dotenv/config";
-import test from "node:test";
 import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
 import { pool } from "../server/db.js";

@@ -1,5 +1,5 @@
+import test from "./isolated-test.js";
 import assert from "node:assert/strict";
-import test from "node:test";
 import {contentPageQuery} from "../src/contentPages.js";
 
 test("singular content pages preserve canonical resolver context separately from unrelated query loops",()=>{

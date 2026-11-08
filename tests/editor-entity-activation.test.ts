@@ -1,4 +1,4 @@
-import test from "node:test";
+import test from "./isolated-test.js";
 import assert from "node:assert/strict";
 import {select} from "@wordpress/data";
 import {setEditorPreview,removeEditorPreview,activateEditorPreview} from "../src/editor/editorPreviewStore.js";

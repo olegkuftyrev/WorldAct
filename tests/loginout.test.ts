@@ -1,6 +1,6 @@
+import test, { after } from "./isolated-test.js";
 import "dotenv/config";
 import assert from "node:assert/strict";
-import test, { after } from "node:test";
 import { createHash } from "node:crypto";
 import { DOMParser } from "linkedom";
 import { pool } from "../server/db.js";

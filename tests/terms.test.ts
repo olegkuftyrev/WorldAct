@@ -1,5 +1,5 @@
+import test, { after } from "./isolated-test.js";
 import "dotenv/config";
-import test, { after } from "node:test";
 import assert from "node:assert/strict";
 import { pool } from "../server/db.js";
 after(async () => { await pool.end(); });

@@ -1,5 +1,5 @@
+import { test } from "./isolated-test.js";
 import assert from "node:assert/strict";
-import { test } from "node:test";
 import { DOMParser } from "linkedom";
 import { readFootnotes, synchronizeFootnotes, rememberFootnotes } from "../src/editor/footnotes.js";
 const parseHTML=(html:string)=>new DOMParser().parseFromString(`<!doctype html><html><body>${html}</body></html>`,"text/html") as unknown as Document;

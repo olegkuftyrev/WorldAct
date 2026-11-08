@@ -1,6 +1,6 @@
+import test, {after} from "./isolated-test.js";
 import "dotenv/config";
 import assert from "node:assert/strict";
-import test, {after} from "node:test";
 import {DOMParser} from "linkedom";
 import {XMLParser} from "fast-xml-parser";
 import {pool,defaultSettings,getPost} from "../server/db.js";

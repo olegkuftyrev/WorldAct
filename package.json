@@ -14,7 +14,7 @@
     "typecheck": "tsc --noEmit",
     "db:migrate": "tsx server/migrate.ts",
     "db:seed": "tsx server/seed.ts",
-    "test": "tsx --test --test-concurrency=1 tests/*.test.ts",
+    "test": "node scripts/test-isolated.mjs",
     "setup": "node scripts/setup.mjs",
     "test:isolated": "node scripts/test-isolated.mjs"
   },

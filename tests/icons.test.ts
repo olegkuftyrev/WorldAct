@@ -1,6 +1,6 @@
+import test, { after } from "./isolated-test.js";
 import "dotenv/config";
 import assert from "node:assert/strict";
-import test, { after } from "node:test";
 import { DOMParser } from "linkedom";
 import { auditBundledIcon, bundledIcons, getBundledIcon } from "../server/icons.js";
 import { renderPublicContent, renderSiteDocument, SUPPORTED_DYNAMIC_BLOCKS } from "../server/block-renderer.js";

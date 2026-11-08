@@ -1,12 +1,12 @@
+import test from "./isolated-test.js";
 import "dotenv/config";
-import test from "node:test";
 import assert from "node:assert/strict";
 import { writeFile, readFile, readdir } from "node:fs/promises";
 import path from "node:path";
 import sharp from "sharp";
 import {createHash} from "node:crypto";
 import {uploadsDir,pool} from "../server/db.js";
-import {after} from "node:test";
+import {after} from "./isolated-test.js";
 after(()=>pool.end());
 
 const stage = process.env.SITE_ARCHIVE_STAGE;

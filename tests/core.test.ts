@@ -1,6 +1,6 @@
+import { test } from "./isolated-test.js";
 import assert from "node:assert/strict";
 import { pool } from "../server/db.js";
-import { test } from "node:test";
 import { publishDuePosts } from "../server/core.js";
 const base = process.env.TEST_API_URL || "http://127.0.0.1:3001",
   origin = process.env.APP_ORIGIN || "http://127.0.0.1:5173";

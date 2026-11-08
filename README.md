@@ -57,7 +57,7 @@ npm run test:isolated
 npm run build
 ```
 
-The isolated runner creates a disposable local database, upload directory and API on port 3004, forces mail to the local outbox, and removes its database/files afterward. It restarts the API between test files so the production login limit remains unchanged. It does not change your configured site data. `ISOLATED_TEST_PORT` changes the test port; `ISOLATED_TEST_COMPILED=true` tests a fresh compiled build. `npm test` instead targets an already-running API and the database in the environment; those tests temporarily change and restore settings. `TEST_API_URL` overrides that API address.
+Both `npm test` and `npm run test:isolated` create a disposable local database, upload directory and API on port 3004, force mail to the local outbox, and remove their database/files afterward. The runner restarts the API between test files so the production login limit remains unchanged. It leaves your configured site's data alone. `ISOLATED_TEST_PORT` changes the test port; `ISOLATED_TEST_COMPILED=true` tests a fresh compiled build. Use `npm test -- tests/example.test.ts` for selected files. Every test imports a guard before application modules; direct test invocations without the runner's disposable database, upload directory, API and outbox context stop before fixtures run.
 
 The cross-site archive test has separate export/restore phases on fresh databases; see [verification](docs/parity.md).
 The GitHub Actions workflow runs source and compiled checks on Node 22/24 with PostgreSQL 17, plus fresh-database site/font archive restores on Node 24. Test credentials and storage are disposable; SMTP is forced off.

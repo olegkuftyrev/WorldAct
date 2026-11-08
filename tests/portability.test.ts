@@ -1,6 +1,6 @@
+import test from "./isolated-test.js";
 import "dotenv/config";
 import assert from "node:assert/strict";
-import test from "node:test";
 import { parse } from "@wordpress/block-serialization-default-parser";
 import { remapImportedBlockReferences } from "../server/block-portability.js";
 

@@ -1,6 +1,6 @@
+import test, { after } from "./isolated-test.js";
 import "dotenv/config";
 import assert from "node:assert/strict";
-import test, { after } from "node:test";
 import { createHash, randomBytes } from "node:crypto";
 import type { PoolClient } from "pg";
 import { pool } from "../server/db.js";
