@@ -89,6 +89,8 @@ test("native editing accepts only current metadata URLs and uses the retained ra
   const clone = (await api(`/api/media/${rawResult.data.id}`)).data.media;
   const edit = await api(`/api/media/${clone.id}/edit`, "POST", { rotate: 90 }); assert.equal(edit.response.status, 200);
   const restore = await api(`/api/media/${clone.id}/restore`, "POST", {}); assert.equal(restore.response.status, 200); assert.equal(restore.data.media.filename, clone.filename);
+  assert.equal((await api(`/api/media/${clone.id}`, "DELETE")).response.status, 200); media.delete(clone.id);
+  assert.equal((await fetch(base + source.url)).status, 200); assert.equal((await fetch(base + source.originalUploadUrl)).status, 200);
   const row = (await pool.query("SELECT * FROM media WHERE id=$1", [source.id])).rows[0], original = row.derivatives["original-upload"];
   await rename(path.join(uploadsDir, original), path.join(uploadsDir, original + ".test-missing"));
   try { assert.equal((await copy(source.id, { src: native.source_url, modifiers: [rotate()] })).response.status, 404); }
