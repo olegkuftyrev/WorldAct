@@ -1,0 +1,146 @@
+{
+  "runtime_base": "c3d16da7f897f51806d79355ff9bae351586b023",
+  "immutable_probe_commit": "b7f3164afc9342c7cf8d9e3af8c3a2312f58cabd",
+  "runtime_change_commit": "ab3b85483322c0a87fbec8231eb8b18634edb341",
+  "final_code_commit": "d2f491f21ef4a3b650c4622a75b5b33d5058e00a",
+  "node": "v24.14.1",
+  "immutable_probe_sha256": "16963dc3d67a835b766cb12b893c89685952df19373e44e217a12af0348a578e",
+  "records": {
+    "before-source-sequential": {
+      "log_filename": "worldact-incoming-flood-before-source-sequential.log",
+      "sha256": "1ba6bb9560fb2e9aab1ee4affea0418ab074bd3ad484fba4b39f29ae9116c4cf",
+      "exit_code": 1,
+      "counts": {
+        "tests": 24,
+        "pass": 4,
+        "fail": 20,
+        "skipped": 0
+      }
+    },
+    "before-compiled": {
+      "log_filename": "worldact-incoming-flood-before-compiled.log",
+      "sha256": "951a55223770ccd738db54ae4e5d949f18922e5e79194c9727d5cd1d8bc66eb4",
+      "exit_code": 1,
+      "counts": {
+        "tests": 24,
+        "pass": 4,
+        "fail": 20,
+        "skipped": 0
+      }
+    },
+    "after-source": {
+      "log_filename": "worldact-incoming-flood-after-source.log",
+      "sha256": "5876c19406b4e4cf4f7435ff6b115b7f2816e173cd360ee8ba43ec614788e15b",
+      "exit_code": 0,
+      "counts": {
+        "tests": 42,
+        "pass": 42,
+        "fail": 0,
+        "skipped": 0
+      }
+    },
+    "after-compiled": {
+      "log_filename": "worldact-incoming-flood-after-compiled.log",
+      "sha256": "bfca0cdbd145182b5f5c1032b0e30d8b132a1aa7b8ef43c2132f764be626119b",
+      "exit_code": 0,
+      "counts": {
+        "tests": 42,
+        "pass": 42,
+        "fail": 0,
+        "skipped": 0
+      }
+    },
+    "production-source": {
+      "log_filename": "worldact-incoming-flood-production-source.log",
+      "sha256": "84f4d3dedeab404a796d8b0ee0b0e6d7e86a597c7061ee181a60f8c05699fa75",
+      "exit_code": 0,
+      "counts": {
+        "tests": 6,
+        "pass": 6,
+        "fail": 0,
+        "skipped": 0
+      }
+    },
+    "production-compiled": {
+      "log_filename": "worldact-incoming-flood-production-compiled.log",
+      "sha256": "cf5b640f6d2e6bcccef8d3653d8cd465e51d811ed5a01c150ef456d4e966f751",
+      "exit_code": 0,
+      "counts": {
+        "tests": 6,
+        "pass": 6,
+        "fail": 0,
+        "skipped": 0
+      }
+    },
+    "related-source": {
+      "log_filename": "worldact-incoming-flood-related-source.log",
+      "sha256": "bc1114fa67fe500b44540c9a4dab06c4987c368f1f88a74b7df65daf97b16794",
+      "exit_code": 0,
+      "counts": {
+        "tests": 76,
+        "pass": 76,
+        "fail": 0,
+        "skipped": 0
+      }
+    },
+    "related-compiled": {
+      "log_filename": "worldact-incoming-flood-related-compiled.log",
+      "sha256": "12cd943e69d49fceda8ae23d48671b0ed9bd56574606fc66548ce19dd884f670",
+      "exit_code": 0,
+      "counts": {
+        "tests": 76,
+        "pass": 76,
+        "fail": 0,
+        "skipped": 0
+      }
+    },
+    "final-three-source": {
+      "log_filename": "worldact-incoming-flood-final-three-source.log",
+      "sha256": "63c8b8f54313f548a0da71c5794f35b75fcf1e7a19257f944f90e538ff412460",
+      "exit_code": 0,
+      "counts": {
+        "tests": 48,
+        "pass": 48,
+        "fail": 0,
+        "skipped": 0
+      }
+    },
+    "final-three-compiled": {
+      "log_filename": "worldact-incoming-flood-final-three-compiled.log",
+      "sha256": "252c9dac410e7824547ac703cbdc1a180b6a87438364d2ba11a119e93cc65694",
+      "exit_code": 0,
+      "counts": {
+        "tests": 48,
+        "pass": 48,
+        "fail": 0,
+        "skipped": 0
+      }
+    }
+  },
+  "totals_nonoverlapping_per_mode": {
+    "passed": 124,
+    "failed": 0,
+    "skipped": 0,
+    "files": 15,
+    "composition": "final-three48 + related76; earlier repeats excluded"
+  },
+  "invalid_attempt": {
+    "log_filename": "worldact-incoming-flood-before-source.log",
+    "reason": "Initial source and compiled guards shared the owned fixed router3062. The source listen failed EADDRINUSE; the valid sequential source baseline replaced this attempt, without overwriting the receipt."
+  },
+  "build": {
+    "typecheck_exit_code": 0,
+    "vite_exit_code": 0,
+    "esbuild_exit_code": 0,
+    "runtime_bundle_sha256": "350946d241ead9e6fbe3cdd3ab354fab98f1a66974483a7f236dce81f004bdba",
+    "build_runtime_commit": "ab3b85483322c0a87fbec8231eb8b18634edb341",
+    "final_code_runtime_byte_identical_to_build": true,
+    "final_typecheck_filename": "worldact-incoming-flood-final-typecheck.log",
+    "build_log_filename": "worldact-incoming-flood-after-build.log"
+  },
+  "limits": [
+    "Injected verifier/Akismet calls execute source imports in both guard modes; the real production-entry trackback test executes the selected source/compiled receiver.",
+    "Final-race rejection cannot undo completed external filtering or its existing global connector-health update; no retained per-comment IP/Akismet row or mail is inserted.",
+    "No external delivery, PHP/MySQL execution, UI/visual certificate, benchmark, full-suite or full-CMS parity claim."
+  ]
+}

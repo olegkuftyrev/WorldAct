@@ -44,11 +44,18 @@ archives expose no flood metadata. Personal-data exports are the explicit privat
 exception and include only matching account/email-linked unexpired records.
 
 Successful human comments, including exempt moderators’ comments, and newly
-admitted verified pings store the record atomically. Incoming ping verification,
-leases, identity and existing rate policy remain intact. **Ping flood enforcement
-itself is separate**; their saved records can be predecessors for a later human
-submission, as the source query requires. Imports and administrative creation do
-not invent an unknown source IP. Akismet remains optional and independent.
+admitted pingbacks/trackbacks store the record atomically. Incoming notifications
+now enforce this same ordinary interval anonymously, after real verification or
+bounded trackback parsing, and recheck it under the final admission lock before
+inserting. Their empty email comparison remains unconditional; actual request IP
+is the other guest match. A short locked metadata precheck avoids external
+filtering for already known floods; a final check rejects a predecessor committed
+while I/O was in flight. Duplicate48 precedes flooding, and the source protocol
+keeps generic XML-RPC fault0 / Trackback error1 instead of exposing HTTP429.
+Verification, leases, identity and separate persistent attempt rates remain
+intact. Saved ping records also remain predecessors for later human submissions.
+See [incoming receiver ordering and verification](incoming-pings.md). Imports
+and administrative creation do not invent an unknown source IP. Akismet remains optional and independent.
 
 Metadata logically expires after one hour and never affects admission after
 expiry. A bounded500-record cleanup batch runs at startup and each scheduler
