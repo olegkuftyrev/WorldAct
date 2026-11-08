@@ -25,6 +25,8 @@ test("civil grammar, explicit-zone formatting and chosen fixed/floating pairs ar
  assert.deepEqual(resolvePostDate({},fixed,"publish","+05:45",now),{postDate:fixed.postDate,postDateGmt:fixed.postDateGmt});
  for(const bad of [undefined,3,{},"2024-01-01T00:00:00"]){assert.throws(()=>publicationPair("2024-01-01T00:00:00",bad),{status:400});}
  assert.throws(()=>civilFromInstant("2024-01-01T00:00:00","UTC"),/explicit UTC offset/);
+ assert.throws(()=>civilFromInstant("2024-01-01T00:00:00Z","Unknown/Zone"),/timezone is invalid/);
+ assert.equal(civilFromInstant("2024-01-01T00:00:00Z","+0545"),"2024-01-01T05:45:00");
  const chosen={...fixed,publishedAt:fixed.postDateGmt};assert.deepEqual(resolvePostDate({publishedAt:fixed.postDateGmt},chosen,"publish","+05:45",now),{postDate:fixed.postDate,postDateGmt:fixed.postDateGmt});
  const future={...fixed,status:"future",publishedAt:"1999-01-01T00:00:00Z",scheduledAt:fixed.postDateGmt};assert.equal(resolvePostDate({scheduledAt:fixed.postDateGmt},future,"future","+05:45",now).postDate,fixed.postDate);
  const float={status:"draft",postDate:"2000-01-01T00:00:00",postDateGmt:null};assert.deepEqual(resolvePostDate({postDate:float.postDate},float,"publish","UTC",now),{postDate:"2026-01-01T00:00:00",postDateGmt:now.toISOString()});
