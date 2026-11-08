@@ -1,4 +1,5 @@
 import {renderPublicTemplateDocument} from "./public-presentation.js";
+import {completePublicRead} from "./public-read-attempt.js";
 import {pingbackHeader} from "./incoming-ping-policy.js";
 import express, { type Request, type Response } from "express";
 import { createHash } from "node:crypto";
@@ -793,6 +794,7 @@ router.all(
   },
 );
 router.get("/api/public/templates/:slug", async (req:AuthRequest, res) => {
+  const output=await completePublicRead(postAccessReader(req),async reader=>{
   const settings = await getSettings();
   const templateSlug = z
       .string()
@@ -845,7 +847,7 @@ router.get("/api/public/templates/:slug", async (req:AuthRequest, res) => {
       typeof value === "string"
     )
       query[key] = value.slice(0, 300);
-  res.json({
+  return {
     document: {
       id: doc.id,
       slug: doc.slug,
@@ -865,9 +867,11 @@ router.get("/api/public/templates/:slug", async (req:AuthRequest, res) => {
       placeholderBindings: false,
       user: (req as AuthRequest).user,
       preview,
-      canReadProtectedPost: postAccessReader(req),
+      canReadProtectedPost: reader,
     }),
+  };
   });
+  res.json(output);
 });
 router.use(
   "/wp-json",

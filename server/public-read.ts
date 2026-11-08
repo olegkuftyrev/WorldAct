@@ -9,6 +9,7 @@ import { renderedCommentContent } from "./comment-policy.js";
 import { avatarURL } from "./avatars.js";
 import { appendPostDateArchiveSQL, dateArchiveDTO, parseDateArchiveQuery } from "./date-archives.js";
 import { HttpError } from "./utils.js";
+import {completePublicRead,observePublicPost,settledPublicReads} from "./public-read-attempt.js";
 
 export type PublicReadContext = {
   query: Record<string, unknown>; requestPath?: string; user?: User;
@@ -18,7 +19,12 @@ function decoratePost(post: any) {
   const terms=post.terms || [];
   return {...post,terms,categories:terms.filter((term:any)=>term.taxonomy==="category"),tags:terms.filter((term:any)=>term.taxonomy==="tag"),categoryIds:terms.filter((term:any)=>term.taxonomy==="category").map((term:any)=>term.id),tagIds:terms.filter((term:any)=>term.taxonomy==="tag").map((term:any)=>term.id)};
 }
-export async function publicPost(post: any, locked = false, options: RenderOptions = {}) {
+export async function publicPost(post:any,locked=false,options:RenderOptions={}){
+  if(options.preview || !options.canReadProtectedPost)return publicPostOnce(post,locked,options);
+  return completePublicRead(options.canReadProtectedPost,reader=>publicPostOnce(post,locked,{...options,canReadProtectedPost:reader}),options.db || pool);
+}
+async function publicPostOnce(post: any, locked = false, options: RenderOptions = {}) {
+  if(!options.preview)observePublicPost(options.canReadProtectedPost,{...post,locked});
   const {
     blocks: _blocks,
     rawContent: _rawContent,
@@ -37,6 +43,7 @@ export async function publicPost(post: any, locked = false, options: RenderOptio
     linked.hasPassword=current.hasPassword;
     locked=Boolean(current.hasPassword) && !(options.canReadProtectedPost && await options.canReadProtectedPost(post.id,db));
   }
+  if(!options.preview)observePublicPost(options.canReadProtectedPost,{...linked,locked});
   const result = {
     ...linked,
     commentCount: safe.approvedCommentCount ?? safe.commentCount ?? 0,
@@ -74,7 +81,10 @@ export async function commentResponse(postId: number, context: PublicReadContext
     },
   };
 }
-export async function readPublicSite(context: PublicReadContext) {
+export function readPublicSite(context:PublicReadContext){
+  return completePublicRead(context.canReadProtectedPost,reader=>readPublicSiteOnce({...context,canReadProtectedPost:reader}));
+}
+async function readPublicSiteOnce(context: PublicReadContext) {
   const filter = z
     .object({
       page: z.coerce.number().int().positive().max(2_147_483_647).default(1),
@@ -135,7 +145,7 @@ export async function readPublicSite(context: PublicReadContext) {
       ).rows[0]
     : null;
   const totalPosts = count.rows[0].total;
-  const safePages = await Promise.all(pages.rows.map(post => sanitize(post)));
+  const safePages = await settledPublicReads(pages.rows.map(post => sanitize(post)));
   const frontPage =
     settings.frontPageMode === "page"
       ? (safePages.find((page) => page.id === settings.frontPageId) ?? null)
@@ -149,7 +159,7 @@ export async function readPublicSite(context: PublicReadContext) {
       siteIconSizes:icon?.sizes || {},
     },
     archive: dateArchive ? dateArchiveDTO(dateArchive) : author ? { type: "author", name: author.name, authorId: filter.author } : null,
-    posts: await Promise.all(posts.rows.map(post => sanitize(post, "archive"))),
+    posts: await settledPublicReads(posts.rows.map(post => sanitize(post, "archive"))),
     pages: safePages,
     frontPage,
     postsPage,
@@ -163,7 +173,10 @@ export async function readPublicSite(context: PublicReadContext) {
 
 /** Body acquisition is independently fenced to the already resolved immutable
  * identity/type and current publication. A later slug reassignment cannot win. */
-export async function readPublishedPostById(id: number, type: "post" | "page", context: PublicReadContext) {
+export function readPublishedPostById(id:number,type:"post"|"page",context:PublicReadContext){
+  return completePublicRead(context.canReadProtectedPost,reader=>readPublishedPostByIdOnce(id,type,{...context,canReadProtectedPost:reader}));
+}
+async function readPublishedPostByIdOnce(id: number, type: "post" | "page", context: PublicReadContext) {
   const row=(await pool.query(`SELECT ${postFields},p.password_hash AS "_passwordHash" FROM posts p JOIN users u ON u.id=p.author_id WHERE p.id=$1 AND p.type=$2 AND p.status='publish'`,[id,type])).rows[0];
   if(!row) throw new HttpError(404,"Post not found.");
   const {_passwordHash,...post}=row;

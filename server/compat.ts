@@ -8,7 +8,8 @@ import express, {
 } from "express";
 import { XMLParser, XMLValidator } from "fast-xml-parser";
 import { randomBytes } from "node:crypto";
-import { renderPublicContent } from "./block-renderer.js";
+import { renderPublicContent,type RenderOptions } from "./block-renderer.js";
+import {completePublicRead,observePublicPost,settledPublicReads,editorialPostReader} from "./public-read-attempt.js";
 import { restLocalDate, restDateToUTC } from "./date.js";
 import { remapImportedBlockReferences } from "./block-portability.js";
 import { allocateImportedBlockEntities } from "./site-portability.js";
@@ -180,6 +181,7 @@ router.get("/api/public/resolve", async (req, res) => {
   res.json({...data,...(resolved.contentPage?{contentPage:resolved.contentPage}:{})});
 });
 async function feedPosts(req: Request) {
+  return completePublicRead(postAccessReader(req),async canReadProtectedPost=>{
   const settings = await getSettings();
   const posts = (
     await pool.query(
@@ -187,12 +189,12 @@ async function feedPosts(req: Request) {
       [settings.feedItems],
     )
   ).rows;
-  const canReadProtectedPost = postAccessReader(req);
   return {
     settings,
-    posts: await Promise.all(
+    posts: await settledPublicReads(
       posts.map(async (p) => {
         const locked = postHasPassword(p) && !(await canReadProtectedPost(p.id, pool));
+        observePublicPost(canReadProtectedPost,{...p,locked});
         return withPermalink(
           { ...p, title: publicPostTitle(p), excerpt: locked ? protectedPostExcerpt : p.excerpt, content: await renderPublicContent({ ...p, locked }, { canReadProtectedPost, contentMode: "feed" }) },
           settings,
@@ -200,6 +202,7 @@ async function feedPosts(req: Request) {
       }),
     ),
   };
+  });
 }
 router.get(
   ["/feed", "/feed/", "/feed/rss2", "/feed/rss2/", "/rss.xml"],
@@ -223,25 +226,26 @@ router.get(["/feed/atom", "/feed/atom/", "/atom.xml"], async (req, res) => {
       `<?xml version="1.0" encoding="UTF-8"?><feed xmlns="http://www.w3.org/2005/Atom"><title>${esc(settings.siteTitle)}</title><subtitle>${esc(settings.tagline)}</subtitle><id>${esc(settings.siteUrl)}</id><link href="${esc(absolute("/feed/atom/", settings.siteUrl))}" rel="self"/><link href="${esc(settings.siteUrl)}"/><updated>${posts[0] ? iso(posts[0].updatedAt) : new Date().toISOString()}</updated>${posts.map((p) => `<entry><title>${esc(p.title)}</title><id>urn:worldact:post:${p.id}</id><link href="${esc(absolute(p.permalink, settings.siteUrl))}"/><published>${iso(p.publishedAt)}</published><updated>${iso(p.updatedAt)}</updated><author><name>${esc(p.authorName)}</name></author><summary>${esc(p.excerpt || excerptText(p.content).slice(0, 400))}</summary><content type="html">${esc(settings.feedExcerpt ? p.excerpt || excerptText(p.content).slice(0, 400) : p.content)}</content></entry>`).join("")}</feed>`,
     );
 });
-router.get(["/comments/feed", "/comments/feed/"], async (_req, res) => {
+router.get(["/comments/feed", "/comments/feed/"], async (req, res) => {
+  const xml=await completePublicRead(postAccessReader(req),async reader=>{
   const settings = await getSettings();
   const comments = (
     await pool.query(
-      `SELECT c.id,c.author_name,c.content,c.created_at,p.id AS post_id,p.type,p.slug,p.title,p.published_at,p.parent_id FROM comments c JOIN posts p ON p.id=c.post_id WHERE c.status='approved' AND p.status='publish' AND p.password_hash IS NULL ORDER BY c.created_at DESC,c.id DESC LIMIT $1`,
+      `SELECT c.id,c.author_name,c.content,c.created_at,p.id AS post_id,p.author_id AS "authorId",p.type,p.slug,p.title,p.published_at,p.parent_id FROM comments c JOIN posts p ON p.id=c.post_id WHERE c.status='approved' AND p.status='publish' AND p.password_hash IS NULL ORDER BY c.created_at DESC,c.id DESC LIMIT $1`,
       [settings.feedItems],
     )
   ).rows;
-  const entries = await Promise.all(
+  const entries = await settledPublicReads(
     comments.map(
-      async (c) =>
-        `<item><title>${esc("Comment on " + c.title + " by " + c.author_name)}</title><link>${esc(absolute(await postPermalink({ ...c, id: c.post_id }, settings), settings.siteUrl) + "#comment-" + c.id)}</link><guid isPermaLink="false">worldact:comment:${c.id}</guid><pubDate>${new Date(c.created_at).toUTCString()}</pubDate><dc:creator>${cdata(c.author_name)}</dc:creator><description>${cdata(c.content)}</description></item>`,
+      async (c) => {
+        observePublicPost(reader,{...c,id:c.post_id,hasPassword:false,locked:false});
+        return `<item><title>${esc("Comment on " + c.title + " by " + c.author_name)}</title><link>${esc(absolute(await postPermalink({ ...c, id: c.post_id }, settings), settings.siteUrl) + "#comment-" + c.id)}</link><guid isPermaLink="false">worldact:comment:${c.id}</guid><pubDate>${new Date(c.created_at).toUTCString()}</pubDate><dc:creator>${cdata(c.author_name)}</dc:creator><description>${cdata(c.content)}</description></item>`;
+      },
     ),
   );
-  res
-    .type("application/rss+xml")
-    .send(
-      `<?xml version="1.0" encoding="UTF-8"?><rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/"><channel><title>${esc("Comments for " + settings.siteTitle)}</title><link>${esc(settings.siteUrl)}</link><description>${esc(settings.tagline)}</description>${entries.join("")}</channel></rss>`,
-    );
+  return `<?xml version="1.0" encoding="UTF-8"?><rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/"><channel><title>${esc("Comments for " + settings.siteTitle)}</title><link>${esc(settings.siteUrl)}</link><description>${esc(settings.tagline)}</description>${entries.join("")}</channel></rss>`;
+  });
+  res.type("application/rss+xml").send(xml);
 });
 router.get(["/sitemap.xml", "/wp-sitemap.xml"], async (_req, res) => {
   const settings = await getSettings();
@@ -352,14 +356,16 @@ async function postEmbeddings(post: any, req: Request) {
   }
   return Object.keys(embedded).length ? { _embedded: embedded } : {};
 }
-async function wpPost(post: any, req: AuthRequest, edit = false) {
+async function wpPost(post: any, req: AuthRequest, edit = false,reader:NonNullable<RenderOptions["canReadProtectedPost"]>=postAccessReader(req)) {
+  const own = canEdit(req.user, post);
+  if(own)reader=editorialPostReader(reader,post);
+  if(!edit)observePublicPost(reader,{...post,locked:Boolean(post.hasPassword)},!post.hasPassword);
   const settings = await getSettings(),
     link = absolute(await postPermalink(post, settings), settings.siteUrl);
   const publicationDate = (post.status === "future" ? post.scheduledAt : null) || post.publishedAt || post.createdAt;
   const protectedPost = !!post.hasPassword;
-  const own = canEdit(req.user, post);
   const raw = edit && own ? post.rawContent || post.content : undefined;
-  const rendered = protectedPost && !own ? "" : await renderPublicContent({ ...post, locked: false }, { user: req.user, requestPath: await postPermalink(post, settings), query: req.query, preview: edit, contentMode: "complete", canReadProtectedPost: postAccessReader(req) });
+  const rendered = protectedPost && !own ? "" : await renderPublicContent({ ...post, locked: false }, { user: req.user, requestPath: await postPermalink(post, settings), query: req.query, preview: edit, contentMode: "complete", canReadProtectedPost: reader });
   const excerptWords = excerptText(legacyExcerptSource(post)).trim().split(/\s+/).filter(Boolean);
   const excerpt = protectedPost && !own ? "" : post.excerpt
     ? `<p>${esc(post.excerpt)}</p>`
@@ -499,6 +505,7 @@ for (const collection of ["posts", "pages"] as const) {
     res.json({ namespace: "wp/v2", methods, schema: postRestSchema });
   });
   router.get("/wp-json/wp/v2/" + collection, async (req: AuthRequest, res) => {
+    const output=await completePublicRead(postAccessReader(req),async reader=>{
     res.setHeader("Allow", createAllowed(req.user) ? "GET, POST" : "GET");
     const edit = req.query.context === "edit",
       user = req.user;
@@ -643,16 +650,17 @@ for (const collection of ["posts", "pages"] as const) {
         args,
       )
     ).rows;
-    res.json(
-      wpFields(
+    return wpFields(
         req,
-        await Promise.all(rows.map((post) => wpPost(post, req, edit))),
-      ),
-    );
+        await settledPublicReads(rows.map((post) => wpPost(post, req, edit,reader))),
+      );
+    });
+    res.json(output);
   });
   router.get(
     "/wp-json/wp/v2/" + collection + "/:id",
     async (req: AuthRequest, res) => {
+      const output=await completePublicRead(postAccessReader(req),async reader=>{
       const post = await getPost(parseId(req.params.id));
       if (!post || post.type !== type)
         throw new HttpError(404, "Post not found.");
@@ -662,7 +670,9 @@ for (const collection of ["posts", "pages"] as const) {
       if (edit && !canEdit(req.user, post))
         throw new HttpError(req.user ? 403 : 401, "You cannot edit this post.");
       res.setHeader("Allow", canEdit(req.user, post) ? "GET, POST, PUT, PATCH, DELETE" : "GET");
-      res.json(wpFields(req, await wpPost(post, req, edit)));
+      return wpFields(req, await wpPost(post, req, edit,reader));
+      });
+      res.json(output);
     },
   );
   const mutation = async (req: AuthRequest, res: Response) => {

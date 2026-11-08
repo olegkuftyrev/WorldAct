@@ -2,6 +2,7 @@ import moment from "moment-timezone";
 import { date as formatDate } from "@wordpress/date";
 import type { Context, Node, RenderPost, State } from "./block-renderer.js";
 import { postPermalink } from "./permalinks.js";
+import {observePublicPost} from "./public-read-attempt.js";
 import { avatarURL } from "./avatars.js";
 import { cleanContent, plainText, HttpError } from "./utils.js";
 import { excerptText } from "./excerpts.js";
@@ -28,7 +29,10 @@ const postDate = (value: unknown, state: State) => {
   const date = localMoment(value, state.settings.timezone);
   return date.isValid() ? formatDate(state.settings.dateFormat, date.toISOString(), state.settings.timezone) : "";
 };
-const permalink = (post: RenderPost, state: State) => cached(state, `link:${post.id}`, () => postPermalink(post, state.settings, state.db));
+const permalink = (post:RenderPost,state:State)=>{
+  if(!state.options.preview)observePublicPost(state.options.canReadProtectedPost,post,false);
+  return cached(state,`link:${post.id}`,()=>postPermalink(post,state.settings,state.db));
+};
 const excerpt = (value: string, limit: number) => {
   const words = plainText(value).trim().split(/\s+/).filter(Boolean);
   return { text: words.slice(0, limit).join(" "), trimmed: words.length > limit };
@@ -96,6 +100,7 @@ async function latestPosts(node: Node, context: Context, state: State, attribute
       const granted=sameUnlockedPost || (state.options.canReadProtectedPost ? await cached(state,`post-access:${post.id}`,()=>state.options.canReadProtectedPost!(post.id,state.db)):false);
       post={...post,locked:!granted};
     }
+    if(!state.options.preview)observePublicPost(state.options.canReadProtectedPost,{...post,locked:protectedPost(post)},Boolean(a.displayPostContent));
     const url = await permalink(post, state), title = titleOf(post); let item = "";
     const image = images.get(post.featuredMediaId);
     if (image) {
@@ -126,12 +131,13 @@ async function latestPosts(node: Node, context: Context, state: State, attribute
 
 async function latestComments(node: Node, state: State, attributes: (extra?: string) => string) {
   const a = node.attrs, limit = number(a.commentsToShow, 5);
-  const records = await cached(state, `widget-latest-comments:${limit}`, async () => (await state.db.query(`SELECT c.id,c.author_name AS "authorName",c.author_email AS "avatarEmail",c.author_url AS "authorUrl",c.user_id AS "userId",c.content AS "commentContent",c.created_at AS "commentDate",p.id AS "postId",p.title,p.slug,p.type,p.parent_id AS "parentId",p.published_at AS "publishedAt",p.created_at AS "createdAt",(p.password_hash IS NOT NULL) AS "hasPassword",p.post_date AS "postDate",p.post_date_gmt AS "postDateGmt",COALESCE((SELECT json_agg(json_build_object('id',t.id,'taxonomy',t.taxonomy,'slug',t.slug) ORDER BY t.name,t.id) FROM post_terms pt JOIN terms t ON t.id=pt.term_id WHERE pt.post_id=p.id),'[]'::json) AS terms FROM comments c JOIN posts p ON p.id=c.post_id WHERE c.status='approved' AND p.status='publish' ORDER BY c.created_at DESC,c.id DESC LIMIT $1`, [limit])).rows);
+  const records = await cached(state, `widget-latest-comments:${limit}`, async () => (await state.db.query(`SELECT c.id,c.author_name AS "authorName",c.author_email AS "avatarEmail",c.author_url AS "authorUrl",c.user_id AS "userId",c.content AS "commentContent",c.created_at AS "commentDate",p.id AS "postId",p.author_id AS "authorId",p.title,p.slug,p.type,p.parent_id AS "parentId",p.published_at AS "publishedAt",p.created_at AS "createdAt",(p.password_hash IS NOT NULL) AS "hasPassword",p.post_date AS "postDate",p.post_date_gmt AS "postDateGmt",COALESCE((SELECT json_agg(json_build_object('id',t.id,'taxonomy',t.taxonomy,'slug',t.slug) ORDER BY t.name,t.id) FROM post_terms pt JOIN terms t ON t.id=pt.term_id WHERE pt.post_id=p.id),'[]'::json) AS terms FROM comments c JOIN posts p ON p.id=c.post_id WHERE c.status='approved' AND p.status='publish' ORDER BY c.created_at DESC,c.id DESC LIMIT $1`, [limit])).rows);
   const display = a.displayExcerpt !== undefined ? a.displayExcerpt ? "excerpt" : "none" : ["none", "excerpt", "full"].includes(a.displayContent) ? a.displayContent : "excerpt";
   const classes = [a.displayAvatar !== false ? "has-avatars" : "", a.displayDate !== false ? "has-dates" : "", display !== "none" ? "has-excerpts" : "", !records.length ? "no-comments" : ""].filter(Boolean).join(" ");
   if (!records.length) return `<div${attributes(classes)}>No comments to show.</div>`;
   const items: string[] = [];
   for (const record of records) {
+    if(!state.options.preview)observePublicPost(state.options.canReadProtectedPost,{...record,id:record.postId,locked:false},!record.hasPassword);
     const url = await permalink({ ...record, id: record.postId }, state), authorURL = safeURL(record.authorUrl) || (record.userId ? "/?author=" + record.userId : "");
     const author = authorURL ? `<a class="wp-block-latest-comments__comment-author" href="${escape(authorURL)}">${escape(record.authorName)}</a>` : `<span class="wp-block-latest-comments__comment-author">${escape(record.authorName)}</span>`;
     const avatar = a.displayAvatar !== false ? avatarURL(record.avatarEmail, state.settings, 48) : null;

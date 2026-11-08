@@ -6,6 +6,7 @@ import { commentReturnPath, commentLoginHref } from "../shared/comment-links.js"
 import { type User } from "./db.js";
 import { readCookieSessionUser } from "./auth.js";
 import { postAccessReader, currentPublicPostPolicy } from "./post-passwords.js";
+import {completePublicRead} from "./public-read-attempt.js";
 import { resolvePublicDocumentRoute } from "./public-documents.js";
 import { readPublicPath } from "./public-path.js";
 import { readPublicSite, readPublishedPostById, type PublicReadContext } from "./public-read.js";
@@ -65,7 +66,10 @@ function publicHead(model: Pick<PublicDocumentModel,"post"|"site"|"route"|"statu
 }
 
 /** One request, direct services, no internal HTTP or Express response adapter. */
-export async function readPublicDocument(path: string, context: PublicDocumentContext): Promise<PublicDocumentModel | FrameworkDocument> {
+export function readPublicDocument(path:string,context:PublicDocumentContext):Promise<PublicDocumentModel|FrameworkDocument>{
+  return completePublicRead(context.canReadProtectedPost,reader=>readPublicDocumentOnce(path,{...context,canReadProtectedPost:reader}));
+}
+async function readPublicDocumentOnce(path: string, context: PublicDocumentContext): Promise<PublicDocumentModel | FrameworkDocument> {
   let resolution=await resolvePublicDocumentRoute(path);
   if(resolution.kind==="framework")return {kind:"framework",status:200,requestPath:path};
   if(!await isInstalled())return {kind:"framework",status:resolution.status,requestPath:path};
@@ -129,26 +133,5 @@ export async function readPublicDocument(path: string, context: PublicDocumentCo
     model.head.pingback=model.status===200 ? resolution.pingback || null : null;
     return model;
   }
-  // Site/archive/template rendering can perform later author lookups after the
-  // singular body was selected. Discard the complete model and precomputed HTML
-  // when current policy differs, then rebuild once from fresh guarded services.
-  // A second change fails before bytes are emitted; there is no retry loop/cache.
-  async function reloadBody(){
-    try{body=await readPublishedPostById(selectedId!,selectedType!,{...readContext,query:{...query.values,page:query.contentPage}});}
-    catch(error){if(!(error instanceof HttpError)||error.status!==404)throw error;body=null;resolution={status:404,kind:"not-found"};}
-  }
-  for(let attempt=0;attempt<2;attempt++){
-    let model:PublicDocumentModel;
-    try{model=await assemble();}
-    catch(error){
-      if(!(error instanceof HttpError)||error.status!==404||!body||attempt===1)throw error;
-      await reloadBody();continue;
-    }
-    if(!body)return model;
-    const policy=await currentPublicPostPolicy(selectedId!,selectedType!,context.canReadProtectedPost);
-    if(policy && policy.hasPassword===Boolean(body.post.hasPassword) && policy.locked===Boolean(body.post.locked))return model;
-    if(attempt===1)throw new HttpError(409,"The public document changed while it was being rendered. Reload to continue.");
-    await reloadBody();
-  }
-  throw new HttpError(409,"The public document changed while it was being rendered. Reload to continue.");
+  return assemble();
 }

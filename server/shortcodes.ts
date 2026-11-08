@@ -4,6 +4,7 @@ import { cleanContent, plainText, HttpError } from "./utils.js";
 import { parseShortcodes, hasShortcodes, formatShortcodeBlocks, ShortcodeLimitError, type Shortcode } from "./shortcode-parser.js";
 import { reserveInteractiveId } from "./interactive-blocks.js";
 import { postNeedsPassword } from "./post-passwords.js";
+import {observePublicPost} from "./public-read-attempt.js";
 import { renderPlaylistBlock } from "./playlist-blocks.js";
 import { parseVideoEmbed } from "../src/embeds.js";
 
@@ -34,9 +35,10 @@ async function readableParent(parent: any, context: Context, state: State) {
   const editor = !!user && ["administrator", "editor"].includes(user.role);
   const preview = state.options.preview && (editor || user?.id === Number(parent.authorId));
   if (status !== "publish" && !preview) return false;
-  if (!parent.hasPassword) return true;
-  if (context.post?.id === id && !postNeedsPassword(context.post)) return true;
-  return !!state.options.canReadProtectedPost && cached(state, `shortcode-parent-access:${id}`, () => state.options.canReadProtectedPost!(id, state.db));
+  const allowed=!parent.hasPassword || context.post?.id===id && !postNeedsPassword(context.post)
+    || !!state.options.canReadProtectedPost && await cached(state,`shortcode-parent-access:${id}`,()=>state.options.canReadProtectedPost!(id,state.db));
+  if(allowed && !preview)observePublicPost(state.options.canReadProtectedPost,{...parent,locked:false});
+  return allowed;
 }
 async function attachmentRows(tag: string, a: Record<string, string>, context: Context, state: State) {
   const explicit = own(a, "ids") || own(a, "include"), include = ids(own(a, "ids") ? a.ids : a.include), exclude = ids(a.exclude);
@@ -44,7 +46,7 @@ async function attachmentRows(tag: string, a: Record<string, string>, context: C
   const parentId = ["gallery", "playlist"].includes(tag) && own(a, "id") ? number(a.id, 0, 0, 2147483647) : Number(context.post?.id || 0);
   if (!explicit && !parentId) return [];
   if (!explicit) {
-    const parent = context.post?.id === parentId ? { id: parentId, status: context.post.status, authorId: context.post.authorId ?? context.post.author_id, hasPassword: context.post.hasPassword ?? context.post.has_password } : await cached(state, `shortcode-parent:${parentId}`, async () => (await state.db.query('SELECT id,status,author_id AS "authorId",password_hash IS NOT NULL AS "hasPassword" FROM posts WHERE id=$1', [parentId])).rows[0]);
+    const parent = context.post?.id === parentId ? { id: parentId, type:context.post.type,status: context.post.status, authorId: context.post.authorId ?? context.post.author_id, hasPassword: context.post.hasPassword ?? context.post.has_password } : await cached(state, `shortcode-parent:${parentId}`, async () => (await state.db.query('SELECT id,type,status,author_id AS "authorId",password_hash IS NOT NULL AS "hasPassword" FROM posts WHERE id=$1', [parentId])).rows[0]);
     if (!await readableParent(parent, context, state)) return [];
   }
   const type = tag === "gallery" ? "image" : tag === "playlist" ? a.type === "video" ? "video" : "audio" : tag;
@@ -54,10 +56,10 @@ async function attachmentRows(tag: string, a: Record<string, string>, context: C
   const key = JSON.stringify([type, explicit ? 0 : parentId, explicit, include, exclude, orderby, order]);
   const rows: any[] = await cached(state, "shortcode-media:" + key, async () => (await state.db.query(`SELECT m.id,m.title,m.alt,m.caption,m.width,m.height,m.sizes,m.audio_metadata AS "audioMetadata",m.mime_type AS "mimeType",'/uploads/'||m.filename AS url,
     (SELECT jsonb_build_object('src','/uploads/'||art.filename,'alt',art.alt) FROM media art WHERE art.id=m.artwork_media_id AND art.mime_type LIKE 'image/%') AS image,
-    m.attached_post_id AS "parentId",p.status AS "parentStatus",p.author_id AS "parentAuthorId",p.password_hash IS NOT NULL AS "parentHasPassword" FROM media m LEFT JOIN posts p ON p.id=m.attached_post_id WHERE m.mime_type LIKE $1 AND (($5::boolean AND m.id=ANY($2::int[])) OR (NOT $5::boolean AND m.attached_post_id=$3::int)) AND NOT m.id=ANY($4::int[]) ORDER BY ${orderby} ${order},m.id ${order} LIMIT 200`, [type + "/%", include, parentId, exclude, explicit])).rows);
+    m.attached_post_id AS "parentId",p.status AS "parentStatus",p.type AS "parentType",p.author_id AS "parentAuthorId",p.password_hash IS NOT NULL AS "parentHasPassword" FROM media m LEFT JOIN posts p ON p.id=m.attached_post_id WHERE m.mime_type LIKE $1 AND (($5::boolean AND m.id=ANY($2::int[])) OR (NOT $5::boolean AND m.attached_post_id=$3::int)) AND NOT m.id=ANY($4::int[]) ORDER BY ${orderby} ${order},m.id ${order} LIMIT 200`, [type + "/%", include, parentId, exclude, explicit])).rows);
   const visible = [];
   for (const row of rows) {
-    if (row.parentId && !await readableParent({ id: row.parentId, status: row.parentStatus, authorId: row.parentAuthorId, hasPassword: row.parentHasPassword }, context, state)) continue;
+    if (row.parentId && !await readableParent({ id: row.parentId,type:row.parentType,status: row.parentStatus, authorId: row.parentAuthorId, hasPassword: row.parentHasPassword }, context, state)) continue;
     visible.push(row);
   }
   return visible;

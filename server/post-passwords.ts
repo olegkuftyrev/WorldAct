@@ -40,10 +40,34 @@ export function postAccessReader(req: Pick<Request, "headers">) {
       FROM posts p WHERE p.id=$1 AND p.type=$2 AND p.status='publish'`,[postId,type,tokens.get(postId) || null])).rows[0];
     return row || null;
   };
+  read.publicPolicies=async(ids:number[],db:BlockDatabase):Promise<PublicPostPolicies>=>{
+    if(!ids.length)return [];
+    return (await db.query(`SELECT p.id,p.type,p.author_id AS "authorId",p.password_hash IS NOT NULL AS "hasPassword",
+      p.password_hash IS NOT NULL AND NOT EXISTS(SELECT 1 FROM post_access_tokens access
+        WHERE access.post_id=p.id AND access.token_hash=(SELECT token FROM jsonb_to_recordset($2::jsonb) AS request(id int,token text) WHERE request.id=p.id)
+          AND access.password_hash=p.password_hash AND access.expires_at>clock_timestamp()) AS locked
+      FROM posts p WHERE p.id=ANY($1::int[]) AND p.type IN('post','page') AND p.status='publish'`,
+      [ids,JSON.stringify(ids.map(id=>({id,token:tokens.get(id)||null})))])).rows;
+  };
   return read;
 }
 
 export type PublicPostPolicy={hasPassword:boolean;locked:boolean};
+type PublicPostPolicies=Array<PublicPostPolicy & {id:number;type:"post"|"page";authorId:number}>;
+/** Validate the whole accumulated result in one request-policy statement, with
+ * no author expression or body read. Trusted callbacks keep their supplied DB. */
+export async function currentPublicPostPolicies(ids:number[],reader:NonNullable<RenderOptions["canReadProtectedPost"]>,db:BlockDatabase=pool):Promise<PublicPostPolicies>{
+  if(!ids.length)return [];
+  const requestReader=reader as typeof reader & {publicPolicies?:ReturnType<typeof postAccessReader>["publicPolicies"]};
+  if(requestReader.publicPolicies)return requestReader.publicPolicies(ids,db);
+  const rows=(await db.query(`SELECT id,type,author_id AS "authorId",password_hash FROM posts
+    WHERE id=ANY($1::int[]) AND type IN('post','page') AND status='publish'`,[ids])).rows;
+  const result=await Promise.all(rows.map(async row=>({id:row.id,type:row.type,authorId:row.authorId,hasPassword:Boolean(row.password_hash),locked:Boolean(row.password_hash)&&!(await reader(row.id,db))})));
+  const stable=(await db.query(`SELECT p.id FROM posts p JOIN jsonb_to_recordset($1::jsonb) AS expected(id int,type text,author_id int,password_hash text)
+    ON p.id=expected.id AND p.type=expected.type AND p.author_id=expected.author_id AND p.password_hash IS NOT DISTINCT FROM expected.password_hash
+    WHERE p.status='publish'`,[JSON.stringify(rows.map(row=>({id:row.id,type:row.type,author_id:row.authorId,password_hash:row.password_hash})))])).rows;
+  return result.filter(row=>stable.some(item=>item.id===row.id));
+}
 /** Final metadata/access decision after asynchronous document work. Preserve a
  * supplied transaction; opaque trusted service readers get a bounded metadata
  * stability check instead of inventing request tokens. */

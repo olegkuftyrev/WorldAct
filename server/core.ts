@@ -1,5 +1,5 @@
 import {readPublicDocument,publicDocumentContext} from "./public-document-data.js";
-import { publicPost, commentResponse, readPublicSite } from "./public-read.js";
+import { publicPost, commentResponse, readPublicSite,readPublishedPostById } from "./public-read.js";
 import { hasPostAccess } from "./post-passwords.js";
 export { hasPostAccess } from "./post-passwords.js";
 import {pingbackHeader} from "./incoming-ping-policy.js";
@@ -1300,14 +1300,10 @@ router.get("/public/posts/:slug", async (req, res) => {
     ).rows[0];
   if (!row) throw new HttpError(404, "Post not found.");
   const { _passwordHash, ...post } = row;
-  const locked = !(await hasPostAccess(req, post.id, _passwordHash));
   const pingback=pingbackHeader(post,await getSettings());if(pingback)res.setHeader("X-Pingback",pingback);
   await setRobots(res);
-  const visible=await publicPost(post, locked, { query: req.query, user: (req as AuthRequest).user, contentPage: parseContentPage(req.query.page), canReadProtectedPost: postAccessReader(req) });
-  res.json({
-    post: visible,
-    ...(await commentResponse(post.id, {query:req.query,user:(req as AuthRequest).user,canReadProtectedPost:postAccessReader(req)}, visible.locked)),
-  });
+  const {rawPost:_rawPost,...result}=await readPublishedPostById(post.id,post.type,{query:req.query,user:(req as AuthRequest).user,canReadProtectedPost:postAccessReader(req)});
+  res.json(result);
 });
 const passwordAttempts = new Map<string, { count: number; expires: number }>();
 export async function unlockPublicPost(req:Request,res:Response) {
@@ -1360,11 +1356,8 @@ export async function unlockPublicPost(req:Request,res:Response) {
     });
   }
   const canReadProtectedPost=postAccessReader({headers:{cookie:grantedToken?`worldact_post_${post.id}=${grantedToken}`:req.headers.cookie}});
-  const visible=await publicPost(post, false, { query: req.query, user: (req as AuthRequest).user, contentPage,canReadProtectedPost });
-  res.json({
-    post: visible,
-    ...(await commentResponse(post.id, {query:req.query,user:(req as AuthRequest).user,canReadProtectedPost},visible.locked)),
-  });
+  const {rawPost:_rawPost,...result}=await readPublishedPostById(post.id,post.type,{query:{...req.query,page:contentPage},user:(req as AuthRequest).user,canReadProtectedPost});
+  res.json(result);
 }
 router.post("/public/posts/:slug/unlock",unlockPublicPost);
 const commentAttempts = new Map<string, { count: number; expires: number }>();
