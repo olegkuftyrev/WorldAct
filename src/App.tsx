@@ -362,6 +362,7 @@ function Login({ serverError }: { serverError: string }) {
     location = useLocation();
   const [login, setLogin] = useState(""),
     [password, setPassword] = useState(""),
+    [remember, setRemember] = useState(false),
     [visible, setVisible] = useState(false),
     [error, setError] = useState(serverError || (new URLSearchParams(location.search).get("login_error")==="1"?"The username or password is incorrect. Please try again.":"")),
     [busy, setBusy] = useState(false);
@@ -372,7 +373,7 @@ function Login({ serverError }: { serverError: string }) {
     try {
       const data = await api<{ user: User }>(
         "/auth/login",
-        json("POST", { login, password }),
+        json("POST", { login, password, remember }),
       );
       setUser(data.user);
       navigate(
@@ -450,6 +451,11 @@ function Login({ serverError }: { serverError: string }) {
             </button>
           </div>
         </div>
+        <p className="forgetmenot">
+          <input name="rememberme" type="checkbox" id="rememberme" value="forever"
+            checked={remember} onChange={event => setRemember(event.target.checked)} />
+          <label htmlFor="rememberme">Remember Me</label>
+        </p>
         <p className="submit">
           <button
             className="button button-primary button-large"
