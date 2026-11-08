@@ -6,22 +6,9 @@ The shared token inventory supplies settings help, validation, generation, and
 resolver captures. A structure still needs `%postname%` or `%post_id%`; a complete
 timestamp alone does not establish a unique post identity in this implementation.
 
-All six date/time fields come from the chosen publication instant, with the
-existing creation-date fallback, converted once through the same site-clock
-helper used for REST local dates. Hours, minutes and seconds are two digits,
-including midnight `00`, named-zone DST folds, and fractional fixed offsets.
-Resolution retains exact canonical path matching and the existing published
-post/type/ID fences. Numeric time captures accept one or two digits, but only
-the generated two-digit canonical value resolves; alias redirects remain a
-separate routing contract. Pages keep their existing hierarchy and body-page
-rules independently of post time tags.
+All six date/time fields come from persisted canonical `post_date` civil text. A later site timezone change leaves them unchanged. Hours/minutes/seconds remain two digits; exact resolution retains published post/type/ID fences and known numeric child-page priority. `%author%` uses the actual persisted owner's creation-time nicename. Structures still require a name or numeric identity; source canonical redirects remain separate.
 
-This is the existing **current site timezone** contract. It does not preserve a
-historical stored local publication date when the site timezone changes, and it
-does not implement `%author%`, timestamp-only identities, additional rewrite
-tags, or source canonical redirects. The supplied source's `post_date` storage
-semantics require a separate data-model change. No publication instants are
-rewritten by saving a custom structure.
+Category and actual author metadata resolve before the final authoritative civil lookup. Ordinary callers use a short SHARE NOWAIT statement with actual owner/type/status pins and bounded409 on contention/serialization; explicit read-only repeatable-read callers keep their coherent snapshot without row locks. Supplied date/author DTOs do not choose dated canonical fields. Native continuations recheck selected civil after later route/comment-page awaits. See [historical civil publication dates](post-civil-dates.md) for write/migration/portability and precise concurrency limits.
 
 When the configured structure contains `%category%`, permalink generation selects
 the assigned category with the lowest term ID, then includes its ancestor slugs.
@@ -68,9 +55,8 @@ Two-stage site archive coverage asserts nested source/destination URLs and menu
 rebasing on different fresh databases after source files are removed.
 
 The Plain query-ID backend is described in [its separate contract](plain-permalinks.md).
-The shared nine-token inventory also supplies the current native Settings help.
-Additional author identities, canonical redirects and historical civil dates
-remain separate work. Known published multipage archive links use the bounded
+The shared ten-token inventory also supplies the current native Settings tag controls.
+Additional author archive/editing behavior and canonical redirects remain separate work. Known published multipage archive links use the bounded
 [body-page remapping contract](body-page-portability.md). Fresh-ID copies were
 also verified through actual Node HTML and native comment303 return context,
 not only the legacy JSON resolver.
