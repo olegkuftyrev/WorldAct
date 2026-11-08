@@ -59,7 +59,8 @@ test("published protected metadata remains discoverable while private records an
         await pool.query("UPDATE settings SET data=jsonb_set(data,'{permalinkStructure}',$1::jsonb) WHERE id=1", [JSON.stringify("/%category%/%postname%/")]);
         const first = (await pool.query("INSERT INTO terms(taxonomy,name,slug) VALUES('category','AAA first canonical category',$1) RETURNING id,slug", [stamp + "-first"])).rows[0]; terms.push(first.id);
         await pool.query("INSERT INTO post_terms(post_id,term_id) VALUES($1,$2),($3,$4)", [protectedPost.id, first.id, current.id, category.id]);
-        const expectedProtected = `/${first.slug}/${protectedPost.slug}/`, expectedOrdinary = `/${stamp}/${current.slug}/`;
+        // The earlier assigned category wins by ID, regardless of name sorting.
+        const expectedProtected = `/${stamp}/${protectedPost.slug}/`, expectedOrdinary = `/${stamp}/${current.slug}/`;
         const rows = (await pool.query(`SELECT ${postMetadataFields} FROM posts p WHERE p.id=ANY($1::int[])`, [[protectedPost.id, current.id]])).rows;
         for (const row of rows) {
           assert.equal(row.categories.length, 1); assert.deepEqual(Object.keys(row.categories[0]), ["slug"]);

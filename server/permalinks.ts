@@ -3,6 +3,39 @@ import type pg from "pg";
 type Database = Pick<pg.Pool, "query"> | pg.PoolClient;
 type Settings = Awaited<ReturnType<typeof getSettings>>;
 const segment = (value: string) => encodeURIComponent(value);
+/** Select the source's lowest-ID assigned category and its ancestors in one
+ * statement snapshot. Supplied DTO terms can be partial or stale. UNION visits
+ * each persisted ancestor once, including malformed historical cycles. */
+export async function categoryPermalinkPath(
+  postId: number,
+  settings: Settings,
+  db: Database = pool,
+): Promise<string> {
+  const rows = (await db.query(`WITH RECURSIVE
+    chosen AS (
+      SELECT t.id,t.slug,t.parent_id FROM terms t JOIN post_terms pt ON pt.term_id=t.id
+      WHERE pt.post_id=$1 AND t.taxonomy='category' ORDER BY t.id LIMIT 1
+    ),
+    fallback AS (
+      SELECT t.id,t.slug,NULL::integer AS parent_id FROM terms t
+      WHERE t.taxonomy='category' AND NOT EXISTS(SELECT 1 FROM chosen)
+      ORDER BY (t.id=$2) DESC NULLS LAST,t.is_default DESC,t.id LIMIT 1
+    ),
+    selected AS (SELECT * FROM chosen UNION ALL SELECT * FROM fallback),
+    ancestors AS (
+      SELECT id,slug,parent_id FROM selected
+      UNION
+      SELECT t.id,t.slug,t.parent_id
+      FROM terms t JOIN ancestors a ON t.id=a.parent_id
+      WHERE t.taxonomy='category'
+    ) SELECT ancestors.*,selected.id AS "selectedId" FROM ancestors CROSS JOIN selected`,[postId,settings.defaultCategoryId])).rows;
+  const byId=new Map(rows.map(row=>[row.id,row])),seen=new Set<number>(),slugs:string[]=[];
+  let current=rows.length?byId.get(rows[0].selectedId):undefined;
+  while(current&&!seen.has(current.id)){
+    seen.add(current.id);slugs.push(segment(current.slug));current=byId.get(current.parent_id);
+  }
+  return slugs.length ? slugs.reverse().join("/") : "uncategorized";
+}
 export async function postPermalink(
   post: Record<string, any>,
   settings?: Settings,
@@ -47,11 +80,8 @@ export async function postPermalink(
     year: parts.find((p) => p.type === "year")!.value,
     monthnum: parts.find((p) => p.type === "month")!.value,
     day: parts.find((p) => p.type === "day")!.value,
-    category: segment(
-      post.categories?.[0]?.slug ??
-        post.terms?.find((term: any) => term.taxonomy === "category")?.slug ??
-        "uncategorized",
-    ),
+    category: settings.permalinkStructure.includes("%category%")
+      ? await categoryPermalinkPath(post.id,settings,db) : "",
   };
   return settings.permalinkStructure.replace(
     /%(postname|post_id|year|monthnum|day|category)%/g,
@@ -86,19 +116,20 @@ async function resolveExactPublicPath(path: string, settings: Settings) {
     /%(postname|post_id|year|monthnum|day|category)%/g,
     (_match, key: string) => {
       tokens.push(key);
-      return key === "category" || key === "postname" ? "([^/]+)" : "(\\d+)";
+      return key === "category" ? "(.+?)" : key === "postname" ? "([^/]+)" : "(\\d+)";
     },
   );
   const match = new RegExp("^" + pattern.replace(/\/$/, "/?") + "$").exec(
     normalized,
   );
   if (match) {
-    const captures = Object.fromEntries(
+    let captures: Record<string,string>;
+    try { captures = Object.fromEntries(
       tokens.map((token, index) => [
         token,
         decodeURIComponent(match[index + 1]),
       ]),
-    );
+    ); } catch { return null; }
     let rows: any[] = [];
     if (
       captures.post_id &&
@@ -121,11 +152,6 @@ async function resolveExactPublicPath(path: string, settings: Settings) {
         )
       ).rows;
     for (const row of rows) {
-      const terms = await pool.query(
-        "SELECT t.taxonomy,t.slug FROM terms t JOIN post_terms pt ON pt.term_id=t.id WHERE pt.post_id=$1 ORDER BY t.name,t.id",
-        [row.id],
-      );
-      row.terms = terms.rows;
       if ((await postPermalink(row, settings)) === normalized) return row;
     }
   }
@@ -133,7 +159,8 @@ async function resolveExactPublicPath(path: string, settings: Settings) {
   let parent: number | null = null;
   let current: any;
   for (const part of normalized.split("/").filter(Boolean)) {
-    const slug = decodeURIComponent(part);
+    let slug: string;
+    try { slug = decodeURIComponent(part); } catch { return null; }
     const rows = await pool.query(
       "SELECT id,slug,parent_id,status FROM posts WHERE type='page' AND slug=$1 AND parent_id IS NOT DISTINCT FROM $2",
       [slug, parent],

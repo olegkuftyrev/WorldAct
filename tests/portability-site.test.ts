@@ -56,6 +56,7 @@ test("complete site archive crosses fresh databases with media, design and setti
       const background = { backgroundImage: { url: edited.url }, backgroundSize: "contain" };
       const raw = block("template-part", { slug: part.slug }) + block("navigation", { ref: nav.id }) + block("image", { id: image.id }, `<figure class="wp-block-image"><img class="wp-image-${image.id}" src="https://archive-source.example.invalid${edited.url}" alt="Portable image" /></figure>`) + block("group", { style: { background } }, `<div class="wp-block-group" style="padding:20px;background-image:url(&quot;${edited.url}&quot;);background-size:contain"><p>Portable background image</p></div>`);
       const post = (await ok("/api/posts", "POST", { title: stamp + " Main Post", status: "publish", content: raw, featuredMediaId: image.id, categoryIds: [childCategory.id], blocks: [{ name: "core/template-part", attributes: { slug: part.slug }, innerBlocks: [] }, { name: "core/image", attributes: { id: image.id, url: edited.url }, innerBlocks: [] }, { name: "core/group", attributes: { style: { background } }, innerBlocks: [] }] })).post;
+      assert.equal(post.permalink,`/journal/${category.slug}/${childCategory.slug}/${post.slug}/`);
       await ok(`/api/media/${image.id}`,"PUT",{attachedPostId:post.id,description:"<p>Portable attachment description</p>",commentStatus:"open"});
       const expanded = (await ok("/api/posts", "POST", { title: stamp + " Expanded text", status: "draft", content: "&".repeat(210000) })).post;
       assert.ok(expanded.content.length > 1_000_000);
@@ -124,6 +125,10 @@ test("complete site archive crosses fresh databases with media, design and setti
         assert.equal(createHash("sha256").update(Buffer.from(await response.arrayBuffer())).digest("hex"),archive.mediaFiles.find((item:any)=>item.filename===oldName).sha256);
       }
       const menu = exported.menus.find((item: any) => restored.menuIds.includes(item.id)); assert.equal(menu.location, "primary"); assert.doesNotMatch(menu.items[0].url, /archive-source\.example\.invalid/);
+      const restoredPost=(await ok(`/api/public/posts/${post.slug}`)).post;
+      const restoredChild=exported.terms.find((item:any)=>item.id===settings.defaultCategoryId),restoredParent=exported.terms.find((item:any)=>item.id===restoredChild.parent_id);
+      assert.equal(restoredPost.permalink,`/journal/${restoredParent.slug}/${restoredChild.slug}/${post.slug}/`);
+      assert.equal(new URL(menu.items[0].url,baseline.siteUrl).pathname,restoredPost.permalink);
       assert.equal(exported.extensions.find((item: any) => item.slug === "custom-footer").settings.text, "Portable custom footer");
       const themedStyle = exported.themeDesigns.find((item: any) => item.theme === settings.theme)?.styles;
       assert.equal(themedStyle?.accentColor || exported.styles.accentColor, "#aa3344");

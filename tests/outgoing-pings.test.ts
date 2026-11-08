@@ -57,13 +57,15 @@ test('transactional publication hooks, durable two-worker delivery, leases, supp
    await clearJobs();const before=await getSettings();
    try{
     await ok('/api/settings','PUT',{pingServices:[],defaultPingbackFlag:true,timezone:'America/Los_Angeles',permalinkStructure:'/%year%/%monthnum%/%day%/%category%/%postname%/'});
-    const category=(await ok('/api/terms','POST',{taxonomy:'category',name:stamp+' dated category'})).data.term;terms.push(category.id);
-    const document=await post({publishedAt:'2012-01-01T07:30:00Z',categoryIds:[category.id],content:'<a href="https://target.example.test/historical">Historical</a>'});
-    assert.match(document.permalink,new RegExp('^/2011/12/31/'+category.slug+'/'));
+    const parent=(await ok('/api/terms','POST',{taxonomy:'category',name:stamp+' parent category'})).data.term;terms.push(parent.id);
+    const category=(await ok('/api/terms','POST',{taxonomy:'category',name:'ZZZ '+stamp+' dated category',parentId:parent.id})).data.term;terms.push(category.id);
+    const later=(await ok('/api/terms','POST',{taxonomy:'category',name:'AAA '+stamp+' later category'})).data.term;terms.push(later.id);
+    const document=await post({publishedAt:'2012-01-01T07:30:00Z',categoryIds:[later.id,category.id],content:'<a href="https://target.example.test/historical">Historical</a>'});
+    assert.match(document.permalink,new RegExp('^/2011/12/31/'+parent.slug+'/'+category.slug+'/'));
     const sources:string[]=[];const worker=createOutgoingPingWorker({environment:()=> 'production',protocol:{...noNetwork,async pingback(_target,source){sources.push(source);return 'sent';}}});
     await enqueue(document.id);await worker.runOnce();await worker.runOnce();assert.equal(sources[0],new URL(document.permalink,before.siteUrl).href);
     await pool.query("UPDATE posts SET published_at=NULL,created_at='2010-06-01T06:30:00Z',content=$1,raw_content=$1 WHERE id=$2",['<a href="https://target.example.test/creation">Fallback</a>',document.id]);
-    const fallback=(await ok('/api/posts/'+document.id)).data.post;assert.match(fallback.permalink,new RegExp('^/2010/05/31/'+category.slug+'/'));
+    const fallback=(await ok('/api/posts/'+document.id)).data.post;assert.match(fallback.permalink,new RegExp('^/2010/05/31/'+parent.slug+'/'+category.slug+'/'));
     await enqueue(document.id);await worker.runOnce();await worker.runOnce();assert.equal(sources[1],new URL(fallback.permalink,before.siteUrl).href);
    }finally{await ok('/api/settings','PUT',{timezone:before.timezone,permalinkStructure:before.permalinkStructure});}
   });
