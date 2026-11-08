@@ -10,13 +10,13 @@ import {pool,getSettings} from './db.js';
 import {normalizePublicURL,publicHTTP} from './public-http.js';
 import {pingEnvironment,type PingEnvironment} from './outgoing-ping-settings.js';
 import {resolvePublicPath,postPermalink} from './permalinks.js';
-import {cleanContent,plainText} from './utils.js';
+import {cleanContent,plainText,HttpError} from './utils.js';
 import {moderateComment,type CommentType} from './comment-policy.js';
 import {checkAkismetComment,recordAkismetCheck,createAkismetClient,type AkismetComment} from './bundled-plugins.js';
 import {queueCommentNotifications} from './core.js';
 import {deliverMail} from './accounts.js';
 import type {PingHTTP} from './ping-protocol.js';
-import {commentAdmissionTime,recordCommentFloodMetadata} from './comment-flood.js';
+import {assertCommentFloodAllowed,commentAdmissionTime,recordCommentFloodMetadata} from './comment-flood.js';
 const esc=(s:string)=>s.replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;').replaceAll("'",'&apos;');
 const hash=(s:string)=>createHash('sha256').update(s).digest('hex');
 export class IncomingPingError extends Error{constructor(readonly code=0){super('Ping notification could not be accepted.');}}
@@ -75,6 +75,28 @@ async function admission(ip:string,source:string,targetId:number){
   await client.query("INSERT INTO incoming_ping_leases(token,expires_at) VALUES($1,now()+interval '120 seconds')",[token]);await client.query('COMMIT');return token;
  }catch(error){await client.query('ROLLBACK');throw error;}finally{client.release();}
 }
+// Both protocols are anonymous even when a notification carries credentials.
+// Keep the public helper's429 internal to the existing generic ping contract.
+async function assertPingFloodAllowed(db:Pick<pg.Pool,'query'>|pg.PoolClient,ip:string,current:Date){
+ try{await assertCommentFloodAllowed(db,{email:'',ip},current);}
+ catch(error){if(error instanceof HttpError&&error.status===429)throw new IncomingPingError(0);throw error;}
+}
+async function assertPingNotDuplicate(db:Pick<pg.Pool,'query'>|pg.PoolClient,postId:number,source:string){
+ if((await db.query("SELECT 1 FROM comments WHERE post_id=$1 AND (source_hash=$2 OR author_url=$3) LIMIT 1",[postId,hash(source),source])).rowCount)throw new IncomingPingError(48);
+}
+/** Short metadata-only check, released before moderation and external I/O.
+ * The same hierarchy lock gives duplicate48 precedence over a known flood.
+ * This is an optimization only: a new predecessor can arrive before final admission.
+ */
+async function precheckPingFlood(postId:number,source:string,ip:string){
+ const client=await pool.connect();
+ try{
+  await client.query('BEGIN');await client.query("SELECT pg_advisory_xact_lock(hashtext('worldact-comment-hierarchy'))");
+  await assertPingNotDuplicate(client,postId,source);
+  await assertPingFloodAllowed(client,ip,await commentAdmissionTime(client));
+  await client.query('COMMIT');
+ }catch(error){await client.query('ROLLBACK');throw error;}finally{client.release();}
+}
 let activeIncoming=0;
 export function createIncomingPings(options:{http?:PingHTTP;environment?:()=>PingEnvironment;akismet?:ReturnType<typeof createAkismetClient>}={}){
  const http=options.http||publicHTTP,environment=options.environment||pingEnvironment;
@@ -105,6 +127,7 @@ export function createIncomingPings(options:{http?:PingHTTP;environment?:()=>Pin
     content:cleanContent('<strong>'+esc(plainText(input.title||'').slice(0,250))+'</strong>\n\n'+esc(plainText(input.excerpt||'').slice(0,252))),
    };
    if(!plainText(body.content).trim())throw new IncomingPingError(0);
+   await precheckPingFlood(target.post.id,source.href,input.ip);
    const moderation={...body,type:input.type as CommentType,authorEmail:'',authorUrl:source.href,ip:input.ip};
    let status=await moderateComment(moderation,pool,snapshot.settings);
    const akismet:AkismetComment={type:input.type,userIP:input.ip,userAgent:input.userAgent||'',referrer:'',authorName:body.authorName,authorEmail:'',authorURL:source.href,content:body.content,permalink:target.url};
@@ -121,9 +144,10 @@ export function createIncomingPings(options:{http?:PingHTTP;environment?:()=>Pin
     if(!pingsOpen(post,snapshot.settings))throw new IncomingPingError(33);
     post.terms=(await client.query("SELECT t.taxonomy,t.slug FROM post_terms pt JOIN terms t ON t.id=pt.term_id WHERE pt.post_id=$1 ORDER BY t.name,t.id",[post.id])).rows;
     if(new URL(await postPermalink(post,snapshot.settings,client),snapshot.settings.siteUrl).href!==target.url)throw new IncomingPingError(33);
-    if((await client.query("SELECT 1 FROM comments WHERE post_id=$1 AND (source_hash=$2 OR author_url=$3) LIMIT 1",[post.id,hash(source.href),source.href])).rowCount)throw new IncomingPingError(48);
+    await assertPingNotDuplicate(client,post.id,source.href);
     if(!(await client.query("SELECT token FROM incoming_ping_leases WHERE token=$1 AND expires_at>clock_timestamp() FOR UPDATE",[token])).rowCount)throw new IncomingPingError(0);
     const admittedAt=await commentAdmissionTime(client);
+    await assertPingFloodAllowed(client,input.ip,admittedAt);
     const result=await client.query("INSERT INTO comments(post_id,type,author_name,author_email,author_url,content,status,created_at,updated_at) VALUES($1,$2,$3,'',$4,$5,$6,$7,$7) RETURNING id",[post.id,input.type,body.authorName,source.href,body.content,status,admittedAt]);
     await recordCommentFloodMetadata(client,result.rows[0].id,input.ip,admittedAt);
     await recordAkismetCheck(result.rows[0].id,akismet,verdict,client);

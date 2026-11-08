@@ -19,6 +19,9 @@ async function api(path:string,method='GET',body?:unknown,auth=cookie){const res
 async function ok(path:string,method='GET',body?:unknown,auth=cookie){const result=await api(path,method,body,auth);assert.ok(result.response.ok,`${path}: ${result.response.status} ${JSON.stringify(result.data)}`);return result.data;}
 async function post(input:Record<string,unknown>={}){const p=(await ok('/api/posts','POST',{title:stamp,status:'publish',content:'<p>Safe public</p>',...input})).post;posts.push(p.id);return p;}
 async function resetAdmission(){await pool.query('DELETE FROM incoming_ping_rates');await pool.query('DELETE FROM incoming_ping_leases');}
+// Only unrelated protocol/policy cases age this file's owned predecessors.
+// Immediate duplicates, concurrency, and lock/flood assertions stay unaged.
+async function ageOwnedAdmissions(){await pool.query("UPDATE comments SET created_at=date_trunc('second',clock_timestamp())-interval '20 seconds' WHERE post_id=ANY($1::int[])",[posts]);}
 const failCode=(code:number)=>(error:unknown)=>error instanceof IncomingPingError&&error.code===code;
 const rpc=(s:string,t:string)=>Buffer.from(pingRPC('pingback.ping',[s,t]));
 function fixture(body:Buffer,options:{remote?:string;status?:number;headers?:Record<string,string>;hold?:boolean}={}){
@@ -51,9 +54,11 @@ test('incoming typed notifications enforce public state, protocol, transaction, 
   await ok('/api/settings','PUT',{defaultPingStatus:'open',commentModeration:false,commentPreviouslyApproved:false,commentMaxLinks:0,notifyComments:false,notifyModeration:false,closeCommentsDays:0});
   const publicPost=await post();target=new URL(publicPost.permalink,(await getSettings()).siteUrl).href;
   await t.test('new post defaults are source open, pages closed, explicit fields and preexisting flags remain',async()=>{
+   await ageOwnedAdmissions();
    assert.equal(publicPost.pingStatus,'open');assert.equal((await post({type:'page'})).pingStatus,'closed');const explicit=await post({pingStatus:'closed'});await ok('/api/settings','PUT',{defaultPingStatus:'closed'});assert.equal((await post()).pingStatus,'closed');assert.equal((await ok('/api/posts/'+publicPost.id)).post.pingStatus,'open');assert.equal((await ok('/api/posts/'+explicit.id)).post.pingStatus,'closed');await ok('/api/settings','PUT',{defaultPingStatus:'open'});
   });
   await t.test('local environment and closed, old, draft, private, protected or noncanonical targets never fetch',async()=>{
+   await ageOwnedAdmissions();
    const local=createIncomingPings({environment:()=> 'local',http:async()=>{throw new Error('must not fetch');}});await assert.rejects(local({type:'pingback',source:'https://source.test/a',target,ip:'1.1.1.1'}),failCode(0));
    const count=calls;
    for(const input of [{pingStatus:'closed'},{status:'draft'},{status:'private'},{password:'protected-secret'}, {publishedAt:'2000-01-01T00:00:00Z'}]){
@@ -66,13 +71,15 @@ test('incoming typed notifications enforce public state, protocol, transaction, 
    const localAPI=await fetch(base+'/xmlrpc.php',{method:'POST',body:rpc('https://source.test/local',target)});assert.equal(parsePingReply(Buffer.from(await localAPI.text())).fault,0);
   });
   await t.test('actual anonymous RPC response persists typed safe source identity and duplicates fault48',async()=>{
+   await ageOwnedAdmissions();
    await resetAdmission();const result=await xml('https://SOURCE.example.test/one#fragment');assert.equal(result.response.status,200);assert.equal(parsePingReply(Buffer.from(result.body)).fault,null);assert.doesNotMatch(result.body,/Source &|private|protected-secret/);
    const c=(await pool.query('SELECT * FROM comments WHERE post_id=$1 AND type=$2',[publicPost.id,'pingback'])).rows[0];assert.equal(c.author_url,'https://source.example.test/one');assert.equal(c.author_email,'');assert.equal(c.user_id,null);assert.equal(c.author_name,'Source & title');assert.equal(c.status,'approved');assert.match(c.content,/actual backlink/);assert.equal(c.source_hash.length,64);
    assert.equal(parsePingReply(Buffer.from((await xml('https://source.example.test/one')).body)).fault,48);
    await ok('/api/comments','POST',{postId:publicPost.id,authorName:'Human URL',authorEmail:'human@example.test',authorUrl:'https://source.test/human-url',content:'Human',status:'approved'});assert.equal(parsePingReply(Buffer.from((await xml('https://source.test/human-url')).body)).fault,48);
-   const concurrent=await Promise.all([xml('https://source.example.test/race'),xml('https://source.example.test/race')]);assert.deepEqual(concurrent.map(r=>parsePingReply(Buffer.from(r.body)).fault).sort(),[48,null].sort());assert.equal((await pool.query("SELECT count(*)::int AS n FROM comments WHERE post_id=$1 AND author_url='https://source.example.test/race'",[publicPost.id])).rows[0].n,1);
+   await ageOwnedAdmissions();const concurrent=await Promise.all([xml('https://source.example.test/race'),xml('https://source.example.test/race')]);assert.deepEqual(concurrent.map(r=>parsePingReply(Buffer.from(r.body)).fault).sort(),[48,null].sort());assert.equal((await pool.query("SELECT count(*)::int AS n FROM comments WHERE post_id=$1 AND author_url='https://source.example.test/race'",[publicPost.id])).rows[0].n,1);
   });
   await t.test('missing source title/backlink and a rolled-back insertion return only generic faults',async()=>{
+   await ageOwnedAdmissions();
    await resetAdmission();
    for(const [page,code] of [[`<a href="${target}">No title</a>`,32],[`<title>Source</title><script><a href="${target}">fake</a></script>`,17]] as const){html=page;assert.equal(parsePingReply(Buffer.from((await xml('https://source.test/failure'+code)).body)).fault,code);}html='';
    throwTransport=true;const unavailable=(await xml('https://source.test/unavailable')).body;assert.equal(parsePingReply(Buffer.from(unavailable)).fault,0);assert.doesNotMatch(unavailable,/PRIVATE|transport diagnostics/);throwTransport=false;
@@ -82,19 +89,22 @@ test('incoming typed notifications enforce public state, protocol, transaction, 
    try{const response=await xml('https://source.test/rollback');assert.equal(parsePingReply(Buffer.from(response.body)).fault,0);assert.doesNotMatch(response.body,/PRIVATE|database detail/);assert.equal((await pool.query('SELECT count(*)::int AS n FROM comments')).rows[0].n,count);assert.equal((await pool.query('SELECT count(*)::int AS n FROM incoming_ping_leases')).rows[0].n,0);}finally{await pool.query('DROP TRIGGER incoming_test_failure ON comments');await pool.query('DROP FUNCTION incoming_test_failure()');}
   });
   await t.test('trackback protocol never fetches or authenticates claimed source identity and respects source excerpts',async()=>{
+   await ageOwnedAdmissions();
    await resetAdmission();const before=calls;const response=await fetch(endpoint+'/wp-trackback.php?tb_id='+publicPost.id,{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded',Cookie:cookie},body:new URLSearchParams({url:'https://source.test/track',title:'<b>Title & caption</b>',excerpt:'<script>attack()</script> safe excerpt',blog_name:'Blog',charset:'UTF-8'})});assert.match(await response.text(),/<error>0<\/error>/);assert.equal(calls,before);
    const row=(await pool.query("SELECT * FROM comments WHERE post_id=$1 AND type='trackback'",[publicPost.id])).rows[0];assert.equal(row.author_name,'Blog');assert.equal(row.user_id,null);assert.equal(row.author_email,'');assert.doesNotMatch(row.content,/<script|<b>/);assert.match(row.content,/<strong>Title &amp; caption<\/strong>/);const rendered=await ok('/wp-json/wp/v2/comments/'+row.id);assert.match(rendered.content.rendered,/<p><strong>Title &amp; caption<\/strong><\/p>/);
    const flood=(await pool.query('SELECT author_ip,expires_at FROM comment_flood_metadata WHERE comment_id=$1',[row.id])).rows[0];assert.match(flood.author_ip,/127\.0\.0\.1/);assert.equal(flood.expires_at.getTime()-row.created_at.getTime(),3600000);assert.equal(row.updated_at.getTime(),row.created_at.getTime());
-   const pretty=await fetch(endpoint+publicPost.permalink+'trackback/',{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:new URLSearchParams({url:'https://source.test/pretty',title:'Pretty'})});assert.match(await pretty.text(),/<error>0<\/error>/);
+   await ageOwnedAdmissions();const pretty=await fetch(endpoint+publicPost.permalink+'trackback/',{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:new URLSearchParams({url:'https://source.test/pretty',title:'Pretty'})});assert.match(await pretty.text(),/<error>0<\/error>/);
   });
   await t.test('shared moderation, previous-human exclusion, disallowed trash and notification outbox apply',async()=>{
+   await ageOwnedAdmissions();
    await resetAdmission();await ok('/api/settings','PUT',{commentPreviouslyApproved:true,notifyModeration:true});await receive({type:'pingback',source:'https://source.test/previous',target,ip:'1.1.1.1'});assert.equal((await pool.query("SELECT status FROM comments WHERE author_url='https://source.test/previous' AND post_id=$1",[publicPost.id])).rows[0].status,'pending');
    assert.ok((await pool.query("SELECT 1 FROM mail_outbox WHERE subject LIKE $1",['%'+stamp+'%'])).rowCount);
-   await ok('/api/settings','PUT',{commentPreviouslyApproved:false,notifyModeration:false,disallowedCommentKeys:'source.test/disallowed'});await receive({type:'trackback',source:'https://source.test/disallowed',title:'Title',target,ip:'1.1.1.1'});assert.equal((await pool.query("SELECT status FROM comments WHERE author_url='https://source.test/disallowed' AND post_id=$1",[publicPost.id])).rows[0].status,'trash');
-   await ok('/api/settings','PUT',{disallowedCommentKeys:'',commentModerationKeys:'source.test/moderate'});await receive({type:'trackback',source:'https://source.test/moderate',title:'Title',target,ip:'1.1.1.1'});assert.equal((await pool.query("SELECT status FROM comments WHERE author_url='https://source.test/moderate' AND post_id=$1",[publicPost.id])).rows[0].status,'pending');await ok('/api/settings','PUT',{commentModerationKeys:''});
+   await ageOwnedAdmissions();await ok('/api/settings','PUT',{commentPreviouslyApproved:false,notifyModeration:false,disallowedCommentKeys:'source.test/disallowed'});await receive({type:'trackback',source:'https://source.test/disallowed',title:'Title',target,ip:'1.1.1.1'});assert.equal((await pool.query("SELECT status FROM comments WHERE author_url='https://source.test/disallowed' AND post_id=$1",[publicPost.id])).rows[0].status,'trash');
+   await ageOwnedAdmissions();await ok('/api/settings','PUT',{disallowedCommentKeys:'',commentModerationKeys:'source.test/moderate'});await receive({type:'trackback',source:'https://source.test/moderate',title:'Title',target,ip:'1.1.1.1'});assert.equal((await pool.query("SELECT status FROM comments WHERE author_url='https://source.test/moderate' AND post_id=$1",[publicPost.id])).rows[0].status,'pending');await ok('/api/settings','PUT',{commentModerationKeys:''});
    assert.equal(akismetFields({type:'pingback',userIP:'1.1.1.1',userAgent:'',referrer:'',authorName:'Source',authorEmail:'',authorURL:'https://source.test/',content:'context',permalink:target},'fake-key','https://site.test/').comment_type,'pingback');
   });
   await t.test('active Akismet receives the constrained ping type and its real verdict/metadata govern storage',async()=>{
+   await ageOwnedAdmissions();
    await resetAdmission();const plugin=(await pool.query("SELECT * FROM extensions WHERE slug='akismet'")).rows[0],secret=(await pool.query("SELECT * FROM extension_secrets WHERE slug='akismet'")).rows[0];
    const settings=await getSettings();let fields:URLSearchParams|undefined;
    try{
@@ -108,6 +118,7 @@ test('incoming typed notifications enforce public state, protocol, transaction, 
    }
   });
   await t.test('no pooled client during verification; two pending slots and changed target/settings are fenced',async()=>{
+   await ageOwnedAdmissions();
    await resetAdmission();let entered!:()=>void,release!:()=>void;const started=new Promise<void>(done=>entered=done),blocked=new Promise<void>(done=>release=done);
    const held=createIncomingPings({environment:()=> 'production',http:async url=>{entered();await blocked;return {url,status:200,headers:{},body:Buffer.from(`<title>Held</title><a href="${target}">link</a>`)};}});
    const pending=held({type:'pingback',source:'https://source.test/held',target,ip:'1.1.1.2'});const rejected=assert.rejects(pending,failCode(33));await started;
@@ -116,6 +127,7 @@ test('incoming typed notifications enforce public state, protocol, transaction, 
    const first=capacity({type:'pingback',source:'https://source.test/cap1',target,ip:'1.1.1.3'}),second=capacity({type:'pingback',source:'https://source.test/cap2',target,ip:'1.1.1.4'});await both;await assert.rejects(capacity({type:'pingback',source:'https://source.test/cap3',target,ip:'1.1.1.5'}),failCode(0));await ok('/api/settings','PUT',{commentModeration:true});releaseAll();const results=await Promise.allSettled([first,second]);assert.ok(results.every(r=>r.status==='rejected'));assert.equal(count,2);await ok('/api/settings','PUT',{commentModeration:false});
   });
   await t.test('expired admission never stores stale verification and pending admission cannot grow past sixteen',async()=>{
+   await ageOwnedAdmissions();
    await resetAdmission();let started!:()=>void,release!:()=>void;const entered=new Promise<void>(done=>started=done),barrier=new Promise<void>(done=>release=done);const stale=createIncomingPings({environment:()=> 'production',http:async url=>{started();await barrier;return {url,status:200,headers:{},body:Buffer.from(`<title>Expired</title><a href="${target}">actual</a>`)};}});
    const pending=stale({type:'pingback',source:'https://source.test/stale-lease',target,ip:'1.1.1.12'}),rejected=assert.rejects(pending,failCode(0));await entered;await pool.query("UPDATE incoming_ping_leases SET expires_at=now()-interval '1 second'");release();await rejected;assert.equal((await pool.query("SELECT count(*)::int AS n FROM comments WHERE author_url='https://source.test/stale-lease'")).rows[0].n,0);
    const blocker=await pool.connect();let waiting:Promise<void>|undefined;
@@ -132,9 +144,10 @@ test('incoming typed notifications enforce public state, protocol, transaction, 
     await assert.rejects(receive({type:'pingback',source:'https://source.test/seventeenth',target,ip:'1.1.1.14'}),failCode(0));
     const rejectedTrackback=await fetch(endpoint+'/wp-trackback.php?tb_id='+publicPost.id,{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:new URLSearchParams({url:'https://source.test/pending-trackback',title:'Bounded'}),signal:AbortSignal.timeout(2500)});assert.match(await rejectedTrackback.text(),/<error>1<\/error>/);
    }finally{clients.forEach(client=>client.release());await settled;}
-   await resetAdmission();await receive({type:'trackback',source:'https://source.test/after-pending',title:'Recovered',target,ip:'1.1.1.15'});assert.equal((await pool.query('SELECT count(*)::int AS n FROM incoming_ping_leases')).rows[0].n,0);
+   await ageOwnedAdmissions();await resetAdmission();await receive({type:'trackback',source:'https://source.test/after-pending',title:'Recovered',target,ip:'1.1.1.15'});assert.equal((await pool.query('SELECT count(*)::int AS n FROM incoming_ping_leases')).rows[0].n,0);
   });
   await t.test('target locking precedes settings and cannot cycle with content deletion image-setting cleanup',async()=>{
+   await ageOwnedAdmissions();
    await resetAdmission();const p=await post(),destination=new URL(p.permalink,(await getSettings()).siteUrl).href,blocker=await pool.connect();let waiting:Promise<void>|undefined;
    try{
     await blocker.query('BEGIN');await blocker.query('SELECT id FROM posts WHERE id=$1 FOR UPDATE',[p.id]);
@@ -145,12 +158,14 @@ test('incoming typed notifications enforce public state, protocol, transaction, 
    }finally{await blocker.query('ROLLBACK');blocker.release();await waiting?.catch(()=>{});}
   });
   await t.test('source and target rate buckets resist rotating IPs and prune bounded hashed history',async()=>{
+   await ageOwnedAdmissions();
    await resetAdmission();const source='https://source.test/source-limit';await pool.query("INSERT INTO incoming_ping_rates(key,window_start,count) VALUES(encode(sha256(convert_to($1,'UTF8')),'hex'),date_trunc('hour',now()),9)",['source:'+source]);
    await receive({type:'trackback',source,title:'First',target,ip:'2.2.2.1'});const other=await post(),otherTarget=new URL(other.permalink,(await getSettings()).siteUrl).href;const before=calls;await assert.rejects(receive({type:'pingback',source,target:otherTarget,ip:'2.2.2.2'}),failCode(0));assert.equal(calls,before);
-   await resetAdmission();await pool.query("INSERT INTO incoming_ping_rates(key,window_start,count) VALUES(encode(sha256(convert_to($1,'UTF8')),'hex'),date_trunc('hour',now()),99)",['target:'+publicPost.id]);await receive({type:'trackback',source:'https://source.test/target-limit-1',title:'First',target,ip:'2.2.3.1'});await assert.rejects(receive({type:'pingback',source:'https://source.test/target-limit-2',target,ip:'2.2.3.2'}),failCode(0));assert.equal(calls,before);
-   await resetAdmission();await pool.query("INSERT INTO incoming_ping_rates(key,window_start,count) SELECT encode(sha256(convert_to('expired-'||n,'UTF8')),'hex'),now()-interval '2 hours',1 FROM generate_series(1,1000) n");await receive({type:'trackback',source:'https://source.test/prune',title:'Prune',target,ip:'2.2.4.1'});const rates=(await pool.query('SELECT key,window_start,count FROM incoming_ping_rates')).rows;assert.equal(rates.length,4);assert.ok(rates.every(row=>/^[a-f0-9]{64}$/.test(row.key)));assert.equal((await pool.query("SELECT count(*)::int AS n FROM incoming_ping_rates WHERE window_start<date_trunc('hour',now())")).rows[0].n,0);
+   await ageOwnedAdmissions();await resetAdmission();await pool.query("INSERT INTO incoming_ping_rates(key,window_start,count) VALUES(encode(sha256(convert_to($1,'UTF8')),'hex'),date_trunc('hour',now()),99)",['target:'+publicPost.id]);await receive({type:'trackback',source:'https://source.test/target-limit-1',title:'First',target,ip:'2.2.3.1'});await assert.rejects(receive({type:'pingback',source:'https://source.test/target-limit-2',target,ip:'2.2.3.2'}),failCode(0));assert.equal(calls,before);
+   await ageOwnedAdmissions();await resetAdmission();await pool.query("INSERT INTO incoming_ping_rates(key,window_start,count) SELECT encode(sha256(convert_to('expired-'||n,'UTF8')),'hex'),now()-interval '2 hours',1 FROM generate_series(1,1000) n");await receive({type:'trackback',source:'https://source.test/prune',title:'Prune',target,ip:'2.2.4.1'});const rates=(await pool.query('SELECT key,window_start,count FROM incoming_ping_rates')).rows;assert.equal(rates.length,4);assert.ok(rates.every(row=>/^[a-f0-9]{64}$/.test(row.key)));assert.equal((await pool.query("SELECT count(*)::int AS n FROM incoming_ping_rates WHERE window_start<date_trunc('hour',now())")).rows[0].n,0);
   });
   await t.test('persistent rates, malformed/oversized protocol and human-forged types fail without private details',async()=>{
+   await ageOwnedAdmissions();
    await resetAdmission();await pool.query("INSERT INTO incoming_ping_rates(key,window_start,count) VALUES(encode(sha256(convert_to('ip:1.1.1.6','UTF8')),'hex'),date_trunc('hour',now()),30)");const before=calls;await assert.rejects(receive({type:'pingback',source:'https://source.test/rate',target,ip:'1.1.1.6'}),failCode(0));assert.equal(calls,before);
    for(const body of [Buffer.from('<!DOCTYPE a><methodCall/>'),Buffer.alloc(17000,65),Buffer.from('<methodCall><methodName>system.multicall</methodName></methodCall>')]){const response=await fetch(endpoint+'/xmlrpc.php',{method:'POST',body});const text=await response.text();assert.match(text,/faultCode/);assert.doesNotMatch(text,/DOCTYPE|system.multicall|stack|127.0.0.1/);}
    const wrongMethod=await fetch(endpoint+'/xmlrpc.php');assert.equal(wrongMethod.status,405);assert.equal(wrongMethod.headers.get('allow'),'POST');assert.equal(parsePingReply(Buffer.from(await wrongMethod.text())).fault,-32600);
@@ -158,6 +173,7 @@ test('incoming typed notifications enforce public state, protocol, transaction, 
    const native=await api('/wp-json/wp/v2/comments','POST',{post:publicPost.id,content:'Body',type:'pingback'});assert.equal(native.response.status,400);
   });
   await t.test('typed native/admin filters, public mixed counts and JSON/WXR fresh-ID copies agree',async()=>{
+   await ageOwnedAdmissions();
    const human=await ok('/api/comments','POST',{postId:publicPost.id,authorName:'Human',authorEmail:'human@example.test',content:'Human body',status:'approved'});assert.equal(human.comment.type,'comment');
    const mixed=await ok('/api/public/posts/'+publicPost.slug,'GET',undefined,'');assert.ok(mixed.comments.some((c:any)=>c.type==='pingback'));assert.ok(mixed.comments.some((c:any)=>c.type==='trackback'));assert.equal(mixed.commentsPagination.totalComments,mixed.comments.length);
    const only=await ok('/api/comments?type=pingback&postId='+publicPost.id);assert.ok(only.comments.every((c:any)=>c.type==='pingback'));
@@ -169,6 +185,7 @@ test('incoming typed notifications enforce public state, protocol, transaction, 
    const before=(await pool.query('SELECT count(*)::int AS n FROM posts')).rows[0].n;const bad=await api('/api/tools/import','POST',{...copy,comments:[copy.comments.find((c:any)=>c.type==='pingback'),{...copy.comments.find((c:any)=>c.type==='pingback'),id:2147483000}]});assert.equal(bad.response.status,409);assert.equal((await pool.query('SELECT count(*)::int AS n FROM posts')).rows[0].n,before);
   });
   await t.test('typed moderation preserves owner permissions and keeps public and foreign account fields private',async()=>{
+   await ageOwnedAdmissions();
    await resetAdmission();const people:Record<string,{id:number;cookie:string}>={};
    for(const role of ['author','subscriber']){const email=stamp+'-'+role+'@example.test',person=(await ok('/api/users','POST',{username:stamp+'-'+role,email,displayName:role,role,password:'Temporary-safe-password123!'})).user;users.push(person.id);const login=await api('/api/auth/login','POST',{login:email,password:'Temporary-safe-password123!'},'');people[role]={id:person.id,cookie:login.response.headers.get('set-cookie')!.split(';')[0]};}
    const own=await post({authorId:people.author.id}),ownTarget=new URL(own.permalink,(await getSettings()).siteUrl).href;html=`<title>Owned ping</title><a href="${ownTarget}">actual</a>`;await receive({type:'pingback',source:'https://source.test/author-owned',target:ownTarget,ip:'1.1.1.8'});html='';const owned=(await pool.query("SELECT id FROM comments WHERE post_id=$1 AND type='pingback'",[own.id])).rows[0];
@@ -178,6 +195,7 @@ test('incoming typed notifications enforce public state, protocol, transaction, 
    assert.equal((await api('/wp-json/wp/v2/comments?type=pingback','GET',undefined,people.subscriber.cookie)).response.status,403);const publicList=await ok('/wp-json/wp/v2/comments?type=pingback&post='+publicPost.id,'GET',undefined,people.author.cookie);assert.ok(publicList.every((c:any)=>c.author_email===undefined));
   });
   await t.test('X-Pingback appears on real production singular HTTP responses only for public open unprotected targets',async()=>{
+   await ageOwnedAdmissions();
    const settings=await getSettings(),directory=await mkdtemp(path.join(tmpdir(),'worldact-incoming-static-')),oldStatic=process.env.STATIC_DIR;
    await writeFile(path.join(directory,'index.html'),await readFile(path.join(rootDir,'dist','index.html')));process.env.STATIC_DIR=directory;
    const {app:actual}=await import('../server/index.js'),http=createServer(actual);await new Promise<void>(done=>http.listen(0,'127.0.0.1',done));const url='http://127.0.0.1:'+(http.address() as any).port;
