@@ -76,6 +76,9 @@ jobs:
           tests/category-permalinks.test.ts
           tests/permalink-time-tokens.test.ts
           tests/permalink-time-portability.test.ts
+          tests/author-permalinks.test.ts tests/author-access-waits.test.ts
+          tests/user-creation-concurrency.test.ts tests/user-nicenames-migration.test.ts
+          tests/author-permalink-portability.test.ts
           tests/page-delete-reparent.test.ts tests/post-mutation-locks.test.ts
           tests/media-post-locks.test.ts
           tests/db-client-lifecycle.test.ts
@@ -164,6 +167,25 @@ jobs:
           TIME_PERMALINK_ARCHIVE_STAGE: restore
           TIME_PERMALINK_ARCHIVE_PATH: ${{ runner.temp }}/worldact-time-permalinks.json
         run: node scripts/test-isolated.mjs tests/permalink-time-portability.test.ts
+      - name: Export author permalink archive
+        if: matrix.node == 24
+        env:
+          AUTHOR_PERMALINK_ARCHIVE_STAGE: export
+          AUTHOR_PERMALINK_ARCHIVE_PATH: ${{ runner.temp }}/worldact-author-permalinks.json
+        run: node scripts/test-isolated.mjs tests/author-permalink-portability.test.ts
+      - name: Restore author archive to a fresh source database
+        if: matrix.node == 24
+        env:
+          AUTHOR_PERMALINK_ARCHIVE_STAGE: restore
+          AUTHOR_PERMALINK_ARCHIVE_PATH: ${{ runner.temp }}/worldact-author-permalinks.json
+        run: node scripts/test-isolated.mjs tests/author-permalink-portability.test.ts
+      - name: Restore author archive on a fresh compiled server
+        if: matrix.node == 24
+        env:
+          ISOLATED_TEST_COMPILED: "true"
+          AUTHOR_PERMALINK_ARCHIVE_STAGE: restore
+          AUTHOR_PERMALINK_ARCHIVE_PATH: ${{ runner.temp }}/worldact-author-permalinks.json
+        run: node scripts/test-isolated.mjs tests/author-permalink-portability.test.ts
       - name: Export image format archive
         if: matrix.node == 24
         env:
