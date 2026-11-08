@@ -1,0 +1,81 @@
+{
+  "password": [
+    {
+      "theme": "twentytwentyfive",
+      "posts": [
+        {
+          "id": 506,
+          "path": "/api/public/posts/ssr-protected-post/unlock",
+          "method": "POST",
+          "status": 200,
+          "kind": null
+        }
+      ],
+      "oneFreshModel": true
+    },
+    {
+      "theme": "classic",
+      "posts": [
+        {
+          "id": 520,
+          "path": "/api/public/posts/ssr-protected-post/unlock",
+          "method": "POST",
+          "status": 200,
+          "kind": null
+        }
+      ],
+      "oneFreshModel": true
+    }
+  ],
+  "protectedHeldHTML": {
+    "kind": "Actual authorized protected-body HTML held, its persisted password changed, held HTML delivered then revalidated as locked",
+    "masked": {
+      "inert": true,
+      "oldSecret": true,
+      "opacity": "0"
+    },
+    "current": {
+      "descriptionSafe": true,
+      "inert": false,
+      "passwordForm": true,
+      "secretAbsent": true
+    }
+  },
+  "classicSearchPaging": {
+    "oneHistoryEntryPerAction": true,
+    "searchRequests": [
+      {
+        "id": 528,
+        "path": "/api/public/document?path=%2F%3Fsearch%3DSSR%2Bcard",
+        "method": "GET",
+        "status": 200,
+        "kind": null
+      }
+    ],
+    "pageRequests": [
+      {
+        "id": 529,
+        "path": "/api/public/document?path=%2F%3Fsearch%3DSSR%2Bcard%26page%3D2",
+        "method": "GET",
+        "status": 200,
+        "kind": null
+      }
+    ]
+  },
+  "dateHead": {
+    "descriptionCount": 1,
+    "padded": false,
+    "titleCount": 1,
+    "unpadded": true
+  },
+  "toolbarLogout": [
+    {
+      "id": 536,
+      "path": "/api/auth/logout",
+      "method": "POST",
+      "status": 200,
+      "kind": null
+    }
+  ],
+  "errors": ""
+}

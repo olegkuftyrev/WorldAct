@@ -1,0 +1,25 @@
+{
+  "kind": "Actual server500 after owned posts table temporarily renamed while actual initial HTML was held; safe replacement error then restored-table retry",
+  "failed": {
+    "error": "Something went wrong. Please try again. Try again",
+    "gated": false,
+    "oldBodyAbsent": true,
+    "retry": true,
+    "visible": true
+  },
+  "modelFailures": [
+    {
+      "id": 542,
+      "path": "/api/public/document?path=%2F%3Fp%3D9",
+      "method": "GET",
+      "status": 500,
+      "kind": null
+    }
+  ],
+  "recovered": {
+    "errorCleared": true,
+    "inert": false,
+    "opacity": "1"
+  },
+  "errors": ""
+}

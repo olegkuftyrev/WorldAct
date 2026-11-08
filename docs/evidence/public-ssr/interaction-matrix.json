@@ -1,0 +1,416 @@
+{
+  "rows": [
+    {
+      "theme": "twentytwentyfive",
+      "width": 1440,
+      "before": {
+        "body1": false,
+        "body2": true,
+        "card2": true,
+        "documentWidth": 1440,
+        "draft": "SSR controller twentytwentyfive 1440 mw82spsc",
+        "focus": true,
+        "gate": false,
+        "loggedIn": true,
+        "parent": "11",
+        "url": "http://127.0.0.1:3050/?p=7&page=2&query-4-page=2&commentPage=2#respond",
+        "width": 1440
+      },
+      "posts": [
+        {
+          "id": 21,
+          "path": "/api/public/comments",
+          "method": "POST",
+          "status": 201,
+          "kind": null
+        }
+      ],
+      "saved": {
+        "id": 29,
+        "parent_id": 11,
+        "user_id": 2,
+        "status": "approved"
+      },
+      "agedOnlyOwnAdmission": 29
+    },
+    {
+      "theme": "twentytwentyfive",
+      "width": 768,
+      "before": {
+        "body1": false,
+        "body2": true,
+        "card2": true,
+        "documentWidth": 768,
+        "draft": "SSR controller twentytwentyfive 768 mw82szyy",
+        "focus": true,
+        "gate": false,
+        "loggedIn": true,
+        "parent": "11",
+        "url": "http://127.0.0.1:3050/?p=7&page=2&query-4-page=2&commentPage=2#respond",
+        "width": 768
+      },
+      "posts": [
+        {
+          "id": 43,
+          "path": "/api/public/comments",
+          "method": "POST",
+          "status": 201,
+          "kind": null
+        }
+      ],
+      "saved": {
+        "id": 30,
+        "parent_id": 11,
+        "user_id": 2,
+        "status": "approved"
+      },
+      "agedOnlyOwnAdmission": 30
+    },
+    {
+      "theme": "twentytwentyfive",
+      "width": 375,
+      "before": {
+        "body1": false,
+        "body2": true,
+        "card2": true,
+        "documentWidth": 375,
+        "draft": "SSR controller twentytwentyfive 375 mw82ta47",
+        "focus": true,
+        "gate": false,
+        "loggedIn": true,
+        "parent": "11",
+        "url": "http://127.0.0.1:3050/?p=7&page=2&query-4-page=2&commentPage=2#respond",
+        "width": 375
+      },
+      "posts": [
+        {
+          "id": 65,
+          "path": "/api/public/comments",
+          "method": "POST",
+          "status": 201,
+          "kind": null
+        }
+      ],
+      "saved": {
+        "id": 31,
+        "parent_id": 11,
+        "user_id": 2,
+        "status": "approved"
+      },
+      "agedOnlyOwnAdmission": 31
+    },
+    {
+      "theme": "twentytwentyfour",
+      "width": 1440,
+      "before": {
+        "body1": false,
+        "body2": true,
+        "card2": true,
+        "documentWidth": 1440,
+        "draft": "SSR controller twentytwentyfour 1440 mw82tk9z",
+        "focus": true,
+        "gate": false,
+        "loggedIn": true,
+        "parent": "11",
+        "url": "http://127.0.0.1:3050/?p=7&page=2&query-4-page=2&commentPage=2#respond",
+        "width": 1440
+      },
+      "posts": [
+        {
+          "id": 87,
+          "path": "/api/public/comments",
+          "method": "POST",
+          "status": 201,
+          "kind": null
+        }
+      ],
+      "saved": {
+        "id": 32,
+        "parent_id": 11,
+        "user_id": 2,
+        "status": "approved"
+      },
+      "agedOnlyOwnAdmission": 32
+    },
+    {
+      "theme": "twentytwentyfour",
+      "width": 768,
+      "before": {
+        "body1": false,
+        "body2": true,
+        "card2": true,
+        "documentWidth": 768,
+        "draft": "SSR controller twentytwentyfour 768 mw82tuf7",
+        "focus": true,
+        "gate": false,
+        "loggedIn": true,
+        "parent": "11",
+        "url": "http://127.0.0.1:3050/?p=7&page=2&query-4-page=2&commentPage=2#respond",
+        "width": 768
+      },
+      "posts": [
+        {
+          "id": 110,
+          "path": "/api/public/comments",
+          "method": "POST",
+          "status": 201,
+          "kind": null
+        }
+      ],
+      "saved": {
+        "id": 33,
+        "parent_id": 11,
+        "user_id": 2,
+        "status": "approved"
+      },
+      "agedOnlyOwnAdmission": 33
+    },
+    {
+      "theme": "twentytwentyfour",
+      "width": 375,
+      "before": {
+        "body1": false,
+        "body2": true,
+        "card2": true,
+        "documentWidth": 375,
+        "draft": "SSR controller twentytwentyfour 375 mw82u4n1",
+        "focus": true,
+        "gate": false,
+        "loggedIn": true,
+        "parent": "11",
+        "url": "http://127.0.0.1:3050/?p=7&page=2&query-4-page=2&commentPage=2#respond",
+        "width": 375
+      },
+      "posts": [
+        {
+          "id": 133,
+          "path": "/api/public/comments",
+          "method": "POST",
+          "status": 201,
+          "kind": null
+        }
+      ],
+      "saved": {
+        "id": 34,
+        "parent_id": 11,
+        "user_id": 2,
+        "status": "approved"
+      },
+      "agedOnlyOwnAdmission": 34
+    },
+    {
+      "theme": "twentytwentythree",
+      "width": 1440,
+      "before": {
+        "body1": false,
+        "body2": true,
+        "card2": true,
+        "documentWidth": 1440,
+        "draft": "SSR controller twentytwentythree 1440 mw82ueva",
+        "focus": true,
+        "gate": false,
+        "loggedIn": true,
+        "parent": "11",
+        "url": "http://127.0.0.1:3050/?p=7&page=2&query-4-page=2&commentPage=2#respond",
+        "width": 1440
+      },
+      "posts": [
+        {
+          "id": 153,
+          "path": "/api/public/comments",
+          "method": "POST",
+          "status": 201,
+          "kind": null
+        }
+      ],
+      "saved": {
+        "id": 35,
+        "parent_id": 11,
+        "user_id": 2,
+        "status": "approved"
+      },
+      "agedOnlyOwnAdmission": 35
+    },
+    {
+      "theme": "twentytwentythree",
+      "width": 768,
+      "before": {
+        "body1": false,
+        "body2": true,
+        "card2": true,
+        "documentWidth": 768,
+        "draft": "SSR controller twentytwentythree 768 mw82uoxd",
+        "focus": true,
+        "gate": false,
+        "loggedIn": true,
+        "parent": "11",
+        "url": "http://127.0.0.1:3050/?p=7&page=2&query-4-page=2&commentPage=2#respond",
+        "width": 768
+      },
+      "posts": [
+        {
+          "id": 171,
+          "path": "/api/public/comments",
+          "method": "POST",
+          "status": 201,
+          "kind": null
+        }
+      ],
+      "saved": {
+        "id": 36,
+        "parent_id": 11,
+        "user_id": 2,
+        "status": "approved"
+      },
+      "agedOnlyOwnAdmission": 36
+    },
+    {
+      "theme": "twentytwentythree",
+      "width": 375,
+      "before": {
+        "body1": false,
+        "body2": true,
+        "card2": true,
+        "documentWidth": 375,
+        "draft": "SSR controller twentytwentythree 375 mw82uz1m",
+        "focus": true,
+        "gate": false,
+        "loggedIn": true,
+        "parent": "11",
+        "url": "http://127.0.0.1:3050/?p=7&page=2&query-4-page=2&commentPage=2#respond",
+        "width": 375
+      },
+      "posts": [
+        {
+          "id": 189,
+          "path": "/api/public/comments",
+          "method": "POST",
+          "status": 201,
+          "kind": null
+        }
+      ],
+      "saved": {
+        "id": 37,
+        "parent_id": 11,
+        "user_id": 2,
+        "status": "approved"
+      },
+      "agedOnlyOwnAdmission": 37
+    },
+    {
+      "theme": "classic",
+      "width": 1440,
+      "before": {
+        "body1": false,
+        "body2": true,
+        "card2": true,
+        "documentWidth": 1440,
+        "draft": "SSR controller classic 1440 mw82v91u",
+        "focus": true,
+        "gate": false,
+        "loggedIn": true,
+        "parent": "11",
+        "url": "http://127.0.0.1:3050/?p=7&page=2&query-4-page=2&commentPage=2#respond",
+        "width": 1440
+      },
+      "posts": [
+        {
+          "id": 208,
+          "path": "/api/public/comments",
+          "method": "POST",
+          "status": 201,
+          "kind": null
+        }
+      ],
+      "saved": {
+        "id": 38,
+        "parent_id": 11,
+        "user_id": 2,
+        "status": "approved"
+      },
+      "agedOnlyOwnAdmission": 38
+    },
+    {
+      "theme": "classic",
+      "width": 768,
+      "before": {
+        "body1": false,
+        "body2": true,
+        "card2": true,
+        "documentWidth": 768,
+        "draft": "SSR controller classic 768 mw82vj59",
+        "focus": true,
+        "gate": false,
+        "loggedIn": true,
+        "parent": "11",
+        "url": "http://127.0.0.1:3050/?p=7&page=2&query-4-page=2&commentPage=2#respond",
+        "width": 768
+      },
+      "posts": [
+        {
+          "id": 228,
+          "path": "/api/public/comments",
+          "method": "POST",
+          "status": 201,
+          "kind": null
+        }
+      ],
+      "saved": {
+        "id": 39,
+        "parent_id": 11,
+        "user_id": 2,
+        "status": "approved"
+      },
+      "agedOnlyOwnAdmission": 39
+    },
+    {
+      "theme": "classic",
+      "width": 375,
+      "before": {
+        "body1": false,
+        "body2": true,
+        "card2": true,
+        "documentWidth": 375,
+        "draft": "SSR controller classic 375 mw82vt8l",
+        "focus": true,
+        "gate": false,
+        "loggedIn": true,
+        "parent": "11",
+        "url": "http://127.0.0.1:3050/?p=7&page=2&query-4-page=2&commentPage=2#respond",
+        "width": 375
+      },
+      "posts": [
+        {
+          "id": 248,
+          "path": "/api/public/comments",
+          "method": "POST",
+          "status": 201,
+          "kind": null
+        }
+      ],
+      "saved": {
+        "id": 40,
+        "parent_id": 11,
+        "user_id": 2,
+        "status": "approved"
+      },
+      "agedOnlyOwnAdmission": 40
+    }
+  ],
+  "screenshots": [
+    "docs/evidence/public-ssr/twentytwentyfive-1440.png",
+    "docs/evidence/public-ssr/twentytwentyfive-768.png",
+    "docs/evidence/public-ssr/twentytwentyfive-375.png",
+    "docs/evidence/public-ssr/twentytwentyfour-1440.png",
+    "docs/evidence/public-ssr/twentytwentyfour-768.png",
+    "docs/evidence/public-ssr/twentytwentyfour-375.png",
+    "docs/evidence/public-ssr/twentytwentythree-1440.png",
+    "docs/evidence/public-ssr/twentytwentythree-768.png",
+    "docs/evidence/public-ssr/twentytwentythree-375.png",
+    "docs/evidence/public-ssr/classic-1440.png",
+    "docs/evidence/public-ssr/classic-768.png",
+    "docs/evidence/public-ssr/classic-375.png"
+  ],
+  "stage": "Assembled production Node SSR plus actual built React hydration/controller; author native gate.",
+  "browserErrors": ""
+}

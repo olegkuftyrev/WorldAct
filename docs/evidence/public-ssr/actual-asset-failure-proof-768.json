@@ -1,0 +1,60 @@
+{
+  "kind": "Actual held Node HTML delivered after its built hashed entry file was temporarily removed in this owned checkout",
+  "held": [
+    {
+      "id": 777,
+      "path": "/?p=7",
+      "method": "GET",
+      "status": 200,
+      "kind": "html"
+    }
+  ],
+  "assets": [
+    "/assets/index-1LS1IDYv.js",
+    "/assets/index-BsgYOWhl.css"
+  ],
+  "assetFailures": [
+    {
+      "id": 778,
+      "path": "/assets/index-1LS1IDYv.js",
+      "method": "GET",
+      "status": 404,
+      "kind": null
+    },
+    {
+      "id": 779,
+      "path": "/assets/index-BsgYOWhl.css",
+      "method": "GET",
+      "status": 404,
+      "kind": null
+    }
+  ],
+  "failed": {
+    "bottom": 124,
+    "error": "Unable to load this page safely. Please try again.\n\nTry again",
+    "errorOutsideRoot": true,
+    "gated": true,
+    "inert": true,
+    "opacity": "0",
+    "rootHeight": 2412.359375,
+    "scrollY": 0,
+    "ssrBody": true,
+    "top": 16,
+    "viewport": {
+      "height": 1000,
+      "width": 768
+    },
+    "visible": true
+  },
+  "keyboard": {
+    "focusedOutsideRoot": true,
+    "retryFocused": true
+  },
+  "recovered": {
+    "body": true,
+    "errorCleared": true,
+    "inert": false,
+    "opacity": "1"
+  },
+  "expectedAssetErrors": ""
+}

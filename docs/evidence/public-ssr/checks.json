@@ -1,0 +1,76 @@
+{
+  "scope": "Frontend author evidence; independent integrated release verdict remains separate",
+  "codeHead": "b252a69",
+  "uiContinuationCommit": "60e0ae7977dbbf1793f41030fe7f4d97fe4d4924",
+  "backendContinuationCommit": "207a1fac28546285bb8322718567222c701e6335",
+  "fixtureOnlyCommit": "f2d7c94b4f1a1d4ce5b575bf6fbf68b7698b32ef",
+  "build": {
+    "command": "npm run build",
+    "exitCode": 0,
+    "log": "/tmp/worldact-public-ssr-frontend-final-build.log"
+  },
+  "guards": [
+    {
+      "kind": "source",
+      "files": 7,
+      "tests": 42,
+      "pass": 42,
+      "fail": 0,
+      "skipped": 0,
+      "exitCode": 0,
+      "log": "/tmp/worldact-public-ssr-frontend-continuation-source.log"
+    },
+    {
+      "kind": "compiled",
+      "files": 7,
+      "tests": 42,
+      "pass": 42,
+      "fail": 0,
+      "skipped": 0,
+      "exitCode": 0,
+      "log": "/tmp/worldact-public-ssr-frontend-continuation-compiled.log"
+    }
+  ],
+  "nativeContinuation": {
+    "comments": 6,
+    "passwordUnlocks": 6,
+    "newRootWindow": 1,
+    "widths": [
+      1440,
+      768,
+      375
+    ],
+    "themes": [
+      "twentytwentyfive",
+      "classic"
+    ],
+    "genuineScriptsDisabled": true,
+    "oneActualPostEach": true,
+    "noDocumentApi": true,
+    "screenshotsDirectlyInspected": 13,
+    "proof": "native-return-context-proof.json",
+    "log": "/tmp/worldact-public-ssr-frontend-native-return-context.log"
+  },
+  "limits": [
+    "Every JS-enabled public first paint waits for one fresh document validation, including anonymous roots.",
+    "Standalone login/admin/editor remain the existing JS framework shell.",
+    "Actual history test reported persisted:false; no BFCache admission or fabricated persisted-pageshow claim.",
+    "Earlier canonical-only native continuation and offscreen fallback/blue Classic labels remain explicit predecessor failures.",
+    "Policy is request-time/revalidated; delivered bytes are not retroactively revoked."
+  ],
+  "cleanup": {
+    "ownedBrowserClosed": true,
+    "ownedVaultProfilesRemoved": 3,
+    "ownedDatabaseDropped": true,
+    "ownedUploadsEnvPrivateFilesRemoved": true,
+    "portsFree": [
+      3044,
+      3045,
+      3046,
+      3050,
+      3051
+    ],
+    "privateHarnessArchived": true,
+    "worktreeAndRealDependenciesRetained": true
+  }
+}

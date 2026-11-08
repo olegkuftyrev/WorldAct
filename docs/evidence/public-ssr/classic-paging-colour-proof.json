@@ -1,0 +1,197 @@
+{
+  "predecessorRuntime": "f7cf313c411cc3f9810c43fa91c9b49cf65767fa",
+  "before": [
+    {
+      "background": "rgb(17, 17, 17)",
+      "color": "rgb(56, 88, 233)",
+      "documentWidth": 1440,
+      "focused": true,
+      "font": "16px Georgia, \"Times New Roman\", serif",
+      "fontFamily": "Georgia, \"Times New Roman\", serif",
+      "fontSize": "16px",
+      "fontWeight": "400",
+      "geometry": {
+        "height": 49,
+        "width": 210.84375,
+        "x": 370,
+        "y": 491.328125
+      },
+      "href": "/?p=7&page=2&query-4-page=2&commentPage=1",
+      "lineHeight": "normal",
+      "outline": "rgb(56, 88, 233) solid 2px",
+      "padding": "14px 25px",
+      "text": "← Previous comments",
+      "width": 1440
+    },
+    {
+      "background": "rgb(17, 17, 17)",
+      "color": "rgb(56, 88, 233)",
+      "documentWidth": 768,
+      "focused": true,
+      "font": "16px Georgia, \"Times New Roman\", serif",
+      "fontFamily": "Georgia, \"Times New Roman\", serif",
+      "fontSize": "16px",
+      "fontWeight": "400",
+      "geometry": {
+        "height": 49,
+        "width": 210.84375,
+        "x": 38.390625,
+        "y": 498
+      },
+      "href": "/?p=7&page=2&query-4-page=2&commentPage=1",
+      "lineHeight": "normal",
+      "outline": "rgb(56, 88, 233) solid 2px",
+      "padding": "14px 25px",
+      "text": "← Previous comments",
+      "width": 768
+    },
+    {
+      "background": "rgb(17, 17, 17)",
+      "color": "rgb(56, 88, 233)",
+      "documentWidth": 375,
+      "focused": true,
+      "font": "16px Georgia, \"Times New Roman\", serif",
+      "fontFamily": "Georgia, \"Times New Roman\", serif",
+      "fontSize": "16px",
+      "fontWeight": "400",
+      "geometry": {
+        "height": 68,
+        "width": 134.765625,
+        "x": 24,
+        "y": 488.71875
+      },
+      "href": "/?p=7&page=2&query-4-page=2&commentPage=1",
+      "lineHeight": "normal",
+      "outline": "rgb(56, 88, 233) solid 2px",
+      "padding": "14px 25px",
+      "text": "← Previous comments",
+      "width": 375
+    }
+  ],
+  "errors": "",
+  "after": [
+    {
+      "measured": {
+        "background": "rgb(17, 17, 17)",
+        "color": "rgb(255, 255, 255)",
+        "documentWidth": 1440,
+        "focused": true,
+        "font": "16px Georgia, \"Times New Roman\", serif",
+        "fontFamily": "Georgia, \"Times New Roman\", serif",
+        "fontSize": "16px",
+        "fontWeight": "400",
+        "geometry": {
+          "height": 49,
+          "width": 210.84375,
+          "x": 370,
+          "y": 491.328125
+        },
+        "href": "/?p=7&page=2&query-4-page=2&commentPage=1",
+        "lineHeight": "normal",
+        "outline": "rgb(56, 88, 233) solid 2px",
+        "padding": "14px 25px",
+        "text": "← Previous comments",
+        "width": 1440
+      },
+      "contrast": 18.883060964594996,
+      "after": {
+        "body2": true,
+        "bodyPage": "2",
+        "card2": true,
+        "index": 2,
+        "queryPage": "2"
+      },
+      "requests": [
+        {
+          "id": 750,
+          "path": "/api/public/document?path=%2F%3Fp%3D7%26page%3D2%26query-4-page%3D2%26commentPage%3D1",
+          "method": "GET",
+          "status": 200,
+          "kind": null
+        }
+      ]
+    },
+    {
+      "measured": {
+        "background": "rgb(17, 17, 17)",
+        "color": "rgb(255, 255, 255)",
+        "documentWidth": 768,
+        "focused": true,
+        "font": "16px Georgia, \"Times New Roman\", serif",
+        "fontFamily": "Georgia, \"Times New Roman\", serif",
+        "fontSize": "16px",
+        "fontWeight": "400",
+        "geometry": {
+          "height": 49,
+          "width": 210.84375,
+          "x": 38.390625,
+          "y": 498
+        },
+        "href": "/?p=7&page=2&query-4-page=2&commentPage=1",
+        "lineHeight": "normal",
+        "outline": "rgb(56, 88, 233) solid 2px",
+        "padding": "14px 25px",
+        "text": "← Previous comments",
+        "width": 768
+      },
+      "contrast": 18.883060964594996,
+      "after": {
+        "body2": true,
+        "bodyPage": "2",
+        "card2": true,
+        "index": 1,
+        "queryPage": "2"
+      },
+      "requests": [
+        {
+          "id": 757,
+          "path": "/api/public/document?path=%2F%3Fp%3D7%26page%3D2%26query-4-page%3D2%26commentPage%3D1",
+          "method": "GET",
+          "status": 200,
+          "kind": null
+        }
+      ]
+    },
+    {
+      "measured": {
+        "background": "rgb(17, 17, 17)",
+        "color": "rgb(255, 255, 255)",
+        "documentWidth": 375,
+        "focused": true,
+        "font": "16px Georgia, \"Times New Roman\", serif",
+        "fontFamily": "Georgia, \"Times New Roman\", serif",
+        "fontSize": "16px",
+        "fontWeight": "400",
+        "geometry": {
+          "height": 68,
+          "width": 134.765625,
+          "x": 24,
+          "y": 488.71875
+        },
+        "href": "/?p=7&page=2&query-4-page=2&commentPage=1",
+        "lineHeight": "normal",
+        "outline": "rgb(56, 88, 233) solid 2px",
+        "padding": "14px 25px",
+        "text": "← Previous comments",
+        "width": 375
+      },
+      "contrast": 18.883060964594996,
+      "after": {
+        "body2": true,
+        "bodyPage": "2",
+        "card2": true,
+        "index": 1,
+        "queryPage": "2"
+      },
+      "requests": [
+        {
+          "id": 764,
+          "path": "/api/public/document?path=%2F%3Fp%3D7%26page%3D2%26query-4-page%3D2%26commentPage%3D1",
+          "method": "GET",
+          "status": 200,
+          "kind": null
+        }
+      ]
+    }
+  ]
+}

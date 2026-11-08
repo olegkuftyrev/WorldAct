@@ -1,0 +1,29 @@
+{
+  "kind": "Actual pagehide/navigation/back with real authored open navigation and visible descendant",
+  "open": {
+    "open": true,
+    "rootOpacity": "1",
+    "visibility": "visible"
+  },
+  "retired": {
+    "kind": "actual-pagehide-open-source-menu",
+    "persisted": false,
+    "rootPresent": true,
+    "opacity": "0",
+    "inert": true,
+    "menuOpen": true,
+    "descendantVisibility": "visible"
+  },
+  "returning": {
+    "gated": true,
+    "inert": true,
+    "opacity": "0",
+    "path": "/?p=10"
+  },
+  "after": {
+    "body": true,
+    "inert": false,
+    "opacity": "1"
+  },
+  "errors": ""
+}

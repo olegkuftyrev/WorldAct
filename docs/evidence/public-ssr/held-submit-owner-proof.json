@@ -1,0 +1,61 @@
+{
+  "kind": "Actual held successful POST response across same-post body A to B to A SPA history; old completion cannot reacquire new owner",
+  "held": [
+    {
+      "id": 702,
+      "path": "/api/public/comments",
+      "method": "POST",
+      "status": 201,
+      "kind": "comment"
+    }
+  ],
+  "B": {
+    "body1": true,
+    "busy": false
+  },
+  "before": {
+    "body2": true,
+    "busy": false,
+    "card2": true,
+    "draft": "SSR new owner draft mw83mky9",
+    "focused": true,
+    "parent": "11",
+    "url": "/?p=7&page=2&query-4-page=2&commentPage=2"
+  },
+  "after": {
+    "body2": true,
+    "busy": false,
+    "card2": true,
+    "draft": "SSR new owner draft mw83mky9",
+    "focused": true,
+    "parent": "11",
+    "url": "/?p=7&page=2&query-4-page=2&commentPage=2"
+  },
+  "admitted": {
+    "id": 46,
+    "parent_id": 11,
+    "user_id": 2
+  },
+  "saved": {
+    "id": 47,
+    "parent_id": 11,
+    "user_id": 2
+  },
+  "posts": [
+    {
+      "id": 702,
+      "path": "/api/public/comments",
+      "method": "POST",
+      "status": 201,
+      "kind": "comment"
+    },
+    {
+      "id": 707,
+      "path": "/api/public/comments",
+      "method": "POST",
+      "status": 201,
+      "kind": null
+    }
+  ],
+  "errors": ""
+}
