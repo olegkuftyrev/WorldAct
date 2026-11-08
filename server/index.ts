@@ -1,5 +1,4 @@
-import {pingbackHeader} from "./incoming-ping-policy.js";
-import {resolvePublicPath} from "./permalinks.js";
+import { publicDocumentIdentity } from "./public-documents.js";
 import incomingPingsRouter from "./incoming-pings.js";
 import outgoingPingsRouter,{startOutgoingPingWorker} from "./outgoing-pings.js";
 import "dotenv/config";
@@ -17,7 +16,6 @@ import {
   rootDir,
   uploadsDir,
   mediaFields,
-  getSettings,
   type User,
 } from "./db.js";
 import {
@@ -196,22 +194,16 @@ const distDir = path.resolve(
   process.env.STATIC_DIR || path.join(rootDir, "dist"),
 );
 app.use(express.static(distDir, { index: false }));
-app.get("/{*splat}", async (req, res, next) => {
-  try {
-    await access(path.join(distDir, "index.html"));
-    if(!/^\/(api|admin|wp-json|uploads)(?:\/|$)/.test(req.path)){
-      const identity=await resolvePublicPath(req.originalUrl);
-      if(identity){const post=(await pool.query('SELECT id,type,status,ping_status AS "pingStatus",published_at AS "publishedAt",password_hash IS NOT NULL AS "hasPassword" FROM posts WHERE id=$1',[identity.id])).rows[0];const pingback=pingbackHeader(post,await getSettings());if(pingback)res.setHeader("X-Pingback",pingback);}
-    }
-    res.sendFile(path.join(distDir, "index.html"));
-  } catch {
-    next(
-      new HttpError(
-        404,
-        "Build the React application or use the development server.",
-      ),
-    );
-  }
+app.get("/{*splat}", async (req, res) => {
+  const document = await publicDocumentIdentity(req.originalUrl);
+  const index = path.join(distDir, "index.html");
+  await access(index).catch(error => {
+    if (error?.code === "ENOENT" || error?.code === "ENOTDIR")
+      throw new HttpError(404, "Build the React application or use the development server.");
+    throw error;
+  });
+  if (document.pingback) res.setHeader("X-Pingback", document.pingback);
+  res.status(document.status).sendFile(index);
 });
 
 const errorHandler: ErrorRequestHandler = (error, _req, res, _next) => {
@@ -237,6 +229,10 @@ const errorHandler: ErrorRequestHandler = (error, _req, res, _next) => {
   }
   if (error instanceof HttpError) {
     res.status(error.status).json({ error: error.message });
+    return;
+  }
+  if (error instanceof URIError) {
+    res.status(400).json({ error: "The URL path is malformed." });
     return;
   }
   if (error?.type === "entity.too.large") {

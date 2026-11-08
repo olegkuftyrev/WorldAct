@@ -49,7 +49,7 @@ import { readTermQuery } from "./term-blocks.js";
 import { assertPostAccess } from "./core.js";
 import { postFormats } from "../shared/post-formats.js";
 import { assertCommentAccess, canEditPostComments, contributorCanEditPostStatus } from "./comment-access.js";
-import { appendDateArchiveSQL, dateArchiveDTO, parseDateArchivePath } from "./date-archives.js";
+import { resolvePublicArchive } from "./public-path.js";
 import { parseFootnotes, serializeFootnotes, freshFootnoteIds, MAX_FOOTNOTES_BYTES } from "./footnotes.js";
 import { excerptText } from "./excerpts.js";
 import { postAccessReader, postHasPassword, protectedPostExcerpt, publicPostTitle } from "./post-passwords.js";
@@ -162,40 +162,8 @@ router.get("/api/public/resolve", async (req, res) => {
     throw error;
   }
   if (!resolved) {
-    const settings = await getSettings();
-    const parts = path
-      .split("?")[0]
-      .split("/")
-      .filter(Boolean)
-      .map(decodeURIComponent);
-    const taxonomy =
-      parts[0] === settings.categoryBase
-        ? "category"
-        : parts[0] === settings.tagBase
-          ? "tag"
-          : null;
-    if (taxonomy && parts.length === 2) {
-      const term = (
-        await pool.query(
-          "SELECT id,taxonomy,slug,name FROM terms WHERE taxonomy=$1 AND slug=$2",
-          [taxonomy, parts[1]],
-        )
-      ).rows[0];
-      if (term) {
-        res.json({ archive: term });
-        return;
-      }
-    }
-    const dateArchive = parseDateArchivePath(path);
-    if (dateArchive) {
-      const args: unknown[] = [];
-      const where = ["p.type='post'", "p.status='publish'"];
-      appendDateArchiveSQL(where, args, "coalesce(p.published_at,p.created_at)", dateArchive, settings.timezone, settings.weekStartsOn);
-      if ((await pool.query(`SELECT 1 FROM posts p WHERE ${where.map((clause) => `(${clause})`).join(" AND ")} LIMIT 1`, args)).rowCount) {
-        res.json({ archive: dateArchiveDTO(dateArchive) });
-        return;
-      }
-    }
+    const archive = await resolvePublicArchive(path);
+    if (archive) { res.json({ archive }); return; }
     throw new HttpError(404, "Post not found.");
   }
   const result = await forward(

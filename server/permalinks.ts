@@ -1,6 +1,7 @@
 import { pool, getSettings } from "./db.js";
 import type pg from "pg";
 import { readPlainPermalinkQuery } from "../shared/plain-permalink-query.js";
+import { readPublicPath } from "./public-path.js";
 type Database = Pick<pg.Pool, "query"> | pg.PoolClient;
 type Settings = Awaited<ReturnType<typeof getSettings>>;
 const segment = (value: string) => encodeURIComponent(value);
@@ -175,6 +176,7 @@ async function resolveExactPublicPath(path: string, settings: Settings) {
 }
 /** Exact post/page identities win before the source's numeric content-page suffix. */
 export async function resolvePublicPath(path: string) {
+  readPublicPath(path);
   let rootContentPage:number|undefined;
   const queryIndex=path.indexOf("?");
   if(queryIndex>=0){

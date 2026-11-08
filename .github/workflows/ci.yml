@@ -67,6 +67,7 @@ jobs:
           tests/math-blocks.test.ts tests/icons.test.ts tests/protected-metadata.test.ts
           tests/category-permalinks.test.ts
           tests/plain-permalinks.test.ts
+          tests/public-http-status.test.ts
           tests/rss.test.ts tests/playlist-blocks.test.ts tests/audio-metadata.test.ts
           tests/outgoing-ping-protocol.test.ts tests/outgoing-pings.test.ts
           tests/incoming-pings.test.ts
