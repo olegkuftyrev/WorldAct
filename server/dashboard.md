@@ -21,6 +21,9 @@ hide publication activity or the current user's drafts.
   actor's dashboard scope. Before applying the limit, retain only comments on
   editable posts or publicly readable published, unprotected posts. Account
   identity and email are removed when the actor cannot edit the underlying post.
+  `canEdit` controls moderation affordances; `postPermalink` always points to the
+  canonical public post. Its private intermediate post context is metadata-only
+  and is removed from the returned comment DTO.
 - `application`: the WorldAct name and the actual package version.
 - `theme`: the active registered theme ID, name and version, including Classic.
 

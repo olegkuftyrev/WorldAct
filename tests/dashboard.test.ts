@@ -52,9 +52,11 @@ test("readable publication metadata never exposes bodies and future/draft/commen
   assert.deepEqual(data.publishingSoon.map((row:any)=>row.id),[future[2],future[1]]);
   const lower=await dashboard(contributorCookie);assert.equal(lower.status,200);assert.deepEqual(lower.publishingSoon,[]);
   assert.equal(lower.recentComments.length,1);assert.equal(lower.recentComments[0].content,"Readable comment preview");
+  assert.equal(lower.recentComments[0].canEdit,false);assert.ok(lower.recentComments[0].postPermalink.startsWith("/"));
+  for(const field of ["_post","postAuthorId","postStatus","postPreTrashStatus","postType"])assert.equal(lower.recentComments[0][field],undefined);
   assert.equal(lower.recentComments[0].authorEmail,undefined);assert.equal(lower.recentComments[0].userId,undefined);
   assert.doesNotMatch(JSON.stringify(lower),/private-person@example\.test|PROTECTED-COMMENT-BODY|protected@example\.test/);
-  assert.ok((await dashboard()).recentComments.some((row:any)=>row.content==="PROTECTED-COMMENT-BODY"),"An administrator may edit/read the protected post comments.");
+  assert.ok((await dashboard()).recentComments.some((row:any)=>row.content==="PROTECTED-COMMENT-BODY"&&row.canEdit&&row.postPermalink.startsWith("/")),"An administrator may edit/read the protected post comments.");
   assert.equal((await dashboard(subscriberCookie)).status,403);assert.equal((await dashboard("")).status,401);
 });
 test("dashboard application and active-theme labels derive from actual registered metadata for all supported themes",async()=>{
