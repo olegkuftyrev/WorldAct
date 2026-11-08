@@ -1,6 +1,6 @@
 {
   "name": "worldact",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "private": true,
   "type": "module",
   "description": "A personal React and PostgreSQL CMS study, inspired by WordPress.",
@@ -15,7 +15,8 @@
     "db:migrate": "tsx server/migrate.ts",
     "db:seed": "tsx server/seed.ts",
     "test": "tsx --test --test-concurrency=1 tests/*.test.ts",
-    "setup": "node scripts/setup.mjs"
+    "setup": "node scripts/setup.mjs",
+    "test:isolated": "node scripts/test-isolated.mjs"
   },
   "dependencies": {
     "@wordpress/api-fetch": "8.1.0",
@@ -34,6 +35,7 @@
     "express": "^5.1.0",
     "fast-xml-parser": "5.12.0",
     "file-type": "22.3.0",
+    "fontkit": "2.0.4",
     "moment-timezone": "0.5.48",
     "multer": "^2.0.2",
     "nodemailer": "10.3.1",
@@ -48,6 +50,7 @@
   },
   "devDependencies": {
     "@types/express": "^5.0.5",
+    "@types/fontkit": "2.0.9",
     "@types/multer": "^2.0.0",
     "@types/node": "^24.10.0",
     "@types/nodemailer": "^8.0.2",

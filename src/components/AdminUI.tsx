@@ -34,19 +34,28 @@ export const errorText = (error: unknown) =>
   error instanceof Error
     ? error.message
     : "Something went wrong. Please try again.";
-export function useResource<T>(path: string) {
+export function useResource<T>(path: string | null) {
+  const requestId = useRef(0);
   const [data, setData] = useState<T | null>(null),
     [error, setError] = useState(""),
     [loading, setLoading] = useState(true);
   const reload = useCallback(async () => {
+    const currentRequest = ++requestId.current;
+    if (!path) {
+      setData(null);
+      setError("");
+      setLoading(false);
+      return;
+    }
     setLoading(true);
     setError("");
     try {
-      setData(await api<T>(path));
+      const value = await api<T>(path);
+      if (currentRequest === requestId.current) setData(value);
     } catch (e) {
-      setError(errorText(e));
+      if (currentRequest === requestId.current) setError(errorText(e));
     } finally {
-      setLoading(false);
+      if (currentRequest === requestId.current) setLoading(false);
     }
   }, [path]);
   useEffect(() => {
@@ -208,40 +217,4 @@ export function Modal({
   );
 }
 
-export function ScreenTabs({ children }: { children?: ReactNode }) {
-  const [help, setHelp] = useState(false),
-    [options, setOptions] = useState(false);
-  return (
-    <>
-      <div id="screen-meta-links">
-        <button className="show-settings" onClick={() => setOptions(!options)}>
-          Screen Options <Icon name="arrow-down-alt2" />
-        </button>
-        <button className="show-settings" onClick={() => setHelp(!help)}>
-          Help <Icon name="arrow-down-alt2" />
-        </button>
-      </div>
-      {(help || options) && (
-        <div className="screen-help">
-          {help ? (
-            <>
-              <strong>Overview</strong>
-              <p>
-                Manage your site using the menu on the left. Create posts and
-                pages, manage media and comments, and adjust your site settings.
-              </p>
-              <Link to="/admin/about">About this study project</Link>
-            </>
-          ) : (
-            children || (
-              <p>
-                Dashboard panels can be expanded or collapsed using the arrow in
-                each panel heading.
-              </p>
-            )
-          )}
-        </div>
-      )}
-    </>
-  );
-}
+export { ScreenTabs } from "./ScreenOptions";

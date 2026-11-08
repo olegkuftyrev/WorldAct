@@ -76,6 +76,7 @@ ALTER TABLE posts ADD COLUMN IF NOT EXISTS parent_id integer REFERENCES posts(id
 ALTER TABLE posts ADD COLUMN IF NOT EXISTS menu_order integer NOT NULL DEFAULT 0;
 ALTER TABLE posts ADD COLUMN IF NOT EXISTS featured_media_id integer REFERENCES media(id) ON DELETE SET NULL;
 ALTER TABLE posts ADD COLUMN IF NOT EXISTS comment_status varchar(8) NOT NULL DEFAULT 'open' CHECK (comment_status IN ('open', 'closed'));
+ALTER TABLE posts ADD COLUMN IF NOT EXISTS ping_status varchar(8) NOT NULL DEFAULT 'closed' CHECK (ping_status IN ('open', 'closed'));
 ALTER TABLE posts ADD COLUMN IF NOT EXISTS sticky boolean NOT NULL DEFAULT false;
 ALTER TABLE posts ADD COLUMN IF NOT EXISTS password_hash text;
 CREATE INDEX IF NOT EXISTS posts_scheduled ON posts (scheduled_at) WHERE status = 'future';
@@ -139,6 +140,12 @@ CREATE TABLE IF NOT EXISTS post_access_tokens (
   expires_at timestamptz NOT NULL
 );
 CREATE INDEX IF NOT EXISTS post_access_tokens_expiry ON post_access_tokens (expires_at);
+CREATE TABLE IF NOT EXISTS comment_author_tokens (
+  token_hash char(64) PRIMARY KEY,
+  comment_id integer NOT NULL REFERENCES comments(id) ON DELETE CASCADE,
+  expires_at timestamptz NOT NULL
+);
+CREATE INDEX IF NOT EXISTS comment_author_tokens_expiry ON comment_author_tokens(expires_at);
 
 ALTER TABLE comments ADD COLUMN IF NOT EXISTS parent_id integer REFERENCES comments(id) ON DELETE SET NULL;
 CREATE INDEX IF NOT EXISTS comments_parent ON comments (parent_id);
@@ -147,4 +154,6 @@ ALTER TABLE posts ADD COLUMN IF NOT EXISTS raw_content text NOT NULL DEFAULT '';
 ALTER TABLE post_revisions ADD COLUMN IF NOT EXISTS raw_content text NOT NULL DEFAULT '';
 ALTER TABLE post_autosaves ADD COLUMN IF NOT EXISTS raw_content text NOT NULL DEFAULT '';
 ALTER TABLE posts ADD COLUMN IF NOT EXISTS format varchar(20) NOT NULL DEFAULT 'standard'
-  CHECK (format IN ('standard','aside','image','video','quote','link','gallery','audio'));
+  CHECK (format IN ('standard','aside','chat','gallery','link','image','quote','status','video','audio'));
+ALTER TABLE posts DROP CONSTRAINT IF EXISTS posts_format_check;
+ALTER TABLE posts ADD CONSTRAINT posts_format_check CHECK (format IN ('standard','aside','chat','gallery','link','image','quote','status','video','audio'));

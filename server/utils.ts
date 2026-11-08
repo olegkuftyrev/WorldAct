@@ -52,7 +52,7 @@ const allowedStyles: Record<string, RegExp[]> = {
   "font-size": [length],
   "font-weight": [/^(?:normal|bold|bolder|lighter|[1-9]00)$/],
   "font-style": [/^(?:normal|italic|oblique)$/],
-  "font-family": [/^[\w\s,'"-]+$/],
+  "font-family": [/^(?!.*(?:url\s*\(|expression\s*\())(?:[\p{L}\p{N} ._'",()-]){1,500}$/iu],
   "text-align": [/^(?:left|center|right|justify|start|end)$/],
   "text-decoration": [
     /^(?:none|underline|line-through|overline)(?:\s+(?:solid|dotted|dashed|double|wavy))?$/,
@@ -103,10 +103,12 @@ const allowedStyles: Record<string, RegExp[]> = {
   "flex-basis": [length],
   "flex-grow": [/^\d+(?:\.\d+)?$/],
   "flex-shrink": [/^\d+(?:\.\d+)?$/],
+  "grid-column": [/^span (?:[1-9]|1[0-2])$/],
+  "grid-row": [/^span (?:[1-9]|1[0-2])$/],
   "object-fit": [/^(?:cover|contain|fill|none|scale-down)$/],
   "aspect-ratio": [/^\d+(?:\.\d+)?(?:\s*\/\s*\d+(?:\.\d+)?)?$/],
 };
-export function cleanContent(content: string) {
+export function cleanContent(content: string, generatedBlocks = false) {
   return sanitizeHtml(content, {
     allowedTags: [
       "header",
@@ -165,9 +167,10 @@ export function cleanContent(content: string) {
       "cite",
       "abbr",
       "time",
+      ...(generatedBlocks ? ["form", "input", "label", "button", "textarea", "select", "option", "svg", "path", "circle", "rect", "g"] : []),
     ],
     allowedAttributes: {
-      "*": ["class", "id", "style", "aria-label", "aria-hidden", "role"],
+      "*": ["class", "id", "style", "aria-label", "aria-hidden", "role", ...(generatedBlocks ? ["data-*", "aria-*"] : [])],
       a: ["href", "title", "target", "rel", "download"],
       img: [
         "src",
@@ -202,6 +205,16 @@ export function cleanContent(content: string) {
       abbr: ["title"],
       blockquote: ["cite"],
       time: ["datetime"],
+      ...(generatedBlocks ? {
+        form: ["action", "method", "autocomplete"],
+        input: ["type", "name", "value", "placeholder", "required", "checked", "disabled", "maxlength", "minlength", "autocomplete"],
+        label: ["for"], button: ["type", "name", "value", "disabled"],
+        textarea: ["name", "rows", "cols", "required", "placeholder", "maxlength"],
+        select: ["name", "required"], option: ["value", "selected"],
+        svg: ["width", "height", "viewbox", "version", "xmlns", "focusable", "fill"],
+        path: ["d", "fill", "fill-rule", "clip-rule"], circle: ["cx", "cy", "r", "fill"],
+        rect: ["x", "y", "width", "height", "rx", "fill"], g: ["fill"],
+      } : {}),
     },
     allowedStyles: { "*": allowedStyles },
     allowedSchemes: ["http", "https", "mailto", "tel"],
@@ -213,6 +226,9 @@ export function cleanContent(content: string) {
     },
     allowProtocolRelative: false,
     transformTags: {
+      ...(generatedBlocks ? { form: (_tag: string, attrs: Record<string,string>) => ({
+        tagName: "form", attribs: { ...attrs, action: ["/", "/wp-comments-post.php", "/login", "/logout", "/post-password"].includes(attrs.action) ? attrs.action : "/", method: attrs.method?.toLowerCase() === "post" ? "post" : "get" },
+      }) } : {}),
       a: (_tag, attrs) => ({
         tagName: "a",
         attribs: { ...attrs, rel: "noopener noreferrer" },

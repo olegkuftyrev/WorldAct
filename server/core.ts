@@ -1,3 +1,4 @@
+import {checkAkismetComment,recordAkismetCheck,type AkismetComment} from "./bundled-plugins.js";
 import { Router, type Request, type Response } from "express";
 import { createHash, randomBytes } from "node:crypto";
 import type { PoolClient } from "pg";
@@ -22,6 +23,12 @@ import {
 import { enhancePublicPost, classifySpam } from "./design.js";
 import { withPermalink } from "./permalinks.js";
 import { renderPublicContent, type RenderOptions } from "./block-renderer.js";
+import { queueMail, deliverMail } from "./accounts.js";
+import {validatePostTemplate} from "./post-templates.js";
+import { avatarURL } from "./avatars.js";
+import { assertEditLease } from "./edit-lease.js";
+import { postFormats } from "../shared/post-formats.js";
+import { contributorCanEditPostStatus } from "./comment-access.js";
 
 const router = Router();
 const contentRoles = requireRole(
@@ -46,19 +53,9 @@ const idsSchema = z
   .transform((ids) => [...new Set(ids)]);
 const dateSchema = z.iso.datetime({ offset: true }).nullable();
 const postShape = {
+  authorId: idSchema.optional(),
   type: z.enum(["post", "page"]).optional(),
-  format: z
-    .enum([
-      "standard",
-      "aside",
-      "image",
-      "video",
-      "quote",
-      "link",
-      "gallery",
-      "audio",
-    ])
-    .optional(),
+  format: z.enum(postFormats).optional(),
   title: z.string().trim().max(300).optional(),
   content: z.string().max(1_000_000).optional(),
   excerpt: z.string().max(20_000).optional(),
@@ -70,8 +67,10 @@ const postShape = {
   publishedAt: dateSchema.optional(),
   parentId: idSchema.nullable().optional(),
   menuOrder: z.number().int().min(-2_147_483_648).max(2_147_483_647).optional(),
+  templateSlug:z.string().max(160).regex(/^[a-zA-Z0-9_-]*$/).optional(),
   featuredMediaId: idSchema.nullable().optional(),
   commentStatus: z.enum(["open", "closed"]).optional(),
+  pingStatus: z.enum(["open", "closed"]).optional(),
   sticky: z.boolean().optional(),
   password: z.string().max(1024).optional(),
   categoryIds: idsSchema.optional(),
@@ -89,9 +88,9 @@ type PostInput = z.infer<typeof createSchema>;
 function ownOnly(user: User) {
   return user.role === "author" || user.role === "contributor";
 }
-function assertPostAccess(
+export function assertPostAccess(
   user: User,
-  post: { authorId: number; type: string; status: string },
+  post: { authorId: number; type: string; status: string; preTrashStatus?: string | null },
 ) {
   if (ownOnly(user) && post.authorId !== user.id)
     throw new HttpError(403, "You can only edit your own content.");
@@ -102,14 +101,14 @@ function assertPostAccess(
     );
   if (
     user.role === "contributor" &&
-    !["draft", "pending", "trash"].includes(post.status)
+    !contributorCanEditPostStatus(post)
   )
     throw new HttpError(
       403,
       "Contributors can only edit their own drafts and pending posts.",
     );
 }
-function assertNewAccess(user: User, type: string, status: string) {
+function assertNewAccess(user: User, type: string, status: string, existingStatus?: string) {
   if (ownOnly(user) && type === "page")
     throw new HttpError(
       403,
@@ -117,12 +116,35 @@ function assertNewAccess(user: User, type: string, status: string) {
     );
   if (
     user.role === "contributor" &&
-    !["draft", "pending", "trash"].includes(status)
+    !["draft", "pending", "trash"].includes(status) &&
+    !(status === "private" && existingStatus === "private")
   )
     throw new HttpError(
       403,
       "Contributors can save drafts or submit posts for review; publishing requires an editor.",
     );
+}
+export async function lockPostMutationUsers(client: PoolClient, user: User, authorId?: number) {
+  if (authorId !== undefined && ownOnly(user) && authorId !== user.id)
+    throw new HttpError(403, "You can only assign content to yourself.");
+  // Account deletion locks users before posts. Lock both the acting account and
+  // any newly assigned author in one stable order before acquiring post locks:
+  // revisions, autosaves and edit leases also insert foreign keys to the actor.
+  const ids = [...new Set([user.id, ...(authorId === undefined ? [] : [authorId])])].sort((a, b) => a - b);
+  const people = await client.query<{ id: number; role: string }>(
+    "SELECT id,role FROM users WHERE id=ANY($1::int[]) ORDER BY id FOR SHARE", [ids],
+  );
+  const actor = people.rows.find(person => person.id === user.id);
+  if (!actor) throw new HttpError(401, "Your account is no longer available. Sign in again.");
+  if (actor.role !== user.role) throw new HttpError(409, "Your permissions changed. Reload before saving.");
+  if (authorId !== undefined) {
+    const target = people.rows.find(person => person.id === authorId);
+    if (!target || !["administrator", "editor", "author", "contributor"].includes(target.role))
+      throw new HttpError(400, "Choose an existing author who can create content.");
+  }
+}
+async function validateAuthor(client: PoolClient, authorId: number, user: User) {
+  await lockPostMutationUsers(client, user, authorId);
 }
 function decoratePost(post: any) {
   post.terms ??= [];
@@ -148,7 +170,8 @@ async function transaction<T>(work: (client: PoolClient) => Promise<T>) {
     client.release();
   }
 }
-async function lockedPost(client: PoolClient, id: number, user: User) {
+async function lockedPost(client: PoolClient, id: number, user: User, authorId?: number) {
+  await lockPostMutationUsers(client, user, authorId);
   const locked = await client.query(
     "SELECT id,password_hash FROM posts WHERE id=$1 FOR NO KEY UPDATE",
     [id],
@@ -156,6 +179,7 @@ async function lockedPost(client: PoolClient, id: number, user: User) {
   if (!locked.rows[0]) throw new HttpError(404, "Post not found.");
   const post = await getPost(id, client);
   assertPostAccess(user, post);
+  await assertEditLease(client, id, user.id);
   return { post, passwordHash: locked.rows[0].password_hash as string | null };
 }
 function checkVersion(input: { version?: number }, post: { version: number }) {
@@ -263,11 +287,15 @@ async function setTerms(client: PoolClient, postId: number, ids: number[]) {
 }
 function metadata(post: any) {
   return {
+    preTrashStatus: post.preTrashStatus ?? null,
+    authorId: post.authorId,
     format: post.format ?? "standard",
+    templateSlug:post.templateSlug || "",
     parentId: post.parentId,
     menuOrder: post.menuOrder,
     featuredMediaId: post.featuredMediaId,
     commentStatus: post.commentStatus,
+    pingStatus: post.pingStatus,
     sticky: post.sticky,
     scheduledAt: post.scheduledAt,
     categoryIds: [...(post.categoryIds ?? [])].sort(
@@ -317,8 +345,16 @@ async function savePost(
   oldPasswordHash?: string | null,
 ) {
   const type = input.type ?? existing?.type ?? "post";
+  const templateSlug=input.templateSlug ?? existing?.templateSlug ?? "";
+  if(input.templateSlug!==undefined || (input.type!==undefined && type!==existing?.type))await validatePostTemplate(templateSlug,type,client);
+  const authorId = input.authorId ?? existing?.authorId ?? user.id;
+  if (!existing || input.authorId !== undefined) await validateAuthor(client, authorId, user);
   let status = input.status ?? existing?.status ?? "draft";
-  assertNewAccess(user, type, status);
+  assertNewAccess(user, type, status, existing?.status);
+  if (input.sticky !== undefined && input.sticky !== (existing?.sticky ?? false) && ownOnly(user))
+    throw new HttpError(403, "Making a post sticky requires an editor or administrator.");
+  if (type === "page" && input.sticky)
+    throw new HttpError(400, "Only posts can be sticky.");
   let scheduledAt =
     input.scheduledAt !== undefined
       ? input.scheduledAt
@@ -331,7 +367,7 @@ async function savePost(
       );
     if (new Date(scheduledAt).getTime() <= Date.now()) {
       status = "publish";
-      assertNewAccess(user, type, status);
+      assertNewAccess(user, type, status, existing?.status);
     }
   }
   const title =
@@ -408,9 +444,14 @@ async function savePost(
         settings?.defaultPostFormat ??
         "standard")
       : "standard";
+  const preTrashStatus = status === "trash"
+    ? existing?.status === "trash" ? existing.preTrashStatus ?? null : existing?.status ?? "draft"
+    : null;
   const values = {
     type,
+    authorId,
     format,
+    templateSlug,
     title,
     content,
     excerpt,
@@ -418,6 +459,7 @@ async function savePost(
     parentId,
     featuredMediaId,
     status,
+    preTrashStatus,
     scheduledAt,
     menuOrder: input.menuOrder ?? existing?.menuOrder ?? 0,
     commentStatus:
@@ -425,7 +467,8 @@ async function savePost(
       existing?.commentStatus ??
       settings?.defaultCommentStatus ??
       "open",
-    sticky: input.sticky ?? existing?.sticky ?? false,
+    pingStatus: input.pingStatus ?? existing?.pingStatus ?? "closed",
+    sticky: type === "post" ? input.sticky ?? existing?.sticky ?? false : false,
     categoryIds: terms
       .filter((term) => term.taxonomy === "category")
       .map((term) => term.id),
@@ -484,23 +527,25 @@ async function savePost(
       publishedAt,
       rawContent,
       format,
+      authorId,
+      values.pingStatus,
     ];
     let id: number;
     if (existing) {
       args.push(existing.id);
       await client.query(
-        `UPDATE posts SET type=$1,title=$2,slug=$3,content=$4,excerpt=$5,status=$6,blocks=$7::jsonb,scheduled_at=$8,parent_id=$9,menu_order=$10,featured_media_id=$11,comment_status=$12,sticky=$13,password_hash=$14,published_at=$15,raw_content=$16,format=$17,version=version+1,updated_at=now() WHERE id=$18`,
+        `UPDATE posts SET type=$1,title=$2,slug=$3,content=$4,excerpt=$5,status=$6,blocks=$7::jsonb,scheduled_at=$8,parent_id=$9,menu_order=$10,featured_media_id=$11,comment_status=$12,sticky=$13,password_hash=$14,published_at=$15,raw_content=$16,format=$17,author_id=$18,ping_status=$19,version=version+1,updated_at=now() WHERE id=$20`,
         args,
       );
       id = existing.id;
     } else {
-      args.push(user.id);
       const created = await client.query(
-        `INSERT INTO posts(type,title,slug,content,excerpt,status,blocks,scheduled_at,parent_id,menu_order,featured_media_id,comment_status,sticky,password_hash,published_at,raw_content,format,author_id) VALUES($1,$2,$3,$4,$5,$6,$7::jsonb,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18) RETURNING id`,
+        `INSERT INTO posts(type,title,slug,content,excerpt,status,blocks,scheduled_at,parent_id,menu_order,featured_media_id,comment_status,sticky,password_hash,published_at,raw_content,format,author_id,ping_status) VALUES($1,$2,$3,$4,$5,$6,$7::jsonb,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19) RETURNING id`,
         args,
       );
       id = created.rows[0].id;
     }
+    await client.query("UPDATE posts SET template_slug=$1,pre_trash_status=$2 WHERE id=$3",[templateSlug,preTrashStatus,id]);
     await setTerms(client, id, termIds);
     if (input.password !== undefined)
       await client.query("DELETE FROM post_access_tokens WHERE post_id=$1", [
@@ -526,7 +571,9 @@ export async function publishDuePosts(
   return result.rows.map((row) => row.id as number);
 }
 export function startScheduler(intervalMs = 30_000) {
+  let lastPluginCleanup=0;
   const publish = () => {
+    if(Date.now()-lastPluginCleanup>=60*60_000){lastPluginCleanup=Date.now();void pool.query("DELETE FROM akismet_comment_checks WHERE expires_at<=now()").catch(()=>{});}
     void publishDuePosts().catch((error) =>
       console.error("Scheduled publication failed:", error.message),
     );
@@ -551,6 +598,7 @@ router.get("/posts", contentRoles, async (req: AuthRequest, res) => {
         .default("modified"),
       order: z.enum(["asc", "desc"]).default("desc"),
       category: z.coerce.number().int().positive().optional(),
+      author: z.coerce.number().int().positive().optional(),
       tag: z.coerce.number().int().positive().optional(),
       term: z.coerce.number().int().positive().optional(),
       month: z
@@ -574,6 +622,7 @@ router.get("/posts", contentRoles, async (req: AuthRequest, res) => {
     args.push(`%${filter.search}%`);
     where += ` AND (p.title ILIKE $${args.length} OR p.content ILIKE $${args.length})`;
   }
+  if (filter.author) { args.push(filter.author); where += ` AND p.author_id=$${args.length}`; }
   for (const [taxonomy, id] of [
     ["category", filter.category],
     ["tag", filter.tag],
@@ -632,6 +681,59 @@ router.get("/posts", contentRoles, async (req: AuthRequest, res) => {
     },
   });
 });
+router.get("/authors", contentRoles, async (req: AuthRequest, res) => {
+  const user = needUser(req), settings = await getSettings();
+  const authors = await pool.query(
+    `SELECT id,display_name AS "displayName",username,role FROM users WHERE role IN('administrator','editor','author','contributor')${ownOnly(user) ? " AND id=$1" : ""} ORDER BY lower(display_name),id`,
+    ownOnly(user) ? [user.id] : [],
+  );
+  res.json({ authors: authors.rows, defaults: { format: settings.defaultPostFormat, commentStatus: settings.defaultCommentStatus, pingStatus: "closed" } });
+});
+const bulkSchema = z.object({
+  ids: z.array(idSchema).min(1).max(100).transform(ids => [...new Set(ids)]),
+  changes: z.object({
+    authorId: postShape.authorId,
+    categoryIds: postShape.categoryIds,
+    tagIds: postShape.tagIds,
+    parentId: postShape.parentId,
+    commentStatus: postShape.commentStatus,
+    pingStatus: postShape.pingStatus,
+    sticky: postShape.sticky,
+    format: postShape.format,
+    password: postShape.password,
+    status: postShape.status,
+    scheduledAt: postShape.scheduledAt,
+    menuOrder: postShape.menuOrder,
+    templateSlug:postShape.templateSlug,
+  }).strict().refine(changes => Object.keys(changes).length > 0, "Choose at least one field to change."),
+  categoryMode: z.enum(["add", "replace"]).default("add"),
+  tagMode: z.enum(["add", "replace"]).default("add"),
+  versions: z.record(z.string().regex(/^[1-9]\d{0,9}$/), idSchema).optional(),
+}).strict();
+router.post("/posts/bulk", contentRoles, async (req: AuthRequest, res) => {
+  const input = bulkSchema.parse(req.body), user = needUser(req);
+  const posts: any[] = [], errors: Array<{ id: number; status: number; error: string }> = [];
+  for (const id of input.ids) {
+    try {
+      const saved = await transaction(async client => {
+        const { post, passwordHash } = await lockedPost(client, id, user, input.changes.authorId);
+        checkVersion({ version: input.versions?.[String(id)] }, post);
+        const changes = { ...input.changes };
+        if (changes.categoryIds !== undefined && input.categoryMode === "add") changes.categoryIds = [...new Set([...post.categoryIds, ...changes.categoryIds])];
+        if (changes.tagIds !== undefined && input.tagMode === "add") changes.tagIds = [...new Set([...post.tagIds, ...changes.tagIds])];
+        return savePost(client, changes, user, post, passwordHash);
+      });
+      posts.push(saved);
+    } catch (error) {
+      if (error instanceof HttpError) errors.push({ id, status: error.status, error: error.message });
+      else {
+        const conflict = ["40001", "40P01", "23503"].includes(String((error as { code?: string }).code));
+        errors.push({ id, status: conflict ? 409 : 500, error: conflict ? "This content or its author changed during the update. Reload and try again." : "This post could not be updated. Try again." });
+      }
+    }
+  }
+  res.json({ updated: posts.map(post => post.id), errors, posts });
+});
 router.get("/posts/:id", contentRoles, async (req: AuthRequest, res) => {
   const post = await getPost(parseId(req.params.id));
   if (!post) throw new HttpError(404, "Post not found.");
@@ -640,9 +742,11 @@ router.get("/posts/:id", contentRoles, async (req: AuthRequest, res) => {
 });
 router.post("/posts", contentRoles, async (req: AuthRequest, res) => {
   const input = createSchema.parse(req.body);
-  const post = await transaction((client) =>
-    savePost(client, input, needUser(req)),
-  );
+  const user = needUser(req);
+  const post = await transaction(async (client) => {
+    await lockPostMutationUsers(client, user, input.authorId ?? user.id);
+    return savePost(client, input, user);
+  });
   res.status(201).json({ post });
 });
 router.put("/posts/:id", contentRoles, async (req: AuthRequest, res) => {
@@ -650,7 +754,7 @@ router.put("/posts/:id", contentRoles, async (req: AuthRequest, res) => {
     input = updateSchema.parse(req.body),
     user = needUser(req);
   const post = await transaction(async (client) => {
-    const { post, passwordHash } = await lockedPost(client, id, user);
+    const { post, passwordHash } = await lockedPost(client, id, user, input.authorId);
     checkVersion(input, post);
     return savePost(client, input, user, post, passwordHash);
   });
@@ -817,7 +921,11 @@ router.delete(
   },
 );
 
-const termFields = `t.id,t.taxonomy,t.name,t.slug,t.description,t.parent_id AS "parentId",t.is_default AS "isDefault",(SELECT count(*)::int FROM post_terms pt JOIN posts p ON p.id=pt.post_id WHERE pt.term_id=t.id AND p.status='publish') AS count`;
+const defaultCategorySQL = `COALESCE(
+  (SELECT selected.id FROM terms selected JOIN settings s ON s.id=1 WHERE selected.taxonomy='category' AND selected.id::text=s.data->>'defaultCategoryId'),
+  (SELECT fallback.id FROM terms fallback WHERE fallback.taxonomy='category' ORDER BY fallback.is_default DESC,fallback.id LIMIT 1)
+)`;
+const termFields = `t.id,t.taxonomy,t.name,t.slug,t.description,t.parent_id AS "parentId",COALESCE(t.taxonomy='category' AND t.id=(${defaultCategorySQL}),false) AS "isDefault",(SELECT count(*)::int FROM post_terms pt JOIN posts p ON p.id=pt.post_id WHERE pt.term_id=t.id AND p.status='publish') AS count`;
 const termShape = {
   taxonomy: z.enum(["category", "tag"]),
   name: z.string().trim().min(1).max(200),
@@ -849,15 +957,66 @@ async function validateTermParent(
   }
 }
 router.get("/terms", contentRoles, async (req, res) => {
-  const taxonomy = z
-    .enum(["category", "tag"])
-    .optional()
-    .parse(req.query.taxonomy);
-  const result = await pool.query(
-    `SELECT ${termFields} FROM terms t ${taxonomy ? "WHERE t.taxonomy=$1" : ""} ORDER BY t.name,t.id`,
-    taxonomy ? [taxonomy] : [],
-  );
-  res.json({ terms: result.rows });
+  const input = z.object({
+    taxonomy: z.enum(["category", "tag"]).optional(),
+    page: z.coerce.number().int().positive().max(1_000_000).default(1),
+    perPage: z.coerce.number().int().positive().max(1000).default(20),
+    search: z.string().trim().max(300).optional(),
+    orderby: z.enum(["name", "slug", "description", "count"]).optional(),
+    order: z.enum(["asc", "desc"]).default("asc"),
+  }).parse(req.query);
+  const paged = ["page", "perPage", "search", "orderby", "order"].some(key => Object.hasOwn(req.query, key));
+  const args: unknown[] = [], predicates: string[] = [];
+  if (input.taxonomy) { args.push(input.taxonomy); predicates.push(`t.taxonomy=$${args.length}`); }
+  if (paged && input.search) {
+    args.push(`%${input.search.replace(/[\\%_]/g, "\\$&")}%`);
+    predicates.push(`(t.name ILIKE $${args.length} OR t.slug ILIKE $${args.length})`);
+  }
+  const where = predicates.length ? `WHERE ${predicates.join(" AND ")}` : "";
+  if (!paged) {
+    const result = await pool.query(`SELECT ${termFields} FROM terms t ${where} ORDER BY t.name,t.id`, args);
+    res.json({ terms: result.rows }); return;
+  }
+  const offset = (input.page - 1) * input.perPage;
+  let terms: any[], total: number;
+  if (input.taxonomy === "category" && !input.orderby && !input.search) {
+    // WordPress's default category table pages a complete hierarchy, repeating
+    // ancestors when a page begins inside a subtree. Explicit sorting is flat.
+    const rows = (await pool.query(`SELECT ${termFields} FROM terms t ${where} ORDER BY lower(t.name) ${input.order},t.id ${input.order}`, args)).rows;
+    const byId = new Map(rows.map(row => [row.id, row])), children = new Map<number | null, any[]>();
+    for (const row of rows) { const parent = byId.has(row.parentId) ? row.parentId : null; const group = children.get(parent) || []; group.push(row); children.set(parent, group); }
+    const ordered: any[] = [], seen = new Set<number>();
+    const append = (roots: any[]) => {
+      const stack = roots.slice().reverse().map(row => ({ row, depth: 0 }));
+      while (stack.length) {
+        const item = stack.pop()!; if (seen.has(item.row.id)) continue;
+        seen.add(item.row.id); ordered.push({ ...item.row, depth: item.depth });
+        for (const child of (children.get(item.row.id) || []).slice().reverse()) stack.push({ row: child, depth: item.depth + 1 });
+      }
+    };
+    append(children.get(null) || []);
+    // Retain legacy malformed records without recursive loops or silent loss.
+    for (const row of rows) if (!seen.has(row.id)) append([row]);
+    total = ordered.length; terms = ordered.slice(offset, offset + input.perPage);
+    const first = terms[0], context: any[] = [], ancestors = new Set<number>(terms.map(row => row.id));
+    let parent = first?.parentId;
+    while (parent && !ancestors.has(parent)) { ancestors.add(parent); const row = byId.get(parent); if (!row) break; context.unshift(row); parent = row.parentId; }
+    const depths = new Map(ordered.map(row => [row.id, row.depth]));
+    terms = [...context.map(row => ({ ...row, depth: depths.get(row.id) || 0, contextOnly: true })), ...terms];
+  } else {
+    const column = { name: "lower(t.name)", slug: "t.slug", description: "lower(t.description)", count: '"count"' }[input.orderby || "name"];
+    const [count, rows] = await Promise.all([
+      pool.query(`SELECT count(*)::int AS total FROM terms t ${where}`, args),
+      pool.query(`SELECT ${termFields} FROM terms t ${where} ORDER BY ${column} ${input.order},t.id ${input.order} LIMIT $${args.length + 1} OFFSET $${args.length + 2}`, [...args, input.perPage, offset]),
+    ]);
+    total = count.rows[0].total; terms = rows.rows;
+  }
+  res.json({ terms, pagination: { page: input.page, perPage: input.perPage, total, totalPages: Math.max(1, Math.ceil(total / input.perPage)) } });
+});
+router.get("/terms/:id", contentRoles, async (req, res) => {
+  const result = await pool.query(`SELECT ${termFields} FROM terms t WHERE t.id=$1`, [parseId(req.params.id)]);
+  if (!result.rowCount) throw new HttpError(404, "Term not found.");
+  res.json({ term: result.rows[0] });
 });
 router.post("/terms", manageTerms, async (req: AuthRequest, res) => {
   const input = z.object(termShape).strict().parse(req.body);
@@ -960,6 +1119,8 @@ router.delete(
   requireRole("administrator", "editor"),
   async (req, res) => {
     await transaction(async (client) => {
+      // Settings writers use the same row before locking the selected term.
+      await client.query("SELECT id FROM settings WHERE id=1 FOR UPDATE");
       await client.query(
         "SELECT pg_advisory_xact_lock(hashtext('worldact-term-hierarchy'))",
       );
@@ -971,12 +1132,26 @@ router.delete(
           )
         ).rows[0];
       if (!term) throw new HttpError(404, "Term not found.");
-      if (term.is_default)
+      const defaultCategory = (await client.query(`SELECT ${defaultCategorySQL} AS id`)).rows[0].id as number | null;
+      if (term.taxonomy === "category" && term.id === defaultCategory)
         throw new HttpError(409, "The default category cannot be deleted.");
+      const affected = term.taxonomy === "category"
+        ? (await client.query("SELECT p.id FROM posts p JOIN post_terms pt ON pt.post_id=p.id WHERE p.type='post' AND pt.term_id=$1 ORDER BY p.id FOR KEY SHARE OF p", [id])).rows.map(post => post.id)
+        : [];
+      if (term.taxonomy === "category") {
+        await client.query("UPDATE terms SET parent_id=$1 WHERE parent_id=$2", [term.parent_id, id]);
+        // Keep the legacy fallback marker valid after deleting a former default,
+        // including across repeated schema/seed runs on an existing site.
+        if (term.is_default && defaultCategory) {
+          await client.query("UPDATE terms SET is_default=false WHERE is_default");
+          await client.query("UPDATE terms SET is_default=true WHERE id=$1", [defaultCategory]);
+        }
+      }
       await client.query("DELETE FROM terms WHERE id=$1", [id]);
-      if (term.taxonomy === "category")
+      if (affected.length && defaultCategory)
         await client.query(
-          `INSERT INTO post_terms(post_id,term_id) SELECT p.id,t.id FROM posts p CROSS JOIN terms t WHERE p.type='post' AND t.is_default AND NOT EXISTS(SELECT 1 FROM post_terms pt JOIN terms assigned ON assigned.id=pt.term_id WHERE pt.post_id=p.id AND assigned.taxonomy='category') ON CONFLICT DO NOTHING`,
+          `INSERT INTO post_terms(post_id,term_id) SELECT p.id,$2 FROM posts p WHERE p.id=ANY($1::int[]) AND NOT EXISTS(SELECT 1 FROM post_terms pt JOIN terms assigned ON assigned.id=pt.term_id WHERE pt.post_id=p.id AND assigned.taxonomy='category') ON CONFLICT DO NOTHING`,
+          [affected, defaultCategory],
         );
     });
     res.json({ ok: true });
@@ -986,6 +1161,26 @@ router.delete(
 function tokenHash(token: string) {
   return createHash("sha256").update(token).digest("hex");
 }
+const commentAuthorCookie = "worldact_comment_author";
+function rememberedAuthorToken(req: Pick<Request, "headers">) {
+  const value = req.headers.cookie?.split(";").map(part => part.trim()).find(part => part.startsWith(commentAuthorCookie + "="))?.slice(commentAuthorCookie.length + 1);
+  return value && /^[a-f\d]{64}$/.test(value) ? value : null;
+}
+export async function readRememberedCommentAuthor(req: Pick<Request, "headers">) {
+  if (!(await getSettings()).commentCookieConsent) return null;
+  const token = rememberedAuthorToken(req);
+  if (!token) return null;
+  const result = await pool.query(
+    `SELECT c.author_name AS "authorName",c.author_email AS "authorEmail",c.author_url AS "authorUrl" FROM comment_author_tokens t JOIN comments c ON c.id=t.comment_id WHERE t.token_hash=$1 AND t.expires_at>now() AND (c.author_name<>'Anonymous' OR c.author_email<>'' OR c.author_url<>'')`,
+    [tokenHash(token)],
+  );
+  return result.rows[0] || null;
+}
+router.get("/public/comment-author", async (req, res) => {
+  const author = await readRememberedCommentAuthor(req);
+  if (!author && rememberedAuthorToken(req)) res.clearCookie(commentAuthorCookie, { path: "/", httpOnly: true, sameSite: "lax" });
+  res.json({ author });
+});
 function accessToken(req: Request, postId: number) {
   const cookie = req.headers.cookie
     ?.split(";")
@@ -994,7 +1189,7 @@ function accessToken(req: Request, postId: number) {
   const token = cookie?.slice(`worldact_post_${postId}=`.length);
   return token && /^[a-f\d]{64}$/.test(token) ? token : null;
 }
-async function hasPostAccess(
+export async function hasPostAccess(
   req: Request,
   postId: number,
   passwordHash: string | null,
@@ -1013,10 +1208,12 @@ async function publicPost(post: any, locked = false, options: RenderOptions = {}
     blocks: _blocks,
     rawContent: _rawContent,
     raw_content: _raw,
+    pendingCommentCount: _pendingCommentCount,
     ...safe
   } = decoratePost(post);
   const result = {
     ...safe,
+    commentCount: safe.approvedCommentCount ?? safe.commentCount ?? 0,
     locked,
     content: locked ? "" : await renderPublicContent(post, options),
     excerpt: locked ? "" : safe.excerpt,
@@ -1024,22 +1221,21 @@ async function publicPost(post: any, locked = false, options: RenderOptions = {}
   const linked = await withPermalink(result);
   return locked ? linked : enhancePublicPost(linked);
 }
-async function publicComments(postId: number, page = 1) {
-  const settings = await getSettings();
+async function publicComments(postId: number, page: number, settings: Awaited<ReturnType<typeof getSettings>>) {
   return (
     await pool.query(
-      `SELECT c.id,c.author_name AS "authorName",c.author_url AS "authorUrl",c.user_id AS "userId",c.content,c.status,c.parent_id AS "parentId",c.post_id AS "postId",p.title AS "postTitle",c.created_at AS "createdAt" FROM comments c JOIN posts p ON p.id=c.post_id WHERE c.post_id=$1 AND c.status='approved' ORDER BY c.created_at ${settings.commentOrder === "desc" ? "DESC" : "ASC"},c.id ${settings.commentOrder === "desc" ? "DESC" : "ASC"} LIMIT $2 OFFSET $3`,
-      [postId, settings.commentsPerPage, (page - 1) * settings.commentsPerPage],
+      `SELECT c.id,c.author_name AS "authorName",c.author_url AS "authorUrl",c.author_email AS "_authorEmail",c.user_id AS "userId",c.content,c.status,c.parent_id AS "parentId",c.post_id AS "postId",p.title AS "postTitle",c.created_at AS "createdAt" FROM comments c JOIN posts p ON p.id=c.post_id WHERE c.post_id=$1 AND c.status='approved' ORDER BY c.created_at ${settings.commentOrder === "desc" ? "DESC" : "ASC"},c.id ${settings.commentOrder === "desc" ? "DESC" : "ASC"}${settings.paginateComments ? " LIMIT $2 OFFSET $3" : ""}`,
+      settings.paginateComments ? [postId, settings.commentsPerPage, (page - 1) * settings.commentsPerPage] : [postId],
     )
-  ).rows;
+  ).rows.map(({ _authorEmail, ...comment }) => ({ ...comment, avatarUrl: avatarURL(_authorEmail, settings) }));
 }
 async function commentResponse(postId: number, req: Request, locked = false) {
-  const page = z.coerce
+  const requestedPage = z.coerce
     .number()
     .int()
     .positive()
     .max(2_147_483_647)
-    .default(1)
+    .optional()
     .parse(req.query.commentPage);
   const settings = await getSettings();
   const total = locked
@@ -1050,13 +1246,17 @@ async function commentResponse(postId: number, req: Request, locked = false) {
           [postId],
         )
       ).rows[0].total;
+  const totalPages = settings.paginateComments ? Math.max(1, Math.ceil(total / settings.commentsPerPage)) : 1;
+  const page = settings.paginateComments
+    ? Math.min(requestedPage ?? ((settings.defaultCommentPage === "newest") === (settings.commentOrder === "asc") ? totalPages : 1), totalPages)
+    : 1;
   return {
-    comments: locked ? [] : await publicComments(postId, page),
+    comments: locked ? [] : await publicComments(postId, page, settings),
     commentsPagination: {
       page,
-      perPage: settings.commentsPerPage,
+      perPage: settings.paginateComments ? settings.commentsPerPage : Math.max(1, total),
       totalComments: total,
-      totalPages: Math.max(1, Math.ceil(total / settings.commentsPerPage)),
+      totalPages,
     },
   };
 }
@@ -1121,12 +1321,12 @@ router.get("/public/site", async (req, res) => {
       { query: req.query },
     );
   };
-  const { adminEmail: _adminEmail, ...safeSettings } = settings;
+  const { adminEmail: _adminEmail, commentModerationKeys: _moderationKeys, disallowedCommentKeys: _disallowedKeys, ...safeSettings } = settings;
   const author = filter.author ? (await pool.query("SELECT display_name AS name FROM users WHERE id=$1 AND EXISTS(SELECT 1 FROM posts WHERE author_id=$1 AND type='post' AND status='publish')", [filter.author])).rows[0] : null;
   const icon = settings.siteIconId
     ? (
         await pool.query(
-          "SELECT filename FROM media WHERE id=$1 AND mime_type LIKE 'image/%'",
+          "SELECT filename,sizes FROM media WHERE id=$1 AND mime_type LIKE 'image/%'",
           [settings.siteIconId],
         )
       ).rows[0]
@@ -1144,6 +1344,7 @@ router.get("/public/site", async (req, res) => {
     settings: {
       ...safeSettings,
       siteIconUrl: icon ? `/uploads/${icon.filename}` : null,
+      siteIconSizes:icon?.sizes || {},
     },
     archive: author ? { type: "author", name: author.name, authorId: filter.author } : null,
     posts: await Promise.all(posts.rows.map(sanitize)),
@@ -1186,7 +1387,7 @@ router.get("/public/posts/:slug", async (req, res) => {
   });
 });
 const passwordAttempts = new Map<string, { count: number; expires: number }>();
-router.post("/public/posts/:slug/unlock", async (req, res) => {
+export async function unlockPublicPost(req:Request,res:Response) {
   const key = req.ip ?? "unknown",
     now = Date.now();
   if (passwordAttempts.size > 10000)
@@ -1236,9 +1437,36 @@ router.post("/public/posts/:slug/unlock", async (req, res) => {
     post: await publicPost(post, false, { query: req.query }),
     ...(await commentResponse(post.id, req)),
   });
-});
+}
+router.post("/public/posts/:slug/unlock",unlockPublicPost);
 const commentAttempts = new Map<string, { count: number; expires: number }>();
-router.post("/public/comments", async (req, res) => {
+export function matchesCommentKeywords(keys: string, fields: string[]) {
+  const normalized = fields.map(field => field.toLowerCase());
+  return keys.split(/\r?\n/).map(key => key.trim().toLowerCase()).filter(Boolean)
+    .some(key => normalized.some(field => field.includes(key)));
+}
+export async function queueCommentNotifications(client: PoolClient, commentId: number, actorId?: number) {
+  const settings = await getSettings(client);
+  const comment = (await client.query(
+    "SELECT c.author_name,c.author_email,c.author_url,c.content,c.status,p.id AS post_id,p.title,p.author_id,u.email AS post_author_email,u.role AS post_author_role FROM comments c JOIN posts p ON p.id=c.post_id JOIN users u ON u.id=p.author_id WHERE c.id=$1",
+    [commentId],
+  )).rows[0];
+  if (!comment || !["approved", "pending"].includes(comment.status)) return [];
+  const recipients = new Set<string>();
+  if (comment.status === "pending" && settings.notifyModeration) {
+    recipients.add(settings.adminEmail.toLowerCase());
+    if (["administrator", "editor", "author"].includes(comment.post_author_role)) recipients.add(comment.post_author_email.toLowerCase());
+  }
+  if (comment.status === "approved" && settings.notifyComments && actorId !== comment.author_id)
+    recipients.add(comment.post_author_email.toLowerCase());
+  const subject = `[${settings.siteTitle}] ${comment.status === "pending" ? "Please moderate" : "New comment"}: ${comment.title}`;
+  const link = new URL(`/admin/comments?postId=${comment.post_id}`, process.env.APP_ORIGIN || "http://127.0.0.1:5173").href;
+  const body = `A ${comment.status === "pending" ? "comment is awaiting moderation" : "new comment was approved"} on "${comment.title}".\n\nAuthor: ${comment.author_name}\nEmail: ${comment.author_email}\nWebsite: ${comment.author_url || ""}\n\n${plainText(comment.content)}\n\nReview comments:\n${link}`;
+  const messages: Awaited<ReturnType<typeof queueMail>>[] = [];
+  for (const recipient of recipients) messages.push(await queueMail(client, recipient, subject, body));
+  return messages;
+}
+export async function submitPublicComment(req: Request, res: Response) {
   const key = req.ip ?? "unknown",
     now = Date.now(),
     attempt = commentAttempts.get(key);
@@ -1247,6 +1475,8 @@ router.post("/public/comments", async (req, res) => {
   if (commentAttempts.size >= 10000)
     for (const [k, v] of commentAttempts)
       if (v.expires <= now) commentAttempts.delete(k);
+  if (commentAttempts.size >= 10000 && !commentAttempts.has(key))
+    throw new HttpError(429, "Too many comments. Please try again later.");
   commentAttempts.set(key, {
     count: attempt && attempt.expires > now ? attempt.count + 1 : 1,
     expires:
@@ -1271,88 +1501,89 @@ router.post("/public/comments", async (req, res) => {
         ])
         .optional(),
       content: z.string().trim().min(1).max(20_000),
+      rememberAuthor: z.boolean().optional(),
     })
     .strict()
     .parse(req.body);
-  const settings = await getSettings(),
-    user = (req as AuthRequest).user;
-  if (settings.commentRegistration && !user)
-    throw new HttpError(401, "Please log in to leave a comment.");
-  const submittedName = user?.displayName ?? input.authorName ?? "",
-    submittedEmail = user?.email ?? input.authorEmail ?? "";
-  if (
-    settings.requireCommentNameEmail &&
-    (!submittedName.trim() || !submittedEmail)
-  )
-    throw new HttpError(400, "Enter your name and email address.");
-  const content = cleanContent(input.content),
-    authorName = plainText(submittedName).trim() || "Anonymous";
-  if (!plainText(content).trim())
-    throw new HttpError(400, "Write a comment before submitting.");
-  if (!authorName) throw new HttpError(400, "Enter a name containing text.");
-  const post = (
-    await pool.query(
-      "SELECT id,status,comment_status,password_hash,published_at FROM posts WHERE id=$1",
-      [input.postId],
-    )
-  ).rows[0];
-  if (!post || post.status !== "publish")
-    throw new HttpError(404, "Post not found.");
-  if (
-    post.comment_status !== "open" ||
-    (settings.closeCommentsDays > 0 &&
-      post.published_at &&
-      new Date(post.published_at).getTime() +
-        settings.closeCommentsDays * 86_400_000 <
-        Date.now())
-  )
-    throw new HttpError(409, "Comments are closed for this post.");
-  if (!(await hasPostAccess(req, post.id, post.password_hash)))
-    throw new HttpError(403, "Unlock this post before leaving a comment.");
-  if (input.parentId) {
-    if (!settings.threadComments)
-      throw new HttpError(400, "Threaded comments are disabled.");
-    const parent = await pool.query(
-      "SELECT id FROM comments WHERE id=$1 AND post_id=$2 AND status='approved'",
-      [input.parentId, post.id],
-    );
-    if (!parent.rowCount)
-      throw new HttpError(
-        400,
-        "Choose an approved comment on this post to reply to.",
+  const user = (req as AuthRequest).user;
+  const saved = await transaction(async client => {
+    let profileWebsite = "";
+    if (user) {
+      // Match account deletion's lock order before protecting the post.
+      const account = (await client.query("SELECT profile FROM users WHERE id=$1 FOR KEY SHARE", [user.id])).rows[0];
+      if (!account) throw new HttpError(401, "Please log in again before commenting.");
+      if (typeof account.profile?.website === "string" && /^https?:\/\//i.test(account.profile.website)) profileWebsite = account.profile.website;
+    }
+    await client.query("SELECT pg_advisory_xact_lock(hashtext('worldact-comment-hierarchy'))");
+    const settings = await getSettings(client);
+    if (settings.commentRegistration && !user)
+      throw new HttpError(401, "Please log in to leave a comment.");
+    const submittedName = user?.displayName ?? input.authorName ?? "",
+      submittedEmail = (user?.email ?? input.authorEmail ?? "").toLowerCase();
+    if (settings.requireCommentNameEmail && (!submittedName.trim() || !submittedEmail))
+      throw new HttpError(400, "Enter your name and email address.");
+    const cleanName = plainText(submittedName).trim();
+    if (settings.requireCommentNameEmail && !cleanName) throw new HttpError(400, "Enter a name containing text.");
+    const content = cleanContent(input.content), authorName = cleanName || "Anonymous",
+      authorUrl = input.authorUrl ?? profileWebsite;
+    if (!plainText(content).trim()) throw new HttpError(400, "Write a comment before submitting.");
+    const post = (await client.query(
+      "SELECT id,type,slug,parent_id,status,comment_status,password_hash,published_at,created_at,(SELECT jsonb_agg(jsonb_build_object('taxonomy',t.taxonomy,'slug',t.slug)) FROM terms t JOIN post_terms pt ON pt.term_id=t.id WHERE pt.post_id=posts.id) AS terms FROM posts WHERE id=$1 FOR SHARE", [input.postId],
+    )).rows[0];
+    if (!post || post.status !== "publish") throw new HttpError(404, "Post not found.");
+    if (post.comment_status !== "open" || (settings.closeCommentsDays > 0 && post.published_at && new Date(post.published_at).getTime() + settings.closeCommentsDays * 86_400_000 < Date.now()))
+      throw new HttpError(409, "Comments are closed for this post.");
+    if (!(await hasPostAccess(req, post.id, post.password_hash)))
+      throw new HttpError(403, "Unlock this post before leaving a comment.");
+    if (input.parentId) {
+      if (!settings.threadComments) throw new HttpError(400, "Threaded comments are disabled.");
+      const parent = await client.query("SELECT id FROM comments WHERE id=$1 AND post_id=$2 AND status='approved'", [input.parentId, post.id]);
+      if (!parent.rowCount) throw new HttpError(400, "Choose an approved comment on this post to reply to.");
+      const ancestors = await client.query(
+        "WITH RECURSIVE ancestors AS(SELECT id,parent_id FROM comments WHERE id=$1 UNION SELECT c.id,c.parent_id FROM comments c JOIN ancestors a ON c.id=a.parent_id) SELECT count(*)::int AS depth FROM ancestors", [input.parentId],
       );
-    const ancestors = await pool.query(
-      `WITH RECURSIVE ancestors AS(SELECT id,parent_id FROM comments WHERE id=$1 UNION SELECT c.id,c.parent_id FROM comments c JOIN ancestors a ON c.id=a.parent_id) SELECT count(*)::int AS depth FROM ancestors`,
-      [input.parentId],
+      if (ancestors.rows[0].depth >= settings.threadDepth)
+        throw new HttpError(400, "This comment thread has reached its maximum depth.");
+    }
+    const fields = [authorName, submittedEmail, authorUrl, input.content, content, plainText(content), req.ip || ""];
+    const anchors = (content.match(/<a\b[^>]*\bhref\s*=/gi) || []).length;
+    const bareLinks = (content.replace(/<a\b[^>]*>[\s\S]*?<\/a>/gi, " ").match(/https?:\/\//gi) || []).length;
+    const previous = settings.commentPreviouslyApproved && submittedEmail
+      ? !!(await client.query("SELECT 1 FROM comments WHERE lower(author_email)=$1 AND status='approved' LIMIT 1", [submittedEmail])).rowCount
+      : false;
+    let status = matchesCommentKeywords(settings.disallowedCommentKeys, fields) ? "trash"
+      : await classifySpam(content) ? "spam"
+      : settings.commentModeration || matchesCommentKeywords(settings.commentModerationKeys, fields) ||
+        (settings.commentMaxLinks > 0 && anchors + bareLinks >= settings.commentMaxLinks) ||
+        (settings.commentPreviouslyApproved && !previous) ? "pending" : "approved";
+    const akismetInput:AkismetComment={userIP:req.ip || "",userAgent:req.get("user-agent") || "",referrer:req.get("referer") || "",authorName,authorEmail:submittedEmail,authorURL:input.authorUrl || "",content,permalink:new URL((await withPermalink(post,settings,client)).permalink,settings.siteUrl).href,userRole:user?.role};
+    const akismetResult=["trash","spam"].includes(status)?"skipped":await checkAkismetComment(akismetInput,client);
+    if(akismetResult==="spam")status="spam";else if(akismetResult==="unavailable")status="pending";
+    const result = await client.query(
+      "INSERT INTO comments(post_id,author_name,author_email,content,status,parent_id,author_url,user_id) VALUES($1,$2,$3,$4,$5,$6,$7,$8) RETURNING id",
+      [post.id, authorName, submittedEmail, content, status, input.parentId ?? null, authorUrl, user?.id ?? null],
     );
-    if (ancestors.rows[0].depth >= settings.threadDepth)
-      throw new HttpError(
-        400,
-        "This comment thread has reached its maximum depth.",
-      );
-  }
-  const status = (await classifySpam(content))
-    ? "spam"
-    : settings.commentModeration
-      ? "pending"
-      : "approved";
-  const result = await pool.query(
-    `INSERT INTO comments(post_id,author_name,author_email,content,status,parent_id,author_url,user_id) SELECT id,$2,$3,$4,$5,$6,$7,$8 FROM posts WHERE id=$1 AND status='publish' AND comment_status='open' RETURNING id`,
-    [
-      post.id,
-      authorName,
-      submittedEmail.toLowerCase(),
-      content,
-      status,
-      input.parentId ?? null,
-      input.authorUrl ?? "",
-      user?.id ?? null,
-    ],
-  );
-  if (!result.rowCount)
-    throw new HttpError(409, "Comments are no longer available on this post.");
-  res
-    .status(201)
-    .json({ ok: true, comment: { id: result.rows[0].id, status } });
-});
+    const comment = { id: result.rows[0].id, status };
+    await recordAkismetCheck(comment.id,akismetInput,akismetResult,client);
+    let rememberedToken: string | null | undefined;
+    if (!user && (input.rememberAuthor !== undefined || !settings.commentCookieConsent)) {
+      const previousToken = rememberedAuthorToken(req);
+      if (previousToken) await client.query("DELETE FROM comment_author_tokens WHERE token_hash=$1", [tokenHash(previousToken)]);
+      rememberedToken = null;
+      if (settings.commentCookieConsent && input.rememberAuthor) {
+        rememberedToken = randomBytes(32).toString("hex");
+        await client.query("DELETE FROM comment_author_tokens WHERE expires_at<=now()");
+        await client.query("INSERT INTO comment_author_tokens(token_hash,comment_id,expires_at) VALUES($1,$2,now()+interval '347 days')", [tokenHash(rememberedToken), comment.id]);
+      }
+    }
+    const messages = await queueCommentNotifications(client, comment.id, user?.id);
+    return { comment, messages, rememberedToken };
+  });
+  if (saved.rememberedToken) res.cookie(commentAuthorCookie, saved.rememberedToken, { path: "/", httpOnly: true, sameSite: "lax", secure: process.env.NODE_ENV === "production", maxAge: 347 * 86_400_000 });
+  else if (saved.rememberedToken === null) res.clearCookie(commentAuthorCookie, { path: "/", httpOnly: true, sameSite: "lax" });
+  for (const message of saved.messages) await deliverMail(message);
+  res.status(201).json({ ok: true, comment: saved.comment });
+}
+
+router.post("/public/comments", submitPublicComment);
 export default router;

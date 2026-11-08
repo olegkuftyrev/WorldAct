@@ -1,0 +1,77 @@
+name: WorldAct checks
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: worldact-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        node: [22, 24]
+    services:
+      postgres:
+        image: postgres:17-alpine
+        env:
+          POSTGRES_USER: worldact
+          POSTGRES_PASSWORD: worldact-ci
+          POSTGRES_DB: postgres
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U worldact -d postgres"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 15
+    env:
+      DATABASE_URL: postgres://worldact:worldact-ci@127.0.0.1:5432/postgres
+      WORLDACT_MAIL_MODE: outbox
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7
+        with:
+          node-version: ${{ matrix.node }}
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+      - run: npm run test:isolated
+      - name: Compiled Node server regression
+        env:
+          ISOLATED_TEST_COMPILED: "true"
+        run: node scripts/test-isolated.mjs tests/fonts.test.ts tests/site-identity.test.ts tests/bundled-plugins-api.test.ts tests/comment-capabilities.test.ts tests/template-access.test.ts tests/server-startup.test.ts
+      - name: Export site archive
+        if: matrix.node == 24
+        env:
+          SITE_ARCHIVE_STAGE: export
+          SITE_ARCHIVE_PATH: ${{ runner.temp }}/worldact-site.json
+        run: node scripts/test-isolated.mjs tests/portability-site.test.ts
+      - name: Restore site archive to a fresh database
+        if: matrix.node == 24
+        env:
+          SITE_ARCHIVE_STAGE: restore
+          SITE_ARCHIVE_PATH: ${{ runner.temp }}/worldact-site.json
+        run: node scripts/test-isolated.mjs tests/portability-site.test.ts
+      - name: Export font archive
+        if: matrix.node == 24
+        env:
+          FONT_ARCHIVE_STAGE: export
+          FONT_ARCHIVE_PATH: ${{ runner.temp }}/worldact-fonts.json
+        run: node scripts/test-isolated.mjs tests/portability-fonts.test.ts
+      - name: Restore font archive to a fresh database
+        if: matrix.node == 24
+        env:
+          FONT_ARCHIVE_STAGE: restore
+          FONT_ARCHIVE_PATH: ${{ runner.temp }}/worldact-fonts.json
+        run: node scripts/test-isolated.mjs tests/portability-fonts.test.ts

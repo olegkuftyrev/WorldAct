@@ -39,6 +39,24 @@ test("block import remaps canonical and JSON references without binding missing 
   assert.deepEqual(legacy.blocks, []);
 });
 
+test("copied design references retain their source theme across a different active theme", () => {
+  const result = remapImportedBlockReferences(
+    block("template-part", { slug: "header" }) + block("pattern", { slug: "twentytwentythree/banner" }),
+    [node("template-part", { slug: "header" }), node("pattern", { slug: "banner" })],
+    new Map(),
+    { documentTheme: "twentytwentythree", documents: new Map([
+      ["twentytwentythree:template-part:header", "header-copy"],
+      ["twentytwentythree:pattern:banner", "banner-copy"],
+    ]) },
+  );
+  const parsed = parse(result.rawContent);
+  assert.deepEqual(parsed[0].attrs, { slug: "header-copy", theme: "twentytwentythree" });
+  assert.equal(parsed[1].attrs!.slug, "twentytwentythree/banner-copy");
+  assert.deepEqual(result.blocks[0].attributes, parsed[0].attrs);
+  assert.equal(result.blocks[1].attributes.slug, "twentytwentythree/banner-copy");
+  assert.deepEqual(result.warnings, []);
+});
+
 const base = process.env.TEST_API_URL || "http://127.0.0.1:3001";
 const origin = process.env.APP_ORIGIN || "http://127.0.0.1:5173";
 async function api(path: string, method = "GET", body?: unknown, cookie = "") {

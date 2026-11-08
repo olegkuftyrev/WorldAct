@@ -1,9 +1,20 @@
 import { parse } from "@wordpress/block-serialization-default-parser";
-import { cleanBlocks, cleanContent, cleanRawContent, type StoredBlock } from "./utils.js";
+import { cleanBlocks, cleanContent, cleanRawContent, HttpError, type StoredBlock } from "./utils.js";
 
 export type ImportedBlockEntity = {
   id: number;
   kind: "reusable" | "navigation";
+};
+export type BlockReferenceOptions = {
+  documents?: ReadonlyMap<string, string>;
+  documentTheme?: string;
+  media?: ReadonlyMap<number, number>;
+  posts?: ReadonlyMap<number, number>;
+  terms?: ReadonlyMap<number, number>;
+  authors?: ReadonlyMap<number, number>;
+  urls?: ReadonlyMap<string, string>;
+  fontFamilies?: ReadonlyMap<string, string | null>;
+  fontSlugs?: ReadonlyMap<string, string | null>;
 };
 
 /** Imported references must resolve only inside the imported entity graph. */
@@ -11,9 +22,127 @@ export function remapImportedBlockReferences(
   rawContent: string,
   blocks: unknown,
   entities: ReadonlyMap<number, ImportedBlockEntity>,
+  options: BlockReferenceOptions = {},
 ) {
   const warnings = new Set<string>();
+  const warn = (message: string) => { if (warnings.size < 100) warnings.add(message); };
+  const fontFamilies = new Map<string, string | null>();
+  const fontSlugs = options.fontSlugs;
+  for (const [source, target] of options.fontFamilies || []) {
+    if (!/^[\p{L}\p{N}][\p{L}\p{N} ._'()-]{0,119}$/u.test(source) || (target !== null && !/^[\p{L}\p{N}][\p{L}\p{N} ._'()-]{0,119}$/u.test(target)))
+      throw new HttpError(400, "Invalid imported font family mapping.");
+    fontFamilies.set(source.toLowerCase(), target);
+  }
+  for (const [source, target] of fontSlugs || []) if (!/^[a-z0-9][a-z0-9-]{0,159}$/.test(source) || (target !== null && !/^[a-z0-9][a-z0-9-]{0,159}$/.test(target)))
+    throw new HttpError(400, "Invalid imported font preset mapping.");
+  const mapsFontSlug = (slug: string) => !!fontSlugs && (fontSlugs.has(slug) || /^worldact-font-\d+$/.test(slug));
+  const rewriteFontVars = (value: string) => value
+    .replace(/var\(--wp--preset--font-family--([a-z0-9-]+)\)/g, (original, slug) => {
+      if (!mapsFontSlug(slug)) return original;
+      const target = fontSlugs!.get(slug);
+      if (target) return `var(--wp--preset--font-family--${target})`;
+      warn(`Detached unavailable imported font preset ${slug}.`); return "inherit";
+    })
+    .replace(/var:preset\|font-family\|([a-z0-9-]+)/g, (original, slug) => {
+      if (!mapsFontSlug(slug)) return original;
+      const target = fontSlugs!.get(slug);
+      if (target) return `var:preset|font-family|${target}`;
+      warn(`Detached unavailable imported font preset ${slug}.`); return "inherit";
+    });
+  const rewriteFontFamily = (value: string) => rewriteFontVars(value).split(",").map(part => {
+    const name = part.trim().replace(/&(?:quot|#34|#x22);/gi, '"').replace(/&(?:apos|#39|#x27);/gi, "'").replace(/^(['"])(.*)\1$/, "$2");
+    if (!fontFamilies.has(name.toLowerCase())) return part;
+    const target = fontFamilies.get(name.toLowerCase());
+    if (target) return JSON.stringify(target);
+    warn(`Detached unavailable imported font family ${name}.`); return "inherit";
+  }).join(",");
+  const rewriteFontClasses = (value: string) => value.replace(/\bhas-([a-z0-9-]+)-font-family\b/g, (original, slug) => {
+    if (!mapsFontSlug(slug)) return original;
+    const target = fontSlugs!.get(slug);
+    if (target) return `has-${target}-font-family`;
+    warn(`Detached unavailable imported font preset ${slug}.`); return "";
+  }).trim();
+  const urls = [...(options.urls || [])].sort((a, b) => b[0].length - a[0].length);
+  const rewriteText = (value: string) => {
+    for (const [source, target] of urls) if (source) value = value.split(source).join(target);
+    if (options.media) value = value.replace(/\bwp-image-(\d+)\b/g, (_match, id) => options.media!.has(Number(id)) ? `wp-image-${options.media!.get(Number(id))}` : "wp-image-missing");
+    if (fontFamilies.size || fontSlugs) value = value
+      .replace(/(\bclass\s*=\s*)(["'])([\s\S]*?)\2/gi, (_match, prefix, quote, classes) => prefix + quote + rewriteFontClasses(classes) + quote)
+      .replace(/(\bstyle\s*=\s*)(["'])([\s\S]*?)\2/gi, (_match, prefix, quote, style) => prefix + quote + style.replace(/(\bfont-family\s*:\s*)((?:&(?:quot|apos|#39|#34|#x22|#x27);|[^;])*)/gi, (_declaration: string, property: string, family: string) => property + rewriteFontFamily(family).replace(/"/g, "&quot;").replace(/'/g, "&#39;")) + quote);
+    return value;
+  };
+  const rewriteValues = (value: unknown, key = ""): unknown => {
+    if (typeof value === "string") {
+      if (key === "className" && fontSlugs) return rewriteFontClasses(value);
+      if (key === "fontFamily" && (fontFamilies.size || fontSlugs)) {
+        if (mapsFontSlug(value)) {
+          const target = fontSlugs!.get(value);
+          if (target) return target;
+          warn(`Detached unavailable imported font preset ${value}.`); return undefined;
+        }
+        return rewriteFontFamily(value);
+      }
+      return rewriteText(value);
+    }
+    if (Array.isArray(value)) return value.map(item => rewriteValues(item));
+    if (value && typeof value === "object") return Object.fromEntries(Object.entries(value).map(([key, item]) => [key, rewriteValues(item, key)]).filter(([, item]) => item !== undefined));
+    return value;
+  };
   const reference = (name: string, attributes: Record<string, unknown>) => {
+    attributes = rewriteValues(attributes) as Record<string, unknown>;
+    if (options.documents && ["core/template-part", "core/pattern"].includes(name)) {
+      const type = name === "core/template-part" ? "template-part" : "pattern";
+      const sourceSlug = String(attributes.slug || "").split("/").pop() || "";
+      const prefix = String(attributes.slug || "").split("/")[0];
+      const theme = attributes.theme || (["twentytwentyfive", "twentytwentyfour", "twentytwentythree", "classic"].includes(prefix) ? prefix : options.documentTheme || "");
+      const target = options.documents.get(`${theme}:${type}:${sourceSlug}`) || (!theme ? options.documents.get(`${type}:${sourceSlug}`) : undefined);
+      if (!target) { warn(`Dropped ${name} reference ${sourceSlug}: its document is not included in this import.`); return null; }
+      attributes.slug = name === "core/pattern" && theme ? `${theme}/${target}` : target;
+      if (name === "core/template-part" && theme) attributes.theme = theme;
+    }
+    if (options.media) {
+      if (name === "core/gallery" && Array.isArray(attributes.ids)) attributes.ids = attributes.ids.map(Number).map(id => options.media!.get(id)).filter(Boolean);
+      const fields = ["core/image", "core/audio", "core/video", "core/file", "core/cover"].includes(name) ? ["id"] : name === "core/media-text" ? ["mediaId"] : [];
+      for (const field of fields) if (attributes[field]) {
+        const target = options.media.get(Number(attributes[field]));
+        if (target) attributes[field] = target;
+        else { warn(`Detached missing media reference ${attributes[field]} in ${name}.`); delete attributes[field]; }
+      }
+    }
+    if (options.posts && name === "core/navigation-link" && attributes.kind === "post-type" && attributes.id) {
+      const target = options.posts.get(Number(attributes.id));
+      if (target) attributes.id = target;
+      else { warn(`Detached missing post reference ${attributes.id} in navigation.`); delete attributes.id; }
+    }
+    if (name === "core/query" && attributes.query && typeof attributes.query === "object") {
+      const query = { ...(attributes.query as Record<string, any>) };
+      const mapIds = (value: unknown, map: ReadonlyMap<number, number>) => (Array.isArray(value) ? value : String(value).split(",")).map(Number).map(id => map.get(id)).filter((id): id is number => !!id);
+      for (const field of ["include", "exclude", "parents"] as const) if (options.posts && query[field]) {
+        if (Array.isArray(query[field]) && !query[field].length) continue;
+        const mapped = mapIds(query[field], options.posts);
+        if (!mapped.length && field !== "exclude") { warn(`Dropped query with unresolved ${field} post filters.`); return null; }
+        query[field] = mapped;
+      }
+      if (options.authors && query.author) {
+        if (Array.isArray(query.author) && !query.author.length) delete query.author;
+        else {
+        const mapped = mapIds(query.author, options.authors);
+        if (!mapped.length) { warn("Dropped query with an unresolved author filter."); return null; }
+        query.author = mapped;
+        }
+      }
+      if (options.terms && query.taxQuery) {
+        const tax = JSON.parse(JSON.stringify(query.taxQuery));
+        for (const group of [tax, tax.include, tax.exclude].filter(Boolean)) for (const field of ["category", "post_tag", "tag"]) if (group[field]) {
+          if (Array.isArray(group[field]) && !group[field].length) continue;
+          const mapped = mapIds(group[field], options.terms);
+          if (!mapped.length && group !== tax.exclude) { warn(`Dropped query with unresolved ${field} term filters.`); return null; }
+          group[field] = mapped;
+        }
+        query.taxQuery = tax;
+      }
+      attributes.query = query;
+    }
     const kind = name === "core/block" ? "reusable" : "navigation";
     if (name !== "core/block" && name !== "core/navigation") return attributes;
     if (name === "core/navigation" && !Object.hasOwn(attributes, "ref"))
@@ -25,8 +154,7 @@ export function remapImportedBlockReferences(
       ? entities.get(sourceId)
       : undefined;
     if (target?.kind === kind) return { ...attributes, ref: target.id };
-    if (warnings.size < 100)
-      warnings.add(`Dropped ${name} reference ${sourceId || "without a valid ID"}: its ${kind} entity is not included in this import.`);
+    warn(`Dropped ${name} reference ${sourceId || "without a valid ID"}: its ${kind} entity is not included in this import.`);
     return null;
   };
   const rewriteJSON = (nodes: StoredBlock[]): StoredBlock[] => nodes.flatMap(node => {
@@ -34,13 +162,13 @@ export function remapImportedBlockReferences(
     return attributes ? [{ ...node, attributes, innerBlocks: rewriteJSON(node.innerBlocks) }] : [];
   });
   const serialize = (node: ReturnType<typeof parse>[number]): string => {
-    if (!node.blockName) return node.innerHTML;
+    if (!node.blockName) return rewriteText(node.innerHTML);
     const attributes = reference(node.blockName, node.attrs || {});
     if (!attributes) return "";
     let child = 0;
     const content = node.innerContent.map(fragment => fragment === null
       ? serialize(node.innerBlocks[child++])
-      : fragment);
+      : rewriteText(fragment));
     while (child < node.innerBlocks.length) content.push(serialize(node.innerBlocks[child++]));
     const inner = content.join("");
     const name = node.blockName.replace(/^core\//, "");
@@ -55,7 +183,7 @@ export function remapImportedBlockReferences(
   const safeRaw = cleanRawContent(rawContent);
   const rewrittenRaw = safeRaw.includes("<!-- wp:")
     ? cleanRawContent(parse(safeRaw).map(serialize).join(""))
-    : safeRaw;
+    : rewriteText(safeRaw);
   const rewrittenBlocks = rewriteJSON(cleanBlocks(blocks ?? []));
   return {
     rawContent: rewrittenRaw,

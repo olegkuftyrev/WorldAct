@@ -32,12 +32,14 @@ export const privacyRetention = {
   exported: [
     "Account profile fields",
     "Comments linked to the email address or account",
+    "Retained Akismet submission IP, browser, referrer and classification metadata",
   ],
   erased: [
     "Comment author names",
     "Comment author email addresses",
     "Comment author website URLs",
     "Comment links to registered user accounts",
+    "Akismet submission and feedback metadata for matching comments",
     "Existing personal-data export download links and files",
   ],
   retained: [
@@ -48,7 +50,7 @@ export const privacyRetention = {
     "Privacy request audit records",
   ],
   message:
-    "Erasure anonymizes matching comment authors and revokes existing personal-data exports. User accounts, profile fields, posts, pages, media, comment text, moderation status and privacy request records are retained. Delete an account separately in Users if required.",
+    "Erasure anonymizes matching comment authors, removes their Akismet submission metadata and revokes existing personal-data exports. User accounts, profile fields, posts, pages, media, comment text, moderation status and privacy request records are retained. Delete an account separately in Users if required.",
 };
 const requestFields = `r.id,r.email,r.type,r.status,r.created_at AS "createdAt",r.updated_at AS "updatedAt",r.confirmed_at AS "confirmedAt",r.completed_at AS "completedAt",r.confirmation_expires_at AS "confirmationExpiresAt",r.download_expires_at AS "downloadExpiresAt",(r.export_data IS NOT NULL AND r.download_expires_at>now()) AS "hasExport",r.result,r.error,coalesce(u.display_name,'Deleted administrator') AS "requestedByName"`;
 async function requestDto(
@@ -107,7 +109,7 @@ interface QueuedMail {
   subject: string;
   body: string;
 }
-async function queueMail(
+export async function queueMail(
   client: PoolClient,
   recipient: string,
   subject: string,
@@ -119,7 +121,7 @@ async function queueMail(
   );
   return { id: row.rows[0].id, recipient, subject, body };
 }
-async function deliverMail(mail: QueuedMail | null) {
+export async function deliverMail(mail: QueuedMail | null) {
   if (!mail) return null;
   if (
     !process.env.SMTP_HOST ||
@@ -200,6 +202,9 @@ router.post("/auth/register", rateLimit(20, 60 * 60_000), async (req, res) => {
       const settings = await getSettings(client);
       if (!settings.usersCanRegister)
         throw new HttpError(403, "User registration is currently not allowed.");
+      await client.query("SELECT pg_advisory_xact_lock(hashtext('worldact-account-identity'))");
+      if((await client.query("SELECT id FROM users WHERE lower(username)=ANY($1::text[]) OR lower(email)=ANY($1::text[])",[[input.username.toLowerCase(),input.email.toLowerCase()]])).rowCount)
+        throw new HttpError(409,"That username or email address is already registered.");
       const role: Role = ROLES.includes(settings.defaultRole)
         ? settings.defaultRole
         : "subscriber";
@@ -537,7 +542,7 @@ async function personalData(client: PoolClient, email: string) {
   const ids = accounts.map((user) => user.id);
   const size = (
     await client.query(
-      "SELECT count(*)::int AS total,coalesce(sum(octet_length(content)+octet_length(author_name)+octet_length(author_email)+octet_length(author_url)),0)::bigint AS bytes FROM comments WHERE lower(author_email)=lower($1) OR user_id=ANY($2::int[])",
+      "SELECT count(*)::int AS total,coalesce(sum(octet_length(c.content)+octet_length(c.author_name)+octet_length(c.author_email)+octet_length(c.author_url)+coalesce(octet_length(m.user_ip)+octet_length(m.user_agent)+octet_length(m.referrer),0)),0)::bigint AS bytes FROM comments c LEFT JOIN akismet_comment_checks m ON m.comment_id=c.id AND m.expires_at>now() WHERE lower(c.author_email)=lower($1) OR c.user_id=ANY($2::int[])",
       [email, ids],
     )
   ).rows[0];
@@ -555,6 +560,7 @@ async function personalData(client: PoolClient, email: string) {
       [email, ids],
     )
   ).rows;
+  const akismetChecks=(await client.query('SELECT m.comment_id AS "commentId",m.user_ip AS "userIP",m.user_agent AS "userAgent",m.referrer,m.verdict,m.checked_at AS "checkedAt",m.expires_at AS "expiresAt",m.feedback,m.feedback_status AS "feedbackStatus" FROM akismet_comment_checks m JOIN comments c ON c.id=m.comment_id WHERE (lower(c.author_email)=lower($1) OR c.user_id=ANY($2::int[])) AND m.expires_at>now() ORDER BY m.comment_id',[email,ids])).rows;
   const safeAccounts = accounts.map(({ profile, ...user }) => ({
     ...user,
     profile: Object.fromEntries(
@@ -571,6 +577,7 @@ async function personalData(client: PoolClient, email: string) {
     exportedAt: new Date().toISOString(),
     accounts: safeAccounts,
     comments,
+    akismetChecks,
     scope: privacyRetention.exported,
   };
 }
@@ -708,6 +715,7 @@ router.post("/tools/privacy/requests/:id/erase", admin, async (req, res) => {
           [row.email],
         )
       ).rows.map((user) => user.id);
+      const removedAkismet=await client.query("DELETE FROM akismet_comment_checks m USING comments c WHERE m.comment_id=c.id AND (lower(c.author_email)=lower($1) OR c.user_id=ANY($2::int[])) RETURNING m.comment_id",[row.email,users]);
       const erased = await client.query(
         "UPDATE comments SET author_name='Anonymous',author_email='',author_url='',user_id=NULL,version=version+1,updated_at=now() WHERE lower(author_email)=lower($1) OR user_id=ANY($2::int[]) RETURNING id",
         [row.email, users],
@@ -726,9 +734,10 @@ router.post("/tools/privacy/requests/:id/erase", admin, async (req, res) => {
       );
       const result = {
         commentsAnonymized: erased.rowCount || 0,
+        akismetChecksRemoved:removedAkismet.rowCount || 0,
         exportsRevoked: revoked.rowCount || 0,
         messages: [
-          "Matching comment author names, email addresses, website URLs and account links were anonymized. Existing personal-data exports were revoked.",
+          "Matching comment author names, email addresses, website URLs and account links were anonymized. Akismet submission metadata was removed. Existing personal-data exports were revoked.",
         ],
         retained: privacyRetention.retained,
       };

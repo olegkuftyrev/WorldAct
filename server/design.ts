@@ -1,5 +1,9 @@
-import { pool } from "./db.js";
+import { pool, getSettings } from "./db.js";
+import { bundledPluginRegistry } from "./bundled-plugins.js";
+import { validateExtensionSettings } from "./site-validation.js";
+import { bundledThemeRegistry, readThemeDesign } from "./themes.js";
 export const pluginRegistry = [
+  ...bundledPluginRegistry,
   {
     slug: "reading-time",
     name: "Reading Time",
@@ -35,7 +39,15 @@ export const pluginRegistry = [
     settings: { text: "Thanks for reading." },
   },
 ] as const;
-export const themes = [
+/** A strict allowlist shared by public output and portable archives. */
+export function publicExtensionSettings(slug:string,input:unknown):Record<string,unknown>{
+  const record=input && typeof input==="object" && !Array.isArray(input)?input as Record<string,unknown>:{};
+  const fields:Record<string,string[]>={"hello-dolly":[],akismet:["sendComments"],"reading-time":["wordsPerMinute"],"spam-shield":["maxLinks"],"site-seo":["description","siteImage"],"custom-footer":["text"]};
+  const fallback=pluginRegistry.find((plugin)=>plugin.slug===slug)?.settings || {};
+  const candidate={...fallback,...Object.fromEntries((fields[slug] || []).filter((field)=>record[field]!==undefined).map((field)=>[field,record[field]]))};
+  try{return validateExtensionSettings(slug,candidate);}catch{return {...fallback};}
+}
+const legacyThemes = [
   {
     id: "twentytwentyfive",
     name: "Twenty Twenty-Five",
@@ -64,24 +76,29 @@ export const themes = [
     version: "1.0.0",
   },
 ];
+export const themes = [...bundledThemeRegistry, legacyThemes.find(theme => theme.id === "classic")!];
 export async function readDesign() {
+  const settings = await getSettings();
   const [styles, documents, menus, plugins] = await Promise.all([
     pool.query("SELECT data FROM site_styles WHERE id=1"),
     pool.query(
-      'SELECT id,slug,title,type,content,raw_content AS "rawContent",blocks,version,updated_at AS "updatedAt" FROM site_documents ORDER BY type,title',
+      'SELECT id,slug,title,type,theme,source_hash AS "sourceHash",source_metadata AS "sourceMetadata",content,raw_content AS "rawContent",blocks,version,updated_at AS "updatedAt" FROM site_documents WHERE theme=$1 ORDER BY type,title',
+      [settings.theme],
     ),
     pool.query(
       'SELECT id,name,location,items,updated_at AS "updatedAt" FROM navigation_menus ORDER BY id',
     ),
     pool.query("SELECT slug,settings FROM extensions WHERE enabled=true"),
   ]);
+  const theme = await readThemeDesign(settings.theme);
   return {
-    styles: styles.rows[0]?.data || {},
+    theme,
+    styles: settings.theme === "classic" ? styles.rows[0]?.data || {} : theme.styles,
     templates: documents.rows.filter((d) => d.type === "template"),
     parts: documents.rows.filter((d) => d.type === "template-part"),
     patterns: documents.rows.filter((d) => d.type === "pattern"),
     menus: menus.rows,
-    plugins: plugins.rows,
+    plugins: plugins.rows.map((plugin)=>({...plugin,settings:publicExtensionSettings(plugin.slug,plugin.settings)})),
   };
 }
 export async function extensionEnabled(slug: string) {

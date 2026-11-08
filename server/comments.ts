@@ -1,3 +1,4 @@
+import {reportAkismetTransition} from "./bundled-plugins.js";
 import express from "express";
 import { z } from "zod";
 import { pool, commentFields, getComment } from "./db.js";
@@ -10,9 +11,12 @@ import {
   needUser,
 } from "./utils.js";
 import type { PoolClient } from "pg";
+import {queueCommentNotifications} from "./core.js";
+import {deliverMail} from "./accounts.js";
+import { assertCommentAccess, canEditPostComments, canModerateAllComments, editableCommentPostsSQL } from "./comment-access.js";
 
 const router = express.Router();
-router.use("/comments", requireRole("administrator", "editor"));
+router.use("/comments", requireRole("administrator", "editor", "author", "contributor"));
 const id = z.number().int().positive().max(2_147_483_647);
 const status = z.enum(["approved", "pending", "spam", "trash"]);
 const website = z
@@ -32,7 +36,8 @@ const fields = z.object({
   parentId: id.nullable(),
 });
 
-router.get("/comments", async (req, res) => {
+router.get("/comments", async (req:AuthRequest, res) => {
+  const user=needUser(req);
   const input = z
     .object({
       status: z
@@ -41,6 +46,7 @@ router.get("/comments", async (req, res) => {
       excludeTrashSpam: z.enum(["true", "false"]).default("false"),
       search: z.string().trim().max(300).optional(),
       postId: z.coerce.number().int().positive().max(2_147_483_647).optional(),
+      mine: z.enum(["true", "false"]).default("false"),
       page: z.coerce.number().int().positive().max(1_000_000).default(1),
       perPage: z.coerce.number().int().positive().max(1000).default(1000),
       order: z.enum(["asc", "desc"]).default("desc"),
@@ -54,14 +60,18 @@ router.get("/comments", async (req, res) => {
     params.push(value);
     return `$${params.length}`;
   };
+  const editable=editableCommentPostsSQL(user,parameter);
+  where.push(`(${editable} OR (p.status='publish' AND p.password_hash IS NULL))`);
+  if (input.postId) where.push(`c.post_id=${parameter(input.postId)}`);
+  const countParams=params.slice(),countWhere=where.join(" AND ");
+  if (input.mine === "true") where.push(`c.user_id=${parameter(user.id)}`);
   if (input.status !== "all") where.push(`c.status=${parameter(input.status)}`);
   else if (input.excludeTrashSpam === "true")
     where.push("c.status NOT IN ('trash','spam')");
-  if (input.postId) where.push(`c.post_id=${parameter(input.postId)}`);
   if (input.search) {
     const term = parameter(`%${input.search.replace(/[\\%_]/g, "\\$&")}%`);
     where.push(
-      `(c.author_name ILIKE ${term} OR c.author_email ILIKE ${term} OR c.content ILIKE ${term} OR p.title ILIKE ${term})`,
+      `(c.author_name ILIKE ${term} OR (${editable} AND c.author_email ILIKE ${term}) OR c.content ILIKE ${term} OR p.title ILIKE ${term})`,
     );
   }
   const predicate = where.length ? `WHERE ${where.join(" AND ")}` : "";
@@ -76,19 +86,24 @@ router.get("/comments", async (req, res) => {
       params,
     ),
     pool.query(
-      `SELECT ${commentFields} FROM comments c JOIN posts p ON p.id=c.post_id ${predicate} ORDER BY ${orderBy} ${input.order},c.id ${input.order} LIMIT $${params.length + 1} OFFSET $${params.length + 2}`,
+      `SELECT ${commentFields},p.author_id AS "postAuthorId",p.type AS "postType",p.status AS "postStatus",p.pre_trash_status AS "postPreTrashStatus" FROM comments c JOIN posts p ON p.id=c.post_id ${predicate} ORDER BY ${orderBy} ${input.order},c.id ${input.order} LIMIT $${params.length + 1} OFFSET $${params.length + 2}`,
       [...params, input.perPage, (input.page - 1) * input.perPage],
     ),
     pool.query(
-      `SELECT status,count(*)::int AS total FROM comments ${input.postId ? "WHERE post_id=$1" : ""} GROUP BY status`,
-      input.postId ? [input.postId] : [],
+      `SELECT c.status,count(*)::int AS total,count(*) FILTER(WHERE c.user_id=$${countParams.length+1} AND c.status NOT IN('trash','spam'))::int AS mine FROM comments c JOIN posts p ON p.id=c.post_id WHERE ${countWhere} GROUP BY c.status`,
+      [...countParams,user.id],
     ),
   ]);
   res.json({
-    comments: rows.rows,
-    counts: Object.fromEntries(
+    comments: rows.rows.map(({postAuthorId,postType,postStatus,postPreTrashStatus,...comment})=>{
+      const edit=canEditPostComments(user,{authorId:postAuthorId,type:postType,status:postStatus,preTrashStatus:postPreTrashStatus});
+      if(!edit){delete comment.authorEmail;delete comment.userId;}
+      return {...comment,permissions:{edit,reply:edit && !["spam","trash"].includes(comment.status),moderate:edit,delete:edit}};
+    }),
+    permissions:{bulk:canModerateAllComments(user),empty:canModerateAllComments(user)},
+    counts: {...Object.fromEntries(
       counts.rows.map((row) => [row.status, row.total]),
-    ),
+    ),mine:counts.rows.reduce((total,row)=>total+row.mine,0)},
     pagination: {
       page: input.page,
       perPage: input.perPage,
@@ -135,6 +150,35 @@ function cleanBody(value: string) {
     throw new HttpError(400, "Write a comment containing text.");
   return clean;
 }
+async function lockCommentPost(client:PoolClient,commentId:number,req:AuthRequest){
+  // Lock the parent first, matching post deletion's lock order.
+  const post=(await client.query('SELECT p.author_id AS "authorId",p.type,p.status,p.pre_trash_status AS "preTrashStatus" FROM posts p JOIN comments c ON c.post_id=p.id WHERE c.id=$1 FOR SHARE OF p',[commentId])).rows[0];
+  if(!post)throw new HttpError(404,"Comment not found.");
+  assertCommentAccess(needUser(req),post);
+}
+
+router.post("/comments/empty",requireRole("administrator","editor"),async(req,res)=>{
+  const input=z.object({status:z.enum(["spam","trash"]),postId:id.optional()}).strict().parse(req.body);
+  const db=await pool.connect();let deleted=0,hasMore=false;
+  try{
+    await db.query("BEGIN");
+    await db.query("SELECT pg_advisory_xact_lock(hashtext('worldact-comment-hierarchy'))");
+    // Bound each request; the UI repeats batches while hasMore is true.
+    const candidates=(await db.query("SELECT id,post_id FROM comments WHERE status=$1 AND ($2::int IS NULL OR post_id=$2) ORDER BY id LIMIT 500",[input.status,input.postId ?? null])).rows;
+    if(candidates.length){
+      await db.query("SELECT id FROM posts WHERE id=ANY($1::int[]) ORDER BY id FOR SHARE",[[...new Set(candidates.map(row=>row.post_id))]]);
+      for(const candidate of candidates){
+        const row=(await db.query("SELECT parent_id FROM comments WHERE id=$1 AND status=$2 FOR UPDATE",[candidate.id,input.status])).rows[0];
+        if(!row)continue;
+        await db.query("UPDATE comments SET parent_id=$2,version=version+1,updated_at=now() WHERE parent_id=$1",[candidate.id,row.parent_id]);
+        deleted+=(await db.query("DELETE FROM comments WHERE id=$1",[candidate.id])).rowCount || 0;
+      }
+    }
+    hasMore=Boolean((await db.query("SELECT 1 FROM comments WHERE status=$1 AND ($2::int IS NULL OR post_id=$2) LIMIT 1",[input.status,input.postId ?? null])).rowCount);
+    await db.query("COMMIT");
+  }catch(error){await db.query("ROLLBACK");throw error;}finally{db.release();}
+  res.json({deleted,hasMore});
+});
 
 router.post("/comments", async (req: AuthRequest, res) => {
   const input = fields
@@ -145,16 +189,19 @@ router.post("/comments", async (req: AuthRequest, res) => {
   const user = needUser(req),
     client = await pool.connect();
   let resultId: number;
+  let notifications:Awaited<ReturnType<typeof queueCommentNotifications>>=[];
   try {
     await client.query("BEGIN");
+    if(!(await client.query("SELECT id FROM users WHERE id=$1 FOR KEY SHARE",[user.id])).rowCount)throw new HttpError(401,"This account is no longer available.");
     await client.query(
       "SELECT pg_advisory_xact_lock(hashtext('worldact-comment-hierarchy'))",
     );
     const post = await client.query(
-      "SELECT id FROM posts WHERE id=$1 AND status<>'trash' FOR KEY SHARE",
+      'SELECT id,author_id AS "authorId",type,status,pre_trash_status AS "preTrashStatus" FROM posts WHERE id=$1 AND status<>\'trash\' FOR SHARE',
       [input.postId],
     );
     if (!post.rowCount) throw new HttpError(404, "Post not found.");
+    assertCommentAccess(user,post.rows[0]);
     await validateParent(client, input.parentId ?? null, input.postId);
     const result = await client.query(
       "INSERT INTO comments(post_id,author_name,author_email,author_url,content,status,parent_id,user_id) VALUES($1,$2,$3,$4,$5,$6,$7,$8) RETURNING id",
@@ -173,6 +220,7 @@ router.post("/comments", async (req: AuthRequest, res) => {
       ],
     );
     resultId = result.rows[0].id;
+    notifications=await queueCommentNotifications(client,resultId,user.id);
     await client.query("COMMIT");
   } catch (error) {
     await client.query("ROLLBACK");
@@ -180,14 +228,15 @@ router.post("/comments", async (req: AuthRequest, res) => {
   } finally {
     client.release();
   }
+  await Promise.all(notifications.map(deliverMail));
   res.status(201).json({ comment: await getComment(resultId) });
 });
 
-router.put("/comments/:id", async (req, res) => {
+router.put("/comments/:id", async (req:AuthRequest, res) => {
   const commentId = parseId(req.params.id);
   const input = fields
     .partial()
-    .extend({ version: z.number().int().positive().optional() })
+    .extend({ version: z.number().int().positive().optional(), restore:z.literal(true).optional() })
     .strict()
     .refine(
       (value) => Object.keys(value).some((key) => key !== "version"),
@@ -195,17 +244,27 @@ router.put("/comments/:id", async (req, res) => {
     )
     .parse(req.body);
   const client = await pool.connect();
+  let notifications:Awaited<ReturnType<typeof queueCommentNotifications>>=[];
+  let previousStatus="";
+  let nextStatus="";
   try {
     await client.query("BEGIN");
     await client.query(
       "SELECT pg_advisory_xact_lock(hashtext('worldact-comment-hierarchy'))",
     );
+    await lockCommentPost(client,commentId,req);
     const found = await client.query(
       "SELECT * FROM comments WHERE id=$1 FOR NO KEY UPDATE",
       [commentId],
     );
     const previous = found.rows[0];
+    previousStatus=previous?.status || "";
     if (!previous) throw new HttpError(404, "Comment not found.");
+    if(input.restore && input.status)throw new HttpError(400,"Choose restore or a specific status.");
+    if(input.restore && !["spam","trash"].includes(previous.status))throw new HttpError(400,"Only spam or trashed comments can be restored.");
+    nextStatus=input.restore?(previous.previous_status || "pending"):(input.status ?? previous.status);
+    const enteringRemoval=["spam","trash"].includes(nextStatus) && nextStatus!==previous.status;
+    const priorStatus=input.restore?null:enteringRemoval?previous.status:nextStatus!==previous.status?null:previous.previous_status;
     if (input.version !== undefined && input.version !== previous.version)
       throw new HttpError(
         409,
@@ -230,7 +289,7 @@ router.put("/comments/:id", async (req, res) => {
         userId = null;
     }
     await client.query(
-      "UPDATE comments SET author_name=$1,author_email=$2,author_url=$3,content=$4,status=$5,parent_id=$6,user_id=$8,version=version+1,updated_at=now() WHERE id=$7",
+      "UPDATE comments SET author_name=$1,author_email=$2,author_url=$3,content=$4,status=$5::text,parent_id=$6,user_id=$8,previous_status=$9,trashed_at=CASE WHEN $5::text IN('spam','trash') THEN CASE WHEN status=$5::text THEN trashed_at ELSE now() END ELSE NULL END,version=version+1,updated_at=now() WHERE id=$7",
       [
         input.authorName === undefined
           ? previous.author_name
@@ -240,12 +299,14 @@ router.put("/comments/:id", async (req, res) => {
         input.content === undefined
           ? previous.content
           : cleanBody(input.content),
-        input.status ?? previous.status,
+        nextStatus,
         parentId,
         commentId,
         userId,
+        priorStatus,
       ],
     );
+    if(nextStatus==="approved" && previous.status!=="approved")notifications=await queueCommentNotifications(client,commentId,needUser(req).id);
     await client.query("COMMIT");
   } catch (error) {
     await client.query("ROLLBACK");
@@ -253,10 +314,12 @@ router.put("/comments/:id", async (req, res) => {
   } finally {
     client.release();
   }
-  res.json({ comment: await getComment(commentId) });
+  await Promise.all(notifications.map(deliverMail));
+  const akismetFeedback=await reportAkismetTransition(commentId,previousStatus,nextStatus).catch(()=>"unavailable");
+  res.json({ comment: await getComment(commentId),akismetFeedback });
 });
 
-router.delete("/comments/:id", async (req, res) => {
+router.delete("/comments/:id", async (req:AuthRequest, res) => {
   const id = parseId(req.params.id),
     client = await pool.connect();
   try {
@@ -264,14 +327,15 @@ router.delete("/comments/:id", async (req, res) => {
     await client.query(
       "SELECT pg_advisory_xact_lock(hashtext('worldact-comment-hierarchy'))",
     );
+    await lockCommentPost(client,id,req);
     const target = await client.query(
-      "SELECT id FROM comments WHERE id=$1 FOR UPDATE",
+      "SELECT id,post_id,parent_id FROM comments WHERE id=$1 FOR UPDATE",
       [id],
     );
     if (!target.rowCount) throw new HttpError(404, "Comment not found.");
     await client.query(
-      "UPDATE comments SET parent_id=NULL,version=version+1,updated_at=now() WHERE parent_id=$1",
-      [id],
+      "UPDATE comments SET parent_id=$2,version=version+1,updated_at=now() WHERE parent_id=$1",
+      [id,target.rows[0].parent_id],
     );
     const result = await client.query(
       "DELETE FROM comments WHERE id=$1 RETURNING id",

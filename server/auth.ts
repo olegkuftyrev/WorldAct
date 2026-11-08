@@ -8,6 +8,9 @@ const COOKIE = "worldact_session";
 const SESSION_SECONDS = 60 * 60 * 24 * 7;
 export interface AuthRequest extends Request {
   user?: User;
+  authChecked?: boolean;
+  authenticationMethod?: "session" | "application-password";
+  applicationPasswordUuid?: string;
 }
 
 export async function hashPassword(password: string): Promise<string> {
@@ -42,6 +45,37 @@ export async function attachUser(
   next: NextFunction,
 ) {
   try {
+    if (req.authChecked) { next(); return; }
+    req.authChecked = true;
+    const authorization = req.headers.authorization;
+    const basic = authorization?.match(/^Basic\s+(.*)$/i);
+    if (basic) {
+      const encoded = basic[1];
+      const credentials = encoded.length <= 1024 && /^[A-Za-z0-9+/]+={0,2}$/.test(encoded)
+        ? Buffer.from(encoded, "base64").toString("utf8") : "";
+      const separator = credentials.indexOf(":"),
+        login = credentials.slice(0, separator).trim(),
+        secret = credentials.slice(separator + 1).replace(/\s/g, "");
+      if (separator > 0 && login.length <= 254 && /^[A-Za-z0-9_-]{32}$/.test(secret)) {
+        const result = await pool.query<User & { uuid: string }>(
+          `SELECT ${userFields.split(",").map(field => `u.${field.trim()}`).join(", ")},a.uuid
+           FROM users u JOIN application_passwords a ON a.user_id=u.id
+           WHERE a.key_hash=$1 AND (lower(u.username)=lower($2) OR lower(u.email)=lower($2))`,
+          [tokenHash(secret), login],
+        );
+        const account = result.rows[0];
+        if (account) {
+          const { uuid, ...user } = account;
+          req.user = user;
+          req.authenticationMethod = "application-password";
+          req.applicationPasswordUuid = uuid;
+          await pool.query("UPDATE application_passwords SET last_used=now(),last_ip=$2 WHERE uuid=$1", [uuid, (req.ip || "").slice(0, 100)]);
+          next(); return;
+        }
+      }
+      _res.status(401).json({ error: "The application password is invalid or has been revoked.", code: "invalid_application_password", data: { status: 401 } });
+      return;
+    }
     const token = readToken(req);
     if (token) {
       const result = await pool.query<User>(
@@ -53,6 +87,7 @@ export async function attachUser(
         [tokenHash(token)],
       );
       req.user = result.rows[0];
+      if (req.user) req.authenticationMethod = "session";
     }
     next();
   } catch (error) {

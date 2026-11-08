@@ -1,0 +1,39 @@
+assets/fonts/cardo/cardo_italic_400.woff2
+Copyright (c) 2002-2011, David J. Perry (hospes02@scholarsfonts.net)
+This Font Software is licensed under the SIL Open Font License, Version 1.1.  This license is available with a FAQ at: http://scripts.sil.org/OFL.
+http://scripts.sil.org/OFL
+
+assets/fonts/cardo/cardo_normal_400.woff2
+Copyright (c) 2002-2011, David J. Perry (hospes02@scholarsfonts.net)
+This Font Software is licensed under the SIL Open Font License, Version 1.1.  This license is available with a FAQ at: http://scripts.sil.org/OFL.
+http://scripts.sil.org/OFL
+
+assets/fonts/cardo/cardo_normal_700.woff2
+Copyright (c) 2002-2011, David J. Perry (hospes02@scholarsfonts.net)
+This Font Software is licensed under the SIL Open Font License, Version 1.1. This license is available with a FAQ at: http://scripts.sil.org/OFL
+
+
+assets/fonts/instrument-sans/InstrumentSans-Italic-VariableFont_wdth,wght.woff2
+Copyright 2022 The Instrument Sans Project Authors (https://github.com/Instrument/instrument-sans)
+This Font Software is licensed under the SIL Open Font License, Version 1.1. This license is available with a FAQ at: https://scripts.sil.org/OFL
+https://scripts.sil.org/OFL
+
+assets/fonts/instrument-sans/InstrumentSans-VariableFont_wdth,wght.woff2
+Copyright 2022 The Instrument Sans Project Authors (https://github.com/Instrument/instrument-sans)
+This Font Software is licensed under the SIL Open Font License, Version 1.1. This license is available with a FAQ at: https://scripts.sil.org/OFL
+https://scripts.sil.org/OFL
+
+assets/fonts/inter/Inter-VariableFont_slnt,wght.woff2
+Copyright 2020 The Inter Project Authors (https://github.com/rsms/inter)
+This Font Software is licensed under the SIL Open Font License, Version 1.1. This license is available with a FAQ at: http://scripts.sil.org/OFL
+http://scripts.sil.org/OFL
+
+assets/fonts/jost/Jost-Italic-VariableFont_wght.woff2
+Copyright 2020 The Jost Project Authors (https://github.com/indestructible-type/Jost)
+This Font Software is licensed under the SIL Open Font License, Version 1.1. This license is available with a FAQ at: http://scripts.sil.org/OFL
+http://scripts.sil.org/OFL
+
+assets/fonts/jost/Jost-VariableFont_wght.woff2
+Copyright 2020 The Jost Project Authors (https://github.com/indestructible-type/Jost)
+This Font Software is licensed under the SIL Open Font License, Version 1.1. This license is available with a FAQ at: http://scripts.sil.org/OFL
+http://scripts.sil.org/OFL

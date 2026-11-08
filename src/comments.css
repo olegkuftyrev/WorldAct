@@ -188,3 +188,10 @@
     content: none !important;
   }
 }
+.worldact-comments .empty-comment-action {
+  float: left;
+  margin-right: 8px;
+}
+.wa-modal:has(.comment-empty-review) {
+  max-width: 620px;
+}

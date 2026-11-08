@@ -1,0 +1,219 @@
+assets/fonts/beiruti/Beiruti-VariableFont_wght.woff2
+Copyright 2024 The Beiruti Project Authors (https://github.com/googlefonts/beiruti)
+This Font Software is licensed under the SIL Open Font License, Version 1.1. This license is available with a FAQ at: https://openfontlicense.org
+https://openfontlicense.org
+
+assets/fonts/fira-code/FiraCode-VariableFont_wght.woff2
+Copyright 2014-2020 The Fira Code Project Authors (https://github.com/tonsky/FiraCode)
+This Font Software is licensed under the SIL Open Font License, Version 1.1. This license is available with a FAQ at: http://scripts.sil.org/OFL
+http://scripts.sil.org/OFL
+
+assets/fonts/fira-sans/FiraSans-Black.woff2
+Digitized data copyright 2012-2016, The Mozilla Foundation and Telefonica S.A.
+Licensed under the Open Font License, version 1.1 or later
+http://scripts.sil.org/OFL
+
+assets/fonts/fira-sans/FiraSans-BlackItalic.woff2
+Digitized data copyright 2012-2016, The Mozilla Foundation and Telefonica S.A.
+Licensed under the Open Font License, version 1.1 or later
+http://scripts.sil.org/OFL
+
+assets/fonts/fira-sans/FiraSans-Bold.woff2
+Digitized data copyright 2012-2018, The Mozilla Foundation and Telefonica S.A., bBox Type GmbH and Carrois Corporate GbR, with Reserved Font Name "Fira"
+Licensed under the Open Font License, version 1.1 or later
+http://scripts.sil.org/OFL
+
+assets/fonts/fira-sans/FiraSans-BoldItalic.woff2
+Digitized data copyright 2012-2018, The Mozilla Foundation and Telefonica S.A., bBox Type GmbH and Carrois Corporate GbR, with Reserved Font Name "Fira"
+Licensed under the Open Font License, version 1.1 or later
+http://scripts.sil.org/OFL
+
+assets/fonts/fira-sans/FiraSans-ExtraBold.woff2
+Digitized data copyright 2012-2018, The Mozilla Foundation and Telefonica S.A., bBox Type GmbH and Carrois Corporate GbR, with Reserved Font Name "Fira"
+Licensed under the Open Font License, version 1.1 or later
+http://scripts.sil.org/OFL
+
+assets/fonts/fira-sans/FiraSans-ExtraBoldItalic.woff2
+Digitized data copyright 2012-2018, The Mozilla Foundation and Telefonica S.A., bBox Type GmbH and Carrois Corporate GbR, with Reserved Font Name "Fira"
+Licensed under the Open Font License, version 1.1 or later
+http://scripts.sil.org/OFL
+
+assets/fonts/fira-sans/FiraSans-ExtraLight.woff2
+Digitized data copyright 2012-2018, The Mozilla Foundation and Telefonica S.A., bBox Type GmbH and Carrois Corporate GbR, with Reserved Font Name "Fira"
+Licensed under the Open Font License, version 1.1 or later
+http://scripts.sil.org/OFL
+
+assets/fonts/fira-sans/FiraSans-ExtraLightItalic.woff2
+Digitized data copyright 2012-2018, The Mozilla Foundation and Telefonica S.A., bBox Type GmbH and Carrois Corporate GbR, with Reserved Font Name "Fira"
+Licensed under the Open Font License, version 1.1 or later
+http://scripts.sil.org/OFL
+
+assets/fonts/fira-sans/FiraSans-Italic.woff2
+Digitized data copyright 2012-2018, The Mozilla Foundation and Telefonica S.A., bBox Type GmbH and Carrois Corporate GbR, with Reserved Font Name "Fira"
+Licensed under the Open Font License, version 1.1 or later
+http://scripts.sil.org/OFL
+
+assets/fonts/fira-sans/FiraSans-Light.woff2
+Digitized data copyright 2012-2018, The Mozilla Foundation and Telefonica S.A., bBox Type GmbH and Carrois Corporate GbR, with Reserved Font Name "Fira"
+Licensed under the Open Font License, version 1.1 or later
+http://scripts.sil.org/OFL
+
+assets/fonts/fira-sans/FiraSans-LightItalic.woff2
+Digitized data copyright 2012-2018, The Mozilla Foundation and Telefonica S.A., bBox Type GmbH and Carrois Corporate GbR, with Reserved Font Name "Fira"
+Licensed under the Open Font License, version 1.1 or later
+http://scripts.sil.org/OFL
+
+assets/fonts/fira-sans/FiraSans-Medium.woff2
+Digitized data copyright 2012-2018, The Mozilla Foundation and Telefonica S.A., bBox Type GmbH and Carrois Corporate GbR, with Reserved Font Name "Fira"
+Licensed under the Open Font License, version 1.1 or later
+http://scripts.sil.org/OFL
+
+assets/fonts/fira-sans/FiraSans-MediumItalic.woff2
+Digitized data copyright 2012-2018, The Mozilla Foundation and Telefonica S.A., bBox Type GmbH and Carrois Corporate GbR, with Reserved Font Name "Fira"
+Licensed under the Open Font License, version 1.1 or later
+http://scripts.sil.org/OFL
+
+assets/fonts/fira-sans/FiraSans-Regular.woff2
+Digitized data copyright 2012-2018, The Mozilla Foundation and Telefonica S.A., bBox Type GmbH and Carrois Corporate GbR, with Reserved Font Name "Fira"
+Licensed under the Open Font License, version 1.1 or later
+http://scripts.sil.org/OFL
+
+assets/fonts/fira-sans/FiraSans-SemiBold.woff2
+Digitized data copyright 2012-2018, The Mozilla Foundation and Telefonica S.A., bBox Type GmbH and Carrois Corporate GbR, with Reserved Font Name "Fira"
+Licensed under the Open Font License, version 1.1 or later
+http://scripts.sil.org/OFL
+
+assets/fonts/fira-sans/FiraSans-SemiBoldItalic.woff2
+Digitized data copyright 2012-2018, The Mozilla Foundation and Telefonica S.A., bBox Type GmbH and Carrois Corporate GbR, with Reserved Font Name "Fira"
+Licensed under the Open Font License, version 1.1 or later
+http://scripts.sil.org/OFL
+
+assets/fonts/fira-sans/FiraSans-Thin.woff2
+Digitized data copyright 2012-2018, The Mozilla Foundation and Telefonica S.A., bBox Type GmbH and Carrois Corporate GbR, with Reserved Font Name "Fira"
+Licensed under the Open Font License, version 1.1 or later
+http://scripts.sil.org/OFL
+
+assets/fonts/fira-sans/FiraSans-ThinItalic.woff2
+Digitized data copyright 2012-2018, The Mozilla Foundation and Telefonica S.A., bBox Type GmbH and Carrois Corporate GbR, with Reserved Font Name "Fira"
+Licensed under the Open Font License, version 1.1 or later
+http://scripts.sil.org/OFL
+
+assets/fonts/literata/Literata72pt-Black.woff2
+Copyright 2017 The Literata Project Authors (https://github.com/googlefonts/literata)
+This Font Software is licensed under the SIL Open Font License, Version 1.1. This license is available with a FAQ at: https://scripts.sil.org/OFL
+https://scripts.sil.org/OFL
+
+assets/fonts/literata/Literata72pt-BlackItalic.woff2
+Copyright 2017 The Literata Project Authors (https://github.com/googlefonts/literata)
+This Font Software is licensed under the SIL Open Font License, Version 1.1. This license is available with a FAQ at: https://scripts.sil.org/OFL
+https://scripts.sil.org/OFL
+
+assets/fonts/literata/Literata72pt-Bold.woff2
+Copyright 2017 The Literata Project Authors (https://github.com/googlefonts/literata)
+This Font Software is licensed under the SIL Open Font License, Version 1.1. This license is available with a FAQ at: https://scripts.sil.org/OFL
+https://scripts.sil.org/OFL
+
+assets/fonts/literata/Literata72pt-BoldItalic.woff2
+Copyright 2017 The Literata Project Authors (https://github.com/googlefonts/literata)
+This Font Software is licensed under the SIL Open Font License, Version 1.1. This license is available with a FAQ at: https://scripts.sil.org/OFL
+https://scripts.sil.org/OFL
+
+assets/fonts/literata/Literata72pt-ExtraBold.woff2
+Copyright 2017 The Literata Project Authors (https://github.com/googlefonts/literata)
+This Font Software is licensed under the SIL Open Font License, Version 1.1. This license is available with a FAQ at: https://scripts.sil.org/OFL
+https://scripts.sil.org/OFL
+
+assets/fonts/literata/Literata72pt-ExtraBoldItalic.woff2
+Copyright 2017 The Literata Project Authors (https://github.com/googlefonts/literata)
+This Font Software is licensed under the SIL Open Font License, Version 1.1. This license is available with a FAQ at: https://scripts.sil.org/OFL
+https://scripts.sil.org/OFL
+
+assets/fonts/literata/Literata72pt-ExtraLight.woff2
+Copyright 2017 The Literata Project Authors (https://github.com/googlefonts/literata)
+This Font Software is licensed under the SIL Open Font License, Version 1.1. This license is available with a FAQ at: https://scripts.sil.org/OFL
+https://scripts.sil.org/OFL
+
+assets/fonts/literata/Literata72pt-ExtraLightItalic.woff2
+Copyright 2017 The Literata Project Authors (https://github.com/googlefonts/literata)
+This Font Software is licensed under the SIL Open Font License, Version 1.1. This license is available with a FAQ at: https://scripts.sil.org/OFL
+https://scripts.sil.org/OFL
+
+assets/fonts/literata/Literata72pt-Light.woff2
+Copyright 2017 The Literata Project Authors (https://github.com/googlefonts/literata)
+This Font Software is licensed under the SIL Open Font License, Version 1.1. This license is available with a FAQ at: https://scripts.sil.org/OFL
+https://scripts.sil.org/OFL
+
+assets/fonts/literata/Literata72pt-LightItalic.woff2
+Copyright 2017 The Literata Project Authors (https://github.com/googlefonts/literata)
+This Font Software is licensed under the SIL Open Font License, Version 1.1. This license is available with a FAQ at: https://scripts.sil.org/OFL
+https://scripts.sil.org/OFL
+
+assets/fonts/literata/Literata72pt-Medium.woff2
+Copyright 2017 The Literata Project Authors (https://github.com/googlefonts/literata)
+This Font Software is licensed under the SIL Open Font License, Version 1.1. This license is available with a FAQ at: https://scripts.sil.org/OFL
+https://scripts.sil.org/OFL
+
+assets/fonts/literata/Literata72pt-MediumItalic.woff2
+Copyright 2017 The Literata Project Authors (https://github.com/googlefonts/literata)
+This Font Software is licensed under the SIL Open Font License, Version 1.1. This license is available with a FAQ at: https://scripts.sil.org/OFL
+https://scripts.sil.org/OFL
+
+assets/fonts/literata/Literata72pt-Regular.woff2
+Copyright 2017 The Literata Project Authors (https://github.com/googlefonts/literata)
+This Font Software is licensed under the SIL Open Font License, Version 1.1. This license is available with a FAQ at: https://scripts.sil.org/OFL
+https://scripts.sil.org/OFL
+
+assets/fonts/literata/Literata72pt-RegularItalic.woff2
+Copyright 2017 The Literata Project Authors (https://github.com/googlefonts/literata)
+This Font Software is licensed under the SIL Open Font License, Version 1.1. This license is available with a FAQ at: https://scripts.sil.org/OFL
+https://scripts.sil.org/OFL
+
+assets/fonts/literata/Literata72pt-SemiBold.woff2
+Copyright 2017 The Literata Project Authors (https://github.com/googlefonts/literata)
+This Font Software is licensed under the SIL Open Font License, Version 1.1. This license is available with a FAQ at: https://scripts.sil.org/OFL
+https://scripts.sil.org/OFL
+
+assets/fonts/literata/Literata72pt-SemiBoldItalic.woff2
+Copyright 2017 The Literata Project Authors (https://github.com/googlefonts/literata)
+This Font Software is licensed under the SIL Open Font License, Version 1.1. This license is available with a FAQ at: https://scripts.sil.org/OFL
+https://scripts.sil.org/OFL
+
+assets/fonts/manrope/Manrope-VariableFont_wght.woff2
+Copyright 2019 The Manrope Project Authors (https://github.com/sharanda/manrope)
+This Font Software is licensed under the SIL Open Font License, Version 1.1. This license is available with a FAQ at: http://scripts.sil.org/OFL
+http://scripts.sil.org/OFL
+
+assets/fonts/platypi/Platypi-Italic-VariableFont_wght.woff2
+Copyright 2024 The Platypi Project Authors (https://github.com/d-sargent/platypi)
+This Font Software is licensed under the SIL Open Font License, Version 1.1. This license is available with a FAQ at: https://openfontlicense.org
+https://openfontlicense.org
+
+assets/fonts/platypi/Platypi-VariableFont_wght.woff2
+Copyright 2024 The Platypi Project Authors (https://github.com/d-sargent/platypi)
+This Font Software is licensed under the SIL Open Font License, Version 1.1. This license is available with a FAQ at: https://openfontlicense.org
+https://openfontlicense.org
+
+assets/fonts/roboto-slab/RobotoSlab-VariableFont_wght.woff2
+Copyright 2018 The Roboto Slab Project Authors (https://github.com/googlefonts/robotoslab)
+Licensed under the Apache License, Version 2.0
+http://www.apache.org/licenses/LICENSE-2.0
+
+assets/fonts/vollkorn/Vollkorn-Italic-VariableFont_wght.woff2
+Copyright 2018 The Vollkorn Project Authors (https://github.com/FAlthausen/Vollkorn-Typeface)
+This Font Software is licensed under the SIL Open Font License, Version 1.1. This license is available with a FAQ at: http://scripts.sil.org/OFL
+http://scripts.sil.org/OFL
+
+assets/fonts/vollkorn/Vollkorn-VariableFont_wght.woff2
+Copyright 2018 The Vollkorn Project Authors (https://github.com/FAlthausen/Vollkorn-Typeface)
+This Font Software is licensed under the SIL Open Font License, Version 1.1. This license is available with a FAQ at: http://scripts.sil.org/OFL
+http://scripts.sil.org/OFL
+
+assets/fonts/ysabeau-office/YsabeauOffice-Italic-VariableFont_wght.woff2
+Copyright 2023 The Ysabeau Project Authors (https://github.com/CatharsisFonts/Ysabeau)
+This Font Software is licensed under the SIL Open Font License, Version 1.1. This license is available with a FAQ at: https://scripts.sil.org/OFL
+https://scripts.sil.org/OFL
+
+assets/fonts/ysabeau-office/YsabeauOffice-VariableFont_wght.woff2
+Copyright 2023 The Ysabeau Project Authors (https://github.com/CatharsisFonts/Ysabeau)
+This Font Software is licensed under the SIL Open Font License, Version 1.1. This license is available with a FAQ at: https://scripts.sil.org/OFL
+https://scripts.sil.org/OFL

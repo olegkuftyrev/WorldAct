@@ -1,3 +1,11 @@
+import {postFormats} from "../../shared/post-formats";
+import AkismetSettings from "../components/AkismetSettings";
+import ApplicationPasswords from "./ApplicationPasswords";
+import { HealthDetails, PrivacyPolicyGuide } from "./ToolsExtras";
+import { SiteIconControl, PendingEmailNotice, DateFormatControl, type PendingAdminEmail } from "./SiteIdentity";
+import { compileThemeStyles, type ThemeJSON } from "../themeStyles";
+import "../themeAdmin.css";
+import { themeDocument, resolveThemeValue } from "../themeCatalog";
 import {
   lazy,
   Suspense,
@@ -36,6 +44,7 @@ import type { GutenbergEditorHandle } from "../editor/GutenbergEditor";
 import "../platform.css";
 
 const BlockEditor = lazy(() => import("../editor/GutenbergEditor"));
+const FontLibrary = lazy(() => import("../components/FontLibrary"));
 
 function useAction() {
   const [busy, setBusy] = useState(false);
@@ -405,6 +414,7 @@ export function Profile() {
           </p>
         </form>
       )}
+      {form && <ApplicationPasswords userId={form.id} self={form.id === user?.id} />}
     </Screen>
   );
 }
@@ -433,6 +443,8 @@ const settingKeys: Record<string, string[]> = {
     "timezone",
     "dateFormat",
     "timeFormat",
+    "weekStartsOn",
+    "siteIconId",
   ],
   writing: ["defaultCategoryId", "defaultPostFormat"],
   reading: [
@@ -454,6 +466,18 @@ const settingKeys: Record<string, string[]> = {
     "threadDepth",
     "closeCommentsDays",
     "commentOrder",
+    "commentMaxLinks",
+    "commentModerationKeys",
+    "disallowedCommentKeys",
+    "commentPreviouslyApproved",
+    "notifyComments",
+    "notifyModeration",
+    "showAvatars",
+    "avatarRating",
+    "defaultAvatar",
+    "commentCookieConsent",
+    "paginateComments",
+    "defaultCommentPage",
   ],
   media: [
     "thumbnailWidth",
@@ -474,16 +498,25 @@ export function SettingsSuite() {
   const tab = settingTabs.includes(params.get("tab") || "")
     ? params.get("tab")!
     : "general";
-  const resource = useResource<{ settings: Settings }>("/settings");
+  const resource = useResource<{ settings: Settings; pendingAdminEmail?: PendingAdminEmail | null }>("/settings");
   const pages = useResource<{ pages: Post[] }>("/public/site");
+  const policyPages = useResource<{ posts: Post[] }>(tab === "privacy" ? "/posts?type=page&status=all&perPage=100" : null);
   const terms = useResource<{ terms: { id: number; name: string }[] }>(
     "/terms?taxonomy=category",
   );
   const [form, setForm] = useState<SettingValues>({});
+  const currentPolicyPage = useResource<{ post: Post }>(
+    tab === "privacy" && Number(form.privacyPageId) > 0
+      ? `/posts/${Number(form.privacyPageId)}`
+      : null,
+  );
+  const [pendingAdminEmail, setPendingAdminEmail] = useState<PendingAdminEmail | null>(null);
   const action = useAction();
   useEffect(() => {
-    if (resource.data)
+    if (resource.data) {
       setForm(resource.data.settings as unknown as SettingValues);
+      setPendingAdminEmail(resource.data.pendingAdminEmail || null);
+    }
   }, [resource.data]);
   const set = (key: string, value: SettingValues[string]) =>
     setForm((current) => ({ ...current, [key]: value }));
@@ -536,6 +569,10 @@ export function SettingsSuite() {
       ))}
     </select>
   );
+  const policyChoices = [...(policyPages.data?.posts || [])];
+  if (currentPolicyPage.data?.post && !policyChoices.some((page) => page.id === currentPolicyPage.data!.post.id)) {
+    policyChoices.push(currentPolicyPage.data.post);
+  }
   const pageSelect = (key: string, label: string) => (
     <select
       aria-label={label}
@@ -543,9 +580,9 @@ export function SettingsSuite() {
       onChange={(e) => set(key, e.target.value ? Number(e.target.value) : null)}
     >
       <option value="">— Select —</option>
-      {pages.data?.pages.map((page) => (
+      {(key === "privacyPageId" ? policyChoices : pages.data?.pages)?.map((page) => (
         <option value={page.id} key={page.id}>
-          {page.title || "(no title)"}
+          {page.title || "(no title)"}{key === "privacyPageId" && page.status !== "publish" ? ` — ${page.status}` : ""}
         </option>
       ))}
     </select>
@@ -558,7 +595,7 @@ export function SettingsSuite() {
           .filter((key) => form[key] !== undefined)
           .map((key) => [key, form[key]]),
       );
-      const result = await api<{ settings: Settings }>(
+      const result = await api<{ settings: Settings; pendingAdminEmail?: PendingAdminEmail | null }>(
         "/settings",
         json("PUT", input),
       );
@@ -600,6 +637,9 @@ export function SettingsSuite() {
                   >
                     {text("tagline", "Tagline")}
                   </Field>
+                  <Field label="Site Icon">
+                    <SiteIconControl id={Number(form.siteIconId || 0)} url={String(form.siteIconUrl || "") || null} onChange={(id,url)=>setForm(current=>({...current,siteIconId:id,siteIconUrl:url}))} />
+                  </Field>
                   <Field label="Site Address (URL)">
                     {text("siteUrl", "Site Address", "url", true)}
                   </Field>
@@ -610,6 +650,8 @@ export function SettingsSuite() {
                       "email",
                       true,
                     )}
+                    <p className="description">This address is used for site administration. A change requires confirmation at the new email address before it takes effect.</p>
+                    <PendingEmailNotice pending={pendingAdminEmail} currentEmail={resource.data.settings.adminEmail} onChanged={setPendingAdminEmail} />
                   </Field>
                   <Field label="Membership">
                     {check("usersCanRegister", "Anyone can register")}
@@ -638,31 +680,18 @@ export function SettingsSuite() {
                         ...new Set([
                           String(form.timezone || "UTC"),
                           "UTC",
-                          "America/Los_Angeles",
-                          "America/New_York",
-                          "Europe/London",
-                          "Europe/Berlin",
-                          "Asia/Tokyo",
-                          "Australia/Sydney",
+                          ...Intl.supportedValuesOf("timeZone"),
                         ]),
                       ].map((zone) => [zone, zone.replaceAll("_", " ")]),
                     )}
                   </Field>
                   <Field label="Date Format">
-                    {select("dateFormat", "Date Format", [
-                      ["F j, Y", "November 6, 2026"],
-                      ["Y-m-d", "2026-11-06"],
-                      ["m/d/Y", "11/06/2026"],
-                      ["d/m/Y", "06/11/2026"],
-                    ])}
+                    <DateFormatControl kind="date" value={String(form.dateFormat || "F j, Y")} timezone={String(form.timezone || "UTC")} onChange={value=>set("dateFormat",value)} />
                   </Field>
                   <Field label="Time Format">
-                    {select("timeFormat", "Time Format", [
-                      ["g:i a", "1:30 pm"],
-                      ["g:i A", "1:30 PM"],
-                      ["H:i", "13:30"],
-                    ])}
+                    <DateFormatControl kind="time" value={String(form.timeFormat || "g:i a")} timezone={String(form.timezone || "UTC")} onChange={value=>set("timeFormat",value)} />
                   </Field>
+                  <Field label="Week Starts On"><select aria-label="Week Starts On" value={Number(form.weekStartsOn ?? 1)} onChange={event=>set("weekStartsOn",Number(event.target.value))}>{["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"].map((day,index)=><option value={index} key={day}>{day}</option>)}</select></Field>
                 </>
               )}
               {tab === "writing" && (
@@ -690,16 +719,7 @@ export function SettingsSuite() {
                     {select(
                       "defaultPostFormat",
                       "Default Post Format",
-                      [
-                        "standard",
-                        "aside",
-                        "image",
-                        "video",
-                        "quote",
-                        "link",
-                        "gallery",
-                        "audio",
-                      ].map((name) => [
+                      postFormats.map((name) => [
                         name,
                         name[0].toUpperCase() + name.slice(1),
                       ]),
@@ -804,21 +824,47 @@ export function SettingsSuite() {
                       </label>
                     </div>
                   </Field>
+                  <Field label="Email me whenever">
+                    <div className="worldact-stacked-fields">
+                      {check("notifyComments","Anyone posts a comment")}
+                      {check("notifyModeration","A comment is held for moderation")}
+                    </div>
+                    <p className="description">Notifications are sent to the administration email address. <Link to="/admin/tools?tab=mail">View outgoing mail</Link>.</p>
+                  </Field>
                   <Field label="Before a comment appears">
-                    {check(
-                      "commentModeration",
-                      "Comment must be manually approved",
-                    )}
+                    <div className="worldact-stacked-fields">
+                      {check("commentModeration","Comment must be manually approved")}
+                      {check("commentPreviouslyApproved","Comment author must have a previously approved comment")}
+                    </div>
                   </Field>
                   <Field label="Comment pagination">
-                    {number("commentsPerPage", "Comments per page", 1, 200)}{" "}
-                    comments per page
+                    <div className="worldact-stacked-fields">
+                      {check("paginateComments","Break comments into pages")}
+                      <label>{number("commentsPerPage","Comments per page",1,200)} comments per page</label>
+                      <label>Display by default {select("defaultCommentPage","Default comment page",[["oldest","First page"],["newest","Last page"]])}</label>
+                    </div>
                   </Field>
                   <Field label="Comments should be displayed with">
-                    {select("commentOrder", "Comment order", [
-                      ["asc", "Older comments first"],
-                      ["desc", "Newer comments first"],
-                    ])}
+                    {select("commentOrder","Comment order",[["asc","Older comments first"],["desc","Newer comments first"]])}
+                  </Field>
+                  <Field label="Comment Moderation">
+                    <p>Hold a comment in the queue if it contains {number("commentMaxLinks","Maximum comment links",0,100)} or more links. Set 0 to disable the link limit.</p>
+                    <p>Hold comments matching any word, name, URL, or email address below. Enter one item per line.</p>
+                    <textarea aria-label="Comment moderation keys" className="large-text" rows={8} maxLength={20000} value={String(form.commentModerationKeys || "")} onChange={(event) => set("commentModerationKeys",event.target.value)}/>
+                  </Field>
+                  <Field label="Disallowed Comment Keys">
+                    <p>Comments matching these words, names, URLs, or email addresses are sent to Trash. Enter one item per line.</p>
+                    <textarea aria-label="Disallowed comment keys" className="large-text" rows={8} maxLength={20000} value={String(form.disallowedCommentKeys || "")} onChange={(event) => set("disallowedCommentKeys",event.target.value)}/>
+                  </Field>
+                  <Field label="Comment cookies">
+                    {check("commentCookieConsent","Show the option to save the comment author’s name, email, and website for next time")}
+                  </Field>
+                  <Field label="Avatar Display">{check("showAvatars","Show Avatars")}</Field>
+                  <Field label="Maximum Rating">
+                    {select("avatarRating","Avatar rating",[["G","G — Suitable for all audiences"],["PG","PG — Possibly offensive, usually for ages 13 and above"],["R","R — Intended for adult audiences above 17"],["X","X — More mature than above"]])}
+                  </Field>
+                  <Field label="Default Avatar">
+                    {select("defaultAvatar","Default avatar",[["mystery","Mystery Person"],["blank","Blank"],["identicon","Identicon (Generated)"],["wavatar","Wavatar (Generated)"],["monsterid","MonsterID (Generated)"],["retro","Retro (Generated)"]])}
                   </Field>
                 </>
               )}
@@ -909,6 +955,10 @@ export function SettingsSuite() {
                 </>
               )}
               {tab === "privacy" && (
+                <>
+                <Field label="Create your Privacy Policy page">
+                  <PrivacyPolicyGuide onCreated={async (post) => {set("privacyPageId", post.id); await policyPages.reload();}} />
+                </Field>
                 <Field
                   label="Change your Privacy Policy page"
                   hint="This page can explain how your site collects and handles personal information."
@@ -917,7 +967,9 @@ export function SettingsSuite() {
                   <Link className="button" to="/admin/pages/new">
                     Create a new page
                   </Link>
+                  <ResourceState loading={policyPages.loading} error={policyPages.error} retry={policyPages.reload} />
                 </Field>
+                </>
               )}
             </tbody>
           </table>
@@ -1269,19 +1321,24 @@ type Plugin = {
   installed: boolean;
   enabled?: boolean;
   settings: Record<string, unknown>;
+  apiKeyConfigured?:boolean;apiKeyHint?:string;keyVerified?:boolean;verifiedAt?:string|null;lastServiceError?:string|null;
 };
 
 function PluginSettings({
   plugin,
   onSave,
   busy,
+  onVerify,
 }: {
   plugin: Plugin;
-  onSave: (settings: Record<string, unknown>) => void;
+  onSave: (settings: Record<string, unknown>,credentials?:{apiKey?:string;clearApiKey?:boolean}) => void;
+  onVerify:()=>void;
   busy: boolean;
 }) {
   const [form, setForm] = useState(plugin.settings);
   useEffect(() => setForm(plugin.settings), [plugin.settings]);
+  if(plugin.slug==="akismet")return <AkismetSettings plugin={plugin} busy={busy} onSave={onSave} onVerify={onVerify}/>;
+  if(plugin.slug==="hello-dolly")return <p className="description">Activate Hello Dolly to display a random song lyric in the upper right of administration pages. No settings are needed.</p>;
   return (
     <form
       className="worldact-plugin-settings"
@@ -1375,6 +1432,7 @@ export function Plugins() {
     plugin: Plugin,
     operation: "install" | "activate" | "deactivate" | "delete",
     settings?: Record<string, unknown>,
+    credentials?:{apiKey?:string;clearApiKey?:boolean},
   ) {
     await action.run(
       async () => {
@@ -1387,13 +1445,14 @@ export function Plugins() {
                 ? "DELETE"
                 : "PUT",
             settings
-              ? { settings }
+              ? { settings,...credentials }
               : ["activate", "deactivate"].includes(operation)
                 ? { enabled: operation === "activate" }
                 : undefined,
           ),
         );
         await resource.reload();
+        window.dispatchEvent(new Event("worldact-plugins-updated"));
       },
       settings
         ? "Plugin settings saved."
@@ -1534,11 +1593,12 @@ export function Plugins() {
                   <PluginSettings
                     plugin={plugin}
                     busy={action.busy}
-                    onSave={(settings) =>
+                    onVerify={()=>void action.run(async()=>{const result=await api<{result:string}>("/plugins/akismet/verify",json("POST",{}));await resource.reload();if(result.result!=="valid")throw new Error(result.result==="invalid"?"Akismet could not verify this key. Check the key and site address.":"Akismet is unavailable. Please try again later.");},"Akismet API key verified.")}
+                    onSave={(settings,credentials) =>
                       void operate(
                         plugin,
                         plugin.enabled ? "activate" : "deactivate",
-                        settings,
+                        settings,credentials,
                       )
                     }
                   />
@@ -1668,14 +1728,15 @@ export function Themes() {
 }
 
 type Design = {
-  styles: SiteStyle;
+  theme?: { id: string; name: string; version: string; variation: string; variations: {slug:string;title:string}[]; css:string; fonts?: ThemeJSON[] };
+  styles: Partial<SiteStyle>;
   templates: SiteDocument[];
   parts: SiteDocument[];
   patterns: SiteDocument[];
   menus: NavigationMenu[];
   plugins: unknown[];
 };
-type SiteDocument = SiteTemplate & { version?: number };
+type SiteDocument = SiteTemplate & { version?: number; sourceMetadata?: {source?:string;description?:string;inserter?:boolean} };
 const defaultStyle: SiteStyle = {
   backgroundColor: "#ffffff",
   textColor: "#111111",
@@ -1690,15 +1751,18 @@ const fontFamily = (font: string) =>
     ? "-apple-system, BlinkMacSystemFont, sans-serif"
     : font === "Georgia"
       ? "Georgia, serif"
-      : `"${font}", sans-serif`;
+      : `${JSON.stringify(font)}, sans-serif`;
 
 export function SiteEditor() {
   const resource = useResource<Design>("/site-editor");
   const media = useResource<{ media: Media[] }>("/media");
   const { user } = useContext(Session);
   const [view, setView] = useState("templates");
+  const [designSearch, setDesignSearch] = useState("");
+  const [fontLibraryOpen,setFontLibraryOpen] = useState(false);
   const [selected, setSelected] = useState<SiteDocument | null>(null);
-  const [styles, setStyles] = useState<SiteStyle>(defaultStyle);
+  const [styles, setStyles] = useState<Partial<SiteStyle>>({});
+  const [variation, setVariation] = useState("");
   const [code, setCode] = useState(false);
   const [inspector, setInspector] = useState(false);
   const [inserter, setInserter] = useState(false);
@@ -1710,7 +1774,10 @@ export function SiteEditor() {
   const editor = useRef<GutenbergEditorHandle>(null);
   const action = useAction();
   useEffect(() => {
-    if (resource.data) setStyles({ ...defaultStyle, ...resource.data.styles });
+    if (resource.data) {
+      setStyles(resource.data.styles);
+      setVariation(resource.data.theme?.variation || "");
+    }
   }, [resource.data]);
   useEffect(() => {
     const prevent = (event: BeforeUnloadEvent) => {
@@ -1782,7 +1849,27 @@ export function SiteEditor() {
       : view === "parts"
         ? resource.data?.parts
         : resource.data?.templates;
-  const canvasCSS = `body.editor-styles-wrapper{background:${styles.backgroundColor};color:${styles.textColor};font-family:${fontFamily(styles.fontFamily)};} .editor-styles-wrapper :where(h1,h2,h3,h4,h5,h6){font-family:${fontFamily(styles.headingFont)};} :root{--wp--style--global--content-size:${Math.min(styles.contentWidth, 1200)}px;--wp--style--global--wide-size:${styles.contentWidth}px;} .editor-styles-wrapper a{color:${styles.accentColor}}`;
+  const baseTheme = themeDocument(resource.data?.theme?.id || "classic", variation);
+  const libraryFonts = resource.data?.theme?.fonts || [];
+  const sourceTheme: ThemeJSON | null = baseTheme ? {...baseTheme,settings:{...baseTheme.settings,typography:{...baseTheme.settings?.typography,fontFamilies:[...(baseTheme.settings?.typography?.fontFamilies || []),...libraryFonts]}}} : null;
+  const fontChoices = [...new Set(["Manrope","Inter","Georgia","System","serif","sans-serif",...libraryFonts.map((font)=>String(font.name))])];
+  const sourceValue = (value: unknown) => resolveThemeValue(value, sourceTheme);
+  const sourceColor = (value: unknown, fallback: string) => /^#[a-f\d]{3,8}$/i.test(sourceValue(value)) ? sourceValue(value) : fallback;
+  const defaults = {
+    ...defaultStyle,
+    backgroundColor: sourceColor(sourceTheme?.styles?.color?.background, "#ffffff"),
+    textColor: sourceColor(sourceTheme?.styles?.color?.text, "#111111"),
+    accentColor: sourceColor(sourceTheme?.styles?.elements?.link?.color?.text, sourceColor(sourceTheme?.styles?.color?.text, "#111111")),
+    fontFamily: sourceValue(sourceTheme?.styles?.typography?.fontFamily) || fontFamily("Manrope"),
+    headingFont: sourceValue(sourceTheme?.styles?.elements?.heading?.typography?.fontFamily) || sourceValue(sourceTheme?.styles?.typography?.fontFamily) || fontFamily("Manrope"),
+    contentWidth: Number.parseFloat(sourceTheme?.settings?.layout?.wideSize) || 1200,
+    spacing: sourceTheme?.styles?.spacing?.blockGap?.endsWith("rem") ? Math.round(Number.parseFloat(sourceTheme.styles.spacing.blockGap) * 16) : Number.parseFloat(sourceTheme?.styles?.spacing?.blockGap) || 24,
+  };
+  const displayStyles = {...defaults,...styles};
+  const clearStyle = (key: keyof SiteStyle) => setStyles((previous) => {const next={...previous};delete next[key];return next;});
+  const canvasCSS = sourceTheme
+    ? compileThemeStyles(sourceTheme,"body.editor-styles-wrapper",styles)
+    : compileThemeStyles({settings:{typography:{fontFamilies:libraryFonts}}},"body.editor-styles-wrapper",displayStyles);
   return (
     <Screen
       title="Site Editor"
@@ -1794,6 +1881,7 @@ export function SiteEditor() {
     >
       <Feedback action={action} />
       <ResourceState {...resource} retry={resource.reload} />
+      {fontLibraryOpen && <Suspense fallback={<p>Loading Font Library…</p>}><FontLibrary theme={resource.data?.theme?.id || "classic"} onClose={()=>setFontLibraryOpen(false)} onChange={()=>{void resource.reload();setResetKey((value)=>value+1);}}/></Suspense>}
       <div className="worldact-site-editor">
         <aside className="worldact-design-navigation">
           <div className="worldact-design-brand">
@@ -1809,7 +1897,7 @@ export function SiteEditor() {
             <button
               className={view === value ? "is-active" : ""}
               key={value}
-              onClick={() => setView(value)}
+              onClick={() => {setView(value);setDesignSearch("");}}
             >
               {label}
               <span>›</span>
@@ -1825,143 +1913,61 @@ export function SiteEditor() {
         <div className="worldact-design-content">
           {view === "styles" ? (
             <>
-              <h2>Styles</h2>
-              <p>
-                Customize the colors, typography, and layout of your entire
-                site.
-              </p>
+              <div className="worldact-screen-heading"><h2>Styles</h2>{user?.role === "administrator" && <button className="button" onClick={()=>setFontLibraryOpen(true)}>Manage fonts</button>}</div>
+              <p>Customize the colors, typography, and layout of {resource.data?.theme?.name || "your site"}.</p>
               {user?.role === "administrator" ? (
-                <form
-                  onSubmit={(e) => {
-                    e.preventDefault();
-                    void action.run(async () => {
-                      await api("/site-editor/styles", json("PUT", styles));
-                      await resource.reload();
-                    }, "Global styles saved.");
-                  }}
-                >
+                <form onSubmit={(event) => {
+                  event.preventDefault();
+                  void action.run(async () => {
+                    if (resource.data?.theme?.id === "classic") await api("/site-editor/styles",json("PUT",{...defaultStyle,...styles}));
+                    else await api("/site-editor/theme",json("PUT",{variation,styles}));
+                    await resource.reload();
+                  },"Global styles saved.");
+                }}>
+                  {sourceTheme && <fieldset className="worldact-theme-variations">
+                    <legend>Browse styles</legend>
+                    <label>Style variation
+                      <select value={variation} onChange={(event) => {setVariation(event.target.value);setStyles({});}}>
+                        <option value="">Default</option>
+                        {resource.data?.theme?.variations.map((item) => <option key={item.slug} value={item.slug}>{item.title}</option>)}
+                      </select>
+                    </label>
+                    <p className="description">Each variation uses the theme’s original palette and typography. Save to apply it to your site.</p>
+                  </fieldset>}
                   <div className="worldact-style-fields">
-                    <fieldset>
-                      <legend>Colors</legend>
-                      {[
-                        ["backgroundColor", "Background"],
-                        ["textColor", "Text"],
-                        ["accentColor", "Links and accents"],
-                      ].map(([key, label]) => (
-                        <label key={key}>
-                          {label}
-                          <div>
-                            <input
-                              type="color"
-                              aria-label={label}
-                              value={styles[key as keyof SiteStyle] as string}
-                              onChange={(e) =>
-                                setStyles({ ...styles, [key]: e.target.value })
-                              }
-                            />
-                            <code>{styles[key as keyof SiteStyle]}</code>
-                          </div>
-                        </label>
-                      ))}
+                    <fieldset><legend>Colors</legend>
+                      {([["backgroundColor","Background"],["textColor","Text"],["accentColor","Links"]] as const).map(([key,label]) => <label key={key}>
+                        {label}<div><input type="color" aria-label={label} value={displayStyles[key]} onChange={(event) => setStyles({...styles,[key]:event.target.value})}/><code>{displayStyles[key]}</code>
+                        {styles[key] && <button type="button" className="button-link" onClick={() => clearStyle(key)}>Reset</button>}</div>
+                      </label>)}
                     </fieldset>
-                    <fieldset>
-                      <legend>Typography</legend>
-                      {[
-                        ["fontFamily", "Text"],
-                        ["headingFont", "Headings"],
-                      ].map(([key, label]) => (
-                        <label key={key}>
-                          {label}
-                          <select
-                            value={styles[key as keyof SiteStyle]}
-                            onChange={(e) =>
-                              setStyles({ ...styles, [key]: e.target.value })
-                            }
-                          >
-                            {[
-                              "Manrope",
-                              "Inter",
-                              "Georgia",
-                              "System",
-                              "serif",
-                              "sans-serif",
-                            ].map((font) => (
-                              <option key={font}>{font}</option>
-                            ))}
-                          </select>
-                        </label>
-                      ))}
+                    <fieldset><legend>Typography</legend>
+                      {([["fontFamily","Text"],["headingFont","Headings"]] as const).map(([key,label]) => <label key={key}>
+                        {label}<select value={styles[key] || ""} onChange={(event) => event.target.value ? setStyles({...styles,[key]:event.target.value}) : clearStyle(key)}>
+                          <option value="">Theme default</option>
+                          {fontChoices.map((font) => <option key={font}>{font}</option>)}
+                        </select><span className="description">Default: {defaults[key].replace(/['"]/g,"")}</span>
+                      </label>)}
                     </fieldset>
-                    <fieldset>
-                      <legend>Layout</legend>
-                      <label>
-                        Content width
-                        <input
-                          type="number"
-                          min={480}
-                          max={1800}
-                          value={styles.contentWidth}
-                          onChange={(e) =>
-                            setStyles({
-                              ...styles,
-                              contentWidth: Number(e.target.value),
-                            })
-                          }
-                        />
+                    <fieldset><legend>Layout</legend>
+                      <label>Wide width<input type="number" min={480} max={1800} value={displayStyles.contentWidth} onChange={(event) => setStyles({...styles,contentWidth:Number(event.target.value)})}/>
+                        {styles.contentWidth && <button type="button" className="button-link" onClick={() => clearStyle("contentWidth")}>Reset width</button>}
                       </label>
-                      <label>
-                        Block spacing
-                        <input
-                          type="number"
-                          min={8}
-                          max={80}
-                          value={styles.spacing}
-                          onChange={(e) =>
-                            setStyles({
-                              ...styles,
-                              spacing: Number(e.target.value),
-                            })
-                          }
-                        />
+                      <label>Block spacing<input type="number" min={8} max={80} value={displayStyles.spacing} onChange={(event) => setStyles({...styles,spacing:Number(event.target.value)})}/>
+                        {styles.spacing && <button type="button" className="button-link" onClick={() => clearStyle("spacing")}>Reset spacing</button>}
                       </label>
                     </fieldset>
                   </div>
-                  <div
-                    className="worldact-style-preview"
-                    style={{
-                      background: styles.backgroundColor,
-                      color: styles.textColor,
-                      fontFamily: fontFamily(styles.fontFamily),
-                      padding: styles.spacing,
-                    }}
-                  >
-                    <h2 style={{ fontFamily: fontFamily(styles.headingFont) }}>
-                      Make it yours.
-                    </h2>
-                    <p>
-                      Every story begins with a little inspiration. Your words,
-                      your colors, your world.
-                    </p>
-                    <a
-                      style={{ color: styles.accentColor }}
-                      href="#style-preview"
-                      onClick={(e) => e.preventDefault()}
-                    >
-                      A preview of your links →
-                    </a>
+                  <style>{compileThemeStyles(sourceTheme || {settings:{typography:{fontFamilies:libraryFonts}}},".worldact-theme-style-preview",styles)}</style>
+                  <div className="worldact-style-preview worldact-theme-style-preview" style={sourceTheme ? {padding:32} : {background:displayStyles.backgroundColor,color:displayStyles.textColor,fontFamily:fontFamily(displayStyles.fontFamily),padding:32}}>
+                    <h2>Make it yours.</h2><p>Every story begins with a little inspiration. Your words, your colors, your world.</p>
+                    <a href="#style-preview" onClick={(event) => event.preventDefault()}>A preview of your links →</a>
                   </div>
-                  <p>
-                    <button
-                      className="button button-primary"
-                      disabled={action.busy}
-                    >
-                      Save Styles
-                    </button>
+                  <p className="worldact-inline-actions"><button className="button button-primary" disabled={action.busy}>Save Styles</button>
+                    {sourceTheme && <button type="button" className="button" disabled={action.busy} onClick={() => {setVariation("");setStyles({});}}>Reset to theme defaults</button>}
                   </p>
                 </form>
-              ) : (
-                <p>Global style changes require an administrator.</p>
-              )}
+              ) : <p>Global style changes require an administrator.</p>}
             </>
           ) : (
             <>
@@ -2021,8 +2027,9 @@ export function SiteEditor() {
                   </button>
                 </form>
               )}
+              <input className="worldact-design-filter" type="search" aria-label="Search designs" placeholder="Search designs…" value={designSearch} onChange={(event) => setDesignSearch(event.target.value)}/>
               <div className="worldact-document-list">
-                {docs?.map((document) => (
+                {docs?.filter((document) => `${document.title} ${document.slug}`.toLowerCase().includes(designSearch.toLowerCase())).map((document) => (
                   <button
                     key={document.id}
                     className={
@@ -2090,49 +2097,13 @@ export function SiteEditor() {
                       </button>
                     </div>
                   </div>
-                  {selected.type !== "pattern" && (
-                    <details className="worldact-template-tokens">
-                      <summary>Dynamic content</summary>
-                      <p>
-                        Keep these tokens in your template to display live site
-                        and post content.
-                      </p>
-                      <div>
-                        {[
-                          "siteTitle",
-                          "tagline",
-                          "navigation",
-                          "postTitle",
-                          "postDate",
-                          "postAuthor",
-                          "content",
-                          "postList",
-                        ].map((token) => (
-                          <button
-                            className="button"
-                            key={token}
-                            onClick={() => {
-                              const value = `{{${token}}}`;
-                              if (code) {
-                                setSelected({
-                                  ...selected,
-                                  content: selected.content + value,
-                                });
-                                setDirty(true);
-                              } else
-                                editor.current?.insertBlocks([
-                                  {
-                                    name: "core/paragraph",
-                                    attributes: { content: value },
-                                    innerBlocks: [],
-                                  },
-                                ]);
-                            }}
-                          >{`{{${token}}}`}</button>
-                        ))}
-                      </div>
-                    </details>
-                  )}
+                  {selected.type !== "pattern" && <details className="worldact-template-tokens">
+                    <summary>Template blocks</summary><p>Add live site and post content to your template.</p>
+                    <div>{[["core/site-title","Site title"],["core/navigation","Navigation"],["core/post-title","Post title"],["core/post-content","Content"],["core/comments","Comments"]].map(([name,label]) => <button type="button" className="button" key={name} onClick={() => {
+                      if(code){setSelected({...selected,content:selected.content+`\n<!-- wp:${name.replace("core/","")} /-->`});setDirty(true);}
+                      else editor.current?.insertBlocks([{name,attributes:{},innerBlocks:[]}]);
+                    }}>{label}</button>)}</div>
+                  </details>}
                   {code ? (
                     <textarea
                       className="worldact-template-code"
@@ -2176,7 +2147,14 @@ export function SiteEditor() {
                         ? "Unsaved changes"
                         : `Last saved ${date(selected.updatedAt)}`}
                     </span>
-                    {!["header", "footer", "single", "page", "index"].includes(
+                    {selected.sourceMetadata?.source && <button type="button" className="button-link" disabled={action.busy} onClick={() => {
+                      if(!confirm(`Reset ${selected.title} to the theme’s original design?`))return;
+                      void action.run(async () => {
+                        const result=await api<{document:SiteDocument}>(`/site-editor/documents/${selected.id}/reset`,json("POST"));
+                        setSelected({...result.document,content:result.document.rawContent || result.document.content});setResetKey((key)=>key+1);setDirty(false);await resource.reload();
+                      },"Original theme design restored.");
+                    }}>Reset to original</button>}
+                    {!selected.sourceMetadata?.source && !["header", "footer", "single", "page", "index"].includes(
                       selected.slug,
                     ) && (
                       <button
@@ -2243,6 +2221,7 @@ export function ToolsSuite() {
     null,
   );
   const [fileName, setFileName] = useState("");
+  const [replaceDesign, setReplaceDesign] = useState(false);
   const [exportFormat, setExportFormat] = useState("json");
   const [importCount, setImportCount] = useState(0);
   const action = useAction();
@@ -2274,7 +2253,7 @@ export function ToolsSuite() {
       </nav>
       <ResourceState {...resource} retry={resource.reload} />
       {active === "health" && resource.data && "checks" in resource.data && (
-        <>
+        <HealthDetails>
           <div className="worldact-health-heading">
             <span className="worldact-health-ring" />{" "}
             <div>
@@ -2303,15 +2282,16 @@ export function ToolsSuite() {
               </li>
             ))}
           </ul>
-        </>
+        </HealthDetails>
       )}
       {active === "export" && (
         <div className="worldact-tool-panel">
           <h2>Export your content</h2>
           <p>
             Download a WorldAct JSON archive of posts, pages, terms, comments,
-            navigation, templates, styles, and settings. Media file references
-            are included; media files, passwords, and session data are excluded.
+            navigation, templates, styles, settings, and supported media files.
+            JSON archives embed up to 64 MiB of media. Account passwords and
+            session data are excluded.
           </p>
           <p>
             <label>
@@ -2355,24 +2335,34 @@ export function ToolsSuite() {
           <h2>Import content</h2>
           <p>
             Upload a WorldAct JSON export or WordPress XML (WXR) file to import
-            your content. Imported content is assigned to your account. Existing
-            URLs are preserved when available.
+            your content. JSON archives support up to 96 MiB, including up to 64
+            MiB of decoded media files; WordPress XML files support up to 8 MiB.
+            Imported content is assigned to your account.
           </p>
           <input
             type="file"
             accept="application/json,application/xml,text/xml,.json,.xml"
             aria-label="Choose import file"
+            disabled={action.busy}
             onChange={(e) => {
               const file = e.currentTarget.files?.[0];
+              e.currentTarget.value = "";
+              if (file) {
+                setImportData(null);
+                setFileName("");
+                setReplaceDesign(false);
+              }
               if (file)
                 void action.run(async () => {
-                  if (file.size > 8_000_000)
-                    throw new Error("Choose an export file smaller than 8 MB.");
+                  if (file.size > 96 * 1024 * 1024)
+                    throw new Error(
+                      "Choose a JSON archive no larger than 96 MiB.",
+                    );
                   const contents = await file.text();
                   if (contents.trimStart().startsWith("<")) {
-                    if (file.size > 8_000_000)
+                    if (file.size > 8 * 1024 * 1024)
                       throw new Error(
-                        "Choose a WordPress XML file smaller than 8 MB.",
+                        "Choose a WordPress XML file no larger than 8 MiB.",
                       );
                     const document = new DOMParser().parseFromString(
                       contents,
@@ -2414,6 +2404,27 @@ export function ToolsSuite() {
                 <strong>{fileName}</strong> contains {importCount} content
                 items.
               </p>
+              {importData.format !== "wxr" && (
+                <div className="privacy-admin-verification">
+                  <label className="checkbox-label">
+                    <input
+                      type="checkbox"
+                      checked={replaceDesign}
+                      onChange={(event) =>
+                        setReplaceDesign(event.target.checked)
+                      }
+                    />
+                    Replace site design and settings
+                  </label>
+                  <p>
+                    When selected, imported templates, styles, settings, menu
+                    locations, and extensions become active. The destination
+                    site address and administration email are kept. Leave this
+                    unchecked to import content while preserving your live
+                    design and settings.
+                  </p>
+                </div>
+              )}
               <button
                 className="button button-primary"
                 disabled={action.busy}
@@ -2425,10 +2436,16 @@ export function ToolsSuite() {
                         warnings?: string[];
                       }>(
                         "/tools/import",
-                        json("POST", importData),
+                        json(
+                          "POST",
+                          importData.format === "wxr"
+                            ? importData
+                            : { ...importData, replaceDesign },
+                        ),
                       );
                       setImportData(null);
                       setFileName("");
+                      setReplaceDesign(false);
                       return result;
                     })
                     .then((result) => {

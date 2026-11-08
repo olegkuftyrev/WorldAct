@@ -1,6 +1,7 @@
 import { readFile } from "node:fs/promises";
 import path from "node:path";
 import { pool, rootDir } from "./db.js";
+import { syncBundledThemes } from "./themes.js";
 
 export async function migrate() {
   const sql = await readFile(
@@ -20,6 +21,15 @@ export async function migrate() {
       "comments-schema.sql",
       "accounts-schema.sql",
       "blocks-schema.sql",
+      "application-passwords-schema.sql",
+      "themes-schema.sql",
+      "media-schema.sql",
+      "edit-locks-schema.sql",
+      "site-identity-schema.sql",
+      "fonts-schema.sql",
+      "post-templates-schema.sql",
+      "post-trash-schema.sql",
+      "bundled-plugins-schema.sql",
     ]) {
       const extension = await readFile(
         path.join(rootDir, "server", schema),
@@ -47,6 +57,7 @@ export async function migrate() {
           `UPDATE ${table} SET raw_content=regexp_replace(raw_content,'(<!-- wp:[a-zA-Z0-9_/-]+[^<]*?)/ -->','\\1/-->','g') WHERE raw_content LIKE '%/ -->%'`,
         );
     }
+    await syncBundledThemes(client);
     await client.query("COMMIT");
   } catch (error) {
     await client.query("ROLLBACK");

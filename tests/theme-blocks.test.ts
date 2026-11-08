@@ -1,0 +1,40 @@
+import 'dotenv/config';
+import assert from 'node:assert/strict';
+import {test,after} from 'node:test';
+import {DOMParser} from 'linkedom';
+import {pool,postFields} from '../server/db.js';
+import {renderSiteDocument} from '../server/block-renderer.js';
+import {cleanContent} from '../server/utils.js';
+const block=(name:string,attrs:Record<string,unknown>={},body='')=>`<!-- wp:${name} ${JSON.stringify(attrs)}${body?' -->'+body+`<!-- /wp:${name} -->`:' /-->'}`;
+const dom=(html:string)=>new DOMParser().parseFromString(html,'text/html');
+test('source theme blocks preserve layout, comments, source SVG and safe generated forms',async()=>{
+ const db=await pool.connect();await db.query('BEGIN');
+ try{
+  const user=(await db.query("SELECT id,display_name AS name FROM users WHERE role='administrator' ORDER BY id LIMIT 1")).rows[0],stamp='theme-'+Date.now().toString(36);
+  await db.query("UPDATE settings SET data=data || $1::jsonb WHERE id=1",[JSON.stringify({threadComments:true,threadDepth:2,commentsPerPage:50,commentOrder:'asc',commentRegistration:false,requireCommentNameEmail:true,closeCommentsDays:0})]);
+  const postId=(await db.query("INSERT INTO posts(type,title,slug,status,author_id,published_at) VALUES('post',$1,$1,'publish',$2,'2020-01-01T00:00:00.123456Z') RETURNING id",[stamp,user.id])).rows[0].id;
+  const post=(await db.query(`SELECT ${postFields} FROM posts p JOIN users u ON u.id=p.author_id WHERE p.id=$1`,[postId])).rows[0];
+  const ids:number[]=[];
+  for(let i=0;i<4;i++)ids.push((await db.query("INSERT INTO comments(post_id,author_name,author_email,content,status,parent_id) VALUES($1,$2,'secret@example.test',$3,$4,$5) RETURNING id",[postId,'Author'+i,'<p>Comment body'+i+'</p>',i===3?'pending':'approved',i>0&&i<3?ids[i-1]:null])).rows[0].id);
+  const render=(rawContent:string,options:Record<string,unknown>={})=>renderSiteDocument({rawContent},{db,post,requestPath:'/example/',...options});
+  const template=block('comments',{},block('comments-title')+block('comment-template',{},block('comment-author-name')+block('comment-content')+block('comment-date')+block('comment-reply-link'))+block('post-comments-form'));
+  const threaded=await render(template),parsed=dom(threaded);
+  for(let i=0;i<3;i++)assert.equal(parsed.querySelectorAll('#comment-'+ids[i]).length,1);
+  assert.equal(parsed.querySelectorAll('ol.children ol.children').length,0);assert.doesNotMatch(threaded,/secret@example|Comment body3|Author3/);assert.match(threaded,/3 responses/);
+  assert.equal(parsed.querySelector('form')!.getAttribute('action'),'/wp-comments-post.php');assert.equal(parsed.querySelector('[name=authorEmail]')!.hasAttribute('required'),true);assert.equal(parsed.querySelector('input[name=postId]')!.getAttribute('value'),String(postId));
+  await db.query("UPDATE settings SET data=data || '{\"threadComments\":false}'::jsonb WHERE id=1");
+  const flat=dom(await render(template));assert.equal(flat.querySelectorAll('li.comment').length,3);assert.equal(flat.querySelectorAll('ol.children').length,0);
+  await db.query("UPDATE settings SET data=data || '{\"commentRegistration\":true}'::jsonb WHERE id=1");
+  assert.doesNotMatch(await render(block('post-comments-form')),/<form/);assert.match(await render(block('post-comments-form')),/logged in/);
+  const authenticated=await render(block('post-comments-form'),{user:{id:user.id,role:'administrator',displayName:user.name}});assert.match(authenticated,/Logged in as/);assert.doesNotMatch(authenticated,/name="authorEmail"/);
+  const search=dom(await render(block('search',{label:'Find articles',buttonText:'Search'}),{query:{search:'<script>secret</script>'}}));assert.equal(search.querySelector('input[name=s]')!.getAttribute('value'),'<script>secret</script>');assert.equal(search.querySelectorAll('script').length,0);
+  const social=await render(block('social-links',{},block('social-link',{service:'github',url:'https://github.com/example'})+block('social-link',{service:'x',url:'javascript:alert(1)'})));assert.match(social,/<svg/);assert.match(social,/<path/);assert.doesNotMatch(social,/javascript/);
+  assert.equal(cleanContent('<form action="https://evil.test/"><input name="password"></form><svg><script>bad()</script></svg>'),'');
+  const layout=dom(await render(block('group',{layout:{type:'constrained'},style:{spacing:{padding:{top:'2rem'}}}},'<main class="original">'+block('paragraph',{},'<p>Actual content</p>')+'</main>')));assert.ok(layout.querySelector('main.is-layout-constrained.has-global-padding.original'));assert.match(layout.querySelector('main')!.getAttribute('style')!,/padding-top:2rem/);
+  const parent=(await db.query("INSERT INTO terms(taxonomy,name,slug) VALUES('category',$1,$1) RETURNING id",[stamp+'-parent'])).rows[0].id;
+  const child=(await db.query("INSERT INTO terms(taxonomy,name,slug,parent_id) VALUES('category',$1,$1,$2) RETURNING id",[stamp+'-child',parent])).rows[0].id;await db.query('INSERT INTO post_terms(post_id,term_id) VALUES($1,$2)',[postId,child]);
+  const categories=dom(await render(block('categories',{showHierarchy:true})));assert.equal(categories.querySelectorAll('.cat-item-'+parent+' .cat-item-'+child).length,1);
+  const navigation=dom(await render(block('post-navigation-link',{type:'next',showTitle:true})));assert.equal(navigation.querySelector('a')?.getAttribute('href')==='/posts/'+stamp+'/',false);
+ }finally{await db.query('ROLLBACK');db.release();}
+});
+after(()=>pool.end());

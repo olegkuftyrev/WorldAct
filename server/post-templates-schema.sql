@@ -1,0 +1,1 @@
+ALTER TABLE posts ADD COLUMN IF NOT EXISTS template_slug varchar(160) NOT NULL DEFAULT '';

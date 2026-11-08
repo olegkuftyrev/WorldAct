@@ -335,3 +335,91 @@
     display: block;
   }
 }
+
+/* Global layout rules used by the supplied block themes. Their palettes,
+   typography and block-specific styles come directly from theme.json. */
+.public-site.worldact-theme {
+  min-width: 0;
+  --wp--style--block-background-padding: 0;
+  overflow-wrap: break-word;
+}
+.worldact-theme .wp-site-blocks,
+.worldact-theme .wp-site-blocks * { box-sizing: border-box; }
+.worldact-theme .wp-site-blocks { min-height: calc(100vh - 32px); }
+.worldact-theme .wp-site-blocks :where(p) { font-size: inherit; line-height: inherit; }
+.worldact-theme .wp-site-blocks > * { margin-block-start: 0; margin-block-end: 0; }
+.worldact-theme .wp-site-blocks > * + *,
+.worldact-theme .is-layout-flow > * + *,
+.worldact-theme .is-layout-constrained > * + * { margin-block-start: var(--wp--style--block-gap, 1.2rem); margin-block-end: 0; }
+.worldact-theme :is(.is-layout-flow,.is-layout-constrained) > :first-child { margin-block-start: 0; }
+.worldact-theme .is-layout-flex { gap: var(--wp--style--block-gap, 1.2rem); }
+.worldact-theme .is-layout-grid { gap: var(--wp--style--block-gap, 1.2rem); }
+.worldact-theme :is(.is-layout-flex,.is-layout-grid) > * { margin-block-start: 0; margin-block-end: 0; }
+.worldact-theme .is-layout-constrained > :where(:not(.alignleft):not(.alignright):not(.alignfull)) { max-width: var(--wp--style--global--content-size); margin-inline: auto !important; }
+.worldact-theme .is-layout-constrained > .alignwide { max-width: var(--wp--style--global--wide-size); }
+.worldact-theme .is-layout-constrained > .alignfull { max-width: none; }
+.worldact-theme .is-layout-grid.columns-2 { grid-template-columns: repeat(2,minmax(0,1fr)); }
+.worldact-theme .is-layout-grid.columns-3 { grid-template-columns: repeat(3,minmax(0,1fr)); }
+.worldact-theme .is-layout-grid.columns-4 { grid-template-columns: repeat(4,minmax(0,1fr)); }
+.worldact-theme .is-layout-grid.columns-5 { grid-template-columns: repeat(5,minmax(0,1fr)); }
+.worldact-theme .is-layout-grid.columns-6 { grid-template-columns: repeat(6,minmax(0,1fr)); }
+.worldact-theme .is-layout-flex.is-vertical { align-items: flex-start; }
+.worldact-theme .is-layout-flex.is-vertical.is-content-justification-center { align-items: center; }
+.worldact-theme .is-layout-flex.is-vertical.is-content-justification-right { align-items: flex-end; }
+.worldact-theme .is-nowrap { flex-wrap: nowrap; }
+.worldact-theme .items-justified-left { justify-content: flex-start; }
+.worldact-theme .items-justified-center { justify-content: center; }
+.worldact-theme .items-justified-right { justify-content: flex-end; }
+.worldact-theme .items-justified-space-between { justify-content: space-between; }
+.worldact-theme .has-global-padding { padding-right: var(--wp--style--root--padding-right); padding-left: var(--wp--style--root--padding-left); }
+.worldact-theme .has-global-padding > .alignfull { margin-right: calc(-1 * var(--wp--style--root--padding-right)); margin-left: calc(-1 * var(--wp--style--root--padding-left)); }
+.worldact-theme .wp-block-post-template { padding: 0; list-style: none; }
+.worldact-theme .wp-block-post-template > li { min-width: 0; }
+.worldact-theme .wp-block-post-featured-image img,
+.worldact-theme .wp-block-image img { max-width: 100%; vertical-align: bottom; }
+.worldact-theme .wp-block-post-content :where(img,video,iframe) { max-width: 100%; }
+.worldact-theme .wp-block-post-content :where(pre) { overflow-x: auto; }
+.worldact-theme .wp-block-post-content :where(table) { max-width: 100%; }
+.worldact-theme .wp-block-post-content > :where(ul,ol) { padding-inline-start: 1.5em; }
+.worldact-theme .wp-block-query-pagination,
+.worldact-theme .wp-block-comments-pagination { display: flex; gap: 1em; flex-wrap: wrap; align-items: center; }
+.worldact-theme .wp-block-query-pagination-next { margin-left: auto; }
+.worldact-theme .wp-block-comments-title { overflow-wrap: anywhere; }
+.worldact-theme .wp-block-comment-template { list-style: none; padding: 0; }
+.worldact-theme .wp-block-comment-template .children { list-style: none; padding-inline-start: 2rem; }
+.worldact-theme .wp-block-avatar img { display: block; max-width: 100%; }
+.worldact-theme .wp-block-post-comments-form :is(textarea,input:not([type=checkbox]):not([type=submit])) { border: 1px solid #949494; background: transparent; color: inherit; padding: calc(.667em + 2px); font: inherit; width: 100%; }
+.worldact-theme .wp-block-post-comments-form textarea { display: block; min-height: 180px; resize: vertical; }
+.worldact-theme .wp-block-post-comments-form label { display: block; margin-bottom: .4em; }
+.worldact-theme .wp-block-post-comments-form input[type=submit] { cursor: pointer; width: auto; padding: calc(.667em + 2px) calc(1.333em + 2px); }
+.worldact-theme .wp-block-post-comments-form .comment-form-cookies-consent { display: flex; gap: .5em; align-items: baseline; }
+.worldact-theme .wp-block-post-comments-form .comment-form-cookies-consent label { display: inline; }
+.worldact-theme .wp-block-embed__wrapper iframe { width: 100%; height: auto; aspect-ratio: 16/9; display: block; border: 0; }
+.worldact-theme .wp-site-blocks[aria-busy=true] form { opacity: .65; pointer-events: none; }
+.worldact-public-notice,
+.worldact-public-loading { max-width: 645px; margin: 1.5rem auto; padding: 1rem; font: 16px/1.5 -apple-system,BlinkMacSystemFont,sans-serif; }
+.worldact-public-notice { border: 1px solid currentColor; }
+.worldact-theme .public-admin-bar { overflow-wrap: normal; }
+.worldact-theme .public-admin-bar a { color: #fff; font: inherit; }
+.worldact-theme .public-admin-bar .worldact-mark { line-height: 1; }
+.worldact-theme[data-theme=twentytwentyfive] .wp-site-blocks :where(a) { text-decoration-thickness: 1px; text-underline-offset: .1em; }
+.worldact-theme[data-theme=twentytwentyfive] .wp-site-blocks :where(blockquote,caption,figcaption,h1,h2,h3,h4,h5,h6,p) { text-wrap: pretty; }
+.worldact-theme[data-theme=twentytwentyfive] .wp-site-blocks :where(:focus) { outline-width: 2px; outline-style: solid; }
+@media(max-width:600px) {
+  .worldact-theme .is-layout-grid { grid-template-columns: 1fr !important; }
+  .worldact-theme .wp-block-comment-template .children { padding-inline-start: 1rem; }
+  .worldact-theme .wp-block-navigation .worldact-navigation-toggle > ul { align-items: flex-end; }
+}
+.worldact-theme .wp-block-navigation > .wp-block-navigation__container { flex-direction: inherit; gap: inherit; align-items: flex-start; margin: 0; }
+.worldact-theme .wp-block-navigation[style*="flex-direction:column"] { align-items: flex-start; }
+.worldact-theme .wp-block-navigation .wp-block-navigation-item { min-width: 0; }
+/* The original navigation open/close icons, retaining native disclosure keys. */
+.worldact-theme .worldact-navigation-toggle summary { list-style: none; padding: 0; width: 24px; height: 24px; font-size: 0; line-height: 0; }
+.worldact-theme .worldact-navigation-toggle summary::-webkit-details-marker { display: none; }
+.worldact-theme .worldact-navigation-toggle summary::before { content: ""; display: block; width: 24px; height: 24px; background: currentColor; mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M4 7.5h16v1.5H4zM4 15h16v1.5H4z'/%3E%3C/svg%3E") center/contain no-repeat; }
+.worldact-theme .worldact-navigation-toggle[open] { position: fixed; inset: 0; z-index: 100000; background: var(--wp--preset--color--base,#fff); color: var(--wp--preset--color--contrast,#111); display: flex; flex-direction: column; align-items: flex-end; box-sizing: border-box; width: 100vw; height: 100dvh; max-width: none; padding: clamp(24px,5vw,50px); overflow: auto; }
+.worldact-theme .worldact-navigation-toggle[open] summary { margin-left: auto; flex-shrink: 0; }
+.worldact-theme .worldact-navigation-toggle[open] summary::before { mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='m13.06 12 6.47-6.47-1.06-1.06L12 10.94 5.53 4.47 4.47 5.53 10.94 12l-6.47 6.47 1.06 1.06L12 13.06l6.47 6.47 1.06-1.06L13.06 12Z'/%3E%3C/svg%3E"); }
+.worldact-theme .worldact-navigation-toggle[open] > .wp-block-navigation__container { display: flex; flex-direction: column; align-items: flex-end; margin: 0; padding: 48px 0 0; gap: 1.2em; }
+.public-comment-form .public-comment-consent { display: flex; align-items: flex-start; gap: 8px; line-height: 1.5; font-size: .875em; }
+.public-comment-form .public-comment-consent input { width: auto; min-height: 0; flex-shrink: 0; margin-top: .2em; }

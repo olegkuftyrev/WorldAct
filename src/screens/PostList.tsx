@@ -1,4 +1,15 @@
+import PostTemplateSelect from "../components/PostTemplateSelect";
+import {
+  ListTableOptions,
+  useListTablePreferences,
+} from "../components/ScreenOptions";
 import { postLink } from "../publicLinks";
+import PostBulkEdit, {
+  postFormats,
+  type Author,
+  type PostFormat,
+  type PostChanges,
+} from "./PostBulkEdit";
 import {
   Fragment,
   useContext,
@@ -18,8 +29,13 @@ import {
   errorText,
 } from "../components/AdminUI";
 
+type ListedPost = Post & {
+  commentCount?: number;
+  approvedCommentCount?: number;
+  pendingCommentCount?: number;
+};
 type PostResult = {
-  posts: Post[];
+  posts: ListedPost[];
   counts: Record<string, number>;
   pagination: {
     page: number;
@@ -38,6 +54,9 @@ const statusNames: Record<Post["status"], string> = {
 };
 export default function PostList({ type }: { type: "post" | "page" }) {
   const { user } = useContext(Session);
+  const tablePreferences = useListTablePreferences(
+    type === "post" ? "posts" : "pages",
+  );
   const [params, setParams] = useSearchParams();
   const status = params.get("status") || "all",
     search = params.get("search") || "",
@@ -53,11 +72,13 @@ export default function PostList({ type }: { type: "post" | "page" }) {
   queryParams.set("type", type);
   queryParams.set("status", status);
   queryParams.set("page", String(page));
-  queryParams.set("perPage", "20");
+  queryParams.set("perPage", String(tablePreferences.value.perPage));
   queryParams.set("orderby", orderby);
   queryParams.set("order", order);
   const resource = useResource<PostResult>(`/posts?${queryParams}`);
   const terms = useResource<{ terms: Term[] }>("/terms?taxonomy=category");
+  const allTerms = useResource<{ terms: Term[] }>("/terms");
+  const authors = useResource<{ authors: Author[] }>("/authors");
   const [query, setQuery] = useState(search),
     [selected, setSelected] = useState<number[]>([]),
     [bulk, setBulk] = useState(""),
@@ -65,12 +86,14 @@ export default function PostList({ type }: { type: "post" | "page" }) {
     [error, setError] = useState(""),
     [busy, setBusy] = useState(false),
     [editing, setEditing] = useState<Post | null>(null),
+    [bulkEditing, setBulkEditing] = useState(false),
     [filterCategory, setFilterCategory] = useState(category),
     [filterMonth, setFilterMonth] = useState(month);
   useEffect(() => {
     setQuery(search);
     setSelected([]);
     setEditing(null);
+    setBulkEditing(false);
     setFilterCategory(category);
     setFilterMonth(month);
   }, [search, status, type, page, category, month]);
@@ -124,6 +147,15 @@ export default function PostList({ type }: { type: "post" | "page" }) {
       order: orderby === field && order === "asc" ? "desc" : "asc",
     });
   }
+  const visibleColumnCount =
+    2 +
+    [
+      "author",
+      ...(type === "post" ? ["categories", "tags"] : []),
+      "comments",
+      "date",
+    ].filter((column) => !tablePreferences.value.hiddenColumns.includes(column))
+      .length;
   const checkAll =
     posts.length > 0 && posts.every((post) => selected.includes(post.id));
   const header = (
@@ -241,8 +273,26 @@ export default function PostList({ type }: { type: "post" | "page" }) {
   );
   return (
     <>
-      <ScreenTabs />
-      <main className="wrap">
+      <ScreenTabs>
+        <ListTableOptions
+          table={tablePreferences}
+          itemLabel={label.toLowerCase()}
+          excerpt
+          columns={[
+            { id: "author", label: "Author" },
+            ...(type === "post"
+              ? [
+                  { id: "categories", label: "Categories" },
+                  { id: "tags", label: "Tags" },
+                ]
+              : []),
+            { id: "comments", label: "Comments" },
+            { id: "date", label: "Date" },
+          ]}
+          onApply={() => change({ page: "1" })}
+        />
+      </ScreenTabs>
+      <main className="wrap worldact-posts">
         <h1 className="wp-heading-inline">{label}</h1>{" "}
         <Link className="page-title-action" to={`${base}/new`}>
           Add New {singular}
@@ -324,12 +374,20 @@ export default function PostList({ type }: { type: "post" | "page" }) {
                   <option value="delete">Delete permanently</option>
                 </>
               ) : (
-                <option value="trash">Move to Trash</option>
+                <>
+                  <option value="edit">Edit</option>
+                  <option value="trash">Move to Trash</option>
+                </>
               )}
             </select>
             <button
               className="button action"
-              onClick={() => void action(selected, bulk)}
+              onClick={() => {
+                if (bulk === "edit") {
+                  setBulkEditing(true);
+                  setEditing(null);
+                } else void action(selected, bulk);
+              }}
               disabled={busy || !selected.length || !bulk}
             >
               Apply
@@ -372,11 +430,16 @@ export default function PostList({ type }: { type: "post" | "page" }) {
               </>
             )}
             <button className="button">Filter</button>
-            {(category || month || params.has("tag")) && (
+            {(category ||
+              month ||
+              params.has("tag") ||
+              params.has("author")) && (
               <button
                 type="button"
                 className="button-link"
-                onClick={() => change({ month: "", category: "", tag: "" })}
+                onClick={() =>
+                  change({ month: "", category: "", tag: "", author: "" })
+                }
               >
                 Clear
               </button>
@@ -384,12 +447,49 @@ export default function PostList({ type }: { type: "post" | "page" }) {
           </form>
           {pager}
         </div>
-        <table className="wp-list-table widefat fixed striped table-view-list posts">
+        <table
+          data-hidden-columns={tablePreferences.value.hiddenColumns.join(" ")}
+          className={`wp-list-table widefat fixed striped table-view-${tablePreferences.value.viewMode} posts`}
+        >
           <thead>{header}</thead>
           <tbody>
+            {bulkEditing && (
+              <tr className="inline-edit-row">
+                <td colSpan={visibleColumnCount}>
+                  <PostBulkEdit
+                    posts={posts.filter((post) => selected.includes(post.id))}
+                    type={type}
+                    canPublish={canPublish}
+                    canSticky={
+                      user?.role === "administrator" || user?.role === "editor"
+                    }
+                    authors={authors.data?.authors || []}
+                    authorsError={authors.error}
+                    terms={allTerms.data?.terms || []}
+                    close={() => setBulkEditing(false)}
+                    saved={async (result) => {
+                      setBulkEditing(false);
+                      setSelected([]);
+                      setNotice(
+                        `${result.updated.length} ${result.updated.length === 1 ? singular.toLowerCase() : label.toLowerCase()} updated.`,
+                      );
+                      setError(
+                        result.errors
+                          .map(
+                            (item) =>
+                              `${posts.find((post) => post.id === item.id)?.title || `Item #${item.id}`}: ${item.error}`,
+                          )
+                          .join(" "),
+                      );
+                      await resource.reload();
+                    }}
+                  />
+                </td>
+              </tr>
+            )}
             {posts.map((post) => (
               <Fragment key={post.id}>
-                <tr className={editing?.id === post.id ? "hidden" : undefined}>
+                <tr hidden={editing?.id === post.id}>
                   <th scope="row" className="check-column">
                     <input
                       type="checkbox"
@@ -414,6 +514,16 @@ export default function PostList({ type }: { type: "post" | "page" }) {
                       {post.sticky && " — Sticky"}
                       {post.hasPassword && " — Password protected"}
                     </strong>
+                    {tablePreferences.value.viewMode === "excerpt" && (
+                      <p className="worldact-list-excerpt">
+                        {new DOMParser()
+                          .parseFromString(
+                            post.excerpt || post.content,
+                            "text/html",
+                          )
+                          .body.textContent?.slice(0, 240) || "No excerpt."}
+                      </p>
+                    )}
                     <div className="row-actions">
                       {post.status === "trash" ? (
                         <>
@@ -438,7 +548,10 @@ export default function PostList({ type }: { type: "post" | "page" }) {
                           <Link to={`${base}/${post.id}`}>Edit</Link> |{" "}
                           <button
                             className="button-link"
-                            onClick={() => setEditing(post)}
+                            onClick={() => {
+                              setEditing(post);
+                              setBulkEditing(false);
+                            }}
                           >
                             Quick Edit
                           </button>{" "}
@@ -462,7 +575,14 @@ export default function PostList({ type }: { type: "post" | "page" }) {
                       )}
                     </div>
                   </td>
-                  <td className="author column-author">{post.authorName}</td>
+                  <td className="author column-author">
+                    <button
+                      className="button-link"
+                      onClick={() => change({ author: String(post.authorId) })}
+                    >
+                      {post.authorName}
+                    </button>
+                  </td>
                   {type === "post" && (
                     <>
                       <td className="categories column-categories">
@@ -502,7 +622,28 @@ export default function PostList({ type }: { type: "post" | "page" }) {
                       </td>
                     </>
                   )}
-                  <td className="comments column-comments">—</td>
+                  <td className="comments column-comments">
+                    <Link
+                      className="post-com-count post-com-count-approved"
+                      to={`/admin/comments?postId=${post.id}`}
+                      aria-label={`${post.commentCount ?? 0} comments on ${post.title}`}
+                    >
+                      <span className="comment-count-approved">
+                        {post.commentCount ?? 0}
+                      </span>
+                    </Link>
+                    {!!post.pendingCommentCount && (
+                      <Link
+                        className="post-com-count post-com-count-pending"
+                        to={`/admin/comments?postId=${post.id}&status=pending`}
+                        aria-label={`${post.pendingCommentCount} pending comments on ${post.title}`}
+                      >
+                        <span className="comment-count-pending">
+                          {post.pendingCommentCount}
+                        </span>
+                      </Link>
+                    )}
+                  </td>
                   <td className="date column-date">
                     {post.status === "publish"
                       ? "Published"
@@ -521,11 +662,16 @@ export default function PostList({ type }: { type: "post" | "page" }) {
                 </tr>
                 {editing?.id === post.id && (
                   <tr className="inline-edit-row">
-                    <td colSpan={type === "post" ? 7 : 5}>
+                    <td colSpan={visibleColumnCount}>
                       <QuickEdit
                         post={editing}
                         canPublish={canPublish}
                         terms={terms.data?.terms || []}
+                        authors={authors.data?.authors || []}
+                        canSticky={
+                          user?.role === "administrator" ||
+                          user?.role === "editor"
+                        }
                         cancel={() => setEditing(null)}
                         onSave={async (patch) => {
                           await api(
@@ -544,7 +690,7 @@ export default function PostList({ type }: { type: "post" | "page" }) {
             ))}
             {!resource.loading && !posts.length && (
               <tr className="no-items">
-                <td colSpan={type === "post" ? 7 : 5}>
+                <td colSpan={visibleColumnCount}>
                   No {label.toLowerCase()} found.
                 </td>
               </tr>
@@ -561,14 +707,18 @@ function QuickEdit({
   post,
   terms,
   canPublish,
+  canSticky,
+  authors,
   cancel,
   onSave,
 }: {
   post: Post;
   terms: Term[];
   canPublish: boolean;
+  canSticky: boolean;
+  authors: Author[];
   cancel: () => void;
-  onSave: (patch: Partial<Post>) => Promise<void>;
+  onSave: (patch: PostChanges) => Promise<void>;
 }) {
   const [title, setTitle] = useState(post.title),
     [slug, setSlug] = useState(post.slug),
@@ -576,6 +726,13 @@ function QuickEdit({
     [categories, setCategories] = useState(post.categoryIds || []),
     [sticky, setSticky] = useState(post.sticky),
     [commentStatus, setCommentStatus] = useState(post.commentStatus),
+    [pingStatus, setPingStatus] = useState(
+      (post as Post & { pingStatus?: "open" | "closed" }).pingStatus ||
+        "closed",
+    ),
+    [authorId, setAuthorId] = useState(post.authorId),
+    [format, setFormat] = useState<PostFormat>(post.format || "standard"),
+    [templateSlug, setTemplateSlug] = useState(post.templateSlug || ""),
     [error, setError] = useState(""),
     [busy, setBusy] = useState(false);
   async function submit(e: FormEvent) {
@@ -589,8 +746,12 @@ function QuickEdit({
         status,
         scheduledAt: status === "future" ? post.scheduledAt : null,
         categoryIds: categories,
-        sticky,
+        ...(canSticky ? { sticky } : {}),
         commentStatus,
+        pingStatus,
+        authorId,
+        templateSlug,
+        ...(post.type === "post" ? { format } : {}),
       });
     } catch (e) {
       setError(errorText(e));
@@ -604,6 +765,40 @@ function QuickEdit({
       {error && <Notice error>{error}</Notice>}
       <div className="quick-edit-fields">
         <fieldset>
+          <label>
+            Author
+            <select
+              value={authorId}
+              disabled={!authors.length}
+              onChange={(event) => setAuthorId(Number(event.target.value))}
+            >
+              {!authors.some((author) => author.id === authorId) && (
+                <option value={authorId}>{post.authorName}</option>
+              )}
+              {authors.map((author) => (
+                <option key={author.id} value={author.id}>
+                  {author.displayName} ({author.username})
+                </option>
+              ))}
+            </select>
+          </label>
+          {post.type === "post" && (
+            <label>
+              Format
+              <select
+                value={format}
+                onChange={(event) =>
+                  setFormat(event.target.value as PostFormat)
+                }
+              >
+                {postFormats.map((value) => (
+                  <option key={value} value={value}>
+                    {value[0].toUpperCase() + value.slice(1)}
+                  </option>
+                ))}
+              </select>
+            </label>
+          )}
           <label>
             Title
             <input value={title} onChange={(e) => setTitle(e.target.value)} />
@@ -635,6 +830,11 @@ function QuickEdit({
           </fieldset>
         )}
         <fieldset>
+          <PostTemplateSelect
+            type={post.type}
+            value={templateSlug}
+            onChange={(value) => setTemplateSlug(value || "")}
+          />
           <label>
             Status
             <select
@@ -645,7 +845,11 @@ function QuickEdit({
                 [
                   "draft",
                   "pending",
-                  ...(canPublish ? ["publish", "private"] : []),
+                  ...(canPublish
+                    ? ["publish", "private"]
+                    : post.status === "private"
+                      ? ["private"]
+                      : []),
                   ...(post.status === "future" ? ["future"] : []),
                 ] as Post["status"][]
               ).map((value) => (
@@ -665,7 +869,17 @@ function QuickEdit({
             />{" "}
             Allow Comments
           </label>
-          {post.type === "post" && canPublish && (
+          <label className="checkbox-label">
+            <input
+              type="checkbox"
+              checked={pingStatus === "open"}
+              onChange={(event) =>
+                setPingStatus(event.target.checked ? "open" : "closed")
+              }
+            />
+            Allow Pings
+          </label>
+          {post.type === "post" && canSticky && (
             <label className="checkbox-label">
               <input
                 type="checkbox"

@@ -1,3 +1,5 @@
+import Users from "./screens/Users";
+import { AdminEmailConfirmation } from "./screens/SiteIdentity";
 import Comments from "./screens/Comments";
 import {
   Register,
@@ -5,11 +7,10 @@ import {
   PrivacyConfirmation,
   PrivacyRequests,
   RegistrationLink,
-  DeleteUserDialog,
 } from "./screens/Accounts";
 import PublicSite, { PermalinkResolver } from "./screens/PublicSite";
 import Dashboard from "./screens/Dashboard";
-import MediaImageEditor from "./components/MediaImageEditor";
+import MediaLibrary from "./screens/Media";
 import {
   Profile,
   SettingsSuite,
@@ -30,15 +31,12 @@ import {
   useResource,
   Notice,
   ResourceState,
-  Panel,
-  Modal,
-  ScreenTabs,
 } from "./components/AdminUI";
 import Taxonomies from "./screens/Taxonomies";
+import BundledPluginNotices from "./components/BundledPluginNotices";
 import {
   useContext,
   useEffect,
-  useRef,
   useState,
   lazy,
   Suspense,
@@ -59,10 +57,8 @@ import {
 import {
   api,
   json,
-  date,
   type User,
   type Post,
-  type Media,
   type Settings,
 } from "./api";
 
@@ -116,6 +112,7 @@ export default function App() {
       "/register",
       "/check-email",
       "/privacy/confirm",
+      "/confirm-admin-email",
     ].includes(location.pathname);
     const admin = location.pathname.startsWith("/admin");
     document.body.className = location.pathname.startsWith("/admin")
@@ -184,6 +181,7 @@ export default function App() {
           <Route path="/register" element={<Register />} />
           <Route path="/check-email" element={<CheckEmail />} />
           <Route path="/privacy/confirm" element={<PrivacyConfirmation />} />
+          <Route path="/confirm-admin-email" element={<AdminEmailConfirmation />} />
           <Route path="/lost-password" element={<LostPassword />} />
           <Route path="/reset-password" element={<ResetPassword />} />
           <Route
@@ -219,14 +217,15 @@ export default function App() {
             <Route path="posts/tags" element={<Taxonomies taxonomy="tag" />} />
             <Route path="pages" element={<PostList type="page" />} />
             <Route path="media" element={<MediaLibrary />} />
+            <Route path="media/:id" element={<MediaLibrary />} />
             <Route path="comments" element={<Comments />} />
             <Route path="users" element={<Users />} />
             <Route path="users/:id" element={<Profile />} />
             <Route path="profile" element={<Profile />} />
             <Route path="settings" element={<SettingsSuite />} />
-            <Route path="appearance" element={<Themes />} />
-            <Route path="appearance/editor" element={<SiteEditor />} />
-            <Route path="appearance/menus" element={<Menus />} />
+            <Route path="appearance" element={user?.role === "administrator" ? <Themes /> : <Navigate to="/admin" replace />} />
+            <Route path="appearance/editor" element={user?.role === "administrator" ? <SiteEditor /> : <Navigate to="/admin" replace />} />
+            <Route path="appearance/menus" element={user?.role === "administrator" ? <Menus /> : <Navigate to="/admin" replace />} />
             <Route path="plugins" element={<Plugins />} />
             <Route path="tools" element={<ToolsRoute />} />
             <Route path="about" element={<About />} />
@@ -637,7 +636,7 @@ function AdminShell() {
                 <span>{settings.data?.settings.siteTitle || "WorldAct"}</span>
               </Link>
             </li>
-            {canPages && (
+            {user?.role !== "subscriber" && (
               <li>
                 <Link
                   className="ab-item"
@@ -720,9 +719,8 @@ function AdminShell() {
                     "/admin/plugins",
                     "/admin/tools",
                   ].includes(item.to)) ||
-                (!canPages && item.to === "/admin/appearance") ||
-                (!canPages &&
-                  ["/admin/pages", "/admin/comments"].includes(item.to)) ||
+                (!administrator && item.to === "/admin/appearance") ||
+                (!canPages && item.to === "/admin/pages") ||
                 (user?.role === "contributor" && item.to === "/admin/media")
               )
                 return null;
@@ -801,6 +799,7 @@ function AdminShell() {
                 {error}
               </Notice>
             )}
+            <BundledPluginNotices />
             <Outlet />
           </div>
         </div>
@@ -809,7 +808,7 @@ function AdminShell() {
         <p id="footer-left">
           Thank you for creating with <Link to="/admin/about">WorldAct</Link>.
         </p>
-        <p id="footer-upgrade">Version 0.3.0</p>
+        <p id="footer-upgrade">Version 0.4.0</p>
       </footer>
     </div>
   );
@@ -823,640 +822,13 @@ function escapeHTML(value: string) {
       ]!,
   );
 }
-function MediaPreview({ item, full = false }: { item: Media; full?: boolean }) {
-  if (item.mimeType.startsWith("image/"))
-    return <img src={item.url} alt={item.alt || item.title} />;
-  if (full && item.mimeType.startsWith("audio/"))
-    return <audio controls preload="metadata" src={item.url} />;
-  if (full && item.mimeType.startsWith("video/"))
-    return <video controls preload="metadata" src={item.url} />;
-  return (
-    <div className={`media-type-preview ${full ? "full" : ""}`}>
-      <Icon
-        name={
-          item.mimeType.startsWith("audio/")
-            ? "media-audio"
-            : item.mimeType.startsWith("video/")
-              ? "media-video"
-              : "media-document"
-        }
-      />
-      {full && (
-        <a href={item.url} target="_blank" rel="noreferrer">
-          Open {item.filename}
-        </a>
-      )}
-    </div>
-  );
-}
-function MediaLibrary() {
-  const resource = useResource<{ media: Media[] }>("/media");
-  const [uploader, setUploader] = useState(false),
-    [selected, setSelected] = useState<Media | null>(null),
-    [query, setQuery] = useState(""),
-    [error, setError] = useState(""),
-    [notice, setNotice] = useState(""),
-    [busy, setBusy] = useState(false),
-    [grid, setGrid] = useState(true),
-    [filter, setFilter] = useState("all");
-  const fileInput = useRef<HTMLInputElement>(null);
-  async function upload(files: FileList | File[] | null) {
-    if (!files?.length) return;
-    setBusy(true);
-    setError("");
-    try {
-      for (const file of Array.from(files)) {
-        const body = new FormData();
-        body.append("file", file);
-        await api("/media", { method: "POST", body });
-      }
-      setNotice("Media uploaded.");
-      await resource.reload();
-    } catch (e) {
-      setError(errorText(e));
-    } finally {
-      setBusy(false);
-      if (fileInput.current) fileInput.current.value = "";
-    }
-  }
-  async function save(event: FormEvent) {
-    event.preventDefault();
-    if (!selected) return;
-    setBusy(true);
-    setError("");
-    try {
-      await api(
-        `/media/${selected.id}`,
-        json("PUT", {
-          title: selected.title,
-          alt: selected.alt,
-          caption: selected.caption,
-        }),
-      );
-      setNotice("Attachment details saved.");
-      setSelected(null);
-      await resource.reload();
-    } catch (e) {
-      setError(errorText(e));
-    } finally {
-      setBusy(false);
-    }
-  }
-  async function remove() {
-    if (
-      !selected ||
-      !window.confirm(
-        "You are about to permanently delete this item. Continue?",
-      )
-    )
-      return;
-    setBusy(true);
-    setError("");
-    try {
-      await api(`/media/${selected.id}`, json("DELETE"));
-      setSelected(null);
-      setNotice("Media permanently deleted.");
-      await resource.reload();
-    } catch (e) {
-      setError(errorText(e));
-    } finally {
-      setBusy(false);
-    }
-  }
-  const items = (resource.data?.media || []).filter(
-    (item) =>
-      (item.title + item.filename)
-        .toLowerCase()
-        .includes(query.toLowerCase()) &&
-      (filter === "all" ||
-        (filter === "document"
-          ? !/^(image|audio|video)\//.test(item.mimeType)
-          : item.mimeType.startsWith(filter))),
-  );
-  return (
-    <>
-      <ScreenTabs />
-      <main className="wrap">
-        <h1 className="wp-heading-inline">Media Library</h1>{" "}
-        <button
-          className="page-title-action"
-          onClick={() => setUploader(!uploader)}
-        >
-          Add New Media File
-        </button>
-        <hr className="wp-header-end" />
-        {error && (
-          <Notice error onDismiss={() => setError("")}>
-            {error}
-          </Notice>
-        )}
-        {notice && <Notice onDismiss={() => setNotice("")}>{notice}</Notice>}
-        <input
-          ref={fileInput}
-          type="file"
-          multiple
-          accept="image/png,image/jpeg,image/webp,image/gif,audio/mpeg,audio/wav,audio/ogg,video/mp4,video/webm,application/pdf,text/plain,text/csv,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-          hidden
-          onChange={(e) => upload(e.target.files)}
-        />
-        {uploader && (
-          <div
-            className="upload-ui"
-            onDragOver={(e) => e.preventDefault()}
-            onDrop={(e) => {
-              e.preventDefault();
-              void upload(e.dataTransfer.files);
-            }}
-          >
-            <h2>Drop files to upload</h2>
-            <p>or</p>
-            <button
-              className="button button-large"
-              onClick={() => fileInput.current?.click()}
-              disabled={busy}
-            >
-              {busy ? "Uploading…" : "Select Files"}
-            </button>
-            <p>
-              Upload images, audio, video, PDFs, and documents. The server
-              checks file type and upload size.
-            </p>
-          </div>
-        )}
-        <div className="media-toolbar">
-          <div className="view-switch">
-            <button
-              className={!grid ? "current" : ""}
-              aria-label="List view"
-              onClick={() => setGrid(false)}
-            >
-              <Icon name="list-view" />
-            </button>
-            <button
-              className={grid ? "current" : ""}
-              aria-label="Grid view"
-              onClick={() => setGrid(true)}
-            >
-              <Icon name="grid-view" />
-            </button>
-          </div>
-          <label className="screen-reader-text" htmlFor="media-filter">
-            Filter media
-          </label>
-          <select
-            id="media-filter"
-            value={filter}
-            onChange={(e) => setFilter(e.target.value)}
-          >
-            <option value="all">All media items</option>
-            <option value="image/">Images</option>
-            <option value="audio/">Audio</option>
-            <option value="video/">Video</option>
-            <option value="document">Documents</option>
-          </select>
-          <input
-            type="search"
-            placeholder="Search media"
-            aria-label="Search media"
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-          />
-        </div>
-        <ResourceState
-          loading={resource.loading}
-          error={resource.error}
-          retry={resource.reload}
-        />
-        {!resource.loading && !items.length && (
-          <div className="media-empty">
-            <p>No media items found.</p>
-            <button
-              className="button button-primary"
-              onClick={() => {
-                setUploader(true);
-                fileInput.current?.click();
-              }}
-            >
-              Upload a file
-            </button>
-          </div>
-        )}
-        {grid ? (
-          <div className="media-grid">
-            {items.map((item) => (
-              <button
-                className="media-item"
-                key={item.id}
-                onClick={() => setSelected({ ...item })}
-              >
-                <MediaPreview item={item} />
-                <span>{item.title}</span>
-              </button>
-            ))}
-          </div>
-        ) : (
-          <table className="wp-list-table widefat striped">
-            <thead>
-              <tr>
-                <th>File</th>
-                <th>File type</th>
-                <th>Uploaded on</th>
-              </tr>
-            </thead>
-            <tbody>
-              {items.map((item) => (
-                <tr key={item.id}>
-                  <td>
-                    <button
-                      className="media-file-button button-link"
-                      onClick={() => setSelected({ ...item })}
-                    >
-                      <MediaPreview item={item} />
-                      <strong>{item.title}</strong>
-                      <small>{item.filename}</small>
-                    </button>
-                  </td>
-                  <td>{item.mimeType}</td>
-                  <td>{date(item.createdAt)}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        )}
-        {selected && (
-          <Modal title="Attachment details" close={() => setSelected(null)}>
-            <form onSubmit={save} className="attachment-details-layout">
-              <div className="attachment-preview">
-                <MediaPreview item={selected} full />
-                <MediaImageEditor
-                  media={selected}
-                  onUpdate={(item) => {
-                    setSelected(item);
-                    void resource.reload();
-                  }}
-                />
-              </div>
-              <div className="attachment-fields">
-                <p>
-                  <strong>{selected.filename}</strong>
-                  <br />
-                  {date(selected.createdAt)}
-                  <br />
-                  {selected.mimeType} · {Math.ceil(selected.size / 1024)} KB
-                </p>
-                <hr />
-                {selected.mimeType.startsWith("image/") && (
-                  <>
-                    <label>
-                      Alternative Text
-                      <textarea
-                        rows={2}
-                        value={selected.alt}
-                        onChange={(e) =>
-                          setSelected({ ...selected, alt: e.target.value })
-                        }
-                      />
-                    </label>
-                    <p className="description">
-                      Describe the purpose of the image for people who cannot
-                      see it.
-                    </p>
-                  </>
-                )}
-                <label>
-                  Title
-                  <input
-                    type="text"
-                    value={selected.title}
-                    onChange={(e) =>
-                      setSelected({ ...selected, title: e.target.value })
-                    }
-                  />
-                </label>
-                <label>
-                  Caption
-                  <textarea
-                    rows={3}
-                    value={selected.caption}
-                    onChange={(e) =>
-                      setSelected({ ...selected, caption: e.target.value })
-                    }
-                  />
-                </label>
-                <label>
-                  File URL
-                  <input type="text" readOnly value={selected.url} />
-                </label>
-                <p className="attachment-actions">
-                  <button className="button button-primary" disabled={busy}>
-                    Save changes
-                  </button>
-                  <button
-                    className="button-link button-link-delete"
-                    type="button"
-                    onClick={remove}
-                    disabled={busy}
-                  >
-                    Delete permanently
-                  </button>
-                </p>
-                {error && <Notice error>{error}</Notice>}
-              </div>
-            </form>
-          </Modal>
-        )}
-      </main>
-    </>
-  );
-}
-function Users() {
-  const [userParams] = useSearchParams();
-  const resource = useResource<{ users: User[] }>("/users"),
-    { user } = useContext(Session);
-  const [removingUser, setRemovingUser] = useState<User | null>(null);
-  const [adding, setAdding] = useState(userParams.get("new") === "1"),
-    [query, setQuery] = useState(""),
-    [roleFilter, setRoleFilter] = useState("all"),
-    [form, setForm] = useState({
-      username: "",
-      email: "",
-      displayName: "",
-      password: "",
-      role: "subscriber",
-    }),
-    [error, setError] = useState(""),
-    [notice, setNotice] = useState(""),
-    [busy, setBusy] = useState(false),
-    [visible, setVisible] = useState(false);
-  async function add(event: FormEvent) {
-    event.preventDefault();
-    setError("");
-    setBusy(true);
-    try {
-      await api("/users", json("POST", form));
-      setForm({
-        username: "",
-        email: "",
-        displayName: "",
-        password: "",
-        role: "subscriber",
-      });
-      setAdding(false);
-      setNotice("New user created.");
-      await resource.reload();
-    } catch (e) {
-      setError(errorText(e));
-    } finally {
-      setBusy(false);
-    }
-  }
-  function remove(item: User) {
-    setRemovingUser(item);
-  }
-  const users = (resource.data?.users || []).filter(
-    (item) =>
-      (roleFilter === "all" || item.role === roleFilter) &&
-      `${item.username} ${item.displayName} ${item.email}`
-        .toLowerCase()
-        .includes(query.toLowerCase()),
-  );
-  return (
-    <>
-      <ScreenTabs />
-      <main className="wrap">
-        <h1 className="wp-heading-inline">
-          {adding ? "Add New User" : "Users"}
-        </h1>{" "}
-        <button
-          className="page-title-action"
-          onClick={() => setAdding(!adding)}
-        >
-          {adding ? "Back to Users" : "Add New User"}
-        </button>
-        <hr className="wp-header-end" />
-        {error && <Notice error>{error}</Notice>}
-        {notice && <Notice onDismiss={() => setNotice("")}>{notice}</Notice>}
-        <ResourceState
-          loading={resource.loading}
-          error={resource.error}
-          retry={resource.reload}
-        />
-        {adding ? (
-          <form className="validate" onSubmit={add}>
-            <p>Create a brand new user and add them to this site.</p>
-            <table className="form-table">
-              <tbody>
-                {[
-                  { key: "username", label: "Username", type: "text" },
-                  { key: "email", label: "Email", type: "email" },
-                  { key: "displayName", label: "Display Name", type: "text" },
-                ].map((field) => (
-                  <tr key={field.key}>
-                    <th>
-                      <label htmlFor={`new-${field.key}`}>
-                        {field.label}{" "}
-                        <span className="description">(required)</span>
-                      </label>
-                    </th>
-                    <td>
-                      <input
-                        className="regular-text"
-                        id={`new-${field.key}`}
-                        type={field.type}
-                        value={form[field.key as keyof typeof form]}
-                        onChange={(e) =>
-                          setForm({ ...form, [field.key]: e.target.value })
-                        }
-                        required
-                        autoComplete="off"
-                      />
-                    </td>
-                  </tr>
-                ))}
-                <tr>
-                  <th>
-                    <label htmlFor="new-password">
-                      Password <span className="description">(required)</span>
-                    </label>
-                  </th>
-                  <td>
-                    <input
-                      className="regular-text"
-                      id="new-password"
-                      type={visible ? "text" : "password"}
-                      minLength={12}
-                      value={form.password}
-                      onChange={(e) =>
-                        setForm({ ...form, password: e.target.value })
-                      }
-                      required
-                      autoComplete="new-password"
-                    />{" "}
-                    <button
-                      type="button"
-                      className="button"
-                      onClick={() => setVisible(!visible)}
-                    >
-                      {visible ? "Hide" : "Show"}
-                    </button>
-                    <p className="description">Use at least 12 characters.</p>
-                  </td>
-                </tr>
-                <tr>
-                  <th>
-                    <label htmlFor="new-role">Role</label>
-                  </th>
-                  <td>
-                    <select
-                      id="new-role"
-                      value={form.role}
-                      onChange={(e) =>
-                        setForm({ ...form, role: e.target.value })
-                      }
-                    >
-                      {[
-                        "subscriber",
-                        "contributor",
-                        "author",
-                        "editor",
-                        "administrator",
-                      ].map((role) => (
-                        <option key={role} value={role}>
-                          {role[0].toUpperCase() + role.slice(1)}
-                        </option>
-                      ))}
-                    </select>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-            <p className="submit">
-              <button className="button button-primary" disabled={busy}>
-                {busy ? "Creating…" : "Add New User"}
-              </button>
-            </p>
-          </form>
-        ) : (
-          <>
-            <ul className="subsubsub">
-              {[
-                "all",
-                "administrator",
-                "editor",
-                "author",
-                "contributor",
-                "subscriber",
-              ].map((role, i) => (
-                <li key={role}>
-                  {i > 0 && " | "}
-                  <button
-                    className={`button-link ${roleFilter === role ? "current" : ""}`}
-                    onClick={() => setRoleFilter(role)}
-                  >
-                    {role === "all"
-                      ? "All"
-                      : role[0].toUpperCase() + role.slice(1)}{" "}
-                    <span className="count">
-                      (
-                      {
-                        (resource.data?.users || []).filter(
-                          (item) => role === "all" || item.role === role,
-                        ).length
-                      }
-                      )
-                    </span>
-                  </button>
-                </li>
-              ))}
-            </ul>
-            <div className="search-box">
-              <input
-                type="search"
-                aria-label="Search users"
-                placeholder="Search users"
-                value={query}
-                onChange={(e) => setQuery(e.target.value)}
-              />
-            </div>
-            <div className="tablenav top">
-              <div className="tablenav-pages">{users.length} items</div>
-            </div>
-            <table className="wp-list-table widefat fixed striped users">
-              <thead>
-                <tr>
-                  <th>Username</th>
-                  <th>Name</th>
-                  <th>Email</th>
-                  <th>Role</th>
-                </tr>
-              </thead>
-              <tbody>
-                {users.map((item) => (
-                  <tr key={item.id}>
-                    <td className="username column-username">
-                      <span className="user-avatar">
-                        <Icon name="admin-users" />
-                      </span>
-                      <strong>
-                        <Link to={`/admin/users/${item.id}`}>
-                          {item.username}
-                        </Link>
-                      </strong>
-                      {item.id === user?.id && " (you)"}
-                      <div className="row-actions">
-                        <Link to={`/admin/users/${item.id}`}>Edit</Link>
-                        {" | "}
-                        {item.id !== user?.id && (
-                          <button
-                            className="button-link button-link-delete"
-                            disabled={busy}
-                            onClick={() => remove(item)}
-                          >
-                            Delete
-                          </button>
-                        )}
-                      </div>
-                    </td>
-                    <td>{item.displayName}</td>
-                    <td>
-                      <a href={`mailto:${item.email}`}>{item.email}</a>
-                    </td>
-                    <td className="capitalize">{item.role}</td>
-                  </tr>
-                ))}
-                {!users.length && (
-                  <tr>
-                    <td colSpan={4}>No users found.</td>
-                  </tr>
-                )}
-              </tbody>
-            </table>
-          </>
-        )}
-        {removingUser && (
-          <DeleteUserDialog
-            target={removingUser}
-            users={resource.data?.users || []}
-            currentUserId={user!.id}
-            onClose={() => setRemovingUser(null)}
-            onDeleted={async () => {
-              setRemovingUser(null);
-              setNotice("User deleted.");
-              await resource.reload();
-            }}
-          />
-        )}
-      </main>
-    </>
-  );
-}
 function About() {
   return (
     <main className="wrap about-page">
       <div className="about-header">
         <Brand />
         <div>
-          <h1>WorldAct 0.3</h1>
+          <h1>WorldAct 0.4</h1>
           <p>Your words. Your site. Your world.</p>
         </div>
       </div>

@@ -1,0 +1,102 @@
+.worldact-users .search-box {
+  display: flex;
+  gap: 4px;
+}
+.worldact-users .search-box input {
+  min-width: 0;
+}
+.worldact-users .tablenav .actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+.worldact-users-pagination {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.worldact-users .column-username {
+  width: 24%;
+}
+.worldact-users .column-name {
+  width: 20%;
+}
+.worldact-users .column-email {
+  width: 26%;
+}
+.worldact-users .column-role {
+  width: 17%;
+}
+.worldact-users .column-posts {
+  width: 8%;
+}
+.worldact-users .users td {
+  overflow-wrap: anywhere;
+}
+.worldact-new-user-password {
+  display: flex;
+  gap: 5px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+.worldact-new-user-password .regular-text {
+  max-width: 100%;
+}
+@media (max-width: 782px) {
+  .worldact-users .search-box {
+    float: none;
+    clear: both;
+    padding-top: 12px;
+  }
+  .worldact-users .tablenav {
+    height: auto;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+  .worldact-users .tablenav .actions {
+    padding-right: 0;
+  }
+  .worldact-users .tablenav-pages {
+    margin-left: auto;
+  }
+  .worldact-users .users thead {
+    display: none;
+  }
+  .worldact-users table.users,
+  .worldact-users table.users tbody,
+  .worldact-users table.users tbody tr {
+    display: block;
+    width: auto;
+  }
+  .worldact-users table.users tbody tr {
+    position: relative;
+    padding: 10px 12px 10px 52px;
+    border-bottom: 1px solid #dcdcde;
+  }
+  .worldact-users table.users tbody td {
+    display: block !important;
+    width: auto !important;
+    padding: 5px 0 !important;
+    border: 0;
+  }
+  .worldact-users table.users tbody th.check-column {
+    position: absolute;
+    left: 12px;
+    top: 14px;
+    width: 26px;
+    padding: 0;
+  }
+  .worldact-users table.users tbody td[data-colname]:before {
+    position: static !important;
+    display: inline !important;
+    width: auto !important;
+    content: attr(data-colname) ": " !important;
+    font-weight: 600;
+    margin-right: 5px;
+  }
+  .worldact-users table.users tbody td:not([data-colname]):before {
+    content: none !important;
+  }
+}

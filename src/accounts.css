@@ -139,10 +139,15 @@
   border: 0;
   padding: 0;
   margin: 16px 0;
+  min-width: 0;
 }
 .delete-user-form select {
-  margin: 4px 0 8px 25px;
-  max-width: calc(100% - 25px);
+  display: block;
+  box-sizing: border-box;
+  margin: 4px 0 8px;
+  min-width: 0;
+  width: 100%;
+  max-width: 100%;
 }
 .delete-user-form .delete-user-warning {
   margin-left: 25px;

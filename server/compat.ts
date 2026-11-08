@@ -8,9 +8,11 @@ import { randomBytes } from "node:crypto";
 import { renderPublicContent } from "./block-renderer.js";
 import { restLocalDate, restDateToUTC } from "./date.js";
 import { remapImportedBlockReferences } from "./block-portability.js";
+import { allocateImportedBlockEntities } from "./site-portability.js";
 import {
   pool,
   getPost,
+  getComment,
   getSettings,
   postFields,
   mediaFields,
@@ -37,6 +39,8 @@ import {
   withPermalink,
 } from "./permalinks.js";
 import { z } from "zod";
+import { postFormats } from "../shared/post-formats.js";
+import { assertCommentAccess, canEditPostComments } from "./comment-access.js";
 const router = express.Router();
 const admin = requireRole("administrator");
 const esc = (value: unknown) =>
@@ -78,7 +82,7 @@ router.use("/wp-json", (req, res, next) => {
   if (!["GET", "HEAD", "OPTIONS"].includes(req.method)) {
     const expected = new URL(process.env.APP_ORIGIN || "http://127.0.0.1:5173")
       .origin;
-    if (req.headers.origin !== expected)
+    if (req.headers.origin !== expected && !(!req.headers.origin && (req as AuthRequest).authenticationMethod === "application-password"))
       return res.status(403).json({
         code: "rest_cookie_invalid_origin",
         message: "This request must come from the configured site origin.",
@@ -100,6 +104,7 @@ async function forward(
     Origin: new URL(process.env.APP_ORIGIN || "http://127.0.0.1:5173").origin,
   };
   if (req.headers.cookie) headers.Cookie = req.headers.cookie;
+  if (req.headers.authorization) headers.Authorization = req.headers.authorization;
   if (multipart)
     headers["Content-Type"] = String(
       req.headers["content-type"] || "application/octet-stream",
@@ -365,9 +370,9 @@ async function wpPost(post: any, req: AuthRequest, edit = false) {
     parent: post.parentId || 0,
     menu_order: post.menuOrder || 0,
     comment_status: post.commentStatus,
-    ping_status: "closed",
+    ping_status: post.pingStatus || "closed",
     sticky: post.sticky,
-    template: "",
+    template: post.templateSlug || "",
     format: post.format || "standard",
     meta: {},
     categories:
@@ -560,10 +565,10 @@ for (const collection of ["posts", "pages"] as const) {
     }
     if (req.query.format !== undefined) {
       const formats = z.union([
-        z.string().max(200), z.array(z.string().max(20)).max(8),
+        z.string().max(200), z.array(z.string().max(20)).max(postFormats.length),
       ]).parse(req.query.format);
       const names = (Array.isArray(formats) ? formats : formats.split(","))
-        .map((format) => z.enum(["standard", "aside", "image", "video", "quote", "link", "gallery", "audio"]).parse(format));
+        .map((format) => z.enum(postFormats).parse(format));
       args.push(names);
       where += ` AND p.format=ANY($${args.length}::text[])`;
     }
@@ -660,32 +665,17 @@ for (const collection of ["posts", "pages"] as const) {
         menu_order: z.number().int().optional(),
         featured_media: z.number().int().min(0).optional(),
         comment_status: z.enum(["open", "closed"]).optional(),
+        ping_status: z.enum(["open", "closed"]).optional(),
         sticky: z.boolean().optional(),
         categories: z.array(z.number().int().positive()).optional(),
         tags: z.array(z.number().int().positive()).optional(),
         author: z.number().int().positive().optional(),
         meta: z.record(z.string(), z.unknown()).optional(),
         template: z.string().optional(),
-        format: z
-          .enum([
-            "standard",
-            "aside",
-            "image",
-            "video",
-            "quote",
-            "link",
-            "gallery",
-            "audio",
-          ])
-          .optional(),
+        format: z.enum(postFormats).optional(),
       })
       .strict()
       .parse(req.body);
-    if (data.author !== undefined && data.author !== user.id)
-      throw new HttpError(
-        400,
-        "Author reassignment is not supported by this compatibility endpoint.",
-      );
     const body: Record<string, unknown> = {};
     if (!req.params.id) body.type = type;
     for (const field of ["title", "content", "excerpt"] as const)
@@ -707,6 +697,9 @@ for (const collection of ["posts", "pages"] as const) {
       ["menu_order", "menuOrder"],
       ["featured_media", "featuredMediaId"],
       ["comment_status", "commentStatus"],
+      ["ping_status", "pingStatus"],
+      ["author", "authorId"],
+      ["template", "templateSlug"],
       ["categories", "categoryIds"],
       ["tags", "tagIds"],
     ] as const)
@@ -773,7 +766,7 @@ async function wpMedia(item: any) {
     link: url,
     title: { rendered: esc(item.title) },
     author: item.authorId || item.author_id,
-    description: { rendered: item.caption || "" },
+    description: { rendered: item.description || "" },
     caption: { rendered: item.caption || "" },
     alt_text: item.alt,
     media_type: String(item.mimeType || item.mime_type).startsWith("image/")
@@ -784,9 +777,10 @@ async function wpMedia(item: any) {
       width: item.width,
       height: item.height,
       file: item.filename,
-      sizes: {},
+      sizes: item.sizes || {},
     },
-    post: 0,
+    post: item.attachedPostId || item.attached_post_id || 0,
+    comment_status:item.commentStatus || item.comment_status || "closed",
     source_url: url,
   };
 }
@@ -796,7 +790,7 @@ router.get("/wp-json/wp/v2/media", async (req, res) => {
   const { perPage, offset } = pagination(req, res, total);
   const rows = (
     await pool.query(
-      `SELECT ${mediaFields},author_id AS "authorId",width,height FROM media ORDER BY created_at DESC,id DESC LIMIT $1 OFFSET $2`,
+      `SELECT ${mediaFields},author_id AS "authorId",width,height,sizes,description,attached_post_id,comment_status FROM media ORDER BY created_at DESC,id DESC LIMIT $1 OFFSET $2`,
       [perPage, offset],
     )
   ).rows;
@@ -805,7 +799,7 @@ router.get("/wp-json/wp/v2/media", async (req, res) => {
 router.get("/wp-json/wp/v2/media/:id", async (req, res) => {
   const item = (
     await pool.query(
-      `SELECT ${mediaFields},author_id AS "authorId",width,height FROM media WHERE id=$1`,
+      `SELECT ${mediaFields},author_id AS "authorId",width,height,sizes,description,attached_post_id,comment_status FROM media WHERE id=$1`,
       [parseId(req.params.id)],
     )
   ).rows[0];
@@ -823,6 +817,9 @@ router.post("/wp-json/wp/v2/media/:id", async (req: AuthRequest, res) => {
     .object({
       title: z.string().optional(),
       caption: z.string().optional(),
+      description:z.string().optional(),
+      post:z.number().int().min(0).optional(),
+      comment_status:z.enum(["open","closed"]).optional(),
       alt_text: z.string().optional(),
     })
     .strict()
@@ -831,6 +828,9 @@ router.post("/wp-json/wp/v2/media/:id", async (req: AuthRequest, res) => {
     ...(input.title === undefined ? {} : { title: input.title }),
     ...(input.caption === undefined ? {} : { caption: input.caption }),
     ...(input.alt_text === undefined ? {} : { alt: input.alt_text }),
+    ...(input.description === undefined ? {} : {description:input.description}),
+    ...(input.post === undefined ? {} : {attachedPostId:input.post || null}),
+    ...(input.comment_status === undefined ? {} : {commentStatus:input.comment_status}),
   });
   res.json(await wpMedia(result.data.media));
 });
@@ -1074,19 +1074,20 @@ router.get("/wp-json/wp/v2/comments", async (req: AuthRequest, res) => {
   );
 });
 router.get("/wp-json/wp/v2/comments/:id", async (req: AuthRequest, res) => {
-  const edit = req.query.context === "edit",
-    moderator = req.user && ["administrator", "editor"].includes(req.user.role);
-  if (edit && !moderator)
+  const edit = req.query.context === "edit";
+  if (edit && (!req.user || !["administrator", "editor"].includes(req.user.role)))
     throw new HttpError(req.user ? 403 : 401, "You cannot moderate comments.");
   const row = (
     await pool.query(
-      `SELECT c.id,c.post_id AS "postId",c.parent_id AS "parentId",c.author_name AS "authorName",c.author_email AS "authorEmail",c.author_url AS "authorUrl",c.user_id AS "userId",c.content,c.status,c.created_at AS "createdAt",p.status AS "postStatus",p.password_hash AS protected FROM comments c JOIN posts p ON p.id=c.post_id WHERE c.id=$1`,
+      `SELECT c.id,c.post_id AS "postId",c.parent_id AS "parentId",c.author_name AS "authorName",c.author_email AS "authorEmail",c.author_url AS "authorUrl",c.user_id AS "userId",c.content,c.status,c.created_at AS "createdAt",p.author_id AS "postAuthorId",p.type AS "postType",p.status AS "postStatus",p.pre_trash_status AS "postPreTrashStatus",p.password_hash AS protected FROM comments c JOIN posts p ON p.id=c.post_id WHERE c.id=$1`,
       [parseId(req.params.id)],
     )
   ).rows[0];
+  const canEdit=row && req.user && canEditPostComments(req.user,{authorId:row.postAuthorId,type:row.postType,status:row.postStatus,preTrashStatus:row.postPreTrashStatus});
+  if(row && edit && !canEdit)throw new HttpError(403,"You cannot edit comments on this post.");
   if (
     !row ||
-    (!moderator &&
+    (!canEdit &&
       (row.status !== "approved" ||
         row.postStatus !== "publish" ||
         row.protected))
@@ -1095,6 +1096,7 @@ router.get("/wp-json/wp/v2/comments/:id", async (req: AuthRequest, res) => {
   res.json(wpFields(req, await wpComment(row, edit)));
 });
 router.post("/wp-json/wp/v2/comments", async (req: AuthRequest, res) => {
+  needUser(req);
   const input = z
     .object({
       post: z.number().int().positive(),
@@ -1173,9 +1175,23 @@ router.post("/wp-json/wp/v2/comments/:id", updateWPComment);
 router.put("/wp-json/wp/v2/comments/:id", updateWPComment);
 router.patch("/wp-json/wp/v2/comments/:id", updateWPComment);
 router.delete("/wp-json/wp/v2/comments/:id", async (req: AuthRequest, res) => {
-  needUser(req);
-  await forward(req, "/comments/" + parseId(req.params.id), "DELETE");
-  res.json({ deleted: true });
+  const user=needUser(req),id=parseId(req.params.id);
+  const parent=(await pool.query('SELECT p.author_id AS "authorId",p.type,p.status,p.pre_trash_status AS "preTrashStatus" FROM posts p JOIN comments c ON c.post_id=p.id WHERE c.id=$1',[id])).rows[0];
+  if(!parent)throw new HttpError(404,"Comment not found.");
+  assertCommentAccess(user,parent);
+  const comment=await getComment(id);
+  if(!comment)throw new HttpError(404,"Comment not found.");
+  const value=z.union([z.boolean(),z.enum(["true","false","1","0"])]).optional().parse(req.query.force ?? req.body?.force);
+  const force=value===true || value==="true" || value==="1";
+  if(force){
+    const previous=await wpComment(comment,true);
+    await forward(req,"/comments/"+id,"DELETE");
+    res.json({deleted:true,previous});
+  }else{
+    if(comment.status==="trash")throw new HttpError(410,"The comment has already been trashed.");
+    const result=await forward(req,"/comments/"+id,"PUT",{status:"trash",version:comment.version});
+    res.json(await wpComment(result.data.comment,true));
+  }
 });
 router.get("/wp-json/wp/v2/search", async (req, res) => {
   const search = z.string().max(200).default("").parse(req.query.search),
@@ -1369,7 +1385,7 @@ router.get("/api/tools/export", admin, async (req, res, next) => {
     return;
   }
   const s = await getSettings();
-  const [posts, terms, comments, media] = await Promise.all([
+  const [posts, terms, comments, media, entities] = await Promise.all([
     pool.query(
       `SELECT ${postFields},p.raw_content AS "rawContent",u.username,u.email AS "authorEmail" FROM posts p JOIN users u ON u.id=p.author_id ORDER BY p.id`,
     ),
@@ -1378,8 +1394,14 @@ router.get("/api/tools/export", admin, async (req, res, next) => {
     pool.query(
       "SELECT m.*,u.username FROM media m JOIN users u ON u.id=m.author_id ORDER BY m.id",
     ),
+    pool.query('SELECT b.*,u.username,u.email AS "authorEmail",u.display_name AS "authorName",u.id AS "authorId" FROM block_entities b JOIN users u ON u.id=b.author_id ORDER BY b.id'),
   ]);
-  const authors = [...new Map(posts.rows.map((p) => [p.authorId, p])).values()]
+  // WXR uses one post ID space for pages, posts, synced patterns and navigation.
+  const usedIds=new Set<number>(posts.rows.map(p=>p.id)), entityIds=new Map<number,{id:number;kind:"reusable"|"navigation"}>();
+  let nextId=1;
+  for(const entity of entities.rows){while(usedIds.has(nextId))nextId++;usedIds.add(nextId);entityIds.set(entity.id,{id:nextId++,kind:entity.kind});}
+  const exportedContent=(record:any)=>remapImportedBlockReferences(record.rawContent || record.raw_content || record.content,[],entityIds).rawContent;
+  const authors = [...new Map([...posts.rows,...entities.rows].map((p) => [p.authorId, p])).values()]
     .map(
       (p) =>
         `<wp:author><wp:author_id>${p.authorId}</wp:author_id><wp:author_login>${cdata(p.username)}</wp:author_login><wp:author_email>${cdata(p.authorEmail)}</wp:author_email><wp:author_display_name>${cdata(p.authorName)}</wp:author_display_name><wp:author_first_name/><wp:author_last_name/></wp:author>`,
@@ -1395,7 +1417,7 @@ router.get("/api/tools/export", admin, async (req, res, next) => {
   const itemXml = await Promise.all(
     posts.rows.map(
       async (p) =>
-        `<item><title>${cdata(p.title)}</title><link>${esc(absolute(await postPermalink(p, s), s.siteUrl))}</link><pubDate>${new Date(p.publishedAt || p.createdAt).toUTCString()}</pubDate><dc:creator>${cdata(p.username)}</dc:creator><guid isPermaLink="false">worldact:${p.id}</guid><description/><content:encoded>${cdata(p.rawContent || p.content)}</content:encoded><excerpt:encoded>${cdata(p.excerpt)}</excerpt:encoded><wp:post_id>${p.id}</wp:post_id><wp:post_date>${wpDate(p.publishedAt || p.scheduledAt || p.createdAt)}</wp:post_date><wp:post_date_gmt>${wpDate(p.publishedAt || p.scheduledAt || p.createdAt)}</wp:post_date_gmt><wp:post_modified>${wpDate(p.updatedAt)}</wp:post_modified><wp:post_modified_gmt>${wpDate(p.updatedAt)}</wp:post_modified_gmt><wp:comment_status>${p.commentStatus}</wp:comment_status><wp:ping_status>closed</wp:ping_status><wp:post_name>${cdata(p.slug)}</wp:post_name><wp:status>${p.hasPassword ? "draft" : p.status}</wp:status><wp:post_parent>${p.parentId || 0}</wp:post_parent><wp:menu_order>${p.menuOrder}</wp:menu_order><wp:post_type>${p.type}</wp:post_type><wp:post_password/><wp:is_sticky>${p.sticky ? 1 : 0}</wp:is_sticky>${p.hasPassword ? "<wp:postmeta><wp:meta_key>_worldact_password_protected</wp:meta_key><wp:meta_value>1</wp:meta_value></wp:postmeta>" : ""}${p.featuredMediaId ? `<wp:postmeta><wp:meta_key>_thumbnail_id</wp:meta_key><wp:meta_value>${p.featuredMediaId + 2147483648}</wp:meta_value></wp:postmeta>` : ""}${p.format && p.format !== "standard" ? `<category domain="post_format" nicename="post-format-${esc(p.format)}">${cdata(p.format)}</category>` : ""}${p.terms.map((t: any) => `<category domain="${t.taxonomy === "tag" ? "post_tag" : "category"}" nicename="${esc(t.slug)}">${cdata(t.name)}</category>`).join("")}${comments.rows
+        `<item><title>${cdata(p.title)}</title><link>${esc(absolute(await postPermalink(p, s), s.siteUrl))}</link><pubDate>${new Date(p.publishedAt || p.createdAt).toUTCString()}</pubDate><dc:creator>${cdata(p.username)}</dc:creator><guid isPermaLink="false">worldact:${p.id}</guid><description/><content:encoded>${cdata(exportedContent(p))}</content:encoded><excerpt:encoded>${cdata(p.excerpt)}</excerpt:encoded><wp:post_id>${p.id}</wp:post_id><wp:post_date>${wpDate(p.publishedAt || p.scheduledAt || p.createdAt)}</wp:post_date><wp:post_date_gmt>${wpDate(p.publishedAt || p.scheduledAt || p.createdAt)}</wp:post_date_gmt><wp:post_modified>${wpDate(p.updatedAt)}</wp:post_modified><wp:post_modified_gmt>${wpDate(p.updatedAt)}</wp:post_modified_gmt><wp:comment_status>${p.commentStatus}</wp:comment_status><wp:ping_status>${p.pingStatus || "closed"}</wp:ping_status><wp:post_name>${cdata(p.slug)}</wp:post_name><wp:status>${p.hasPassword ? "draft" : p.status}</wp:status><wp:post_parent>${p.parentId || 0}</wp:post_parent><wp:menu_order>${p.menuOrder}</wp:menu_order><wp:post_type>${p.type}</wp:post_type><wp:post_password/><wp:is_sticky>${p.sticky ? 1 : 0}</wp:is_sticky>${p.hasPassword ? "<wp:postmeta><wp:meta_key>_worldact_password_protected</wp:meta_key><wp:meta_value>1</wp:meta_value></wp:postmeta>" : ""}${p.templateSlug ? `<wp:postmeta><wp:meta_key>_wp_page_template</wp:meta_key><wp:meta_value>${cdata(p.templateSlug)}</wp:meta_value></wp:postmeta>` : ""}${p.featuredMediaId ? `<wp:postmeta><wp:meta_key>_thumbnail_id</wp:meta_key><wp:meta_value>${p.featuredMediaId + 2147483648}</wp:meta_value></wp:postmeta>` : ""}${p.format && p.format !== "standard" ? `<category domain="post_format" nicename="post-format-${esc(p.format)}">${cdata(p.format)}</category>` : ""}${p.terms.map((t: any) => `<category domain="${t.taxonomy === "tag" ? "post_tag" : "category"}" nicename="${esc(t.slug)}">${cdata(t.name)}</category>`).join("")}${comments.rows
           .filter((c) => c.post_id === p.id)
           .map(
             (c) =>
@@ -1404,13 +1426,14 @@ router.get("/api/tools/export", admin, async (req, res, next) => {
           .join("")}</item>`,
     ),
   );
+  const entityXml=entities.rows.map(entity=>`<item><title>${cdata(entity.title)}</title><dc:creator>${cdata(entity.username)}</dc:creator><content:encoded>${cdata(exportedContent(entity))}</content:encoded><wp:post_id>${entityIds.get(entity.id)!.id}</wp:post_id><wp:post_type>${entity.kind==="reusable"?"wp_block":"wp_navigation"}</wp:post_type><wp:status>${entity.status}</wp:status><wp:post_name>${cdata(entity.slug)}</wp:post_name><wp:post_date_gmt>${wpDate(entity.created_at)}</wp:post_date_gmt><wp:post_modified_gmt>${wpDate(entity.updated_at)}</wp:post_modified_gmt></item>`).join("");
   const mediaXml = media.rows
     .map(
       (m) =>
         `<item><title>${cdata(m.title)}</title><content:encoded>${cdata(m.caption)}</content:encoded><wp:post_id>${m.id + 2147483648}</wp:post_id><wp:post_type>attachment</wp:post_type><wp:status>inherit</wp:status><wp:post_name>${cdata(m.filename)}</wp:post_name><wp:post_parent>0</wp:post_parent><wp:attachment_url>${esc(absolute("/uploads/" + m.filename, s.siteUrl))}</wp:attachment_url></item>`,
     )
     .join("");
-  const xml = `<?xml version="1.0" encoding="UTF-8"?><rss version="2.0" xmlns:excerpt="http://wordpress.org/export/1.2/excerpt/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:wfw="http://wellformedweb.org/CommentAPI/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:wp="http://wordpress.org/export/1.2/"><channel><title>${esc(s.siteTitle)}</title><link>${esc(s.siteUrl)}</link><description>${esc(s.tagline)}</description><pubDate>${new Date().toUTCString()}</pubDate><language>en-US</language><wp:wxr_version>1.2</wp:wxr_version><wp:base_site_url>${esc(s.siteUrl)}</wp:base_site_url><wp:base_blog_url>${esc(s.siteUrl)}</wp:base_blog_url>${authors}${termXml}${itemXml.join("")}${mediaXml}</channel></rss>`;
+  const xml = `<?xml version="1.0" encoding="UTF-8"?><rss version="2.0" xmlns:excerpt="http://wordpress.org/export/1.2/excerpt/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:wfw="http://wellformedweb.org/CommentAPI/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:wp="http://wordpress.org/export/1.2/"><channel><title>${esc(s.siteTitle)}</title><link>${esc(s.siteUrl)}</link><description>${esc(s.tagline)}</description><pubDate>${new Date().toUTCString()}</pubDate><language>en-US</language><wp:wxr_version>1.2</wp:wxr_version><wp:base_site_url>${esc(s.siteUrl)}</wp:base_site_url><wp:base_blog_url>${esc(s.siteUrl)}</wp:base_blog_url>${authors}${termXml}${itemXml.join("")}${entityXml}${mediaXml}</channel></rss>`;
   res.setHeader(
     "Content-Disposition",
     'attachment; filename="worldact-export.xml"',
@@ -1479,6 +1502,13 @@ router.post("/api/tools/import", admin, async (req: AuthRequest, res, next) => {
     await client.query(
       "SELECT pg_advisory_xact_lock(hashtext('worldact-wxr-import'))",
     );
+    const entityItems=items.filter((item:any)=>["wp_block","wp_navigation"].includes(text(item["wp:post_type"])));
+    const entityGraph=await allocateImportedBlockEntities(client,entityItems.map((item:any)=>({
+      id:zero(item["wp:post_id"]),kind:text(item["wp:post_type"])==="wp_block"?"reusable":"navigation",
+      title:plainText(text(item.title)).slice(0,200),slug:text(item["wp:post_name"]).slice(0,220),
+      content:z.string().max(1_000_000).parse(text(item["content:encoded"])),
+      status:["publish","draft","trash"].includes(text(item["wp:status"]))?text(item["wp:status"]):"draft",
+    })),needUser(req).id);
     const definitions = [
       ...list(channel["wp:category"]).map((t: any) => ({
         taxonomy: "category",
@@ -1569,6 +1599,7 @@ router.post("/api/tools/import", admin, async (req: AuthRequest, res, next) => {
     }
     const contentItems = items.filter((item: any) => {
       const type = text(item["wp:post_type"]);
+      if(["wp_block","wp_navigation"].includes(type))return false;
       if (type === "attachment") {
         skippedAttachments++;
         return false;
@@ -1599,7 +1630,7 @@ router.post("/api/tools/import", admin, async (req: AuthRequest, res, next) => {
       )
         slug = base.slice(0, 170) + "-import-" + randomBytes(5).toString("hex");
       const portable = remapImportedBlockReferences(
-          z.string().max(1_000_000).parse(text(item["content:encoded"])), [], new Map(),
+          z.string().max(1_000_000).parse(text(item["content:encoded"])), [], entityGraph.map,
         );
       for (const warning of portable.warnings)
         if (referenceWarnings.size < 100) referenceWarnings.add(warning);
@@ -1652,6 +1683,9 @@ router.post("/api/tools/import", admin, async (req: AuthRequest, res, next) => {
         ],
       );
       const id = inserted.rows[0].id;
+      await client.query("UPDATE posts SET ping_status=$1 WHERE id=$2",[text(item["wp:ping_status"]) === "open" ? "open" : "closed",id]);
+      const template=text(list(item["wp:postmeta"]).find((meta:any)=>text(meta["wp:meta_key"])==="_wp_page_template")?.["wp:meta_value"]);
+      if(template && template!=="default" && /^[a-zA-Z0-9_-]{1,160}$/.test(template))await client.query("UPDATE posts SET template_slug=$1 WHERE id=$2",[template,id]);
       const importedFormat = text(
         list(item.category).find(
           (term: any) => text(term["@_domain"]) === "post_format",
@@ -1659,15 +1693,7 @@ router.post("/api/tools/import", admin, async (req: AuthRequest, res, next) => {
       ).replace(/^post-format-/, "");
       if (
         type === "post" &&
-        [
-          "aside",
-          "image",
-          "video",
-          "quote",
-          "link",
-          "gallery",
-          "audio",
-        ].includes(importedFormat)
+        (postFormats as readonly string[]).includes(importedFormat)
       )
         await client.query("UPDATE posts SET format=$1 WHERE id=$2", [
           importedFormat,
@@ -1794,11 +1820,20 @@ router.post("/api/tools/import", admin, async (req: AuthRequest, res, next) => {
           postMap.get(oldId),
         ]);
     }
+    // Resolve forward post references only after every destination ID exists.
+    for(let index=0;index<contentItems.length;index++){
+      const item=contentItems[index],oldId=zero(item["wp:post_id"]) || index+1;
+      const value=remapImportedBlockReferences(text(item["content:encoded"]),[],entityGraph.map,{posts:postMap});
+      await client.query("UPDATE posts SET content=$1,raw_content=$2,blocks=$3::jsonb WHERE id=$4",[value.content,value.rawContent,JSON.stringify(value.blocks),postMap.get(oldId)]);
+      for(const warning of value.warnings)if(referenceWarnings.size<100)referenceWarnings.add(warning);
+    }
+    for(const warning of await entityGraph.finalize({posts:postMap}))if(referenceWarnings.size<100)referenceWarnings.add(warning);
     await client.query("COMMIT");
     res.status(201).json({
       ok: true,
       imported: createdPosts.length,
       postIds: createdPosts,
+      blockEntityIds:entityGraph.ids,
       termIds: [...createdTerms],
       commentIds: createdComments,
       skippedAttachments,

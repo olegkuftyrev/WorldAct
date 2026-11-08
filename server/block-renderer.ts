@@ -5,6 +5,7 @@ import { postPermalink } from "./permalinks.js";
 import { cleanContent, plainText, HttpError } from "./utils.js";
 import { restDateToUTC } from "./date.js";
 import { date as formatBlockDate, humanTimeDiff } from "@wordpress/date";
+import { renderThemeBlock, THEME_BLOCKS } from "./theme-blocks.js";
 
 export type BlockDatabase = Pick<pg.Pool, "query"> | pg.PoolClient;
 export type RenderPost = Record<string, any>;
@@ -25,9 +26,11 @@ export type RenderOptions = {
   query?: Record<string, unknown>;
   page?: number;
   placeholderBindings?: boolean;
+  preview?:boolean;
   db?: BlockDatabase;
+  user?: { id: number; role: string; displayName: string };
 };
-type Node = {
+export type Node = {
   name: string | null;
   attrs: Record<string, any>;
   children: Node[];
@@ -42,14 +45,18 @@ type QueryResult = {
   totalPages: number;
   queryId: number;
 };
-type Context = {
+export type Context = {
   post: RenderPost | null;
   loop?: QueryResult;
   depth: number;
   refs: Set<string>;
   contentIds: Set<number>;
+  comment?: Record<string, any>;
+  commentLoop?: { comments: any[]; total: number; page: number; perPage: number; totalPages: number };
+  social?: { openInNewTab: boolean; showLabels: boolean };
+  queryDisplayLayout?: { type?: string; columns?: number };
 };
-type State = {
+export type State = {
   db: BlockDatabase;
   settings: Awaited<ReturnType<typeof getSettings>>;
   options: RenderOptions;
@@ -59,6 +66,7 @@ type State = {
   cache: Map<string, Promise<any>>;
 };
 export const CORE_DYNAMIC_BLOCKS = [
+  ...THEME_BLOCKS,
   "core/query",
   "core/post-template",
   "core/post-title",
@@ -182,6 +190,8 @@ function classNames(name: string, attrs: Record<string, any>, extra = "") {
       : "",
     attrs.textColor ? `has-${slug(attrs.textColor)}-color has-text-color` : "",
     attrs.fontSize ? `has-${slug(attrs.fontSize)}-font-size` : "",
+    attrs.fontFamily ? `has-${slug(attrs.fontFamily)}-font-family` : "",
+    attrs.layout?.type ? `is-layout-${slug(attrs.layout.type)}${attrs.layout.type === "constrained" ? " has-global-padding" : ""}` : ["core/columns", "core/buttons"].includes(name) ? "is-layout-flex" : "",
     extra,
   ]
     .filter(Boolean)
@@ -225,6 +235,18 @@ function blockStyle(attrs: Record<string, any>) {
         push(`${key}-${side}`, size(value[side]));
     else push(key, size(value));
   }
+  if (style.spacing?.blockGap) {
+    const gap = style.spacing.blockGap;
+    push("gap", typeof gap === "object" ? `${size(gap.top || "0")} ${size(gap.left || gap.top || "0")}` : size(gap));
+  }
+  if (style.layout?.selfStretch === "fixed" && style.layout.flexSize) {
+    push("flex-basis", size(style.layout.flexSize)); push("flex-grow", "0");
+  }
+  if (style.layout?.selfStretch === "fill") { push("flex-basis", "0"); push("flex-grow", "1"); }
+  if (style.layout?.columnSpan) push("grid-column", `span ${integer(style.layout.columnSpan, 1, 1, 12)}`);
+  if (style.layout?.rowSpan) push("grid-row", `span ${integer(style.layout.rowSpan, 1, 1, 12)}`);
+  for (const field of ["minHeight", "aspectRatio"]) if (style.dimensions?.[field])
+    push(field === "minHeight" ? "min-height" : "aspect-ratio", size(style.dimensions[field]));
   for (const key of ["color", "radius", "style", "width"])
     push(
       key === "radius" ? "border-radius" : `border-${key}`,
@@ -235,6 +257,8 @@ function blockStyle(attrs: Record<string, any>) {
     push("flex-wrap", attrs.layout.flexWrap || "wrap");
     if (attrs.layout.orientation === "vertical")
       push("flex-direction", "column");
+    if (attrs.layout.justifyContent) push("justify-content", ({left:"flex-start",right:"flex-end"} as Record<string,string>)[attrs.layout.justifyContent] || attrs.layout.justifyContent);
+    if (attrs.layout.verticalAlignment) push("align-items", ({top:"flex-start",bottom:"flex-end"} as Record<string,string>)[attrs.layout.verticalAlignment] || attrs.layout.verticalAlignment);
   }
   if (attrs.layout?.type === "grid") {
     push("display", "grid");
@@ -260,7 +284,7 @@ function fromJSON(blocks: SerializedNode[], depth = 0): Node[] {
 }
 export function parseRenderNodes(document: RenderDocument): Node[] {
   const raw =
-    document.rawContent ?? document.raw_content ?? document.content ?? "";
+    document.rawContent || document.raw_content || document.content || "";
   if (raw.includes("<!-- wp:") || !document.blocks?.length)
     return parse(raw).map(function convert(block): Node {
       return {
@@ -386,7 +410,7 @@ async function queryPosts(
   const parents = ids(input.parents);
   if (parents.length) add("p.parent_id=ANY(?::int[])", parents);
   const formats = Array.isArray(input.format)
-    ? input.format.filter((v: unknown) => typeof v === "string").slice(0, 8)
+    ? input.format.filter((v: unknown) => typeof v === "string").slice(0, 10)
     : [];
   if (formats.length) add("p.format=ANY(?::text[])", formats);
   if (input.sticky === "only") where.push("p.sticky=true");
@@ -589,7 +613,20 @@ async function staticHTML(
       );
     while (child < node.children.length)
       out.push(await render(node.children[child++], context, state));
-    return out.join("");
+    const html = out.join("");
+    if (!node.name || !["core/group", "core/columns", "core/column", "core/buttons"].includes(node.name)) return html;
+    return html.replace(/^(\s*<[a-z][a-z\d-]*)([^>]*)(>)/i, (_match, tag, original, end) => {
+      const classes = esc(classNames(node.name!, node.attrs));
+      const style = esc(blockStyle(node.attrs));
+      let attributes = String(original);
+      if (classes) attributes = /\sclass=(["'])[^]*?\1/i.test(attributes)
+        ? attributes.replace(/\sclass=(["'])([^]*?)\1/i, (_value, quote, existing) => ` class=${quote}${existing} ${classes}${quote}`)
+        : attributes + ` class="${classes}"`;
+      if (style) attributes = /\sstyle=(["'])[^]*?\1/i.test(attributes)
+        ? attributes.replace(/\sstyle=(["'])([^]*?)\1/i, (_value, quote, existing) => ` style=${quote}${existing};${style}${quote}`)
+        : attributes + ` style="${style}"`;
+      return tag + attributes + end;
+    });
   }
   if (!node.name) return node.html || "";
   const content = String(node.attrs.content ?? node.attrs.value ?? "");
@@ -703,13 +740,16 @@ async function renderNode(
     a = node.attrs || {},
     p = context.post;
   const attr = (extra = "") => attrsHTML(node, extra);
+  const themeBlock = await renderThemeBlock(node, context, state,
+    (nodes, next) => renderChildren(nodes, next, state), attr);
+  if (themeBlock !== undefined) return themeBlock;
   const body = () => renderChildren(node.children, context, state);
   const wrap = async (tag = "div", extra = "") =>
     `<${safeTag(tag)}${attr(extra)}>${await body()}</${safeTag(tag)}>`;
   if (name === "core/query") {
     if (context.depth > 15) return "";
     const loop = await queryPosts(a, context, state);
-    return `<${safeTag(a.tagName)}${attr()}>${await renderChildren(node.children, { ...context, loop }, state)}</${safeTag(a.tagName)}>`;
+    return `<${safeTag(a.tagName)}${attr()}>${await renderChildren(node.children, { ...context, loop,queryDisplayLayout:a.displayLayout }, state)}</${safeTag(a.tagName)}>`;
   }
   if (name === "core/post-template") {
     if (!context.loop) return "";
@@ -718,7 +758,8 @@ async function renderNode(
       items.push(
         `<li class="wp-block-post post-${integer(post.id, 0, 0, 2147483647)} type-${esc(post.type)}">${await renderChildren(node.children, { ...context, post }, state)}</li>`,
       );
-    return `<ul${attr(a.layout?.type === "grid" ? `is-layout-grid columns-${integer(a.layout.columnCount, 3, 1, 8)}` : "is-layout-flow")}>${items.join("")}</ul>`;
+    const legacyGrid=!a.layout && context.queryDisplayLayout?.type === "flex";
+    return `<ul${attr(a.layout?.type === "grid" ? `is-layout-grid columns-${integer(a.layout.columnCount, 3, 1, 8)}` : legacyGrid?`is-flex-container columns-${integer(context.queryDisplayLayout?.columns,3,1,8)}`:"is-layout-flow")}>${items.join("")}</ul>`;
   }
   if (name === "core/query-no-results")
     return context.loop && !context.loop.posts.length ? wrap() : "";
@@ -882,7 +923,8 @@ async function renderNode(
     return `<li${attr("wp-block-navigation-item")}>${node.children.length ? `<details><summary>${esc(label)}</summary><ul class="wp-block-navigation__submenu-container">${await body()}</ul></details>` : link}</li>`;
   }
   if (name === "core/template-part") {
-    const key = "part:" + String(a.slug);
+    const theme = typeof a.theme === "string" ? a.theme : state.settings.theme;
+    const key = "part:" + theme + ":" + String(a.slug);
     if (context.refs.has(key)) return "";
     const doc = await cached(
       state,
@@ -890,8 +932,8 @@ async function renderNode(
       async () =>
         (
           await state.db.query(
-            "SELECT content,raw_content AS \"rawContent\",blocks FROM site_documents WHERE slug=$1 AND type='template-part' LIMIT 1",
-            [String(a.slug || "").slice(0, 160)],
+            "SELECT content,raw_content AS \"rawContent\",blocks FROM site_documents WHERE slug=$1 AND theme=$2 AND type='template-part' LIMIT 1",
+            [String(a.slug || "").slice(0, 160), theme],
           )
         ).rows[0],
     );
@@ -900,7 +942,8 @@ async function renderNode(
       : "";
   }
   if (name === "core/pattern") {
-    const key = "pattern:" + String(a.slug);
+    const theme = String(a.slug || "").includes("/") ? String(a.slug).split("/")[0] : state.settings.theme;
+    const key = "pattern:" + theme + ":" + String(a.slug);
     if (context.refs.has(key)) return "";
     const patternSlug = String(a.slug || "")
       .split("/")
@@ -911,8 +954,8 @@ async function renderNode(
       async () =>
         (
           await state.db.query(
-            "SELECT content,raw_content AS \"rawContent\",blocks FROM site_documents WHERE slug=$1 AND type='pattern' LIMIT 1",
-            [patternSlug],
+            "SELECT content,raw_content AS \"rawContent\",blocks FROM site_documents WHERE slug=$1 AND theme=$2 AND type='pattern' LIMIT 1",
+            [patternSlug, theme],
           )
         ).rows[0],
     );
@@ -1045,6 +1088,7 @@ async function renderNode(
       return `<${tag}${attr()}>${a.isLink ? `<a href="${esc(url)}"${a.linkTarget === "_blank" ? ' target="_blank" rel="noopener noreferrer"' : ""}>${title}</a>` : title}</${tag}>`;
     }
     if (name === "core/post-content") {
+      if(p.locked)return `<div${attr()}><form class="post-password-form worldact-native-password-form" action="/post-password" method="post"><p>This content is password protected. To view it please enter your password below:</p><p><label for="post-password-${p.id}">Password: <input id="post-password-${p.id}" type="password" name="password" maxlength="1024" required></label><input type="hidden" name="postSlug" value="${esc(p.slug)}"><button class="wp-element-button" type="submit">Enter</button></p><p class="worldact-native-password-notice" role="status"></p></form></div>`;
       if (context.contentIds.has(p.id))
         return cleanContent(String(p.content || ""));
       const inner = await renderChildren(
@@ -1055,6 +1099,7 @@ async function renderNode(
       return `<${safeTag(a.tagName)}${attr()}>${inner}</${safeTag(a.tagName)}>`;
     }
     if (name === "core/post-excerpt") {
+      if(p.locked)return `<div${attr()}><p>There is no excerpt because this is a protected post.</p></div>`;
       const words = plainText(String(p.excerpt || p.content || ""))
           .trim()
           .split(/\s+/)
@@ -1173,7 +1218,7 @@ export async function renderSiteDocument(
         contentIds: new Set(),
       },
       state,
-    ),
+    ), true,
   );
 }
 export async function renderPublicContent(
@@ -1190,7 +1235,7 @@ export async function renderPublicContent(
       parseRenderNodes(post),
       { post, depth: 0, refs: new Set(), contentIds: new Set([post.id]) },
       state,
-    ),
+    ), true,
   );
 }
 /** Render a single official dynamic block for authenticated editor previews. */
@@ -1211,6 +1256,6 @@ export async function renderBlock(
         contentIds: new Set(),
       },
       state,
-    ),
+    ), true,
   );
 }

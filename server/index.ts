@@ -38,6 +38,16 @@ import commentsRouter from "./comments.js";
 import accountsRouter from "./accounts.js";
 import legacyRouter from "./legacy.js";
 import blocksRouter from "./blocks.js";
+import applicationPasswordsRouter from "./application-passwords.js";
+import usersRouter from "./users.js";
+import nativeFormsRouter from "./native-forms.js";
+import editLocksRouter from "./edit-locks.js";
+import siteIdentityRouter from "./site-identity.js";
+import diagnosticsRouter from "./diagnostics.js";
+import privacyPolicyRouter from "./privacy-policy.js";
+import fontsRouter from "./fonts.js";
+import postTemplatesRouter from "./post-templates.js";
+import bundledPluginsRouter from "./bundled-plugins.js";
 import { plainText, HttpError, parseId, needUser } from "./utils.js";
 
 export const app = express();
@@ -61,6 +71,7 @@ app.use((_req, res, next) => {
   res.setHeader("Referrer-Policy", "strict-origin-when-cross-origin");
   next();
 });
+app.use(["/api", "/wp-json", "/wp-comments-post.php", "/logout", "/post-password"], attachUser);
 app.use("/api", (_req, res, next) => {
   res.setHeader("Cache-Control", "no-store");
   next();
@@ -80,7 +91,7 @@ app.use("/api", (req, res, next) => {
       .json({ error: "The site origin is not configured correctly." });
     return;
   }
-  if (!req.headers.origin || req.headers.origin !== expected) {
+  if (req.headers.origin !== expected && !(!req.headers.origin && (req as AuthRequest).authenticationMethod === "application-password")) {
     res.status(403).json({
       error: "This request must come from the configured site origin.",
     });
@@ -88,8 +99,11 @@ app.use("/api", (req, res, next) => {
   }
   next();
 });
+app.use("/api/tools/import", attachUser, requireRole("administrator"), express.json({ limit: "96mb" }));
 app.use(express.json({ limit: "10mb" }));
+app.use(nativeFormsRouter);
 app.use(blocksRouter);
+app.use(applicationPasswordsRouter);
 app.use(compatRouter);
 
 app.get("/api/health", async (_req, res) => {
@@ -103,6 +117,14 @@ app.get("/api/health", async (_req, res) => {
 app.use("/api", attachUser);
 app.use("/api", accountsRouter);
 app.use("/api", commentsRouter);
+app.use("/api", usersRouter);
+app.use("/api", editLocksRouter);
+app.use("/api", siteIdentityRouter);
+app.use("/api", diagnosticsRouter);
+app.use("/api", privacyPolicyRouter);
+app.use("/api", fontsRouter);
+app.use("/api", postTemplatesRouter);
+app.use("/api", bundledPluginsRouter);
 app.use("/api", platformRouter);
 app.use("/api", coreRouter);
 
@@ -210,86 +232,6 @@ app.get("/api/dashboard", dashboardRoles, async (req: AuthRequest, res) => {
   });
 });
 
-const mediaSchema = z
-  .object({
-    title: z.string().trim().min(1).max(300).optional(),
-    alt: z.string().max(1000).optional(),
-    caption: z.string().max(20_000).optional(),
-  })
-  .strict()
-  .refine(
-    (value) => Object.keys(value).length > 0,
-    "Provide at least one field to update.",
-  );
-app.put("/api/media/:id", contentRoles, async (req: AuthRequest, res) => {
-  const id = parseId(req.params.id);
-  const input = mediaSchema.parse(req.body);
-  const result = await pool.query("SELECT * FROM media WHERE id = $1", [id]);
-  const media = result.rows[0];
-  if (!media) throw new HttpError(404, "Media item not found.");
-  assertOwner(needUser(req), media.author_id);
-  const title = plainText(input.title ?? media.title).trim();
-  if (!title) throw new HttpError(400, "Enter an image title containing text.");
-  const updated = await pool.query(
-    `UPDATE media SET title = $1, alt = $2, caption = $3 WHERE id = $4 RETURNING ${mediaFields}`,
-    [
-      title,
-      plainText(input.alt ?? media.alt),
-      plainText(input.caption ?? media.caption),
-      id,
-    ],
-  );
-  res.json({ media: updated.rows[0] });
-});
-app.get("/api/users", administrator, async (_req, res) => {
-  const result = await pool.query(
-    `SELECT ${userFields} FROM users ORDER BY id`,
-  );
-  res.json({ users: result.rows });
-});
-app.post("/api/users", administrator, async (req, res) => {
-  const input = z
-    .object({
-      username: z
-        .string()
-        .trim()
-        .min(1)
-        .max(60)
-        .regex(
-          /^[a-zA-Z0-9_.@-]+$/,
-          "Use letters, numbers, periods, underscores, @, or hyphens for the username.",
-        ),
-      email: z.email().max(254),
-      displayName: z.string().trim().min(1).max(160),
-      password: z
-        .string()
-        .min(12, "Use a password with at least 12 characters.")
-        .max(1024),
-      role: z.enum([
-        "administrator",
-        "editor",
-        "author",
-        "contributor",
-        "subscriber",
-      ]),
-    })
-    .strict()
-    .parse(req.body);
-  const displayName = plainText(input.displayName).trim();
-  if (!displayName)
-    throw new HttpError(400, "Enter a display name containing text.");
-  const result = await pool.query(
-    `INSERT INTO users (username, email, display_name, password_hash, role) VALUES ($1, $2, $3, $4, $5) RETURNING ${userFields}`,
-    [
-      input.username,
-      input.email.toLowerCase(),
-      displayName,
-      await hashPassword(input.password),
-      input.role,
-    ],
-  );
-  res.status(201).json({ user: result.rows[0] });
-});
 app.use("/api", (_req, res) =>
   res.status(404).json({ error: "API endpoint not found." }),
 );
@@ -388,9 +330,16 @@ if (
 ) {
   const stopScheduler = startScheduler();
   const port = Number(process.env.PORT || 3001);
-  const server = app.listen(port, "127.0.0.1", () =>
-    console.log(`WorldAct API listening on http://127.0.0.1:${port}`),
-  );
+  const server = app.listen(port, "127.0.0.1", (error?:Error) => {
+    if(error){
+      stopScheduler();
+      console.error("Could not start WorldAct API:",error.message);
+      process.exitCode=1;
+      void pool.end();
+      return;
+    }
+    console.log(`WorldAct API listening on http://127.0.0.1:${port}`);
+  });
   const stop = () => {
     stopScheduler();
     server.close(() => {

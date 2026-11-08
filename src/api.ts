@@ -1,3 +1,4 @@
+import type { PostFormat } from "../shared/post-formats";
 export type Role =
   | "administrator"
   | "editor"
@@ -39,19 +40,13 @@ export type Term = {
   description: string;
   parentId: number | null;
   count: number;
+  isDefault?: boolean;
 };
 export type Post = {
+  templateSlug?:string;
   id: number;
   type: "post" | "page";
-  format:
-    | "standard"
-    | "aside"
-    | "image"
-    | "video"
-    | "quote"
-    | "link"
-    | "gallery"
-    | "audio";
+  format: PostFormat;
   title: string;
   slug: string;
   content: string;
@@ -61,6 +56,9 @@ export type Post = {
   status: PostStatus;
   authorId: number;
   authorName: string;
+  commentCount?: number;
+  approvedCommentCount?: number;
+  pendingCommentCount?: number;
   createdAt: string;
   updatedAt: string;
   publishedAt: string | null;
@@ -132,11 +130,17 @@ export type Media = {
   createdAt: string;
   authorId?: number;
   authorName?: string;
+  attachedPostId?: number | null;
+  attachedPostTitle?: string | null;
+  description?: string;
+  commentStatus?: "open" | "closed";
 };
 export type Comment = {
+  permissions?: { edit: boolean; reply: boolean; moderate: boolean; delete: boolean };
   id: number;
   authorName: string;
-  authorEmail: string;
+  avatarUrl?: string | null;
+  authorEmail?: string;
   authorUrl?: string;
   userId?: number | null;
   version?: number;
@@ -165,6 +169,8 @@ export type Settings = {
   siteLogoId?: number;
   siteIconId?: number;
   siteIconUrl?: string | null;
+  siteIconSizes?:Record<string,{url:string;width:number;height:number}>;
+  weekStartsOn?:number;
   timezone: string;
   dateFormat: string;
   timeFormat: string;

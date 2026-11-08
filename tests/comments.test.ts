@@ -198,7 +198,7 @@ test("comment editorial workflows preserve ownership, hierarchy, versions and pu
     assert.equal(
       (await api("/api/comments", "GET", undefined, authorCookie)).response
         .status,
-      403,
+      200,
     );
     assert.equal(
       (

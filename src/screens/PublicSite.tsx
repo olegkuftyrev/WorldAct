@@ -6,6 +6,7 @@ import {
   useContext,
   useEffect,
   useState,
+  useRef,
   type FormEvent,
   type CSSProperties,
   type ReactNode,
@@ -18,6 +19,7 @@ import {
 } from "react-router-dom";
 import {
   api,
+  ApiError,
   json,
   date,
   type Post,
@@ -45,31 +47,36 @@ export default function PublicSite({
   preview = false,
   slugOverride,
   archive,
+  notFound = false,
 }: {
   detail?: boolean;
   page?: boolean;
   preview?: boolean;
   slugOverride?: string;
   archive?: { taxonomy: "category" | "tag"; slug: string; name?: string };
+  notFound?: boolean;
 }) {
   const { slug: routeSlug, id: previewId } = useParams(),
     { user, setUser } = useContext(Session);
   const slug = slugOverride || routeSlug;
   const [params, setParams] = useSearchParams();
+  const searchTerm = params.get("search") || params.get("s") || "";
   const categoryFilter =
     archive?.taxonomy === "category" ? archive.slug : params.get("category");
   const tagFilter =
     archive?.taxonomy === "tag" ? archive.slug : params.get("tag");
   const requestedPage = Math.max(1, Number(params.get("page")) || 1);
-  const commentPage = Math.max(1, Number(params.get("commentPage")) || 1);
+  const commentPageParam = params.get("commentPage");
+  const commentPage = Math.max(1, Number(commentPageParam) || 1);
   const blockQuery = new URLSearchParams(
     [...params.entries()].filter(([name]) => /^query-\d+-page$/.test(name)),
   ).toString();
+  const commentQuery = [commentPageParam ? `commentPage=${commentPage}` : "",blockQuery].filter(Boolean).join("&");
   const publicQuery = new URLSearchParams({
     page: String(detail ? 1 : requestedPage),
   });
   for (const [key, value] of [
-    ["search", params.get("search")],
+    ["search", searchTerm],
     ["category", categoryFilter],
     ["tag", tagFilter],
     ["author", params.get("author")],
@@ -87,9 +94,11 @@ export default function PublicSite({
     postsPage: Post | null;
     pagination: { page: number; totalPosts: number; totalPages: number };
   }>(`/public/site?${publicQuery}`);
+  const [missingPost,setMissingPost] = useState(false);
   const [commentsPagination, setCommentsPagination] =
     useState<CommentPagination | null>(null);
   const [reply, setReply] = useState<{ id: number; name: string } | null>(null);
+  const [rememberAuthor,setRememberAuthor] = useState(false);
   const [post, setPost] = useState<Post | null>(null),
     [comments, setComments] = useState<Comment[]>([]),
     [loading, setLoading] = useState(detail),
@@ -97,17 +106,19 @@ export default function PublicSite({
     [comment, setComment] = useState({
       authorName: "",
       authorEmail: "",
+      authorUrl: "",
       content: "",
     }),
-    [notice, setNotice] = useState(""),
+    [notice, setNotice] = useState(params.get("comment-status") === "pending" ? "Your comment is awaiting moderation." : ""),
     [busy, setBusy] = useState(false),
     [password, setPassword] = useState(""),
-    [publicSearch, setPublicSearch] = useState(params.get("search") || "");
+    [publicSearch, setPublicSearch] = useState(searchTerm || "");
   useEffect(() => {
     if (!detail || (!slug && !previewId)) return;
     setLoading(true);
+    setMissingPost(false);
     setError("");
-    setNotice("");
+    setNotice(params.get("comment-status") === "pending" ? "Your comment is awaiting moderation." : "");
     setPost(null);
     setPassword("");
     setReply(null);
@@ -118,7 +129,7 @@ export default function PublicSite({
     }>(
       preview
         ? `/posts/${previewId}/preview${blockQuery ? "?" + blockQuery : ""}`
-        : `/public/posts/${encodeURIComponent(slug!)}?commentPage=${commentPage}${blockQuery ? "&" + blockQuery : ""}`,
+        : `/public/posts/${encodeURIComponent(slug!)}${commentQuery ? "?" + commentQuery : ""}`,
     )
       .then((data) => {
         if (!preview && data.post.type !== (page ? "page" : "post"))
@@ -129,33 +140,37 @@ export default function PublicSite({
       })
       .catch((e) => {
         setPost(null);
+        setMissingPost(e instanceof ApiError && e.status === 404);
         setError(errorText(e));
       })
       .finally(() => setLoading(false));
-  }, [detail, slug, page, preview, previewId, commentPage, blockQuery]);
+  }, [detail, slug, page, preview, previewId, commentQuery, blockQuery]);
   const settings = site.data?.settings,
     title = settings?.siteTitle || "WorldAct",
     posts = site.data?.posts || [];
   useEffect(() => {
-    const href = site.data?.settings.siteIconUrl;
-    if (!href) return;
-    let url: URL;
-    try {
-      url = new URL(href, window.location.origin);
-    } catch {
-      return;
-    }
-    if (!["http:", "https:"].includes(url.protocol)) return;
-    const link = document.createElement("link");
-    link.rel = "icon";
-    link.href = url.href;
-    link.dataset.worldactIcon = "true";
-    document.head.appendChild(link);
-    return () => link.remove();
-  }, [site.data?.settings.siteIconUrl]);
+    const icons=site.data?.settings.siteIconSizes || {}, fallback=site.data?.settings.siteIconUrl;
+    const nodes: HTMLElement[]=[];
+    const safe=(href:string|null|undefined)=>{if(!href)return "";try{const url=new URL(href,location.origin);return ["http:","https:"].includes(url.protocol)?url.href:"";}catch{return "";}};
+    const add=(rel:string,href:string|null|undefined,size?:number)=>{const url=safe(href);if(!url)return;const link=document.createElement("link");link.rel=rel;link.href=url;if(size)link.sizes=`${size}x${size}`;link.dataset.worldactIcon="true";document.head.appendChild(link);nodes.push(link);};
+    add("icon",icons["icon-16"]?.url || fallback,16);
+    if(icons["icon-32"])add("icon",icons["icon-32"].url,32);
+    if(icons["icon-192"])add("icon",icons["icon-192"].url,192);
+    if(icons["icon-180"])add("apple-touch-icon",icons["icon-180"].url,180);
+    const tile=safe(icons["icon-270"]?.url);
+    if(tile){const meta=document.createElement("meta");meta.name="msapplication-TileImage";meta.content=tile;meta.dataset.worldactIcon="true";document.head.appendChild(meta);nodes.push(meta);}
+    return()=>{for(const node of nodes)node.remove();};
+  }, [site.data?.settings.siteIconUrl,JSON.stringify(site.data?.settings.siteIconSizes)]);
+  useEffect(() => {
+    if (user || (settings as Partial<Settings> & {commentCookieConsent?:boolean})?.commentCookieConsent === false) return;
+    let active = true;
+    api<{author:{authorName:string;authorEmail:string;authorUrl:string}|null}>("/public/comment-author")
+      .then(({author}) => {if(active && author){setComment((current)=>({...current,...author}));setRememberAuthor(true);}}).catch(()=>{});
+    return () => {active=false;};
+  },[user?.id,(settings as Partial<Settings> & {commentCookieConsent?:boolean})?.commentCookieConsent]);
   const pagination = site.data?.pagination;
   const hasArchiveFilter = Boolean(
-    params.get("search") ||
+    searchTerm ||
     categoryFilter ||
     tagFilter ||
     params.get("author") ||
@@ -232,14 +247,14 @@ export default function PublicSite({
   const displayDate = (value: string | null) => publicDate(value, settings);
   useEffect(() => {
     document.title = `${post && detail ? post.title : title}${post && detail ? ` – ${title}` : ""}`;
-    if (settings?.discourageSearchEngines) {
+    if (preview || settings?.discourageSearchEngines) {
       const meta = document.createElement("meta");
       meta.name = "robots";
       meta.content = "noindex,nofollow";
       document.head.appendChild(meta);
       return () => meta.remove();
     }
-  }, [title, detail, post, settings?.discourageSearchEngines]);
+  }, [title, detail, post, preview, settings?.discourageSearchEngines]);
   useEffect(() => {
     const plugin = design.data?.plugins.find(
       (item) => item.slug === "site-seo",
@@ -307,6 +322,7 @@ export default function PublicSite({
           ...comment,
           postId: post?.id,
           parentId: reply?.id || null,
+          ...((settings as Partial<Settings> & {commentCookieConsent?:boolean})?.commentCookieConsent !== false ? {rememberAuthor} : {}),
         }),
       );
       setNotice(
@@ -320,12 +336,12 @@ export default function PublicSite({
           comments: Comment[];
           commentsPagination: CommentPagination;
         }>(
-          `/public/posts/${encodeURIComponent(post.slug)}?commentPage=${commentPage}${blockQuery ? "&" + blockQuery : ""}`,
+          `/public/posts/${encodeURIComponent(post.slug)}${commentQuery ? "?" + commentQuery : ""}`,
         );
         setComments(data.comments);
         setCommentsPagination(data.commentsPagination);
       }
-      setComment({ authorName: "", authorEmail: "", content: "" });
+      setComment((current) => rememberAuthor ? {...current,content:""} : { authorName: "", authorEmail: "", authorUrl:"", content: "" });
     } catch (e) {
       setError(errorText(e));
     } finally {
@@ -342,7 +358,7 @@ export default function PublicSite({
         comments: Comment[];
         commentsPagination?: CommentPagination;
       }>(
-        `/public/posts/${encodeURIComponent(post?.slug || slug || "")}/unlock${blockQuery ? "?" + blockQuery : ""}`,
+        `/public/posts/${encodeURIComponent(post?.slug || slug || "")}/unlock${commentQuery ? "?" + commentQuery : ""}`,
         json("POST", { password }),
       );
       setPost(data.post);
@@ -363,18 +379,7 @@ export default function PublicSite({
       setError(errorText(e));
     }
   }
-  const content = (item: Post) => (
-    <div
-      className="public-content"
-      dangerouslySetInnerHTML={{ __html: item.content }}
-    />
-  );
-  return (
-    <div
-      className={`public-site ${settings?.theme === "classic" ? "classic-site" : `${settings?.theme || "twentytwentyfive"}-site`}`}
-      style={globalStyle}
-    >
-      {user && (
+  const adminBar = (user && (
         <div className="public-admin-bar">
           <Link to={user.role === "subscriber" ? "/" : "/admin"}>
             <Brand />
@@ -404,7 +409,49 @@ export default function PublicSite({
             Log Out
           </button>
         </div>
-      )}
+      ));
+  const content = (item: Post) => (
+    <div
+      className="public-content"
+      dangerouslySetInnerHTML={{ __html: item.content }}
+    />
+  );
+  const sourceTemplate = selectSourceTemplate(design.data?.templates, {
+    notFound: notFound || missingPost,
+    single: displaySingle,
+    post: displayedPost,
+    frontPage: Boolean(frontPage),
+    home: !detail && !hasArchiveFilter,
+    search: Boolean(searchTerm),
+    category: categoryFilter || undefined,
+    tag: tagFilter || undefined,
+    author: Boolean(params.get("author")),
+  });
+  if (design.data?.theme?.themeJSON && sourceTemplate) {
+    return (
+      <div className="public-site worldact-theme" data-theme={design.data.theme.id}>
+        <style>{design.data.theme.css}</style>
+        {adminBar}
+        <ResourceState loading={site.loading || loading} error={site.error || (missingPost ? "" : error)} retry={site.error ? site.reload : undefined} />
+        {!loading && !site.loading && !site.error && (!error || missingPost) && <SourceThemeDocument
+          document={sourceTemplate}
+          postId={displayedPost?.id}
+          query={publicQuery.toString()}
+          commentPage={commentPageParam ? commentPage : undefined}
+          userName={user?.displayName}
+          preview={preview}
+        />}
+        {enabledPlugin("custom-footer") && <div className="public-extension-footer">{String(enabledPlugin("custom-footer")?.settings.text || "")}</div>}
+      </div>
+    );
+  }
+  return (
+    <div
+      className={`public-site worldact-theme ${settings?.theme === "classic" ? "classic-site" : `${settings?.theme || "twentytwentyfive"}-site`}`}
+      style={globalStyle}
+    >
+      {design.data?.theme?.css && <style>{design.data.theme.css}</style>}
+      {adminBar}
       {customHeader ? (
         <RenderedTemplate
           document={customHeader}
@@ -680,8 +727,12 @@ export default function PublicSite({
                                   settings?.requireCommentNameEmail !== false
                                 }
                               />
+                              <label htmlFor="comment-url">Website</label>
+                              <input type="url" id="comment-url" autoComplete="url" value={comment.authorUrl} onChange={(event)=>setComment({...comment,authorUrl:event.target.value})}/>
+                              {(settings as Partial<Settings> & {commentCookieConsent?:boolean})?.commentCookieConsent !== false && <label className="public-comment-consent"><input type="checkbox" checked={rememberAuthor} onChange={(event)=>setRememberAuthor(event.target.checked)}/> Save my name, email, and website in this browser for the next time I comment.</label>}
                             </>
                           )}
+                          {enabledPlugin("akismet")?.settings.sendComments === true && <p className="akismet_comment_form_privacy_notice">This site uses Akismet to reduce spam. <a href="https://akismet.com/privacy/" target="_blank" rel="noreferrer">Learn how your comment data is processed.</a></p>}
                           <button disabled={busy}>
                             {busy ? "Submitting…" : "Post Comment"}
                           </button>
@@ -708,8 +759,8 @@ export default function PublicSite({
             ) : (
               <>
                 <h1 className="blog-heading">
-                  {params.get("search")
-                    ? `Search results for: ${params.get("search")}`
+                  {searchTerm
+                    ? `Search results for: ${searchTerm}`
                     : categoryFilter
                       ? `Category: ${archive?.name || categoryFilter}`
                       : tagFilter
@@ -744,7 +795,7 @@ export default function PublicSite({
                     onChange={(e) => setPublicSearch(e.target.value)}
                   />
                   <button>Search</button>
-                  {(params.get("search") ||
+                  {(searchTerm ||
                     categoryFilter ||
                     tagFilter ||
                     params.get("author")) && <Link to="/">Show all posts</Link>}
@@ -909,6 +960,7 @@ function publicDate(
 }
 
 type PublicDesign = {
+  theme?: {id:string; name:string; version:string; css:string; themeJSON:Record<string,unknown>|null; variation:string};
   styles: Partial<SiteStyle>;
   templates: SiteTemplate[];
   parts: SiteTemplate[];
@@ -980,6 +1032,173 @@ function RenderedTemplate({
   return (
     <div className={className} dangerouslySetInnerHTML={{ __html: content }} />
   );
+}
+
+function selectSourceTemplate(documents: SiteTemplate[] | undefined, context: {
+  notFound: boolean; single: boolean; post: Post | null | undefined;
+  frontPage: boolean; home: boolean; search: boolean;
+  category?: string; tag?: string; author: boolean;
+}) {
+  const candidates = context.notFound ? ["404", "index"]
+    : context.search ? ["search", "index"]
+    : context.category ? [`category-${context.category}`, "category", "archive", "index"]
+    : context.tag ? [`tag-${context.tag}`, "tag", "archive", "index"]
+    : context.author ? ["author", "archive", "index"]
+    : context.single && context.post ? [
+        ...(context.post.templateSlug ? [context.post.templateSlug] : []),
+        ...(context.frontPage ? ["front-page"] : []),
+        ...(context.post.type === "page" ? [`page-${context.post.slug}`, `page-${context.post.id}`, "page"] : [`single-post-${context.post.slug}`, "single-post", "single"]),
+        "singular", "index",
+      ]
+    : [...(context.home ? ["front-page"] : []), "home", "index"];
+  for (const slug of candidates) {
+    const document = documents?.find((item) => item.slug === slug);
+    if (document) return document;
+  }
+  return null;
+}
+function enhanceEmbeds(root: ParentNode) {
+  for (const wrapper of root.querySelectorAll<HTMLElement>(".wp-block-embed__wrapper")) {
+    if (wrapper.querySelector("iframe")) continue;
+    const embed = parseVideoEmbed((wrapper.textContent || "").trim());
+    if (!embed) continue;
+    const frame = document.createElement("iframe");
+    frame.src = embed.src; frame.title = embed.title;
+    frame.width = String(embed.width); frame.height = String(embed.height);
+    frame.allowFullscreen = true; frame.loading = "lazy";
+    frame.referrerPolicy = "strict-origin-when-cross-origin";
+    frame.allow = "encrypted-media; picture-in-picture";
+    wrapper.replaceChildren(frame);
+  }
+}
+function enhanceNavigation(root: HTMLElement) {
+  const disclosures = [...root.querySelectorAll<HTMLDetailsElement>("details.worldact-navigation-toggle")];
+  const previousOverflow = document.body.style.overflow;
+  const synchronize = (opened?: HTMLDetailsElement) => {
+    if (opened?.open) for (const disclosure of disclosures) if (disclosure !== opened) disclosure.open = false;
+    const active = disclosures.find((disclosure) => disclosure.open);
+    document.body.style.overflow = active ? "hidden" : previousOverflow;
+    for (const disclosure of disclosures) {
+      const summary = disclosure.querySelector("summary");
+      summary?.setAttribute("aria-label", disclosure.open ? "Close menu" : "Open menu");
+      summary?.setAttribute("aria-expanded", String(disclosure.open));
+      if (disclosure.open) {disclosure.setAttribute("role","dialog");disclosure.setAttribute("aria-modal","true");disclosure.setAttribute("aria-label","Navigation");}
+      else {disclosure.removeAttribute("role");disclosure.removeAttribute("aria-modal");disclosure.removeAttribute("aria-label");}
+    }
+  };
+  const listeners = disclosures.map((disclosure) => {
+    const toggle = () => synchronize(disclosure);
+    disclosure.addEventListener("toggle",toggle);
+    return () => disclosure.removeEventListener("toggle",toggle);
+  });
+  const keydown = (event: globalThis.KeyboardEvent) => {
+    const active = disclosures.find((disclosure) => disclosure.open);
+    if (!active) return;
+    if (event.key === "Escape") {event.preventDefault();active.open=false;active.querySelector("summary")?.focus();synchronize();}
+    if (event.key === "Tab") {
+      const controls = [...active.querySelectorAll<HTMLElement>('summary,a[href],button,input,select,textarea,[tabindex="0"]')].filter((item) => item.getClientRects().length > 0);
+      const first=controls[0],last=controls[controls.length-1];
+      if(event.shiftKey && (document.activeElement===first || !active.contains(document.activeElement))) {event.preventDefault();last?.focus();}
+      else if(!event.shiftKey && (document.activeElement===last || !active.contains(document.activeElement))) {event.preventDefault();first?.focus();}
+    }
+  };
+  const closeOnLink = (event: MouseEvent) => {
+    const link=(event.target as HTMLElement).closest("a[href]");
+    if(link)for(const disclosure of disclosures)if(disclosure.open && disclosure.contains(link))disclosure.open=false;
+    synchronize();
+  };
+  document.addEventListener("keydown",keydown,true);root.addEventListener("click",closeOnLink);synchronize();
+  return () => {for(const cleanup of listeners)cleanup();document.removeEventListener("keydown",keydown,true);root.removeEventListener("click",closeOnLink);document.body.style.overflow=previousOverflow;};
+}
+function SourceThemeDocument({ document: template, postId, query, commentPage, userName, preview = false }: {
+  document: SiteTemplate; postId?: number; query: string; commentPage?: number; userName?: string; preview?: boolean;
+}) {
+  const location = useLocation(), root = useRef<HTMLDivElement>(null);
+  const [html, setHTML] = useState<string | null>(null), [error, setError] = useState("");
+  const [notice, setNotice] = useState(new URLSearchParams(location.search).get("comment-status") === "pending" ? "Your comment is awaiting moderation." : ""), [revision, setRevision] = useState(0), [busy, setBusy] = useState(false);
+  const requestQuery = new URLSearchParams(location.search);
+  for (const [key, value] of new URLSearchParams(query)) requestQuery.set(key, value);
+  requestQuery.set("requestPath", location.pathname);
+  if(preview) requestQuery.set("preview","true");
+  if(commentPage) requestQuery.set("commentPage", String(commentPage));
+  if (postId) requestQuery.set("postId", String(postId));
+  const request = `/public/templates/${encodeURIComponent(template.slug)}?${requestQuery}`;
+  useEffect(() => {
+    let active = true;
+    setError("");
+    api<{content:string}>(request).then((result) => { if (active) setHTML(result.content); })
+      .catch((reason) => { if (active) setError(errorText(reason)); });
+    return () => { active = false; };
+  }, [request, template.updatedAt, revision]);
+  useEffect(() => {
+    if (!root.current) return;
+    enhanceEmbeds(root.current);
+    const cleanup = enhanceNavigation(root.current);
+    let active=true;
+    if(!userName)api<{author:{authorName:string;authorEmail:string;authorUrl:string}|null}>("/public/comment-author").then(({author})=>{
+      if(!active || !author || !root.current)return;
+      const checkbox=root.current.querySelector<HTMLInputElement>('input[name="rememberAuthor"],input[name="wp-comment-cookies-consent"]');
+      if(!checkbox)return;
+      for(const key of ["authorName","authorEmail","authorUrl"] as const){const field=root.current.querySelector<HTMLInputElement>(`input[name="${key}"]`);if(field && !field.value)field.value=author[key] || "";}
+      checkbox.checked=true;
+    }).catch(()=>{});
+    return ()=>{active=false;cleanup();};
+  }, [html]);
+  async function submitComment(event: FormEvent<HTMLDivElement>) {
+    const form = event.target as HTMLFormElement;
+    if(form.matches("form.worldact-native-password-form")){
+      event.preventDefault();if(busy)return;const data=new FormData(form);
+      setBusy(true);setError("");
+      try{await api(`/public/posts/${encodeURIComponent(String(data.get("postSlug") || ""))}/unlock`,json("POST",{password:String(data.get("password") || "")}));setRevision((value)=>value+1);}catch(reason){setError(errorText(reason));}finally{setBusy(false);}return;
+    }
+    if (!form.matches("form.worldact-native-comment-form, .wp-block-post-comments-form form, form.comment-form")) return;
+    event.preventDefault();
+    if (busy) return;
+    const data = new FormData(form);
+    const value = (...names: string[]) => names.map((name) => data.get(name)).find((item) => typeof item === "string" && item) || "";
+    setBusy(true); setError(""); setNotice("");
+    try {
+      const result = await api<{comment:{id:number;status:string}}>("/public/comments", json("POST", {
+        postId: Number(value("postId", "comment_post_ID") || postId),
+        parentId: Number(value("parentId", "comment_parent")) || null,
+        authorName: String(value("authorName", "author")),
+        authorEmail: String(value("authorEmail", "email")),
+        authorUrl: String(value("authorUrl", "url")),
+        ...(form.querySelector('input[name="rememberAuthor"],input[name="wp-comment-cookies-consent"]') ? {rememberAuthor: data.has("rememberAuthor") || data.has("wp-comment-cookies-consent")} : {}),
+        content: String(value("content", "comment")),
+      }));
+      setNotice(result.comment.status === "approved" ? "Your comment has been published." : "Your comment is awaiting moderation.");
+      if(data.has("rememberAuthor") || data.has("wp-comment-cookies-consent")) {const field=form.querySelector<HTMLTextAreaElement>("textarea");if(field)field.value="";}
+      else form.reset();
+      const parent = form.querySelector<HTMLInputElement>('[name="parentId"],[name="comment_parent"]');
+      if (parent) parent.value = "0";
+      if (result.comment.status === "approved") setRevision((value) => value + 1);
+    } catch (reason) { setError(errorText(reason)); }
+    finally { setBusy(false); }
+  }
+  return <>
+    {(error || notice) && <div className="worldact-public-notice" role={error ? "alert" : "status"}>{error || notice}</div>}
+    {html === null && !error && <p className="worldact-public-loading" role="status">Loading…</p>}
+    <div className="wp-site-blocks" ref={root} aria-busy={busy || undefined}
+      onSubmit={submitComment}
+      onClick={(event) => {
+        const target = event.target as HTMLElement;
+        const reply = target.closest<HTMLAnchorElement>("[data-comment-reply]");
+        const cancel = target.closest<HTMLElement>("[data-comment-cancel]");
+        if (!reply && !cancel) return;
+        const form = root.current?.querySelector<HTMLFormElement>("form.worldact-native-comment-form, .wp-block-post-comments-form form, form.comment-form");
+        if (!form) return;
+        event.preventDefault();
+        let parent = form.querySelector<HTMLInputElement>('[name="parentId"],[name="comment_parent"]');
+        if (!parent) { parent = document.createElement("input"); parent.type = "hidden"; parent.name = "parentId"; form.appendChild(parent); }
+        parent.value = reply?.dataset.commentReply || "0";
+        setNotice(reply ? `Replying to ${reply.dataset.commentAuthor || "comment"}.` : "");
+        form.querySelector<HTMLTextAreaElement>("textarea")?.focus();
+        form.scrollIntoView({behavior:"smooth",block:"center"});
+      }} dangerouslySetInnerHTML={{__html:html || ""}} />
+    {busy && <p className="worldact-public-loading" role="status">Submitting…</p>}
+    {userName && <span className="screen-reader-text">Logged in as {userName}.</span>}
+  </>;
 }
 
 const defaultDocuments: Record<string, string> = {
@@ -1067,6 +1286,7 @@ export function PermalinkResolver() {
     post?: Post;
     archive?: { taxonomy: "category" | "tag"; slug: string; name?: string };
   }>(`/public/resolve?path=${encodeURIComponent(location.pathname)}`);
+  if (resource.error === "This page could not be found." || resource.error === "Page not found." || resource.error === "Post not found.") return <PublicSite notFound />;
   if (resource.loading || resource.error)
     return (
       <div className="public-site">
@@ -1090,14 +1310,7 @@ export function PermalinkResolver() {
         slugOverride={resource.data.post.slug}
       />
     );
-  return (
-    <div className="public-site">
-      <main className="site-main">
-        <h1>Page not found</h1>
-        <Link to="/">Return to home</Link>
-      </main>
-    </div>
-  );
+  return <PublicSite notFound />;
 }
 
 type CommentPagination = {
@@ -1138,9 +1351,9 @@ function CommentThread({
     return (
       <div className="public-comment-node" key={item.id}>
         <article id={`comment-${item.id}`} className="public-comment">
-          <div className="public-comment-avatar">
-            <Icon name="admin-users" />
-          </div>
+          {(item as Comment & {avatarUrl?:string|null}).avatarUrl && <div className="public-comment-avatar">
+            <img src={(item as Comment & {avatarUrl:string}).avatarUrl} alt="" width={48} height={48} loading="lazy" referrerPolicy="no-referrer"/>
+          </div>}
           <div>
             <strong>{item.authorName}</strong>
             <p className="comment-date">{displayDate(item.createdAt)}</p>

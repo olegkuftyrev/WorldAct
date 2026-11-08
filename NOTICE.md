@@ -1,6 +1,6 @@
 # Attribution and third-party notices
 
-WorldAct is a personal educational CMS reimplementation using React, Node.js and PostgreSQL. It is an independent project and is not affiliated with or endorsed by WordPress or Automattic. WordPress and the bundled theme names identify the upstream references; WorldAct's native React presentations are limited implementations.
+WorldAct is a personal educational CMS reimplementation using React, Node.js and PostgreSQL. It is an independent project and is not affiliated with or endorsed by WordPress or Automattic. WordPress and the bundled theme names identify the upstream references; WorldAct ports the supplied block themes into a React/Node renderer and retains a separate legacy Classic presentation.
 
 ## Project license
 
@@ -10,9 +10,9 @@ WorldAct source is provided under **GPL-2.0-or-later**. The root [LICENSE](LICEN
 
 Selected static admin CSS/color schemes, Dashicons and its font files, dashboard artwork, and theme screenshots under `public/vendor/wordpress/` were copied from the user-supplied distribution at `/Users/olegkuftyrev/Desktop/wordpress`. Its version file declares WordPress **7.1.4**, and its readme identifies GNU GPL version 2 or later. Copyright belongs to the WordPress contributors and original asset authors. Source comments and available notices are retained.
 
-The theme screenshots are from Twenty Twenty-Five, Twenty Twenty-Four and Twenty Twenty-Three. Their presence documents and illustrates the upstream theme references; it does not make WorldAct a complete port of those themes.
+Templates, parts, patterns, theme.json data, variations, original CSS, images and fonts from Twenty Twenty-Five, Twenty Twenty-Four and Twenty Twenty-Three are statically transformed and copied with source paths/hashes in `src/theme-source/bundled.json`. No PHP executes in the import or runtime. Theme readme/style notices accompany assets; each theme’s `FONT-NOTICES.txt` records font copyright/license provenance, with OFL or Apache 2.0 notices beside the applicable fonts. The Roboto Slab font embeds Apache 2.0 copyright information, which is preserved with that license.
 
-The Manrope variable font from Twenty Twenty-Five is copyright 2018 The Manrope Project Authors and licensed under SIL Open Font License 1.1. Its license is retained beside the font at `public/vendor/wordpress/wp-content/themes/twentytwentyfive/assets/fonts/manrope/OFL.txt`. Inter from Twenty Twenty-Four retains its original copyright and SIL Open Font License in the adjacent `inter/LICENSE.txt`. Other font choices use system fonts and fallbacks.
+Two Twenty Twenty-Four directory patterns declared by its theme metadata are retained with their canonical source/provenance in `src/theme-source/`. Social SVG icons are statically extracted from the supplied `wp-includes/blocks/social-link.php` into `src/theme-source/social-icons.json`; copyright belongs to the WordPress contributors and original service mark owners.
 
 The copied dashboard SVG has a duplicate root XML attribute removed so it loads as an external image. The original reference distribution is unchanged. It is not configured or executed as a PHP/MySQL installation, and no existing WordPress user database or content dump is included.
 
@@ -24,6 +24,8 @@ The Gutenberg project is GPL version 2 or later. Its package license files also 
 
 ## Other dependencies and services
 
-React, Express, PostgreSQL, Sharp, file-type, fast-xml-parser, Nodemailer, Vite, and other dependencies retain their respective upstream licenses and copyright notices in their distributions. Generated build outputs and installed dependency data are not a replacement for those notices.
+The supplied Hello Dolly 1.7.2 and Akismet 5.7.2 plugins are reimplemented as Node modules. Hello Dolly retains its source lyric data and Matt Mullenweg attribution; Akismet identifies Automattic and its anti-spam team. Original plugin code/notices are reference material, and the applicable GPL notices are retained in `src/plugins/`. No PHP plugin code executes. Akismet's optional external service requires separate operator configuration and is subject to its provider's terms.
 
-Optional YouTube and Vimeo embeds load player resources from their respective providers. WorldAct constructs player URLs from validated provider/video IDs; those services and media remain subject to their owners' terms and rights. SMTP contacts the configured mail server only when configured; local development otherwise uses a database mail outbox.
+React, Express, PostgreSQL, Sharp, fontkit, file-type, fast-xml-parser, Nodemailer, Vite, and other dependencies retain their respective upstream licenses and copyright notices in their distributions. Generated build outputs and installed dependency data are not a replacement for those notices.
+
+Enabled public avatars load Gravatar URLs using the source-equivalent SHA-256 identity hash, rating and default style. Disabling avatars suppresses those images. Optional YouTube and Vimeo embeds load player resources from their respective providers. WorldAct constructs player URLs from validated provider/video IDs; those services and media remain subject to their owners' terms and rights. SMTP contacts the configured mail server only when configured; local development otherwise uses a database mail outbox.

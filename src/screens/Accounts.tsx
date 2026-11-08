@@ -26,7 +26,7 @@ import {
 import "../accounts.css";
 
 type RegistrationSettings = { enabled: boolean };
-function AccountLayout({ children }: { children: ReactNode }) {
+export function AccountLayout({ children }: { children: ReactNode }) {
   return (
     <div id="login" className="worldact-account-screen">
       <h1>

@@ -68,6 +68,7 @@ import formatCSS from "../../node_modules/@wordpress/format-library/build-style/
 import { api, type Media } from "../api";
 import type { SerializedBlock } from "./types";
 import { parseVideoEmbed } from "../embeds";
+import { compileThemeStyles, type ThemeJSON, type ThemeStyleOverrides } from "../themeStyles";
 import "./gutenberg.css";
 
 export type { SerializedBlock, GutenbergBlock } from "./types";
@@ -124,6 +125,26 @@ export const WORLDAct_DYNAMIC_BLOCKS = [
   "core/query-no-results",
   "core/query-title",
   "core/block",
+  "core/term-description",
+  "core/avatar",
+  "core/post-navigation-link",
+  "core/search",
+  "core/social-links",
+  "core/social-link",
+  "core/comments",
+  "core/comments-title",
+  "core/comment-template",
+  "core/comment-date",
+  "core/comment-author-name",
+  "core/comment-content",
+  "core/comment-edit-link",
+  "core/comment-reply-link",
+  "core/comments-pagination",
+  "core/comments-pagination-previous",
+  "core/comments-pagination-numbers",
+  "core/comments-pagination-next",
+  "core/post-comments-form",
+  "core/categories",
 ];
 export const WORLDAct_SITE_BLOCKS = [
   "core/site-title",
@@ -839,13 +860,15 @@ function restoreBlocks(blocks: SerializedBlock[]): Block[] {
 }
 
 function initialValue(blocks: SerializedBlock[] | null, html: string): Block[] {
-  const value = blocks?.length
-    ? restoreBlocks(blocks)
-    : html.trim()
-      ? html.includes("<!-- wp:")
-        ? restoreBlocks(toStored(parse(html)))
-        : rawHandler({ HTML: html })
-      : [];
+  // The official parser also recovers RichText and media attributes from saved
+  // markup. The server's structural parser deliberately does not extract them.
+  const value = html.includes("<!-- wp:")
+    ? restoreBlocks(toStored(parse(html)))
+    : blocks?.length
+      ? restoreBlocks(blocks)
+      : html.trim()
+        ? rawHandler({ HTML: html })
+        : [];
   return value.length ? value : [createBlock("core/paragraph")];
 }
 
@@ -966,8 +989,10 @@ const GutenbergSession = forwardRef<
   const [addedMedia, setAddedMedia] = useState<Media[]>([]);
   const [error, setError] = useState("");
   const [patterns, setPatterns] = useState<
-    { name: string; title: string; content: string; categories: string[] }[]
+    { name: string; title: string; content: string; categories: string[]; inserter?: boolean; blockTypes?: string[] }[]
   >([]);
+  const [themeDocument, setThemeDocument] = useState<ThemeJSON | null>(null);
+  const [themeOverrides,setThemeOverrides]=useState<ThemeStyleOverrides>({});
   const entityHistory = useSelect(
     (select) => ({
       undo: select(coreDataStore).hasUndo(),
@@ -1203,7 +1228,7 @@ const GutenbergSession = forwardRef<
   useEffect(() => {
     let active = true;
     api<{
-      settings: { timezone: string; dateFormat: string; timeFormat: string };
+      settings: { timezone: string; dateFormat: string; timeFormat: string; weekStartsOn?: 0|1|2|3|4|5|6 };
     }>("/public/site")
       .then(({ settings }) => {
         if (!active) return;
@@ -1215,6 +1240,7 @@ const GutenbergSession = forwardRef<
           : current.timezone.offset;
         setDateSettings({
           ...current,
+          l10n: {...current.l10n,startOfWeek:settings.weekStartsOn ?? 1},
           timezone: {
             ...current.timezone,
             string: fixed ? "" : settings.timezone,
@@ -1235,18 +1261,29 @@ const GutenbergSession = forwardRef<
         title: string;
         content: string;
         blocks: SerializedBlock[] | null;
+        rawContent?: string;
+        theme?: string;
+        slug?: string;
+        sourceMetadata?: { categories?: string[]; inserter?: boolean; blockTypes?: string[] };
       }[];
+      theme?: { themeJSON: ThemeJSON | null; fonts?: ThemeJSON[] };
+      styles?:ThemeStyleOverrides;
     }>("/public/design")
       .then((design) => {
-        if (active)
+        if (active) {
+          setThemeDocument(design.theme?.themeJSON || {settings:{typography:{fontFamilies:design.theme?.fonts || []}}});
+          setThemeOverrides(design.styles || {});
           setPatterns(
             design.patterns.map((pattern) => ({
-              name: `worldact/pattern-${pattern.id}`,
+              name: pattern.theme && pattern.slug ? `${pattern.theme}/${pattern.slug}` : `worldact/pattern-${pattern.id}`,
               title: pattern.title,
-              content: serialize(initialValue(pattern.blocks, pattern.content)),
-              categories: ["featured"],
+              content: pattern.rawContent || serialize(initialValue(pattern.blocks, pattern.content)),
+              categories: pattern.sourceMetadata?.categories?.length ? pattern.sourceMetadata.categories : ["featured"],
+              inserter: pattern.sourceMetadata?.inserter !== false,
+              blockTypes: pattern.sourceMetadata?.blockTypes || [],
             })),
           );
+        }
       })
       .catch(() => {
         /* Patterns are optional; content editing remains available. */
@@ -1354,22 +1391,26 @@ const GutenbergSession = forwardRef<
         { slug: "large", name: "Large" },
         { slug: "full", name: "Full size" },
       ],
-      maxWidth: 1120,
-      colors,
-      fontSizes: [
+      maxWidth: Number.parseFloat(themeDocument?.settings?.layout?.wideSize) || 1120,
+      colors: themeDocument?.settings?.color?.palette || colors,
+      fontSizes: themeDocument?.settings?.typography?.fontSizes || [
         { name: "Small", slug: "small", size: 14 },
         { name: "Medium", slug: "medium", size: 20 },
         { name: "Large", slug: "large", size: 36 },
         { name: "Extra Large", slug: "x-large", size: 48 },
       ],
       __experimentalFeatures: {
+        ...themeDocument?.settings,
         appearanceTools: true,
         color: {
           custom: true,
           customGradient: true,
           text: true,
           background: true,
-          palette: { theme: colors },
+          ...themeDocument?.settings?.color,
+          palette: { theme: themeDocument?.settings?.color?.palette || colors },
+          gradients: { theme: themeDocument?.settings?.color?.gradients || [] },
+          duotone: { theme: themeDocument?.settings?.color?.duotone || [] },
         },
         typography: {
           customFontSize: true,
@@ -1379,17 +1420,23 @@ const GutenbergSession = forwardRef<
           letterSpacing: true,
           textDecoration: true,
           textTransform: true,
+          ...themeDocument?.settings?.typography,
+          fontFamilies: { theme: themeDocument?.settings?.typography?.fontFamilies || [] },
+          fontSizes: { theme: themeDocument?.settings?.typography?.fontSizes || [] },
         },
         spacing: {
           padding: true,
           margin: true,
           blockGap: true,
           units: ["px", "em", "rem", "%", "vw", "vh"],
+          ...themeDocument?.settings?.spacing,
+          spacingSizes: { theme: themeDocument?.settings?.spacing?.spacingSizes || [] },
         },
         border: { color: true, radius: true, style: true, width: true },
-        layout: { contentSize: "680px", wideSize: "1120px" },
+        layout: themeDocument?.settings?.layout || { contentSize: "680px", wideSize: "1120px" },
       },
       __experimentalBlockPatterns: patterns,
+      __experimentalBlockPatternCategories: [...new Set(patterns.flatMap((pattern) => pattern.categories))].map((name) => ({ name, label: name.replace(/[-_]/g, " ").replace(/\b\w/g, (letter) => letter.toUpperCase()) })),
       __experimentalReusableBlocks: reusable,
       __experimentalBlockBindingsSupportedAttributes: {
         "core/post-date": ["datetime"],
@@ -1434,7 +1481,7 @@ const GutenbergSession = forwardRef<
       mediaUpload,
       styles: canvasStyles,
     }),
-    [mediaUpload, patterns, reusable, props.context, reportError],
+    [mediaUpload, patterns, reusable, props.context, reportError, themeDocument],
   );
 
   const keyDown = (event: KeyboardEvent<HTMLDivElement>) => {
@@ -1554,8 +1601,8 @@ const GutenbergSession = forwardRef<
                     height="min(72vh, 900px)"
                     styles={
                       props.canvasCSS
-                        ? [...canvasStyles, { css: props.canvasCSS }]
-                        : canvasStyles
+                        ? [...canvasStyles, ...(themeDocument ? [{css:compileThemeStyles(themeDocument, "body.editor-styles-wrapper",themeOverrides)}] : []), { css: props.canvasCSS }]
+                        : [...canvasStyles, ...(themeDocument ? [{css:compileThemeStyles(themeDocument, "body.editor-styles-wrapper",themeOverrides)}] : [])]
                     }
                   />
                 </div>

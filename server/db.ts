@@ -3,13 +3,15 @@ import pg from "pg";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { withPermalink } from "./permalinks.js";
+import type { PostFormat } from "../shared/post-formats.js";
 
 export const rootDir = path.resolve(
   path.dirname(fileURLToPath(import.meta.url)),
   "..",
 );
-export const uploadsDir = path.join(rootDir, "uploads");
 dotenv.config({ path: path.join(rootDir, ".env"), quiet: true });
+// Isolated regression runs use a disposable filesystem alongside their database.
+export const uploadsDir = path.resolve(process.env.WORLDACT_UPLOADS_DIR || path.join(rootDir, "uploads"));
 export const pool = new pg.Pool({
   connectionString: process.env.DATABASE_URL,
   max: 10,
@@ -35,12 +37,15 @@ export interface User {
   createdAt: Date;
 }
 export const userFields = `id, username, email, display_name AS "displayName", role, created_at AS "createdAt"`;
-export const postFields = `p.id, p.type, p.title, p.slug, p.content,p.raw_content AS "rawContent", p.excerpt, p.status, p.format,
+export const postFields = `p.id, p.type, p.title, p.slug, p.content,p.raw_content AS "rawContent", p.excerpt, p.status, p.pre_trash_status AS "preTrashStatus", p.format,
   p.author_id AS "authorId", u.display_name AS "authorName", p.created_at AS "createdAt",
   p.updated_at AS "updatedAt", p.published_at AS "publishedAt", p.scheduled_at AS "scheduledAt",
-  p.blocks, p.version, p.parent_id AS "parentId", p.menu_order AS "menuOrder",
-  p.featured_media_id AS "featuredMediaId", p.comment_status AS "commentStatus", p.sticky,
+  p.blocks, p.version, p.parent_id AS "parentId", p.menu_order AS "menuOrder",p.template_slug AS "templateSlug",
+  p.featured_media_id AS "featuredMediaId", p.comment_status AS "commentStatus", p.ping_status AS "pingStatus", p.sticky,
   (p.password_hash IS NOT NULL) AS "hasPassword",
+  (SELECT count(*)::int FROM comments c WHERE c.post_id=p.id AND c.status IN('approved','pending')) AS "commentCount",
+  (SELECT count(*)::int FROM comments c WHERE c.post_id=p.id AND c.status='approved') AS "approvedCommentCount",
+  (SELECT count(*)::int FROM comments c WHERE c.post_id=p.id AND c.status='pending') AS "pendingCommentCount",
   COALESCE((SELECT jsonb_agg(jsonb_build_object('id',t.id,'taxonomy',t.taxonomy,'name',t.name,'slug',t.slug,'description',t.description,'parentId',t.parent_id,'count',(SELECT count(*)::int FROM post_terms counted JOIN posts counted_post ON counted_post.id=counted.post_id WHERE counted.term_id=t.id AND counted_post.status='publish')) ORDER BY t.name,t.id)
     FROM post_terms pt JOIN terms t ON t.id=pt.term_id WHERE pt.post_id=p.id), '[]'::jsonb) AS terms`;
 export const mediaFields = `id, title, '/uploads/' || filename AS url, mime_type AS "mimeType", filename,
@@ -60,6 +65,7 @@ export const defaultSettings = {
   timezone: "America/Los_Angeles",
   dateFormat: "F j, Y",
   timeFormat: "g:i a",
+  weekStartsOn: 1,
   postsPerPage: 10,
   discourageSearchEngines: false,
   theme: "twentytwentyfive" as
@@ -68,15 +74,7 @@ export const defaultSettings = {
     | "twentytwentythree"
     | "classic",
   defaultCategoryId: null as number | null,
-  defaultPostFormat: "standard" as
-    | "standard"
-    | "aside"
-    | "image"
-    | "video"
-    | "quote"
-    | "link"
-    | "gallery"
-    | "audio",
+  defaultPostFormat: "standard" as PostFormat,
   frontPageMode: "posts" as "posts" | "page",
   frontPageId: null as number | null,
   postsPageId: null as number | null,
@@ -86,6 +84,18 @@ export const defaultSettings = {
   requireCommentNameEmail: true,
   commentRegistration: false,
   commentModeration: true,
+  commentMaxLinks: 2,
+  commentModerationKeys: "",
+  disallowedCommentKeys: "",
+  commentPreviouslyApproved: false,
+  notifyComments: false,
+  notifyModeration: false,
+  showAvatars: true,
+  avatarRating: "G" as "G" | "PG" | "R" | "X",
+  defaultAvatar: "mystery" as "mystery" | "blank" | "identicon" | "wavatar" | "monsterid" | "retro",
+  commentCookieConsent: true,
+  paginateComments: true,
+  defaultCommentPage: "oldest" as "oldest" | "newest",
   commentsPerPage: 50,
   threadComments: true,
   threadDepth: 5,

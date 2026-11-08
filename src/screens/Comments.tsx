@@ -1,4 +1,15 @@
-import { Fragment, useRef, useState, type FormEvent } from "react";
+import {
+  ListTableOptions,
+  useListTablePreferences,
+} from "../components/ScreenOptions";
+import {
+  Fragment,
+  useEffect,
+  useRef,
+  useState,
+  type FormEvent,
+  type ReactNode,
+} from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { api, ApiError, date, json, type Comment } from "../api";
 import {
@@ -14,7 +25,8 @@ import "../comments.css";
 type Status = Comment["status"] | "all";
 type CommentList = {
   comments: Comment[];
-  counts: Partial<Record<Status, number>>;
+  counts: Partial<Record<Status | "mine", number>>;
+  permissions: { bulk: boolean; empty: boolean };
   pagination: {
     page: number;
     perPage: number;
@@ -33,10 +45,12 @@ const statuses: [Status, string][] = [
 
 export default function Comments() {
   const [params, setParams] = useSearchParams();
+  const tablePreferences = useListTablePreferences("comments");
   const requestedStatus = params.get("status") as Status;
   const status = statuses.some(([value]) => value === requestedStatus)
     ? requestedStatus
     : "all";
+  const mine = params.get("mine") === "true";
   const page = Math.max(1, Number(params.get("page")) || 1);
   const search = params.get("search") || "";
   const orderby = ["date", "author", "post"].includes(
@@ -49,10 +63,11 @@ export default function Comments() {
     status,
     excludeTrashSpam: "true",
     page: String(page),
-    perPage: "20",
+    perPage: String(tablePreferences.value.perPage),
     orderby,
     order,
   });
+  if (mine) query.set("mine", "true");
   if (search) query.set("search", search);
   const postId = Number(params.get("postId"));
   if (Number.isInteger(postId) && postId > 0)
@@ -63,9 +78,18 @@ export default function Comments() {
     [bulk, setBulk] = useState("");
   const [editing, setEditing] = useState<Editing | null>(null),
     [deleting, setDeleting] = useState<number[] | null>(null);
+  const [emptyReview, setEmptyReview] = useState<"spam" | "trash" | null>(null);
+  const [emptyProgress, setEmptyProgress] = useState(0);
   const [notice, setNotice] = useState(""),
     [error, setError] = useState(""),
     [busy, setBusy] = useState(false);
+  useEffect(() => {
+    setSearchDraft(search);
+    setSelected([]);
+    setEditing(null);
+  }, [search, status, mine, page, postId]);
+  const canBulk = resource.data?.permissions.bulk === true;
+  const columnCount = canBulk ? 5 : 4;
   const comments = resource.data?.comments || [];
   const counts = resource.data?.counts || {};
   const totalPages = resource.data?.pagination.totalPages || 1;
@@ -100,7 +124,9 @@ export default function Comments() {
           nextStatus === "delete"
             ? json("DELETE")
             : json("PUT", {
-                status: nextStatus,
+                ...(nextStatus === "restore"
+                  ? { restore: true }
+                  : { status: nextStatus }),
                 ...(comment?.version ? { version: comment.version } : {}),
               }),
         );
@@ -121,7 +147,49 @@ export default function Comments() {
       setBusy(false);
     }
   }
+  async function emptyComments() {
+    if (!emptyReview || busy || !resource.data?.permissions.empty) return;
+    setBusy(true);
+    setError("");
+    setEmptyProgress(0);
+    let deleted = 0;
+    try {
+      let hasMore = true;
+      while (hasMore) {
+        const result = await api<{ deleted: number; hasMore: boolean }>(
+          "/comments/empty",
+          json("POST", {
+            status: emptyReview,
+            ...(Number.isInteger(postId) && postId > 0 ? { postId } : {}),
+          }),
+        );
+        deleted += result.deleted;
+        setEmptyProgress(deleted);
+        hasMore = result.hasMore;
+      }
+      setEmptyReview(null);
+      setSelected([]);
+      setEditing(null);
+      setNotice(
+        `${deleted} ${emptyReview === "spam" ? "spam" : "trashed"} ${deleted === 1 ? "comment" : "comments"} permanently deleted.`,
+      );
+    } catch (reason) {
+      setError(
+        `${errorText(reason)}${deleted ? ` ${deleted} comments were deleted before the error.` : ""}`,
+      );
+    } finally {
+      setBusy(false);
+      await resource.reload();
+    }
+  }
   function begin(comment: Comment, mode: Editing["mode"]) {
+    if (
+      ["spam", "trash"].includes(comment.status) ||
+      !(mode === "reply"
+        ? comment.permissions?.reply
+        : comment.permissions?.edit)
+    )
+      return;
     setEditing({ comment, mode });
     setError("");
   }
@@ -133,7 +201,8 @@ export default function Comments() {
   const paging = (
     <div className="tablenav-pages comment-pagination">
       <span className="displaying-num">
-        {resource.data?.pagination.total || 0} items
+        {resource.data?.pagination.total || 0}{" "}
+        {resource.data?.pagination.total === 1 ? "item" : "items"}
       </span>
       <button
         className="button"
@@ -174,7 +243,18 @@ export default function Comments() {
   );
   return (
     <>
-      <ScreenTabs />
+      <ScreenTabs>
+        <ListTableOptions
+          table={tablePreferences}
+          itemLabel="comments"
+          columns={[
+            { id: "author", label: "Author" },
+            { id: "response", label: "In response to" },
+            { id: "date", label: "Submitted on" },
+          ]}
+          onApply={() => change({ page: "1" })}
+        />
+      </ScreenTabs>
       <main className="wrap worldact-comments">
         <h1>Comments</h1>
         {notice && <Notice onDismiss={() => setNotice("")}>{notice}</Notice>}
@@ -185,13 +265,26 @@ export default function Comments() {
           retry={resource.reload}
         />
         <ul className="subsubsub">
-          {statuses.map(([value, label], index) => (
+          {(
+            [statuses[0], ["mine", "Mine"], ...statuses.slice(1)] as [
+              Status | "mine",
+              string,
+            ][]
+          ).map(([value, label], index) => (
             <li key={value}>
               {index > 0 && " | "}
               <Link
-                className={status === value ? "current" : ""}
-                aria-current={status === value ? "page" : undefined}
-                to={`?${new URLSearchParams({ ...Object.fromEntries(params), status: value, page: "1" })}`}
+                className={
+                  (value === "mine" ? mine : !mine && status === value)
+                    ? "current"
+                    : ""
+                }
+                aria-current={
+                  (value === "mine" ? mine : !mine && status === value)
+                    ? "page"
+                    : undefined
+                }
+                to={`?${new URLSearchParams({ ...Object.fromEntries(params), status: value === "mine" ? "all" : value, mine: value === "mine" ? "true" : "false", page: "1" })}`}
               >
                 {label}{" "}
                 <span className="count">
@@ -222,51 +315,79 @@ export default function Comments() {
           <button className="button">Search Comments</button>
         </form>
         <div className="tablenav top">
-          <div className="alignleft actions bulkactions">
-            <select
-              aria-label="Bulk actions"
-              value={bulk}
-              onChange={(event) => setBulk(event.target.value)}
-            >
-              <option value="">Bulk actions</option>
-              <option value="approved">Approve</option>
-              <option value="pending">Unapprove</option>
-              <option value="spam">Mark as spam</option>
-              <option value="trash">Move to Trash</option>
-              {["trash", "spam"].includes(status) && (
-                <option value="delete">Delete permanently</option>
-              )}
-            </select>
-            <button
-              className="button"
-              disabled={busy || !selected.length || !bulk}
-              onClick={() => void action(selected, bulk)}
-            >
-              Apply
-            </button>
-          </div>
+          {canBulk && (
+            <div className="alignleft actions bulkactions">
+              <select
+                aria-label="Bulk actions"
+                value={bulk}
+                onChange={(event) => setBulk(event.target.value)}
+              >
+                <option value="">Bulk actions</option>
+                {["trash", "spam"].includes(status) ? (
+                  <>
+                    <option value="restore">
+                      {status === "spam" ? "Not spam" : "Restore"}
+                    </option>
+                    <option value="delete">Delete permanently</option>
+                  </>
+                ) : (
+                  <>
+                    <option value="approved">Approve</option>
+                    <option value="pending">Unapprove</option>
+                    <option value="spam">Mark as spam</option>
+                    <option value="trash">Move to Trash</option>
+                  </>
+                )}
+              </select>
+              <button
+                className="button"
+                disabled={busy || !selected.length || !bulk}
+                onClick={() => void action(selected, bulk)}
+              >
+                Apply
+              </button>
+            </div>
+          )}
+          {resource.data?.permissions.empty &&
+            (status === "spam" || status === "trash") && (
+              <button
+                className="button empty-comment-action"
+                disabled={busy || !(counts[status] || 0)}
+                onClick={() => {
+                  setEmptyProgress(0);
+                  setEmptyReview(status);
+                }}
+              >
+                {status === "spam" ? "Empty Spam" : "Empty Trash"}
+              </button>
+            )}
           {paging}
         </div>
-        <table className="wp-list-table widefat fixed striped comments">
+        <table
+          data-hidden-columns={tablePreferences.value.hiddenColumns.join(" ")}
+          className="wp-list-table widefat fixed striped comments"
+        >
           <thead>
             <tr>
-              <td className="check-column">
-                <input
-                  type="checkbox"
-                  aria-label="Select all comments"
-                  checked={
-                    comments.length > 0 &&
-                    comments.every((item) => selected.includes(item.id))
-                  }
-                  onChange={(event) =>
-                    setSelected(
-                      event.target.checked
-                        ? comments.map((item) => item.id)
-                        : [],
-                    )
-                  }
-                />
-              </td>
+              {canBulk && (
+                <td className="check-column">
+                  <input
+                    type="checkbox"
+                    aria-label="Select all comments"
+                    checked={
+                      comments.length > 0 &&
+                      comments.every((item) => selected.includes(item.id))
+                    }
+                    onChange={(event) =>
+                      setSelected(
+                        event.target.checked
+                          ? comments.map((item) => item.id)
+                          : [],
+                      )
+                    }
+                  />
+                </td>
+              )}
               <th
                 className="column-author"
                 aria-sort={
@@ -303,20 +424,22 @@ export default function Comments() {
                   className={comment.status === "pending" ? "unapproved" : ""}
                   id={`comment-${comment.id}`}
                 >
-                  <th scope="row" className="check-column">
-                    <input
-                      type="checkbox"
-                      aria-label={`Select comment by ${comment.authorName}`}
-                      checked={selected.includes(comment.id)}
-                      onChange={(event) =>
-                        setSelected(
-                          event.target.checked
-                            ? [...selected, comment.id]
-                            : selected.filter((id) => id !== comment.id),
-                        )
-                      }
-                    />
-                  </th>
+                  {canBulk && (
+                    <th scope="row" className="check-column">
+                      <input
+                        type="checkbox"
+                        aria-label={`Select comment by ${comment.authorName}`}
+                        checked={selected.includes(comment.id)}
+                        onChange={(event) =>
+                          setSelected(
+                            event.target.checked
+                              ? [...selected, comment.id]
+                              : selected.filter((id) => id !== comment.id),
+                          )
+                        }
+                      />
+                    </th>
+                  )}
                   <td className="author">
                     <strong>{comment.authorName}</strong>
                     {comment.authorUrl && (
@@ -353,91 +476,23 @@ export default function Comments() {
                       className="comment-content"
                       dangerouslySetInnerHTML={{ __html: comment.content }}
                     />
-                    <div className="row-actions visible">
-                      <button
-                        className="button-link"
-                        disabled={busy}
-                        onClick={() =>
-                          void action(
-                            [comment.id],
-                            comment.status === "approved"
-                              ? "pending"
-                              : "approved",
-                          )
-                        }
-                      >
-                        {comment.status === "approved"
-                          ? "Unapprove"
-                          : "Approve"}
-                      </button>
-                      {" | "}
-                      <button
-                        className="button-link"
-                        onClick={() => begin(comment, "reply")}
-                      >
-                        Reply
-                      </button>
-                      {" | "}
-                      <button
-                        className="button-link"
-                        onClick={() => begin(comment, "quick")}
-                      >
-                        Quick Edit
-                      </button>
-                      {" | "}
-                      <button
-                        className="button-link"
-                        onClick={() => begin(comment, "edit")}
-                      >
-                        Edit
-                      </button>
-                      {" | "}
-                      {comment.status !== "spam" && (
-                        <>
-                          <button
-                            className="button-link"
-                            disabled={busy}
-                            onClick={() => void action([comment.id], "spam")}
-                          >
-                            Spam
-                          </button>
-                          {" | "}
-                        </>
-                      )}
-                      {comment.status === "trash" ||
-                      comment.status === "spam" ? (
-                        <>
-                          <button
-                            className="button-link"
-                            disabled={busy}
-                            onClick={() => void action([comment.id], "pending")}
-                          >
-                            Restore
-                          </button>
-                          {" | "}
-                          <button
-                            className="button-link button-link-delete"
-                            disabled={busy}
-                            onClick={() => setDeleting([comment.id])}
-                          >
-                            Delete permanently
-                          </button>
-                        </>
-                      ) : (
-                        <button
-                          className="button-link button-link-delete"
-                          disabled={busy}
-                          onClick={() => void action([comment.id], "trash")}
-                        >
-                          Trash
-                        </button>
-                      )}
-                    </div>
+                    <CommentActions
+                      comment={comment}
+                      busy={busy}
+                      action={(operation) =>
+                        void action([comment.id], operation)
+                      }
+                      begin={(mode) => begin(comment, mode)}
+                    />
                   </td>
                   <td className="column-response">
-                    <Link to={`/admin/posts/${comment.postId}`}>
-                      {comment.postTitle}
-                    </Link>
+                    {comment.permissions?.edit ? (
+                      <Link to={`/admin/content/${comment.postId}`}>
+                        {comment.postTitle}
+                      </Link>
+                    ) : (
+                      <strong>{comment.postTitle}</strong>
+                    )}
                     <br />
                     <Link to={`?postId=${comment.postId}`}>
                       View all comments for this post
@@ -454,7 +509,7 @@ export default function Comments() {
                 {editing?.comment.id === comment.id &&
                   editing.mode !== "edit" && (
                     <tr className="comment-inline-row">
-                      <td colSpan={5}>
+                      <td colSpan={columnCount}>
                         <CommentForm
                           key={`${comment.id}-${editing.mode}`}
                           editing={editing}
@@ -469,7 +524,7 @@ export default function Comments() {
             ))}
             {!resource.loading && !comments.length && (
               <tr>
-                <td colSpan={5}>No comments found.</td>
+                <td colSpan={columnCount}>No comments found.</td>
               </tr>
             )}
           </tbody>
@@ -488,6 +543,46 @@ export default function Comments() {
               saved={saved}
               onConflict={resource.reload}
             />
+          </Modal>
+        )}
+        {emptyReview && (
+          <Modal
+            title={emptyReview === "spam" ? "Empty Spam" : "Empty Trash"}
+            close={() => !busy && setEmptyReview(null)}
+          >
+            <div className="comment-empty-review">
+              <p>
+                Permanently delete all{" "}
+                {emptyReview === "spam" ? "spam" : "trashed"} comments
+                {Number.isInteger(postId) && postId > 0 ? " for this post" : ""}
+                ? This cannot be undone.
+              </p>
+              {search && (
+                <p>
+                  This includes comments outside the current search results.
+                </p>
+              )}
+              {busy && (
+                <p role="status">Deleting comments… {emptyProgress} deleted.</p>
+              )}
+              {error && <Notice error>{error}</Notice>}
+              <div className="comment-form-actions">
+                <button
+                  className="button"
+                  disabled={busy}
+                  onClick={() => setEmptyReview(null)}
+                >
+                  Cancel
+                </button>
+                <button
+                  className="button button-danger"
+                  disabled={busy}
+                  onClick={() => void emptyComments()}
+                >
+                  {busy ? "Deleting…" : "Delete all permanently"}
+                </button>
+              </div>
+            </div>
           </Modal>
         )}
         {deleting && (
@@ -525,6 +620,74 @@ export default function Comments() {
   );
 }
 
+function CommentActions({
+  comment,
+  busy,
+  action,
+  begin,
+}: {
+  comment: Comment;
+  busy: boolean;
+  action: (operation: string) => void;
+  begin: (mode: Editing["mode"]) => void;
+}) {
+  const permissions = comment.permissions;
+  const removed = comment.status === "spam" || comment.status === "trash";
+  const actions: { key: string; node: ReactNode }[] = [];
+  const add = (
+    key: string,
+    label: string,
+    onClick: () => void,
+    danger = false,
+  ) =>
+    actions.push({
+      key,
+      node: (
+        <button
+          className={`button-link${danger ? " button-link-delete" : ""}`}
+          disabled={busy}
+          onClick={onClick}
+        >
+          {label}
+        </button>
+      ),
+    });
+  if (removed) {
+    if (permissions?.moderate)
+      add("restore", comment.status === "spam" ? "Not Spam" : "Restore", () =>
+        action("restore"),
+      );
+    if (permissions?.delete)
+      add("delete", "Delete permanently", () => action("delete"), true);
+  } else {
+    if (permissions?.moderate)
+      add(
+        "moderate",
+        comment.status === "approved" ? "Unapprove" : "Approve",
+        () => action(comment.status === "approved" ? "pending" : "approved"),
+      );
+    if (permissions?.reply) add("reply", "Reply", () => begin("reply"));
+    if (permissions?.edit) {
+      add("quick", "Quick Edit", () => begin("quick"));
+      add("edit", "Edit", () => begin("edit"));
+    }
+    if (permissions?.moderate) {
+      add("spam", "Spam", () => action("spam"));
+      add("trash", "Trash", () => action("trash"), true);
+    }
+  }
+  return actions.length ? (
+    <div className="row-actions visible">
+      {actions.map(({ key, node }, index) => (
+        <Fragment key={key}>
+          {index > 0 && " | "}
+          {node}
+        </Fragment>
+      ))}
+    </div>
+  ) : null;
+}
+
 function CommentForm({
   editing,
   close,
@@ -540,7 +703,7 @@ function CommentForm({
   const reply = mode === "reply";
   const [form, setForm] = useState({
     authorName: comment.authorName,
-    authorEmail: comment.authorEmail,
+    authorEmail: comment.authorEmail || "",
     authorUrl: comment.authorUrl || "",
     content: reply ? "" : comment.content,
     status: reply ? "approved" : comment.status,
@@ -622,6 +785,7 @@ function CommentForm({
           <label>
             Name
             <input
+              type="text"
               required
               maxLength={160}
               value={form.authorName}

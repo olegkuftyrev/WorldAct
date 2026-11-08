@@ -132,7 +132,7 @@ test("canonical block rendering, public isolation, pagination, nested context an
           ),
         );
         const html = await renderSiteDocument({ rawContent: raw }, options);
-        assert.match(html, /<section class="preserved">/);
+        assert.ok(new DOMParser().parseFromString(html,"text/html").querySelector("section.preserved"));
         assert.equal(
           new DOMParser().parseFromString(html, "text/html").querySelector("h2")
             ?.textContent,
@@ -654,11 +654,11 @@ test("block entity REST permissions, canonical persistence and optimistic confli
     postRecords.push(createdPost.data.post.id);
     const templatePath =
       "/api/public/templates/" + name + "?postId=" + createdPost.data.post.id;
-    assert.equal((await request(templatePath)).response.status, 403);
-    assert.equal(
-      (await request(templatePath, "GET", undefined, cookie)).response.status,
-      403,
-    );
+    for(const viewer of ["",cookie]){
+      const locked=await request(templatePath,"GET",undefined,viewer);
+      assert.equal(locked.response.status,200);
+      assert.doesNotMatch(locked.data.content,new RegExp("Confidential "+name));
+    }
     const unlock = await request(
       "/api/public/posts/" + createdPost.data.post.slug + "/unlock",
       "POST",

@@ -60,6 +60,8 @@ router.get(
       "site-health.php": "/admin/tools?tab=health",
     };
     let target = simple[file];
+    const attachment=query.attachment_id ?? query.item;
+    if(["media.php","upload.php"].includes(file) && typeof attachment==="string" && /^[1-9]\d{0,9}$/.test(attachment) && Number(attachment)<=2147483647)target=`/admin/media/${attachment}`;
     if (file === "edit.php") {
       target = `/admin/${page ? "pages" : "posts"}`;
       for (const [source, destination] of [

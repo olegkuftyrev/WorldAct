@@ -1,4 +1,6 @@
+import PostTemplateSelect from "../components/PostTemplateSelect";
 import { postLink } from "../publicLinks";
+import { postFormats, type Author, type PostFormat } from "./PostBulkEdit";
 import {
   useCallback,
   useContext,
@@ -46,7 +48,11 @@ type DocumentState = {
   featuredMediaId: number | null;
   parentId: number | null;
   menuOrder: number;
-  commentStatus: "open" | "closed";
+  templateSlug: string;
+  authorId?: number;
+  format?: PostFormat;
+  commentStatus?: "open" | "closed";
+  pingStatus?: "open" | "closed";
   sticky: boolean;
 };
 const emptyDocument = (): DocumentState => ({
@@ -63,7 +69,7 @@ const emptyDocument = (): DocumentState => ({
   featuredMediaId: null,
   parentId: null,
   menuOrder: 0,
-  commentStatus: "open",
+  templateSlug: "",
   sticky: false,
 });
 const postDocument = (post: Post): DocumentState => ({
@@ -86,7 +92,12 @@ const postDocument = (post: Post): DocumentState => ({
   featuredMediaId: post.featuredMediaId || null,
   parentId: post.parentId || null,
   menuOrder: post.menuOrder || 0,
+  templateSlug: post.templateSlug || "",
   commentStatus: post.commentStatus || "open",
+  pingStatus:
+    (post as Post & { pingStatus?: "open" | "closed" }).pingStatus || "closed",
+  authorId: post.authorId,
+  format: post.format || "standard",
   sticky: post.sticky || false,
 });
 function localDate(value: string) {
@@ -106,6 +117,161 @@ const statuses: Record<Post["status"], string> = {
 };
 type Recovery = Autosave & { source: "server" | "browser" };
 
+type EditingLease = {
+  userId: number;
+  displayName: string;
+  expiresAt: string;
+  owned: boolean;
+};
+function usePostEditLease(postId: number | null, userId: number | undefined) {
+  const [status, setStatus] = useState<
+    "checking" | "owned" | "blocked" | "error"
+  >(postId ? "checking" : "owned");
+  const [lock, setLock] = useState<EditingLease | null>(null),
+    [error, setError] = useState("");
+  const [dialog, setDialog] = useState(false),
+    [busy, setBusy] = useState(false);
+  const generation = useRef(0),
+    owned = useRef<number | null>(null),
+    currentId = useRef(postId),
+    lastForeignOwner = useRef<number | null>(null);
+  currentId.current = postId;
+  const applyForeignLock = useCallback((value: EditingLease) => {
+    owned.current = null;
+    setLock(value);
+    setStatus("blocked");
+    setError("");
+    if (lastForeignOwner.current !== value.userId) setDialog(true);
+    lastForeignOwner.current = value.userId;
+  }, []);
+  const acquire = useCallback(
+    async (
+      recordId: number,
+      takeover = false,
+      requestGeneration = generation.current,
+    ) => {
+      try {
+        const result = await api<{ lock: EditingLease }>(
+          `/posts/${recordId}/lock`,
+          json("PUT", takeover ? { takeover: true } : {}),
+        );
+        if (
+          requestGeneration !== generation.current ||
+          currentId.current !== recordId
+        )
+          return false;
+        if (!result.lock?.owned)
+          throw new Error("The editing lock could not be acquired. Try again.");
+        owned.current = recordId;
+        lastForeignOwner.current = null;
+        setLock(result.lock);
+        setStatus("owned");
+        setError("");
+        setDialog(false);
+        return true;
+      } catch (reason) {
+        if (
+          requestGeneration !== generation.current ||
+          currentId.current !== recordId
+        )
+          return false;
+        owned.current = null;
+        const foreign =
+          reason instanceof ApiError && reason.status === 409
+            ? (reason.data.lock as EditingLease | undefined)
+            : undefined;
+        if (foreign && typeof foreign.displayName === "string")
+          applyForeignLock(foreign);
+        else {
+          setStatus("error");
+          setError(errorText(reason));
+        }
+        return false;
+      }
+    },
+    [applyForeignLock],
+  );
+  useEffect(() => {
+    const recordId = postId,
+      requestGeneration = ++generation.current;
+    setLock(null);
+    lastForeignOwner.current = null;
+    setError("");
+    setDialog(false);
+    if (!recordId || !userId) {
+      setStatus("owned");
+      return;
+    }
+    setStatus("checking");
+    void acquire(recordId, false, requestGeneration);
+    const timer = window.setInterval(() => {
+      void acquire(recordId, false, requestGeneration);
+    }, 30_000);
+    const visible = () => {
+      if (document.visibilityState === "visible")
+        void acquire(recordId, false, requestGeneration);
+    };
+    const release = () => {
+      if (owned.current !== recordId) return;
+      owned.current = null;
+      void fetch(`/api/posts/${recordId}/lock`, {
+        method: "DELETE",
+        credentials: "same-origin",
+        keepalive: true,
+      }).catch(() => {});
+    };
+    document.addEventListener("visibilitychange", visible);
+    window.addEventListener("pagehide", release);
+    return () => {
+      generation.current++;
+      window.clearInterval(timer);
+      document.removeEventListener("visibilitychange", visible);
+      window.removeEventListener("pagehide", release);
+      release();
+    };
+  }, [postId, userId, acquire]);
+  const retry = useCallback(
+    async (takeover = false) => {
+      if (!currentId.current) return true;
+      setBusy(true);
+      try {
+        return await acquire(currentId.current, takeover);
+      } finally {
+        setBusy(false);
+      }
+    },
+    [acquire],
+  );
+  const checkConflict = useCallback(async () => {
+    const recordId = currentId.current;
+    if (!recordId) return false;
+    try {
+      const result = await api<{ lock: EditingLease | null }>(
+        `/posts/${recordId}/lock`,
+      );
+      if (currentId.current !== recordId) return false;
+      if (result.lock && !result.lock.owned) {
+        applyForeignLock(result.lock);
+        return true;
+      }
+    } catch {
+      /* Keep the original save error visible when a status check fails. */
+    }
+    return false;
+  }, [applyForeignLock]);
+  return {
+    ready: !postId || status === "owned",
+    status,
+    lock,
+    error,
+    dialog,
+    setDialog,
+    busy,
+    retry,
+    checkConflict,
+  };
+}
+
 export default function Editor({ type }: { type: "post" | "page" }) {
   const { id } = useParams(),
     navigate = useNavigate(),
@@ -119,6 +285,9 @@ export default function Editor({ type }: { type: "post" | "page" }) {
   const base = `/admin/${type === "post" ? "posts" : "pages"}`;
   const [doc, setDoc] = useState<DocumentState>(emptyDocument);
   const [postId, setPostId] = useState<number | null>(id ? Number(id) : null);
+  const lease = usePostEditLease(postId, user?.id);
+  const leaseReady = useRef(lease.ready);
+  leaseReady.current = lease.ready;
   const [version, setVersion] = useState(0);
   const [permalink, setPermalink] = useState("");
   const [resetKey, setResetKey] = useState(0);
@@ -139,6 +308,13 @@ export default function Editor({ type }: { type: "post" | "page" }) {
     [pages, setPages] = useState<Post[]>([]),
     [picker, setPicker] = useState(false),
     [pickerError, setPickerError] = useState("");
+  const [authors, setAuthors] = useState<Author[]>([]),
+    [authorError, setAuthorError] = useState("");
+  const [defaults, setDefaults] = useState<{
+    format: PostFormat;
+    commentStatus: "open" | "closed";
+    pingStatus: "open" | "closed";
+  }>({ format: "standard", commentStatus: "open", pingStatus: "closed" });
   const [newTag, setNewTag] = useState(""),
     [tagBusy, setTagBusy] = useState(false),
     [tagError, setTagError] = useState("");
@@ -277,6 +453,17 @@ export default function Editor({ type }: { type: "post" | "page" }) {
   }, [id, type, navigate, storageKey]);
   useEffect(() => {
     let cancelled = false;
+    api<{ authors: Author[]; defaults: typeof defaults }>("/authors")
+      .then((result) => {
+        if (!cancelled) {
+          setAuthors(result.authors);
+          setDefaults(result.defaults);
+          setAuthorError("");
+        }
+      })
+      .catch((reason) => {
+        if (!cancelled) setAuthorError(errorText(reason));
+      });
     api<{ terms: Term[] }>("/terms")
       .then(({ terms }) => {
         if (!cancelled) setTerms(terms);
@@ -350,9 +537,9 @@ export default function Editor({ type }: { type: "post" | "page" }) {
     };
   }
   useEffect(() => {
-    if (loading || !dirty || recovery) return;
+    if (loading || !dirty || recovery || !lease.ready) return;
     const timeout = window.setTimeout(async () => {
-      if (busyRef.current || !dirtyRef.current) return;
+      if (busyRef.current || !dirtyRef.current || !leaseReady.current) return;
       const current = docRef.current;
       if (!current.title.trim() && !current.content.trim()) return;
       busyRef.current = true;
@@ -372,6 +559,8 @@ export default function Editor({ type }: { type: "post" | "page" }) {
           localStorage.removeItem(storageKey(null));
           navigate(`${base}/${post.id}`, { replace: true });
         }
+        if (idRef.current && !leaseReady.current && !(await lease.retry()))
+          return;
         const latest = docRef.current;
         const { autosave } = await api<{ autosave: Autosave }>(
           `/posts/${idRef.current}/autosave`,
@@ -385,6 +574,8 @@ export default function Editor({ type }: { type: "post" | "page" }) {
         );
         setAutosavedAt(autosave.savedAt);
       } catch (e) {
+        if (e instanceof ApiError && e.status === 409)
+          await lease.checkConflict();
         setAutosaveError(
           `Autosave failed: ${errorText(e)} Your changes are stored in this browser.`,
         );
@@ -393,7 +584,18 @@ export default function Editor({ type }: { type: "post" | "page" }) {
       }
     }, 8000);
     return () => window.clearTimeout(timeout);
-  }, [doc, dirty, loading, recovery, base, navigate, storageKey]);
+  }, [
+    doc,
+    dirty,
+    loading,
+    recovery,
+    base,
+    navigate,
+    storageKey,
+    lease.ready,
+    lease.retry,
+    lease.checkConflict,
+  ]);
   const loadRevisions = useCallback(async () => {
     if (!idRef.current) return;
     setRevisionBusy(true);
@@ -411,7 +613,7 @@ export default function Editor({ type }: { type: "post" | "page" }) {
     }
   }, []);
   async function save(nextStatus: Post["status"]) {
-    if (busyRef.current) return;
+    if (busyRef.current || !leaseReady.current) return;
     if (
       nextStatus === "future" &&
       (!doc.scheduledAt || new Date(doc.scheduledAt) <= new Date())
@@ -479,7 +681,9 @@ export default function Editor({ type }: { type: "post" | "page" }) {
       }
     } catch (e) {
       setError(errorText(e));
-      if (e instanceof ApiError && e.status === 409) setConflict(true);
+      if (e instanceof ApiError && e.status === 409) {
+        if (!(await lease.checkConflict())) setConflict(true);
+      }
     } finally {
       busyRef.current = false;
       setBusy(false);
@@ -577,7 +781,7 @@ export default function Editor({ type }: { type: "post" | "page" }) {
     }
   }
   async function restoreRevision() {
-    if (!revision || !postId) return;
+    if (!revision || !postId || !leaseReady.current) return;
     if (
       dirty &&
       !window.confirm("Replace your current edits with this revision?")
@@ -596,6 +800,8 @@ export default function Editor({ type }: { type: "post" | "page" }) {
       setNotice("Revision restored.");
       localStorage.removeItem(storageKey(post.id));
     } catch (e) {
+      if (e instanceof ApiError && e.status === 409)
+        await lease.checkConflict();
       setRevisionError(errorText(e));
     } finally {
       setRevisionBusy(false);
@@ -612,7 +818,9 @@ export default function Editor({ type }: { type: "post" | "page" }) {
     return candidate.id === postId;
   }
   const primaryStatus: Post["status"] = !canPublish
-    ? "pending"
+    ? doc.status === "private"
+      ? "private"
+      : "pending"
     : doc.status === "draft" || doc.status === "pending"
       ? doc.scheduledAt && new Date(doc.scheduledAt) > new Date()
         ? "future"
@@ -699,7 +907,7 @@ export default function Editor({ type }: { type: "post" | "page" }) {
           {!["publish", "private", "future"].includes(doc.status) && (
             <button
               className="button-link"
-              disabled={busy || loading || forbidden}
+              disabled={busy || loading || forbidden || !lease.ready}
               onClick={() => void save("draft")}
             >
               Save draft
@@ -744,7 +952,7 @@ export default function Editor({ type }: { type: "post" | "page" }) {
           </button>
           <button
             className="button button-primary"
-            disabled={busy || loading || forbidden}
+            disabled={busy || loading || forbidden || !lease.ready}
             onClick={() => void save(primaryStatus)}
           >
             {busy ? "Saving…" : primaryLabel}
@@ -761,6 +969,46 @@ export default function Editor({ type }: { type: "post" | "page" }) {
           !loading && (
             <>
               <div className="editor-notices">
+                {postId && lease.status === "checking" && (
+                  <Notice>Checking editing status…</Notice>
+                )}
+                {lease.status === "blocked" && (
+                  <Notice error>
+                    {lease.lock?.displayName || "Another user"} is currently
+                    editing this {type}. Your edits are preserved in this
+                    browser.
+                    <p>
+                      <button
+                        className="button"
+                        disabled={lease.busy}
+                        onClick={() => void lease.retry(true)}
+                      >
+                        Take over
+                      </button>{" "}
+                      <button
+                        className="button-link"
+                        onClick={() => lease.setDialog(true)}
+                      >
+                        View editing details
+                      </button>
+                    </p>
+                  </Notice>
+                )}
+                {lease.status === "error" && (
+                  <Notice error>
+                    Saving is paused. {lease.error} Your edits are preserved in
+                    this browser.
+                    <p>
+                      <button
+                        className="button"
+                        disabled={lease.busy}
+                        onClick={() => void lease.retry()}
+                      >
+                        Retry editing connection
+                      </button>
+                    </p>
+                  </Notice>
+                )}
                 {error && (
                   <Notice error>
                     {error}
@@ -840,7 +1088,7 @@ export default function Editor({ type }: { type: "post" | "page" }) {
                 />
               </div>
               <GutenbergEditor
-                postId={postId||undefined}
+                postId={postId || undefined}
                 postType={type}
                 initialBlocks={doc.blocks}
                 initialHTML={doc.content}
@@ -893,7 +1141,9 @@ export default function Editor({ type }: { type: "post" | "page" }) {
                           "pending",
                           ...(canPublish
                             ? ["publish", "future", "private"]
-                            : []),
+                            : doc.status === "private"
+                              ? ["private"]
+                              : []),
                           ...(doc.status === "trash" ? ["trash"] : []),
                         ] as Post["status"][]
                       ).map((status) => (
@@ -1005,6 +1255,56 @@ export default function Editor({ type }: { type: "post" | "page" }) {
                   />
                 </label>
               </details>
+              <details>
+                <summary>Author</summary>
+                <label>
+                  Author
+                  <select
+                    value={doc.authorId ?? user?.id ?? ""}
+                    disabled={!authors.length}
+                    onChange={(event) =>
+                      change({ authorId: Number(event.target.value) })
+                    }
+                  >
+                    {doc.authorId &&
+                      !authors.some((author) => author.id === doc.authorId) && (
+                        <option value={doc.authorId}>
+                          Current author (#{doc.authorId})
+                        </option>
+                      )}
+                    {authors.map((author) => (
+                      <option value={author.id} key={author.id}>
+                        {author.displayName} ({author.username})
+                      </option>
+                    ))}
+                  </select>
+                </label>
+                {authorError && (
+                  <p className="field-error" role="alert">
+                    {authorError}
+                  </p>
+                )}
+              </details>
+              {type === "post" && (
+                <details>
+                  <summary>Format</summary>
+                  <label>
+                    Post Format
+                    <select
+                      value={doc.format ?? defaults.format}
+                      onChange={(event) =>
+                        change({ format: event.target.value as PostFormat })
+                      }
+                    >
+                      {postFormats.map((format) => (
+                        <option value={format} key={format}>
+                          {format[0].toUpperCase() + format.slice(1)}
+                        </option>
+                      ))}
+                    </select>
+                  </label>
+                </details>
+              )}
               {type === "post" && (
                 <>
                   <details open>
@@ -1134,6 +1434,16 @@ export default function Editor({ type }: { type: "post" | "page" }) {
                   )}
                 </details>
               )}
+              <details open>
+                <summary>Template</summary>
+                <PostTemplateSelect
+                  type={type}
+                  value={doc.templateSlug}
+                  onChange={(templateSlug) =>
+                    change({ templateSlug: templateSlug || "" })
+                  }
+                />
+              </details>
               {type === "page" && (
                 <details open>
                   <summary>Page Attributes</summary>
@@ -1187,7 +1497,9 @@ export default function Editor({ type }: { type: "post" | "page" }) {
                 <label className="checkbox-label">
                   <input
                     type="checkbox"
-                    checked={doc.commentStatus === "open"}
+                    checked={
+                      (doc.commentStatus ?? defaults.commentStatus) === "open"
+                    }
                     onChange={(e) =>
                       change({
                         commentStatus: e.target.checked ? "open" : "closed",
@@ -1196,9 +1508,23 @@ export default function Editor({ type }: { type: "post" | "page" }) {
                   />{" "}
                   Allow comments
                 </label>
-                <p className="description">Comments are held for moderation.</p>
+                <label className="checkbox-label">
+                  <input
+                    type="checkbox"
+                    checked={(doc.pingStatus ?? defaults.pingStatus) === "open"}
+                    onChange={(event) =>
+                      change({
+                        pingStatus: event.target.checked ? "open" : "closed",
+                      })
+                    }
+                  />
+                  Allow pingbacks and trackbacks
+                </label>
+                <p className="description">
+                  Comment moderation follows the site's Discussion settings.
+                </p>
               </details>
-              {type === "post" && canPublish && (
+              {type === "post" && canPages && (
                 <details>
                   <summary>Post options</summary>
                   <label className="checkbox-label">
@@ -1219,15 +1545,45 @@ export default function Editor({ type }: { type: "post" | "page" }) {
         <span>{type === "post" ? "Post" : "Page"}</span>
         <span>{words} words</span>
         <span className="save-indicator">
-          {busy
-            ? "Saving…"
-            : autosavedAt
-              ? `Autosaved at ${new Date(autosavedAt).toLocaleTimeString()}`
-              : dirty
-                ? "Unsaved changes"
-                : statuses[doc.status]}
+          {!lease.ready
+            ? lease.status === "blocked"
+              ? "Editing locked"
+              : "Saving paused"
+            : busy
+              ? "Saving…"
+              : autosavedAt
+                ? `Autosaved at ${new Date(autosavedAt).toLocaleTimeString()}`
+                : dirty
+                  ? "Unsaved changes"
+                  : statuses[doc.status]}
         </span>
       </footer>
+      {lease.dialog && lease.status === "blocked" && (
+        <Modal
+          title={`This ${type} is already being edited`}
+          close={() => lease.setDialog(false)}
+        >
+          <p>
+            <strong>{lease.lock?.displayName || "Another user"}</strong> is
+            currently working on this {type}. You can return to the list or take
+            over editing.
+          </p>
+          {dirty && <p>Your unsaved edits are preserved in this browser.</p>}
+          <div className="worldact-inline-actions">
+            <button type="button" className="button" onClick={leave}>
+              Back to {type === "post" ? "Posts" : "Pages"}
+            </button>
+            <button
+              type="button"
+              className="button button-primary"
+              disabled={lease.busy}
+              onClick={() => void lease.retry(true)}
+            >
+              {lease.busy ? "Taking over…" : "Take over"}
+            </button>
+          </div>
+        </Modal>
+      )}
       {picker && (
         <Modal title="Featured image" close={() => setPicker(false)}>
           {pickerError && <Notice error>{pickerError}</Notice>}
@@ -1308,7 +1664,7 @@ export default function Editor({ type }: { type: "post" | "page" }) {
                 </label>
                 <button
                   className="button button-primary"
-                  disabled={revisionBusy || !revision}
+                  disabled={revisionBusy || !revision || !lease.ready}
                   onClick={() => void restoreRevision()}
                 >
                   Restore This Revision

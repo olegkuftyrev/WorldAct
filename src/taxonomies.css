@@ -1,0 +1,27 @@
+.taxonomy-context-row td,
+.taxonomy-context-row th {
+  background-color: #f6f7f7;
+  color: #646970;
+}
+.taxonomy-context-row .row-title {
+  font-weight: 400;
+}
+.taxonomy-list .tablenav-pages {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+@media (max-width: 782px) {
+  .taxonomy-list .tablenav {
+    min-height: 50px;
+    height: auto;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 8px;
+    margin-bottom: 10px;
+  }
+  .taxonomy-list .tablenav-pages {
+    margin-left: auto;
+  }
+}

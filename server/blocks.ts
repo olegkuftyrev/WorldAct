@@ -24,6 +24,9 @@ import {
   renderBlock,
   renderSiteDocument,
 } from "./block-renderer.js";
+import { themeIds, readThemeDesign } from "./themes.js";
+import {hasPostAccess,assertPostAccess} from "./core.js";
+import { postFormats } from "../shared/post-formats.js";
 
 const escapeHTML = (value: unknown) =>
   String(value ?? "").replace(
@@ -36,6 +39,8 @@ const escapeHTML = (value: unknown) =>
 const router = express.Router();
 const admin = requireRole("administrator");
 const editors = requireRole("administrator", "editor");
+const contentReaders=requireRole("administrator","editor","author","contributor");
+const publishers=requireRole("administrator","editor","author");
 router.use(
   [
     "/wp-json/wp/v2/block-renderer",
@@ -57,7 +62,8 @@ router.use("/wp-json", (req, res, next) => {
   if (
     !["GET", "HEAD", "OPTIONS"].includes(req.method) &&
     req.headers.origin !==
-      new URL(process.env.APP_ORIGIN || "http://127.0.0.1:5173").origin
+      new URL(process.env.APP_ORIGIN || "http://127.0.0.1:5173").origin &&
+    !(!req.headers.origin && (req as AuthRequest).authenticationMethod === "application-password")
   )
     return res.status(403).json({
       code: "rest_cookie_invalid_origin",
@@ -72,9 +78,9 @@ const unwrap = (value: unknown) =>
   typeof value === "object" && value !== null && "raw" in value
     ? String((value as any).raw ?? "")
     : value;
-function allow(req: AuthRequest, res: Response, collection = false) {
+function allow(req: AuthRequest, res: Response, collection = false, allowed?:boolean) {
   const user = req.user;
-  const can = user && ["administrator", "editor"].includes(user.role);
+  const can = allowed ?? !!(user && ["administrator", "editor"].includes(user.role));
   res.setHeader(
     "Allow",
     can ? (collection ? "GET, POST" : "GET, POST, PUT, PATCH, DELETE") : "GET",
@@ -130,8 +136,12 @@ for (const [base, kind] of [
   ["blocks", "reusable"],
   ["navigation", "navigation"],
 ] as const) {
-  router.options(`/wp-json/wp/v2/${base}{/:id}`, (req: AuthRequest, res) => {
-    allow(req, res, !req.params.id);
+  const readers=kind==="navigation"?admin:contentReaders;
+  const writers=kind==="navigation"?admin:publishers;
+  const canChange=(req:AuthRequest,row?:any)=>!!req.user && (req.user.role==="administrator" || (kind==="reusable" && (req.user.role==="editor" || (req.user.role==="author" && (!row || row.author_id===req.user.id)))));
+  router.options(`/wp-json/wp/v2/${base}{/:id}`, async(req: AuthRequest, res) => {
+    const row=req.params.id?(await pool.query("SELECT author_id FROM block_entities WHERE id=$1 AND kind=$2",[parseId(req.params.id),kind])).rows[0]:undefined;
+    allow(req, res, !req.params.id,canChange(req,row));
     res.json({
       schema: {
         properties: {
@@ -146,9 +156,9 @@ for (const [base, kind] of [
   // published references internally; it never exposes raw entity content by ID.
   router.get(
     `/wp-json/wp/v2/${base}`,
-    editors,
+    readers,
     async (req: AuthRequest, res) => {
-      allow(req, res, true);
+      allow(req, res, true,canChange(req));
       const perPage = Math.max(
           1,
           Math.min(100, Number(req.query.per_page) || 100),
@@ -197,9 +207,8 @@ for (const [base, kind] of [
   );
   router.get(
     `/wp-json/wp/v2/${base}/:id`,
-    editors,
+    readers,
     async (req: AuthRequest, res) => {
-      allow(req, res);
       const row = (
         await pool.query(
           "SELECT * FROM block_entities WHERE kind=$1 AND id=$2",
@@ -207,12 +216,13 @@ for (const [base, kind] of [
         )
       ).rows[0];
       if (!row) throw new HttpError(404, "This block entity does not exist.");
+      allow(req,res,false,canChange(req,row));
       res.json(entityRecord(row));
     },
   );
   router.post(
     `/wp-json/wp/v2/${base}`,
-    editors,
+    writers,
     async (req: AuthRequest, res) => {
       const input = entityInput.parse(req.body),
         raw = cleanRawContent(input.content || ""),
@@ -243,7 +253,7 @@ for (const [base, kind] of [
   );
   router.all(
     `/wp-json/wp/v2/${base}/:id`,
-    editors,
+    writers,
     async (req: AuthRequest, res, next) => {
       if (!["POST", "PUT", "PATCH", "DELETE"].includes(req.method))
         return next();
@@ -258,6 +268,7 @@ for (const [base, kind] of [
           )
         ).rows[0];
         if (!row) throw new HttpError(404, "This block entity does not exist.");
+        if(!canChange(req,row))throw new HttpError(403,"You can only edit or delete your own patterns.");
         if (req.method === "DELETE") {
           const previous = entityRecord(row);
           if (req.query.force === "true")
@@ -372,6 +383,16 @@ router.all(
     res.json(await siteRecord());
   },
 );
+router.get("/wp-json/wp/v2/users/me", async (req: AuthRequest, res) => {
+  const user = needUser(req);
+  const record = (await pool.query("SELECT profile,created_at FROM users WHERE id=$1",[user.id])).rows[0];
+  const profile = record?.profile || {};
+  res.json({ id:user.id, username:user.username, name:user.displayName, slug:user.username, email:user.email,
+    first_name:profile.firstName || "",last_name:profile.lastName || "",nickname:profile.nickname || user.username,
+    description:profile.bio || "",url:profile.website || "",link:`/?author=${user.id}`,roles:[user.role],
+    locale:profile.locale || "en_US",registered_date:record?.created_at,avatar_urls:{24:"/vendor/wordpress/avatar.svg",48:"/vendor/wordpress/avatar.svg",96:"/vendor/wordpress/avatar.svg"},
+  });
+});
 router.get("/wp-json/wp/v2/users{/:id}", async (req: AuthRequest, res) => {
   const id = req.params.id ? parseId(req.params.id) : null;
   const include = String(req.query.include || "")
@@ -403,7 +424,7 @@ router.get("/wp-json/wp/v2/users{/:id}", async (req: AuthRequest, res) => {
     res.json(records);
   }
 });
-router.get("/wp-json/wp/v2/menus", editors, async (_req, res) => {
+router.get("/wp-json/wp/v2/menus", admin, async (_req, res) => {
   const rows = (
     await pool.query(
       "SELECT id,name,location FROM navigation_menus ORDER BY id",
@@ -420,7 +441,7 @@ router.get("/wp-json/wp/v2/menus", editors, async (_req, res) => {
     })),
   );
 });
-router.get("/wp-json/wp/v2/menu-items", editors, async (req, res) => {
+router.get("/wp-json/wp/v2/menu-items", admin, async (req, res) => {
   const menuId = Number(req.query.menus || req.query.menu),
     rows = (
       await pool.query(
@@ -458,7 +479,7 @@ router.get("/wp-json/wp/v2/menu-items", editors, async (req, res) => {
   res.setHeader("X-WP-TotalPages", 1);
   res.json(records);
 });
-router.get("/wp-json/wp/v2/themes", editors, async (_req, res) => {
+router.get("/wp-json/wp/v2/themes", contentReaders, async (_req, res) => {
   const s = await getSettings();
   res.json([
     {
@@ -475,7 +496,7 @@ router.get("/wp-json/wp/v2/themes", editors, async (_req, res) => {
       theme_supports: {
         "block-templates": true,
         "post-thumbnails": true,
-        formats: ["standard", "aside", "image", "video", "quote", "link", "gallery", "audio"],
+        formats: postFormats,
       },
     },
   ]);
@@ -484,7 +505,7 @@ for (const [name, base, label] of [
   ["wp_block", "blocks", "Patterns"],
   ["wp_navigation", "navigation", "Navigation"],
 ] as const)
-  router.get(`/wp-json/wp/v2/types/${name}`, editors, (_req, res) =>
+  router.get(`/wp-json/wp/v2/types/${name}`,name==="wp_navigation"?admin:contentReaders, (_req, res) =>
     res.json({
       slug: name,
       name: label,
@@ -504,10 +525,10 @@ function templatePartRecord(row: any, theme: string) {
     theme,
     type: "wp_template_part",
     status: "publish",
-    source: "custom",
-    origin: "custom",
-    is_custom: true,
-    has_theme_file: false,
+    source: row.sourceHash && row.rawContent === row.sourceContent ? "theme" : "custom",
+    origin: row.sourceHash ? "theme" : "custom",
+    is_custom: !row.sourceHash || row.rawContent !== row.sourceContent,
+    has_theme_file: !!row.sourceHash,
     title: { raw: row.title, rendered: escapeHTML(row.title) },
     content: { raw: row.rawContent || row.content, rendered: row.content },
     area: ["header", "footer"].includes(row.slug) ? row.slug : "uncategorized",
@@ -516,7 +537,7 @@ function templatePartRecord(row: any, theme: string) {
 }
 router.options(
   "/wp-json/wp/v2/template-parts{/*id}",
-  editors,
+  admin,
   (req: AuthRequest, res) => {
     allow(req, res, !req.params.id);
     res.json({
@@ -526,8 +547,10 @@ router.options(
     });
   },
 );
-router.get("/wp-json/wp/v2/template-parts{/*id}", editors, async (req, res) => {
+router.get("/wp-json/wp/v2/template-parts{/*id}", admin, async (req, res) => {
   const settings = await getSettings();
+  const requested = req.params.id ? (Array.isArray(req.params.id) ? req.params.id.join("/") : String(req.params.id)) : "";
+  const theme = z.enum(themeIds).parse(requested.includes("//") ? requested.split("//")[0] : req.query.wp_theme || settings.theme);
   const itemSlug = req.params.id
     ? (Array.isArray(req.params.id)
         ? req.params.id.join("/")
@@ -538,11 +561,11 @@ router.get("/wp-json/wp/v2/template-parts{/*id}", editors, async (req, res) => {
     : null;
   const docs = (
     await pool.query(
-      `SELECT id,slug,title,content,raw_content AS "rawContent",version FROM site_documents WHERE type='template-part' AND ($1::text IS NULL OR slug=$1) ORDER BY title,id`,
-      [itemSlug],
+      `SELECT id,slug,title,content,raw_content AS "rawContent",source_hash AS "sourceHash",source_content AS "sourceContent",version FROM site_documents WHERE type='template-part' AND theme=$2 AND ($1::text IS NULL OR slug=$1) ORDER BY title,id`,
+      [itemSlug,theme],
     )
   ).rows;
-  const records = docs.map((doc) => templatePartRecord(doc, settings.theme));
+  const records = docs.map((doc) => templatePartRecord(doc, theme));
   if (itemSlug) {
     if (!records[0]) throw new HttpError(404, "Template part not found.");
     res.setHeader("Allow", "GET, POST, PUT");
@@ -551,7 +574,7 @@ router.get("/wp-json/wp/v2/template-parts{/*id}", editors, async (req, res) => {
 });
 router.all(
   "/wp-json/wp/v2/template-parts{/*id}",
-  editors,
+  admin,
   async (req: AuthRequest, res, next) => {
     if (!["POST", "PUT", "PATCH"].includes(req.method)) return next();
     const input = entityInput.parse(req.body),
@@ -560,6 +583,8 @@ router.all(
         input.content === undefined
           ? undefined
           : cleanRawContent(input.content);
+    const requested = req.params.id ? (Array.isArray(req.params.id) ? req.params.id.join("/") : String(req.params.id)) : "";
+    const theme = z.enum(themeIds).parse(requested.includes("//") ? requested.split("//")[0] : settings.theme);
     const itemSlug = req.params.id
       ? (Array.isArray(req.params.id)
           ? req.params.id.join("/")
@@ -575,8 +600,8 @@ router.all(
       await db.query("BEGIN");
       let doc = (
         await db.query(
-          "SELECT * FROM site_documents WHERE slug=$1 AND type='template-part' FOR UPDATE",
-          [itemSlug],
+          "SELECT * FROM site_documents WHERE slug=$1 AND theme=$2 AND type='template-part' FOR UPDATE",
+          [itemSlug,theme],
         )
       ).rows[0];
       if (doc) {
@@ -604,13 +629,14 @@ router.all(
         const value = raw || "";
         doc = (
           await db.query(
-            "INSERT INTO site_documents(slug,title,type,content,raw_content,blocks) VALUES($1,$2,'template-part',$3,$4,$5::jsonb) RETURNING *",
+            "INSERT INTO site_documents(slug,title,type,content,raw_content,blocks,theme) VALUES($1,$2,'template-part',$3,$4,$5::jsonb,$6) RETURNING *",
             [
               itemSlug,
               plainText(input.title || "Template part"),
               cleanContent(value),
               value,
               JSON.stringify(durableBlocks(value)),
+              theme,
             ],
           )
         ).rows[0];
@@ -619,8 +645,8 @@ router.all(
       await db.query("COMMIT");
       res.json(
         templatePartRecord(
-          { ...doc, rawContent: doc.raw_content },
-          settings.theme,
+          { ...doc, rawContent: doc.raw_content, sourceHash: doc.source_hash, sourceContent: doc.source_content },
+          theme,
         ),
       );
     } catch (error) {
@@ -663,7 +689,7 @@ function metadata(name: string) {
 }
 router.get(
   "/wp-json/wp/v2/block-types{/:namespace}{/:block}",
-  editors,
+  contentReaders,
   async (req, res) => {
     const name = req.params.block
       ? `${req.params.namespace}/${req.params.block}`
@@ -719,7 +745,8 @@ router.all(
     res.json({ rendered: await renderBlock(name, attributes, { post }) });
   },
 );
-router.get("/api/public/templates/:slug", async (req, res) => {
+router.get("/api/public/templates/:slug", async (req:AuthRequest, res) => {
+  const settings = await getSettings();
   const templateSlug = z
       .string()
       .regex(/^[a-zA-Z0-9_-]{1,160}$/)
@@ -727,45 +754,27 @@ router.get("/api/public/templates/:slug", async (req, res) => {
     type = req.query.type === "template-part" ? "template-part" : "template";
   const doc = (
     await pool.query(
-      'SELECT id,slug,title,type,version,content,raw_content AS "rawContent",blocks FROM site_documents WHERE slug=$1 AND type=$2 LIMIT 1',
-      [templateSlug, type],
+      'SELECT id,slug,title,type,version,content,raw_content AS "rawContent",blocks FROM site_documents WHERE slug=$1 AND type=$2 AND theme=$3 LIMIT 1',
+      [templateSlug, type, settings.theme],
     )
   ).rows[0];
   if (!doc) throw new HttpError(404, "Template not found.");
   let post = null;
+  const preview=req.query.preview==="true";
+  if(preview){const user=needUser(req);if(!["administrator","editor","author","contributor"].includes(user.role))throw new HttpError(403,"You cannot preview this content.");res.setHeader("X-Robots-Tag","noindex, nofollow");res.setHeader("Cache-Control","private, no-store");}
   if (req.query.postId) {
     const id = parseId(String(req.query.postId));
     post = (
       await pool.query(
-        `SELECT ${postFields},p.password_hash AS "passwordHash" FROM posts p JOIN users u ON u.id=p.author_id WHERE p.id=$1 AND p.status='publish'`,
+        `SELECT ${postFields},p.password_hash AS "passwordHash" FROM posts p JOIN users u ON u.id=p.author_id WHERE p.id=$1 ${preview?"":"AND p.status='publish'"}`,
         [id],
       )
     ).rows[0];
     if (!post) throw new HttpError(404, "Post not found.");
+    if(preview)assertPostAccess(needUser(req),post);
     if (post.hasPassword) {
-      const token = req.headers.cookie
-        ?.split(";")
-        .map((c) => c.trim())
-        .find((c) => c.startsWith(`worldact_post_${id}=`))
-        ?.split("=")[1];
-      const valid =
-        token &&
-        /^[a-f0-9]{64}$/.test(token) &&
-        (
-          await pool.query(
-            "SELECT 1 FROM post_access_tokens WHERE post_id=$1 AND token_hash=$2 AND password_hash=$3 AND expires_at>now()",
-            [
-              id,
-              createHash("sha256").update(token).digest("hex"),
-              post.passwordHash,
-            ],
-          )
-        ).rowCount;
-      if (!valid)
-        throw new HttpError(
-          403,
-          "Enter this post password before viewing its template.",
-        );
+      post.locked=!preview && !(await hasPostAccess(req,id,post.passwordHash));
+      if(post.locked){post.content="";post.rawContent="";post.raw_content="";post.blocks=[];post.excerpt="";}
       res.setHeader("Cache-Control", "private, no-store");
     }
     delete post.passwordHash;
@@ -794,6 +803,8 @@ router.get("/api/public/templates/:slug", async (req, res) => {
       query,
       page: Number(req.query.page) || 1,
       placeholderBindings: false,
+      user: (req as AuthRequest).user,
+      preview,
     }),
   });
 });

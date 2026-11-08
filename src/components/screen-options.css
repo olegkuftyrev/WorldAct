@@ -1,0 +1,257 @@
+.worldact-screen-meta {
+  position: relative;
+}
+.worldact-screen-meta #screen-meta[hidden],
+.worldact-screen-meta section[hidden],
+.worldact-contextual-help section[hidden] {
+  display: none !important;
+}
+.worldact-screen-meta #screen-meta {
+  display: block;
+  margin: 0 20px 0 22px;
+  border: 1px solid #c3c4c7;
+  border-top: 0;
+  background: #fff;
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.04);
+}
+.worldact-screen-meta #screen-meta-links {
+  display: flex;
+  justify-content: flex-end;
+  float: none;
+  height: 30px;
+  margin-right: 20px;
+}
+.worldact-screen-meta .screen-meta-toggle {
+  float: none;
+  margin: 0 0 0 6px;
+}
+.worldact-screen-meta .screen-meta-toggle .show-settings {
+  margin: 0;
+  border-top: 0;
+  border-radius: 0 0 3px 3px;
+  min-height: 30px;
+  line-height: 29px;
+  padding: 0 10px;
+  background: #fff;
+  color: #50575e;
+  border-color: #c3c4c7;
+}
+.worldact-screen-meta .show-settings .dashicons {
+  font-size: 16px;
+  width: 16px;
+  height: 16px;
+  vertical-align: middle;
+}
+.worldact-screen-options {
+  padding: 14px 20px;
+}
+.worldact-list-options fieldset {
+  margin: 0 0 14px;
+  padding: 0;
+  border: 0;
+}
+.worldact-list-options legend {
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+.worldact-list-options label {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin: 0 18px 6px 0;
+}
+.worldact-list-options .small-text {
+  width: 65px;
+}
+.worldact-list-options .submit {
+  padding: 0;
+  margin: 6px 0 0;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.worldact-column-choices {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 12px;
+}
+.worldact-options-error {
+  color: #b32d2e;
+}
+.worldact-contextual-help {
+  display: grid;
+  grid-template-columns: 160px minmax(0, 1fr) 190px;
+  min-height: 180px;
+  font-size: 13px;
+}
+.worldact-contextual-help .contextual-help-tabs {
+  position: static;
+  float: none;
+  width: auto;
+  margin: 0;
+  border-right: 1px solid #dcdcde;
+}
+.worldact-contextual-help .contextual-help-tabs ul {
+  margin: 12px 0;
+}
+.worldact-contextual-help .contextual-help-tabs li {
+  margin: 0;
+  border-left: 3px solid transparent;
+}
+.worldact-contextual-help .contextual-help-tabs li.active {
+  border-left-color: var(--wp-admin-theme-color, #3858e9);
+  background: #f6f7f7;
+}
+.worldact-contextual-help .contextual-help-tabs button {
+  width: 100%;
+  text-align: left;
+  background: none;
+  border: 0;
+  padding: 7px 12px;
+  color: #2271b1;
+  cursor: pointer;
+  font: inherit;
+}
+.worldact-contextual-help .contextual-help-tabs li.active button {
+  color: #1d2327;
+  font-weight: 600;
+}
+.worldact-contextual-help .contextual-help-tabs button:focus-visible {
+  outline: 2px solid var(--wp-admin-theme-color, #3858e9);
+  outline-offset: -3px;
+}
+.worldact-contextual-help .contextual-help-tabs-wrap {
+  position: static;
+  margin: 0;
+  padding: 8px 20px 16px;
+  overflow: visible;
+  min-width: 0;
+}
+.worldact-contextual-help .help-tab-content {
+  display: block;
+  padding: 0;
+}
+.worldact-contextual-help p {
+  line-height: 1.6;
+}
+.worldact-contextual-help .contextual-help-sidebar {
+  position: static;
+  float: none;
+  width: auto;
+  padding: 8px 14px;
+  border-left: 1px solid #dcdcde;
+}
+#wpbody-content table[data-hidden-columns~="author"] .column-author,
+#wpbody-content table[data-hidden-columns~="author"] td.author,
+#wpbody-content table[data-hidden-columns~="categories"] .column-categories,
+#wpbody-content table[data-hidden-columns~="tags"] .column-tags,
+#wpbody-content table[data-hidden-columns~="comments"] .column-comments,
+#wpbody-content table[data-hidden-columns~="date"] .column-date,
+#wpbody-content table[data-hidden-columns~="response"] .column-response,
+#wpbody-content table[data-hidden-columns~="description"] .column-description,
+#wpbody-content table[data-hidden-columns~="slug"] .column-slug,
+#wpbody-content table[data-hidden-columns~="posts"] .column-posts {
+  display: none !important;
+}
+#wpbody-content table[data-hidden-columns~="name"] .column-name,
+#wpbody-content table[data-hidden-columns~="email"] .column-email,
+#wpbody-content table[data-hidden-columns~="role"] .column-role {
+  display: none !important;
+}
+.worldact-list-excerpt {
+  margin: 6px 0 0;
+  color: #50575e;
+  font-weight: 400;
+}
+@media (max-width: 782px) {
+  #wpbody-content .worldact-users .tablenav .actions,
+  #wpbody-content .worldact-comments .tablenav .actions,
+  #wpbody-content .taxonomy-list .tablenav .actions,
+  #wpbody-content .worldact-posts .tablenav .actions {
+    display: flex !important;
+    flex-wrap: wrap;
+    gap: 4px;
+  }
+  .worldact-posts .tablenav,
+  .taxonomy-list .tablenav {
+    display: flex;
+    flex-wrap: wrap;
+    height: auto;
+    min-height: 30px;
+    gap: 10px;
+  }
+  .worldact-posts .tablenav-pages,
+  .taxonomy-list .tablenav-pages {
+    margin-left: auto;
+  }
+  .worldact-screen-meta #screen-meta {
+    margin: 0 10px;
+  }
+  .worldact-screen-meta #screen-meta-links {
+    margin-right: 10px;
+    height: 36px;
+  }
+  .worldact-contextual-help {
+    grid-template-columns: 135px minmax(0, 1fr);
+  }
+  .worldact-contextual-help .contextual-help-sidebar {
+    grid-column: 1/-1;
+    border-left: 0;
+    border-top: 1px solid #dcdcde;
+    padding: 8px 14px;
+  }
+  .worldact-contextual-help .contextual-help-sidebar p {
+    display: inline-block;
+    margin: 4px 12px 4px 0;
+  }
+}
+@media (max-width: 480px) {
+  .worldact-contextual-help {
+    display: block;
+  }
+  .worldact-contextual-help .contextual-help-tabs {
+    border-right: 0;
+    border-bottom: 1px solid #dcdcde;
+  }
+  .worldact-contextual-help .contextual-help-tabs ul {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 0;
+  }
+  .worldact-contextual-help .contextual-help-tabs li {
+    border-left: 0;
+    border-bottom: 3px solid transparent;
+  }
+  .worldact-contextual-help .contextual-help-tabs li.active {
+    border-bottom-color: var(--wp-admin-theme-color, #3858e9);
+  }
+  .worldact-contextual-help .contextual-help-tabs button {
+    padding: 9px;
+  }
+  .worldact-contextual-help .contextual-help-tabs-wrap {
+    padding: 4px 12px 12px;
+  }
+}
+
+.worldact-term-quick-edit {
+  padding: 4px 8px 12px;
+}
+.worldact-term-quick-edit label {
+  display: flex;
+  gap: 12px;
+  margin: 10px 0;
+  align-items: center;
+}
+.worldact-term-quick-edit input {
+  width: min(400px, 100%);
+  min-width: 0;
+}
+.worldact-term-quick-edit h2 {
+  font-size: 14px;
+}
+.worldact-term-quick-edit .comment-form-buttons {
+  justify-content: flex-end;
+}
+#wpbody-content .tags tr[hidden] {
+  display: none !important;
+}

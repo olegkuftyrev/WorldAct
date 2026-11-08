@@ -56,7 +56,7 @@ INSERT INTO site_documents(slug,title,type,content) SELECT initial.slug,initial.
 ('hero','Hero with heading and text','pattern','<div class="wp-block-group"><h2>Your next chapter starts here</h2><p>Share ideas, stories, and everything that matters to you.</p></div>'),
 ('call-to-action','Call to action','pattern','<div class="wp-block-group"><h2>Let’s build something together</h2><p>Write a message that connects with your readers.</p><p><a class="wp-element-button" href="/">Learn more</a></p></div>')
 ) AS initial(slug,title,type,content) WHERE NOT EXISTS (SELECT 1 FROM seed_markers WHERE name='platform-design-v1')
-ON CONFLICT(type,slug) DO NOTHING;
+ON CONFLICT DO NOTHING;
 INSERT INTO seed_markers(name) VALUES('platform-design-v1') ON CONFLICT DO NOTHING;
 
 -- Canonical editor blocks for untouched built-in templates. Edited content is preserved.

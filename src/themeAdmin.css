@@ -1,0 +1,10 @@
+.worldact-theme-variations { border: 1px solid #dcdcde; margin: 16px 0 24px; padding: 16px 20px; max-width: 650px; }
+.worldact-theme-variations legend { font-weight: 600; padding: 0 4px; }
+.worldact-theme-variations label { display: flex; align-items: center; gap: 16px; }
+.worldact-theme-variations select { min-width: 190px; }
+.worldact-theme-variations .description { margin-bottom: 0; }
+.worldact-style-fields .description { display: block; max-width: 260px; font-size: 12px; overflow-wrap: anywhere; }
+.worldact-theme-style-preview { max-width: 850px; border: 1px solid #dcdcde; border-radius: 0; }
+.worldact-theme-style-preview h2 { margin-top: 0; }
+.worldact-design-filter { margin: 0 0 16px; max-width: 360px; width: 100%; }
+@media(max-width:600px) { .worldact-theme-variations label { align-items: stretch; flex-direction: column; gap: 8px; } .worldact-theme-variations select { min-width: 0; width: 100%; } }

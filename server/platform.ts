@@ -1,9 +1,12 @@
+import {akismetKey,readAkismetSecretStatus,setAkismetCredentials} from "./bundled-plugins.js";
+import { validateFontChoices, withFontLibraryLock } from "./fonts.js";
 import express from "express";
 import multer from "multer";
 import sharp from "sharp";
 import { fileTypeFromBuffer } from "file-type";
 import nodemailer from "nodemailer";
 import { z } from "zod";
+import { postFormats } from "../shared/post-formats.js";
 import { createHash, randomBytes } from "node:crypto";
 import type { PoolClient } from "pg";
 import { mkdir, writeFile, readFile, unlink, copyFile } from "node:fs/promises";
@@ -31,18 +34,26 @@ import {
   cleanBlocks,
   slugify,
 } from "./utils.js";
-import { readDesign, pluginRegistry, themes } from "./design.js";
+import { readDesign, pluginRegistry, themes, publicExtensionSettings } from "./design.js";
 import {
   buildSizes,
   uploadPrefix,
   safeStoredFile,
   mediaBackups,
 } from "./media-files.js";
-import { remapImportedBlockReferences, type ImportedBlockEntity } from "./block-portability.js";
+import { remapImportedBlockReferences } from "./block-portability.js";
+import { SiteImport, allocateImportedBlockEntities, exportMediaFiles, exportFontLibrary, MAX_ARCHIVE_JSON_BYTES, MAX_STORED_CONTENT_BYTES } from "./site-portability.js";
+import { postPermalink } from "./permalinks.js";
+
+import { settingSchema, menuSchema, validMenu, styleSchema, documentSchema, validateExtensionSettings } from "./site-validation.js";
+import { readThemeDesign, validateThemeDesign, resetBundledDocument } from "./themes.js";
+import {pendingAdminEmail,queueAdminEmailChange} from "./site-identity.js";
+import {deliverMail} from "./accounts.js";
 
 const router = express.Router();
 const admin = requireRole("administrator");
-const editors = requireRole("administrator", "editor");
+// Default WordPress roles reserve theme options, templates and menus for admins.
+const editors = requireRole("administrator");
 const creators = requireRole("administrator", "editor", "author");
 const auth = requireRole(
   "administrator",
@@ -63,7 +74,7 @@ const safeUrl = z
     "Use an HTTP(S), relative, or email URL.",
   );
 const docFields =
-  'id,slug,title,type,content,raw_content AS "rawContent",blocks,version,updated_at AS "updatedAt"';
+  'id,slug,title,type,theme,source_hash AS "sourceHash",source_metadata AS "sourceMetadata",content,raw_content AS "rawContent",blocks,version,updated_at AS "updatedAt"';
 const menuFields = 'id,name,location,items,updated_at AS "updatedAt"';
 function normalizedText(value: string) {
   const clean = plainText(value).trim();
@@ -90,105 +101,10 @@ async function clearDeletedSiteImages(client: PoolClient, ids: number[]) {
 }
 
 // General, Writing, Reading, Discussion, Media, Permalinks and Privacy settings.
-const settingSchema = z
-  .object({
-    siteTitle: text(1, 200),
-    tagline: z.string().max(500),
-    siteUrl: z
-      .url()
-      .max(2000)
-      .refine((v) => /^https?:\/\//i.test(v)),
-    adminEmail: z.email().max(254),
-    usersCanRegister: z.boolean(),
-    defaultRole: z.enum([
-      "administrator",
-      "editor",
-      "author",
-      "contributor",
-      "subscriber",
-    ]),
-    siteLogoId: z.number().int().min(0).max(2147483647),
-    siteIconId: z.number().int().min(0).max(2147483647),
-    timezone: text(1, 100).refine((v) => {
-      try {
-        new Intl.DateTimeFormat("en", { timeZone: v });
-        return true;
-      } catch {
-        return false;
-      }
-    }),
-    dateFormat: text(1, 80),
-    timeFormat: text(1, 80),
-    postsPerPage: z.number().int().min(1).max(100),
-    discourageSearchEngines: z.boolean(),
-    theme: z.enum([
-      "twentytwentyfive",
-      "twentytwentyfour",
-      "twentytwentythree",
-      "classic",
-    ]),
-    defaultCategoryId: nullableId,
-    defaultPostFormat: z.enum([
-      "standard",
-      "aside",
-      "image",
-      "video",
-      "quote",
-      "link",
-      "gallery",
-      "audio",
-    ]),
-    frontPageMode: z.enum(["posts", "page"]),
-    frontPageId: nullableId,
-    postsPageId: nullableId,
-    feedItems: z.number().int().min(1).max(100),
-    feedExcerpt: z.boolean(),
-    defaultCommentStatus: z.enum(["open", "closed"]),
-    requireCommentNameEmail: z.boolean(),
-    commentRegistration: z.boolean(),
-    commentModeration: z.boolean(),
-    commentsPerPage: z.number().int().min(1).max(200),
-    threadComments: z.boolean(),
-    threadDepth: z.number().int().min(1).max(10),
-    closeCommentsDays: z.number().int().min(0).max(3650),
-    commentOrder: z.enum(["asc", "desc"]),
-    permalinkStructure: text(1, 200).refine((s) => {
-      const tokens = s.match(/%[^%]+%/g) || [];
-      return (
-        s.startsWith("/") &&
-        s.endsWith("/") &&
-        !/[?#<>\\\s]/.test(s) &&
-        !s.includes("//") &&
-        !s.split("/").includes("..") &&
-        !/^\/(api|admin|uploads|wp-json|login|lost-password|reset-password)(\/|$)/.test(
-          s,
-        ) &&
-        /%(postname|post_id)%/.test(s) &&
-        new Set(tokens).size === tokens.length &&
-        !/%[^%]+%%/.test(s) &&
-        !s
-          .replace(/%(postname|post_id|year|monthnum|day|category)%/g, "")
-          .includes("%")
-      );
-    }, "Use a unique path beginning and ending with / and containing %postname% or %post_id%. Supported tokens: %postname%, %post_id%, %year%, %monthnum%, %day%, %category%."),
-    categoryBase: text(1, 80).regex(/^[a-z0-9-]+$/),
-    tagBase: text(1, 80).regex(/^[a-z0-9-]+$/),
-    thumbnailWidth: z.number().int().min(1).max(4096),
-    thumbnailCrop: z.boolean(),
-    thumbnailHeight: z.number().int().min(1).max(4096),
-    mediumWidth: z.number().int().min(1).max(8192),
-    mediumHeight: z.number().int().min(1).max(8192),
-    largeWidth: z.number().int().min(1).max(8192),
-    largeHeight: z.number().int().min(1).max(8192),
-    uploadsYearMonth: z.boolean(),
-    privacyPageId: nullableId,
-  })
-  .partial()
-  .strict();
 router.get("/settings", admin, async (_req, res) =>
-  res.json({ settings: await getSettings() }),
+  res.json({ settings: await getSettings(),pendingAdminEmail:await pendingAdminEmail() }),
 );
-router.put("/settings", admin, async (req, res) => {
+router.put("/settings", admin, async (req:AuthRequest, res) => {
   const input = settingSchema.parse(req.body);
   if (!Object.keys(input).length)
     throw new HttpError(400, "Provide settings to save.");
@@ -207,14 +123,6 @@ router.put("/settings", admin, async (req, res) => {
       if (!found.rowCount) throw new HttpError(400, "Choose an existing page.");
     }
   }
-  if (input.defaultCategoryId) {
-    const term = await pool.query(
-      "SELECT id FROM terms WHERE id=$1 AND taxonomy='category'",
-      [input.defaultCategoryId],
-    );
-    if (!term.rowCount)
-      throw new HttpError(400, "Choose an existing category.");
-  }
   for (const key of ["siteLogoId", "siteIconId"] as const)
     if (input[key]) {
       const image = await pool.query(
@@ -224,10 +132,21 @@ router.put("/settings", admin, async (req, res) => {
       if (!image.rowCount)
         throw new HttpError(400, "Choose an existing image.");
     }
-  await pool.query("UPDATE settings SET data=data || $1::jsonb WHERE id=1", [
-    JSON.stringify(input),
-  ]);
-  res.json({ settings: await getSettings() });
+  const db=await pool.connect();let mail=null;
+  try{
+    await db.query("BEGIN");await db.query("SELECT id FROM settings WHERE id=1 FOR UPDATE");
+    if(input.defaultCategoryId){
+      const term=await db.query("SELECT id FROM terms WHERE id=$1 AND taxonomy='category' FOR KEY SHARE",[input.defaultCategoryId]);
+      if(!term.rowCount)throw new HttpError(400,"Choose an existing category.");
+    }
+    if(input.adminEmail){
+      const current=await getSettings(db);
+      input.adminEmail=input.adminEmail.toLowerCase();
+      if(input.adminEmail!==current.adminEmail.toLowerCase()){mail=await queueAdminEmailChange(db,input.adminEmail,needUser(req).id);delete input.adminEmail;}
+    }
+    await db.query("UPDATE settings SET data=data || $1::jsonb WHERE id=1",[JSON.stringify(input)]);await db.query("COMMIT");
+  }catch(error){await db.query("ROLLBACK");throw error;}finally{db.release();}
+  res.json({settings:await getSettings(),pendingAdminEmail:await pendingAdminEmail(),delivery:await deliverMail(mail)});
 });
 
 const profileSchema = z
@@ -269,12 +188,16 @@ router.get("/profile", auth, async (req: AuthRequest, res) => {
   const row = result.rows[0];
   res.json({ user: { ...row, ...row.profile }, preferences: row.preferences });
 });
-async function updateUser(req: AuthRequest, target: number) {
+export async function updateUser(req: AuthRequest, target: number) {
   const user = needUser(req),
     input = profileSchema.parse(req.body);
   if (target !== user.id && user.role !== "administrator")
     throw new HttpError(403, "You cannot edit this user.");
-  const existing = await pool.query("SELECT * FROM users WHERE id=$1", [
+  const client=await pool.connect();
+  try {
+  await client.query("BEGIN");
+  await client.query("SELECT pg_advisory_xact_lock(hashtext('worldact-account-identity'))");
+  const existing = await client.query("SELECT * FROM users WHERE id=$1 FOR UPDATE", [
     target,
   ]);
   const row = existing.rows[0];
@@ -292,6 +215,7 @@ async function updateUser(req: AuthRequest, target: number) {
       !(await verifyPassword(input.currentPassword, row.password_hash)))
   )
     throw new HttpError(400, "Your current password is incorrect.");
+  if(input.email && input.email.toLowerCase()!==row.email.toLowerCase() && (await client.query("SELECT id FROM users WHERE id<>$1 AND (lower(email)=lower($2) OR lower(username)=lower($2))",[target,input.email])).rowCount)throw new HttpError(409,"That email address is already registered.");
   const {
     email,
     displayName,
@@ -302,7 +226,7 @@ async function updateUser(req: AuthRequest, target: number) {
   } = input;
   for (const key of ["firstName", "lastName", "nickname", "bio"] as const)
     if (profile[key] !== undefined) profile[key] = plainText(profile[key]!);
-  await pool.query(
+  await client.query(
     "UPDATE users SET email=$1,display_name=$2,password_hash=$3,role=$4,profile=profile || $5::jsonb WHERE id=$6",
     [
       email?.toLowerCase() ?? row.email,
@@ -321,16 +245,18 @@ async function updateUser(req: AuthRequest, target: number) {
       .map((s) => s.trim())
       .find((s) => s.startsWith("worldact_session="))
       ?.split("=")[1];
-    await pool.query(
+    await client.query(
       "DELETE FROM sessions WHERE user_id=$1 AND token_hash<>$2",
       [target, token ? createHash("sha256").update(token).digest("hex") : ""],
     );
   }
-  const result = await pool.query(
+  const result = await client.query(
     `SELECT ${userFields},profile FROM users WHERE id=$1`,
     [target],
   );
+  await client.query("COMMIT");
   return { ...result.rows[0], ...result.rows[0].profile };
+  } catch(error){await client.query("ROLLBACK");throw error;}finally{client.release();}
 }
 router.put("/profile", auth, async (req: AuthRequest, res) =>
   res.json({ user: await updateUser(req, needUser(req).id) }),
@@ -344,21 +270,14 @@ router.get("/users/:id", admin, async (req, res) => {
   const { profile, ...user } = result.rows[0];
   res.json({ user: { ...user, ...profile } });
 });
-router.delete("/users/:id", admin, async (req: AuthRequest, res) => {
+export async function deleteUser(req: AuthRequest, target: number, options: {reassignTo?: number; deleteContent?: "true" | "false"} = {}) {
   const user = needUser(req),
-    target = parseId(req.params.id);
+    replacement = options.reassignTo ?? user.id;
   if (target === user.id)
     throw new HttpError(
       400,
       "You cannot delete the account you are signed in with.",
     );
-  const options = z
-    .object({
-      reassignTo: z.coerce.number().int().positive().optional(),
-      deleteContent: z.enum(["true", "false"]).optional(),
-    })
-    .parse(req.query);
-  const replacement = options.reassignTo ?? user.id;
   if (replacement === target)
     throw new HttpError(400, "Choose another user to receive this content.");
   const client = await pool.connect();
@@ -416,7 +335,11 @@ router.delete("/users/:id", admin, async (req: AuthRequest, res) => {
       unlink(path.join(uploadsDir, filename)).catch(() => {}),
     ),
   );
-  res.json({ ok: true });
+}
+router.delete("/users/:id", admin, async (req: AuthRequest, res) => {
+  const options = z.object({reassignTo:z.coerce.number().int().positive().optional(),deleteContent:z.enum(["true","false"]).optional()}).parse(req.query);
+  await deleteUser(req, parseId(req.params.id), options);
+  res.json({ok:true});
 });
 router.put("/users/:id", admin, async (req: AuthRequest, res) =>
   res.json({ user: await updateUser(req, parseId(req.params.id)) }),
@@ -432,11 +355,26 @@ router.put("/preferences", auth, async (req: AuthRequest, res) => {
       hiddenWidgets: z.array(z.string().max(100)).max(30).optional(),
       welcome: z.boolean().optional(),
       postsPerPage: z.number().int().min(1).max(100).optional(),
+      listTables: z.partialRecord(
+        z.enum(["posts", "pages", "comments", "categories", "tags", "users", "media"]),
+        z.object({
+          hiddenColumns: z.array(z.string().min(1).max(60)).max(30).optional(),
+          perPage: z.number().int().min(1).max(100).optional(),
+          viewMode: z.enum(["list", "excerpt"]).optional(),
+        }).strict(),
+      ).optional(),
     })
     .strict()
     .parse(req.body);
   const result = await pool.query(
-    "UPDATE users SET preferences=preferences || $1::jsonb WHERE id=$2 RETURNING preferences",
+    `UPDATE users SET preferences=(preferences || ($1::jsonb-'listTables'))
+      || CASE WHEN $1::jsonb ? 'listTables' THEN jsonb_build_object('listTables',
+        coalesce(preferences->'listTables','{}'::jsonb) || coalesce((
+          SELECT jsonb_object_agg(entry.key,
+            coalesce(preferences->'listTables'->entry.key,'{}'::jsonb) || entry.value)
+          FROM jsonb_each($1::jsonb->'listTables') entry
+        ),'{}'::jsonb)) ELSE '{}'::jsonb END
+      WHERE id=$2 RETURNING preferences`,
     [JSON.stringify(preferences), needUser(req).id],
   );
   res.json({ preferences: result.rows[0].preferences });
@@ -571,44 +509,6 @@ router.post("/auth/reset-password", async (req, res) => {
   }
 });
 
-const menuSchema = z
-  .object({
-    name: text(1, 160),
-    location: z.enum(["", "primary", "footer"]).default(""),
-    items: z
-      .array(
-        z
-          .object({
-            id: text(1, 100),
-            label: text(1, 200),
-            url: safeUrl,
-            parentId: z.string().max(100).nullable().optional(),
-            target: z.enum(["_self", "_blank"]).optional(),
-          })
-          .strict(),
-      )
-      .max(200)
-      .default([]),
-  })
-  .strict();
-function validMenu(items: z.infer<typeof menuSchema>["items"]) {
-  const ids = new Set(items.map((i) => i.id));
-  if (ids.size !== items.length)
-    throw new HttpError(400, "Menu item IDs must be unique.");
-  for (const item of items) {
-    if (item.parentId && !ids.has(item.parentId))
-      throw new HttpError(400, "Choose an existing parent menu item.");
-    let parent = item.parentId;
-    const seen = new Set([item.id]);
-    while (parent) {
-      if (seen.has(parent))
-        throw new HttpError(400, "Menu items cannot form a cycle.");
-      seen.add(parent);
-      parent = items.find((i) => i.id === parent)?.parentId;
-    }
-    item.label = normalizedText(item.label);
-  }
-}
 router.get("/menus", editors, async (_req, res) =>
   res.json({
     menus: (
@@ -678,54 +578,39 @@ router.get("/site-editor", editors, async (_req, res) =>
   res.json(await readDesign()),
 );
 router.get("/public/design", async (_req, res) => res.json(await readDesign()));
-const styleSchema = z
-  .object({
-    backgroundColor: z.string().regex(/^#[a-f\d]{3,8}$/i),
-    textColor: z.string().regex(/^#[a-f\d]{3,8}$/i),
-    accentColor: z.string().regex(/^#[a-f\d]{3,8}$/i),
-    fontFamily: z.enum([
-      "Manrope",
-      "Inter",
-      "Georgia",
-      "System",
-      "serif",
-      "sans-serif",
-    ]),
-    headingFont: z.enum([
-      "Manrope",
-      "Inter",
-      "Georgia",
-      "System",
-      "serif",
-      "sans-serif",
-    ]),
-    contentWidth: z.number().int().min(480).max(1800),
-    spacing: z.number().int().min(8).max(80),
-  })
-  .partial()
-  .strict();
 router.put("/site-editor/styles", admin, async (req, res) => {
-  const input = styleSchema.parse(req.body);
-  const result = await pool.query(
-    "UPDATE site_styles SET data=data || $1::jsonb WHERE id=1 RETURNING data",
-    [JSON.stringify(input)],
-  );
-  res.json({ styles: result.rows[0].data });
+  const input=styleSchema.parse(req.body);
+  const result=await withFontLibraryLock(async(database)=>{
+    const settings=await getSettings(database);
+    await validateFontChoices(input,settings.theme,database);
+    if(settings.theme!=="classic"){
+      const result=await database.query("UPDATE theme_designs SET styles=styles || $2::jsonb,updated_at=now() WHERE theme=$1 RETURNING styles",[settings.theme,JSON.stringify(input)]);
+      return {styles:result.rows[0]?.styles || {},theme:await readThemeDesign(settings.theme,database)};
+    }
+    const result=await database.query("UPDATE site_styles SET data=data || $1::jsonb WHERE id=1 RETURNING data",[JSON.stringify(input)]);
+    return {styles:result.rows[0].data};
+  });
+  res.json(result);
 });
-const documentSchema = z
-  .object({
-    slug: text(1, 160).regex(/^[a-z0-9-]+$/),
-    title: text(1, 200),
-    type: z.enum(["template", "template-part", "pattern"]),
-    content: z.string().max(1_000_000).default(""),
-    blocks: z.unknown().optional(),
-    version: z.number().int().positive().optional(),
-  })
-  .strict();
+router.put("/site-editor/theme", admin, async (req, res) => {
+  const result=await withFontLibraryLock(async(database)=>{
+    const settings=await getSettings(database),previous=await readThemeDesign(settings.theme,database);
+    const input=validateThemeDesign(settings.theme,{...req.body,variation:req.body?.variation ?? previous.variation,styles:req.body?.styles ?? previous.styles});
+    await validateFontChoices(input.styles,settings.theme,database);
+    await database.query("UPDATE theme_designs SET variation=$2,styles=$3::jsonb,updated_at=now() WHERE theme=$1",[settings.theme,input.variation,JSON.stringify(input.styles)]);
+    if(settings.theme==="classic")await database.query("UPDATE site_styles SET data=$1::jsonb WHERE id=1",[JSON.stringify(input.styles)]);
+    return {theme:await readThemeDesign(settings.theme,database)};
+  });
+  res.json(result);
+});
+router.post("/site-editor/documents/:id/reset", editors, async (req, res) => {
+  res.json({ document: await resetBundledDocument(parseId(req.params.id)) });
+});
 router.post("/site-editor/documents", editors, async (req, res) => {
   const input = documentSchema.parse(req.body);
+  const settings = await getSettings();
   const result = await pool.query(
-    `INSERT INTO site_documents(slug,title,type,content,blocks,raw_content) VALUES($1,$2,$3,$4,$5,$6) RETURNING ${docFields}`,
+    `INSERT INTO site_documents(slug,title,type,content,blocks,raw_content,theme) VALUES($1,$2,$3,$4,$5,$6,$7) RETURNING ${docFields}`,
     [
       input.slug,
       normalizedText(input.title),
@@ -733,6 +618,7 @@ router.post("/site-editor/documents", editors, async (req, res) => {
       cleanContent(input.content),
       JSON.stringify(parseBlocks(input.blocks)),
       cleanRawContent(input.content),
+      settings.theme,
     ],
   );
   res.status(201).json({ document: result.rows[0] });
@@ -763,12 +649,12 @@ router.put("/site-editor/documents/:id", editors, async (req, res) => {
 });
 router.delete("/site-editor/documents/:id", editors, async (req, res) => {
   const existing = await pool.query(
-    "SELECT slug,type FROM site_documents WHERE id=$1",
+    "SELECT slug,type,source_hash FROM site_documents WHERE id=$1",
     [parseId(req.params.id)],
   );
   if (!existing.rowCount) throw new HttpError(404, "Template not found.");
   if (
-    ["header", "footer", "single", "page", "index"].includes(
+    existing.rows[0].source_hash || ["header", "footer", "single", "page", "index"].includes(
       existing.rows[0].slug,
     )
   )
@@ -784,82 +670,35 @@ router.delete("/site-editor/documents/:id", editors, async (req, res) => {
 router.get("/themes", admin, async (_req, res) =>
   res.json({ themes, active: (await getSettings()).theme }),
 );
-router.get("/plugins", admin, async (_req, res) => {
-  const installed = await pool.query(
-    'SELECT slug,enabled,settings,installed_at AS "installedAt" FROM extensions',
-  );
-  res.json({
-    plugins: pluginRegistry.map((p) => ({
-      ...p,
-      ...installed.rows.find((r) => r.slug === p.slug),
-      installed: installed.rows.some((r) => r.slug === p.slug),
-    })),
-  });
+router.get("/plugins",admin,async(_req,res)=>{
+  const installed=await pool.query('SELECT slug,enabled,settings,installed_at AS "installedAt" FROM extensions');
+  const secret=await readAkismetSecretStatus();
+  res.json({plugins:pluginRegistry.map((plugin)=>{const row=installed.rows.find((item)=>item.slug===plugin.slug);return {...plugin,...row,settings:publicExtensionSettings(plugin.slug,row?.settings || plugin.settings),installed:Boolean(row),...(plugin.slug==="akismet"?secret:{})};})});
 });
-router.post("/plugins/:slug/install", admin, async (req, res) => {
-  const plugin = pluginRegistry.find((p) => p.slug === req.params.slug);
-  if (!plugin)
-    throw new HttpError(
-      404,
-      "This JavaScript extension is not in the local registry.",
-    );
-  await pool.query(
-    "INSERT INTO extensions(slug,settings) VALUES($1,$2) ON CONFLICT DO NOTHING",
-    [plugin.slug, JSON.stringify(plugin.settings)],
-  );
-  res.status(201).json({ ok: true });
+router.post("/plugins/:slug/install",admin,async(req,res)=>{
+  const plugin=pluginRegistry.find((item)=>item.slug===req.params.slug);if(!plugin)throw new HttpError(404,"This extension is not in the local registry.");
+  await pool.query("INSERT INTO extensions(slug,settings) VALUES($1,$2) ON CONFLICT DO NOTHING",[plugin.slug,JSON.stringify(plugin.settings)]);res.status(201).json({ok:true});
 });
-router.put("/plugins/:slug", admin, async (req, res) => {
-  const plugin = pluginRegistry.find((p) => p.slug === req.params.slug);
-  if (!plugin) throw new HttpError(404, "Plugin not found.");
-  const input = z
-    .object({
-      enabled: z.boolean().optional(),
-      settings: z.record(z.string(), z.unknown()).optional(),
-    })
-    .strict()
-    .parse(req.body);
-  let settings: Record<string, unknown> = {};
-  if (input.settings) {
-    if (plugin.slug === "reading-time")
-      settings = z
-        .object({ wordsPerMinute: z.number().int().min(50).max(1000) })
-        .strict()
-        .parse(input.settings);
-    if (plugin.slug === "spam-shield")
-      settings = z
-        .object({ maxLinks: z.number().int().min(0).max(30) })
-        .strict()
-        .parse(input.settings);
-    if (plugin.slug === "site-seo")
-      settings = z
-        .object({ description: z.string().max(500), siteImage: safeUrl })
-        .strict()
-        .parse(input.settings);
-    if (plugin.slug === "custom-footer")
-      settings = z
-        .object({ text: z.string().max(2000) })
-        .strict()
-        .parse(input.settings);
-  }
-  const result = await pool.query(
-    "UPDATE extensions SET enabled=coalesce($1,enabled),settings=settings || $2::jsonb WHERE slug=$3 RETURNING slug,enabled,settings",
-    [input.enabled ?? null, JSON.stringify(settings), plugin.slug],
-  );
-  if (!result.rowCount)
-    throw new HttpError(404, "Install this extension first.");
-  res.json({ plugin: result.rows[0] });
+router.put("/plugins/:slug",admin,async(req,res)=>{
+  const plugin=pluginRegistry.find((item)=>item.slug===req.params.slug);if(!plugin)throw new HttpError(404,"Plugin not found.");
+  const input=z.object({enabled:z.boolean().optional(),settings:z.record(z.string(),z.unknown()).optional(),apiKey:akismetKey.optional(),clearApiKey:z.boolean().optional()}).strict().parse(req.body);
+  if(plugin.slug!=="akismet" && (input.apiKey!==undefined || input.clearApiKey!==undefined))throw new HttpError(400,"API key fields are only available for Akismet.");
+  const settings=input.settings?validateExtensionSettings(plugin.slug,input.settings):{};
+  const database=await pool.connect();let updated;
+  try{await database.query("BEGIN");
+    const row=(await database.query("SELECT slug,enabled,settings FROM extensions WHERE slug=$1 FOR UPDATE",[plugin.slug])).rows[0];if(!row)throw new HttpError(404,"Install this extension first.");
+    updated=(await database.query("UPDATE extensions SET enabled=coalesce($1,enabled),settings=$2::jsonb WHERE slug=$3 RETURNING slug,enabled,settings",[input.enabled ?? null,JSON.stringify({...publicExtensionSettings(plugin.slug,row.settings),...settings}),plugin.slug])).rows[0];
+    if(plugin.slug==="akismet")await setAkismetCredentials(database,input);
+    await database.query("COMMIT");
+  }catch(reason){await database.query("ROLLBACK");throw reason;}finally{database.release();}
+  res.json({plugin:{...updated,settings:publicExtensionSettings(plugin.slug,updated.settings),...(plugin.slug==="akismet"?await readAkismetSecretStatus():{})}});
 });
-router.delete("/plugins/:slug", admin, async (req, res) => {
-  const existing = await pool.query(
-    "SELECT enabled FROM extensions WHERE slug=$1",
-    [req.params.slug],
-  );
-  if (!existing.rowCount) throw new HttpError(404, "Plugin not found.");
-  if (existing.rows[0].enabled)
-    throw new HttpError(409, "Deactivate the extension before deleting it.");
-  await pool.query("DELETE FROM extensions WHERE slug=$1", [req.params.slug]);
-  res.json({ ok: true });
+router.delete("/plugins/:slug",admin,async(req,res)=>{
+  const database=await pool.connect();
+  try{await database.query("BEGIN");const row=(await database.query("SELECT enabled FROM extensions WHERE slug=$1 FOR UPDATE",[req.params.slug])).rows[0];if(!row)throw new HttpError(404,"Plugin not found.");if(row.enabled)throw new HttpError(409,"Deactivate the extension before deleting it.");
+    if(req.params.slug==="akismet")await database.query("DELETE FROM akismet_comment_checks");
+    await database.query("DELETE FROM extensions WHERE slug=$1",[req.params.slug]);await database.query("COMMIT");
+  }catch(reason){await database.query("ROLLBACK");throw reason;}finally{database.release();}res.json({ok:true});
 });
 
 const upload = multer({
@@ -886,14 +725,47 @@ const allowedMimes = new Set([
   "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
   "application/vnd.openxmlformats-officedocument.presentationml.presentation",
 ]);
-const expandedMediaFields = `${mediaFields},author_id AS "authorId",width,height,sizes,derivatives,original_filename IS NOT NULL AS "canRestore"`;
+const expandedMediaFields = `${mediaFields},author_id AS "authorId",(SELECT display_name FROM users WHERE users.id=media.author_id) AS "authorName",attached_post_id AS "attachedPostId",(SELECT title FROM posts WHERE posts.id=media.attached_post_id) AS "attachedPostTitle",description,comment_status AS "commentStatus",width,height,sizes,derivatives,original_filename IS NOT NULL AS "canRestore"`;
 router.get("/media", creators, async (req: AuthRequest, res) => {
-  const user = needUser(req);
-  const result = await pool.query(
-    `SELECT ${expandedMediaFields} FROM media ${user.role === "author" ? "WHERE author_id=$1" : ""} ORDER BY created_at DESC,id DESC`,
-    user.role === "author" ? [user.id] : [],
-  );
-  res.json({ media: result.rows });
+  const user = needUser(req),input=z.object({search:z.string().trim().max(200).default(""),type:z.enum(["all","image","audio","video","document"]).default("all"),month:z.string().regex(/^\d{4}-(0[1-9]|1[0-2])$/).optional(),unattached:z.enum(["true","false"]).default("false"),page:z.coerce.number().int().positive().max(1_000_000).default(1),perPage:z.coerce.number().int().min(1).max(1000).default(1000),orderby:z.enum(["title","author","date"]).default("date"),order:z.enum(["asc","desc"]).default("desc")}).strict().parse(req.query);
+  const values:unknown[]=[],where:string[]=[];
+  if(user.role==="author"){values.push(user.id);where.push("author_id=$1");}
+  const base=where.length?"WHERE "+where.join(" AND "):"";
+  const [counts,months]=await Promise.all([pool.query(`SELECT count(*)::int AS all,count(*) FILTER(WHERE mime_type LIKE 'image/%')::int AS image,count(*) FILTER(WHERE mime_type LIKE 'audio/%')::int AS audio,count(*) FILTER(WHERE mime_type LIKE 'video/%')::int AS video,count(*) FILTER(WHERE mime_type !~ '^(image|audio|video)/')::int AS document,count(*) FILTER(WHERE attached_post_id IS NULL)::int AS unattached FROM media ${base}`,values),pool.query(`SELECT DISTINCT to_char(created_at AT TIME ZONE $${values.length+1},'YYYY-MM') AS month FROM media ${base} ORDER BY month DESC`,[...values,(await getSettings()).timezone])]);
+  if(input.search){values.push("%"+input.search.replace(/[\\%_]/g,"\\$&")+"%");where.push(`(title ILIKE $${values.length} OR filename ILIKE $${values.length} OR caption ILIKE $${values.length})`);}
+  if(input.type!=="all"){if(input.type==="document")where.push("mime_type !~ '^(image|audio|video)/'");else{values.push(input.type+"/%");where.push(`mime_type LIKE $${values.length}`);}}
+  if(input.month){values.push(input.month,(await getSettings()).timezone);where.push(`to_char(created_at AT TIME ZONE $${values.length},'YYYY-MM')=$${values.length-1}`);}
+  if(input.unattached==="true")where.push("attached_post_id IS NULL");
+  const predicate=where.length?"WHERE "+where.join(" AND "):"";
+  const total=(await pool.query(`SELECT count(*)::int AS n FROM media ${predicate}`,values)).rows[0].n,totalPages=Math.max(1,Math.ceil(total/input.perPage)),page=Math.min(input.page,totalPages);
+  values.push(input.perPage,(page-1)*input.perPage);
+  const sort={title:"lower(title)",author:'"authorName"',date:"created_at"}[input.orderby];
+  const result=await pool.query(`SELECT ${expandedMediaFields} FROM media ${predicate} ORDER BY ${sort} ${input.order},id ${input.order} LIMIT $${values.length-1} OFFSET $${values.length}`,values);
+  res.json({media:result.rows,counts:counts.rows[0],months:months.rows.map(row=>row.month),pagination:{page,perPage:input.perPage,total,totalPages}});
+});
+const mediaUpdate=z.object({title:z.string().trim().min(1).max(300).optional(),alt:z.string().max(1000).optional(),caption:z.string().max(20_000).optional(),description:z.string().max(20_000).optional(),commentStatus:z.enum(["open","closed"]).optional(),attachedPostId:z.number().int().positive().max(2147483647).nullable().optional()}).strict().refine(value=>Object.keys(value).length>0,"Provide a field to update.");
+async function updateMedia(req:AuthRequest,id:number,body:unknown){
+  const input=mediaUpdate.parse(body),client=await pool.connect();
+  try{
+    await client.query("BEGIN");const existing=(await client.query("SELECT * FROM media WHERE id=$1 FOR UPDATE",[id])).rows[0];
+    if(!existing)throw new HttpError(404,"Media not found.");ownsMedia(req,existing.author_id);
+    if(input.attachedPostId){
+      const post=(await client.query("SELECT id,author_id,type FROM posts WHERE id=$1 AND status<>'trash' FOR KEY SHARE",[input.attachedPostId])).rows[0];
+      if(!post)throw new HttpError(400,"Choose an existing post or page.");
+      if(needUser(req).role==="author" && (post.author_id!==needUser(req).id || post.type!=="post"))throw new HttpError(403,"You can only attach files to your own posts.");
+    }
+    const title=normalizedText(input.title ?? existing.title);
+    const result=await client.query(`UPDATE media SET title=$1,alt=$2,caption=$3,description=$4,comment_status=$5,attached_post_id=$6 WHERE id=$7 RETURNING ${expandedMediaFields}`,[title,plainText(input.alt ?? existing.alt),plainText(input.caption ?? existing.caption),cleanContent(input.description ?? existing.description),input.commentStatus ?? existing.comment_status,input.attachedPostId===undefined?existing.attached_post_id:input.attachedPostId,id]);
+    await client.query("COMMIT");return result.rows[0];
+  }catch(error){await client.query("ROLLBACK");throw error;}finally{client.release();}
+}
+router.put("/media/:id",creators,async(req:AuthRequest,res)=>res.json({media:await updateMedia(req,parseId(req.params.id),req.body)}));
+router.post("/media/bulk",creators,async(req:AuthRequest,res)=>{
+  const input=z.object({ids:z.array(z.number().int().positive().max(2147483647)).min(1).max(100),action:z.enum(["delete","attach","detach"]),postId:z.number().int().positive().max(2147483647).optional()}).strict().parse(req.body);
+  if(input.action==="attach"&&!input.postId)throw new HttpError(400,"Choose a post or page to attach these files to.");
+  let updated=0;const errors:{id:number;message:string}[]=[];
+  for(const id of new Set(input.ids))try{if(input.action==="delete")await deleteMedia(req,id);else await updateMedia(req,id,{attachedPostId:input.action==="detach"?null:input.postId});updated++;}catch(error){if(!(error instanceof HttpError))throw error;errors.push({id,message:error.message});}
+  res.json({updated,errors});
 });
 router.get("/media/:id", creators, async (req: AuthRequest, res) => {
   const result = await pool.query(
@@ -1115,14 +987,14 @@ router.post("/media/:id/restore", creators, async (req: AuthRequest, res) => {
     throw error;
   }
 });
-router.delete("/media/:id", creators, async (req: AuthRequest, res) => {
+async function deleteMedia(req: AuthRequest,id:number) {
   const client = await pool.connect();
   let item: any;
   try {
     await client.query("BEGIN");
     item = (
       await client.query("SELECT * FROM media WHERE id=$1 FOR UPDATE", [
-        parseId(req.params.id),
+        id,
       ])
     ).rows[0];
     if (!item) throw new HttpError(404, "Media not found.");
@@ -1148,7 +1020,9 @@ router.delete("/media/:id", creators, async (req: AuthRequest, res) => {
       await unlink(path.join(uploadsDir, (size as any).filename)).catch(
         () => {},
       );
-  res.json({ ok: true });
+}
+router.delete("/media/:id", creators, async (req: AuthRequest, res) => {
+  await deleteMedia(req,parseId(req.params.id));res.json({ok:true});
 });
 
 router.get("/tools/health", admin, async (_req, res) => {
@@ -1204,48 +1078,46 @@ router.delete("/tools/mail/:id", admin, async (req, res) => {
   res.json({ ok: true });
 });
 router.get("/tools/export", admin, async (_req, res) => {
-  const [posts, terms, media, comments, menus, docs, styles, blockEntities] =
-    await Promise.all(
-      [
-        "posts",
-        "terms",
-        "media",
-        "comments",
-        "navigation_menus",
-        "site_documents",
-        "site_styles",
-        "block_entities",
-      ].map((table) => pool.query(`SELECT * FROM ${table} ORDER BY id`)),
-    );
-  const postIds = posts.rows.map((p) => p.id),
-    relations = await pool.query(
-      "SELECT * FROM post_terms WHERE post_id=ANY($1::int[])",
-      [postIds],
-    );
-  res.json({
-    application: "WorldAct",
-    version: 2,
-    exportedAt: new Date().toISOString(),
-    posts: posts.rows.map(({ password_hash: password, ...post }) =>
-      password ? { ...post, status: "draft", passwordProtected: true } : post,
-    ),
-    terms: terms.rows,
-    postTerms: relations.rows,
-    media: media.rows,
-    comments: comments.rows,
-    blockEntities: blockEntities.rows,
-    menus: menus.rows,
-    documents: docs.rows,
-    styles: styles.rows[0]?.data || {},
-    settings: await getSettings(),
-    note: "Media file bytes and password/session data are not included. Password-protected content exports as drafts. Import assigns content to the importing administrator.",
-  });
+  const [posts, terms, media, comments, menus, docs, styles, blockEntities, extensions] = await Promise.all(
+    ["posts", "terms", "media", "comments", "navigation_menus", "site_documents", "site_styles", "block_entities", "extensions"].map(table => pool.query(`SELECT * FROM ${table} ORDER BY ${table === "extensions" ? "slug" : "id"}`)),
+  );
+  for (const records of [posts, terms, media, menus, docs, blockEntities]) if (records.rows.length > 1000) throw new HttpError(413, "Export at most 1000 records per section in a site archive.");
+  if (comments.rows.length > 10000) throw new HttpError(413, "Export at most 10000 comments per archive.");
+  const relations = await pool.query("SELECT * FROM post_terms ORDER BY post_id,term_id");
+  const settings = await getSettings(), { adminEmail: _contact, ...publicSettings } = settings;
+  const embedded = await exportMediaFiles(media.rows);
+  const fonts = await exportFontLibrary(pool, embedded.files.reduce((total, file) => total + file.size, 0));
+  const themeDesigns = (await pool.query("SELECT to_regclass('theme_designs') present")).rows[0].present
+    ? (await pool.query("SELECT theme,variation,styles FROM theme_designs ORDER BY theme")).rows : [];
+  const archive = {
+    application: "WorldAct", version: 3, exportedAt: new Date().toISOString(),
+    posts: await Promise.all(posts.rows.map(async ({password_hash: password, ...post}) => ({...post, permalink: await postPermalink({...post, terms: terms.rows.filter(term => relations.rows.some(rel => rel.post_id === post.id && rel.term_id === term.id))}, settings), ...(password ? {status: "draft", passwordProtected: true} : {})}))),
+    terms: terms.rows, postTerms: relations.rows, media: media.rows, mediaFiles: embedded.files,
+    comments: comments.rows, blockEntities: blockEntities.rows, menus: menus.rows, documents: docs.rows,
+    styles: styles.rows[0]?.data || {}, themeDesigns, extensions: extensions.rows.map(extension => ({ ...extension, settings: publicExtensionSettings(extension.slug, extension.settings) })), settings: publicSettings,
+    fontFamilies: fonts.fontFamilies, fontFaces: fonts.fontFaces, themeFonts: fonts.themeFonts, fontFiles: fonts.fontFiles,
+    warnings: [...embedded.warnings, ...fonts.warnings],
+    note: "Local media and font bytes are embedded with SHA-256 checksums; font activation follows the explicit design replacement choice. Passwords, sessions and account credentials are excluded. Imported content belongs to the importing administrator. Existing content is retained; explicitly choose replaceDesign to activate imported site design and settings. Destination site URL and administrator contact remain unchanged.",
+  };
+  if (Buffer.byteLength(JSON.stringify(archive)) > MAX_ARCHIVE_JSON_BYTES) throw new HttpError(413, "The complete archive exceeds 96 MiB. Export a smaller site archive.");
+  res.json(archive);
 });
 router.post("/tools/import", admin, async (req: AuthRequest, res) => {
   const input = z
     .object({
       application: z.literal("WorldAct"),
-      version: z.number(),
+      version: z.number().int().min(1).max(3),
+      replaceDesign: z.boolean().optional(),
+      media: z.array(z.record(z.string(), z.unknown())).max(1000).optional(),
+      mediaFiles: z.array(z.record(z.string(), z.unknown())).max(5000).optional(),
+      fontFamilies: z.array(z.record(z.string(), z.unknown())).max(200).optional(),
+      fontFaces: z.array(z.record(z.string(), z.unknown())).max(800).optional(),
+      themeFonts: z.array(z.record(z.string(), z.unknown())).max(800).optional(),
+      fontFiles: z.array(z.record(z.string(), z.unknown())).max(800).optional(),
+      documents: z.array(z.record(z.string(), z.unknown())).max(1000).optional(),
+      menus: z.array(z.record(z.string(), z.unknown())).max(1000).optional(),
+      themeDesigns: z.array(z.record(z.string(), z.unknown())).max(4).optional(),
+      extensions: z.array(z.record(z.string(), z.unknown())).max(1000).optional(),
       posts: z.array(z.record(z.string(), z.unknown())).max(1000),
       terms: z.array(z.record(z.string(), z.unknown())).max(1000).optional(),
       postTerms: z
@@ -1275,52 +1147,25 @@ router.post("/tools/import", admin, async (req: AuthRequest, res) => {
   }
   const client = await pool.connect();
   let imported = 0;
+  let site: SiteImport | undefined;
   try {
     await client.query("BEGIN");
+    await client.query("SELECT pg_advisory_xact_lock(hashtext('worldact-site-import'))");
+    site = new SiteImport(client, input, needUser(req), await getSettings(client));
+    await site.prepare();
     const postMap = new Map<number, number>(),
       termMap = new Map<number, number>(),
       newTerms = new Set<number>(),
-      blockEntityMap = new Map<number, ImportedBlockEntity>(),
       warnings = new Set<string>();
+    let suppressedWarnings = 0;
     const addWarnings = (items: string[]) => {
       for (const warning of items)
-        if (warnings.size < 100) warnings.add(warning);
+        if (warnings.has(warning)) continue;
+        else if (warnings.size < 99) warnings.add(warning);
+        else suppressedWarnings++;
     };
-    const blockEntitySchema = z.object({
-      id,
-      kind: z.enum(["reusable", "navigation"]),
-      title: z.string().max(200),
-      slug: z.string().max(220).optional(),
-      content: z.string().max(1_000_000),
-      raw_content: z.string().max(1_000_000).optional(),
-      blocks: z.unknown().optional(),
-      status: z.enum(["publish", "draft", "trash"]).default("publish"),
-      created_at: z.iso.datetime({ offset: true }).optional(),
-      updated_at: z.iso.datetime({ offset: true }).optional(),
-    });
-    const entityInputs: z.infer<typeof blockEntitySchema>[] = [];
-    // Allocate every ID first so forward references and nested entities can be
-    // rewritten without ever consulting an unrelated local entity.
-    for (const item of input.blockEntities || []) {
-      const entity = blockEntitySchema.parse(item);
-      const allocated = await client.query(
-        "INSERT INTO block_entities(kind,title,slug,status,author_id,created_at,updated_at) VALUES($1,$2,$3,$4,$5,coalesce($6::timestamptz,now()),coalesce($7::timestamptz,now())) RETURNING id",
-        [entity.kind, plainText(entity.title), `${slugify(entity.slug || entity.title).slice(0, 160)}-import-${randomBytes(8).toString("hex")}`,
-          entity.status, needUser(req).id, entity.created_at ?? null, entity.updated_at ?? null],
-      );
-      blockEntityMap.set(entity.id, { id: allocated.rows[0].id, kind: entity.kind });
-      entityInputs.push(entity);
-    }
-    for (const entity of entityInputs) {
-      const rewritten = remapImportedBlockReferences(
-        entity.raw_content || entity.content, entity.blocks, blockEntityMap,
-      );
-      addWarnings(rewritten.warnings);
-      await client.query(
-        "UPDATE block_entities SET content=$1,raw_content=$2,blocks=$3::jsonb WHERE id=$4",
-        [rewritten.content, rewritten.rawContent, JSON.stringify(rewritten.blocks), blockEntityMap.get(entity.id)!.id],
-      );
-    }
+    const blockGraph = await allocateImportedBlockEntities(client, input.blockEntities || [], needUser(req).id);
+    const blockEntityMap = blockGraph.map;
     for (const item of input.terms || []) {
       const term = z
         .object({
@@ -1329,36 +1174,23 @@ router.post("/tools/import", admin, async (req: AuthRequest, res) => {
           name: text(1, 200),
           slug: text(1, 220),
           description: z.string().max(5000).default(""),
+          parent_id: nullableId.optional(),
         })
         .parse(item);
-      let r = await client.query(
-        "INSERT INTO terms(taxonomy,name,slug,description) VALUES($1,$2,$3,$4) ON CONFLICT(taxonomy,slug) DO NOTHING RETURNING id",
-        [
-          term.taxonomy,
-          normalizedText(term.name),
-          term.slug,
-          plainText(term.description),
-        ],
-      );
-      if (r.rowCount) newTerms.add(r.rows[0].id);
-      else
-        r = await client.query(
-          "SELECT id FROM terms WHERE taxonomy=$1 AND slug=$2",
-          [term.taxonomy, term.slug],
-        );
+      let slug = slugify(term.slug);
+      if ((await client.query("SELECT id FROM terms WHERE taxonomy=$1 AND slug=$2", [term.taxonomy, slug])).rowCount) {
+        slug = `${slug.slice(0,160)}-import-${randomBytes(6).toString("hex")}`;
+        site.warn("Conflicting taxonomy terms were imported with unique slugs; existing taxonomy content was retained.");
+      }
+      const r = await client.query("INSERT INTO terms(taxonomy,name,slug,description) VALUES($1,$2,$3,$4) RETURNING id", [term.taxonomy, normalizedText(term.name), slug, plainText(term.description)]);
+      newTerms.add(r.rows[0].id);
       termMap.set(term.id, r.rows[0].id);
     }
     for (const item of input.terms || []) {
       if (!item.parent_id) continue;
       const term = termMap.get(Number(item.id)),
         parent = termMap.get(Number(item.parent_id));
-      if (
-        !term ||
-        !parent ||
-        item.taxonomy !== "category" ||
-        !newTerms.has(term)
-      )
-        continue;
+      if (!term || !parent || item.taxonomy !== "category" || !newTerms.has(term)) { site.warn(`Term ${item.id} had an unresolved parent and was imported at the top level.`); continue; }
       const ancestors = new Set<number>([term]);
       let cursor: number | undefined = parent;
       while (cursor) {
@@ -1399,14 +1231,15 @@ router.post("/tools/import", admin, async (req: AuthRequest, res) => {
           type: z.enum(["post", "page"]),
           title: z.string().max(300),
           slug: text(1, 220),
-          content: z.string().max(1_000_000),
-          raw_content: z.string().max(1_000_000).optional(),
+          content: z.string().max(MAX_STORED_CONTENT_BYTES),
+          raw_content: z.string().max(MAX_STORED_CONTENT_BYTES).optional(),
           excerpt: z.string().max(20000).default(""),
           status: z
             .enum(["publish", "draft", "pending", "future", "private", "trash"])
             .default("draft"),
           blocks: z.unknown().optional(),
-          scheduled_at: z.string().nullable().optional(),
+          scheduled_at: z.iso.datetime({ offset: true }).nullable().optional(),
+          featured_media_id: nullableId.optional(),
           created_at: z.iso.datetime({ offset: true }).optional(),
           updated_at: z.iso.datetime({ offset: true }).optional(),
           published_at: z.iso.datetime({ offset: true }).nullable().optional(),
@@ -1415,18 +1248,10 @@ router.post("/tools/import", admin, async (req: AuthRequest, res) => {
           menu_order: z.number().int().min(-10000).max(10000).optional(),
           sticky: z.boolean().optional(),
           comment_status: z.enum(["open", "closed"]).optional(),
-          format: z
-            .enum([
-              "standard",
-              "aside",
-              "image",
-              "video",
-              "quote",
-              "link",
-              "gallery",
-              "audio",
-            ])
-            .default("standard"),
+          ping_status: z.enum(["open", "closed"]).optional(),
+          template_slug: z.string().max(160).regex(/^[a-zA-Z0-9_-]*$/).default(""),
+          pre_trash_status: z.enum(["publish", "future", "private", "draft", "pending"]).nullable().optional(),
+          format: z.enum(postFormats).default("standard"),
         })
         .parse(item);
       let slug = post.slug;
@@ -1440,11 +1265,11 @@ router.post("/tools/import", admin, async (req: AuthRequest, res) => {
           ? "draft"
           : post.status;
       const rewritten = remapImportedBlockReferences(
-        post.raw_content || post.content, post.blocks, blockEntityMap,
+        post.raw_content || post.content, post.blocks, blockEntityMap, site.options,
       );
       addWarnings(rewritten.warnings);
       const r = await client.query(
-        "INSERT INTO posts(type,title,slug,content,excerpt,status,author_id,blocks,raw_content,menu_order,sticky,comment_status,created_at,updated_at,published_at,format) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,COALESCE($13::timestamptz,now()),COALESCE($14::timestamptz,now()),CASE WHEN $6::varchar='publish' THEN COALESCE($15::timestamptz,$13::timestamptz,now()) ELSE $15::timestamptz END,$16) RETURNING id",
+        "INSERT INTO posts(type,title,slug,content,excerpt,status,author_id,blocks,raw_content,menu_order,sticky,comment_status,created_at,updated_at,published_at,format,featured_media_id,scheduled_at,ping_status,template_slug,pre_trash_status) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,COALESCE($13::timestamptz,now()),COALESCE($14::timestamptz,now()),CASE WHEN $6::varchar='publish' THEN COALESCE($15::timestamptz,$13::timestamptz,now()) ELSE $15::timestamptz END,$16,$17,$18,$19,$20,$21) RETURNING id",
         [
           post.type,
           plainText(post.title),
@@ -1462,14 +1287,23 @@ router.post("/tools/import", admin, async (req: AuthRequest, res) => {
           post.updated_at ?? null,
           post.published_at ?? null,
           post.type === "page" ? "standard" : post.format,
+          post.featured_media_id ? site.media.get(post.featured_media_id) || null : null,
+          post.scheduled_at ?? null,
+          post.ping_status ?? "closed",
+          site.mapPostTemplate(post.template_slug),
+          post.status === "trash" ? post.pre_trash_status ?? null : null,
         ],
       );
+      if (post.featured_media_id && !site.media.has(post.featured_media_id)) site.warn(`Featured media ${post.featured_media_id} was missing and detached from imported post ${post.id}.`);
+      if (post.status === "future") site.warn("Scheduled content was imported as a draft for review; its scheduled date was retained.");
+      if (post.passwordProtected) site.warn("Password-protected content was imported as a draft. Set a new password before publishing it.");
       postMap.set(post.id, r.rows[0].id);
       imported++;
     }
     for (const item of input.posts) {
       const child = postMap.get(Number(item.id)),
         parent = postMap.get(Number(item.parent_id));
+      if (item.parent_id && (!child || !parent)) site.warn(`Page ${item.id} had a missing parent and was imported at the top level.`);
       if (child && parent && item.type === "page") {
         const ancestors = new Set<number>([child]);
         let cursor: number | undefined = parent;
@@ -1502,14 +1336,11 @@ router.post("/tools/import", admin, async (req: AuthRequest, res) => {
         ]);
       }
     }
-    for (const rel of input.postTerms || []) {
-      const p = postMap.get(Number(rel.post_id)),
-        term = termMap.get(Number(rel.term_id));
-      if (p && term)
-        await client.query(
-          "INSERT INTO post_terms(post_id,term_id) VALUES($1,$2) ON CONFLICT DO NOTHING",
-          [p, term],
-        );
+    for (const item of input.postTerms || []) {
+      const rel = z.object({post_id:id,term_id:id}).parse(item);
+      const post = postMap.get(rel.post_id), term = termMap.get(rel.term_id);
+      if (post && term) await client.query("INSERT INTO post_terms(post_id,term_id) VALUES($1,$2) ON CONFLICT DO NOTHING", [post,term]);
+      else site.warn(`A taxonomy relationship for post ${rel.post_id} and term ${rel.term_id} could not be restored.`);
     }
     const commentMap = new Map<number, number>();
     for (const item of input.comments || []) {
@@ -1533,12 +1364,13 @@ router.post("/tools/import", admin, async (req: AuthRequest, res) => {
             .enum(["approved", "pending", "spam", "trash"])
             .default("pending"),
           parent_id: nullableId.optional(),
+          created_at: z.iso.datetime({ offset: true }).optional(),
         })
         .parse(item);
       const post = postMap.get(comment.post_id);
-      if (!post) continue;
+      if (!post) { site.warn(`Comment ${comment.id} referred to a missing post and was not imported.`); continue; }
       const result = await client.query(
-        "INSERT INTO comments(post_id,author_name,author_email,content,status,author_url) VALUES($1,$2,$3,$4,$5,$6) RETURNING id",
+        "INSERT INTO comments(post_id,author_name,author_email,content,status,author_url,created_at) VALUES($1,$2,$3,$4,$5,$6,coalesce($7::timestamptz,now())) RETURNING id",
         [
           post,
           normalizedText(comment.author_name),
@@ -1546,6 +1378,7 @@ router.post("/tools/import", admin, async (req: AuthRequest, res) => {
           cleanContent(comment.content),
           comment.status,
           comment.author_url,
+          comment.created_at ?? null,
         ],
       );
       commentMap.set(comment.id, result.rows[0].id);
@@ -1553,7 +1386,7 @@ router.post("/tools/import", admin, async (req: AuthRequest, res) => {
     for (const item of input.comments || []) {
       const child = commentMap.get(Number(item.id)),
         parent = commentMap.get(Number(item.parent_id));
-      if (!child || !parent) continue;
+      if (!child || !parent) { if (item.parent_id) site.warn(`Comment ${item.id} had an unresolved parent and was imported without it.`); continue; }
       const ancestors = new Set<number>([child]);
       let cursor: number | undefined = parent;
       while (cursor) {
@@ -1585,10 +1418,18 @@ router.post("/tools/import", admin, async (req: AuthRequest, res) => {
         child,
       ]);
     }
-    await client.query(
-      "INSERT INTO post_terms(post_id,term_id) SELECT p.id,t.id FROM posts p CROSS JOIN terms t WHERE p.id=ANY($1::int[]) AND p.type='post' AND t.taxonomy='category' AND t.is_default=true AND NOT EXISTS(SELECT 1 FROM post_terms pt JOIN terms x ON x.id=pt.term_id WHERE pt.post_id=p.id AND x.taxonomy='category') ON CONFLICT DO NOTHING",
-      [[...postMap.values()]],
-    );
+    const references = await site.finalize(postMap, termMap, blockEntityMap);
+    addWarnings(await blockGraph.finalize(references));
+    for (const item of input.posts) {
+      const post = postMap.get(Number(item.id));
+      if (!post) continue;
+      const rewritten = remapImportedBlockReferences(String(item.raw_content || item.content), item.blocks, blockEntityMap, references);
+      addWarnings(rewritten.warnings);
+      await client.query("UPDATE posts SET content=$1,raw_content=$2,blocks=$3::jsonb WHERE id=$4", [rewritten.content, rewritten.rawContent, JSON.stringify(rewritten.blocks), post]);
+    }
+    const defaultCategory = (await getSettings(client)).defaultCategoryId;
+    await client.query("INSERT INTO post_terms(post_id,term_id) SELECT p.id,t.id FROM posts p JOIN terms t ON t.id=COALESCE($2::int,(SELECT id FROM terms WHERE is_default LIMIT 1)) WHERE p.id=ANY($1::int[]) AND p.type='post' AND NOT EXISTS(SELECT 1 FROM post_terms pt JOIN terms x ON x.id=pt.term_id WHERE pt.post_id=p.id AND x.taxonomy='category') ON CONFLICT DO NOTHING", [[...postMap.values()], defaultCategory]);
+    addWarnings(site.importWarnings);
     await client.query("COMMIT");
     res.status(201).json({
       ok: true,
@@ -1596,10 +1437,14 @@ router.post("/tools/import", admin, async (req: AuthRequest, res) => {
       postIds: [...postMap.values()],
       termIds: [...newTerms],
       blockEntityIds: [...blockEntityMap.values()].map(entity => entity.id),
-      ...(warnings.size ? { warnings: [...warnings] } : {}),
+      fontFamilyIds: [...site.fontFamilies.values()], fontFaceIds: site.fontFaceIds,
+      mediaIds: [...site.media.values()], documentIds: site.documentIds, menuIds: site.menuIds,
+      restoredDesign: input.replaceDesign === true,
+      ...(warnings.size ? { warnings: [...warnings, ...(suppressedWarnings ? [`${suppressedWarnings} additional import warnings were omitted; review missing data and references before publishing.`] : [])] } : {}),
     });
   } catch (e) {
     await client.query("ROLLBACK");
+    await site?.rollbackFiles();
     throw e;
   } finally {
     client.release();

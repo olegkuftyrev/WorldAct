@@ -1,0 +1,181 @@
+.worldact-media-toolbar {
+  flex-wrap: wrap;
+  gap: 8px;
+  height: auto;
+  min-height: 74px;
+  box-sizing: border-box;
+}
+.worldact-media-toolbar form {
+  display: flex;
+  gap: 5px;
+  align-items: center;
+}
+.worldact-media-toolbar .worldact-media-search {
+  margin-left: auto;
+}
+.worldact-media-toolbar input[type="search"] {
+  min-width: 0;
+}
+.worldact-media-library .tablenav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  height: auto;
+  min-height: 32px;
+  margin: 12px 0;
+}
+.worldact-media-library .tablenav-pages {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin-left: auto;
+}
+.worldact-media-actions {
+  align-items: center;
+}
+#wpbody-content .worldact-media-library .tablenav .actions {
+  display: flex !important;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+.worldact-media-grid-item {
+  position: relative;
+  min-width: 0;
+}
+.worldact-media-grid-item .media-item {
+  width: 100%;
+  height: 100%;
+}
+.worldact-media-grid-item > input {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  z-index: 2;
+  margin: 0;
+}
+.worldact-media-grid-item.is-selected {
+  outline: 3px solid var(--wp-admin-theme-color, #3858e9);
+  outline-offset: -3px;
+}
+.worldact-media-library .media .column-title {
+  width: auto;
+}
+.worldact-media-library .media .check-column {
+  width: 2.2em;
+}
+.worldact-media-library .media .column-author {
+  width: 15%;
+}
+.worldact-media-library .media .column-response {
+  width: 22%;
+}
+.worldact-media-library .media .column-date {
+  width: 15%;
+}
+.worldact-media-library .media-file-button {
+  display: flex;
+  text-align: left;
+  gap: 12px;
+}
+.worldact-media-library .media-file-button > img,
+.worldact-media-library .media-file-button > .media-type-preview {
+  width: 60px;
+  height: 60px;
+  flex-shrink: 0;
+  object-fit: contain;
+}
+.worldact-media-library .media-file-button small {
+  display: block;
+  color: #50575e;
+  margin: 4px 0;
+  overflow-wrap: anywhere;
+}
+.worldact-media-attach-search {
+  display: flex;
+  gap: 5px;
+}
+.worldact-media-attach-search input {
+  min-width: 0;
+  flex: 1;
+}
+.worldact-media-attach-choices {
+  max-height: 350px;
+  overflow: auto;
+  margin: 14px 0;
+  border: 1px solid #c3c4c7;
+}
+.worldact-media-attach-choices label {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 10px;
+  border-bottom: 1px solid #dcdcde;
+}
+.worldact-media-attach-choices label:last-child {
+  border-bottom: 0;
+}
+.worldact-media-attach-choices input {
+  flex-shrink: 0;
+}
+.worldact-media-attach-choices small {
+  display: block;
+  color: #646970;
+  margin-top: 4px;
+}
+.worldact-media-library .attachment-details-layout {
+  grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+}
+.worldact-media-library .attachment-preview {
+  flex-direction: column;
+  gap: 16px;
+  min-width: 0;
+}
+.worldact-media-library .attachment-fields {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.worldact-media-library .attachment-fields label.checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.worldact-media-library .attachment-fields input[type="checkbox"] {
+  width: 16px;
+  flex-shrink: 0;
+}
+@media (max-width: 782px) {
+  .worldact-media-library .attachment-details-layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .worldact-media-library .attachment-preview > img {
+    width: auto;
+    max-width: 100%;
+  }
+  .worldact-media-toolbar {
+    padding: 12px;
+  }
+  .worldact-media-toolbar .worldact-media-search {
+    width: 100%;
+    margin-left: 0;
+  }
+  .worldact-media-search input {
+    flex: 1;
+  }
+  .worldact-media-library .media-file-button {
+    gap: 8px;
+  }
+  .worldact-media-library .media-file-button > img,
+  .worldact-media-library .media-file-button > .media-type-preview {
+    width: 40px;
+    height: 40px;
+  }
+  .worldact-media-library .media .column-response {
+    display: none;
+  }
+  .worldact-media-library .media .column-title {
+    width: 70%;
+  }
+  .worldact-media-library .media .column-date {
+    width: 25%;
+  }
+}
