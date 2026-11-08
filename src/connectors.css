@@ -1,0 +1,14 @@
+/* Supplied routes/connectors-home/style.scss card geometry and Modern admin colors. */
+.connectors-page{box-sizing:border-box;margin:0 auto;max-width:680px;padding:24px;width:100%}
+.connectors-page .connector-item{background:#fff;border:1px solid #ddd;border-radius:8px;overflow:hidden;padding:20px;scroll-margin-top:120px}
+.connector-item__header,.connector-item__identity,.connector-item__actions{display:flex;align-items:center;gap:12px}
+.connector-item__header{justify-content:space-between;gap:20px}
+.connector-item__identity{min-width:0}.connector-item__identity img{flex-shrink:0}.connector-item__identity h2{margin:0;font-size:16px;line-height:24px}
+.connector-item__actions{flex-shrink:0}.connector-item>p{margin:16px 0 0;line-height:20px}.connector-item .connector-status{margin-top:8px}
+.connector-connected{color:#345b37;background:#eff8f0;padding:4px 12px;border-radius:2px;font-size:13px;white-space:nowrap}
+.connector-settings{border-top:1px solid #ddd;margin-top:20px;padding-top:20px}.connector-settings>label:first-child{display:block;font-weight:500;margin-bottom:8px}
+.connector-settings input[type=password]{box-sizing:border-box;width:100%;max-width:100%;font-family:monospace;font-size:13px;min-height:40px}
+.connector-settings .connector-consent{display:flex;align-items:flex-start;gap:8px;margin-top:20px;line-height:20px}.worldact-connectors .connector-consent input[type=checkbox]{flex:0 0 16px;width:16px;min-width:16px;max-width:16px;height:16px;min-height:16px;max-height:16px;margin-top:2px}
+.connector-settings__actions{display:flex;flex-wrap:wrap;align-items:center;gap:16px;margin-top:20px}.worldact-connectors .connector-settings .connector-disconnect{color:#b32d2e}
+.connector-plugin-link{text-align:center}.worldact-update-services{max-width:900px}.worldact-update-services textarea{box-sizing:border-box;width:100%;font-family:monospace;min-height:80px}.worldact-update-services details{margin-top:12px}.worldact-update-services summary{cursor:pointer;color:var(--wp-admin-theme-color,#3858e9);width:fit-content}.worldact-update-services .notification-counts{display:flex;gap:16px;flex-wrap:wrap}
+@media(max-width:480px){.connectors-page{padding:8px 0}.connectors-page .connector-item{padding:12px}.connector-item__identity img{width:32px;height:32px}.connector-item__header{gap:12px;align-items:flex-start}.connector-item__actions{align-items:flex-end;flex-direction:column;gap:8px}.connector-item__identity h2{font-size:15px}.connector-settings__actions{align-items:flex-start;flex-direction:column}.worldact-update-services textarea{font-size:13px}}

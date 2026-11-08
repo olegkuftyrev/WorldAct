@@ -197,6 +197,8 @@ export type Settings = {
   feedItems?: number;
   feedExcerpt?: boolean;
   defaultCommentStatus?: "open" | "closed";
+  defaultPingbackFlag?: boolean;
+  pingServices?: string[];
   requireCommentNameEmail?: boolean;
   commentRegistration?: boolean;
   commentModeration?: boolean;

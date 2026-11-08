@@ -1,5 +1,7 @@
 import {postFormats} from "../../shared/post-formats";
 import AkismetSettings from "../components/AkismetSettings";
+import OutgoingNotifications from "../components/OutgoingNotifications";
+import { ConnectorOperation, pingServiceLines } from "../connectors";
 import ApplicationPasswords from "./ApplicationPasswords";
 import ExportContent from "./ExportContent";
 import { ProfileEmailNotice, deliveryMessage, type PendingProfileEmail } from "./ProfileEmail";
@@ -546,7 +548,7 @@ export function Profile() {
 
 type SettingValues = Record<
   string,
-  string | number | boolean | null | undefined
+  string | string[] | number | boolean | null | undefined
 >;
 const settingTabs = [
   "general",
@@ -571,7 +573,7 @@ const settingKeys: Record<string, string[]> = {
     "weekStartsOn",
     "siteIconId",
   ],
-  writing: ["defaultCategoryId", "defaultPostFormat"],
+  writing: ["defaultCategoryId", "defaultPostFormat", "pingServices"],
   reading: [
     "frontPageMode",
     "frontPageId",
@@ -582,6 +584,7 @@ const settingKeys: Record<string, string[]> = {
     "discourageSearchEngines",
   ],
   discussion: [
+    "defaultPingbackFlag",
     "defaultCommentStatus",
     "requireCommentNameEmail",
     "commentRegistration",
@@ -630,6 +633,10 @@ export function SettingsSuite() {
     "/terms?taxonomy=category",
   );
   const [form, setForm] = useState<SettingValues>({});
+  const [pingText, setPingText] = useState("");
+  const formRef = useRef(form), pingTextRef = useRef(pingText);
+  formRef.current = form; pingTextRef.current = pingText;
+  const settingsOperation = useRef(new ConnectorOperation());
   const currentPolicyPage = useResource<{ post: Post }>(
     tab === "privacy" && Number(form.privacyPageId) > 0
       ? `/posts/${Number(form.privacyPageId)}`
@@ -640,9 +647,14 @@ export function SettingsSuite() {
   useEffect(() => {
     if (resource.data) {
       setForm(resource.data.settings as unknown as SettingValues);
+      setPingText((resource.data.settings.pingServices || []).join("\n"));
       setPendingAdminEmail(resource.data.pendingAdminEmail || null);
     }
   }, [resource.data]);
+  useEffect(() => {
+    action.reset();
+    return () => settingsOperation.current.cancel();
+  }, [tab]);
   const set = (key: string, value: SettingValues[string]) =>
     setForm((current) => ({ ...current, [key]: value }));
   const text = (
@@ -714,19 +726,25 @@ export function SettingsSuite() {
   );
   async function save(event: FormEvent) {
     event.preventDefault();
+    const owner = settingsOperation.current.start(), savedForm = form, savedText = pingText;
     await action.run(async () => {
       const input = Object.fromEntries(
         settingKeys[tab]
           .filter((key) => form[key] !== undefined)
           .map((key) => [key, form[key]]),
       );
+      if (tab === "writing") {
+        if (!form.discourageSearchEngines) input.pingServices = pingServiceLines(savedText);
+        else delete input.pingServices;
+      }
       const result = await api<{ settings: Settings; pendingAdminEmail?: PendingAdminEmail | null }>(
         "/settings",
-        json("PUT", input),
+        { ...json("PUT", input), signal: owner.signal },
       );
-      resource.setData(result);
+      if (!owner.current()) return;
+      if (formRef.current === savedForm && pingTextRef.current === savedText) resource.setData(result);
       window.dispatchEvent(new Event("worldact-settings-updated"));
-    }, "Settings saved.");
+    }, "Settings saved.", owner.current);
   }
   return (
     <Screen title={`${tab[0].toUpperCase() + tab.slice(1)} Settings`}>
@@ -905,6 +923,8 @@ export function SettingsSuite() {
               {tab === "discussion" && (
                 <>
                   <Field label="Default post settings">
+                    <div className="worldact-stacked-fields">
+                    {check("defaultPingbackFlag", "Attempt to notify any blogs linked to from the post")}
                     <label>
                       <input
                         type="checkbox"
@@ -918,6 +938,7 @@ export function SettingsSuite() {
                       />{" "}
                       Allow people to submit comments on new posts
                     </label>
+                    </div>
                   </Field>
                   <Field label="Other comment settings">
                     <div className="worldact-stacked-fields">
@@ -1099,6 +1120,7 @@ export function SettingsSuite() {
               )}
             </tbody>
           </table>
+          {tab === "writing" && <OutgoingNotifications hidden={Boolean(form.discourageSearchEngines)} value={pingText} onChange={setPingText} />}
           <p className="submit">
             <button className="button button-primary" disabled={action.busy}>
               {action.busy ? "Saving…" : "Save Changes"}

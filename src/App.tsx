@@ -25,6 +25,7 @@ import {
   LostPassword,
   ResetPassword,
 } from "./screens/Platform";
+import Connectors from "./screens/Connectors";
 import PostList from "./screens/PostList";
 import {
   Session,
@@ -231,6 +232,7 @@ export default function App() {
             <Route path="users/:id" element={<Profile />} />
             <Route path="profile" element={<Profile />} />
             <Route path="settings" element={<SettingsSuite />} />
+            <Route path="settings/connectors" element={user?.role === "administrator" ? <Connectors /> : <Navigate to="/admin" replace />} />
             <Route path="appearance" element={user?.role === "administrator" ? <Themes /> : <Navigate to="/admin" replace />} />
             <Route path="appearance/editor" element={user?.role === "administrator" ? <SiteEditor /> : <Navigate to="/admin" replace />} />
             <Route path="appearance/menus" element={user?.role === "administrator" ? <Menus /> : <Navigate to="/admin" replace />} />
@@ -574,6 +576,7 @@ function AdminShell() {
       icon: "admin-settings",
       sub: [
         ["General", "/admin/settings"],
+        ["Connectors", "/admin/settings/connectors"],
         ["Writing", "/admin/settings?tab=writing"],
         ["Reading", "/admin/settings?tab=reading"],
         ["Discussion", "/admin/settings?tab=discussion"],
