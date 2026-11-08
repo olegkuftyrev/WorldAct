@@ -62,12 +62,14 @@ import "@wordpress/block-editor/build-style/style.css";
 import "@wordpress/block-library/build-style/editor.css";
 // The format-library package does not export its CSS subpath.
 import "../../node_modules/@wordpress/format-library/build-style/style.css";
+import componentsCSS from "@wordpress/components/build-style/style.css?inline";
 import libraryCSS from "@wordpress/block-library/build-style/style.css?inline";
 import libraryEditorCSS from "@wordpress/block-library/build-style/editor.css?inline";
 import editorContentCSS from "@wordpress/block-editor/build-style/content.css?inline";
 import themeCSS from "@wordpress/block-library/build-style/theme.css?inline";
 import formatCSS from "../../node_modules/@wordpress/format-library/build-style/style.css?inline";
 import { api, type Media, type Footnote } from "../api";
+import {attachment} from "./mediaAttachment";
 import { readFootnotes, synchronizeFootnotes } from "./footnotes";
 import { setEditorPreview, removeEditorPreview, activateEditorPreview } from "./editorPreviewStore";
 import { OwnedFootnoteFormat } from "./OwnedFootnoteFormat";
@@ -91,6 +93,9 @@ export const WORLDAct_CONTENT_BLOCKS = [
   "core/icon",
   "core/more",
   "core/nextpage",
+  "core/playlist",
+  "core/playlist-track",
+  "core/rss",
   "core/heading",
   "core/list",
   "core/list-item",
@@ -432,61 +437,6 @@ function mediaMatches(item: Media, allowedTypes?: string[]) {
   );
 }
 
-function attachment(item: Media, rest = false): Attachment {
-  const dimensions = item as Media & {
-    width?: number | null;
-    height?: number | null;
-  };
-  const full = {
-    url: item.url,
-    source_url: item.url,
-    width: dimensions.width || undefined,
-    height: dimensions.height || undefined,
-    mime_type: item.mimeType,
-  };
-  const sizes = {
-    full,
-    ...Object.fromEntries(
-      Object.entries(item.sizes || {}).map(([name, size]) => [
-        name,
-        {
-          ...size,
-          source_url: size.url,
-          mime_type: size.mimeType,
-        },
-      ]),
-    ),
-  };
-  return {
-    id: item.id,
-    url: item.url,
-    src: item.url,
-    source_url: item.url,
-    title: rest ? { raw: item.title, rendered: item.title } : item.title,
-    caption: rest
-      ? { raw: item.caption, rendered: item.caption }
-      : item.caption,
-    description: { raw: "", rendered: "" },
-    alt: item.alt,
-    alt_text: item.alt,
-    mime: item.mimeType,
-    mime_type: item.mimeType,
-    type: item.mimeType.split("/")[0],
-    media_type: item.mimeType.startsWith("image/") ? "image" : "file",
-    subtype: item.mimeType.split("/")[1],
-    filesize: item.size,
-    filename: item.filename,
-    width: dimensions.width || undefined,
-    height: dimensions.height || undefined,
-    sizes,
-    media_details: {
-      width: dimensions.width || undefined,
-      height: dimensions.height || undefined,
-      sizes,
-    },
-    link: item.url,
-  };
-}
 
 // Core image and gallery blocks also read attachment entities. Adapt only this
 // narrow endpoint to our real Node API; no WordPress server is required.
@@ -968,6 +918,8 @@ body.editor-styles-wrapper { padding: 36px 32px 120px; box-sizing: border-box; }
 @media(max-width:600px) { body.editor-styles-wrapper { padding: 20px 20px 100px; } body { font-size: 18px; } }
 `;
 const canvasStyles = [
+  // Native in-canvas DropZone, Placeholder and playback controls use components.
+  { css: componentsCSS },
   { css: libraryCSS },
   { css: libraryEditorCSS },
   { css: editorContentCSS },

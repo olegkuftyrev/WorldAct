@@ -110,7 +110,11 @@ export type Autosave = {
   savedAt: string;
   version: number;
 };
+export type AudioMetadata = {title?:string;artist?:string;album?:string;genre?:string;year?:number;length?:number;length_formatted?:string;bitrate?:number;sample_rate?:number;channels?:number;bits_per_sample?:number;codec?:string;fileformat?:string;lossless?:boolean;filesize?:number;mime_type?:string};
 export type Media = {
+  audioMetadata?: AudioMetadata;
+  artworkMediaId?:number|null;
+  image?:{id:number;src:string;alt:string;width:number;height:number}|null;
   id: number;
   title: string;
   url: string;

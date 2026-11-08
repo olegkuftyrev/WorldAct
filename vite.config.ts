@@ -1,7 +1,24 @@
 import { defineConfig } from "vite";
+import { fileURLToPath } from "node:url";
 import react from "@vitejs/plugin-react";
 export default defineConfig({
   plugins: [react()],
+  resolve: {
+    alias: [
+      {
+        find: /^@arraypress\/waveform-player\/no-autoinit$/,
+        replacement: fileURLToPath(
+          new URL("./src/boundedWaveformPlayer.ts", import.meta.url),
+        ),
+      },
+    ],
+  },
+  optimizeDeps: {
+    exclude: ["@arraypress/waveform-player/no-autoinit"],
+    include: [
+      "@arraypress/waveform-player/dist/waveform-player-no-autoinit.esm.js",
+    ],
+  },
   server: {
     port: 5173,
     cors: false,

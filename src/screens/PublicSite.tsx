@@ -4,6 +4,7 @@ import { enhanceInteractiveBlocks } from "../interactiveBlocks";
 import { enhanceNavigationOverlays } from "../navigationOverlays";
 import { contentPageQuery } from "../contentPages";
 import { scrollToMoreFragment } from "../contentFragments";
+import {enhancePlaylists} from "../playlists";
 import "@wordpress/block-library/build-style/style.css";
 import "@wordpress/block-library/build-style/theme.css";
 import {
@@ -354,6 +355,7 @@ export default function PublicSite({
     cleanups.push(...[...document.querySelectorAll(".public-site .public-content")].map(enhanceInteractiveBlocks));
     cleanups.push(...[...document.querySelectorAll(".public-site .public-content")].map(enhanceNavigationOverlays));
     cleanups.push(...[...document.querySelectorAll(".public-site .public-content")].map(scrollToMoreFragment));
+    cleanups.push(...[...document.querySelectorAll(".public-site .public-content")].map(root=>enhancePlaylists(root)));
     return () => {for (const cleanup of cleanups) cleanup?.();};
   }, [post, site.data, design.data]);
   async function submit(event: FormEvent) {
@@ -1059,8 +1061,8 @@ function RenderedTemplate({
     };
   }, [request, document.updatedAt, preview]);
   useEffect(() => {
-    const archive = enhanceArchives(root.current), interactive = enhanceInteractiveBlocks(root.current), navigation=enhanceNavigationOverlays(root.current), fragment=scrollToMoreFragment(root.current);
-    return () => { archive?.(); interactive(); navigation(); fragment(); };
+    const archive = enhanceArchives(root.current), interactive = enhanceInteractiveBlocks(root.current), navigation=enhanceNavigationOverlays(root.current), fragment=scrollToMoreFragment(root.current), playlist=enhancePlaylists(root.current);
+    return () => { archive?.(); interactive(); navigation(); fragment(); playlist(); };
   }, [content, fallback, preview]);
   if (preview)
     return (
@@ -1179,6 +1181,7 @@ function SourceThemeDocument({ document: template, postId, query, commentPage, u
     const cleanupArchives = enhanceArchives(root.current);
     const cleanupInteractive = enhanceInteractiveBlocks(root.current);
     const cleanupFragment = scrollToMoreFragment(root.current);
+    const cleanupPlaylist = enhancePlaylists(root.current);
     let active=true;
     if(!userName)api<{author:{authorName:string;authorEmail:string;authorUrl:string}|null}>("/public/comment-author").then(({author})=>{
       if(!active || !author || !root.current)return;
@@ -1187,7 +1190,7 @@ function SourceThemeDocument({ document: template, postId, query, commentPage, u
       for(const key of ["authorName","authorEmail","authorUrl"] as const){const field=root.current.querySelector<HTMLInputElement>(`input[name="${key}"]`);if(field && !field.value)field.value=author[key] || "";}
       checkbox.checked=true;
     }).catch(()=>{});
-    return ()=>{active=false;cleanup();cleanupArchives?.();cleanupInteractive();cleanupFragment();};
+    return ()=>{active=false;cleanup();cleanupArchives?.();cleanupInteractive();cleanupFragment();cleanupPlaylist();};
   }, [html]);
   async function submitComment(event: FormEvent<HTMLDivElement>) {
     const form = event.target as HTMLFormElement;

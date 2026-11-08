@@ -115,6 +115,12 @@
   background: #fff;
   box-sizing: border-box;
 }
+/* Keep native parent-selection breadcrumbs above the document status footer. */
+.block-editor-screen .worldact-gutenberg-breadcrumb {
+  position: sticky;
+  bottom: 25px;
+  z-index: 20;
+}
 .worldact-gutenberg .components-notice {
   margin: 0;
 }
