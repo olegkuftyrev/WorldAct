@@ -47,8 +47,8 @@ test("flood exemption and admitted UTC time use current actor and actual complet
         let sampled:Date;
         do{sampled=(await pool.query("SELECT date_trunc('second',clock_timestamp()) AS time")).rows[0].time;if(sampled.getTime()>start.getTime())break;await new Promise(resolve=>setTimeout(resolve,10));}while(true);
         await lock.query("COMMIT");const response=await request;request=undefined;assert.equal(response.response.status,201,JSON.stringify(response.data));
-        const row=(await pool.query("SELECT c.created_at,m.expires_at FROM comments c JOIN comment_flood_metadata m ON m.comment_id=c.id WHERE c.id=$1",[response.data.comment.id])).rows[0];
-        assert.ok(row.created_at.getTime()>=sampled.getTime());assert.equal(row.created_at.getMilliseconds(),0);assert.equal(row.expires_at.getTime()-row.created_at.getTime(),3600000);
+        const row=(await pool.query("SELECT c.created_at,c.updated_at,m.expires_at FROM comments c JOIN comment_flood_metadata m ON m.comment_id=c.id WHERE c.id=$1",[response.data.comment.id])).rows[0];
+        assert.ok(row.created_at.getTime()>=sampled.getTime());assert.equal(row.created_at.getMilliseconds(),0);assert.equal(row.updated_at.getTime(),row.created_at.getTime(),"a newly admitted comment must not have an earlier updated_at after waiting");assert.equal(row.expires_at.getTime()-row.created_at.getTime(),3600000);
       }finally{await lock.query("ROLLBACK");await request?.catch(()=>{});lock.release();}
     });
   }finally{await f.dispose();}

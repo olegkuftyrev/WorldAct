@@ -16,7 +16,7 @@ Pending, spam, trash and ping predecessors therefore participate. The signed-in
 branch does not match unrelated visitors sharing an IP. UTC dates use integer
 seconds: differences below15 reject, exactly15 permits, and future predecessors
 reject. The one new timestamp is sampled after actual admission lock waits and
-used for both comparison and storage.
+used for comparison, initial creation/update timestamps and metadata expiry.
 
 The existing actor → comment hierarchy → post lock order serializes concurrent
 admissions across processes. A duplicate remains409 before flooding. A distinct

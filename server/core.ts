@@ -1623,7 +1623,7 @@ export async function submitPublicComment(req: Request, res: Response) {
     const akismetResult=["trash","spam"].includes(status)?"skipped":await checkAkismetComment(akismetInput,client);
     if(akismetResult==="spam")status="spam";else if(akismetResult==="unavailable")status="pending";
     const result = await client.query(
-      "INSERT INTO comments(post_id,author_name,author_email,content,status,parent_id,author_url,user_id,created_at) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9) RETURNING id",
+      "INSERT INTO comments(post_id,author_name,author_email,content,status,parent_id,author_url,user_id,created_at,updated_at) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$9) RETURNING id",
       [post.id, authorName, submittedEmail, content, status, input.parentId ?? null, authorUrl, actor?.id ?? null, admittedAt],
     );
     const comment = { id: result.rows[0].id, status };
