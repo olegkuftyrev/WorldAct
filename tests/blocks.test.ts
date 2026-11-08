@@ -356,7 +356,7 @@ test("canonical block rendering, public isolation, pagination, nested context an
               },
             }),
           },
-          { ...options, post: { ...post, updatedAt: "2022-06-01T12:00:00Z" } },
+          { ...options, post: { ...post, publishedAt: "2020-01-01T12:00:00Z", updatedAt: "2022-06-01T12:00:00Z" } },
         );
         assert.match(modified, />2022<\/time>/);
         const archive = await renderSiteDocument(

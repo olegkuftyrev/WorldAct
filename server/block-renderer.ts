@@ -23,6 +23,7 @@ import { renderIconBlock } from "./icons.js";
 import { renderPlaylistBlock, type PlaylistContext } from "./playlist-blocks.js";
 import { prepareShortcodeDocument } from "./shortcodes.js";
 import { hasShortcodes } from "./shortcode-parser.js";
+import { applyBlockBindings, patternOverrides, type PatternOverrides } from "./block-bindings.js";
 
 export type BlockDatabase = Pick<pg.Pool, "query"> | pg.PoolClient;
 export type RenderPost = Record<string, any>;
@@ -88,6 +89,7 @@ export type Context = {
   tabs?: TabsContext;
   navigationOverlay?: NavigationOverlayContext;
   playlist?: PlaylistContext;
+  patternOverrides?: PatternOverrides;
 };
 export type State = {
   db: BlockDatabase;
@@ -667,8 +669,14 @@ async function staticHTML(
       "core/verse": "pre",
     } as Record<string, string>
   )[node.name];
-  if (tag)
-    return `<${tag}${attr}>${node.name === "core/button" ? `<a class="wp-block-button__link wp-element-button" href="${esc(safeBlockURL(node.attrs.url) || "#")}">${node.attrs.text || ""}</a>` : content + inner}</${tag}>`;
+  if (tag) {
+    if (node.name === "core/button") {
+      const button = node.attrs.tagName === "button", element = button ? "button" : "a";
+      const link = node.attrs.url === false ? "" : ` href="${esc(Object.hasOwn(node.attrs, "url") ? safeBlockURL(node.attrs.url) : "#")}"`;
+      return `<${tag}${attr}><${element} class="wp-block-button__link wp-element-button"${button ? ` type="${["button", "submit", "reset"].includes(node.attrs.type) ? node.attrs.type : "button"}"` : link + (node.attrs.linkTarget ? ` target="${esc(node.attrs.linkTarget)}"` : "") + (node.attrs.rel ? ` rel="${esc(node.attrs.rel)}"` : "")}>${node.attrs.text || ""}</${element}></${tag}>`;
+    }
+    return `<${tag}${attr}>${content + inner}</${tag}>`;
+  }
   if (node.name === "core/heading") {
     const tag = "h" + integer(node.attrs.level, 2, 1, 6);
     return `<${tag}${attr}>${content}</${tag}>`;
@@ -691,7 +699,7 @@ async function staticHTML(
   if (node.name === "core/spacer")
     return `<div${attr} style="height:${esc(node.attrs.height || "100px")}"></div>`;
   if (node.name === "core/image")
-    return `<figure${attr}><img src="${esc(safeBlockURL(node.attrs.url))}" alt="${esc(node.attrs.alt || "")}">${node.attrs.caption ? `<figcaption>${node.attrs.caption}</figcaption>` : ""}</figure>`;
+    return `<figure${attr}><img${node.attrs.url === false ? "" : ` src="${esc(safeBlockURL(node.attrs.url))}"`}${node.attrs.alt === false ? "" : ` alt="${esc(node.attrs.alt || "")}"`}${node.attrs.title ? ` title="${esc(node.attrs.title)}"` : ""}${Number.isSafeInteger(Number(node.attrs.id)) && Number(node.attrs.id) > 0 ? ` class="wp-image-${Number(node.attrs.id)}"` : ""}${node.attrs["data-id"] !== undefined ? ` data-id="${integer(node.attrs.id || node.attrs["data-id"], 0, 0, 2147483647)}"` : ""}>${node.attrs.caption ? `<figcaption>${node.attrs.caption}</figcaption>` : ""}</figure>`;
   if (node.name === "core/gallery")
     return `<figure${attrsHTML(node, "has-nested-images is-layout-flex " + (node.attrs.imageCrop === false ? "" : "is-cropped") + " columns-" + integer(node.attrs.columns, 3, 1, 8))}>${inner}</figure>`;
   if (node.name === "core/audio" || node.name === "core/video") {
@@ -775,6 +783,7 @@ async function renderNode(
 ): Promise<string> {
   if (!node || ++state.nodes > 4000 || context.depth > 24) return "";
   context = { ...context, depth: context.depth + 1 };
+  node = await applyBlockBindings(node, context, state);
   const name = node.name || "",
     a = node.attrs || {},
     p = context.post;
@@ -976,7 +985,7 @@ async function renderNode(
   if (name === "core/navigation-link" || name === "core/navigation-submenu") {
     let href = safeBlockURL(a.url);
     if (
-      (!href || a.metadata?.bindings?.url?.source === "core/post-data") &&
+      !href &&
       a.id &&
       a.kind === "post-type"
     ) {
@@ -1043,7 +1052,7 @@ async function renderNode(
         ).rows[0],
     );
     return doc
-      ? renderDocument(doc, { ...context, refs: new Set([...context.refs, key]) }, state)
+      ? renderDocument(doc, { ...context, refs: new Set([...context.refs, key]), patternOverrides: patternOverrides(a) }, state)
       : "";
   }
   if (name.startsWith("worldact/")) {
@@ -1103,16 +1112,9 @@ async function renderNode(
     ].includes(name)
   ) {
     if (name === "core/post-date") {
-      const boundField = a.metadata?.bindings?.datetime?.args?.field,
-        modified = boundField === "modified" || !!a.displayModified;
-      let value =
-        boundField || !a.datetime
-          ? p
-            ? dateValue(p, modified)
-            : null
-          : a.datetime;
+      let value = a.datetime;
       if (!value)
-        return state.options.placeholderBindings
+        return !Object.hasOwn(a, "datetime") && state.options.placeholderBindings
           ? `<div${attr()}>{{postDate}}</div>`
           : "";
       try {

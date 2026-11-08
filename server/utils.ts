@@ -335,7 +335,7 @@ export function cleanBlocks(input: unknown): StoredBlock[] {
     throw new HttpError(400, "Blocks must be an array.");
   if (JSON.stringify(input).length > 1_000_000)
     throw new HttpError(400, "Block content is too large.");
-  function attributes(value: unknown, depth: number, key = ""): unknown {
+  function attributes(value: unknown, depth: number, key = "", blockName = ""): unknown {
     if (++valueCount > 25_000 || depth > 25)
       throw new HttpError(400, "Block attributes are too complex.");
     if (
@@ -364,18 +364,20 @@ export function cleanBlocks(input: unknown): StoredBlock[] {
       return value.includes("<") ? cleanContent(value) : value;
     }
     if (Array.isArray(value))
-      return value.map((item) => attributes(item, depth + 1, key));
+      return value.map((item) => attributes(item, depth + 1, key, blockName));
     if (typeof value === "object") {
       const result: Record<string, unknown> = {};
       for (const [childKey, childValue] of Object.entries(
         value as Record<string, unknown>,
       )) {
+        // Synced-pattern names are labels, not attribute names. Keep names such
+        // as "One" while still rejecting handlers inside their attribute maps.
         if (
           ["__proto__", "prototype", "constructor"].includes(childKey) ||
-          /^on[a-z]/i.test(childKey)
+          (/^on[a-z]/i.test(childKey) && !(blockName === "core/block" && depth === 1 && ["content", "overrides"].includes(key)))
         )
           continue;
-        result[childKey] = attributes(childValue, depth + 1, childKey);
+        result[childKey] = attributes(childValue, depth + 1, childKey, blockName);
       }
       return result;
     }
@@ -407,7 +409,7 @@ export function cleanBlocks(input: unknown): StoredBlock[] {
         throw new HttpError(400, "Block attributes must be an object.");
       if (block.innerBlocks !== undefined && !Array.isArray(block.innerBlocks))
         throw new HttpError(400, "Inner blocks must be an array.");
-      const safeAttributes=attributes(block.attributes ?? {}, 0) as Record<string,unknown>;
+      const safeAttributes=attributes(block.attributes ?? {}, 0, "", block.name) as Record<string,unknown>;
       // LaTeX is plain source text, including literal comparisons such as x<y.
       // It is escaped as annotation text when rendered, never parsed as HTML.
       if(block.name==='core/math' && typeof (block.attributes as Record<string,unknown> | undefined)?.latex==='string')

@@ -139,6 +139,18 @@ export function remapImportedBlockReferences(
       if (name === "core/template-part" && theme) attributes.theme = theme;
     }
     if (options.media) {
+      if (name === "core/block") for (const field of ["content", "overrides"]) {
+        const content = attributes[field];
+        if (!content || typeof content !== "object" || Array.isArray(content)) continue;
+        for (const values of Object.values(content)) {
+          if (!values || typeof values !== "object" || Array.isArray(values)) continue;
+          const item = values as Record<string, any>, target = item.values && typeof item.values === "object" && !Array.isArray(item.values) ? item.values : item;
+          if (!Object.hasOwn(target, "id") || !/^[1-9]\d{0,9}$/.test(String(target.id))) continue;
+          const replacement = options.media.get(Number(target.id));
+          if (replacement) target.id = replacement;
+          else { target.id = 0; warn("Detached missing image id in imported pattern overrides."); }
+        }
+      }
       if (name === "core/gallery" && Array.isArray(attributes.ids)) attributes.ids = attributes.ids.map(Number).map(id => options.media!.get(id)).filter(Boolean);
       const fields = ["core/image", "core/audio", "core/video", "core/file", "core/cover", "core/playlist-track"].includes(name) ? ["id"] : name === "core/media-text" ? ["mediaId"] : [];
       for (const field of fields) if (attributes[field]) {
