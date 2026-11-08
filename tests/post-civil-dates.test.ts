@@ -104,6 +104,12 @@ test("persisted civil dates survive zones, REST edits, real post waits, revision
    await ok(`/api/posts/${post.id}/autosave`,"PUT",{version:restored.version,content:"<p>CIVIL AUTOSAVE PREVIEW</p>"});
    const preview=(await ok(`/api/posts/${post.id}/preview`)).post;assert.equal(preview.postDate,restored.postDate);assert.equal(preview.postDateGmt,restored.postDateGmt);assert.match(preview.content,/CIVIL AUTOSAVE PREVIEW/);
   });
+  await t.test("future status without an explicitly chosen date keeps the existing missing-date rejection",async()=>{
+   const before=(await pool.query("SELECT count(*)::int n FROM posts")).rows[0].n;
+   for(const input of [{status:"future"},{status:"future",publishedAt:"2100-01-01T00:00:00Z"},{status:"future",scheduledAt:null}])assert.equal((await api("/api/posts","POST",{title:stamp+"-missing-future",...input})).response.status,400);
+   assert.equal((await pool.query("SELECT count(*)::int n FROM posts")).rows[0].n,before);
+   const draft=await make({status:"draft"});assert.equal((await api(`/api/posts/${draft.id}`,"PUT",{status:"future"})).response.status,400);const current=await getPost(draft.id);assert.equal(current.status,"draft");assert.equal(current.postDateGmt,null);
+  });
   await t.test("date-only reschedules create no content revision and restoring content retains the current schedule",async()=>{
    const post=await make({status:"future",postDate:"2100-02-03T04:05:06"});
    const before=(await ok(`/api/posts/${post.id}/revisions`)).revisions.length;
@@ -142,7 +148,7 @@ test("persisted civil dates survive zones, REST edits, real post waits, revision
    const exported=await fetch(base+"/api/tools/export?format=wxr&content=posts&startDate=2011-12&endDate=2011-12",{headers:{Cookie:cookie}});const parsed=new XMLParser({parseTagValue:false,isArray:n=>n==="item"}).parse(await exported.text());const item=parsed.rss.channel.item.find((p:any)=>Number(p["wp:post_id"])===post.id);assert.equal(item["wp:post_date"],"2011-12-30 12:34:56");assert.equal(item["wp:post_date_gmt"],"2000-01-01 01:02:03");
    const malformed=xml.replace("2011-12-30 12:34:56","2011-02-30 12:34:56");const count=(await pool.query("SELECT count(*)::int n FROM posts")).rows[0].n;
    assert.equal((await api("/api/tools/import","POST",{format:"wxr",xml:malformed})).response.status,400);assert.equal((await pool.query("SELECT count(*)::int n FROM posts")).rows[0].n,count);
-   const legacy=await ok("/api/tools/import","POST",{application:"WorldAct",version:3,settings:{timezone:"America/Los_Angeles"},posts:[{id:987653,type:"post",title:stamp+"-legacy",slug:stamp+"-legacy",content:"<p>Old archive.</p>",status:"publish",published_at:"2024-03-01T07:30:07Z"}]});ids.push(...legacy.postIds);assert.equal((await getPost(legacy.postIds[0])).postDate,"2024-02-29T23:30:07");
+   const legacy=await ok("/api/tools/import","POST",{application:"WorldAct",version:3,settings:{timezone:" America/Los_Angeles "},posts:[{id:987653,type:"post",title:stamp+"-legacy",slug:stamp+"-legacy",content:"<p>Old archive.</p>",status:"publish",published_at:"2024-03-01T07:30:07Z"}]});ids.push(...legacy.postIds);assert.equal((await getPost(legacy.postIds[0])).postDate,"2024-02-29T23:30:07");
    const db=await pool.connect();try{await db.query("BEGIN");await db.query("UPDATE posts SET post_date='1999-12-31T23:59:59' WHERE id=$1",[post.id]);assert.match(await postPermalink({...post,postDate:"LYING"},await getSettings(db),db),/^\/1999\/12\/31\/23\/59\/59\//);await db.query("ROLLBACK");}finally{db.release();}
   });
  }finally{await pool.query("DELETE FROM posts WHERE id=ANY($1::int[])",[ids]);await pool.query("UPDATE settings SET data=$1::jsonb WHERE id=1",[JSON.stringify(original)]);}

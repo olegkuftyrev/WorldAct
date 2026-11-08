@@ -1323,7 +1323,7 @@ router.post("/tools/import", admin, async (req: AuthRequest, res) => {
         if(post.post_date===undefined || post.post_date_gmt===undefined)throw new HttpError(400,"Version 4 posts require both post_date and nullable post_date_gmt.");
         datePair=publicationPair(post.post_date,post.post_date_gmt);
       }else{
-        const sourceZone=typeof (input as any).settings?.timezone==="string"?(input as any).settings.timezone:destinationDateSettings.timezone;
+        const sourceZone=site.settings.timezone ?? destinationDateSettings.timezone;
         const effective=(post.status==="future"?post.scheduled_at:null) || post.published_at || post.created_at || new Date().toISOString();
         datePair=publicationPair(civilFromInstant(effective,sourceZone),["draft","pending"].includes(post.status)&&!post.published_at&&!post.scheduled_at?null:effective);
         addWarnings(["Historical civil publication dates were approximated once using the archive timezone, or the destination timezone when absent."]);

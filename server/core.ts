@@ -527,7 +527,7 @@ async function savePost(
     const pair=resolvePostDate(input,existing,status,dateSettings.timezone,dateNow);
     if(status==="future"){
       if(input.postDate!==undefined || input.restDate!==undefined || input.restDateGmt!==undefined)scheduledAt=pair.postDateGmt;
-      if(!scheduledAt && input.scheduledAt===undefined)scheduledAt=pair.postDateGmt;
+      if(!scheduledAt && input.scheduledAt===undefined && existing?.postDateGmt)scheduledAt=pair.postDateGmt;
       if(!scheduledAt || !pair.postDateGmt)throw new HttpError(400,"Choose a publication date before scheduling this post.");
       if(new Date(scheduledAt).valueOf()<=dateNow.valueOf()){status="publish";assertNewAccess(user,type,status,existing?.status);}
     }

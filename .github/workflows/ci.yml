@@ -121,7 +121,7 @@ jobs:
           tests/account-tools-ui.test.ts
           tests/legacy-routes.test.ts tests/login-remember.test.ts tests/media-details-state.test.ts
           tests/dashboard.test.ts tests/dashboard-dates.test.ts
-          tests/post-list-dates.test.ts tests/post-civil-dates.test.ts tests/post-civil-independent-waits.test.ts tests/post-civil-native-final-waits.test.ts tests/post-civil-transactions.test.ts tests/post-civil-boundaries.test.ts tests/post-civil-fixed-draft.test.ts tests/post-civil-portability.test.ts
+          tests/post-list-dates.test.ts tests/post-civil-dates.test.ts tests/post-civil-independent-waits.test.ts tests/post-civil-native-final-waits.test.ts tests/post-civil-transactions.test.ts tests/post-civil-boundaries.test.ts tests/post-civil-fixed-draft.test.ts tests/post-civil-migration.test.ts tests/post-civil-portability.test.ts
           tests/post-list-date-format.test.ts tests/editor-publication-date.test.ts tests/classic-comment-tree.test.ts
           tests/fresh-defaults.test.ts tests/admin-tools.test.ts
           tests/shortcodes.test.ts
