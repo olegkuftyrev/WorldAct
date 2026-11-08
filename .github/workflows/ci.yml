@@ -91,6 +91,7 @@ jobs:
           tests/classic-parser.test.ts tests/block-history.test.ts
           tests/account-tools-ui.test.ts
           tests/legacy-routes.test.ts tests/login-remember.test.ts tests/media-details-state.test.ts
+          tests/dashboard.test.ts tests/dashboard-dates.test.ts
           tests/fresh-defaults.test.ts tests/admin-tools.test.ts
           tests/shortcodes.test.ts
       - name: Fresh browser installation on the compiled server
