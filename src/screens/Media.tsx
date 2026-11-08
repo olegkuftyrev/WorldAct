@@ -4,6 +4,7 @@ import {
   useNavigate,
   useParams,
   useSearchParams,
+  useLocation,
 } from "react-router-dom";
 import { api, json, date, type Media, type Post } from "../api";
 import {
@@ -21,6 +22,7 @@ import {
   useListTablePreferences,
 } from "../components/ScreenOptions";
 import MediaImageEditor from "../components/MediaImageEditor";
+import { mergeMediaDetails } from "../mediaDetailsState";
 import "../media.css";
 
 type MediaItem = Media & {
@@ -87,7 +89,16 @@ export function MediaPreview({
 export default function MediaLibrary() {
   const { user } = useContext(Session),
     { id } = useParams(),
+    route = useLocation(),
     navigate = useNavigate();
+  const scopeRef = useRef({ key: route.key, user, active: true });
+  if (scopeRef.current.key !== route.key || scopeRef.current.user !== user) {
+    scopeRef.current.active = false;
+    scopeRef.current = { key: route.key, user, active: true };
+  }
+  const scope = scopeRef.current;
+  const ownsOpening = () => scope.active && scopeRef.current === scope;
+  useEffect(() => { scope.active = true; return () => { scope.active = false; }; }, [scope]);
   const [params, setParams] = useSearchParams();
   const preferences = useListTablePreferences("media");
   const type = ["image", "audio", "video", "document"].includes(
@@ -144,8 +155,11 @@ export default function MediaLibrary() {
     setSelecting(false);
   }, [search, month, type, unattached, page]);
   useEffect(() => {
-    setSelected(detail.data?.media || null);
+    setSelected(detail.data?.media.id === Number(id) ? detail.data.media : null);
   }, [detail.data, id]);
+  useEffect(() => {
+    setBusy(false); setError(""); setNotice(""); setDeleting(null); setAttaching(null);
+  }, [scope]);
   function change(values: Record<string, string>) {
     const next = new URLSearchParams(params);
     for (const [key, value] of Object.entries(values))
@@ -155,10 +169,12 @@ export default function MediaLibrary() {
     setChecked([]);
   }
   function open(item: MediaItem) {
+    scope.active = false;
     navigate(`/admin/media/${item.id}${params.size ? `?${params}` : ""}`);
   }
   function close() {
     if (!busy) {
+      scope.active = false;
       setSelected(null);
       navigate(`/admin/media${params.size ? `?${params}` : ""}`);
     }
@@ -174,17 +190,22 @@ export default function MediaLibrary() {
         body.append("file", file);
         await api("/media", { method: "POST", body });
         uploaded++;
+        if (!ownsOpening()) return;
       }
+      if (!ownsOpening()) return;
       setNotice(`${uploaded} ${uploaded === 1 ? "file" : "files"} uploaded.`);
       await resource.reload();
     } catch (reason) {
+      if (!ownsOpening()) return;
       setError(
         `${uploaded ? `${uploaded} files uploaded. ` : ""}${errorText(reason)}`,
       );
       await resource.reload();
     } finally {
-      setBusy(false);
-      if (fileInput.current) fileInput.current.value = "";
+      if (ownsOpening()) {
+        setBusy(false);
+        if (fileInput.current) fileInput.current.value = "";
+      }
     }
   }
   async function save(event: FormEvent) {
@@ -192,8 +213,9 @@ export default function MediaLibrary() {
     if (!selected) return;
     setBusy(true);
     setError("");
+    const submitted = selected;
     try {
-      await api(
+      const { media: updated } = await api<{ media: MediaItem }>(
         `/media/${selected.id}`,
         json("PUT", {
           title: selected.title,
@@ -203,12 +225,15 @@ export default function MediaLibrary() {
           commentStatus: selected.commentStatus || "open",
         }),
       );
+      if (!ownsOpening()) return;
+      if (updated.id !== submitted.id) return;
+      setSelected(current => mergeMediaDetails(current, submitted, updated));
       setNotice("Attachment details saved.");
-      await Promise.all([resource.reload(), detail.reload()]);
+      await resource.reload();
     } catch (reason) {
-      setError(errorText(reason));
+      if (ownsOpening()) setError(errorText(reason));
     } finally {
-      setBusy(false);
+      if (ownsOpening()) setBusy(false);
     }
   }
   async function apply(
@@ -223,6 +248,7 @@ export default function MediaLibrary() {
         "/media/bulk",
         json("POST", { ids, action, ...(postId ? { postId } : {}) }),
       );
+      if (!ownsOpening()) return;
       setNotice(
         `${result.updated} ${result.updated === 1 ? "item" : "items"} ${action === "delete" ? "permanently deleted" : action === "attach" ? "attached" : "detached"}.`,
       );
@@ -235,6 +261,7 @@ export default function MediaLibrary() {
       setDeleting(null);
       setAttaching(null);
       await resource.reload();
+      if (!ownsOpening()) return;
       if (id && ids.includes(Number(id))) {
         if (
           action === "delete" &&
@@ -245,10 +272,10 @@ export default function MediaLibrary() {
         } else await detail.reload();
       }
     } catch (reason) {
-      setError(errorText(reason));
+      if (ownsOpening()) setError(errorText(reason));
       throw reason;
     } finally {
-      setBusy(false);
+      if (ownsOpening()) setBusy(false);
     }
   }
   function runBulk() {
@@ -714,16 +741,16 @@ export default function MediaLibrary() {
           !deleting &&
           !detail.loading &&
           !detail.error && (
-            <Modal title="Attachment details" close={close}>
+            <Modal key={route.key} title="Attachment details" close={close}>
               <form onSubmit={save} className="attachment-details-layout">
                 <div className="attachment-preview">
                   <MediaPreview item={selected} full />
                   <MediaImageEditor
+                    key={route.key}
                     media={selected}
                     onUpdate={(item) => {
-                      setSelected((current) =>
-                        current ? { ...current, ...item } : item,
-                      );
+                      if (!ownsOpening() || item.id !== Number(id)) return;
+                      setSelected(current => mergeMediaDetails(current, null, item));
                       void resource.reload();
                     }}
                   />
@@ -869,9 +896,9 @@ export default function MediaLibrary() {
                         await navigator.clipboard.writeText(
                           new URL(selected.url, location.origin).href,
                         );
-                        setNotice("File URL copied.");
+                        if (ownsOpening()) setNotice("File URL copied.");
                       } catch {
-                        setError(
+                        if (ownsOpening()) setError(
                           "Select the file URL and copy it with your keyboard.",
                         );
                       }
