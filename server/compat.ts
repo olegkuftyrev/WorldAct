@@ -15,6 +15,7 @@ import {
   getComment,
   getSettings,
   postFields,
+  postMetadataFields,
   mediaFields,
   type User,
 } from "./db.js";
@@ -273,7 +274,7 @@ router.get(["/sitemap.xml", "/wp-sitemap.xml"], async (_req, res) => {
   }
   const posts = (
     await pool.query(
-      `SELECT ${postFields} FROM posts p JOIN users u ON u.id=p.author_id WHERE p.status='publish' AND p.password_hash IS NULL ORDER BY p.id LIMIT 50000`,
+      `SELECT ${postMetadataFields} FROM posts p WHERE p.status='publish' ORDER BY p.id LIMIT 50000`,
     )
   ).rows;
   const urls = await Promise.all(

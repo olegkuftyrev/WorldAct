@@ -1,6 +1,6 @@
 import { parse } from "@wordpress/block-serialization-default-parser";
 import type pg from "pg";
-import { pool, getSettings, postFields } from "./db.js";
+import { pool, getSettings, postFields, postMetadataFields } from "./db.js";
 import { postPermalink } from "./permalinks.js";
 import { cleanContent, plainText, HttpError } from "./utils.js";
 import { restDateToUTC } from "./date.js";
@@ -322,7 +322,7 @@ async function loadPublicPost(
     async () =>
       (
         await state.db.query(
-          `SELECT ${postFields},p.raw_content AS "rawContent" FROM posts p JOIN users u ON u.id=p.author_id WHERE p.id=$1 AND p.status='publish' AND p.password_hash IS NULL`,
+          `SELECT ${postMetadataFields} FROM posts p WHERE p.id=$1 AND p.status='publish'`,
           [id],
         )
       ).rows[0] || null,
@@ -582,7 +582,7 @@ async function pageList(node: Node, context: Context, state: State) {
     async () =>
       (
         await state.db.query(
-          `SELECT ${postFields} FROM posts p JOIN users u ON u.id=p.author_id WHERE p.type='page' AND p.status='publish' AND p.password_hash IS NULL ORDER BY p.menu_order,p.title,p.id LIMIT 200`,
+          `SELECT ${postMetadataFields} FROM posts p WHERE p.type='page' AND p.status='publish' ORDER BY p.menu_order,p.title,p.id LIMIT 200`,
         )
       ).rows,
   );
@@ -880,7 +880,7 @@ async function renderNode(
           async () =>
             (
               await state.db.query(
-                "SELECT display_name AS name FROM users WHERE id=$1 AND EXISTS(SELECT 1 FROM posts p WHERE p.author_id=$1 AND p.status='publish' AND p.password_hash IS NULL)",
+                "SELECT display_name AS name FROM users WHERE id=$1 AND EXISTS(SELECT 1 FROM posts p WHERE p.author_id=$1 AND p.status='publish')",
                 [id],
               )
             ).rows[0],

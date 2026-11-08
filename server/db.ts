@@ -38,6 +38,7 @@ export interface User {
   createdAt: Date;
 }
 export const userFields = `id, username, email, display_name AS "displayName", role, created_at AS "createdAt"`;
+export const postMetadataFields = `p.id,p.type,p.title,p.slug,p.status,p.parent_id AS "parentId",p.published_at AS "publishedAt",p.created_at AS "createdAt",p.updated_at AS "updatedAt",p.author_id AS "authorId",(p.password_hash IS NOT NULL) AS "hasPassword"`;
 export const postFields = `p.id, p.type, p.title, p.slug, p.content,p.raw_content AS "rawContent", p.excerpt, p.status, p.pre_trash_status AS "preTrashStatus", p.format,
   p.author_id AS "authorId", u.display_name AS "authorName", p.created_at AS "createdAt",
   p.updated_at AS "updatedAt", p.published_at AS "publishedAt", p.scheduled_at AS "scheduledAt",

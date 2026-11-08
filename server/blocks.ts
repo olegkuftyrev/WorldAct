@@ -415,7 +415,7 @@ router.get("/wp-json/wp/v2/users{/:id}", async (req: AuthRequest, res) => {
     if (!values.length || values.some(value => !["post", "page"].includes(value))) throw new HttpError(400, "Choose a supported published content type.");
     types = [...new Set(values)];
   }
-  const args: unknown[] = [id, include, types], where = ["($1::int IS NULL OR u.id=$1)", "($2::int[]='{}'::int[] OR u.id=ANY($2::int[]))", "EXISTS(SELECT 1 FROM posts p WHERE p.author_id=u.id AND p.status='publish' AND p.password_hash IS NULL AND p.type=ANY($3::text[]))"];
+  const args: unknown[] = [id, include, types], where = ["($1::int IS NULL OR u.id=$1)", "($2::int[]='{}'::int[] OR u.id=ANY($2::int[]))", "EXISTS(SELECT 1 FROM posts p WHERE p.author_id=u.id AND p.status='publish' AND p.type=ANY($3::text[]))"];
   if (input.search) { args.push(`%${input.search.replace(/[\\%_]/g,"\\$&")}%`); where.push(`(u.display_name ILIKE $${args.length} OR u.username ILIKE $${args.length})`); }
   const total = (await pool.query(`SELECT count(*)::int AS total FROM users u WHERE ${where.join(" AND ")}`, args)).rows[0].total;
   if (input.page > 1 && (input.page - 1) * input.per_page >= total) throw new HttpError(400, "The page number requested is larger than the number of pages available.");

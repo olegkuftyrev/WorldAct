@@ -1,7 +1,7 @@
 import { date as formatDate } from "@wordpress/date";
 import socialIcons from "../src/theme-source/social-icons.json";
 import type { Node, Context, State } from "./block-renderer.js";
-import { postFields } from "./db.js";
+import { postFields, postMetadataFields } from "./db.js";
 import { postPermalink } from "./permalinks.js";
 import { cleanContent, plainText } from "./utils.js";
 import {avatarURL} from "./avatars.js";
@@ -75,7 +75,7 @@ export async function renderThemeBlock(
   if(name==="core/post-navigation-link") {
     if(!p?.id)return "";
     const previous=a.type==="previous",operator=previous?"<":">",order=previous?"DESC":"ASC";
-    const next=await cached(state,`post-navigation:${p.id}:${previous}:${a.taxonomy || ""}`,async()=>(await state.db.query(`SELECT ${postFields} FROM posts p JOIN users u ON u.id=p.author_id WHERE p.type=$1 AND p.id<>$2 AND p.status='publish' AND p.password_hash IS NULL AND (coalesce(p.published_at,p.created_at),p.id)${operator}(SELECT coalesce(current_post.published_at,current_post.created_at),current_post.id FROM posts current_post WHERE current_post.id=$2) ${a.taxonomy?"AND EXISTS(SELECT 1 FROM post_terms current JOIN post_terms related ON related.term_id=current.term_id JOIN terms t ON t.id=current.term_id WHERE current.post_id=$2 AND related.post_id=p.id AND t.taxonomy=$3)":""} ORDER BY coalesce(p.published_at,p.created_at) ${order},p.id ${order} LIMIT 1`,a.taxonomy?[p.type,p.id,a.taxonomy==="post_tag"?"tag":"category"]:[p.type,p.id])).rows[0]);
+    const next=await cached(state,`post-navigation:${p.id}:${previous}:${a.taxonomy || ""}`,async()=>(await state.db.query(`SELECT ${postMetadataFields} FROM posts p WHERE p.type=$1 AND p.id<>$2 AND p.status='publish' AND (coalesce(p.published_at,p.created_at),p.id)${operator}(SELECT coalesce(current_post.published_at,current_post.created_at),current_post.id FROM posts current_post WHERE current_post.id=$2) ${a.taxonomy?"AND EXISTS(SELECT 1 FROM post_terms current JOIN post_terms related ON related.term_id=current.term_id JOIN terms t ON t.id=current.term_id WHERE current.post_id=$2 AND related.post_id=p.id AND t.taxonomy=$3)":""} ORDER BY coalesce(p.published_at,p.created_at) ${order},p.id ${order} LIMIT 1`,a.taxonomy?[p.type,p.id,a.taxonomy==="post_tag"?"tag":"category"]:[p.type,p.id])).rows[0]);
     if(!next)return "";
     const url=await postPermalink(next,state.settings,state.db),title=esc(next.title || "(no title)"),label=esc(a.label || (previous?"Previous Post":"Next Post")),arrow=a.arrow && a.arrow!=="none"?(previous?"← ":" →"):"";
     return `<div${attributes()}>${a.showTitle && !a.linkLabel?`<span class="post-navigation-link__label">${label}</span>`:""}<a href="${esc(url)}" rel="${previous?"prev":"next"}">${previous?arrow:""}${a.showTitle?title:label}${previous?"":arrow}</a></div>`;
@@ -142,7 +142,7 @@ export async function renderThemeBlock(
   }
   if(name==="core/categories") {
     const taxonomy=a.taxonomy==="post_tag"?"tag":"category";
-    const terms=await cached(state,`categories-block:${taxonomy}`,async()=>(await state.db.query("SELECT t.id,t.name,t.slug,t.parent_id AS \"parentId\",(SELECT count(*)::int FROM post_terms pt JOIN posts p ON p.id=pt.post_id WHERE pt.term_id=t.id AND p.status='publish' AND p.password_hash IS NULL) AS count FROM terms t WHERE taxonomy=$1 ORDER BY name,id LIMIT 1000",[taxonomy])).rows);
+    const terms=await cached(state,`categories-block:${taxonomy}`,async()=>(await state.db.query("SELECT t.id,t.name,t.slug,t.parent_id AS \"parentId\",(SELECT count(*)::int FROM post_terms pt JOIN posts p ON p.id=pt.post_id WHERE pt.term_id=t.id AND p.status='publish') AS count FROM terms t WHERE taxonomy=$1 ORDER BY name,id LIMIT 1000",[taxonomy])).rows);
     const visibleIds=new Set<number>(terms.filter((term:any)=>a.showEmpty || term.count>0).map((term:any)=>term.id));
     if(a.showHierarchy || a.showOnlyTopLevel)for(const term of terms.filter((term:any)=>visibleIds.has(term.id))){
       let parent=term.parentId;const seen=new Set<number>();

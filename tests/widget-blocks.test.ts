@@ -223,12 +223,15 @@ test("native widget REST dependencies embed safe author/media records and page a
     const list = (await ok(`/wp-json/wp/v2/posts?include=${posts[0]}&_embed=author,wp:featuredmedia`)).data;
     assert.equal(list[0]._embedded.author[0].id, people[0]);
     const query = `/wp-json/wp/v2/users?search=${stamp}&has_published_posts[]=post&per_page=1`;
-    const authors = await ok(query); assert.deepEqual(authors.data.map((row: any) => row.id), [people[0]]); assert.equal(authors.response.headers.get("X-WP-Total"), "1");
+    const authors = await ok(query); assert.deepEqual(authors.data.map((row: any) => row.id), [people[0]]); assert.equal(authors.response.headers.get("X-WP-Total"), "2");
+    const protectedAuthor = await ok(query + "&page=2"); assert.deepEqual(protectedAuthor.data.map((row: any) => row.id), [people[2]]);
     const pages = await ok(`/wp-json/wp/v2/users?search=${stamp}&has_published_posts[]=page`); assert.deepEqual(pages.data.map((row: any) => row.id), [people[1]]);
     const both = await ok(`/wp-json/wp/v2/users?search=${stamp}&has_published_posts[]=post&has_published_posts[]=page&per_page=1`);
-    assert.equal(both.response.headers.get("X-WP-Total"), "2"); assert.equal(both.response.headers.get("X-WP-TotalPages"), "2"); assert.match(both.response.headers.get("Link")!, /page=2/);
+    assert.equal(both.response.headers.get("X-WP-Total"), "3"); assert.equal(both.response.headers.get("X-WP-TotalPages"), "3"); assert.match(both.response.headers.get("Link")!, /page=2/);
     const next = await ok(`/wp-json/wp/v2/users?search=${stamp}&has_published_posts[]=post&has_published_posts[]=page&per_page=1&page=2`); assert.notEqual(both.data[0].id, next.data[0].id);
-    for (const record of [...both.data, ...next.data]) assert.deepEqual(Object.keys(record).sort(), ["avatar_urls", "description", "id", "link", "name", "slug", "url"]);
+    const third = await ok(`/wp-json/wp/v2/users?search=${stamp}&has_published_posts[]=post&has_published_posts[]=page&per_page=1&page=3`);
+    const allAuthors=[...both.data,...next.data,...third.data]; assert.deepEqual(allAuthors.map((row:any)=>row.id).sort((a:number,b:number)=>a-b),people.slice(0,3).sort((a,b)=>a-b));
+    for (const record of allAuthors) assert.deepEqual(Object.keys(record).sort(), ["avatar_urls", "description", "id", "link", "name", "slug", "url"]);
     const types = (await ok("/wp-json/wp/v2/block-types")).data; for (const name of WIDGET_BLOCKS) assert.ok(types.some((row: any) => row.name === name && row.is_dynamic));
     const counts = await ok(`/wp-json/wp/v2/comments?post=${posts[0]}&per_page=1&_fields=id&context=view`); assert.equal(counts.response.headers.get("X-WP-Total"), "0");
     const rendered = await ok(`/wp-json/wp/v2/block-renderer/core/latest-posts?attributes=${encodeURIComponent(JSON.stringify({ selectedAuthor: people[0], displayAuthor: true }))}`); assert.match(rendered.data.rendered, new RegExp(stamp + " post"));
