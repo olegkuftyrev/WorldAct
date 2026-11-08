@@ -20,7 +20,7 @@ npm run dev
 
 Open [WorldAct admin](http://127.0.0.1:5173/admin). Sign in with `ADMIN_EMAIL` and `ADMIN_PASSWORD` from the ignored local `.env` file. Setup generates a unique password when creating `.env`; the initial username is `admin`.
 
-Setup starts PostgreSQL 17 on `127.0.0.1:54329`, migrates the schema, and seeds the administrator, Hello world! post, Sample Page, sample comment, and default site designs. Re-running setup preserves existing content. Copy and edit `.env.example` before first setup to choose your own configuration. Changing the environment password afterward does not replace an existing account password.
+Setup starts PostgreSQL 17 on `127.0.0.1:54329`, migrates the schema, and seeds the administrator, Hello world! post, complete Sample Page, formatted sample comment, private Privacy Policy draft, inactive bundled plugins, and default site designs. Re-running setup preserves existing content, including deleted defaults. Copy and edit `.env.example` before first setup to choose your own configuration. Changing the environment password afterward does not replace an existing account password.
 
 For a fresh site, use `npm run setup:browser` instead of `npm run setup` to choose the site title and administrator in the browser. Preparation migrates PostgreSQL without seeding and prints a private `/install#token=…` link. Start `npm run dev` and open that link; the installer clears the fragment immediately and keeps its token in memory only. Installation runs once, then directs you to normal login. An initialized site cannot be reset through the installer.
 
