@@ -4,7 +4,7 @@ import { randomInt } from "node:crypto";
 import type pg from "pg";
 import { z } from "zod";
 import { pool, getSettings } from "./db.js";
-import { requireRole } from "./auth.js";
+import { requireRole, assertActiveAccountAuthentication, type AuthRequest } from "./auth.js";
 import { HttpError, needUser, parseId } from "./utils.js";
 import { postPermalink } from "./permalinks.js";
 import lyrics from "../src/plugins/hello-dolly.json";
@@ -166,9 +166,70 @@ export async function setAkismetCredentials(
 async function akismetConfiguration(database: Database) {
   return (
     await database.query(
-      "SELECT e.enabled,e.settings,s.api_key,s.verified_at,s.verified_site_url FROM extensions e LEFT JOIN extension_secrets s ON s.slug=e.slug WHERE e.slug='akismet'",
+      "SELECT e.enabled,e.settings,s.api_key,s.verified_at,s.verified_site_url,s.updated_at::text AS credential_version FROM extensions e LEFT JOIN extension_secrets s ON s.slug=e.slug WHERE e.slug='akismet'",
     )
   ).rows[0];
+}
+/** Lock order is actor, plugin, secret. No caller keeps this client over HTTP. */
+async function withAkismetAdministrator<T>(
+  req: AuthRequest,
+  work: (database: pg.PoolClient, config: any) => Promise<T>,
+) {
+  const database = await pool.connect();
+  try {
+    await database.query("BEGIN");
+    const actor = (await database.query("SELECT role FROM users WHERE id=$1 FOR UPDATE", [needUser(req).id])).rows[0];
+    if (!actor || actor.role !== "administrator") throw new HttpError(403, "Only administrators can configure connectors.");
+    await assertActiveAccountAuthentication(req, database);
+    const plugin = (await database.query("SELECT slug FROM extensions WHERE slug='akismet' FOR UPDATE")).rows[0];
+    if (!plugin) throw new HttpError(404, "Install Akismet first.");
+    await database.query("SELECT slug FROM extension_secrets WHERE slug='akismet' FOR UPDATE");
+    const result = await work(database, await akismetConfiguration(database));
+    await database.query("COMMIT");
+    return result;
+  } catch (error) {
+    await database.query("ROLLBACK");
+    throw error;
+  } finally {
+    database.release();
+  }
+}
+export async function updateAkismetConfiguration(
+  req: AuthRequest,
+  input: { enabled?: boolean; settings?: { sendComments?: boolean }; apiKey?: string; clearApiKey?: boolean },
+  requireActive = false,
+) {
+  return withAkismetAdministrator(req, async (database, config) => {
+    if (requireActive && !config.enabled) throw new HttpError(409, "Activate Akismet before connecting it.");
+    const plugin = (await database.query(
+      "UPDATE extensions SET enabled=coalesce($1,enabled),settings=jsonb_build_object('sendComments',coalesce($2,(settings->>'sendComments')::boolean,false)) WHERE slug='akismet' RETURNING slug,enabled,settings",
+      [input.enabled ?? null, input.settings?.sendComments ?? null],
+    )).rows[0];
+    await setAkismetCredentials(database, input);
+    return { ...plugin, ...(await readAkismetSecretStatus(database)) };
+  });
+}
+export async function verifyAkismetKey(
+  req: AuthRequest,
+  service = createAkismetClient(),
+) {
+  const snapshot = await withAkismetAdministrator(req, async (database, config) => {
+    if (!config.enabled || !config.settings?.sendComments || !config.api_key)
+      throw new HttpError(409, "Activate Akismet, save an API key, and enable comment processing before verifying the key.");
+    return { key: config.api_key, version: config.credential_version, site: safeServiceURL((await getSettings(database)).siteUrl) };
+  });
+  const result = await service.verify(snapshot.key, snapshot.site);
+  return withAkismetAdministrator(req, async (database, config) => {
+    const site = safeServiceURL((await getSettings(database)).siteUrl);
+    if (!config.enabled || !config.settings?.sendComments || config.api_key !== snapshot.key ||
+      !config.credential_version || config.credential_version !== snapshot.version || site !== snapshot.site)
+      throw new HttpError(409, "The connector changed while verification was running. Review its current settings and try again.");
+    await database.query(
+      "UPDATE extension_secrets SET verified_at=CASE WHEN $1='valid' THEN now() ELSE NULL END,verified_site_url=CASE WHEN $1='valid' THEN $2 ELSE NULL END,last_error_code=CASE WHEN $1='valid' THEN NULL ELSE $1 END,updated_at=now() WHERE slug='akismet'",
+      [result, site],
+    );
+    return { result, ...(await readAkismetSecretStatus(database)) };
+  });
 }
 export interface AkismetComment {
   userIP: string;
@@ -336,21 +397,9 @@ bundledPluginsRouter.get("/admin/plugin-notices", async (req, res) => {
 bundledPluginsRouter.post(
   "/plugins/akismet/verify",
   requireRole("administrator"),
-  async (_req, res) => {
-    const config = await akismetConfiguration(pool);
-    if (!config) throw new HttpError(404, "Install Akismet first.");
-    if (!config.enabled || !config.settings?.sendComments || !config.api_key)
-      throw new HttpError(
-        409,
-        "Activate Akismet, save an API key, and enable comment processing before verifying the key.",
-      );
-    const site = safeServiceURL((await getSettings()).siteUrl);
-    const result = await createAkismetClient().verify(config.api_key, site);
-    await pool.query(
-      "UPDATE extension_secrets SET verified_at=CASE WHEN $2='valid' THEN now() ELSE NULL END,verified_site_url=CASE WHEN $2='valid' THEN $3 ELSE NULL END,last_error_code=CASE WHEN $2='valid' THEN NULL ELSE $2 END,updated_at=now() WHERE slug='akismet' AND api_key=$1",
-      [config.api_key, result, site],
-    );
-    res.json({ result, ...(await readAkismetSecretStatus()) });
+  async (req, res) => {
+    z.object({}).strict().parse(req.body || {});
+    res.json(await verifyAkismetKey(req));
   },
 );
 bundledPluginsRouter.post(

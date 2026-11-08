@@ -44,6 +44,7 @@ import privacyPolicyRouter from "./privacy-policy.js";
 import fontsRouter from "./fonts.js";
 import postTemplatesRouter from "./post-templates.js";
 import bundledPluginsRouter from "./bundled-plugins.js";
+import connectorsRouter from "./connectors.js";
 import { plainText, HttpError, parseId, needUser } from "./utils.js";
 
 export const app = express();
@@ -123,6 +124,7 @@ app.use("/api", privacyPolicyRouter);
 app.use("/api", fontsRouter);
 app.use("/api", postTemplatesRouter);
 app.use("/api", bundledPluginsRouter);
+app.use("/api", connectorsRouter);
 app.use("/api", platformRouter);
 app.use("/api", coreRouter);
 

@@ -1,4 +1,4 @@
-import {akismetKey,readAkismetSecretStatus,setAkismetCredentials} from "./bundled-plugins.js";
+import {akismetKey,readAkismetSecretStatus,updateAkismetConfiguration} from "./bundled-plugins.js";
 import { validateFontChoices, withFontLibraryLock } from "./fonts.js";
 import express from "express";
 import multer from "multer";
@@ -711,14 +711,16 @@ router.put("/plugins/:slug",admin,async(req,res)=>{
   const input=z.object({enabled:z.boolean().optional(),settings:z.record(z.string(),z.unknown()).optional(),apiKey:akismetKey.optional(),clearApiKey:z.boolean().optional()}).strict().parse(req.body);
   if(plugin.slug!=="akismet" && (input.apiKey!==undefined || input.clearApiKey!==undefined))throw new HttpError(400,"API key fields are only available for Akismet.");
   const settings=input.settings?validateExtensionSettings(plugin.slug,input.settings):{};
+  if(plugin.slug==="akismet"){
+    res.json({plugin:await updateAkismetConfiguration(req,{...input,settings:{...("sendComments" in settings?{sendComments:settings.sendComments}:{})}})});return;
+  }
   const database=await pool.connect();let updated;
   try{await database.query("BEGIN");
     const row=(await database.query("SELECT slug,enabled,settings FROM extensions WHERE slug=$1 FOR UPDATE",[plugin.slug])).rows[0];if(!row)throw new HttpError(404,"Install this extension first.");
     updated=(await database.query("UPDATE extensions SET enabled=coalesce($1,enabled),settings=$2::jsonb WHERE slug=$3 RETURNING slug,enabled,settings",[input.enabled ?? null,JSON.stringify({...publicExtensionSettings(plugin.slug,row.settings),...settings}),plugin.slug])).rows[0];
-    if(plugin.slug==="akismet")await setAkismetCredentials(database,input);
     await database.query("COMMIT");
   }catch(reason){await database.query("ROLLBACK");throw reason;}finally{database.release();}
-  res.json({plugin:{...updated,settings:publicExtensionSettings(plugin.slug,updated.settings),...(plugin.slug==="akismet"?await readAkismetSecretStatus():{})}});
+  res.json({plugin:{...updated,settings:publicExtensionSettings(plugin.slug,updated.settings)}});
 });
 router.delete("/plugins/:slug",admin,async(req,res)=>{
   const database=await pool.connect();

@@ -1,0 +1,15 @@
+# Fixed Node connector bridge
+
+The administrator-only Connectors API exposes the implemented Akismet integration. It uses the same `extensions` activation/processing flag and `extension_secrets` credential as Plugins; there is no second key store. Reference metadata and active-plugin behavior come from the supplied `wp-includes/connectors.php` and bundled Akismet connector. Reference PHP is data and never executes.
+
+- `GET /api/connectors` returns a fixed Akismet card with installed, active, processing consent, configured, verified, connected, key-source and safe error state. Reading it performs no remote request.
+- `PUT /api/connectors/akismet` accepts only optional `apiKey`, `clearApiKey` and `sendComments`. The plugin must already be installed and active. Blank key input retains the saved key; explicit clear removes it. Actual install/activation remain the existing local Plugins operations.
+- `POST /api/connectors/akismet/verify` accepts an empty object and invokes the same fixed HTTPS verification service as Plugins. Activation, key and processing consent are required. Valid/invalid/unavailable outcomes update the shared status. Only successful verification of the current saved key for the current site sets connected state.
+
+No endpoint returns key bytes; the existing four-character hint is administrator-only. Secrets remain outside public/design DTOs, preferences and JSON/WXR site archives. The supported key source is the database; no environment/constant override is advertised. The service always posts to the fixed Akismet host with redirect refusal, deadline and reply-size bound. No caller can supply an endpoint, headers or arbitrary provider.
+
+Both configuration surfaces now share actor → plugin → secret transaction lock order and recheck current administrator role and live session/application password after waiting. Verification snapshots the credential generation and site in a short transaction, releases its client before HTTP, then rechecks authentication, activation, consent, exact credential generation and site before recording the outcome. A delayed result cannot validate or invalidate a replacement key, changed site or revoked account. No database transaction connection is held while the remote service responds.
+
+`verifiedAt` records an actual successful check; changing the key or site invalidates its applicability. This bridge retains the existing explicit verification contract. The source's one-day automatic verification cache and its AI-provider registry are separate parity work; unsupported providers have no fake install/connect controls here.
+
+The guarded suite exercises shared Plugin/Connector state, missing/inactive installations, strict inputs, secret-free exports, valid/invalid/unavailable responses through an injected fixed-service client, a delayed result after key/site/consent changes, use of all ten pool clients during I/O, administrator demotion while queued, session revocation while queued and after HTTP. No public DNS, external Akismet or SMTP service is contacted.
