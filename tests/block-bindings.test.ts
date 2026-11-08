@@ -18,6 +18,10 @@ function fixture(entities: Record<number, any> = {}, posts: Record<number, any> 
     calls.push({ sql, args });
     if (sql.includes("FROM settings")) return { rows: [{ data: { ...defaultSettings, timezone: "UTC" } }] };
     if (sql.includes("FROM block_entities")) return { rows: entities[args[0]] ? [entities[args[0]]] : [] };
+    // Complete public renders now validate accumulated metadata on this same
+    // supplied fixture client; body/title/raw reads remain forbidden below.
+    if(sql.startsWith('SELECT id,type,author_id AS "authorId",password_hash FROM posts'))return {rows:args[0].map((id:number)=>posts[id]).filter((row:any)=>row?.status==='publish').map((row:any)=>({id:row.id,type:row.type,authorId:row.authorId,password_hash:row.hasPassword?'fixture-private-hash':null}))};
+    if(sql.startsWith('SELECT p.id FROM posts p JOIN jsonb_to_recordset'))return {rows:JSON.parse(args[0]).filter((row:any)=>posts[row.id]?.status==='publish').map((row:any)=>({id:row.id}))};
     if (sql.includes("FROM posts p WHERE p.id")) { assert.doesNotMatch(sql, /p\.content|p\.raw_content|p\.title|AS\s+"?(?:passwordHash|_passwordHash)/i); return { rows: posts[args[0]] ? [posts[args[0]]] : [] }; }
     throw new Error(sql);
   } } as any;

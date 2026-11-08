@@ -1,0 +1,102 @@
+import test,{after} from './isolated-test.js';
+import assert from 'node:assert/strict';
+import {pool} from '../server/db.js';
+import {hashPassword} from '../server/auth.js';
+import {completePublicRead,observePublicPost} from '../server/public-read-attempt.js';
+import {postAccessReader,currentPublicPostPolicies} from '../server/post-passwords.js';
+const base=process.env.TEST_API_URL!,origin=process.env.APP_ORIGIN!;
+after(()=>pool.end());
+const secret='INDEPENDENT-ARCHIVE-SECRET-BODY';
+async function waitFor(sql:string){for(let i=0;i<500;i++){if((await pool.query(sql)).rows[0].ok)return;await new Promise(r=>setTimeout(r,15));}assert.fail('bounded actual archive wait/finished-body observation absent');}
+test('complete template API attempts reacquire nonselected bodies and public identity',{timeout:120000},async t=>{
+ const settings=(await pool.query('SELECT data FROM settings WHERE id=1')).rows[0].data;
+ const oldPosts=(await pool.query('SELECT id,status FROM posts')).rows;
+ const reading=(await pool.query("SELECT enabled,settings FROM extensions WHERE slug='reading-time'")).rows[0];
+ const people:number[]=[],posts:number[]=[],createdDocuments:number[]=[];let views=false,serial=0;const documents=(await pool.query("SELECT id,theme,content,raw_content,blocks FROM site_documents WHERE slug='single' AND type='template' AND theme=ANY($1::text[])",[['classic','twentytwentyfive']])).rows;
+ async function api(path:string,method='GET',body?:unknown,cookie=''){const response=await fetch(base+path,{method,headers:{Origin:origin,'Content-Type':'application/json',...(cookie?{Cookie:cookie}:{})},body:body===undefined?undefined:JSON.stringify(body),signal:AbortSignal.timeout(20000)});return {response,text:await response.text()};}
+ try{
+  await pool.query("UPDATE posts SET status='draft'");await pool.query("INSERT INTO extensions(slug,enabled,settings) VALUES('reading-time',true,'{}') ON CONFLICT(slug) DO UPDATE SET enabled=true");assert.equal((await pool.query("SELECT count(*)::int AS n FROM extensions WHERE slug='reading-time' AND enabled")).rows[0].n,1);
+  for(const name of ['independent_archive_a','independent_archive_b'])people.push((await pool.query("INSERT INTO users(username,email,display_name,password_hash,role,nicename) VALUES($1,$2,$1,'inert-test-password','author',$1) RETURNING id",[name,name+'@example.test'])).rows[0].id);
+  const users=(await pool.query("SELECT column_name FROM information_schema.columns WHERE table_schema='public' AND table_name='users' ORDER BY ordinal_position")).rows.map(r=>r.column_name);
+  const extensions=(await pool.query("SELECT column_name FROM information_schema.columns WHERE table_schema='public' AND table_name='extensions' ORDER BY ordinal_position")).rows.map(r=>r.column_name);
+  const setup=await pool.connect();try{await setup.query('BEGIN');await setup.query('CREATE SEQUENCE worldact_archive_body_finished');await setup.query('CREATE SEQUENCE worldact_archive_b_calls');await setup.query('CREATE TABLE worldact_archive_gate(enabled boolean NOT NULL)');await setup.query('INSERT INTO worldact_archive_gate VALUES(false)');
+   await setup.query(`CREATE FUNCTION worldact_archive_nicename(value varchar) RETURNS varchar LANGUAGE plpgsql STABLE AS $$ BEGIN IF value='independent_archive_b' AND (SELECT enabled FROM worldact_archive_gate) AND nextval('worldact_archive_b_calls')=1 THEN PERFORM pg_advisory_xact_lock(hashtext('worldact-independent-archive-wait')); END IF; RETURN value; END $$`);
+   await setup.query(`CREATE FUNCTION worldact_archive_extension(name varchar,value jsonb) RETURNS jsonb LANGUAGE plpgsql STABLE AS $$ BEGIN IF name='reading-time' AND current_query()='SELECT settings FROM extensions WHERE slug=$1 AND enabled=true' THEN PERFORM nextval('worldact_archive_body_finished'); END IF; RETURN value; END $$`);
+   await setup.query('ALTER TABLE users RENAME TO worldact_archive_actual_users');await setup.query('CREATE VIEW users AS SELECT '+users.map(c=>c==='nicename'?'worldact_archive_nicename(nicename) AS nicename':'"'+c+'"').join(',')+' FROM worldact_archive_actual_users');
+   await setup.query('ALTER TABLE extensions RENAME TO worldact_archive_actual_extensions');await setup.query('CREATE VIEW extensions AS SELECT '+extensions.map(c=>c==='settings'?'worldact_archive_extension(slug,settings) AS settings':'"'+c+'"').join(',')+' FROM worldact_archive_actual_extensions');await setup.query('COMMIT');views=true;
+  }catch(e){await setup.query('ROLLBACK');throw e;}finally{setup.release();}
+  for(const theme of ['classic','twentytwentyfive'])for(const surface of ['query','latest'])for(const mutation of ['rotate','add','type','owner','unchanged'])await t.test(theme+' '+surface+' earlier post '+mutation+' during different post author expression',async()=>{
+   await pool.query('UPDATE worldact_archive_gate SET enabled=false');await pool.query("UPDATE settings SET data=data || $1::jsonb WHERE id=1",[JSON.stringify({theme,permalinkStructure:'/%author%/%post_id%/%postname%/',postsPerPage:2,pingServices:[],frontPageMode:'posts',frontPageId:null,postsPageId:null,showAvatars:false})]);
+   const own:number[]=[];const number=++serial;
+   async function make(author:number,label:string,password=false){const content='<p>'+secret+'</p>',post=(await pool.query("INSERT INTO posts(type,title,slug,content,raw_content,excerpt,status,author_id,password_hash,published_at,sticky) VALUES('post',$1,$1,$2,$2,$3,'publish',$4,$5,clock_timestamp()+interval '1 day',true) RETURNING id,slug",['archive-'+number+'-'+label,label==='a'?content:'<p>Public sibling body</p>',label==='a'?secret:'Public sibling excerpt',author,password?await hashPassword('Archive-wait-password'):null])).rows[0];own.push(post.id);posts.push(post.id);return post;}
+   const a=await make(people[0],'a',['rotate','unchanged'].includes(mutation)),b=await make(people[1],'b');await pool.query("UPDATE posts SET published_at=clock_timestamp()+interval '2 days' WHERE id=$1",[a.id]);const c=(await pool.query("INSERT INTO posts(type,title,slug,content,raw_content,status,author_id,published_at) VALUES('post',$1,$1,'<p>PUBLIC-SELECTED-C</p>','<p>PUBLIC-SELECTED-C</p>','publish',$2,clock_timestamp()) RETURNING id",['archive-selected-c-'+number,people[0]])).rows[0];own.push(c.id);posts.push(c.id);const template='<!-- wp:post-content /-->'+(surface==='query'?'<!-- wp:query '+JSON.stringify({query:{perPage:2,include:[a.id,b.id],order:'desc',orderBy:'date'}})+' --><!-- wp:post-template --><!-- wp:post-title {"isLink":true} /--><!-- wp:post-content /--><!-- /wp:post-template --><!-- /wp:query -->':'<!-- wp:latest-posts '+JSON.stringify({postsToShow:2,order:'desc',orderBy:'date',displayPostContent:true,displayPostContentRadio:'full_post'})+' /-->');const doc=(await pool.query("SELECT id FROM site_documents WHERE slug='single' AND type='template' AND theme=$1",[theme])).rows[0];if(doc)await pool.query("UPDATE site_documents SET content=$2,raw_content=$2,blocks='[]' WHERE id=$1",[doc.id,template]);else createdDocuments.push((await pool.query("INSERT INTO site_documents(slug,title,type,theme,content,raw_content,blocks) VALUES('single','Independent query','template',$1,$2,$2,'[]') RETURNING id",[theme,template])).rows[0].id);let cookie='';if(['rotate','unchanged'].includes(mutation)){const unlock=await api('/api/public/posts/'+a.slug+'/unlock','POST',{password:'Archive-wait-password'});assert.equal(unlock.response.status,200,unlock.text);cookie=unlock.response.headers.get('set-cookie')!.split(';')[0];}
+   const path='/api/public/templates/single?'+new URLSearchParams({postId:String(c.id),requestPath:'/?p='+c.id});
+   const before=await api(path,'GET',undefined,cookie);assert.equal(before.response.status,200,before.text);assert.ok(before.text.includes(secret),'fixture must actually expose the granted earlier archive post before revocation');
+   const control=await pool.connect();let pending:ReturnType<typeof api>|undefined;
+   try{await pool.query('ALTER SEQUENCE worldact_archive_body_finished RESTART WITH 1');await pool.query('ALTER SEQUENCE worldact_archive_b_calls RESTART WITH 1');await pool.query('UPDATE worldact_archive_gate SET enabled=true');await control.query('BEGIN');await control.query("SELECT pg_advisory_xact_lock(hashtext('worldact-independent-archive-wait'))");pending=api(path,'GET',undefined,cookie);
+    await waitFor("SELECT EXISTS(SELECT 1 FROM pg_stat_activity WHERE datname=current_database() AND wait_event='advisory' AND position('SELECT u.nicename FROM posts p JOIN users u' in query)>0) AS ok");
+    // Only A can reach enhancePublicPost while B's author expression waits.
+    // Its reading-time query occurs after its complete content was rendered and
+    // after all local publicPost grant/metadata checks, giving a DB-observed
+    // completion marker rather than a sleep-based assumption.
+    assert.equal(Number((await pool.query('SELECT last_value FROM worldact_archive_b_calls')).rows[0].last_value),1,'standalone template B expression is after sequential A template rendering');
+    if(mutation==='rotate'||mutation==='add')await pool.query('UPDATE posts SET password_hash=$2 WHERE id=$1',[a.id,await hashPassword('Rotated-accumulation-password')]);
+    else if(mutation==='type')await pool.query("UPDATE posts SET type='page' WHERE id=$1",[a.id]);
+    else if(mutation==='owner')await pool.query('UPDATE posts SET author_id=$2 WHERE id=$1',[a.id,people[1]]);
+    await control.query('COMMIT');const result=await pending;
+    assert.equal(result.response.status,200,result.text);
+    const model=JSON.parse(result.text);assert.ok(model.document);assert.equal(typeof model.content,'string');
+    if(['owner','unchanged'].includes(mutation))assert.ok(model.content.includes(secret),'current public or unchanged granted A remains visible');
+    else assert.equal(result.text.includes(secret),false,'the complete template API must discard an earlier stale body');
+    if(mutation==='owner'){assert.ok(model.content.includes('/independent_archive_b/'+a.id+'/'));assert.equal(model.content.includes('/independent_archive_a/'+a.id+'/'),false);}
+
+   }finally{await control.query('ROLLBACK');control.release();if(pending)await pending.catch(()=>{});await pool.query('UPDATE worldact_archive_gate SET enabled=false');await pool.query('DELETE FROM posts WHERE id=ANY($1::int[])',[own]);}
+  });
+  await t.test('legacy site second policy change rejects the entire second accumulated attempt',async()=>{
+   await pool.query('UPDATE worldact_archive_gate SET enabled=false');
+   await pool.query(`CREATE OR REPLACE FUNCTION worldact_archive_nicename(value varchar) RETURNS varchar LANGUAGE plpgsql STABLE AS $$ DECLARE call bigint; BEGIN IF value='independent_archive_b' AND (SELECT enabled FROM worldact_archive_gate) THEN call:=nextval('worldact_archive_b_calls'); IF call=ANY(ARRAY[1,2]) THEN PERFORM pg_advisory_xact_lock(hashtext('worldact-extra-archive-'||call)); END IF; END IF; RETURN value; END $$`);
+   await pool.query("UPDATE settings SET data=data || '{\"permalinkStructure\":\"/%author%/%post_id%/%postname%/\",\"frontPageMode\":\"posts\",\"postsPerPage\":2}' WHERE id=1");
+   const a=(await pool.query("INSERT INTO posts(type,title,slug,content,raw_content,excerpt,status,author_id,password_hash,published_at,sticky) VALUES('post','ExtraA','extra-churn-a',$1,$1,$1,'publish',$2,$3,clock_timestamp()+interval '2 days',true) RETURNING id",[secret,people[0],await hashPassword('Archive-wait-password')])).rows[0];posts.push(a.id);
+   const b=(await pool.query("INSERT INTO posts(type,title,slug,content,raw_content,status,author_id,published_at,sticky) VALUES('post','ExtraB','extra-churn-b','public-b','public-b','publish',$1,clock_timestamp()+interval '1 day',true) RETURNING id",[people[1]])).rows[0];posts.push(b.id);
+   const unlock=await api('/api/public/posts/extra-churn-a/unlock','POST',{password:'Archive-wait-password'});assert.equal(unlock.response.status,200);const cookie=unlock.response.headers.get('set-cookie')!.split(';')[0];
+   const baseline=await api('/api/public/site','GET',undefined,cookie);assert.ok(baseline.text.includes(secret));
+   const controls=[];let pending:ReturnType<typeof api>|undefined;
+   try{
+    await pool.query('ALTER SEQUENCE worldact_archive_b_calls RESTART WITH 1');await pool.query('ALTER SEQUENCE worldact_archive_body_finished RESTART WITH 1');await pool.query('UPDATE worldact_archive_gate SET enabled=true');
+    for(const call of [1,2]){const control=await pool.connect();await control.query('BEGIN');await control.query('SELECT pg_advisory_xact_lock(hashtext($1))',['worldact-extra-archive-'+call]);controls.push(control);}
+    async function observed(call:number){await waitFor("SELECT EXISTS(SELECT 1 FROM pg_stat_activity a JOIN pg_locks l ON l.pid=a.pid WHERE a.datname=current_database() AND a.wait_event='advisory' AND l.locktype='advisory' AND NOT l.granted AND l.objid=(hashtext('worldact-extra-archive-"+call+"')::bigint&4294967295)::oid) AS ok");}
+    pending=api('/api/public/site','GET',undefined,cookie);await observed(1);await waitFor('SELECT is_called AS ok FROM worldact_archive_body_finished');
+    await pool.query("UPDATE post_access_tokens SET expires_at=clock_timestamp()-interval '1 second' WHERE post_id=$1",[a.id]);await controls[0].query('COMMIT');
+    await observed(2);await pool.query('UPDATE posts SET password_hash=NULL WHERE id=$1',[a.id]);await controls[1].query('COMMIT');
+    const result=await pending;assert.equal(result.response.status,409,result.text);assert.equal(result.text.includes(secret),false);assert.equal(result.text.includes('"posts"'),false);
+   }finally{for(const control of controls){await control.query('ROLLBACK');control.release();}if(pending)await pending.catch(()=>{});await pool.query('UPDATE worldact_archive_gate SET enabled=false');}
+  });
+
+ }finally{
+  if(views){const restore=await pool.connect();try{await restore.query('BEGIN');await restore.query('DROP VIEW users');await restore.query('ALTER TABLE worldact_archive_actual_users RENAME TO users');await restore.query('DROP VIEW extensions');await restore.query('ALTER TABLE worldact_archive_actual_extensions RENAME TO extensions');await restore.query('DROP FUNCTION worldact_archive_nicename(varchar)');await restore.query('DROP FUNCTION worldact_archive_extension(varchar,jsonb)');await restore.query('DROP TABLE worldact_archive_gate');await restore.query('DROP SEQUENCE worldact_archive_body_finished');await restore.query('DROP SEQUENCE worldact_archive_b_calls');await restore.query('COMMIT');}catch(e){await restore.query('ROLLBACK');throw e;}finally{restore.release();}}
+  for(const document of documents)await pool.query('UPDATE site_documents SET content=$2,raw_content=$3,blocks=$4 WHERE id=$1',[document.id,document.content,document.raw_content,JSON.stringify(document.blocks)]);if(createdDocuments.length)await pool.query('DELETE FROM site_documents WHERE id=ANY($1::int[])',[createdDocuments]);await pool.query('UPDATE settings SET data=$1 WHERE id=1',[settings]);if(reading)await pool.query("UPDATE extensions SET enabled=$1,settings=$2 WHERE slug='reading-time'",[reading.enabled,reading.settings]);else await pool.query("DELETE FROM extensions WHERE slug='reading-time'");
+  if(posts.length)await pool.query('DELETE FROM posts WHERE id=ANY($1::int[])',[posts]);if(people.length)await pool.query('DELETE FROM users WHERE id=ANY($1::int[])',[people]);for(const post of oldPosts)await pool.query('UPDATE posts SET status=$2 WHERE id=$1',[post.id,post.status]);
+ }
+});
+
+test('accumulated final policies retain supplied transaction visibility and never expose hashes',async()=>{
+ const client=await pool.connect();await client.query('BEGIN');
+ try{
+  const author=(await client.query("SELECT id FROM users ORDER BY id LIMIT 1")).rows[0].id;
+  const post=(await client.query("INSERT INTO posts(type,title,slug,content,status,author_id,published_at) VALUES('post','uncommitted accumulation','uncommitted-accumulation','transaction-secret','publish',$1,clock_timestamp()) RETURNING id,type,author_id AS \"authorId\",password_hash IS NOT NULL AS \"hasPassword\"",[author])).rows[0];
+  assert.equal((await pool.query('SELECT 1 FROM posts WHERE id=$1',[post.id])).rowCount,0);
+  const requestReader=postAccessReader({headers:{cookie:''}});
+  const policy=await currentPublicPostPolicies([post.id],requestReader,client);
+  assert.equal(policy.length,1);assert.deepEqual(Object.keys(policy[0]).sort(),['authorId','hasPassword','id','locked','type']);
+  assert.equal((await currentPublicPostPolicies([post.id],requestReader)).length,0);
+  let attempts=0;
+  const result=await completePublicRead(async()=>true,async reader=>{
+   attempts++;const row=(await client.query('SELECT id,type,author_id AS \"authorId\",password_hash IS NOT NULL AS \"hasPassword\" FROM posts WHERE id=$1',[post.id])).rows[0];
+   observePublicPost(reader,{...row,locked:false});
+   if(attempts===1)await client.query('UPDATE posts SET password_hash=$2 WHERE id=$1',[post.id,'server-private-transaction-hash']);
+   return {content:'transaction-secret',hasPassword:row.hasPassword};
+  },client);
+  assert.equal(attempts,2);assert.equal(result.hasPassword,true);assert.equal(result.content,'transaction-secret');
+  assert.equal(JSON.stringify(policy).includes('hash'),false);
+ }finally{await client.query('ROLLBACK');client.release();}
+});

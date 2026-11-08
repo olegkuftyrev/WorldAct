@@ -25,6 +25,7 @@ import { prepareShortcodeDocument } from "./shortcodes.js";
 import { hasShortcodes } from "./shortcode-parser.js";
 import { applyBlockBindings, patternOverrides, type PatternOverrides } from "./block-bindings.js";
 import { publicPaginationLocation } from "./public-pagination.js";
+import {completePublicRead,observePublicPost} from "./public-read-attempt.js";
 
 export type BlockDatabase = Pick<pg.Pool, "query"> | pg.PoolClient;
 export type RenderPost = Record<string, any>;
@@ -317,6 +318,7 @@ async function cached<T>(
   return state.cache.get(key)!;
 }
 async function postURL(post: RenderPost, state: State) {
+  if(!state.options.preview)observePublicPost(state.options.canReadProtectedPost,post,false);
   return cached(state, `link:${post.id}`, () =>
     postPermalink(post, state.settings, state.db),
   );
@@ -375,6 +377,7 @@ async function postForRender(post: RenderPost | null | undefined, state: State):
       ? await cached(state,`post-access:${post.id}`,()=>state.options.canReadProtectedPost!(post.id,state.db)):false);
     locked=!permitted;
   }
+  if(!state.options.preview)observePublicPost(state.options.canReadProtectedPost,{...post,locked});
   return locked?{...post,locked:true,content:"",rawContent:"",raw_content:"",blocks:[],excerpt:"",footnotes:[]}: {...post,locked:false};
 }
 async function queryPosts(
@@ -1241,10 +1244,11 @@ function storedStaticHTML(document: RenderDocument): string | undefined {
     ? cleanContent(raw)
     : undefined;
 }
-export async function renderSiteDocument(
-  document: RenderDocument,
-  options: RenderOptions = {},
-): Promise<string> {
+export function renderSiteDocument(document:RenderDocument,options:RenderOptions={}):Promise<string>{
+  if(options.preview || !options.canReadProtectedPost)return renderSiteDocumentOnce(document,options);
+  return completePublicRead(options.canReadProtectedPost,reader=>renderSiteDocumentOnce(document,{...options,canReadProtectedPost:reader}),options.db || pool);
+}
+async function renderSiteDocumentOnce(document:RenderDocument,options:RenderOptions={}):Promise<string>{
   const stored = storedStaticHTML(document);
   if (stored !== undefined) return stored;
   const state = await createState({
@@ -1264,10 +1268,12 @@ export async function renderSiteDocument(
     ), true,
   );
 }
-export async function renderPublicContent(
-  post: RenderPost,
-  options: RenderOptions = {},
-): Promise<string> {
+export function renderPublicContent(post:RenderPost,options:RenderOptions={}):Promise<string>{
+  if(options.preview || !options.canReadProtectedPost)return renderPublicContentOnce(post,options);
+  return completePublicRead(options.canReadProtectedPost,reader=>renderPublicContentOnce(post,{...options,canReadProtectedPost:reader}),options.db || pool);
+}
+async function renderPublicContentOnce(post:RenderPost,options:RenderOptions={}):Promise<string>{
+  if(!options.preview)observePublicPost(options.canReadProtectedPost,{...post,locked:postNeedsPassword(post)});
   let state:State|undefined;
   if(postNeedsPassword(post)){
     state=await createState({...options,placeholderBindings:false},post);

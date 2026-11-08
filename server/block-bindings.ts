@@ -4,6 +4,7 @@ import type { Context, Node, RenderPost, State } from "./block-renderer.js";
 import { cleanContent, HttpError } from "./utils.js";
 import { postNeedsPassword } from "./post-passwords.js";
 import { postPermalink } from "./permalinks.js";
+import {observePublicPost} from "./public-read-attempt.js";
 import { archiveTerm, termLink, type RenderTerm } from "./term-blocks.js";
 import { expandShortcodes } from "./shortcodes.js";
 
@@ -55,6 +56,7 @@ async function postValue(args: Record<string, any>, node: Node, context: Context
     COALESCE((SELECT jsonb_build_array(jsonb_build_object('slug',t.slug)) FROM terms t JOIN post_terms pt ON pt.term_id=t.id WHERE pt.post_id=p.id AND t.taxonomy='category' ORDER BY t.name,t.id LIMIT 1),'[]'::jsonb) AS categories
     FROM posts p WHERE p.id=$1`, [postId])).rows[0]);
   if (!post || !await readablePost(post, state)) return null;
+  if(!state.options.preview)observePublicPost(state.options.canReadProtectedPost,post,false);
   if (field === "link") return { value: await cached(state, `link:${postId}`, () => postPermalink(post, state.settings, state.db)) };
   const published = post.publishedAt ?? post.published_at ?? post.createdAt ?? post.created_at;
   const modified = post.updatedAt ?? post.updated_at ?? published;
