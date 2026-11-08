@@ -84,6 +84,7 @@ jobs:
           tests/public-document-data.test.ts
           tests/public-document-view.test.ts
           tests/public-document-ssr.test.ts
+          tests/native-continuation.test.ts
           tests/rss.test.ts tests/playlist-blocks.test.ts tests/audio-metadata.test.ts
           tests/outgoing-ping-protocol.test.ts tests/outgoing-pings.test.ts
           tests/incoming-pings.test.ts

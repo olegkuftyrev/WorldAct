@@ -45,7 +45,9 @@ test("actual Node HTML has all four persisted presentations, selected bodies, na
     for(const input of form.querySelectorAll('input[type="hidden"]'))body.set(input.getAttribute("name")!,input.getAttribute("value") || "");
     body.set("authorName","Actual SSR Native");body.set("authorEmail",f.stamp+"@example.test");body.set("content","SSR Native "+f.stamp);
     const saved=await fetch(base+form.getAttribute("action"),{method:"POST",redirect:"manual",headers:{Origin:origin,Referer:origin+route,"Content-Type":"application/x-www-form-urlencoded"},body});assert.equal(saved.status,303);
-    const rows=(await pool.query("SELECT parent_id FROM comments WHERE post_id=$1 AND content LIKE $2",[post.id,"%"+f.stamp+"%"])).rows;assert.equal(rows.length,1);assert.equal(rows[0].parent_id,parent);
+    const rows=(await pool.query("SELECT id,parent_id FROM comments WHERE post_id=$1 AND content LIKE $2",[post.id,"%"+f.stamp+"%"])).rows;assert.equal(rows.length,1);assert.equal(rows[0].parent_id,parent);
+    const returned=new URL(saved.headers.get("location")!,origin);assert.equal(returned.searchParams.get("p"),String(post.id));assert.equal(returned.searchParams.get("page"),"2");assert.equal(returned.searchParams.get("query-4-page"),"2");assert.equal(returned.searchParams.get("commentPage"),"1");assert.equal(returned.searchParams.get("replytocom"),null);assert.equal(returned.hash,"#comment-"+rows[0].id);
+    const afterSave=await get(returned.pathname+returned.search);assert.equal(afterSave.response.status,200);assert.ok(bootstrap(afterSave.html).comments.some(comment=>comment.id===rows[0].id));assert.match(parse(afterSave.html).querySelector("#root")!.textContent!,/SSR Native/);
     const unknown=await get("/missing-ssr-"+f.stamp);assert.equal(unknown.response.status,404);assert.equal(bootstrap(unknown.html).route.kind,"not-found");assert.match(parse(unknown.html).querySelector("#root")!.textContent!,/not found|found at this location/i);
   }finally{await f.dispose();}
 });
@@ -94,5 +96,19 @@ test("actual SSR keeps renderer overflow as bounded413 without partial successfu
     const post=await f.post(),content="<p>"+"b".repeat(8*1024*1024+1)+"</p>";
     await pool.query("UPDATE posts SET content=$2,raw_content=$2 WHERE id=$1",[post.id,content]);
     const result=await get("/?p="+post.id);assert.equal(result.response.status,413);assert.match(result.response.headers.get("content-type") || "",/application\/json/);assert.doesNotMatch(result.html,/<!doctype|worldact-public-document|bbbbbbbbbbbb/);assert.match(JSON.parse(result.html).error,/8 MiB/);
+  }finally{await f.dispose();}
+});
+
+
+test("native replies explicitly select the oldest root page when the default comment page is newest",async()=>{
+  const f=await approvalFixture("native-newest-default");
+  try {
+    await f.ok("/api/settings","PUT",{theme:"classic",frontPageMode:"posts",frontPageId:null,postsPageId:null,permalinkStructure:"",threadComments:true,threadDepth:3,paginateComments:true,commentsPerPage:1,commentOrder:"desc",defaultCommentPage:"newest",notifyComments:false,notifyModeration:false});
+    const post=await f.post();await f.ok("/api/posts/"+post.id,"PUT",{content:"<p>NATIVE NEWEST FIRST</p><!--nextpage--><p>NATIVE NEWEST SECOND</p>"});
+    const roots:number[]=[];for(const day of [1,2])roots.push((await pool.query("INSERT INTO comments(post_id,author_name,content,status,created_at) VALUES($1,'Native root','<p>Old root</p>','approved',$2) RETURNING id",[post.id,`2025-01-0${day}T12:00:00Z`])).rows[0].id);
+    const body=new URLSearchParams({postId:String(post.id),parentId:String(roots[0]),content:"Native newest reply "+f.stamp,redirect_to:`/?p=${post.id}&page=2&query-4-page=2`});
+    const saved=await fetch(base+"/wp-comments-post.php",{method:"POST",redirect:"manual",headers:{Origin:origin,Cookie:f.admin},body});assert.equal(saved.status,303);
+    const target=new URL(saved.headers.get("location")!,origin);assert.equal(target.searchParams.get("commentPage"),"1");assert.equal(target.searchParams.get("page"),"2");assert.equal(target.searchParams.get("query-4-page"),"2");
+    const fresh=await get(target.pathname+target.search),data=bootstrap(fresh.html);assert.equal(fresh.response.status,200);assert.equal(data.commentsPagination!.page,1);assert.ok(data.comments.some(comment=>comment.parentId===roots[0] && comment.content.includes(f.stamp)));assert.match(parse(fresh.html).querySelector("#root")!.textContent!,/NATIVE NEWEST SECOND/);assert.match(parse(fresh.html).querySelector("#root")!.textContent!,/Native newest reply/);
   }finally{await f.dispose();}
 });

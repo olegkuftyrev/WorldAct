@@ -2,14 +2,17 @@ import express, {type Response} from "express";
 import {z} from "zod";
 import {submitPublicComment,unlockPublicPost} from "./core.js";
 import {destroySession,type AuthRequest} from "./auth.js";
-import {getPost,getSettings} from "./db.js";
-import {postPermalink} from "./permalinks.js";
+import {nativePostReturn} from "./native-post-return.js";
 import {HttpError} from "./utils.js";
 import {authenticateLogin,loginRateLimit} from "./login.js";
 import {normalizeLoginRedirect} from "../shared/login-redirect.js";
 const router=express.Router();
 const origin=()=>new URL(process.env.APP_ORIGIN || "http://127.0.0.1:5173").origin;
 function localPath(value:unknown){return normalizeLoginRedirect(value,origin()) || "/";}
+function nativeRedirectInput(input:Record<string,unknown>):unknown {
+  if(Object.keys(input).some(key=>key.startsWith("redirect_to[")))return null;
+  return Object.hasOwn(input,"redirect_to") ? input.redirect_to : undefined;
+}
 router.use(["/wp-comments-post.php","/logout","/post-password","/public-login"],(req,res,next)=>{
   if(req.method!=="POST"){next();return;}
   let valid=req.headers.origin===origin();
@@ -32,12 +35,7 @@ router.post("/wp-comments-post.php",async(req:AuthRequest,res)=>{
   const response=new Proxy(res,{get(target,key){if(key==="status")return(code:number)=>{status=code;return response;};if(key==="json")return(value:unknown)=>{result=value;return response;};const value=Reflect.get(target,key,target);return typeof value==="function"?value.bind(target):value;}}) as Response;
   await submitPublicComment(req,response);
   if(status!==201 || !result?.comment)throw new HttpError(status,result?.error || "Unable to submit this comment.");
-  const post=await getPost(req.body.postId),settings=await getSettings();
-  if(!post)throw new HttpError(404,"Post not found.");
-  const path=await postPermalink(post,settings),url=new URL(path,origin());
-  if(result.comment.status!=="approved")url.searchParams.set("comment-status","pending");
-  url.hash=result.comment.status==="approved"?"comment-"+result.comment.id:"respond";
-  res.redirect(303,url.pathname+url.search+url.hash);
+  res.redirect(303,await nativePostReturn(req.body.postId,nativeRedirectInput(input),req.headers.referer,{comment:result.comment}));
 });
 router.post("/public-login",loginRateLimit,async(req,res)=>{
   const input=z.object({
@@ -58,11 +56,12 @@ router.post("/logout",async(req,res)=>{
   await destroySession(req,res);res.redirect(303,localPath(input.redirect_to));
 });
 router.post("/post-password",async(req,res)=>{
-  const input=z.object({postSlug:z.string().min(1).max(220),password:z.string().min(1).max(1024)}).strict().parse(req.body);
+  const fields=req.body || {}, values=Object.fromEntries(Object.entries(fields).filter(([key])=>!key.startsWith("redirect_to[")));
+  const input=z.object({postSlug:z.string().min(1).max(220),password:z.string().min(1).max(1024),redirect_to:z.unknown().optional()}).strict().parse(values);
   (req.params as Record<string,string>).slug=input.postSlug;req.body={password:input.password};let result:any;
   const response=new Proxy(res,{get(target,key){if(key==="json")return(value:unknown)=>{result=value;return response;};const value=Reflect.get(target,key,target);return typeof value==="function"?value.bind(target):value;}}) as Response;
   await unlockPublicPost(req,response);
   if(!result?.post)throw new HttpError(400,"Unable to unlock this post.");
-  res.redirect(303,await postPermalink(result.post,await getSettings()));
+  res.redirect(303,await nativePostReturn(result.post.id,nativeRedirectInput(fields),req.headers.referer));
 });
 export default router;
