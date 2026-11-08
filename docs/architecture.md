@@ -7,6 +7,7 @@ WorldAct 0.4 is an independent **React + TypeScript → Express + `pg` → Postg
 ```mermaid
 flowchart LR
     Browser[React admin and public site] -->|Same-origin API| API[Express Node API]
+    API -->|Server-rendered public HTML| Browser
     Browser -->|Lazy editor chunk| Gutenberg[Official Gutenberg React packages]
     API -->|Parameterized SQL| DB[(PostgreSQL 17)]
     API --> Files[Uploads and image derivatives]
@@ -19,11 +20,13 @@ Vite serves development at `127.0.0.1:5173` and proxies API, upload, REST, and f
 | Source                                                             | Responsibility                                                                            |
 | ------------------------------------------------------------------ | ----------------------------------------------------------------------------------------- |
 | `src/App.tsx`, `src/components/`                                   | Routing, authenticated admin shell, common controls, media/image UI                       |
-| `src/screens/`                                                     | Dashboard, posts/editor, taxonomies, platform settings/design, and public rendering       |
+| `src/screens/`                                                     | Dashboard, posts/editor, taxonomies, platform settings and design                         |
+| `src/public/`, `shared/public-document.ts`                           | Shared Node-safe public view, browser document ownership, hydration and enhancements      |
 | `src/editor/`                                                      | Lazy official Gutenberg integration, durable block contract, media adapter, site bindings |
 | `src/embeds.ts`, `src/publicLinks.ts`, `src/template.ts`           | Video-provider validation, public links and safe template binding                         |
 | `server/index.ts`, `server/auth.ts`                                | HTTP application, sessions, login, common middleware and bootstrap                        |
 | `server/core.ts`                                                   | Editorial workflows, access rules, taxonomies, revisions/autosaves, locks and scheduler   |
+| `server/public-read.ts`, `server/public-document-data.ts`, `server/render-public-document.tsx` | Direct authorized public reads, presentation models and complete HTML assembly |
 | `server/platform.ts`, `server/design.ts`                           | Profiles/settings, media, menus, site documents, extensions, tools and mail               |
 | `server/media-files.ts`, `server/permalinks.ts`, `server/utils.ts` | Derivatives/storage, routing, validation, sanitization and canonical block handling       |
 | `server/compat.ts`                                                 | REST compatibility subset, feeds, sitemap/robots, permalink resolver and WXR              |
@@ -39,6 +42,16 @@ Vite serves development at `127.0.0.1:5173` and proxies API, upload, REST, and f
 | `server/*schema.sql`                                               | Repeatable, additive PostgreSQL schema upgrades                                           |
 
 Migration runs atomically under a PostgreSQL advisory lock. Seeds use explicit markers and preserve existing content. `.env`, uploads, dependency directories, and build outputs are excluded from source control as configured by `.gitignore`.
+
+## Public documents
+
+The compiled Node server renders public GET/HEAD documents through a narrow shared React view. It reads the selected immutable post ID/type/publication separately from its body, resolves the actual request cookie and password grant, and projects only public presentation fields into an escaped, single-use JSON model. HTML authentication ignores application-password Basic credentials. Framework/admin/editor routes retain their JavaScript application shell, including the standalone login screen; the full administrative App is never rendered on the server. The same document service supplies `/api/public/document?path=...` for browser navigation and the Vite development client.
+
+Source templates remain opaque sanitized HTML islands; Classic uses the extracted shared JSX. Initial dates, selected body, block-query counters, comment window and eligible Reply context come from the same model. The assembler fills three checked compiler markers and completes all rendering before headers, with a 64 MiB complete-document limit in addition to existing 8 MiB fragment limits. Public documents use actual 200/404 statuses and private no-store headers; failed assembly returns the existing bounded error response.
+
+Every JavaScript-enabled public root waits behind an early compositor/inert gate for one fresh owned model validation. An unchanged model hydrates the existing nodes; a changed model replaces the gated tree. Departed route/account generations cannot reuse pending reads or mutation feedback. Pagehide gates immediately and persisted pageshow requires revalidation. A boot failure has an outside-root retry control whose essential styles ship in the head. With JavaScript genuinely disabled, authorized request-time HTML and native public forms remain available; previously delivered bytes cannot be revoked. This choice adds a validation request before JavaScript-enabled first paint. See [server rendering boundaries](../server/public-document-ssr.md) and [browser ownership](../src/public/README.md).
+
+Native comment/password303 returns validate the current public immutable post/type and reconstruct only recognized local context. Approved comments select the actual chronological saved-comment page; password returns retain positive Reply intent for fresh validation. Separate body and Query Loop counters survive. Independent browser review exercised real pagehide/Back/Forward, but this browser refused BFCache admission and reported persisted:false, so genuine BFCache restoration remains unverified.
 
 ## Editor and content representations
 
@@ -102,7 +115,7 @@ Administration-email changes retain the old contact until a 24-hour, hashed, sin
 | Editorial        | `/api/posts`, post revisions/autosave routes, `/api/terms`, `/api/comments`                             |
 | Media            | `/api/media`, image edit/restore routes, `/uploads/*`                                                   |
 | Design           | `/api/menus`, `/api/site-editor/*`, `/api/themes`, `/api/plugins`                                       |
-| Public           | `/api/public/site`, posts/unlock/comments, `/api/public/design`, `/api/public/resolve`                  |
+| Public           | `/api/public/document`, `/api/public/site`, posts/unlock/comments, `/api/public/design`, `/api/public/resolve` |
 | Tools            | `/api/tools/health`, mail, export/import and personal-data export                                       |
 | Privacy          | `/api/tools/privacy/requests/*`, `/api/privacy/confirm`, private expiring download links                 |
 | Compatibility    | `/wp-json/wp/v2` subset for content/media/terms/comments, block renderers/entities, settings and template parts |
