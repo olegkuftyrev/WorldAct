@@ -4,6 +4,7 @@ import {
   useCallback,
   useContext,
   useEffect,
+  useLayoutEffect,
   useImperativeHandle,
   useMemo,
   useRef,
@@ -87,6 +88,7 @@ import { ClassicSupport } from "./classic/ClassicSupport";
 import { NativeClassicEdit } from "./classic/NativeClassic";
 import { useNativeMediaEditor, NativeBlockEditorProvider as BlockEditorProvider } from "./media/NativeMediaEditor";
 import "./gutenberg.css";
+import type { EditorPreferences } from "../../shared/editor-preferences";
 
 export type { SerializedBlock, GutenbergBlock } from "./types";
 
@@ -871,6 +873,7 @@ function initialValue(blocks: SerializedBlock[] | null, html: string): Block[] {
   return value.length ? value : [createBlock("core/paragraph")];
 }
 
+
 const canvasCSS = `
 :root { --wp--style--global--content-size: 680px; --wp--style--global--wide-size: 1120px; --wp--preset--color--base: #fff; --wp--preset--color--contrast: #111; --wp--preset--color--accent-1: #ffee58; --wp--preset--color--accent-2: #f6cff4; --wp--preset--color--accent-3: #503aa8; --wp--preset--font-size--small: 14px; --wp--preset--font-size--medium: 20px; --wp--preset--font-size--large: 36px; --wp--preset--font-size--x-large: 48px; --wp--preset--font-size--xx-large: 64px; --wp--preset--spacing--20: 10px; --wp--preset--spacing--30: 20px; --wp--preset--spacing--40: 30px; --wp--preset--spacing--50: 40px; --wp--preset--spacing--60: 60px; --wp--preset--spacing--70: 80px; --wp--preset--spacing--80: 120px; }
 body { margin: 0; color: #1e1e1e; background: #fff; font-family: Georgia, 'Times New Roman', serif; font-size: 20px; line-height: 1.6; }
@@ -946,6 +949,9 @@ export type GutenbergEditorProps = {
   hidePatternManager?: boolean;
   entityContext?: EditorEntityContext | null;
   onEntitySaved?: () => void;
+  preferences?: EditorPreferences;
+  onModeChange?: (mode: "visual" | "text") => void;
+  onTypingChange?: (typing: boolean) => void;
 };
 
 function UndoIcon({ redo = false }: { redo?: boolean }) {
@@ -992,6 +998,12 @@ function EntityEditsObserver({ onDirty, postId, postType }: { onDirty: () => voi
       if (changes !== "[]") onDirty();
     }
   }, [changes, onDirty]);
+  return null;
+}
+
+function EditorTypingObserver({ onChange }: { onChange?: (typing: boolean) => void }) {
+  const typing = useSelect(select => select(blockEditorStore).isTyping(), []);
+  useEffect(() => { onChange?.(typing); }, [typing, onChange]);
   return null;
 }
 
@@ -1072,6 +1084,11 @@ const GutenbergSession = forwardRef<
     };
   }, [props.postId, props.postType, props.context]);
   const blocksRef = useRef(blocks);
+  const sourceRef = useRef(props.initialHTML || serialize(blocks));
+  const [source, setSource] = useState(sourceRef.current);
+  const codeMode = props.preferences?.editorMode === "text";
+  const codeModeRef = useRef(codeMode); codeModeRef.current = codeMode;
+  const codeInput = useRef<HTMLTextAreaElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const onChangeRef = useRef(props.onChange);
   onChangeRef.current = props.onChange;
@@ -1110,8 +1127,8 @@ const GutenbergSession = forwardRef<
     setReadyEntity(entityKey);
   },[previewContext,nativeFootnotes,entityKey]);
   useEffect(()=>()=>removeEditorPreview(previewOwner.current),[]);
-  const history = useRef({ items: [{blocks,footnotes:footnotesRef.current}], index: 0, lastInput: 0 });
-  const signature = useRef(JSON.stringify([toStored(blocks),footnotesRef.current]));
+  const history = useRef({ items: [{blocks,footnotes:footnotesRef.current,source:sourceRef.current}], index: 0, lastInput: 0 });
+  const signature = useRef(JSON.stringify([toStored(blocks),footnotesRef.current,sourceRef.current]));
   const writeNativeFootnotes=useCallback(async (footnotes:Footnote[])=>{
     const {id,type}=currentPost.current;if(!id || !metadataRef.current)return;
     const record=select(coreDataStore).getEditedEntityRecord("postType",type,id) as {meta?:Record<string,unknown>} | false;
@@ -1138,25 +1155,31 @@ const GutenbergSession = forwardRef<
   );
 
   const emit = useCallback(
-    (next: Block[], kind: HistoryMode, noteSnapshot?:Footnote[]) => {
+    (next: Block[], kind: HistoryMode, noteSnapshot?:Footnote[], rawSource?:string) => {
+      if (codeModeRef.current && rawSource === undefined && kind !== "history") return;
       let footnotes=noteSnapshot || footnotesRef.current;
       if(metadataRef.current) {
         try {
-          const synchronized=synchronizeFootnotes(next,serialize(next),footnotes,deletedFootnotes.current,(html)=>new DOMParser().parseFromString(html,"text/html"),{read:(value)=>value instanceof RichTextData?value.toHTMLString():null,write:(html)=>RichTextData.fromHTMLString(html)});
+          const synchronized=synchronizeFootnotes(next,rawSource ?? serialize(next),footnotes,deletedFootnotes.current,(html)=>new DOMParser().parseFromString(html,"text/html"),{read:(value)=>value instanceof RichTextData?value.toHTMLString():null,write:(html)=>RichTextData.fromHTMLString(html)});
           next=synchronized.blocks;footnotes=synchronized.footnotes;
         } catch(reason){reportError(reason instanceof Error?reason.message:"Footnotes could not be updated.");return;}
       }
+      const stored = toStored(next);
+      const nextSource = rawSource ?? serialize(next);
+      const recovery = (items: Block[]): unknown => items.map(block => [block.isValid, block.originalContent, recovery(block.innerBlocks || [])]);
+      const unchangedNative = JSON.stringify([stored,footnotes,recovery(next)]) === JSON.stringify([toStored(blocksRef.current),footnotesRef.current,recovery(blocksRef.current)]);
       setBlocks(next);
       blocksRef.current = next;
-      const stored = toStored(next);
-      const nextSignature = JSON.stringify([stored,footnotes]);
+      if (rawSource === undefined && unchangedNative) return;
+      const nextSignature = JSON.stringify([stored,footnotes,nextSource]);
       if (signature.current === nextSignature) return;
       signature.current = nextSignature;
+      sourceRef.current = nextSource; setSource(nextSource);
       footnotesRef.current=footnotes;
       void writeNativeFootnotes(footnotes);
-      recordBlockHistory(history.current, {blocks:next,footnotes}, kind);
+      recordBlockHistory(history.current, {blocks:next,footnotes,source:nextSource}, kind);
       setHistoryVersion((value) => value + 1);
-      onChangeRef.current(stored, serialize(next));
+      onChangeRef.current(stored, nextSource);
       metadataRef.current?.(footnotes);
     },
     [reportError,writeNativeFootnotes],
@@ -1206,7 +1229,7 @@ const GutenbergSession = forwardRef<
       }
       state.index = nextIndex;
       state.lastInput = 0;
-      emit(state.items[nextIndex].blocks, "history",state.items[nextIndex].footnotes);
+      emit(state.items[nextIndex].blocks, "history",state.items[nextIndex].footnotes,state.items[nextIndex].source);
     },
     [emit],
   );
@@ -1250,14 +1273,14 @@ const GutenbergSession = forwardRef<
       undo: () => travel(-1),
       redo: () => travel(1),
       getBlocks: () => toStored(blocksRef.current),
-      getHTML: () => serialize(blocksRef.current),
+      getHTML: () => sourceRef.current,
       getFootnotes: () => footnotesRef.current.map(note=>({...note})),
       acknowledgeFootnotes:(saved,sent)=>{
         const {id,type}=currentPost.current;if(!id)return;
         const record=select(coreDataStore).getEntityRecord("postType",type,id) as any;if(!record)return;
         if(JSON.stringify(footnotesRef.current)===JSON.stringify(sent)){
           footnotesRef.current=readFootnotes(saved);
-          signature.current=JSON.stringify([toStored(blocksRef.current),footnotesRef.current]);
+          signature.current=JSON.stringify([toStored(blocksRef.current),footnotesRef.current,sourceRef.current]);
         }
         void dispatch(coreDataStore).receiveEntityRecords("postType",type,{...record,meta:{...record.meta,footnotes:JSON.stringify(saved)}},undefined,false,{meta:{...record.meta,footnotes:JSON.stringify(sent)}});
       },
@@ -1449,7 +1472,10 @@ const GutenbergSession = forwardRef<
           : [...WORLDAct_CONTENT_BLOCKS, ...WORLDAct_DYNAMIC_BLOCKS]),
       alignWide: true,
       supportsLayout: true,
-      hasFixedToolbar: true,
+      hasFixedToolbar: props.preferences ? props.preferences.fixedToolbar || props.preferences.distractionFree : true,
+      focusMode: props.preferences?.focusMode || false,
+      distractionFree: props.preferences?.distractionFree || false,
+      keepCaretInsideBlock: props.preferences?.keepCaretInsideBlock || false,
       canLockBlocks: true,
       ...nativeMedia.settings,
       imageSizes: [
@@ -1553,7 +1579,7 @@ const GutenbergSession = forwardRef<
         ...(props.canvasCSS ? [{css:props.canvasCSS}] : []),
       ],
     }),
-    [mediaUpload, patterns, reusable, props.context, !!props.onMetadataChange, reportError, themeDocument, themeOverrides, props.canvasCSS, props.entityContext, nativeMedia.settings],
+    [mediaUpload, patterns, reusable, props.context, !!props.onMetadataChange, reportError, themeDocument, themeOverrides, props.canvasCSS, props.entityContext, props.preferences, nativeMedia.settings],
   );
 
   const keyDown = (event: KeyboardEvent<HTMLDivElement>) => {
@@ -1570,6 +1596,17 @@ const GutenbergSession = forwardRef<
       travel(event.shiftKey || event.key.toLowerCase() === "y" ? 1 : -1);
     }
   };
+  const previousCodeMode = useRef(codeMode);
+  useLayoutEffect(() => {
+    if (previousCodeMode.current === codeMode) return;
+    previousCodeMode.current = codeMode;
+    props.onTypingChange?.(false);
+    if (codeMode) codeInput.current?.focus();
+    else {
+      const canvas = containerRef.current?.querySelector<HTMLIFrameElement>('iframe[name="editor-canvas"]')?.contentDocument;
+      canvas?.querySelector<HTMLElement>('.is-selected [contenteditable="true"], [data-block][contenteditable="true"], .block-editor-writing-flow')?.focus();
+    }
+  }, [codeMode, props.onTypingChange]);
   // Reading this value keeps the toolbar in step with the ref-backed history.
   void historyVersion;
   // Native insertion restrictions read entity identity while their selectors
@@ -1589,13 +1626,14 @@ const GutenbergSession = forwardRef<
           onChange={(next, options) => emit(next, options?.undoIgnore ? "ignore" : "change")}
           settings={settings}
         >
+          <EditorTypingObserver onChange={props.onTypingChange}/>
           <EntityEditsObserver
             postId={props.postId}
             postType={props.postType || "post"}
             onDirty={() =>
               onChangeRef.current(
                 toStored(blocksRef.current),
-                serialize(blocksRef.current),
+                sourceRef.current,
               )
             }
           />
@@ -1628,22 +1666,22 @@ const GutenbergSession = forwardRef<
                 />
                 <Button
                   label="Undo"
-                  icon={<UndoIcon />}
+                  icon={props.preferences?.showIconLabels ? undefined : <UndoIcon />}
                   disabled={
                     history.current.index < 1 &&
                     !(entityHistory.dirty && entityHistory.undo)
                   }
                   onClick={() => travel(-1)}
-                />
+                >{props.preferences?.showIconLabels ? "Undo" : undefined}</Button>
                 <Button
                   label="Redo"
-                  icon={<UndoIcon redo />}
+                  icon={props.preferences?.showIconLabels ? undefined : <UndoIcon redo />}
                   disabled={
                     history.current.index >= history.current.items.length - 1 &&
                     !(entityHistory.dirty && entityHistory.redo)
                   }
                   onClick={() => travel(1)}
-                />
+                >{props.preferences?.showIconLabels ? "Redo" : undefined}</Button>
                 {!props.hidePatternManager && (
                   <Button
                     onClick={() => {
@@ -1655,11 +1693,12 @@ const GutenbergSession = forwardRef<
                   </Button>
                 )}
                 <span className="worldact-toolbar-divider" />
-                <div className="worldact-selected-block-toolbar">
+                {settings.hasFixedToolbar && !codeMode && <div className="worldact-selected-block-toolbar">
                   <BlockToolbar hideDragHandle />
-                </div>
+                </div>}
               </div>
-              <div className="worldact-gutenberg-workspace">
+              {codeMode && <div className="worldact-code-editor"><div className="worldact-code-editor-header"><span>Editing code</span><Button variant="tertiary" onClick={() => props.onModeChange?.("visual")}>Exit code editor</Button></div><label className="screen-reader-text" htmlFor="worldact-post-content">Type text or HTML</label><textarea id="worldact-post-content" ref={codeInput} className="editor-post-text-editor" aria-label="Type text or HTML" autoComplete="off" spellCheck={false} dir="auto" value={source} placeholder="Start writing with text or HTML" onChange={event => emit(parseEditorSource(event.target.value), "input", undefined, event.target.value)} onKeyDown={event => { if ((event.metaKey || event.ctrlKey) && !event.altKey && ["z", "y"].includes(event.key.toLowerCase())) { event.preventDefault(); travel(event.shiftKey || event.key.toLowerCase() === "y" ? 1 : -1); } }} /></div>}
+              <div className="worldact-gutenberg-workspace" hidden={codeMode}>
                 {(props.inserterOpen || props.listViewOpen) && (
                   <aside
                     className="worldact-gutenberg-outline"
@@ -1696,9 +1735,9 @@ const GutenbergSession = forwardRef<
                   </aside>
                 )}
               </div>
-              <div className="worldact-gutenberg-breadcrumb">
+              {!codeMode && props.preferences?.showBlockBreadcrumbs !== false && !props.preferences?.distractionFree && <div className="worldact-gutenberg-breadcrumb">
                 <BlockBreadcrumb />
-              </div>
+              </div>}
               </>}
             </div>
           </BlockContextProvider>

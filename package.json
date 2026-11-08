@@ -43,6 +43,7 @@
     "@wordpress/media-editor": "0.22.0",
     "@wordpress/media-fields": "0.24.0",
     "@wordpress/notices": "6.1.0",
+    "@wordpress/preferences": "5.1.0",
     "@wordpress/rich-text": "8.1.0",
     "@wordpress/shortcode": "5.1.0",
     "@wordpress/ui": "0.26.0",

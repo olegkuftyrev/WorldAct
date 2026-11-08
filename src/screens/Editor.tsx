@@ -33,6 +33,10 @@ import {
   errorText,
 } from "../components/AdminUI";
 import GutenbergEditor, {type GutenbergEditorHandle} from "../editor/GutenbergEditor";
+import EditorOptions from "../editor/EditorOptions";
+import { useEditorPreferences } from "../editor/EditorPreferences";
+import { useEditorShortcuts } from "../editor/editorShortcuts";
+import type { EditorPreferencePatch } from "../editor/preferenceQueue";
 
 type DocumentState = {
   title: string;
@@ -280,6 +284,9 @@ export default function Editor({ type }: { type: "post" | "page" }) {
   const { id } = useParams(),
     navigate = useNavigate(),
     { user } = useContext(Session);
+  const preferences = useEditorPreferences(), options = preferences.value;
+  const editorRoot = useRef<HTMLDivElement>(null);
+  const [optionsDialog, setOptionsDialog] = useState<"preferences" | "shortcuts" | null>(null), [typing, setTyping] = useState(false);
   const canPublish =
     user?.role === "administrator" ||
     user?.role === "editor" ||
@@ -307,6 +314,21 @@ export default function Editor({ type }: { type: "post" | "page" }) {
     [inspectorTab, setInspectorTab] = useState<"post" | "block">("post"),
     [inserter, setInserter] = useState(false),
     [listView, setListView] = useState(false);
+  const listViewIntent = useRef(false), listViewInitialized = useRef(false);
+  useEffect(() => {
+    if (preferences.loading || listViewInitialized.current) return;
+    listViewInitialized.current = true;
+    if (!listViewIntent.current && !options.distractionFree && matchMedia("(min-width:782px)").matches) setListView(options.showListViewByDefault);
+  }, [preferences.loading, options.showListViewByDefault, options.distractionFree]);
+  useEffect(() => { if (options.distractionFree) { setInserter(false); setListView(false); } }, [options.distractionFree]);
+  const updatePreference = (patch: EditorPreferencePatch) => { if (patch.editorMode && patch.editorMode !== options.editorMode) { const frame = editorRoot.current?.querySelector<HTMLIFrameElement>('iframe[name="editor-canvas"]'); (frame?.contentDocument?.activeElement as HTMLElement | null)?.blur(); } if (patch.distractionFree === true) { setInserter(false); setListView(false); } setTyping(false); preferences.update(patch); };
+  useEditorShortcuts(editorRoot, action => {
+    if (action === "mode") updatePreference({ editorMode: options.editorMode === "visual" ? "text" : "visual" });
+    else if (action === "distraction") updatePreference({ distractionFree: !options.distractionFree });
+    else if (action === "help") setOptionsDialog("shortcuts");
+    else if (options.distractionFree) { setTyping(false); requestAnimationFrame(() => editorRoot.current?.querySelector<HTMLButtonElement>('.worldact-editor-options button')?.focus()); }
+    else return false;
+  }, !!user && !loading);
   const [media, setMedia] = useState<Media[]>([]),
     [terms, setTerms] = useState<Term[]>([]),
     [pages, setPages] = useState<Post[]>([]),
@@ -358,9 +380,14 @@ export default function Editor({ type }: { type: "post" | "page" }) {
   );
   useEffect(()=>()=>{loadGeneration.current++;},[]);
   const change = useCallback((patch: Partial<DocumentState>) => {
-    setDoc((current) => ({ ...current, ...patch }));
+    docRef.current = { ...docRef.current, ...patch };
+    setDoc(docRef.current);
     setDirty(true);
     setNotice("");
+  }, []);
+  const documentSnapshot = useCallback((): DocumentState => {
+    const editor = blockEditor.current, current = docRef.current;
+    return editor ? { ...current, content: editor.getHTML(), blocks: editor.getBlocks(), footnotes: editor.getFootnotes() } : current;
   }, []);
   function applyPost(post: Post) {
     setDoc(postDocument(post));
@@ -378,6 +405,7 @@ export default function Editor({ type }: { type: "post" | "page" }) {
       return;
     }
     const generation = ++loadGeneration.current;
+    busyRef.current = false; setBusy(false); setOptionsDialog(null); setTyping(false);
     setError("");
     setNotice("");
     setRecovery(null);
@@ -503,7 +531,7 @@ export default function Editor({ type }: { type: "post" | "page" }) {
   useEffect(() => {
     if (!dirty || loading) return;
     const timeout = window.setTimeout(() => {
-      const current = docRef.current;
+      const current = documentSnapshot();
       try {
         localStorage.setItem(
           storageKey(idRef.current),
@@ -522,7 +550,7 @@ export default function Editor({ type }: { type: "post" | "page" }) {
       }
     }, 700);
     return () => window.clearTimeout(timeout);
-  }, [doc, dirty, loading, storageKey]);
+  }, [doc, dirty, loading, storageKey, documentSnapshot]);
   function payload(current: DocumentState, nextStatus: Post["status"]) {
     const effective =
       nextStatus === "publish" && current.visibility === "private"
@@ -548,7 +576,7 @@ export default function Editor({ type }: { type: "post" | "page" }) {
   const ensureDraft = useCallback((): Promise<number> => {
     if(idRef.current)return Promise.resolve(idRef.current);
     if(draftCreation.current)return draftCreation.current;
-    const snapshot=docRef.current,generation=loadGeneration.current;
+    const snapshot=documentSnapshot(),generation=loadGeneration.current;
     draftCreation.current=api<{post:Post}>("/posts",json("POST",payload(snapshot,"draft"))).then(({post})=>{
       if(loadGeneration.current!==generation)return post.id;
       idRef.current=post.id;versionRef.current=post.version;
@@ -559,7 +587,7 @@ export default function Editor({ type }: { type: "post" | "page" }) {
       return post.id;
     }).finally(()=>{draftCreation.current=null;});
     return draftCreation.current;
-  },[base,navigate,storageKey,type]);
+  },[base,navigate,storageKey,type,documentSnapshot]);
   useEffect(()=>{
     if(loading || !dirty || recovery || idRef.current)return;
     const current=docRef.current;
@@ -572,6 +600,7 @@ export default function Editor({ type }: { type: "post" | "page" }) {
     if (loading || !dirty || recovery || !lease.ready) return;
     const timeout = window.setTimeout(async () => {
       if (busyRef.current || !dirtyRef.current || !leaseReady.current) return;
+      const generation = loadGeneration.current;
       const current = docRef.current;
       if (!current.title.trim() && !current.content.trim()) return;
       busyRef.current = true;
@@ -580,9 +609,10 @@ export default function Editor({ type }: { type: "post" | "page" }) {
         if (!idRef.current) {
           await ensureDraft();
         }
+        if (generation !== loadGeneration.current) return;
         if (idRef.current && !leaseReady.current && !(await lease.retry()))
           return;
-        const latest = docRef.current;
+        const latest = documentSnapshot();
         const { autosave } = await api<{ autosave: Autosave }>(
           `/posts/${idRef.current}/autosave`,
           json("PUT", {
@@ -594,15 +624,16 @@ export default function Editor({ type }: { type: "post" | "page" }) {
             version: versionRef.current,
           }),
         );
-        setAutosavedAt(autosave.savedAt);
+        if (generation === loadGeneration.current) setAutosavedAt(autosave.savedAt);
       } catch (e) {
+        if (generation !== loadGeneration.current) return;
         if (e instanceof ApiError && e.status === 409)
           await lease.checkConflict();
         setAutosaveError(
           `Autosave failed: ${errorText(e)} Your changes are stored in this browser.`,
         );
       } finally {
-        busyRef.current = false;
+        if (generation === loadGeneration.current) busyRef.current = false;
       }
     }, 8000);
     return () => window.clearTimeout(timeout);
@@ -618,21 +649,24 @@ export default function Editor({ type }: { type: "post" | "page" }) {
     lease.retry,
     lease.checkConflict,
     ensureDraft,
+    documentSnapshot,
   ]);
   const loadRevisions = useCallback(async () => {
     if (!idRef.current) return;
+    const generation = loadGeneration.current;
     setRevisionBusy(true);
     setRevisionError("");
     try {
       const data = await api<{ revisions: Revision[] }>(
         `/posts/${idRef.current}/revisions`,
       );
+      if (generation !== loadGeneration.current) return;
       setRevisions(data.revisions);
       setRevision(data.revisions[0] || null);
     } catch (e) {
-      setRevisionError(errorText(e));
+      if (generation === loadGeneration.current) setRevisionError(errorText(e));
     } finally {
-      setRevisionBusy(false);
+      if (generation === loadGeneration.current) setRevisionBusy(false);
     }
   }, []);
   async function save(nextStatus: Post["status"]) {
@@ -657,15 +691,18 @@ export default function Editor({ type }: { type: "post" | "page" }) {
     setError("");
     setNotice("");
     setConflict(false);
-    const snapshot = docRef.current,
-      fingerprint = JSON.stringify(snapshot),
-      wasNew = !idRef.current;
+    const generation = loadGeneration.current, wasNew = !idRef.current;
     try {
+      await blockEditor.current?.flushEntities();
+      if (generation !== loadGeneration.current) return;
+      const snapshot = documentSnapshot(), fingerprint = JSON.stringify(snapshot);
       const currentId = idRef.current || await ensureDraft();
+      if (generation !== loadGeneration.current) return;
       const { post } = await api<{ post: Post }>(
         currentId ? `/posts/${currentId}` : "/posts",
         json(currentId ? "PUT" : "POST", payload(snapshot, nextStatus)),
       );
+      if (generation !== loadGeneration.current) return;
       setPostId(post.id);
       setPermalink(postLink(post));
       idRef.current = post.id;
@@ -702,17 +739,18 @@ export default function Editor({ type }: { type: "post" | "page" }) {
         await api(`/posts/${post.id}/autosave`, json("DELETE")).catch(() => {});
       }
       if (wasNew) {
+        if (generation !== loadGeneration.current) return;
         createdRoute.current = post.id;
         navigate(`${base}/${post.id}`, { replace: true });
       }
     } catch (e) {
+      if (generation !== loadGeneration.current) return;
       setError(errorText(e));
       if (e instanceof ApiError && e.status === 409) {
         if (!(await lease.checkConflict())) setConflict(true);
       }
     } finally {
-      busyRef.current = false;
-      setBusy(false);
+      if (generation === loadGeneration.current) { busyRef.current = false; setBusy(false); }
     }
   }
   function leave() {
@@ -721,17 +759,19 @@ export default function Editor({ type }: { type: "post" | "page" }) {
   }
   async function previewChanges() {
     if(busyRef.current || !leaseReady.current || !idRef.current)return;
-    const tab=window.open("about:blank","_blank");
+    const recordId=idRef.current,generation=loadGeneration.current,tab=window.open("about:blank","_blank");
     if(tab)tab.opener=null;
     busyRef.current=true;setBusy(true);setError("");
     try {
-      const snapshot=docRef.current;
-      const {autosave}=await api<{autosave:Autosave}>(`/posts/${idRef.current}/autosave`,json("PUT",{title:snapshot.title,content:snapshot.content,excerpt:snapshot.excerpt,blocks:snapshot.blocks || [],footnotes:snapshot.footnotes,version:versionRef.current}));
-      setAutosavedAt(autosave.savedAt);
-      if(tab)tab.location.replace(`/preview/${idRef.current}`);
-      else window.open(`/preview/${idRef.current}`,"_blank","noopener,noreferrer");
-    } catch(reason){tab?.close();setError(errorText(reason));if(reason instanceof ApiError && reason.status===409)await lease.checkConflict();}
-    finally{busyRef.current=false;setBusy(false);}
+      await blockEditor.current?.flushEntities();
+      if(generation!==loadGeneration.current){tab?.close();return;}
+      const snapshot=documentSnapshot();
+      const {autosave}=await api<{autosave:Autosave}>(`/posts/${recordId}/autosave`,json("PUT",{title:snapshot.title,content:snapshot.content,excerpt:snapshot.excerpt,blocks:snapshot.blocks || [],footnotes:snapshot.footnotes,version:versionRef.current}));
+      if(generation===loadGeneration.current)setAutosavedAt(autosave.savedAt);
+      if(tab)tab.location.replace(`/preview/${recordId}`);
+      else window.open(`/preview/${recordId}`,"_blank","noopener,noreferrer");
+    } catch(reason){tab?.close();if(generation===loadGeneration.current){setError(errorText(reason));if(reason instanceof ApiError && reason.status===409)await lease.checkConflict();}}
+    finally{if(generation===loadGeneration.current){busyRef.current=false;setBusy(false);}}
   }
   async function recover() {
     if (!recovery) return;
@@ -830,22 +870,25 @@ export default function Editor({ type }: { type: "post" | "page" }) {
       return;
     setRevisionBusy(true);
     setRevisionError("");
+    const generation = loadGeneration.current;
     try {
       const { post } = await api<{ post: Post }>(
         `/posts/${postId}/revisions/${revision.id}/restore`,
         json("POST", { version }),
       );
+      if (generation !== loadGeneration.current) return;
       applyPost(post);
       versionRef.current = post.version;
       setRevisionOpen(false);
       setNotice("Revision restored.");
       localStorage.removeItem(storageKey(post.id));
     } catch (e) {
+      if (generation !== loadGeneration.current) return;
       if (e instanceof ApiError && e.status === 409)
         await lease.checkConflict();
       setRevisionError(errorText(e));
     } finally {
-      setRevisionBusy(false);
+      if (generation === loadGeneration.current) setRevisionBusy(false);
     }
   }
   function isDescendant(candidate: Post) {
@@ -901,14 +944,25 @@ export default function Editor({ type }: { type: "post" | "page" }) {
         onClick={() => setSidebar(false)}
       >
         <Icon name="no-alt" />
+        {options.showIconLabels && <span>Close settings</span>}
       </button>
     </div>
   );
   const forbidden =
     !user || user.role === "subscriber" || (type === "page" && !canPages);
+  async function copyAllBlocks() {
+    const generation = loadGeneration.current, content = blockEditor.current?.getHTML() ?? docRef.current.content;
+    try {
+      if (!navigator.clipboard?.writeText) throw new Error("Clipboard access is unavailable.");
+      await navigator.clipboard.writeText(content);
+      if (generation === loadGeneration.current) setNotice("All content copied.");
+    } catch {
+      if (generation === loadGeneration.current) setError("Content could not be copied. Select the text in the Code editor and copy it with your keyboard.");
+    }
+  }
   return (
-    <div className={`block-editor-screen ${sidebar ? "with-sidebar" : ""}`}>
-      <header className="editor-header">
+    <div ref={editorRoot} className={`block-editor-screen ${sidebar && !options.distractionFree ? "with-sidebar" : ""} ${options.fullscreenMode || options.distractionFree ? "is-fullscreen-mode" : ""} ${options.distractionFree ? "is-distraction-free" : ""} ${options.distractionFree && typing && !optionsDialog ? "is-writing" : ""} ${options.showIconLabels ? "show-icon-labels" : ""} ${options.editorMode === "text" ? "is-code-mode" : ""}`} onMouseMove={() => { if (options.distractionFree) setTyping(false); }}>
+      <header className="editor-header" inert={options.distractionFree && typing && !optionsDialog}>
         <button
           className="editor-home"
           aria-label={`Back to ${type === "post" ? "posts" : "pages"}`}
@@ -924,9 +978,11 @@ export default function Editor({ type }: { type: "post" | "page" }) {
             onClick={() => {
               setInserter(!inserter);
               setListView(false);
+              if (options.distractionFree) updatePreference({ distractionFree: false });
             }}
           >
             <Icon name={inserter ? "no-alt" : "plus"} />
+            {options.showIconLabels && <span>{inserter ? "Close" : "Add block"}</span>}
           </button>
           <button
             className={`editor-icon-button ${listView ? "is-pressed" : ""}`}
@@ -935,9 +991,12 @@ export default function Editor({ type }: { type: "post" | "page" }) {
             onClick={() => {
               setListView(!listView);
               setInserter(false);
+              listViewIntent.current = true;
+              if (options.distractionFree) updatePreference({ distractionFree: false });
             }}
           >
             <Icon name="editor-ul" />
+            {options.showIconLabels && <span>List View</span>}
           </button>
           <span className="editor-document-name">
             {doc.title || (type === "post" ? "New post" : "New page")}{" "}
@@ -966,6 +1025,7 @@ export default function Editor({ type }: { type: "post" | "page" }) {
               aria-label="View published content"
             >
               <Icon name="external" />
+              {options.showIconLabels && <span>View {type}</span>}
             </Link>
           )}
           {postId && (
@@ -976,6 +1036,7 @@ export default function Editor({ type }: { type: "post" | "page" }) {
               onClick={() => void previewChanges()}
             >
               <Icon name="visibility" />
+              {options.showIconLabels && <span>Preview</span>}
             </button>
           )}
           <button
@@ -985,6 +1046,7 @@ export default function Editor({ type }: { type: "post" | "page" }) {
             onClick={() => setSidebar(!sidebar)}
           >
             <Icon name="admin-settings" />
+            {options.showIconLabels && <span>Settings</span>}
           </button>
           <button
             className="button button-primary"
@@ -993,6 +1055,7 @@ export default function Editor({ type }: { type: "post" | "page" }) {
           >
             {busy ? "Saving…" : primaryLabel}
           </button>
+          <EditorOptions value={options} update={updatePreference} disabled={loading || forbidden} dialog={optionsDialog} setDialog={setOptionsDialog} copy={() => void copyAllBlocks()}/>
         </div>
       </header>
       <main className="editor-main">
@@ -1005,6 +1068,7 @@ export default function Editor({ type }: { type: "post" | "page" }) {
           !loading && (
             <>
               <div className="editor-notices">
+                {preferences.error && <Notice error onDismiss={preferences.dismiss}>{preferences.error}</Notice>}
                 {postId && lease.status === "checking" && (
                   <Notice>Checking editing status…</Notice>
                 )}
@@ -1143,10 +1207,13 @@ export default function Editor({ type }: { type: "post" | "page" }) {
                     change({ blocks, content });
                 }}
                 media={media}
-                inserterOpen={inserter}
+                preferences={options}
+                onModeChange={editorMode => updatePreference({ editorMode })}
+                onTypingChange={setTyping}
+                inserterOpen={inserter && !options.distractionFree}
                 onInserterClose={() => setInserter(false)}
-                listViewOpen={listView}
-                inspectorOpen={sidebar && inspectorTab === "block"}
+                listViewOpen={listView && !options.distractionFree}
+                inspectorOpen={sidebar && inspectorTab === "block" && !options.distractionFree && options.editorMode !== "text"}
                 onUpload={canUpload ? upload : undefined}
                 onError={setError}
               />
@@ -1154,7 +1221,7 @@ export default function Editor({ type }: { type: "post" | "page" }) {
           )
         )}
       </main>
-      {sidebar && (
+      {sidebar && !options.distractionFree && (
         <aside
           className={`editor-settings ${inspectorTab === "block" ? "block-tab" : ""}`}
         >

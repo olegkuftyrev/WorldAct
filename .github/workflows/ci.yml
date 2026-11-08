@@ -75,6 +75,7 @@ jobs:
           tests/profile-email.test.ts tests/media-zero-dimensions.test.ts
           tests/profile-options.test.ts
           tests/editor-preferences.test.ts
+          tests/editor-options-ui.test.ts
           tests/media-format-preservation.test.ts
           tests/full-image-uploads.test.ts tests/media-upload-cleanup.test.ts
           tests/media-edit-transforms.test.ts tests/media-edit-copy.test.ts

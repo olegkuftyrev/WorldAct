@@ -1,0 +1,64 @@
+/* Source editor MoreMenu and preferences styles, with public TabPanel in place
+   of its private Tabs/store coupling. Source: wp-includes/css/dist/editor and
+   preferences/style.css; labels/composition: wp-includes/js/dist/editor.js. */
+.more-menu-dropdown__content .components-popover__content { min-width: 280px; max-width: calc(100vw - 24px); }
+.worldact-editor-options .components-button { color: #1e1e1e; }
+.worldact-editor-preferences .components-toggle-control { width: 100%; }
+.preference-base-option + .preference-base-option { margin-top: 16px; }
+.preferences-modal__section { border: 0; padding: 0; margin: 0 0 2.5rem; min-width: 0; }
+.preferences-modal__section:last-child { margin: 0; }
+.preferences-modal__section-legend { margin-bottom: 8px; }
+.preferences-modal__section-title { font-size: .9rem; font-weight: 600; margin-top: 0; }
+.preferences-modal__section-description { margin: -8px 0 8px; font-size: 12px; color: #757575; }
+.preferences__tabs > .components-tab-panel__tabs { position: absolute; top: 88px; left: 16px; width: 160px; display: flex; flex-direction: column; }
+.preferences__tabs > .components-tab-panel__tabs button { justify-content: flex-start; height: 40px; border-radius: 2px; }
+.preferences__tabs > .components-tab-panel__tabs button.is-active { background: #f0f0f0; box-shadow: none; }
+.preferences__tabs-tabpanel { padding-left: 24px; margin-left: 160px; }
+.worldact-editor-shortcuts dl > div { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 24px; padding: 12px 0; }
+.worldact-editor-shortcuts dd { margin: 0; }
+.worldact-editor-shortcuts kbd { font-family: inherit; font-size: 13px; white-space: nowrap; }
+.worldact-gutenberg-workspace[hidden] { display: none; }
+.worldact-code-editor { max-width: 1080px; margin: auto; padding: 16px 48px 80px; box-sizing: border-box; }
+.worldact-code-editor-header { display: flex; justify-content: space-between; align-items: center; font-size: 13px; margin-bottom: 16px; }
+.editor-post-text-editor { display: block; width: 100%; min-height: 55vh; box-sizing: border-box; border: 1px solid #949494; border-radius: 0; padding: 16px; font: 16px/1.8 Menlo, Consolas, Monaco, monospace; resize: vertical; color: #1e1e1e; background: #fff; }
+.editor-post-text-editor:focus { border-color: #1e1e1e; outline: 1px solid #1e1e1e; box-shadow: none; }
+.block-editor-screen.show-icon-labels .editor-icon-button, .block-editor-screen.show-icon-labels .editor-add { width: auto; min-width: 32px; gap: 6px; padding-inline: 8px; }
+.block-editor-screen.show-icon-labels .editor-actions, .block-editor-screen.show-icon-labels .editor-tools { gap: 6px; }
+.block-editor-screen.show-icon-labels .editor-icon-button > .dashicons, .block-editor-screen.show-icon-labels .editor-add > .dashicons { display: none; }
+.block-editor-screen.is-distraction-free .editor-main { margin-right: 0; }
+.block-editor-screen.is-distraction-free.is-writing .editor-header,
+.block-editor-screen.is-distraction-free.is-writing .worldact-gutenberg-toolbar,
+.block-editor-screen.is-distraction-free.is-writing .editor-status { visibility: hidden; }
+.block-editor-screen.is-distraction-free .worldact-gutenberg-toolbar { transition: none; }
+.worldact-editor-admin-shell:has(.is-fullscreen-mode) { padding-top: 0; }
+.worldact-editor-admin-shell:has(.is-fullscreen-mode) > #wpadminbar,
+.worldact-editor-admin-shell:has(.is-fullscreen-mode) > #adminmenumain,
+.worldact-editor-admin-shell > #wpfooter { display: none; }
+.worldact-editor-admin-shell #wpbody-content { padding-bottom: 0; }
+.worldact-editor-admin-shell #wpcontent { padding-left: 0; }
+.worldact-editor-admin-shell:has(.is-fullscreen-mode) #wpcontent { margin-left: 0; }
+.worldact-editor-admin-shell:not(:has(.is-fullscreen-mode)) .editor-header { top: 32px; left: 160px; }
+.worldact-editor-admin-shell.folded:not(:has(.is-fullscreen-mode)) .editor-header { left: 36px; }
+.worldact-editor-admin-shell:not(:has(.is-fullscreen-mode)) .editor-settings { top: 92px; }
+.worldact-editor-admin-shell:not(:has(.is-fullscreen-mode)) .worldact-gutenberg-inspector { top: 140px; }
+.worldact-editor-admin-shell:not(:has(.is-fullscreen-mode)) .block-editor-screen { min-height: calc(100vh - 32px); }
+@media (min-width: 600px) { .preferences-modal { width: calc(100% - 32px); height: calc(100% - 128px); } }
+@media (min-width: 782px) { .preferences-modal { width: 750px; } }
+@media (min-width: 960px) { .preferences-modal { height: 70%; } }
+@media (max-width: 781px) {
+  .preferences-modal .components-modal__content { padding: 0; }
+  .preferences__provider { height: 100%; }
+}
+@media (max-width: 782px) {
+  .worldact-editor-admin-shell:not(:has(.is-fullscreen-mode)) .editor-header { top: 46px; left: 0; }
+  .worldact-editor-admin-shell:not(:has(.is-fullscreen-mode)) .editor-settings { top: 106px; }
+  .worldact-editor-admin-shell:not(:has(.is-fullscreen-mode)) .worldact-gutenberg-inspector { top: 154px; }
+  .worldact-editor-admin-shell:not(:has(.is-fullscreen-mode)) .block-editor-screen { min-height: calc(100vh - 46px); }
+  .block-editor-screen.show-icon-labels .editor-header { height: auto; min-height: 60px; flex-wrap: wrap; }
+  .block-editor-screen.show-icon-labels .editor-home { min-height: 60px; }
+  .block-editor-screen.show-icon-labels .editor-actions { flex: 1 1 100%; justify-content: flex-end; padding: 4px 8px; border-top: 1px solid #eee; }
+  .block-editor-screen.show-icon-labels .editor-main { padding-top: 108px; }
+  .block-editor-screen.show-icon-labels .editor-settings { top: 108px; }
+  .worldact-code-editor { padding: 16px 24px 60px; }
+}
+@media (prefers-reduced-motion: reduce) { .block-editor-screen *, .worldact-editor-preferences * { scroll-behavior: auto; } }

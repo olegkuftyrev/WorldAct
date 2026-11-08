@@ -38,6 +38,7 @@ import {
 } from "./components/AdminUI";
 import Taxonomies from "./screens/Taxonomies";
 import BundledPluginNotices from "./components/BundledPluginNotices";
+import { EditorPreferencesProvider } from "./editor/EditorPreferences";
 import {
   useContext,
   useEffect,
@@ -167,6 +168,7 @@ export default function App() {
     );
   return (
     <Session.Provider value={{ user, setUser }}>
+      <EditorPreferencesProvider>
       <Suspense
         fallback={
           <div className="initial-loading">
@@ -244,7 +246,7 @@ export default function App() {
             path="/admin/posts/new"
             element={
               user ? (
-                <Editor type="post" />
+                <AdminShell editor><Editor type="post" /></AdminShell>
               ) : (
                 <Navigate
                   to="/login"
@@ -258,7 +260,7 @@ export default function App() {
             path="/admin/posts/:id"
             element={
               user ? (
-                <Editor type="post" />
+                <AdminShell editor><Editor type="post" /></AdminShell>
               ) : (
                 <Navigate
                   to="/login"
@@ -272,7 +274,7 @@ export default function App() {
             path="/admin/pages/new"
             element={
               user ? (
-                <Editor type="page" />
+                <AdminShell editor><Editor type="page" /></AdminShell>
               ) : (
                 <Navigate
                   to="/login"
@@ -286,7 +288,7 @@ export default function App() {
             path="/admin/pages/:id"
             element={
               user ? (
-                <Editor type="page" />
+                <AdminShell editor><Editor type="page" /></AdminShell>
               ) : (
                 <Navigate
                   to="/login"
@@ -316,6 +318,7 @@ export default function App() {
           <Route path="*" element={<PermalinkResolver />} />
         </Routes>
       </Suspense>
+      </EditorPreferencesProvider>
     </Session.Provider>
   );
 }
@@ -469,7 +472,7 @@ function Login({ serverError }: { serverError: string }) {
     </div>
   );
 }
-function AdminShell() {
+function AdminShell({ children, editor = false }: { children?: ReactNode; editor?: boolean }) {
   const { user, setUser } = useContext(Session),
     location = useLocation(),
     navigate = useNavigate();
@@ -598,7 +601,7 @@ function AdminShell() {
   return (
     <div
       id="wpwrap"
-      className={`${collapsed ? "folded" : ""} ${mobileMenu ? "mobile-open" : ""}`}
+      className={`${collapsed ? "folded" : ""} ${mobileMenu ? "mobile-open" : ""} ${editor ? "worldact-editor-admin-shell" : ""}`}
     >
       <div id="wpadminbar" className="nojq">
         <div
@@ -796,7 +799,7 @@ function AdminShell() {
               </Notice>
             )}
             <BundledPluginNotices />
-            <Outlet />
+            {children || <Outlet />}
           </div>
         </div>
       </div>

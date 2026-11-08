@@ -15,8 +15,8 @@ defaults. No existing preference row needs a migration.
 The fixed keys are `editorMode` (`visual` or `text`), `fixedToolbar`,
 `distractionFree`, `focusMode`, `fullscreenMode`, `showBlockBreadcrumbs`,
 `showListViewByDefault`, `showIconLabels` and `keepCaretInsideBlock`.
-They describe the forthcoming real editor integration; accepting a setting
-alone is not a claim that its visual control has passed native review.
+The post/page React integration is documented in `src/editor/options.md`.
+Independent native review remains a separate gate from API persistence.
 
 The guarded regression uses separate authenticated accounts and simultaneous
 partial updates to verify privacy and preservation of unrelated preferences.
