@@ -1,8 +1,8 @@
 import { createReduxStore, register, dispatch } from "@wordpress/data";
 
 type Preview = {id?:number|string;type?:string;templateId?:string|null;attributes?:Record<string,unknown>};
-// Some official block hooks read these selectors even when explicit block
-// context is supplied. This bridge exposes preview context, never save actions.
+// Official block hooks read the editing entity through these selectors. Block
+// previews have separate explicit context; this bridge never exposes saves.
 const store=createReduxStore("core/editor",{
   reducer:(state:Preview={},action:{type:string;value?:Preview})=>action.type==="WORLDACT_PREVIEW"?action.value || {}:state,
   actions:{setPreview:(value:Preview)=>({type:"WORLDACT_PREVIEW",value})},

@@ -41,6 +41,7 @@ import {
   useResource,
 } from "../components/AdminUI";
 import type { GutenbergEditorHandle } from "../editor/GutenbergEditor";
+import { siteDocumentEntity } from "../editor/entityContext";
 import "../platform.css";
 
 const BlockEditor = lazy(() => import("../editor/GutenbergEditor"));
@@ -1753,6 +1754,19 @@ const fontFamily = (font: string) =>
       ? "Georgia, serif"
       : `${JSON.stringify(font)}, sans-serif`;
 
+const templatePartAreas = [
+  ["uncategorized", "General"],
+  ["header", "Header"],
+  ["footer", "Footer"],
+  ["navigation-overlay", "Navigation Overlay"],
+] as const;
+type TemplatePartArea = NonNullable<SiteTemplate["area"]>;
+function TemplatePartAreaSelect({ value, onChange }: { value: TemplatePartArea; onChange: (area: TemplatePartArea) => void }) {
+  return <label>Area <select value={value} onChange={event => onChange(event.target.value as TemplatePartArea)}>
+    {templatePartAreas.map(([area,label]) => <option value={area} key={area}>{label}</option>)}
+  </select></label>;
+}
+
 export function SiteEditor() {
   const resource = useResource<Design>("/site-editor");
   const media = useResource<{ media: Media[] }>("/media");
@@ -1771,6 +1785,7 @@ export function SiteEditor() {
   const [creating, setCreating] = useState(false);
   const [newTitle, setNewTitle] = useState("");
   const [newType, setNewType] = useState<SiteTemplate["type"]>("pattern");
+  const [newArea,setNewArea] = useState<NonNullable<SiteTemplate["area"]>>("uncategorized");
   const editor = useRef<GutenbergEditorHandle>(null);
   const action = useAction();
   useEffect(() => {
@@ -1804,6 +1819,7 @@ export function SiteEditor() {
           slug,
           title,
           type,
+          ...(type==="template-part"?{area:selected.area || "uncategorized"}:{}),
           content: code
             ? selected.content
             : (editor.current?.getHTML() ?? selected.content),
@@ -1833,6 +1849,7 @@ export function SiteEditor() {
           slug,
           title: newTitle,
           type: newType,
+          ...(newType==="template-part"?{area:newArea}:{}),
           content: "",
           blocks: [],
         }),
@@ -2003,6 +2020,7 @@ export function SiteEditor() {
                       required
                       maxLength={200}
                       value={newTitle}
+                      type="text"
                       onChange={(e) => setNewTitle(e.target.value)}
                     />
                   </label>
@@ -2019,6 +2037,7 @@ export function SiteEditor() {
                       <option value="pattern">Pattern</option>
                     </select>
                   </label>
+                  {newType==="template-part" && <TemplatePartAreaSelect value={newArea} onChange={setNewArea}/>}
                   <button
                     className="button button-primary"
                     disabled={action.busy}
@@ -2039,6 +2058,7 @@ export function SiteEditor() {
                   >
                     <strong>{document.title}</strong>
                     <span>{document.slug}</span>
+                    {document.type==="template-part" && <small>{templatePartAreas.find(([area])=>area===(document.area || "uncategorized"))?.[1]}</small>}
                   </button>
                 ))}
               </div>
@@ -2048,6 +2068,7 @@ export function SiteEditor() {
                     <label>
                       Title{" "}
                       <input
+                        type="text"
                         value={selected.title}
                         onChange={(e) => {
                           setSelected({ ...selected, title: e.target.value });
@@ -2055,6 +2076,7 @@ export function SiteEditor() {
                         }}
                       />
                     </label>
+                    {selected.type==="template-part" && <TemplatePartAreaSelect value={selected.area || "uncategorized"} onChange={area=>{setSelected({...selected,area});setDirty(true);}}/>}
                     <div className="worldact-inline-actions">
                       <button
                         className={`button ${inserter ? "is-pressed" : ""}`}
@@ -2123,6 +2145,8 @@ export function SiteEditor() {
                     <Suspense fallback={<p>Loading block editor…</p>}>
                       <BlockEditor
                         context="site"
+                        entityContext={siteDocumentEntity(selected,resource.data?.theme?.id || "twentytwentyfive")}
+                        onEntitySaved={()=>void resource.reload()}
                         ref={editor}
                         initialBlocks={selected.blocks}
                         initialHTML={selected.content}

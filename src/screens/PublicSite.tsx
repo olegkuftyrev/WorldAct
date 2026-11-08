@@ -1,6 +1,7 @@
 import { renderTemplate } from "../template";
 import { parseVideoEmbed } from "../embeds";
 import { enhanceInteractiveBlocks } from "../interactiveBlocks";
+import { enhanceNavigationOverlays } from "../navigationOverlays";
 import "@wordpress/block-library/build-style/style.css";
 import "@wordpress/block-library/build-style/theme.css";
 import {
@@ -344,6 +345,7 @@ export default function PublicSite({
   useEffect(() => {
     const cleanups = [...document.querySelectorAll(".public-site .public-content")].map(enhanceArchives);
     cleanups.push(...[...document.querySelectorAll(".public-site .public-content")].map(enhanceInteractiveBlocks));
+    cleanups.push(...[...document.querySelectorAll(".public-site .public-content")].map(enhanceNavigationOverlays));
     return () => {for (const cleanup of cleanups) cleanup?.();};
   }, [post, site.data, design.data]);
   async function submit(event: FormEvent) {
@@ -1049,8 +1051,8 @@ function RenderedTemplate({
     };
   }, [request, document.updatedAt, preview]);
   useEffect(() => {
-    const archive = enhanceArchives(root.current), interactive = enhanceInteractiveBlocks(root.current);
-    return () => { archive?.(); interactive(); };
+    const archive = enhanceArchives(root.current), interactive = enhanceInteractiveBlocks(root.current), navigation=enhanceNavigationOverlays(root.current);
+    return () => { archive?.(); interactive(); navigation(); };
   }, [content, fallback, preview]);
   if (preview)
     return (
@@ -1142,45 +1144,6 @@ function enhanceArchives(root: ParentNode | null) {
   });
   return () => {for (const cleanup of cleanups) cleanup();};
 }
-function enhanceNavigation(root: HTMLElement) {
-  const disclosures = [...root.querySelectorAll<HTMLDetailsElement>("details.worldact-navigation-toggle")];
-  const previousOverflow = document.body.style.overflow;
-  const synchronize = (opened?: HTMLDetailsElement) => {
-    if (opened?.open) for (const disclosure of disclosures) if (disclosure !== opened) disclosure.open = false;
-    const active = disclosures.find((disclosure) => disclosure.open);
-    document.body.style.overflow = active ? "hidden" : previousOverflow;
-    for (const disclosure of disclosures) {
-      const summary = disclosure.querySelector("summary");
-      summary?.setAttribute("aria-label", disclosure.open ? "Close menu" : "Open menu");
-      summary?.setAttribute("aria-expanded", String(disclosure.open));
-      if (disclosure.open) {disclosure.setAttribute("role","dialog");disclosure.setAttribute("aria-modal","true");disclosure.setAttribute("aria-label","Navigation");}
-      else {disclosure.removeAttribute("role");disclosure.removeAttribute("aria-modal");disclosure.removeAttribute("aria-label");}
-    }
-  };
-  const listeners = disclosures.map((disclosure) => {
-    const toggle = () => synchronize(disclosure);
-    disclosure.addEventListener("toggle",toggle);
-    return () => disclosure.removeEventListener("toggle",toggle);
-  });
-  const keydown = (event: globalThis.KeyboardEvent) => {
-    const active = disclosures.find((disclosure) => disclosure.open);
-    if (!active) return;
-    if (event.key === "Escape") {event.preventDefault();active.open=false;active.querySelector("summary")?.focus();synchronize();}
-    if (event.key === "Tab") {
-      const controls = [...active.querySelectorAll<HTMLElement>('summary,a[href],button,input,select,textarea,[tabindex="0"]')].filter((item) => item.getClientRects().length > 0);
-      const first=controls[0],last=controls[controls.length-1];
-      if(event.shiftKey && (document.activeElement===first || !active.contains(document.activeElement))) {event.preventDefault();last?.focus();}
-      else if(!event.shiftKey && (document.activeElement===last || !active.contains(document.activeElement))) {event.preventDefault();first?.focus();}
-    }
-  };
-  const closeOnLink = (event: MouseEvent) => {
-    const link=(event.target as HTMLElement).closest("a[href]");
-    if(link)for(const disclosure of disclosures)if(disclosure.open && disclosure.contains(link))disclosure.open=false;
-    synchronize();
-  };
-  document.addEventListener("keydown",keydown,true);root.addEventListener("click",closeOnLink);synchronize();
-  return () => {for(const cleanup of listeners)cleanup();document.removeEventListener("keydown",keydown,true);root.removeEventListener("click",closeOnLink);document.body.style.overflow=previousOverflow;};
-}
 function SourceThemeDocument({ document: template, postId, query, commentPage, userName, preview = false }: {
   document: SiteTemplate; postId?: number; query: string; commentPage?: number; userName?: string; preview?: boolean;
 }) {
@@ -1204,7 +1167,7 @@ function SourceThemeDocument({ document: template, postId, query, commentPage, u
   useEffect(() => {
     if (!root.current) return;
     enhanceEmbeds(root.current);
-    const cleanup = enhanceNavigation(root.current);
+    const cleanup = enhanceNavigationOverlays(root.current);
     const cleanupArchives = enhanceArchives(root.current);
     const cleanupInteractive = enhanceInteractiveBlocks(root.current);
     let active=true;

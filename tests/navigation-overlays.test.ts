@@ -81,6 +81,16 @@ test("mobile, always and never keep native disclosure fallbacks and source icon/
   assert.doesNotMatch(await render(navigation({ customOverlayBackgroundColor: 'url(javascript:bad());position:fixed', customOverlayTextColor: '\" onclick=bad()' })), /javascript:|onclick|position:fixed/);
 });
 
+test("custom-overlay parent navigation destinations remain links independent of their submenu disclosure", async () => {
+  const submenu=block("navigation-submenu",{label:"Parent destination",url:"/parent-destination/"},link);
+  const {db}=stub({dialog:navigation({overlayMenu:"never"},submenu)});
+  const parsed=dom(await render(navigation({overlayMenu:"always",overlay:"dialog"}),db));
+  const summary=parsed.querySelector(".wp-block-navigation__overlay-container details > summary")!;
+  assert.equal(summary.querySelector("a")!.getAttribute("href"),"/parent-destination/");
+  assert.equal(summary.querySelector("a")!.textContent,"Parent destination");
+  assert.equal(summary.parentElement!.querySelector("ul")!.querySelector("a")!.getAttribute("href"),"/public-destination/");
+});
+
 test("custom overlays use their own styles, public content and low-priority images with no area restriction", async () => {
   const custom = block("group", { style: { color: { background: "#123456" }, spacing: { padding: "24px" } } }, '<div class="custom-overlay">' + paragraph("Custom panel") + block("image", {}, '<figure><img src="/uploads/image.png" fetchpriority="high" alt="Overlay image"></figure>') + block("navigation-overlay-close", { displayMode: "both", text: "<strong>Dismiss</strong>" }) + '</div>');
   const { db, calls } = stub({ dialog: custom });

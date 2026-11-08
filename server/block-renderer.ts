@@ -973,7 +973,7 @@ async function renderNode(
     }
     const label = plainText(String(a.label || "Link"));
     const link = `<a class="wp-block-navigation-item__content" href="${esc(href || "#")}"${a.opensInNewTab ? ' target="_blank" rel="noopener noreferrer"' : ""}>${esc(label)}</a>`;
-    return `<li${attr("wp-block-navigation-item")}>${node.children.length ? `<details><summary>${esc(label)}</summary><ul class="wp-block-navigation__submenu-container">${await body()}</ul></details>` : link}</li>`;
+    return `<li${attr("wp-block-navigation-item")}>${node.children.length ? `<details><summary>${link}</summary><ul class="wp-block-navigation__submenu-container">${await body()}</ul></details>` : link}</li>`;
   }
   if (name === "core/template-part") {
     const theme = typeof a.theme === "string" ? a.theme : state.settings.theme;

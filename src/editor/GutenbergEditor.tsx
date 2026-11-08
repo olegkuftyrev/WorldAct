@@ -75,6 +75,7 @@ import { footnoteEntityBoundaries } from "./footnoteScope";
 import type { SerializedBlock } from "./types";
 import { persistentBlockAttributes } from "./blockAttributes";
 import { editorBackgroundSettings } from "./backgroundSettings";
+import { editorSelectorContext, isNavigationOverlayEntity, ownsEntityEdit, type EditorEntityContext } from "./entityContext";
 import { parseVideoEmbed } from "../embeds";
 import { compileThemeStyles, type ThemeJSON, type ThemeStyleOverrides } from "../themeStyles";
 import "./gutenberg.css";
@@ -997,6 +998,8 @@ export type GutenbergEditorProps = {
   postId?: number;
   postType?: "post" | "page";
   hidePatternManager?: boolean;
+  entityContext?: EditorEntityContext | null;
+  onEntitySaved?: () => void;
 };
 
 function UndoIcon({ redo = false }: { redo?: boolean }) {
@@ -1142,12 +1145,16 @@ const GutenbergSession = forwardRef<
     return record && record.meta?.footnotes || "[]";
   },[props.postId,props.postType,!!props.onMetadataChange]);
   const previewOwner=useRef(Symbol("editor-preview"));
+  const entityKey=props.entityContext===undefined?"post-preview":props.entityContext?`${props.entityContext.type}:${props.entityContext.id}:${props.entityContext.record.area || ""}`:"site-pattern";
+  const [readyEntity,setReadyEntity]=useState(props.entityContext===undefined?"post-preview":"");
   useEffect(()=>{
     const id=previewContext.postId as number|undefined,type=previewContext.postType as string|undefined;
     const record=id && type?select(coreDataStore).getEditedEntityRecord("postType",type,id) as any:null;
-    setEditorPreview(previewOwner.current,{id,type,attributes:record || {}});
+    if(props.entityContext)void dispatch(coreDataStore).receiveEntityRecords("postType",props.entityContext.type,props.entityContext.record);
+    setEditorPreview(previewOwner.current,editorSelectorContext(props.entityContext,{id,type,attributes:record || {}}));
+    setReadyEntity(entityKey);
     return()=>removeEditorPreview(previewOwner.current);
-  },[previewContext,nativeFootnotes]);
+  },[previewContext,nativeFootnotes,entityKey]);
   const history = useRef({ items: [{blocks,footnotes:footnotesRef.current}], index: 0, lastInput: 0 });
   const signature = useRef(JSON.stringify([toStored(blocks),footnotesRef.current]));
   const writeNativeFootnotes=useCallback(async (footnotes:Footnote[])=>{
@@ -1318,6 +1325,9 @@ const GutenbergSession = forwardRef<
         const records =
           select(coreDataStore).__experimentalGetDirtyEntityRecords();
         for (const record of records) {
+          // The surrounding document save owns its version and content. Only
+          // nested independent entities are flushed through native REST.
+          if(ownsEntityEdit(props.entityContext,record))continue;
           if (
             (record.kind === "root" && record.name === "site") ||
             (record.kind === "postType" &&
@@ -1345,7 +1355,7 @@ const GutenbergSession = forwardRef<
         }
       },
     }),
-    [travel, emit],
+    [travel, emit, props.entityContext],
   );
 
   useEffect(() => {
@@ -1500,6 +1510,7 @@ const GutenbergSession = forwardRef<
               ...WORLDAct_CONTENT_BLOCKS,
               ...WORLDAct_DYNAMIC_BLOCKS,
               ...WORLDAct_SITE_BLOCKS,
+              ...(isNavigationOverlayEntity(props.entityContext)?["core/navigation-overlay-close"]:[]),
               ...siteBindings.map((binding) => `worldact/${binding.name}`),
             ]
           : [...WORLDAct_CONTENT_BLOCKS, ...WORLDAct_DYNAMIC_BLOCKS]),
@@ -1605,7 +1616,7 @@ const GutenbergSession = forwardRef<
       mediaUpload,
       styles: canvasStyles,
     }),
-    [mediaUpload, patterns, reusable, props.context, !!props.onMetadataChange, reportError, themeDocument],
+    [mediaUpload, patterns, reusable, props.context, !!props.onMetadataChange, reportError, themeDocument, props.entityContext],
   );
 
   const keyDown = (event: KeyboardEvent<HTMLDivElement>) => {
@@ -1624,6 +1635,10 @@ const GutenbergSession = forwardRef<
   };
   // Reading this value keeps the toolbar in step with the ref-backed history.
   void historyVersion;
+  // Native insertion restrictions read entity identity while their selectors
+  // initialize. Seed it before mounting the provider, rather than caching a
+  // decision for the representative preview post on the first render.
+  if(readyEntity!==entityKey)return <p role="status">Loading block editor…</p>;
   return (
     <MediaContext.Provider
       value={{ media: allMedia, upload, onError: reportError }}
@@ -1795,6 +1810,8 @@ const GutenbergSession = forwardRef<
                     hidePatternManager
                     canvasCSS={props.canvasCSS}
                     context={props.context}
+                    entityContext={{id:editingPattern.id,type:editingPattern._entityType || "wp_block",record:editingPattern}}
+                    onEntitySaved={props.onEntitySaved}
                     onError={reportError}
                   />
                   <Button
@@ -1822,6 +1839,7 @@ const GutenbergSession = forwardRef<
                         );
                         setEditingPattern(null);
                         await reloadReusable();
+                        props.onEntitySaved?.();
                       } catch (reason) {
                         reportError((reason as Error).message);
                       } finally {
