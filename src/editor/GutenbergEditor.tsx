@@ -77,6 +77,7 @@ import { OwnedFootnoteFormat } from "./OwnedFootnoteFormat";
 import { footnoteEntityBoundaries } from "./footnoteScope";
 import type { SerializedBlock } from "./types";
 import { persistentBlockAttributes } from "./blockAttributes";
+import { parseEditorSource } from "./editorSource";
 import { editorBackgroundSettings, editorDimensionSettings } from "./backgroundSettings";
 import { editorSelectorContext, isNavigationOverlayEntity, ownsEntityEdit, type EditorEntityContext } from "./entityContext";
 import { overlayPickerReference } from "./navigationOverlayReference";
@@ -861,11 +862,11 @@ function initialValue(blocks: SerializedBlock[] | null, html: string): Block[] {
   // The official parser also recovers RichText and media attributes from saved
   // markup. The server's structural parser deliberately does not extract them.
   const value = html.includes("<!-- wp:")
-    ? restoreBlocks(toStored(parse(html)))
+    ? parseEditorSource(html)
     : blocks?.length
       ? restoreBlocks(blocks)
       : html.trim()
-        ? rawHandler({ HTML: html })
+        ? parseEditorSource(html)
         : [];
   return value.length ? value : [createBlock("core/paragraph")];
 }
