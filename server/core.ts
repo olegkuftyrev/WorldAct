@@ -39,6 +39,7 @@ import { POST_DATE_SQL } from "./post-date.js";
 import { parseFootnotes } from "./footnotes.js";
 import { withPreviewAutosave } from "./post-preview.js";
 import { contentPagination, parseContentPage } from "./legacy-content.js";
+import { publicCommentWindow } from "./comment-window.js";
 
 const router = Router();
 const contentRoles = requireRole(
@@ -1285,14 +1286,6 @@ async function publicPost(post: any, locked = false, options: RenderOptions = {}
   };
   return locked ? result : enhancePublicPost(result);
 }
-async function publicComments(postId: number, page: number, settings: Awaited<ReturnType<typeof getSettings>>) {
-  return (
-    await pool.query(
-      `SELECT c.id,c.author_name AS "authorName",c.author_url AS "authorUrl",coalesce(avatar_user.email,c.author_email) AS "_avatarEmail",c.user_id AS "userId",c.content,c.type,c.status,c.parent_id AS "parentId",c.post_id AS "postId",p.title AS "postTitle",c.created_at AS "createdAt" FROM comments c JOIN posts p ON p.id=c.post_id LEFT JOIN users avatar_user ON avatar_user.id=c.user_id WHERE c.post_id=$1 AND c.status='approved' ORDER BY c.created_at ${settings.commentOrder === "desc" ? "DESC" : "ASC"},c.id ${settings.commentOrder === "desc" ? "DESC" : "ASC"}${settings.paginateComments ? " LIMIT $2 OFFSET $3" : ""}`,
-      settings.paginateComments ? [postId, settings.commentsPerPage, (page - 1) * settings.commentsPerPage] : [postId],
-    )
-  ).rows.map(({ _avatarEmail, ...comment }) => ({ ...comment, content:renderedCommentContent(comment.content,comment.type), avatarUrl: comment.type === "comment" ? avatarURL(_avatarEmail, settings) : null }));
-}
 async function commentResponse(postId: number, req: Request, locked = false) {
   const requestedPage = z.coerce
     .number()
@@ -1302,25 +1295,20 @@ async function commentResponse(postId: number, req: Request, locked = false) {
     .optional()
     .parse(req.query.commentPage);
   const settings = await getSettings();
-  const total = locked
-    ? 0
-    : (
-        await pool.query(
-          "SELECT count(*)::int AS total FROM comments WHERE post_id=$1 AND status='approved'",
-          [postId],
-        )
-      ).rows[0].total;
-  const totalPages = settings.paginateComments ? Math.max(1, Math.ceil(total / settings.commentsPerPage)) : 1;
-  const page = settings.paginateComments
-    ? Math.min(requestedPage ?? ((settings.defaultCommentPage === "newest") === (settings.commentOrder === "asc") ? totalPages : 1), totalPages)
-    : 1;
+  const window = locked
+    ? { comments: [], total: 0, totalTopLevelComments: 0, totalPages: 1, page: 1, perPage: settings.paginateComments ? settings.commentsPerPage : 1 }
+    : await publicCommentWindow(postId, requestedPage, settings);
   return {
-    comments: locked ? [] : await publicComments(postId, page, settings),
+    comments: window.comments.map(({ _avatarEmail, _accountAvatarEmail, ...comment }) => ({
+      ...comment, content: renderedCommentContent(comment.content,comment.type),
+      avatarUrl: comment.type === "comment" ? avatarURL(_accountAvatarEmail ?? _avatarEmail, settings) : null,
+    })),
     commentsPagination: {
-      page,
-      perPage: settings.paginateComments ? settings.commentsPerPage : Math.max(1, total),
-      totalComments: total,
-      totalPages,
+      page: window.page,
+      perPage: window.perPage,
+      totalComments: window.total,
+      totalTopLevelComments: window.totalTopLevelComments,
+      totalPages: window.totalPages,
     },
   };
 }

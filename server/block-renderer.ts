@@ -748,6 +748,7 @@ async function renderPostBody(post: RenderPost, context: Context, state: State, 
   return body + extra;
 }
 export const MAX_RENDER_BYTES = 8 * 1024 * 1024;
+export const MAX_RENDER_NODES = 4000;
 async function render(
   node: Node | undefined,
   context: Context,
@@ -774,7 +775,7 @@ async function renderNode(
   context: Context,
   state: State,
 ): Promise<string> {
-  if (!node || ++state.nodes > 4000 || context.depth > 24) return "";
+  if (!node || ++state.nodes > MAX_RENDER_NODES || context.depth > 24) return "";
   context = { ...context, depth: context.depth + 1 };
   node = await applyBlockBindings(node, context, state);
   const name = node.name || "",

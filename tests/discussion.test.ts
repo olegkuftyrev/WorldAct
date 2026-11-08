@@ -112,7 +112,7 @@ test("Discussion controls enforce moderation, safe mail, private consent prefere
       const newest = (await ok(`/public/posts/${posts[0].slug}`, "GET", undefined, "")).data; assert.equal(newest.commentsPagination.page, newest.commentsPagination.totalPages); assert.deepEqual(newest.comments.map((item: any) => item.id), all.comments.slice((newest.commentsPagination.page - 1) * 2).map((item: any) => item.id));
       const first = (await ok(`/public/posts/${posts[0].slug}?commentPage=1`, "GET", undefined, "")).data; assert.deepEqual(first.comments.map((item: any) => item.id), all.comments.slice(0, 2).map((item: any) => item.id));
       await settings({ commentOrder: "desc" });
-      const descending = (await ok(`/public/posts/${posts[0].slug}`, "GET", undefined, "")).data; assert.equal(descending.commentsPagination.page, 1); assert.deepEqual(descending.comments.map((item: any) => item.id), all.comments.slice(-2).reverse().map((item: any) => item.id));
+      const descending = (await ok(`/public/posts/${posts[0].slug}`, "GET", undefined, "")).data; assert.equal(descending.commentsPagination.page, descending.commentsPagination.totalPages); assert.deepEqual(descending.comments.map((item: any) => item.id), all.comments.slice((descending.commentsPagination.page - 1) * 2).reverse().map((item: any) => item.id));
       await settings({ showAvatars: false });
       assert.ok((await ok(`/public/posts/${posts[0].slug}`, "GET", undefined, "")).data.comments.every((comment: any) => comment.avatarUrl === null));
     });

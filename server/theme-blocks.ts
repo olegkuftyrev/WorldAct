@@ -1,14 +1,15 @@
 import {renderedCommentContent} from "./comment-policy.js";
 import { date as formatDate } from "@wordpress/date";
 import socialIcons from "../src/theme-source/social-icons.json";
-import type { Node, Context, State } from "./block-renderer.js";
+import { MAX_RENDER_NODES, type Node, type Context, type State } from "./block-renderer.js";
 import { postFields, postMetadataFields } from "./db.js";
 import { postPermalink } from "./permalinks.js";
-import { cleanContent, plainText } from "./utils.js";
+import { cleanContent, plainText, HttpError } from "./utils.js";
 import {avatarURL} from "./avatars.js";
 import {canEditPostComments} from "./comment-access.js";
 import {normalizeLoginRedirect} from "../shared/login-redirect.js";
 import {publicPaginationLocation} from "./public-pagination.js";
+import {publicCommentWindow} from "./comment-window.js";
 
 import { THEME_BLOCKS } from "../shared/dynamic-blocks.js";
 export { THEME_BLOCKS };
@@ -30,15 +31,8 @@ async function comments(context:Context,state:State) {
   if(context.commentLoop)return context.commentLoop;
   const postId=context.post?.id;
   if(!postId || context.post?.locked)return {comments:[],total:0,page:1,perPage:state.settings.commentsPerPage,totalPages:0};
-  const requested=int(state.options.query?.commentPage,0),perPage=state.settings.commentsPerPage;
-  return cached(state,`comments:${postId}:${requested}`,async()=>{
-    const total=(await state.db.query("SELECT count(*)::int AS count FROM comments WHERE post_id=$1 AND status='approved'",[postId])).rows[0].count;
-    const totalPages=state.settings.paginateComments?Math.max(1,Math.ceil(total/perPage)):1;
-    const page=state.settings.paginateComments?Math.min(requested || ((state.settings.defaultCommentPage==="newest")===(state.settings.commentOrder==="asc")?totalPages:1),totalPages):1;
-    const order=state.settings.commentOrder==="desc"?"DESC":"ASC";
-    const records=(await state.db.query(`SELECT id,parent_id AS "parentId",author_name AS "authorName",author_email AS "_avatarEmail",author_url AS "authorUrl",user_id AS "userId",content,type,created_at AS "createdAt" FROM comments WHERE post_id=$1 AND status='approved' ORDER BY created_at ${order},id ${order}${state.settings.paginateComments?" LIMIT $2 OFFSET $3":""}`,state.settings.paginateComments?[postId,perPage,(page-1)*perPage]:[postId])).rows;
-    return {comments:records,total,page,perPage:state.settings.paginateComments?perPage:Math.max(1,total),totalPages};
-  });
+  const requested=int(state.options.query?.commentPage,0);
+  return cached(state,`comments:${postId}:${requested}`,()=>publicCommentWindow(postId,requested || undefined,state.settings,state.db));
 }
 export async function renderThemeBlock(
   node:Node, context:Context, state:State,
@@ -103,19 +97,27 @@ export async function renderThemeBlock(
   }
   if(name==="core/comment-template") {
     const loop=await comments(context,state),ids=new Set(loop.comments.map((item:any)=>item.id));
-    const visited=new Set<number>();
-    const renderList=async(parent:number|null,depth=0):Promise<string>=>{
-      const records=loop.comments.filter((item:any)=>!visited.has(item.id) && (!state.settings.threadComments || parent===null?(!state.settings.threadComments || !item.parentId || !ids.has(item.parentId)):item.parentId===parent));
-      const out=[];
-      for(const comment of records){
-        visited.add(comment.id);
-        const atLimit=depth>=state.settings.threadDepth-1;
-        const nested=state.settings.threadComments?await renderList(comment.id,atLimit?depth:depth+1):"";
-        out.push(`<li id="comment-${comment.id}" class="${comment.type || "comment"} ${depth%2?"odd":"even"}">${await body({...context,comment,commentLoop:loop})}${nested && !atLimit?`<ol class="children">${nested}</ol>`:""}</li>${atLimit?nested:""}`);
-      }
-      return out.join("");
-    };
-    return `<ol${attributes()}>${await renderList(null)}</ol>`;
+    const visited=new Set<number>(),byParent=new Map<number,any[]>(),roots:any[]=[];
+    for(const comment of loop.comments){
+      if(!state.settings.threadComments || !comment.parentId || !ids.has(comment.parentId))roots.push(comment);
+      else {const siblings=byParent.get(comment.parentId) || [];siblings.push(comment);byParent.set(comment.parentId,siblings);}
+    }
+    // Historical depth must not become JavaScript call-stack depth. Keep the
+    // source depth-limit flattening and sibling order with an explicit stack.
+    const stack:Array<string|{comment:any;depth:number}>=roots.map(comment=>({comment,depth:0})).reverse(),out:string[]=[];
+    while(stack.length){
+      const next=stack.pop()!;
+      if(typeof next==="string"){out.push(next);continue;}
+      const {comment,depth}=next;if(visited.has(comment.id))continue;visited.add(comment.id);
+      const rendered=await body({...context,comment,commentLoop:loop});
+      if(state.nodes>MAX_RENDER_NODES)throw new HttpError(413,"The complete comment window exceeds the rendering node limit. Reduce comments per page or simplify the comment template.");
+      out.push(`<li id="comment-${comment.id}" class="${comment.type || "comment"} ${depth%2?"odd":"even"}">${rendered}`);
+      const nested=state.settings.threadComments?byParent.get(comment.id) || []:[],atLimit=depth>=state.settings.threadDepth-1;
+      if(!nested.length || atLimit)out.push("</li>");
+      else {out.push('<ol class="children">');stack.push("</ol></li>");}
+      for(let i=nested.length-1;i>=0;i--)stack.push({comment:nested[i],depth:atLimit?depth:depth+1});
+    }
+    return `<ol${attributes()}>${out.join("")}</ol>`;
   }
   if(name==="core/comment-author-name") {
     if(!c)return "";
