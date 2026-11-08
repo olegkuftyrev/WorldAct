@@ -8,6 +8,7 @@ import { safeStoredFile, uploadPrefix, unlinkUnreferencedMediaFiles } from "./me
 import { stageImageUpload } from "./image-uploads.js";
 import { mediaCaptionHTML } from "./media-captions.js";
 import { applyMediaModifiers, mediaEditCopySchema, mediaEditModifiers } from "./media-edit-transforms.js";
+import { lockMediaMutation } from "./media-mutations.js";
 
 /** Compare known local paths only. The request URL is never opened or fetched. */
 export function matchesEditableMediaSource(src: string, item: {
@@ -46,12 +47,7 @@ export async function editMediaCopy(req: AuthRequest, sourceId: number, body: un
   let released = false;
   try {
     await database.query("BEGIN");
-    // Match the account -> media -> post order used by account deletion. Keep
-    // credentials/role stable while waiting for the source file or image work.
-    const actor = (await database.query("SELECT id,role FROM users WHERE id=$1 FOR SHARE", [actorId])).rows[0];
-    if (!actor) throw new HttpError(401, "Your account is unavailable. Sign in again.");
-    await assertActiveAccountAuthentication(req, database);
-    if (!["administrator", "editor", "author"].includes(actor.role)) throw new HttpError(403, "You are not allowed to edit images.");
+    const actor = await lockMediaMutation(database,req);
     const item = (await database.query("SELECT * FROM media WHERE id=$1 FOR SHARE", [sourceId])).rows[0];
     if (!item) throw new HttpError(404, "Media not found.");
     if (actor.role === "author" && item.author_id !== actorId) throw new HttpError(403, "You can only edit your own media.");
@@ -79,6 +75,7 @@ export async function editMediaCopy(req: AuthRequest, sourceId: number, body: un
         JSON.stringify(staged.sizes), JSON.stringify(staged.derivatives), plainText(input.alt_text ?? item.alt),
         mediaCaptionHTML(input.caption ?? item.caption, input.caption === undefined ? item.caption_is_html : true), cleanContent(input.description ?? item.description), input.post || null, input.comment_status ?? "closed"],
     );
+    await assertActiveAccountAuthentication(req,database);
     await database.query("COMMIT");
     return result.rows[0];
   } catch (error) {

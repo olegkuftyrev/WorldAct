@@ -56,6 +56,7 @@ import { parseFootnotes, freshFootnoteIds } from "./footnotes.js";
 import { inspectAudioWithArtwork } from "./audio-metadata.js";
 import { storeAudioArtwork } from "./audio-artwork.js";
 import { lockPageHierarchy, reparentDeletedPages } from "./page-hierarchy.js";
+import { lockMediaMutation, mediaMutation } from "./media-mutations.js";
 
 import { settingSchema, menuSchema, validMenu, styleSchema, documentSchema, validateExtensionSettings } from "./site-validation.js";
 import { readThemeDesign, validateThemeDesign, resetBundledDocument } from "./themes.js";
@@ -786,7 +787,8 @@ const mediaUpdate=z.object({title:z.string().trim().min(1).max(300).optional(),a
 async function updateMedia(req:AuthRequest,id:number,body:unknown){
   const input=mediaUpdate.parse(body),client=await pool.connect();
   try{
-    await client.query("BEGIN");const existing=(await client.query("SELECT * FROM media WHERE id=$1 FOR UPDATE",[id])).rows[0];
+    await client.query("BEGIN");await lockMediaMutation(client,req);
+    const existing=(await client.query("SELECT * FROM media WHERE id=$1 FOR UPDATE",[id])).rows[0];
     if(!existing)throw new HttpError(404,"Media not found.");ownsMedia(req,existing.author_id);
     if(input.attachedPostId){
       const post=(await client.query("SELECT id,author_id,type FROM posts WHERE id=$1 AND status<>'trash' FOR KEY SHARE",[input.attachedPostId])).rows[0];
@@ -795,6 +797,7 @@ async function updateMedia(req:AuthRequest,id:number,body:unknown){
     }
     const title=normalizedText(input.title ?? existing.title);
     const result=await client.query(`UPDATE media SET title=$1,alt=$2,caption=$3,caption_is_html=true,description=$4,comment_status=$5,attached_post_id=$6 WHERE id=$7 RETURNING ${expandedMediaFields}`,[title,plainText(input.alt ?? existing.alt),mediaCaptionHTML(input.caption ?? existing.caption, input.caption === undefined ? existing.caption_is_html : true),cleanContent(input.description ?? existing.description),input.commentStatus ?? existing.comment_status,input.attachedPostId===undefined?existing.attached_post_id:input.attachedPostId,id]);
+    await assertActiveAccountAuthentication(req,client);
     await client.query("COMMIT");return result.rows[0];
   }catch(error){await client.query("ROLLBACK");throw error;}finally{client.release();}
 }
@@ -847,6 +850,7 @@ router.post(
         : null;
       if (!image) await writeNewMediaFile(rawFilename, file.buffer, createdFiles);
       mediaClient = await pool.connect(); await mediaClient.query("BEGIN");
+      await lockMediaMutation(mediaClient,req);
       const title = audioMetadata.title?.slice(0, 300) || plainText(path.basename(file.originalname).replace(/\.[^.]+$/, "")).slice(0, 300) || "Untitled file";
       const artwork = await storeAudioArtwork(inspection.artwork, mediaClient, needUser(req).id, title, prefix, settings);
       for (const file of artwork.files) createdFiles.add(file);
@@ -866,6 +870,7 @@ router.post(
           JSON.stringify(image?.derivatives || {}),
         ],
       );
+      await assertActiveAccountAuthentication(req,mediaClient);
       await mediaClient.query("COMMIT");
       res.status(201).json({ media: result.rows[0] });
     } catch (e) {
@@ -947,7 +952,11 @@ router.post("/media/:id/edit", creators, async (req: AuthRequest, res) => {
     const sizes = await buildSizes(data, prefix, await getSettings());
     Object.values(sizes).forEach(size => owned.add(size.filename));
     await writeNewMediaFile(filename, data, owned);
-    const result = await pool.query(
+    const saved = await mediaMutation(req,async client=>{
+    const current=(await client.query("SELECT author_id,filename FROM media WHERE id=$1 FOR UPDATE",[item.id])).rows[0];
+    if(!current || current.filename!==item.filename)throw new HttpError(409,"This image changed in another window. Reload before editing.");
+    ownsMedia(req,current.author_id);
+    const result = await client.query(
       `UPDATE media SET filename=$1,mime_type=$10,size=$2,width=$3,height=$4,original_filename=coalesce(original_filename,$5),derivatives=derivatives || $7::jsonb || jsonb_build_object($8::text,$5::text),sizes=$9::jsonb WHERE id=$6 AND filename=$5 RETURNING ${expandedMediaFields}`,
       [
         filename,
@@ -967,9 +976,11 @@ router.post("/media/:id/edit", creators, async (req: AuthRequest, res) => {
         409,
         "This image changed in another window. Reload before editing.",
       );
+    return result.rows[0];
+    });
     // Keep previous files available: published content and revisions may still
     // reference their URLs. Permanent deletion removes the complete history.
-    res.json({ media: result.rows[0] });
+    res.json({ media: saved });
   } catch (error) {
     await unlinkUnreferencedMediaFiles(owned);
     throw error;
@@ -993,7 +1004,11 @@ router.post("/media/:id/restore", creators, async (req: AuthRequest, res) => {
       : path.dirname(item.original_filename) + "/";
   const sizes = await buildSizes(buffer, prefix, await getSettings());
   try {
-    const result = await pool.query(
+    const saved = await mediaMutation(req,async client=>{
+    const current=(await client.query("SELECT author_id,filename,original_filename FROM media WHERE id=$1 FOR UPDATE",[item.id])).rows[0];
+    if(!current || current.filename!==item.filename || current.original_filename!==item.original_filename)throw new HttpError(409,"This image changed in another window. Reload before restoring.");
+    ownsMedia(req,current.author_id);
+    const result = await client.query(
       `UPDATE media SET filename=original_filename,original_filename=NULL,mime_type=$1,size=$2,width=$3,height=$4,derivatives=derivatives || $7::jsonb || jsonb_build_object($8::text,filename),sizes=$9::jsonb WHERE id=$5 AND filename=$6 RETURNING ${expandedMediaFields}`,
       [
         output.mimeType,
@@ -1012,7 +1027,9 @@ router.post("/media/:id/restore", creators, async (req: AuthRequest, res) => {
         409,
         "This image changed in another window. Reload before restoring.",
       );
-    res.json({ media: result.rows[0] });
+    return result.rows[0];
+    });
+    res.json({ media: saved });
   } catch (error) {
     await unlinkUnreferencedMediaFiles(Object.values(sizes).map(size => size.filename));
     throw error;
@@ -1023,6 +1040,7 @@ async function deleteMedia(req: AuthRequest,id:number) {
   let item: any;
   try {
     await client.query("BEGIN");
+    await lockMediaMutation(client,req);
     item = (
       await client.query("SELECT * FROM media WHERE id=$1 FOR UPDATE", [
         id,
@@ -1032,6 +1050,7 @@ async function deleteMedia(req: AuthRequest,id:number) {
     ownsMedia(req, item.author_id);
     await client.query("DELETE FROM media WHERE id=$1", [item.id]);
     await clearDeletedSiteImages(client, [item.id]);
+    await assertActiveAccountAuthentication(req,client);
     await client.query("COMMIT");
   } catch (error) {
     await client.query("ROLLBACK");

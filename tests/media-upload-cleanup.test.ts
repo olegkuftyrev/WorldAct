@@ -23,12 +23,16 @@ async function waitForUploadPool(blocker: number, expected: number) {
       `WITH RECURSIVE blocked(pid) AS (
          SELECT $1::int
          UNION SELECT a.pid FROM pg_stat_activity a JOIN blocked b ON b.pid=ANY(pg_blocking_pids(a.pid)) WHERE a.datname=current_database()
-       ) SELECT a.pid FROM pg_stat_activity a JOIN blocked b ON b.pid=a.pid
-         WHERE a.pid<>$1 AND position($2 in a.query)>0`,
-      [blocker, "INSERT INTO media("],
+       ) SELECT a.pid,a.query FROM pg_stat_activity a JOIN blocked b ON b.pid=a.pid
+         WHERE a.pid<>$1 AND (position($2 in a.query)>0 OR position($3 in a.query)>0)`,
+      [blocker, "INSERT INTO media(", "worldact-page-hierarchy"],
     );
     observed = result.rowCount || 0;
-    if (observed === expected) return;
+    if (observed === expected) {
+      assert.equal(result.rows.filter(row => row.query.includes("INSERT INTO media(")).length, 1,
+        "One insert owns hierarchy; the remaining upload transactions wait before media rows");
+      return;
+    }
     await new Promise(resolve => setTimeout(resolve, 10));
   } while (Date.now() < deadline);
   assert.fail(`Expected ${expected} upload transactions to occupy the server pool; observed ${observed}`);
