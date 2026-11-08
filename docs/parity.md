@@ -99,9 +99,11 @@ The combined Image/connector/outgoing batch passed 463 source checks across 108 
 
 The configured-mailbox backend passed 509 source checks across 113 files (six conditional-stage skips), 83 related compiled checks across 11 files, production build and independent code review after a held-configuration-lock authentication correction. It stores destination-local write-only credentials, default-disabled optional polling, bounded POP/MIME retrieval and durable UIDL receipts. Ordinary post creation and each receipt commit before DELE/QUIT; failed remote deletion, credential rotation or later post deletion cannot create duplicate posts. Actual post/configuration lock waits, expired leases/sessions, physical closure, sender capabilities, unsupported mail and rotating bounded work are tested without contacting a mailbox. Writing configuration and legacy anonymous triggers remain outside this backend batch; see [mail intake contract](../server/mail-intake.md).
 
-The cross-site archive check runs twice on **different fresh databases** after source files have been deleted:
-
 The incoming-notification composite passed 482 source checks across 110 files (six conditional-stage skips), 105 related compiled checks across 20 files (two skips), production build, and separate source-export/fresh-compiled-restore site archives. Its final transaction uses comment hierarchy → post → settings locks and rechecks wall-clock verification leases after real waits. Guarded checks cover concurrent duplicates, live pool availability during I/O, bounded HTTP admission, typed REST/moderation and fresh-ID JSON/WXR preservation. The preceding Image/publication composite also passed both GitHub Node 22/24 jobs, including fresh archive stages.
+
+Settings → Connectors and outgoing Discussion/Writing controls passed independent native review at 1440/768/375. Actual install/activation, shared Plugins state, write-only key/clear/consent, validation and prerequisite errors, late-response ownership, role/session denial and saved notification/visibility/environment state passed. Connected/error fixtures prove presentation only; no remote service verification or delivery was claimed. The combined application passed 514 source checks across 115 files (six conditional-stage skips), 59 related compiled checks across seven files and production build. Grouped Comments type=pings and readable-post-scoped typeCounts passed independent backend review and 22 source/22 compiled checks. Node22 CI exposed an inert POP timeout fixture that did not keep its event loop alive; a fixture-only correction passed all nine checks on Node22 and Node24 without changing runtime or assertions.
+
+The cross-site archive check runs twice on **different fresh databases** after source files have been deleted:
 
 ```sh
 SITE_ARCHIVE_STAGE=export SITE_ARCHIVE_PATH=/tmp/worldact-archive.json npm run test:isolated -- tests/portability-site.test.ts
@@ -122,7 +124,7 @@ Independent Accordion/Tabs review returned PASS at 1440, 768 and 375 pixels. Act
 
 - Finish exact legacy media presentation and broader source media-view adapters; extend additional variations and entity formats.
 - Complete remaining localization/accessibility/profile preferences and less-common capability combinations.
-- Implement further Node-compatible extension/package installation, updates/recovery and hooks, source-equivalent classic Customizer/widget workflows, writing email/ping services and conditional legacy screens.
+- Implement further Node-compatible extension/package installation, updates/recovery and hooks, source-equivalent classic Customizer/widget workflows, Writing email configuration, explicit outgoing trackbacks and conditional legacy screens.
 - Extend the content model and REST surface for custom types/taxonomies/fields, additional authentication/query/schema compatibility, custom capabilities and multisite/network administration.
 - Continue source-by-source behavior, keyboard/accessibility and visual comparisons. Arbitrary PHP plugins/themes cannot execute in the required runtime; WordPress.org PHP package compatibility is not claimed.
 
