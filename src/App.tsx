@@ -490,7 +490,15 @@ function AdminShell({ children, editor = false }: { children?: ReactNode; editor
     [error, setError] = useState("");
   const settings = useResource<{ settings: Partial<Settings> }>("/public/site");
   const administrator = user?.role === "administrator",
-    canPages = administrator || user?.role === "editor";
+    canPages = administrator || user?.role === "editor",
+    canCreatePosts = Boolean(user && user.role !== "subscriber"),
+    canUpload = Boolean(user && user.role !== "subscriber" && user.role !== "contributor");
+  const newActions = [
+    ...(canCreatePosts ? [["Post", "/admin/posts/new"]] : []),
+    ...(canUpload ? [["Media", "/admin/media?upload=1"]] : []),
+    ...(canPages ? [["Page", "/admin/pages/new"]] : []),
+    ...(administrator ? [["User", "/admin/users?new=1"]] : []),
+  ];
   useEffect(() => {
     api<{ preferences: { collapsedMenu?: boolean } }>("/profile")
       .then(({ preferences }) =>
@@ -656,33 +664,17 @@ function AdminShell({ children, editor = false }: { children?: ReactNode; editor
                 </Link>
               </li>
             )}
-            <li className="menupop">
-              <Link className="ab-item" to="/admin/posts/new">
+            {newActions.length > 0 && <li className="menupop">
+              <Link className="ab-item" to={newActions[0][1]} aria-haspopup="true">
                 <Icon name="plus" />
                 <span>New</span>
               </Link>
               <div className="ab-sub-wrapper">
                 <ul className="ab-submenu">
-                  <li>
-                    <Link className="ab-item" to="/admin/posts/new">
-                      Post
-                    </Link>
-                  </li>
-                  {canPages && (
-                    <li>
-                      <Link className="ab-item" to="/admin/pages/new">
-                        Page
-                      </Link>
-                    </li>
-                  )}
-                  <li>
-                    <Link className="ab-item" to="/admin/media">
-                      Media
-                    </Link>
-                  </li>
+                  {newActions.map(([label, to]) => <li key={to}><Link className="ab-item" to={to}>{label}</Link></li>)}
                 </ul>
               </div>
-            </li>
+            </li>}
           </ul>
           <ul className="ab-top-secondary ab-top-menu">
             <li className={`menupop ${menu ? "hover" : ""}`}>
