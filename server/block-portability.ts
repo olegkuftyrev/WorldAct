@@ -1,5 +1,6 @@
 import { parse } from "@wordpress/block-serialization-default-parser";
 import { cleanBlocks, cleanContent, cleanRawContent, HttpError, type StoredBlock } from "./utils.js";
+import { remapShortcodeReferences } from "./shortcode-portability.js";
 
 export type ImportedBlockEntity = {
   id: number;
@@ -13,6 +14,7 @@ export type BlockReferenceOptions = {
   terms?: ReadonlyMap<number, number>;
   authors?: ReadonlyMap<number, number>;
   urls?: ReadonlyMap<string, string>;
+  detachMissingShortcodeMediaURLs?: boolean;
   fontFamilies?: ReadonlyMap<string, string | null>;
   fontSlugs?: ReadonlyMap<string, string | null>;
   footnotes?: ReadonlyMap<string, string>;
@@ -68,6 +70,7 @@ export function remapImportedBlockReferences(
   for (const [source, target] of options.footnotes || []) if (!/^[a-z0-9_-]{1,100}$/.test(source) || !/^[a-z0-9_-]{1,100}$/.test(target))
     throw new HttpError(400, "Invalid imported footnote reference mapping.");
   const rewriteText = (value: string) => {
+    value = remapShortcodeReferences(value, options, warn);
     // Match a whole URL, never a local-looking path or mapped origin nested
     // inside an unrelated URL's path/query. Apply each mapping only once.
     // CSS declarations (padding:..., etc.) are not URL schemes. Recognize

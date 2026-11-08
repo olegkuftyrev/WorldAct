@@ -21,6 +21,8 @@ import { hasLegacyContent, legacyExcerptSource, selectLegacyContent, type Conten
 import { CORE_DYNAMIC_BLOCKS, SUPPORTED_DYNAMIC_BLOCKS, hasDynamicBlocks } from "../shared/dynamic-blocks.js";
 import { renderIconBlock } from "./icons.js";
 import { renderPlaylistBlock, type PlaylistContext } from "./playlist-blocks.js";
+import { prepareShortcodeDocument } from "./shortcodes.js";
+import { hasShortcodes } from "./shortcode-parser.js";
 
 export type BlockDatabase = Pick<pg.Pool, "query"> | pg.PoolClient;
 export type RenderPost = Record<string, any>;
@@ -676,6 +678,7 @@ async function staticHTML(
     return `<${tag}${attr}>${inner || node.attrs.values || ""}</${tag}>`;
   }
   if (node.name === "core/html") return content;
+  if (node.name === "core/shortcode") return String(node.attrs.text ?? content);
   if (node.name === "core/math") {
     const latex=typeof node.attrs.latex==='string'?node.attrs.latex:'';
     if(!latex)return '';
@@ -732,9 +735,12 @@ async function renderChildren(nodes: Node[], context: Context, state: State) {
   for (const node of nodes) out.push(await render(node, context, state));
   return out.join("");
 }
+async function renderDocument(document: RenderDocument, context: Context, state: State) {
+  return renderChildren(parseRenderNodes(await prepareShortcodeDocument(document, context, state)), context, state);
+}
 async function renderPostBody(post: RenderPost, context: Context, state: State, mode: ContentMode, page = 1) {
   const selected = selectLegacyContent(post, post, await postURL(post, state), mode, page, state.options.preview);
-  const body = await renderChildren(parseRenderNodes(selected.document), context, state), extra = selected.moreLink + selected.navigation;
+  const body = await renderDocument(selected.document, context, state), extra = selected.moreLink + selected.navigation;
   const bytes = Buffer.byteLength(extra, "utf8");
   if (state.outputBytes + bytes > MAX_RENDER_BYTES) throw new HttpError(413, "Rendered content exceeds the 8 MiB limit. Reduce repeated patterns or query output.");
   state.outputBytes += bytes;
@@ -940,11 +946,7 @@ async function renderNode(
             ).rows[0],
         );
         if (entity && !context.refs.has("nav:" + ref))
-          inner = await renderChildren(
-            parseRenderNodes(entity),
-            { ...context, refs: new Set([...context.refs, "nav:" + ref]) },
-            state,
-          );
+          inner = await renderDocument(entity, { ...context, refs: new Set([...context.refs, "nav:" + ref]) }, state);
       } else inner = await body();
       if (!inner) {
         const menus = await cached(
@@ -969,7 +971,7 @@ async function renderNode(
     };
     const items = await renderItems();
     return renderNavigationWithOverlay(node, context, state, items, attr,
-      (document, next) => renderChildren(parseRenderNodes(document), next, state), renderItems);
+      (document, next) => renderDocument(document, next, state), renderItems);
   }
   if (name === "core/navigation-link" || name === "core/navigation-submenu") {
     let href = safeBlockURL(a.url);
@@ -1001,7 +1003,7 @@ async function renderNode(
         ).rows[0],
     );
     return doc
-      ? `<${safeTag(a.tagName)}${attr()}>${await renderChildren(parseRenderNodes(doc), { ...context, refs: new Set([...context.refs, key]) }, state)}</${safeTag(a.tagName)}>`
+      ? `<${safeTag(a.tagName)}${attr()}>${await renderDocument(doc, { ...context, refs: new Set([...context.refs, key]) }, state)}</${safeTag(a.tagName)}>`
       : "";
   }
   if (name === "core/pattern") {
@@ -1023,11 +1025,7 @@ async function renderNode(
         ).rows[0],
     );
     return doc
-      ? renderChildren(
-          parseRenderNodes(doc),
-          { ...context, refs: new Set([...context.refs, key]) },
-          state,
-        )
+      ? renderDocument(doc, { ...context, refs: new Set([...context.refs, key]) }, state)
       : "";
   }
   if (name === "core/block") {
@@ -1045,11 +1043,7 @@ async function renderNode(
         ).rows[0],
     );
     return doc
-      ? renderChildren(
-          parseRenderNodes(doc),
-          { ...context, refs: new Set([...context.refs, key]) },
-          state,
-        )
+      ? renderDocument(doc, { ...context, refs: new Set([...context.refs, key]) }, state)
       : "";
   }
   if (name.startsWith("worldact/")) {
@@ -1246,7 +1240,7 @@ async function createState(options: RenderOptions, document: RenderDocument = {}
 function storedStaticHTML(document: RenderDocument): string | undefined {
   const raw =
     document.rawContent || document.raw_content || document.content || "";
-  return !hasLegacyContent(document) && !raw.includes("<!-- wp:") && !hasDynamicBlocks(document.blocks) && (raw.length>0 || !document.blocks?.length)
+  return !hasLegacyContent(document) && !hasShortcodes(raw) && !raw.includes("<!-- wp:") && !hasDynamicBlocks(document.blocks) && (raw.length>0 || !document.blocks?.length)
     ? cleanContent(raw)
     : undefined;
 }
@@ -1261,8 +1255,8 @@ export async function renderSiteDocument(
     ...options,
   }, document);
   return cleanContent(
-    await renderChildren(
-      parseRenderNodes(document),
+    await renderDocument(
+      document,
       {
         post: await postForRender(options.post,state),
         depth: 0,
@@ -1302,8 +1296,8 @@ export async function renderBlock(
   if (!SUPPORTED_DYNAMIC_BLOCKS.has(name)) return "";
   const state = await createState({ ...options, placeholderBindings: false }, { blocks: [{ name, attributes, innerBlocks: [] }] });
   return cleanContent(
-    await render(
-      { name, attrs: attributes, children: [] },
+    await renderDocument(
+      { blocks: [{ name, attributes, innerBlocks: [] }] },
       {
         post: await postForRender(options.post,state),
         depth: 0,

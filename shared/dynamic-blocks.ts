@@ -1,4 +1,5 @@
 // Pure block classification shared by storage selection and public rendering.
+import { hasShortcodes } from "./shortcodes.js";
 export const THEME_BLOCKS = [
   "core/term-description", "core/social-links", "core/social-link", "core/avatar", "core/post-navigation-link", "core/search",
   "core/comments", "core/comments-title", "core/comment-template", "core/comment-date", "core/comment-author-name", "core/comment-content",
@@ -21,6 +22,7 @@ export const INTERACTIVE_BLOCKS = [
 export const NAVIGATION_OVERLAY_BLOCKS = ["core/navigation-overlay-close"];
 
 export const CORE_DYNAMIC_BLOCKS = [
+  "core/shortcode",
   "core/playlist", "core/playlist-track",
   "core/icon",
   "core/rss",
@@ -62,7 +64,7 @@ export const CORE_DYNAMIC_BLOCKS = [
 ];
 export const SUPPORTED_DYNAMIC_BLOCKS = new Set(CORE_DYNAMIC_BLOCKS);
 
-type DynamicBlockNode = { name: string; innerBlocks?: readonly DynamicBlockNode[] };
+type DynamicBlockNode = { name: string; attributes?: Record<string, unknown>; innerBlocks?: readonly DynamicBlockNode[] };
 export function hasDynamicBlocks(blocks: readonly DynamicBlockNode[] | null | undefined): boolean {
-  return !!blocks?.some(block => SUPPORTED_DYNAMIC_BLOCKS.has(block.name) || block.name.startsWith("worldact/") || hasDynamicBlocks(block.innerBlocks));
+  return !!blocks?.some(block => !["core/code", "core/preformatted", "core/verse"].includes(block.name) && (SUPPORTED_DYNAMIC_BLOCKS.has(block.name) || block.name.startsWith("worldact/") || ["content", "text", "value", "values", "caption"].some(key => typeof block.attributes?.[key] === "string" && hasShortcodes(block.attributes[key] as string)) || hasDynamicBlocks(block.innerBlocks)));
 }

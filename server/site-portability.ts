@@ -167,7 +167,7 @@ export class SiteImport {
   }
   warn(message: string) { if (this.warnings.has(message)) return; if (this.warnings.size < 99) this.warnings.add(message); else this.suppressedWarnings++; }
   get importWarnings() { return [...this.warnings, ...(this.suppressedWarnings ? [`${this.suppressedWarnings} additional import warnings were omitted; some missing references or files could not be restored.`] : [])]; }
-  get options(): BlockReferenceOptions { return { media: this.media, documents: this.documents, documentTheme: this.sourceTheme, urls: this.urls, fontFamilies: this.fontNames, fontSlugs: this.fontSlugs }; }
+  get options(): BlockReferenceOptions { return { media: this.media, documents: this.documents, documentTheme: this.sourceTheme, urls: this.urls, detachMissingShortcodeMediaURLs: true, fontFamilies: this.fontNames, fontSlugs: this.fontSlugs }; }
   mapPostTemplate(slug: string) {
     if (!slug) return "";
     const mapped = this.documents.get(`${this.sourceTheme}:template:${slug}`);
