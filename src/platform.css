@@ -39,6 +39,8 @@
   align-items: flex-start;
   gap: 10px;
 }
+.worldact-permalink-selection code { overflow-wrap: anywhere; white-space: normal; }
+.worldact-custom-permalink { min-width: 0; }
 .worldact-stacked-fields > label {
   max-width: 100%;
 }

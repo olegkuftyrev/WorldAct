@@ -2,6 +2,7 @@ import {postFormats} from "../../shared/post-formats";
 import AkismetSettings from "../components/AkismetSettings";
 import OutgoingNotifications from "../components/OutgoingNotifications";
 import MailIntakeSettings from "../components/MailIntakeSettings";
+import PermalinkSettings from "../components/PermalinkSettings";
 import { ConnectorOperation, pingServiceLines } from "../connectors";
 import ApplicationPasswords from "./ApplicationPasswords";
 import ExportContent from "./ExportContent";
@@ -749,7 +750,7 @@ export function SettingsSuite() {
     }, "Settings saved.", owner.current);
   }
   return (
-    <Screen title={`${tab[0].toUpperCase() + tab.slice(1)} Settings`}>
+    <Screen title={tab === "permalinks" ? "Permalink Settings" : `${tab[0].toUpperCase() + tab.slice(1)} Settings`}>
       <Feedback action={action} />
       <nav className="nav-tab-wrapper" aria-label="Settings">
         {settingTabs.map((name) => (
@@ -769,7 +770,8 @@ export function SettingsSuite() {
       <ResourceState {...resource} retry={resource.reload} />
       {resource.data && (
         <form onSubmit={save}>
-          <table className="form-table">
+          {tab === "permalinks" && <><h2 className="title">Common Settings</h2><p>Select the permalink structure for your website. Including the <code>%postname%</code> tag makes links easy to understand.</p></>}
+          <table className={`form-table${tab === "permalinks" ? " permalink-structure" : ""}`}>
             <tbody>
               {tab === "general" && (
                 <>
@@ -1068,39 +1070,8 @@ export function SettingsSuite() {
               )}
               {tab === "permalinks" && (
                 <>
-                  <Field label="Common Settings">
-                    <fieldset className="worldact-stacked-fields">
-                      {[
-                        ["/posts/%postname%/", "Post name"],
-                        [
-                          "/%year%/%monthnum%/%day%/%postname%/",
-                          "Day and name",
-                        ],
-                        ["/%year%/%monthnum%/%postname%/", "Month and name"],
-                        ["/archives/%post_id%/", "Numeric"],
-                      ].map(([value, label]) => (
-                        <label key={value}>
-                          <input
-                            name="permalink"
-                            type="radio"
-                            checked={form.permalinkStructure === value}
-                            onChange={() => set("permalinkStructure", value)}
-                          />{" "}
-                          {label} <code>{value}</code>
-                        </label>
-                      ))}
-                    </fieldset>
-                  </Field>
-                  <Field
-                    label="Custom Structure"
-                    hint="Available tags: %postname%, %post_id%, %year%, %monthnum%, %day%."
-                  >
-                    {text(
-                      "permalinkStructure",
-                      "Custom Structure",
-                      "text",
-                      true,
-                    )}
+                  <Field label="Permalink structure">
+                    <PermalinkSettings value={String(form.permalinkStructure ?? "")} siteURL={String(form.siteUrl || window.location.origin)} onChange={value => set("permalinkStructure", value)} />
                   </Field>
                   <Field label="Category base">
                     {text("categoryBase", "Category base", "text", true)}
