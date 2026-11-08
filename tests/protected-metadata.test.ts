@@ -2,7 +2,7 @@ import "dotenv/config";
 import assert from "node:assert/strict";
 import test, { after } from "node:test";
 import { DOMParser } from "linkedom";
-import { pool } from "../server/db.js";
+import { pool, postMetadataFields } from "../server/db.js";
 import { renderSiteDocument } from "../server/block-renderer.js";
 import { postPermalink } from "../server/permalinks.js";
 
@@ -52,6 +52,28 @@ test("published protected metadata remains discoverable while private records an
       assert.ok(!sitemap.includes(await postPermalink(privatePage))); assert.ok(!sitemap.includes(await postPermalink(draftPost))); assert.doesNotMatch(sitemap, /SECRET-METADATA|inert-post-password/);
       const locked = await (await fetch(base + "/api/public/posts/" + protectedPost.slug)).json(); assert.equal(locked.post.locked, true); assert.equal(locked.post.content, ""); assert.deepEqual(locked.post.footnotes, []);
       assert.doesNotMatch(await (await fetch(base + "/comments/feed/")).text(), /SECRET-METADATA/);
+    });
+    await t.test("metadata-only links retain the canonical category permalink for protected and ordinary posts", async () => {
+      const originalSettings = (await pool.query("SELECT data FROM settings WHERE id=1")).rows[0].data;
+      try {
+        await pool.query("UPDATE settings SET data=jsonb_set(data,'{permalinkStructure}',$1::jsonb) WHERE id=1", [JSON.stringify("/%category%/%postname%/")]);
+        const first = (await pool.query("INSERT INTO terms(taxonomy,name,slug) VALUES('category','AAA first canonical category',$1) RETURNING id,slug", [stamp + "-first"])).rows[0]; terms.push(first.id);
+        await pool.query("INSERT INTO post_terms(post_id,term_id) VALUES($1,$2),($3,$4)", [protectedPost.id, first.id, current.id, category.id]);
+        const expectedProtected = `/${first.slug}/${protectedPost.slug}/`, expectedOrdinary = `/${stamp}/${current.slug}/`;
+        const rows = (await pool.query(`SELECT ${postMetadataFields} FROM posts p WHERE p.id=ANY($1::int[])`, [[protectedPost.id, current.id]])).rows;
+        for (const row of rows) {
+          assert.equal(row.categories.length, 1); assert.deepEqual(Object.keys(row.categories[0]), ["slug"]);
+          assert.equal(await postPermalink(row), row.id === protectedPost.id ? expectedProtected : expectedOrdinary);
+          for (const key of ["content", "rawContent", "excerpt", "footnotes", "password_hash", "_passwordHash"]) assert.equal(row[key], undefined);
+        }
+        const navigation = dom(await renderSiteDocument({ rawContent: block("navigation-link", { id: protectedPost.id, kind: "post-type", type: "post", label: "Protected category link" }) + block("navigation-link", { id: current.id, kind: "post-type", type: "post", label: "Ordinary category link" }) }));
+        assert.deepEqual([...navigation.querySelectorAll("a")].map(link => link.getAttribute("href")), [expectedProtected, expectedOrdinary]);
+        const adjacent = dom(await renderSiteDocument({ rawContent: block("post-navigation-link", { type: "next", showTitle: true }) }, { post: current }));
+        assert.equal(adjacent.querySelector("a")!.getAttribute("href"), expectedProtected);
+        const sitemap = await (await fetch(base + "/sitemap.xml")).text(); assert.ok(sitemap.includes(expectedProtected)); assert.ok(sitemap.includes(expectedOrdinary));
+        assert.ok(!sitemap.includes(`/uncategorized/${protectedPost.slug}/`)); assert.ok(!sitemap.includes(`/uncategorized/${current.slug}/`));
+        assert.doesNotMatch(sitemap + navigation.body.innerHTML + adjacent.body.innerHTML, /SECRET-METADATA|inert-post-password/);
+      } finally { await pool.query("UPDATE settings SET data=$1::jsonb WHERE id=1", [JSON.stringify(originalSettings)]); }
     });
   } finally {
     await pool.query("DELETE FROM posts WHERE id=ANY($1::int[])", [ids]);
