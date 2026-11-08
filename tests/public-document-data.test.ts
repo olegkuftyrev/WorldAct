@@ -130,3 +130,34 @@ test("metadata helper remains body-free and subsequent immutable body read rejec
     await assert.rejects(readPublishedPostById(post.id,"post",{query:{},canReadProtectedPost:context.canReadProtectedPost}),/Post not found/);
   }finally{await f.dispose();}
 });
+
+test("document date aliases and scalar validation match the actual legacy site API, while date paths remain authoritative",async()=>{
+  const f=await approvalFixture("public-month-alias");
+  try {
+    await f.ok("/api/settings","PUT",{frontPageMode:"posts",frontPageId:null,postsPageId:null,timezone:"UTC"});
+    const june=await f.post(),july=await f.post();
+    await pool.query("UPDATE posts SET published_at='2024-06-15T12:00:00Z' WHERE id=$1",[june.id]);
+    await pool.query("UPDATE posts SET published_at='2024-07-15T12:00:00Z' WHERE id=$1",[july.id]);
+    const rows=[
+      ["year=2024&month=6",200],["year=2024&monthnum=6",200],["year=2024&month=06&monthnum=6",200],
+      ["m=202406&month=6",200],["year=2024&month=6&day=15",200],
+      ["year=2024&month=6&month=7",400],["year=2024&month[]=6",400],["year=2024&month[x]=6",400],
+      ["year=2024&month=6&monthnum=7",400],["year=2024&month=13",400],["month=6",400],
+      ["m=202407&month=6",400],["year=2024&month=6&w=2",400],
+    ] as const;
+    for(const [query,status] of rows){
+      const legacy=await f.api("/api/public/site?"+query,"GET",undefined,"");
+      const document=await f.api("/api/public/document?"+new URLSearchParams({path:"/?"+query}),"GET",undefined,"");
+      assert.equal(legacy.response.status,status,"legacy "+query);assert.equal(document.response.status,status,"document "+query);
+      if(status===200){
+        assert.deepEqual(document.data.site.posts.map((post:any)=>post.id),legacy.data.posts.map((post:any)=>post.id),query);
+        assert.deepEqual(document.data.route.query.date,legacy.data.archive,query);
+        assert.ok(document.data.site.posts.some((post:any)=>post.id===june.id));assert.ok(!document.data.site.posts.some((post:any)=>post.id===july.id));
+      }
+    }
+    const path=await f.api("/api/public/document?"+new URLSearchParams({path:"/2024/06/?year=1901&month=7&monthnum=8&m=190102&day=2&w=3"}),"GET",undefined,"");
+    assert.equal(path.response.status,200);assert.equal(path.data.route.query.date.year,2024);assert.equal(path.data.route.query.date.month,6);
+    assert.ok(path.data.site.posts.some((post:any)=>post.id===june.id));assert.ok(!path.data.site.posts.some((post:any)=>post.id===july.id));
+    assert.equal(path.data.route.query.values.month,undefined);assert.equal(path.data.route.query.values.monthnum,"6");
+  }finally{await f.dispose();}
+});

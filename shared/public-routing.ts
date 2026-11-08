@@ -1,7 +1,7 @@
 import type { PublicArchive, PublicPost, PublicQuery, PublicTemplateRef } from "./public-document.js";
 
 export class PublicQueryError extends Error {}
-const scalarKeys = /^(?:search|s|category|tag|author|year|monthnum|day|m|w|page|commentPage|replytocom|query-\d+-page)$/;
+const scalarKeys = /^(?:search|s|category|tag|author|year|month|monthnum|day|m|w|page|commentPage|replytocom|query-\d+-page)$/;
 const positive = (value: string, key: string) => {
   if (!/^[1-9]\d{0,9}$/.test(value) || Number(value) > 2147483647)
     throw new PublicQueryError(`Use a positive ${key} within the supported range.`);
@@ -28,7 +28,7 @@ export function normalizePublicQuery(query: URLSearchParams, options: {
   if (category.length > 220 || tag.length > 220) throw new PublicQueryError("The taxonomy slug exceeds the supported length.");
   const date = archive && "type" in archive && archive.type === "date" ? archive : null;
   if (date) {
-    delete values.m; values.year = String(date.year);
+    delete values.m; delete values.month; values.year = String(date.year);
     for (const [key, value] of [["monthnum", date.month], ["day", date.day], ["w", date.week]] as const)
       if (value === undefined) delete values[key]; else values[key] = String(value);
   }
