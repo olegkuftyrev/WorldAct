@@ -1,5 +1,5 @@
 import { renderTemplate } from "../template";
-import { commentTypeLabel, isNotification } from "../commentTypes";
+import ClassicCommentThread from "../components/ClassicCommentThread";
 import { parseVideoEmbed } from "../embeds";
 import { enhanceInteractiveBlocks } from "../interactiveBlocks";
 import { enhanceNavigationOverlays } from "../navigationOverlays";
@@ -17,7 +17,6 @@ import {
   useRef,
   type FormEvent,
   type CSSProperties,
-  type ReactNode,
 } from "react";
 import {
   Link,
@@ -654,11 +653,11 @@ export default function PublicSite({
               {!post.locked && !preview && detail && (
                 <section className="public-comments">
                   <h2>
-                    {comments.length
-                      ? `${comments.length} ${comments.length === 1 ? "response" : "responses"} to “${post.title}”`
+                    {(commentsPagination?.totalComments ?? comments.length)
+                      ? `${commentsPagination?.totalComments ?? comments.length} ${(commentsPagination?.totalComments ?? comments.length) === 1 ? "response" : "responses"} to “${post.title}”`
                       : "Comments"}
                   </h2>
-                  <CommentThread
+                  <ClassicCommentThread
                     comments={comments}
                     displayDate={displayDate}
                     threaded={settings?.threadComments !== false}
@@ -669,6 +668,7 @@ export default function PublicSite({
                       document
                         .getElementById("comment-reply-title")
                         ?.scrollIntoView({ block: "center" });
+                      document.getElementById("comment-content")?.focus({ preventScroll: true });
                     }}
                   />
                   {commentsPagination && commentsPagination.totalPages > 1 && (
@@ -1417,62 +1417,5 @@ function commentsOpen(post: Post, settings: Partial<Settings> | undefined) {
         settings.closeCommentsDays * 86400000 <
         Date.now()
     )
-  );
-}
-function CommentThread({
-  comments,
-  displayDate,
-  threaded,
-  maxDepth,
-  canReply,
-  onReply,
-}: {
-  comments: Comment[];
-  displayDate: (date: string | null) => string;
-  threaded: boolean;
-  maxDepth: number;
-  canReply: boolean;
-  onReply: (comment: Comment) => void;
-}) {
-  const ids = new Set(comments.map((item) => item.id));
-  function render(item: Comment, depth = 0): ReactNode {
-    return (
-      <div className="public-comment-node" key={item.id}>
-        <article id={`comment-${item.id}`} className="public-comment">
-          {!isNotification(item) && (item as Comment & {avatarUrl?:string|null}).avatarUrl && <div className="public-comment-avatar">
-            <img src={(item as Comment & {avatarUrl:string}).avatarUrl} alt="" width={48} height={48} loading="lazy" referrerPolicy="no-referrer"/>
-          </div>}
-          <div>
-            {isNotification(item) ? <p className="comment-notification"><strong>{commentTypeLabel(item)}:</strong>{" "}{item.authorUrl ? <a href={item.authorUrl} rel="external nofollow ugc">{item.authorName}</a> : item.authorName}</p> : <strong>{item.authorName}</strong>}
-            <p className="comment-date">{displayDate(item.createdAt)}</p>
-            <div dangerouslySetInnerHTML={{ __html: item.content }} />
-            {!isNotification(item) && threaded && canReply && depth < maxDepth - 1 && (
-              <button
-                className="button-link public-comment-reply"
-                onClick={() => onReply(item)}
-              >
-                Reply
-              </button>
-            )}
-          </div>
-        </article>
-        {threaded && depth < 10 && (
-          <div className="public-comment-children">
-            {comments
-              .filter((child) => child.parentId === item.id)
-              .map((child) => render(child, depth + 1))}
-          </div>
-        )}
-      </div>
-    );
-  }
-  return (
-    <>
-      {comments
-        .filter(
-          (item) => !threaded || !item.parentId || !ids.has(item.parentId),
-        )
-        .map((item) => render(item))}
-    </>
   );
 }
