@@ -60,6 +60,7 @@ jobs:
           tests/navigation-overlays.test.ts tests/password-listings.test.ts tests/legacy-content.test.ts
           tests/math-blocks.test.ts tests/icons.test.ts tests/protected-metadata.test.ts
           tests/rss.test.ts tests/playlist-blocks.test.ts tests/audio-metadata.test.ts
+          tests/wxr-media.test.ts
       - name: Export site archive
         if: matrix.node == 24
         env:
