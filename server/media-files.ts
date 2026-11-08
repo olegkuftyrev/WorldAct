@@ -189,6 +189,9 @@ export async function buildSizes(
         mimeType: output.mimeType,
       };
     }
+    // With all sizes disabled or unchanged, no encoder has decoded the pixels.
+    // Header-only metadata must not allow a truncated tiny image to be stored.
+    if (!Object.keys(result).length) await sharp(buffer, { limitInputPixels: 80_000_000 }).stats();
     return result;
   } catch (error) {
     await Promise.all(

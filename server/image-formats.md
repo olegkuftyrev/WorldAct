@@ -42,6 +42,12 @@ No API request shape, UI, schema migration, or setting default changes. The
 existing Media Library controls and native REST adapters consume the corrected
 MIME/extension metadata directly.
 
+Omitting all intermediate sizes still requires a full first-frame pixel decode,
+so a truncated tiny image with readable header dimensions cannot be uploaded.
+Embedded archive images and legacy local-file copies receive that same full
+decode validation before any staged copy. A rejected image leaves records and
+files unchanged; original compressed bytes are otherwise preserved.
+
 `tests/media-format-preservation.test.ts` checks real output signatures and
 decoded geometry for all five raster formats, alpha, lossless pixels, frame
 selection, misleading MIME hints, EXIF/manual rotation, crops/scaling, restore,

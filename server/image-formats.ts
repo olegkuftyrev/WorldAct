@@ -19,10 +19,11 @@ export async function rasterOutput(buffer: Buffer, metadata?: Metadata): Promise
   const signature = await detectMediaType(buffer).catch(() => undefined);
   const mimeType = signature?.mime as keyof typeof formats;
   const format = Object.hasOwn(formats, mimeType) ? formats[mimeType] : undefined;
+  if (!format) throw new HttpError(400, "This image format cannot be edited safely on this server.");
   metadata ??= await sharp(buffer, { limitInputPixels: 80_000_000 }).metadata().catch(() => {
     throw new HttpError(400, "The image could not be decoded safely.");
   });
-  if (!format || metadata.format !== format.decoder || !sharp.format[format.decoder].output.buffer) {
+  if (metadata.format !== format.decoder || !sharp.format[format.decoder].output.buffer) {
     throw new HttpError(400, "This image format cannot be edited safely on this server.");
   }
   return { ...format, mimeType, lossless: mimeType === "image/webp" && losslessWebP(buffer) };

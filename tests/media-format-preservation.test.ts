@@ -78,11 +78,50 @@ function client() {
   const ok = async (url: string, method = "GET", body?: unknown, auth = cookie) => { const result = await request(url, method, body, auth); assert.ok(result.response.ok, `${url}: ${result.response.status} ${JSON.stringify(result.data)}`); return result.data; };
   return {
     request, ok,
-    async login() { const result = await request("/api/auth/login", "POST", { login: process.env.ADMIN_EMAIL, password: process.env.ADMIN_PASSWORD }); assert.equal(result.response.status, 200); cookie = result.response.headers.get("set-cookie")!.split(";")[0]; },
+    async login() { const result = await request("/api/auth/login", "POST", { login: process.env.ADMIN_EMAIL, password: process.env.ADMIN_PASSWORD }); assert.equal(result.response.status, 200); cookie = result.response.headers.get("set-cookie")!.split(";")[0]; return result; },
     async upload(bytes: Buffer, filename = "misleading.png") { const form = new FormData(); form.append("file", new Blob([new Uint8Array(bytes)], { type: "image/png" }), filename); const response = await fetch(base + "/api/media", { method: "POST", headers: { Origin: origin, Cookie: cookie }, body: form }); const data = await response.json(); assert.equal(response.status, 201, JSON.stringify(data)); return data.media; },
   };
 }
 const fetchBytes = async (url: string) => { const response = await fetch(base + url); assert.equal(response.status, 200, url); return Buffer.from(await response.arrayBuffer()); };
+
+test("omitted image sizes and archive copies still require complete pixel decoding", async () => {
+  const api = client(), valid = await sample(formats[0], 8, 8), scan = valid.indexOf(Buffer.from([0xff, 0xda]));
+  const broken = valid.subarray(0, scan + 2 + valid.readUInt16BE(scan + 2));
+  assert.equal((await sharp(broken).metadata()).width, 8, "The malformed fixture has valid header dimensions");
+  await assert.rejects(sharp(broken).stats(), "It cannot decode a complete pixel image");
+  const beforeSettings = (await pool.query("SELECT data FROM settings WHERE id=1")).rows[0].data;
+  let image: any;
+  try {
+    const signed = await api.login(), cookie = signed.response.headers.get("set-cookie")!.split(";")[0];
+    for (const disabled of [false, true]) {
+      if (disabled) await api.ok("/api/settings", "PUT", { thumbnailWidth: 0, thumbnailHeight: 0, mediumWidth: 0, mediumHeight: 0, largeWidth: 0, largeHeight: 0 });
+      const before = await inventory(), count = (await pool.query("SELECT count(*)::int AS count FROM media")).rows[0].count;
+      const form = new FormData(); form.append("file", new Blob([new Uint8Array(broken)], { type: "image/jpeg" }), "truncated-tiny.jpg");
+      assert.equal((await fetch(base + "/api/media", { method: "POST", headers: { Origin: origin, Cookie: cookie }, body: form })).status, 400);
+      assert.deepEqual(await inventory(), before); assert.equal((await pool.query("SELECT count(*)::int AS count FROM media")).rows[0].count, count);
+    }
+    image = await api.upload(valid); assert.deepEqual(image.sizes, {});
+    const archive = await api.ok("/api/tools/export"), record = archive.media.find((row: any) => row.id === image.id), good = archive.mediaFiles.find((file: any) => file.filename === image.filename);
+    const bad = { filename: "truncated.jpg", mimeType: "image/jpeg", size: broken.length, sha256: sha(broken), data: broken.toString("base64") };
+    const before = await inventory(), count = (await pool.query("SELECT count(*)::int AS count FROM media")).rows[0].count;
+    for (const [media, mediaFiles] of [
+      [[{ ...record, filename: bad.filename }], [bad]],
+      [[{ ...record, sizes: { thumbnail: { filename: bad.filename, width: 8, height: 8 } } }], [good, bad]],
+    ]) {
+      const rejected = await api.request("/api/tools/import", "POST", { application: "WorldAct", version: 3, posts: [], media, mediaFiles });
+      assert.equal(rejected.response.status, 400); assert.match(rejected.data.error, /image.*decoded/);
+      assert.deepEqual(await inventory(), before); assert.equal((await pool.query("SELECT count(*)::int AS count FROM media")).rows[0].count, count);
+    }
+    await writeFile(path.join(uploadsDir, image.filename), broken);
+    try {
+      const rejected = await api.request("/api/tools/import", "POST", { application: "WorldAct", version: 2, posts: [], media: [record] }); assert.equal(rejected.response.status, 400); assert.match(rejected.data.error, /image.*decoded/);
+      assert.deepEqual(await inventory(), before); assert.equal((await pool.query("SELECT count(*)::int AS count FROM media")).rows[0].count, count);
+    } finally { await writeFile(path.join(uploadsDir, image.filename), valid); }
+  } finally {
+    if (image) await api.ok(`/api/media/${image.id}`, "DELETE");
+    await pool.query("UPDATE settings SET data=$1::jsonb WHERE id=1", [JSON.stringify(beforeSettings)]); await api.ok("/api/auth/logout", "POST", {});
+  }
+});
 
 test("native API upload/edit/crop/scale/restore retain each actual image format and previous URLs", async () => {
   const api = client(), ids = new Set<number>(); let otherId = 0;

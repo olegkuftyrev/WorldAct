@@ -219,7 +219,7 @@ export class SiteImport {
       if (byteCount > MAX_ARCHIVE_MEDIA_BYTES) throw new HttpError(413, "Import at most 64 MiB of uploaded files per archive.");
       const type = await detectMediaType(data);
       if (!type || type.mime !== file.mimeType || !supportedMimes.has(type.mime)) throw new HttpError(400, "An embedded media file has an unsupported or mismatched MIME signature.");
-      if (type.mime.startsWith("image/")) await sharp(data, { limitInputPixels: 80_000_000 }).metadata().catch(() => { throw new HttpError(400, "An embedded image cannot be decoded safely."); });
+      if (type.mime.startsWith("image/")) await sharp(data, { limitInputPixels: 80_000_000 }).stats().catch(() => { throw new HttpError(400, "An embedded image cannot be decoded safely."); });
       embedded.set(file.filename, { data, mime: type.mime, ext: type.ext });
     }
     const copied = new Map<string, { filename: string; mime: string; data: Buffer }>();
@@ -237,6 +237,7 @@ export class SiteImport {
         if (data.length > MAX_ARCHIVE_FILE_BYTES || byteCount > MAX_ARCHIVE_MEDIA_BYTES) throw new HttpError(413, "Local media exceeds the archive file limit.");
         const type = await detectMediaType(data);
         if (!type || !supportedMimes.has(type.mime)) throw new HttpError(400, "A local media file has an unsupported MIME signature.");
+        if (type.mime.startsWith("image/")) await sharp(data, { limitInputPixels: 80_000_000 }).stats().catch(() => { throw new HttpError(400, "A local image cannot be decoded safely."); });
         file = { data, mime: type.mime, ext: type.ext };
         this.warn(`Media file ${source} was copied from the existing local upload library.`);
       }
