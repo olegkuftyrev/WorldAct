@@ -58,3 +58,14 @@ The ten-upload cleanup regression still occupies the complete server pool.
 Its wait graph now verifies one blocked insert and nine hierarchy waiters rather
 than ten simultaneous inserts, then checks every failed transaction releases its
 client before reference-aware cleanup and leaves no files or rows behind.
+
+Independent backend review of `62b777f` passed the actual four original cycles,
+all47 concurrency checks and five additional upload/icon/auth/role checks on
+both runtimes. Its own source and compiled gates each passed133 checks across20
+files with three conditional archive-stage skips; all three separate fresh
+source-export/compiled-restore image archive pairs passed. The additional icon
+test proves true rollback cleanup after actual logout while blocked on settings.
+It does not inject a lost COMMIT acknowledgement. Site-icon's pre-existing catch
+still directly unlinks its staged paths and is a separate cleanup continuation;
+the ordinary pixel/upload/edit-copy reference-aware policy is not claimed for
+that catch.
