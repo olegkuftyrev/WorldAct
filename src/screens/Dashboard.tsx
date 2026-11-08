@@ -71,7 +71,7 @@ export default function Dashboard() {
   const isCurrent = () => scope.active && scopeRef.current === scope;
   const canPages = user?.role === "administrator" || user?.role === "editor";
   const site = useResource<{ settings: Partial<Settings> & { showAvatars?: boolean } }>("/public/site");
-  const { data, loading, error, reload } = useResource<DashboardData>("/dashboard");
+  const { data, loading, error, reload, setData } = useResource<DashboardData>("/dashboard");
   const [welcome, setWelcome] = useState(true),
     [order, setOrder] = useState<WidgetId[]>(widgetIds),
     [hidden, setHidden] = useState<WidgetId[]>([]);
@@ -85,14 +85,22 @@ export default function Dashboard() {
   const draftRevision = useRef(0);
   const draftOperation = useRef<symbol | null>(null);
   const draftActor = useRef(actor);
+  const resourceScope = useRef(scope);
   const moveFocus = useRef<{ id: WidgetId; direction: -1 | 1 } | null>(null);
-  useEffect(() => {
+  useLayoutEffect(() => {
     scope.active = true;
     draftOperation.current = null;
     setBusy(false); setNotice(""); setSaveError("");
     if (draftActor.current !== actor) {
       draftActor.current = actor; draftRevision.current++;
       setDraftTitle(""); setDraftContent("");
+      setData(null); site.setData(null);
+    }
+    if (resourceScope.current !== scope) {
+      resourceScope.current = scope;
+      // Retire an already-started dashboard reload when history changes while
+      // this screen stays mounted; its old response cannot win a new opening.
+      void reload(); void site.reload();
     }
     return () => { scope.active = false; };
   }, [scope]);
@@ -274,7 +282,7 @@ export default function Dashboard() {
     ),
     draft: (
       <>
-        <form onSubmit={saveDraft}>
+        <form id="quick-press" onSubmit={saveDraft}>
           <div className="input-text-wrap">
             <label htmlFor="quick-title">Title</label>
             <input
@@ -285,8 +293,8 @@ export default function Dashboard() {
               required
             />
           </div>
-          <div className="textarea-wrap">
-            <label htmlFor="quick-content" className="screen-reader-text">
+          <div className="textarea-wrap" id="description-wrap">
+            <label htmlFor="quick-content">
               Content
             </label>
             <textarea
