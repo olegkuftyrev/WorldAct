@@ -12,6 +12,7 @@ import { appendDateArchiveSQL, dateArchiveTitle, parseDateArchiveQuery } from ".
 import { gridTemplateColumns, isResponsiveGrid } from "./block-layout.js";
 import { renderFootnotes } from "./footnotes.js";
 import { excerptText } from "./excerpts.js";
+import { renderInteractiveBlock, createInteractiveRenderState, INTERACTIVE_BLOCKS, type InteractiveRenderState, type AccordionContext, type AccordionItemContext, type TabsContext } from "./interactive-blocks.js";
 
 export type BlockDatabase = Pick<pg.Pool, "query"> | pg.PoolClient;
 export type RenderPost = Record<string, any>;
@@ -21,6 +22,10 @@ export type SerializedNode = {
   innerBlocks: SerializedNode[];
 };
 export type RenderDocument = {
+  id?: number | string;
+  slug?: string;
+  type?: string;
+  theme?: string;
   content?: string;
   rawContent?: string;
   raw_content?: string;
@@ -30,6 +35,7 @@ export type RenderOptions = {
   post?: RenderPost | null;
   requestPath?: string;
   templateSlug?: string;
+  instanceKey?: string;
   query?: Record<string, unknown>;
   page?: number;
   placeholderBindings?: boolean;
@@ -64,6 +70,9 @@ export type Context = {
   commentLoop?: { comments: any[]; total: number; page: number; perPage: number; totalPages: number };
   social?: { openInNewTab: boolean; showLabels: boolean };
   queryDisplayLayout?: { type?: string; columns?: number };
+  accordion?: AccordionContext;
+  accordionItem?: AccordionItemContext;
+  tabs?: TabsContext;
 };
 export type State = {
   db: BlockDatabase;
@@ -73,12 +82,14 @@ export type State = {
   outputBytes: number;
   queries: number;
   cache: Map<string, Promise<any>>;
+  interactive?: InteractiveRenderState;
 };
 export const CORE_DYNAMIC_BLOCKS = [
   ...THEME_BLOCKS,
   ...WIDGET_BLOCKS,
   "core/footnotes",
   ...TERM_BLOCKS,
+  ...INTERACTIVE_BLOCKS,
   "core/query",
   "core/post-template",
   "core/post-title",
@@ -756,6 +767,10 @@ async function renderNode(
     a = node.attrs || {},
     p = context.post;
   const attr = (extra = "") => attrsHTML(node, extra);
+  const interactiveBlock = await renderInteractiveBlock(node, context, state,
+    (nodes, next) => renderChildren(nodes, next, state),
+    (extra = "", override = a) => attrsHTML({ ...node, attrs: override }, extra), blockStyle);
+  if (interactiveBlock !== undefined) return interactiveBlock;
   const themeBlock = await renderThemeBlock(node, context, state,
     (nodes, next) => renderChildren(nodes, next, state), attr);
   if (themeBlock !== undefined) return themeBlock;
@@ -1188,7 +1203,7 @@ async function renderNode(
   }
   return staticHTML(node, context, state);
 }
-async function createState(options: RenderOptions): Promise<State> {
+async function createState(options: RenderOptions, document: RenderDocument = {}): Promise<State> {
   const source = options.db || pool;
   let count = 0;
   // The budget includes settings, permalink ancestry and entity lookups, not only query blocks.
@@ -1199,9 +1214,11 @@ async function createState(options: RenderOptions): Promise<State> {
       return (source.query as any).apply(source, args);
     },
   } as BlockDatabase;
+  const settings = await getSettings(db);
   return {
     db,
-    settings: await getSettings(db),
+    settings,
+    interactive: createInteractiveRenderState(document, options, settings.theme),
     options,
     nodes: 0,
     outputBytes: 0,
@@ -1235,7 +1252,7 @@ export async function renderSiteDocument(
   const state = await createState({
     placeholderBindings: !options.post,
     ...options,
-  });
+  }, document);
   return cleanContent(
     await renderChildren(
       parseRenderNodes(document),
@@ -1255,7 +1272,7 @@ export async function renderPublicContent(
 ): Promise<string> {
   const stored = storedStaticHTML(post);
   if (stored !== undefined) return stored;
-  const state = await createState({ ...options, placeholderBindings: false });
+  const state = await createState({ ...options, placeholderBindings: false }, post);
   if (!state.options.requestPath)
     state.options.requestPath = await postURL(post, state);
   return cleanContent(
@@ -1273,7 +1290,7 @@ export async function renderBlock(
   options: RenderOptions = {},
 ): Promise<string> {
   if (!SUPPORTED_DYNAMIC_BLOCKS.has(name)) return "";
-  const state = await createState({ ...options, placeholderBindings: false });
+  const state = await createState({ ...options, placeholderBindings: false }, { blocks: [{ name, attributes, innerBlocks: [] }] });
   return cleanContent(
     await render(
       { name, attrs: attributes, children: [] },

@@ -111,7 +111,8 @@ const allowedStyles: Record<string, RegExp[]> = {
   "object-fit": [/^(?:cover|contain|fill|none|scale-down)$/],
   "aspect-ratio": [/^\d+(?:\.\d+)?(?:\s*\/\s*\d+(?:\.\d+)?)?$/],
 };
-export function cleanContent(content: string, generatedBlocks = false) {
+export function cleanContent(content: string, generatedBlocks = false, canonicalInteractive = false) {
+  const interactive = generatedBlocks || canonicalInteractive;
   return sanitizeHtml(content, {
     allowedTags: [
       "header",
@@ -170,10 +171,11 @@ export function cleanContent(content: string, generatedBlocks = false) {
       "cite",
       "abbr",
       "time",
+      ...(canonicalInteractive && !generatedBlocks ? ["button"] : []),
       ...(generatedBlocks ? ["form", "input", "label", "button", "textarea", "select", "option", "svg", "path", "circle", "rect", "g"] : []),
     ],
     allowedAttributes: {
-      "*": ["class", "id", "style", "aria-label", "aria-hidden", "role", ...(generatedBlocks ? ["data-*", "aria-*"] : [])],
+      "*": ["class", "id", "style", "aria-label", "aria-hidden", "role", ...(interactive ? ["aria-expanded", "aria-controls", "aria-labelledby", "aria-selected", "tabindex", "hidden"] : []), ...(generatedBlocks ? ["data-*", "aria-*"] : [])],
       a: ["href", "title", "target", "rel", "download"],
       img: [
         "src",
@@ -185,6 +187,7 @@ export function cleanContent(content: string, generatedBlocks = false) {
         "height",
         "loading",
         "decoding",
+        "fetchpriority",
       ],
       video: [
         "src",
@@ -209,6 +212,7 @@ export function cleanContent(content: string, generatedBlocks = false) {
       blockquote: ["cite"],
       time: ["datetime"],
       sup: ["data-fn"],
+      ...(canonicalInteractive && !generatedBlocks ? { button: ["type"] } : {}),
       ...(generatedBlocks ? {
         form: ["action", "method", "autocomplete"],
         input: ["type", "name", "value", "placeholder", "required", "checked", "disabled", "maxlength", "minlength", "autocomplete"],
@@ -234,9 +238,22 @@ export function cleanContent(content: string, generatedBlocks = false) {
         const { "data-fn": id, ...safe } = attrs;
         return { tagName: "sup", attribs: { ...safe, ...(id && /^[a-z0-9_-]{1,100}$/.test(id) ? { "data-fn": id } : {}) } };
       },
+      ...(interactive ? { "*": (tag: string, original: Record<string,string>) => {
+        const attrs = { ...original };
+        if ("tabindex" in attrs && !["0", "-1"].includes(attrs.tabindex)) delete attrs.tabindex;
+        if ("hidden" in attrs && attrs.hidden !== "until-found") delete attrs.hidden;
+        for (const key of ["aria-expanded", "aria-selected"]) if (key in attrs && !["true", "false"].includes(attrs[key])) delete attrs[key];
+        for (const key of ["aria-controls", "aria-labelledby"]) if (key in attrs && !/^[A-Za-z0-9_-]{1,160}(?: [A-Za-z0-9_-]{1,160}){0,9}$/.test(attrs[key])) delete attrs[key];
+        if (tag === "button" && canonicalInteractive && !generatedBlocks) attrs.type = "button";
+        return { tagName: tag, attribs: attrs };
+      }} : {}),
       ...(generatedBlocks ? { form: (_tag: string, attrs: Record<string,string>) => ({
         tagName: "form", attribs: { ...attrs, action: ["/", "/wp-comments-post.php", "/login", "/logout", "/post-password", "/public-login"].includes(attrs.action) ? attrs.action : "/", method: attrs.method?.toLowerCase() === "post" ? "post" : "get" },
       }) } : {}),
+      img: (_tag, attrs) => {
+        const next = { ...attrs }; if (next.fetchpriority && !["low", "high", "auto"].includes(next.fetchpriority)) delete next.fetchpriority;
+        return { tagName: "img", attribs: next };
+      },
       a: (_tag, attrs) => ({
         tagName: "a",
         attribs: { ...attrs, rel: "noopener noreferrer" },
@@ -422,7 +439,7 @@ export function cleanRawContent(content: string) {
   );
   if (stack.length)
     throw new HttpError(400, "Gutenberg block markers must be balanced.");
-  const safe = cleanContent(replaced);
+  const safe = cleanContent(replaced, false, true);
   // Markers can be restored only in text, never inside an HTML attribute.
   let inTag = false,
     quote = "",
