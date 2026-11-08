@@ -75,5 +75,10 @@ export async function nativePostReturn(postId: number, requested: unknown, refer
       url.hash = "respond";
     }
   }
+  // Continuation resolution and chronological comment paging can await more
+  // database work after canonical generation. Fence the immutable selection at
+  // the final metadata boundary too; no body or password is needed here.
+  if(!(await pool.query("SELECT 1 FROM posts WHERE id=$1 AND type=$2 AND status='publish' AND author_id=$3",[post.id,post.type,post.authorId])).rowCount)
+    throw new HttpError(404,"Post not found.");
   return url.pathname + url.search + url.hash;
 }

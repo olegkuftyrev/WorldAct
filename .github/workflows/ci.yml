@@ -77,6 +77,7 @@ jobs:
           tests/permalink-time-tokens.test.ts
           tests/permalink-time-portability.test.ts
           tests/author-permalinks.test.ts tests/author-access-waits.test.ts
+          tests/author-nicename-independent-waits.test.ts tests/author-document-waits.test.ts
           tests/user-creation-concurrency.test.ts tests/user-nicenames-migration.test.ts
           tests/author-permalink-portability.test.ts
           tests/page-delete-reparent.test.ts tests/post-mutation-locks.test.ts

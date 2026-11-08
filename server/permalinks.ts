@@ -12,9 +12,16 @@ const segment = (value: string) => encodeURIComponent(value);
  * retain their publication/type fence across this additional database read.
  * Authenticated private editors supply the current explicit status instead. */
 export async function authorPermalinkNicename(post: Record<string, any>, db: Database = pool): Promise<string> {
+  const expectedStatus=post.status ?? "publish";
+  const owner=(await db.query("SELECT author_id FROM posts WHERE id=$1 AND type='post' AND status=$2",[post.id,expectedStatus])).rows[0];
+  if(!owner)throw new HttpError(404,"Post author identity is no longer available.");
   const row=(await db.query(`SELECT u.nicename FROM posts p JOIN users u ON u.id=p.author_id
-    WHERE p.id=$1 AND p.type='post' AND p.status=$2`,[post.id,post.status ?? "publish"])).rows[0];
+    WHERE p.id=$1 AND p.type='post' AND p.status=$2 AND p.author_id=$3`,[post.id,expectedStatus,owner.author_id])).rows[0];
   if (!row?.nicename) throw new HttpError(404,"Post author identity is no longer available.");
+  // The expression SELECT may have waited after taking its MVCC snapshot.
+  // Check again only after it returns, without another author-expression read.
+  if(!(await db.query("SELECT 1 FROM posts WHERE id=$1 AND type='post' AND status=$2 AND author_id=$3",[post.id,expectedStatus,owner.author_id])).rowCount)
+    throw new HttpError(404,"Post author identity is no longer available.");
   return row.nicename;
 }
 /** Select the source's lowest-ID assigned category and its ancestors in one
