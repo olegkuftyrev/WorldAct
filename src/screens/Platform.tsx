@@ -2135,6 +2135,7 @@ export function SiteEditor() {
                         }}
                         media={media.data?.media || []}
                         inserterOpen={inserter}
+                        onInserterClose={() => setInserter(false)}
                         inspectorOpen={inspector}
                         canvasCSS={canvasCSS}
                         onError={action.setError}

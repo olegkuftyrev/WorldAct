@@ -44,6 +44,7 @@ import {
 import { remapImportedBlockReferences } from "./block-portability.js";
 import { SiteImport, allocateImportedBlockEntities, exportMediaFiles, exportFontLibrary, MAX_ARCHIVE_JSON_BYTES, MAX_STORED_CONTENT_BYTES } from "./site-portability.js";
 import { postPermalink } from "./permalinks.js";
+import { dateArchiveLocalSQL } from "./date-archives.js";
 
 import { settingSchema, menuSchema, validMenu, styleSchema, documentSchema, validateExtensionSettings } from "./site-validation.js";
 import { readThemeDesign, validateThemeDesign, resetBundledDocument } from "./themes.js";
@@ -731,10 +732,11 @@ router.get("/media", creators, async (req: AuthRequest, res) => {
   const values:unknown[]=[],where:string[]=[];
   if(user.role==="author"){values.push(user.id);where.push("author_id=$1");}
   const base=where.length?"WHERE "+where.join(" AND "):"";
-  const [counts,months]=await Promise.all([pool.query(`SELECT count(*)::int AS all,count(*) FILTER(WHERE mime_type LIKE 'image/%')::int AS image,count(*) FILTER(WHERE mime_type LIKE 'audio/%')::int AS audio,count(*) FILTER(WHERE mime_type LIKE 'video/%')::int AS video,count(*) FILTER(WHERE mime_type !~ '^(image|audio|video)/')::int AS document,count(*) FILTER(WHERE attached_post_id IS NULL)::int AS unattached FROM media ${base}`,values),pool.query(`SELECT DISTINCT to_char(created_at AT TIME ZONE $${values.length+1},'YYYY-MM') AS month FROM media ${base} ORDER BY month DESC`,[...values,(await getSettings()).timezone])]);
+  const timezone=(await getSettings()).timezone,monthValues=[...values],monthLocal=dateArchiveLocalSQL("created_at",monthValues,timezone);
+  const [counts,months]=await Promise.all([pool.query(`SELECT count(*)::int AS all,count(*) FILTER(WHERE mime_type LIKE 'image/%')::int AS image,count(*) FILTER(WHERE mime_type LIKE 'audio/%')::int AS audio,count(*) FILTER(WHERE mime_type LIKE 'video/%')::int AS video,count(*) FILTER(WHERE mime_type !~ '^(image|audio|video)/')::int AS document,count(*) FILTER(WHERE attached_post_id IS NULL)::int AS unattached FROM media ${base}`,values),pool.query(`SELECT DISTINCT to_char(${monthLocal},'YYYY-MM') AS month FROM media ${base} ORDER BY month DESC`,monthValues)]);
   if(input.search){values.push("%"+input.search.replace(/[\\%_]/g,"\\$&")+"%");where.push(`(title ILIKE $${values.length} OR filename ILIKE $${values.length} OR caption ILIKE $${values.length})`);}
   if(input.type!=="all"){if(input.type==="document")where.push("mime_type !~ '^(image|audio|video)/'");else{values.push(input.type+"/%");where.push(`mime_type LIKE $${values.length}`);}}
-  if(input.month){values.push(input.month,(await getSettings()).timezone);where.push(`to_char(created_at AT TIME ZONE $${values.length},'YYYY-MM')=$${values.length-1}`);}
+  if(input.month){values.push(input.month);const monthParameter=values.length,local=dateArchiveLocalSQL("created_at",values,timezone);where.push(`to_char(${local},'YYYY-MM')=$${monthParameter}`);}
   if(input.unattached==="true")where.push("attached_post_id IS NULL");
   const predicate=where.length?"WHERE "+where.join(" AND "):"";
   const total=(await pool.query(`SELECT count(*)::int AS n FROM media ${predicate}`,values)).rows[0].n,totalPages=Math.max(1,Math.ceil(total/input.perPage)),page=Math.min(input.page,totalPages);

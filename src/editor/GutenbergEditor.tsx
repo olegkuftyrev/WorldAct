@@ -47,6 +47,7 @@ import {
   SlotFillProvider,
 } from "@wordpress/components";
 import { addFilter } from "@wordpress/hooks";
+import { useEnableWpCompatOverlaySlot } from "@wordpress/ui";
 import apiFetch from "@wordpress/api-fetch";
 import {
   getSettings as getDateSettings,
@@ -145,6 +146,15 @@ export const WORLDAct_DYNAMIC_BLOCKS = [
   "core/comments-pagination-next",
   "core/post-comments-form",
   "core/categories",
+  "core/latest-posts",
+  "core/latest-comments",
+  "core/archives",
+  "core/calendar",
+  "core/tag-cloud",
+  "core/post-comments-count",
+  "core/post-comments-link",
+  "core/post-time-to-read",
+  "core/query-total",
 ];
 export const WORLDAct_SITE_BLOCKS = [
   "core/site-title",
@@ -924,6 +934,7 @@ export type GutenbergEditorProps = {
   onUpload?: (files: File[]) => Promise<Media[]>;
   onError?: (message: string) => void;
   inserterOpen?: boolean;
+  onInserterClose?: () => void;
   listViewOpen?: boolean;
   inspectorOpen?: boolean;
   canvasCSS?: string;
@@ -1590,6 +1601,7 @@ const GutenbergSession = forwardRef<
                       </>
                     ) : (
                       <InserterLibrary
+                        onClose={props.onInserterClose}
                         showInserterHelpPanel={false}
                         shouldFocusBlock
                       />
@@ -1825,6 +1837,9 @@ export const GutenbergEditor = forwardRef<
   GutenbergEditorHandle,
   GutenbergEditorProps
 >(function GutenbergEditor(props, ref) {
+  // Official UI selects portal outside the inspector. Its compatibility slot
+  // keeps their menus above the older components and our editor chrome.
+  useEnableWpCompatOverlaySlot();
   return <GutenbergSession key={props.resetKey} {...props} ref={ref} />;
 });
 

@@ -1103,6 +1103,7 @@ export default function Editor({ type }: { type: "post" | "page" }) {
                 }}
                 media={media}
                 inserterOpen={inserter}
+                onInserterClose={() => setInserter(false)}
                 listViewOpen={listView}
                 inspectorOpen={sidebar && inspectorTab === "block"}
                 onUpload={canUpload ? upload : undefined}

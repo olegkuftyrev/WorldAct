@@ -4,6 +4,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { withPermalink } from "./permalinks.js";
 import type { PostFormat } from "../shared/post-formats.js";
+import { normalizeFixedTimezone } from "./timezone.js";
 
 export const rootDir = path.resolve(
   path.dirname(fileURLToPath(import.meta.url)),
@@ -120,7 +121,8 @@ export async function getSettings(
   const result = await db.query<{ data: Partial<typeof defaultSettings> }>(
     "SELECT data FROM settings WHERE id = 1",
   );
-  return { ...defaultSettings, ...result.rows[0]?.data };
+  const settings = { ...defaultSettings, ...result.rows[0]?.data };
+  return { ...settings, timezone: normalizeFixedTimezone(settings.timezone) };
 }
 
 export async function getPost(

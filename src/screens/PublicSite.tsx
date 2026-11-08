@@ -41,6 +41,19 @@ import {
   ResourceState,
 } from "../components/AdminUI";
 
+type DateArchive = {
+  type: "date";
+  year: number;
+  month?: number;
+  day?: number;
+  week?: number;
+  name: string;
+  permalink: string;
+};
+type PublicArchive =
+  | { taxonomy: "category" | "tag"; slug: string; name?: string }
+  | DateArchive;
+
 export default function PublicSite({
   detail = false,
   page = false,
@@ -53,7 +66,7 @@ export default function PublicSite({
   page?: boolean;
   preview?: boolean;
   slugOverride?: string;
-  archive?: { taxonomy: "category" | "tag"; slug: string; name?: string };
+  archive?: PublicArchive;
   notFound?: boolean;
 }) {
   const { slug: routeSlug, id: previewId } = useParams(),
@@ -62,9 +75,23 @@ export default function PublicSite({
   const [params, setParams] = useSearchParams();
   const searchTerm = params.get("search") || params.get("s") || "";
   const categoryFilter =
-    archive?.taxonomy === "category" ? archive.slug : params.get("category");
+    archive && "taxonomy" in archive && archive.taxonomy === "category" ? archive.slug : params.get("category");
   const tagFilter =
-    archive?.taxonomy === "tag" ? archive.slug : params.get("tag");
+    archive && "taxonomy" in archive && archive.taxonomy === "tag" ? archive.slug : params.get("tag");
+  const dateArchive = archive && "type" in archive && archive.type === "date" ? archive : null;
+  const dateQuery = new URLSearchParams();
+  for (const key of ["year", "monthnum", "day", "m", "w"])
+    if (params.has(key)) dateQuery.set(key, params.get(key)!);
+  if (dateArchive) {
+    // The resolved path is authoritative; unrelated search parameters cannot
+    // silently replace the date represented by /YYYY/MM/DD/.
+    dateQuery.delete("m");
+    dateQuery.set("year", String(dateArchive.year));
+    for (const [key, value] of [["monthnum", dateArchive.month], ["day", dateArchive.day], ["w", dateArchive.week]] as const)
+      if (value !== undefined) dateQuery.set(key, String(value));
+      else dateQuery.delete(key);
+  }
+  const hasDateFilter = Boolean(dateArchive || dateQuery.size);
   const requestedPage = Math.max(1, Number(params.get("page")) || 1);
   const commentPageParam = params.get("commentPage");
   const commentPage = Math.max(1, Number(commentPageParam) || 1);
@@ -84,10 +111,11 @@ export default function PublicSite({
     if (value) publicQuery.set(key!, value);
   for (const [key, value] of new URLSearchParams(blockQuery))
     publicQuery.set(key, value);
+  for (const [key, value] of dateQuery) publicQuery.set(key, value);
   const design = useResource<PublicDesign>("/public/design");
   const site = useResource<{
     settings: Partial<Settings>;
-    archive?: { type: "author"; name: string; authorId: number } | null;
+    archive?: { type: "author"; name: string; authorId: number } | DateArchive | null;
     posts: Post[];
     pages: Post[];
     frontPage: Post | null;
@@ -174,6 +202,7 @@ export default function PublicSite({
     categoryFilter ||
     tagFilter ||
     params.get("author") ||
+    hasDateFilter ||
     params.get("page"),
   );
   const frontPage = !detail && !hasArchiveFilter ? site.data?.frontPage : null;
@@ -311,6 +340,10 @@ export default function PublicSite({
       wrapper.replaceChildren(frame);
     }
   }, [post, site.data, design.data]);
+  useEffect(() => {
+    const cleanups = [...document.querySelectorAll(".public-site .public-content")].map(enhanceArchives);
+    return () => {for (const cleanup of cleanups) cleanup?.();};
+  }, [post, site.data, design.data]);
   async function submit(event: FormEvent) {
     event.preventDefault();
     setBusy(true);
@@ -426,6 +459,7 @@ export default function PublicSite({
     category: categoryFilter || undefined,
     tag: tagFilter || undefined,
     author: Boolean(params.get("author")),
+    date: hasDateFilter,
   });
   if (design.data?.theme?.themeJSON && sourceTemplate) {
     return (
@@ -767,6 +801,8 @@ export default function PublicSite({
                         ? `Tag: ${archive?.name || tagFilter}`
                         : params.get("author")
                           ? `Author: ${site.data?.archive?.name || "Posts"}`
+                          : hasDateFilter
+                            ? site.data?.archive?.name || dateArchive?.name || "Archives"
                           : isPostsPage
                             ? post?.title || "Blog"
                             : "Blog"}
@@ -798,7 +834,7 @@ export default function PublicSite({
                   {(searchTerm ||
                     categoryFilter ||
                     tagFilter ||
-                    params.get("author")) && <Link to="/">Show all posts</Link>}
+                    params.get("author") || hasDateFilter) && <Link to="/">Show all posts</Link>}
                 </form>
                 <div className="public-posts">
                   {posts.map((item) => (
@@ -983,7 +1019,7 @@ function RenderedTemplate({
   fallback: string;
   preview?: boolean;
 }) {
-  const location = useLocation();
+  const location = useLocation(), root = useRef<HTMLDivElement>(null);
   const [content, setContent] = useState<string | null>(null),
     [error, setError] = useState("");
   const requestQuery = new URLSearchParams(location.search);
@@ -1010,9 +1046,11 @@ function RenderedTemplate({
       active = false;
     };
   }, [request, document.updatedAt, preview]);
+  useEffect(() => enhanceArchives(root.current), [content, fallback, preview]);
   if (preview)
     return (
       <div
+        ref={root}
         className={className}
         dangerouslySetInnerHTML={{ __html: fallback }}
       />
@@ -1030,20 +1068,21 @@ function RenderedTemplate({
       </p>
     );
   return (
-    <div className={className} dangerouslySetInnerHTML={{ __html: content }} />
+    <div ref={root} className={className} dangerouslySetInnerHTML={{ __html: content }} />
   );
 }
 
 function selectSourceTemplate(documents: SiteTemplate[] | undefined, context: {
   notFound: boolean; single: boolean; post: Post | null | undefined;
   frontPage: boolean; home: boolean; search: boolean;
-  category?: string; tag?: string; author: boolean;
+  category?: string; tag?: string; author: boolean; date: boolean;
 }) {
   const candidates = context.notFound ? ["404", "index"]
     : context.search ? ["search", "index"]
     : context.category ? [`category-${context.category}`, "category", "archive", "index"]
     : context.tag ? [`tag-${context.tag}`, "tag", "archive", "index"]
     : context.author ? ["author", "archive", "index"]
+    : context.date ? ["date", "archive", "index"]
     : context.single && context.post ? [
         ...(context.post.templateSlug ? [context.post.templateSlug] : []),
         ...(context.frontPage ? ["front-page"] : []),
@@ -1070,6 +1109,33 @@ function enhanceEmbeds(root: ParentNode) {
     frame.allow = "encrypted-media; picture-in-picture";
     wrapper.replaceChildren(frame);
   }
+}
+function enhanceArchives(root: ParentNode | null) {
+  if (!root) return;
+  const cleanups = [...root.querySelectorAll<HTMLSelectElement>('.wp-block-archives-dropdown select[name="archive-dropdown"]')].map((select) => {
+    let escapePressed = false;
+    const timers = new Set<ReturnType<typeof setTimeout>>();
+    const keyup = (event: KeyboardEvent) => {escapePressed = event.key === "Escape";};
+    const click = () => {escapePressed = false;};
+    const change = () => {
+      // Match the source dropdown's delay so Escape can cancel the native
+      // select's pending change before a navigation starts.
+      const timer = setTimeout(() => {
+        timers.delete(timer);
+        if (escapePressed || !select.value.startsWith("/") || select.value.startsWith("//")) return;
+        try {
+          const target = new URL(select.value, window.location.origin);
+          if (target.origin === window.location.origin && ["http:", "https:"].includes(target.protocol)) window.location.assign(target.pathname + target.search + target.hash);
+        } catch { /* Ignore malformed archive option URLs. */ }
+      }, 250);
+      timers.add(timer);
+    };
+    select.addEventListener("keyup", keyup);
+    select.addEventListener("click", click);
+    select.addEventListener("change", change);
+    return () => {select.removeEventListener("keyup", keyup);select.removeEventListener("click", click);select.removeEventListener("change", change);for (const timer of timers) clearTimeout(timer);};
+  });
+  return () => {for (const cleanup of cleanups) cleanup();};
 }
 function enhanceNavigation(root: HTMLElement) {
   const disclosures = [...root.querySelectorAll<HTMLDetailsElement>("details.worldact-navigation-toggle")];
@@ -1134,6 +1200,7 @@ function SourceThemeDocument({ document: template, postId, query, commentPage, u
     if (!root.current) return;
     enhanceEmbeds(root.current);
     const cleanup = enhanceNavigation(root.current);
+    const cleanupArchives = enhanceArchives(root.current);
     let active=true;
     if(!userName)api<{author:{authorName:string;authorEmail:string;authorUrl:string}|null}>("/public/comment-author").then(({author})=>{
       if(!active || !author || !root.current)return;
@@ -1142,7 +1209,7 @@ function SourceThemeDocument({ document: template, postId, query, commentPage, u
       for(const key of ["authorName","authorEmail","authorUrl"] as const){const field=root.current.querySelector<HTMLInputElement>(`input[name="${key}"]`);if(field && !field.value)field.value=author[key] || "";}
       checkbox.checked=true;
     }).catch(()=>{});
-    return ()=>{active=false;cleanup();};
+    return ()=>{active=false;cleanup();cleanupArchives?.();};
   }, [html]);
   async function submitComment(event: FormEvent<HTMLDivElement>) {
     const form = event.target as HTMLFormElement;
@@ -1284,7 +1351,7 @@ export function PermalinkResolver() {
   const location = useLocation();
   const resource = useResource<{
     post?: Post;
-    archive?: { taxonomy: "category" | "tag"; slug: string; name?: string };
+    archive?: PublicArchive;
   }>(`/public/resolve?path=${encodeURIComponent(location.pathname)}`);
   if (resource.error === "This page could not be found." || resource.error === "Page not found." || resource.error === "Post not found.") return <PublicSite notFound />;
   if (resource.loading || resource.error)

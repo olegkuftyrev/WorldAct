@@ -1,5 +1,6 @@
 import sanitizeHtml from "sanitize-html";
 import type { AuthRequest } from "./auth.js";
+import { gridTemplateColumnsPattern } from "./block-layout.js";
 
 export class HttpError extends Error {
   constructor(
@@ -105,6 +106,7 @@ const allowedStyles: Record<string, RegExp[]> = {
   "flex-shrink": [/^\d+(?:\.\d+)?$/],
   "grid-column": [/^span (?:[1-9]|1[0-2])$/],
   "grid-row": [/^span (?:[1-9]|1[0-2])$/],
+  "grid-template-columns": [gridTemplateColumnsPattern],
   "object-fit": [/^(?:cover|contain|fill|none|scale-down)$/],
   "aspect-ratio": [/^\d+(?:\.\d+)?(?:\s*\/\s*\d+(?:\.\d+)?)?$/],
 };

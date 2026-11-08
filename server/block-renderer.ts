@@ -6,6 +6,9 @@ import { cleanContent, plainText, HttpError } from "./utils.js";
 import { restDateToUTC } from "./date.js";
 import { date as formatBlockDate, humanTimeDiff } from "@wordpress/date";
 import { renderThemeBlock, THEME_BLOCKS } from "./theme-blocks.js";
+import { renderWidgetBlock, WIDGET_BLOCKS } from "./widget-blocks.js";
+import { appendDateArchiveSQL, dateArchiveTitle, parseDateArchiveQuery } from "./date-archives.js";
+import { gridTemplateColumns, isResponsiveGrid } from "./block-layout.js";
 
 export type BlockDatabase = Pick<pg.Pool, "query"> | pg.PoolClient;
 export type RenderPost = Record<string, any>;
@@ -67,6 +70,7 @@ export type State = {
 };
 export const CORE_DYNAMIC_BLOCKS = [
   ...THEME_BLOCKS,
+  ...WIDGET_BLOCKS,
   "core/query",
   "core/post-template",
   "core/post-title",
@@ -192,6 +196,7 @@ function classNames(name: string, attrs: Record<string, any>, extra = "") {
     attrs.fontSize ? `has-${slug(attrs.fontSize)}-font-size` : "",
     attrs.fontFamily ? `has-${slug(attrs.fontFamily)}-font-family` : "",
     attrs.layout?.type ? `is-layout-${slug(attrs.layout.type)}${attrs.layout.type === "constrained" ? " has-global-padding" : ""}` : ["core/columns", "core/buttons"].includes(name) ? "is-layout-flex" : "",
+    attrs.layout?.type === "grid" ? `wp-block-${name.replace(/^core\//, "").replace("/", "-")}-is-layout-grid${isResponsiveGrid(attrs.layout) ? " has-native-responsive-grid" : ""}` : "",
     extra,
   ]
     .filter(Boolean)
@@ -264,7 +269,7 @@ function blockStyle(attrs: Record<string, any>) {
     push("display", "grid");
     push(
       "grid-template-columns",
-      `repeat(${integer(attrs.layout.columnCount, 3, 1, 8)}, minmax(0, 1fr))`,
+      gridTemplateColumns(attrs.layout, style.spacing?.blockGap),
     );
   }
   return pairs.map(([key, value]) => `${key}:${String(value)}`).join(";");
@@ -388,6 +393,8 @@ async function queryPosts(
     : "post";
   const args: unknown[] = [postType];
   const where = ["p.type=$1", "p.status='publish'", "p.password_hash IS NULL"];
+  const dateArchive = input.inherit ? parseDateArchiveQuery(inherited) : null;
+  appendDateArchiveSQL(where, args, "coalesce(p.published_at,p.created_at)", dateArchive, state.settings.timezone, state.settings.weekStartsOn);
   const add = (sql: string, value: unknown) => {
     args.push(value);
     where.push(sql.replace("?", "$" + args.length));
@@ -453,7 +460,7 @@ async function queryPosts(
   const orderBy = columns[input.orderBy] || columns.date;
   const order = input.order === "asc" ? "ASC" : "DESC";
   const sticky =
-    input.sticky === "" || input.sticky === undefined ? "p.sticky DESC," : "";
+    (input.sticky === "" || input.sticky === undefined) && !dateArchive && !inherited.search && !inherited.author && !inherited.category && !inherited.tag ? "p.sticky DESC," : "";
   const key = JSON.stringify({
     where,
     args,
@@ -743,6 +750,9 @@ async function renderNode(
   const themeBlock = await renderThemeBlock(node, context, state,
     (nodes, next) => renderChildren(nodes, next, state), attr);
   if (themeBlock !== undefined) return themeBlock;
+  const widgetBlock = await renderWidgetBlock(node, context, state, attr,
+    (post, next) => renderChildren(parseRenderNodes(post), next, state));
+  if (widgetBlock !== undefined) return widgetBlock;
   const body = () => renderChildren(node.children, context, state);
   const wrap = async (tag = "div", extra = "") =>
     `<${safeTag(tag)}${attr(extra)}>${await body()}</${safeTag(tag)}>`;
@@ -759,7 +769,7 @@ async function renderNode(
         `<li class="wp-block-post post-${integer(post.id, 0, 0, 2147483647)} type-${esc(post.type)}">${await renderChildren(node.children, { ...context, post }, state)}</li>`,
       );
     const legacyGrid=!a.layout && context.queryDisplayLayout?.type === "flex";
-    return `<ul${attr(a.layout?.type === "grid" ? `is-layout-grid columns-${integer(a.layout.columnCount, 3, 1, 8)}` : legacyGrid?`is-flex-container columns-${integer(context.queryDisplayLayout?.columns,3,1,8)}`:"is-layout-flow")}>${items.join("")}</ul>`;
+    return `<ul${attr(a.layout?.type === "grid" ? `is-layout-grid columns-${integer(a.layout.columnCount, 3, 1, 1000)}` : legacyGrid?`is-flex-container columns-${integer(context.queryDisplayLayout?.columns,3,1,1000)}`:"is-layout-flow")}>${items.join("")}</ul>`;
   }
   if (name === "core/query-no-results")
     return context.loop && !context.loop.posts.length ? wrap() : "";
@@ -803,6 +813,7 @@ async function renderNode(
   }
   if (name === "core/query-title") {
     const query = state.options.query || {};
+    const dateArchive = parseDateArchiveQuery(query);
     let label = "Blog",
       prefix = "";
     if (query.search) {
@@ -839,6 +850,10 @@ async function renderNode(
             ).rows[0],
         );
       label = person?.name || "Posts";
+    }
+    if (dateArchive && !query.search && !query.category && !query.tag && !query.author) {
+      label = dateArchiveTitle(dateArchive, { showPrefix: a.showPrefix !== false });
+      prefix = "";
     }
     const level = integer(a.level, 1, 1, 6);
     return `<h${level}${attr()}>${esc((a.showPrefix === false ? "" : prefix) + label)}</h${level}>`;

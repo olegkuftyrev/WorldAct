@@ -28,6 +28,7 @@ Vite serves development at `127.0.0.1:5173` and proxies API, upload, REST, and f
 | `server/media-files.ts`, `server/permalinks.ts`, `server/utils.ts` | Derivatives/storage, routing, validation, sanitization and canonical block handling       |
 | `server/compat.ts`                                                 | REST compatibility subset, feeds, sitemap/robots, permalink resolver and WXR              |
 | `server/blocks.ts`, `server/block-renderer.ts`                       | Native block/entity REST adapters and bounded dynamic public rendering                     |
+| `server/widget-blocks.ts`, `server/date-archives.ts`                 | Source widget rendering and timezone-safe date archive filtering/grouping                  |
 | `server/accounts.ts`, `server/comments.ts`                          | Registration, confirmed privacy requests and comment editing/moderation                    |
 | `server/date.ts`, `server/legacy.ts`                                | Civil-time/UTC conversion and WordPress admin URL redirects                                 |
 | `server/site-identity.ts`, `server/post-templates.ts`                | Confirmed administrator email, site icon derivatives and content-type template assignments |
@@ -68,7 +69,7 @@ Templates, template parts and patterns are versioned site documents using the sa
 
 Dynamic public rendering parses canonical block markup, resolves query/post/site/entity context and emits sanitized HTML. It filters nonpublic/password-protected query results, checks preview access, bounds nodes/depth/database queries and rendered output to 8 MiB, and stops cyclic content references. Collection metadata is batched where supported. The same renderer supplies public API, feed and REST content. Legacy template bindings still pass a final structural and URL allowlist, preventing metadata from creating executable attributes or unsafe schemes.
 
-REST publication dates use site-local civil time and separate UTC fields. Conversion accounts for named timezones, explicit offsets and daylight-saving transitions; nonexistent local schedule times are rejected. The official editor date settings use the saved site timezone and display formats.
+REST publication dates use site-local civil time and separate UTC fields. Conversion accounts for named timezones, explicit offsets and daylight-saving transitions; nonexistent local schedule times are rejected. Signed offset aliases normalize at settings validation/read boundaries. The official editor date settings use the saved site timezone and display formats. Public year/month/day/week archives, Calendar and Archives widgets share local-date grouping and half-open publication bounds; skipped civil dates select no posts. UTC SQL bounds preserve PostgreSQL's extended-year/BC notation independently of the host timezone. Native REST author/media embeds provide public profile fields and real image-size URLs for editor previews.
 
 Global styles store supported colors, text/heading font selections, content width and spacing. Navigation items have stable IDs, parent IDs, labels, URLs and targets; validation rejects cycles and each primary/footer location has one assigned menu. The public site consumes these designs, menus and styles.
 

@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { postFormats } from "../shared/post-formats.js";
 import { HttpError, plainText } from "./utils.js";
+import { normalizeFixedTimezone } from "./timezone.js";
 const text = (min: number, max: number) => z.string().trim().min(min).max(max);
 const id = z.number().int().positive().max(2147483647);
 const nullableId = id.nullable();
@@ -41,7 +42,7 @@ export const settingSchema = z
       } catch {
         return false;
       }
-    }),
+    }).transform(normalizeFixedTimezone),
     dateFormat: text(1, 80),
     timeFormat: text(1, 80),
     weekStartsOn:z.number().int().min(0).max(6),

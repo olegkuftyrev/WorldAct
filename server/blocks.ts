@@ -395,32 +395,34 @@ router.get("/wp-json/wp/v2/users/me", async (req: AuthRequest, res) => {
 });
 router.get("/wp-json/wp/v2/users{/:id}", async (req: AuthRequest, res) => {
   const id = req.params.id ? parseId(req.params.id) : null;
-  const include = String(req.query.include || "")
-    .split(",")
-    .map(Number)
-    .filter((n) => Number.isSafeInteger(n) && n > 0)
-    .slice(0, 100);
-  const rows = (
-    await pool.query(
-      `SELECT u.id,u.username,u.display_name,u.profile FROM users u WHERE ($1::int IS NULL OR u.id=$1) AND ($2::int[]='{}'::int[] OR u.id=ANY($2::int[])) AND EXISTS(SELECT 1 FROM posts p WHERE p.author_id=u.id AND p.status='publish' AND p.password_hash IS NULL) ORDER BY u.display_name,u.id LIMIT 100`,
-      [id, include],
-    )
-  ).rows;
-  const records = rows.map((u) => ({
-    id: u.id,
-    name: u.display_name,
-    slug: u.username,
-    description: u.profile?.bio || "",
-    url: u.profile?.website || "",
-    link: `/?author=${u.id}`,
-    avatar_urls: {},
-  }));
-  if (id) {
-    if (!records[0]) throw new HttpError(404, "Author not found.");
-    res.json(records[0]);
-  } else {
-    res.setHeader("X-WP-Total", records.length);
-    res.setHeader("X-WP-TotalPages", 1);
+  const input = z.object({
+    page: z.coerce.number().int().positive().max(10000).default(1),
+    per_page: z.coerce.number().int().positive().max(100).default(10),
+    search: z.string().max(200).optional(),
+  }).parse(req.query);
+  const include = String(req.query.include || "").split(",").map(Number).filter(n => Number.isSafeInteger(n) && n > 0).slice(0, 100);
+  const requestedTypes = req.query.has_published_posts;
+  let types = ["post", "page"];
+  if (requestedTypes !== undefined && requestedTypes !== "true" && requestedTypes !== "1" && requestedTypes !== "false" && requestedTypes !== "0") {
+    const values = (Array.isArray(requestedTypes) ? requestedTypes : [requestedTypes]).flatMap(value => typeof value === "string" ? value.split(",") : []);
+    if (!values.length || values.some(value => !["post", "page"].includes(value))) throw new HttpError(400, "Choose a supported published content type.");
+    types = [...new Set(values)];
+  }
+  const args: unknown[] = [id, include, types], where = ["($1::int IS NULL OR u.id=$1)", "($2::int[]='{}'::int[] OR u.id=ANY($2::int[]))", "EXISTS(SELECT 1 FROM posts p WHERE p.author_id=u.id AND p.status='publish' AND p.password_hash IS NULL AND p.type=ANY($3::text[]))"];
+  if (input.search) { args.push(`%${input.search.replace(/[\\%_]/g,"\\$&")}%`); where.push(`(u.display_name ILIKE $${args.length} OR u.username ILIKE $${args.length})`); }
+  const total = (await pool.query(`SELECT count(*)::int AS total FROM users u WHERE ${where.join(" AND ")}`, args)).rows[0].total;
+  if (input.page > 1 && (input.page - 1) * input.per_page >= total) throw new HttpError(400, "The page number requested is larger than the number of pages available.");
+  const rows = (await pool.query(`SELECT u.id,u.username,u.display_name,u.profile FROM users u WHERE ${where.join(" AND ")} ORDER BY u.display_name,u.id LIMIT $${args.length + 1} OFFSET $${args.length + 2}`, [...args, input.per_page, (input.page - 1) * input.per_page])).rows;
+  const records = rows.map(u => ({ id:u.id,name:u.display_name,slug:u.username,description:u.profile?.bio || "",url:u.profile?.website || "",link:`/?author=${u.id}`,avatar_urls:{} }));
+  if (id) { if (!records[0]) throw new HttpError(404,"Author not found."); res.json(records[0]); }
+  else {
+    res.setHeader("X-WP-Total",total); res.setHeader("X-WP-TotalPages",Math.ceil(total/input.per_page));
+    const links: string[] = [];
+    for (const [relation,page] of [["prev",input.page-1],["next",input.page+1]] as const) {
+      if (page<1 || page>Math.ceil(total/input.per_page)) continue;
+      const target = new URL(req.originalUrl,process.env.APP_ORIGIN || "http://127.0.0.1:5173"); target.searchParams.set("page",String(page)); target.searchParams.set("per_page",String(input.per_page)); links.push(`<${target.href}>; rel="${relation}"`);
+    }
+    if (links.length) res.setHeader("Link",links.join(", "));
     res.json(records);
   }
 });

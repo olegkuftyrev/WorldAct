@@ -29,6 +29,7 @@ import { avatarURL } from "./avatars.js";
 import { assertEditLease } from "./edit-lease.js";
 import { postFormats } from "../shared/post-formats.js";
 import { contributorCanEditPostStatus } from "./comment-access.js";
+import { appendDateArchiveSQL, dateArchiveDTO, parseDateArchiveQuery } from "./date-archives.js";
 
 const router = Router();
 const contentRoles = requireRole(
@@ -1288,6 +1289,7 @@ router.get("/public/site", async (req, res) => {
     .parse(req.query);
   const settings = await getSettings(),
     args: unknown[] = [];
+  const dateArchive = parseDateArchiveQuery(req.query);
   let where = "p.type='post' AND p.status='publish'";
   if (filter.author) { args.push(filter.author); where += ` AND p.author_id=$${args.length}`; }
   if (filter.search) {
@@ -1299,6 +1301,9 @@ router.get("/public/site", async (req, res) => {
       args.push(filter[taxonomy]);
       where += ` AND EXISTS(SELECT 1 FROM post_terms pt JOIN terms t ON t.id=pt.term_id WHERE pt.post_id=p.id AND t.taxonomy='${taxonomy}' AND t.slug=$${args.length})`;
     }
+  const dateWhere: string[] = [];
+  appendDateArchiveSQL(dateWhere, args, "coalesce(p.published_at,p.created_at)", dateArchive, settings.timezone, settings.weekStartsOn);
+  if (dateWhere.length) where += " AND " + dateWhere.map((clause) => `(${clause})`).join(" AND ");
   const count = await pool.query(
     `SELECT count(*)::int AS total FROM posts p WHERE ${where}`,
     args,
@@ -1306,7 +1311,7 @@ router.get("/public/site", async (req, res) => {
   args.push(settings.postsPerPage, (filter.page - 1) * settings.postsPerPage);
   const [posts, pages] = await Promise.all([
     pool.query(
-      `SELECT ${postFields},p.password_hash AS "_passwordHash" FROM posts p JOIN users u ON u.id=p.author_id WHERE ${where} ORDER BY p.sticky DESC,p.published_at DESC,p.id DESC LIMIT $${args.length - 1} OFFSET $${args.length}`,
+      `SELECT ${postFields},p.password_hash AS "_passwordHash" FROM posts p JOIN users u ON u.id=p.author_id WHERE ${where} ORDER BY ${dateArchive || filter.search || filter.author || filter.category || filter.tag ? "" : "p.sticky DESC,"}p.published_at DESC,p.id DESC LIMIT $${args.length - 1} OFFSET $${args.length}`,
       args,
     ),
     pool.query(
@@ -1346,7 +1351,7 @@ router.get("/public/site", async (req, res) => {
       siteIconUrl: icon ? `/uploads/${icon.filename}` : null,
       siteIconSizes:icon?.sizes || {},
     },
-    archive: author ? { type: "author", name: author.name, authorId: filter.author } : null,
+    archive: dateArchive ? dateArchiveDTO(dateArchive) : author ? { type: "author", name: author.name, authorId: filter.author } : null,
     posts: await Promise.all(posts.rows.map(sanitize)),
     pages: safePages,
     frontPage,

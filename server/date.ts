@@ -1,10 +1,12 @@
 import moment from "moment-timezone";
 import { HttpError } from "./utils.js";
+import { normalizeFixedTimezone } from "./timezone.js";
 
 const fixedOffset = (timezone: string) => /^[+-]\d{2}:\d{2}$/.test(timezone);
 
 /** WordPress REST's `date` is a local civil time, while `date_gmt` is UTC. */
 export function restLocalDate(value: string | Date, timezone: string) {
+  timezone = normalizeFixedTimezone(timezone);
   const date = moment(value);
   if (!date.isValid()) throw new HttpError(400, "The publication date is invalid.");
   const localized = fixedOffset(timezone)
@@ -14,6 +16,7 @@ export function restLocalDate(value: string | Date, timezone: string) {
 }
 
 export function restDateToUTC(value: string, timezone: string, gmt = false) {
+  timezone = normalizeFixedTimezone(timezone);
   if (!/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}(?::\d{2}(?:\.\d{1,3})?)?(?:Z|[+-]\d{2}:?\d{2})?$/i.test(value))
     throw new HttpError(400, "Use an ISO publication date.");
   const hasZone = /(?:Z|[+-]\d{2}:?\d{2})$/i.test(value);

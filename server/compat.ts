@@ -41,6 +41,7 @@ import {
 import { z } from "zod";
 import { postFormats } from "../shared/post-formats.js";
 import { assertCommentAccess, canEditPostComments } from "./comment-access.js";
+import { appendDateArchiveSQL, dateArchiveDTO, parseDateArchivePath } from "./date-archives.js";
 const router = express.Router();
 const admin = requireRole("administrator");
 const esc = (value: unknown) =>
@@ -168,6 +169,16 @@ router.get("/api/public/resolve", async (req, res) => {
       ).rows[0];
       if (term) {
         res.json({ archive: term });
+        return;
+      }
+    }
+    const dateArchive = parseDateArchivePath(path);
+    if (dateArchive) {
+      const args: unknown[] = [];
+      const where = ["p.type='post'", "p.status='publish'"];
+      appendDateArchiveSQL(where, args, "coalesce(p.published_at,p.created_at)", dateArchive, settings.timezone, settings.weekStartsOn);
+      if ((await pool.query(`SELECT 1 FROM posts p WHERE ${where.map((clause) => `(${clause})`).join(" AND ")} LIMIT 1`, args)).rowCount) {
+        res.json({ archive: dateArchiveDTO(dateArchive) });
         return;
       }
     }
@@ -328,6 +339,37 @@ function wpFields(req: Request, value: any) {
     );
   return Array.isArray(value) ? value.map(pick) : pick(value);
 }
+const embeddedRecords = new WeakMap<Request, Map<string, Promise<any>>>();
+function embeddingRequested(req: Request, relation: string) {
+  if (req.query._embed === undefined) return false;
+  const value = req.query._embed;
+  return value === "" || value === "true" || value === "1" ||
+    (typeof value === "string" && value.split(",").includes(relation));
+}
+async function embeddedRecord(req: Request, key: string, read: () => Promise<any>) {
+  let records = embeddedRecords.get(req);
+  if (!records) { records = new Map(); embeddedRecords.set(req, records); }
+  if (!records.has(key)) records.set(key, read());
+  return records.get(key)!;
+}
+async function postEmbeddings(post: any, req: Request) {
+  const embedded: Record<string, any[]> = {};
+  if (embeddingRequested(req, "author")) {
+    const person = await embeddedRecord(req, `author:${post.authorId}`, async () => {
+      const row = (await pool.query("SELECT id,username,display_name,profile FROM users WHERE id=$1", [post.authorId])).rows[0];
+      return row ? { id: row.id, name: row.display_name, slug: row.username, description: row.profile?.bio || "", url: row.profile?.website || "", link: `/?author=${row.id}`, avatar_urls: {} } : null;
+    });
+    if (person) embedded.author = [person];
+  }
+  if (post.featuredMediaId && embeddingRequested(req, "wp:featuredmedia")) {
+    const image = await embeddedRecord(req, `media:${post.featuredMediaId}`, async () => {
+      const row = (await pool.query(`SELECT ${mediaFields},author_id AS "authorId",width,height,sizes,description,attached_post_id,comment_status FROM media WHERE id=$1`, [post.featuredMediaId])).rows[0];
+      return row ? wpMedia(row) : null;
+    });
+    if (image) embedded["wp:featuredmedia"] = [image];
+  }
+  return Object.keys(embedded).length ? { _embedded: embedded } : {};
+}
 async function wpPost(post: any, req: AuthRequest, edit = false) {
   const settings = await getSettings(),
     link = absolute(await postPermalink(post, settings), settings.siteUrl);
@@ -375,6 +417,7 @@ async function wpPost(post: any, req: AuthRequest, edit = false) {
     template: post.templateSlug || "",
     format: post.format || "standard",
     meta: {},
+    ...(await postEmbeddings(post, req)),
     categories:
       post.categoryIds ||
       post.terms
@@ -777,7 +820,13 @@ async function wpMedia(item: any) {
       width: item.width,
       height: item.height,
       file: item.filename,
-      sizes: item.sizes || {},
+      sizes: {
+        ...Object.fromEntries(Object.entries(item.sizes || {}).map(([name, value]) => {
+          const size = value as any;
+          return [name, { ...size, source_url: absolute(size.url || "/uploads/" + size.filename, s.siteUrl), mime_type: size.mimeType || size.mime_type || item.mimeType || item.mime_type }];
+        })),
+        full: { width:item.width,height:item.height,source_url:url,mime_type:item.mimeType || item.mime_type },
+      },
     },
     post: item.attachedPostId || item.attached_post_id || 0,
     comment_status:item.commentStatus || item.comment_status || "closed",
@@ -1313,7 +1362,8 @@ const taxonomies = {
     slug: "category",
     name: "Categories",
     labels: { name: "Categories", singular_name: "Category" },
-    visibility: { public: true, publicly_queryable: true, show_ui: true, show_in_nav_menus: true, show_admin_column: true },
+    visibility: { public: true, publicly_queryable: true, show_ui: true, show_in_nav_menus: true, show_admin_column: true, show_tagcloud: true },
+    show_cloud: true,
     description: "Hierarchical post categories.",
     hierarchical: true,
     types: ["post"],
@@ -1324,7 +1374,8 @@ const taxonomies = {
     slug: "post_tag",
     name: "Tags",
     labels: { name: "Tags", singular_name: "Tag" },
-    visibility: { public: true, publicly_queryable: true, show_ui: true, show_in_nav_menus: true, show_admin_column: true },
+    visibility: { public: true, publicly_queryable: true, show_ui: true, show_in_nav_menus: true, show_admin_column: true, show_tagcloud: true },
+    show_cloud: true,
     description: "Post tags.",
     hierarchical: false,
     types: ["post"],
