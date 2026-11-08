@@ -67,8 +67,15 @@ passed all twelve depth1/2/3/10 by1440/768/375 control rows, including a real
 eligible child Reply saved and reloaded at the maximum depth; its own23 source
 and23 compiled checks across four files passed. That follow-up also found
 source depth10 overflow at tablet/mobile from inherited global ordered-list
-margins. Layout correction and independent native re-evaluation remain a
-separate release gate; the passing control checks do not waive it.
+margins. The narrowly scoped public comment-list margin reset subsequently
+passed independent native re-evaluation at `bc26b63`: actual source depth10
+documents fit1440/768/375 exactly, the tail stays readable, intended32/16px
+child padding remains, and a real maximum-eligible Reply saves/reloads at the
+correct depth. A separately persisted source content-only template retains
+all2500 IDs at all three widths within the unchanged rendering budget. Classic
+comparison, body/Query Loop/comment counters and privacy pass. Own independent
+build and23 source/23 compiled checks across four files also pass; the earlier
+failed layout evidence remains a separate historical result.
 
 ## Reference provenance
 
