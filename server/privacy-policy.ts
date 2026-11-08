@@ -5,6 +5,7 @@ import {pool,getSettings,getPost} from "./db.js";
 import {requireRole,type AuthRequest} from "./auth.js";
 import {needUser,cleanContent,cleanRawContent,slugify,plainText,HttpError} from "./utils.js";
 import {buildPrivacyPolicyGuide,privacyPolicyRawContent} from "./privacy-guide.js";
+import {resolvePostDate} from "./post-date.js";
 const router=Router(),admin=requireRole("administrator");
 async function policyGuide(){
  const settings=await getSettings();
@@ -19,7 +20,8 @@ router.post("/tools/privacy/policy-draft",admin,async(req:AuthRequest,res)=>{
  const db=await pool.connect();let id:number;
  try{
   await db.query("BEGIN");const base=slugify(input.title).slice(0,170),slug=base+"-"+randomBytes(5).toString("hex");
-  const inserted=await db.query("INSERT INTO posts(type,title,slug,content,raw_content,status,author_id,comment_status) VALUES('page',$1,$2,$3,$4,'draft',$5,'closed') RETURNING id",[input.title,slug,cleanContent(raw),cleanRawContent(raw),needUser(req).id]);id=inserted.rows[0].id;
+  const settings=await getSettings(db),pair=resolvePostDate({},undefined,"draft",settings.timezone,new Date());
+  const inserted=await db.query("INSERT INTO posts(type,title,slug,content,raw_content,status,author_id,comment_status,post_date,post_date_gmt) VALUES('page',$1,$2,$3,$4,'draft',$5,'closed',$6,$7) RETURNING id",[input.title,slug,cleanContent(raw),cleanRawContent(raw),needUser(req).id,pair.postDate,pair.postDateGmt]);id=inserted.rows[0].id;
   if(input.setAsPolicy)await db.query("UPDATE settings SET data=data || $1::jsonb WHERE id=1",[JSON.stringify({privacyPageId:id})]);await db.query("COMMIT");
  }catch(error){await db.query("ROLLBACK");throw error;}finally{db.release();}
  res.status(201).json({post:await getPost(id),reviewRequired:guide.reviewRequired});

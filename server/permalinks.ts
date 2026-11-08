@@ -2,7 +2,7 @@ import { pool, getSettings } from "./db.js";
 import type pg from "pg";
 import { readPlainPermalinkQuery } from "../shared/plain-permalink-query.js";
 import { readPublicPath } from "./public-path.js";
-import { restLocalDate } from "./date.js";
+import {parsePostCivil} from "./post-date.js";
 import { HttpError } from "./utils.js";
 import { permalinkTokenCaptures, permalinkTokenPattern, type PermalinkToken } from "../shared/permalink-tokens.js";
 type Database = Pick<pg.Pool, "query"> | pg.PoolClient;
@@ -84,16 +84,13 @@ export async function postPermalink(
     return "/" + slugs.map(segment).join("/") + (settings.permalinkStructure.endsWith("/")?"/":"");
   }
   if (!settings.permalinkStructure) return "/?p="+post.id;
-  const date = new Date(
-    post.publishedAt ??
-      post.published_at ??
-      post.createdAt ??
-      post.created_at ??
-      Date.now(),
-  );
-  // One chosen instant/current-site-clock conversion supplies all six fields.
-  // Historical stored local publication dates are a separate fidelity contract.
-  const [year, monthnum, day, hour, minute, second] = restLocalDate(date, settings.timezone).split(/[-T:]/);
+  let civil="2000-01-01T00:00:00";
+  if(/%(?:year|monthnum|day|hour|minute|second)%/.test(settings.permalinkStructure)){
+    const row=(await db.query("SELECT post_date FROM posts WHERE id=$1 AND type=$2 AND status=$3",[post.id,post.type || "post",post.status ?? "publish"])).rows[0];
+    if(!parsePostCivil(row?.post_date))throw new HttpError(404,"Post publication identity is no longer available.");
+    civil=row.post_date;
+  }
+  const [year,monthnum,day,hour,minute,second]=civil.split(/[-T:]/);
   const values: Record<PermalinkToken, string> = {
     postname: segment(post.slug),
     post_id: String(post.id),

@@ -73,7 +73,7 @@ test("complete site archive crosses fresh databases with media, design and setti
       await ok("/api/plugins/custom-footer", "PUT", { enabled: true, settings: { text: "Portable custom footer" } });
       const archive = await ok("/api/tools/export");
       assert.doesNotMatch(JSON.stringify(archive),/192\.0\.2\.245|comment_flood_metadata|commentFloodMetadata|author_ip/);
-      assert.equal(archive.version, 3); assert.ok(archive.mediaFiles.length >= 2); assert.equal(archive.settings.adminEmail, undefined);
+      assert.equal(archive.version, 4); assert.ok(archive.mediaFiles.length >= 2); assert.equal(archive.settings.adminEmail, undefined);
       assert.ok(archive.mediaFiles.every((item: any) => item.data && /^[a-f0-9]{64}$/.test(item.sha256)));
       assert.equal(archive.extensions.find((item: any) => item.slug === "custom-footer")?.settings.text, "Portable custom footer");
       assert.equal(archive.posts.find((item: any) => item.id === post.id).featured_media_id, image.id);

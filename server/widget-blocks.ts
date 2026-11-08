@@ -6,10 +6,11 @@ import { avatarURL } from "./avatars.js";
 import { cleanContent, plainText, HttpError } from "./utils.js";
 import { excerptText } from "./excerpts.js";
 import { legacyExcerptSource } from "./legacy-content.js";
-import { dateArchiveSQLBounds, dateArchiveLocalSQL, dateArchivePath, dateArchiveWeekSQL, parseDateArchiveQuery } from "./date-archives.js";
+import { postCivilBounds, dateArchiveLocalSQL, dateArchivePath, dateArchiveWeekSQL, parseDateArchiveQuery } from "./date-archives.js";
 import { gridColumnCount } from "./block-layout.js";
 import { postHasPassword, postNeedsPassword as protectedPost, publicPostTitle as titleOf } from "./post-passwords.js";
 
+import {formatPostCivil,postCivilZoned} from "./post-date.js";
 import { WIDGET_BLOCKS } from "../shared/dynamic-blocks.js";
 export { WIDGET_BLOCKS };
 const escape = (value: unknown) => String(value ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]!);
@@ -17,7 +18,7 @@ const number = (value: unknown, fallback: number, min = 1, max = 100) => Number.
 const safeURL = (value: unknown) => /^(?:https?:\/\/|\/(?!\/)|#)/i.test(String(value ?? "")) && !/[\u0000-\u0020<>"']/.test(String(value)) ? String(value) : "";
 const published = "p.type='post' AND p.status='publish'";
 const publication = "coalesce(p.published_at,p.created_at)";
-const widgetPostFields = `p.id,p.type,p.title,p.slug,p.parent_id AS "parentId",p.published_at AS "publishedAt",p.created_at AS "createdAt",p.author_id AS "authorId",u.display_name AS "authorName",p.featured_media_id AS "featuredMediaId",(p.password_hash IS NOT NULL) AS "hasPassword",COALESCE((SELECT json_agg(json_build_object('id',t.id,'taxonomy',t.taxonomy,'slug',t.slug) ORDER BY t.name,t.id) FROM post_terms pt JOIN terms t ON t.id=pt.term_id WHERE pt.post_id=p.id),'[]'::json) AS terms`;
+const widgetPostFields = `p.id,p.type,p.post_date AS "postDate",p.post_date_gmt AS "postDateGmt",p.title,p.slug,p.parent_id AS "parentId",p.published_at AS "publishedAt",p.created_at AS "createdAt",p.author_id AS "authorId",u.display_name AS "authorName",p.featured_media_id AS "featuredMediaId",(p.password_hash IS NOT NULL) AS "hasPassword",COALESCE((SELECT json_agg(json_build_object('id',t.id,'taxonomy',t.taxonomy,'slug',t.slug) ORDER BY t.name,t.id) FROM post_terms pt JOIN terms t ON t.id=pt.term_id WHERE pt.post_id=p.id),'[]'::json) AS terms`;
 const cached = <T>(state: State, key: string, read: () => Promise<T>): Promise<T> => {
   if (!state.cache.has(key)) state.cache.set(key, read());
   return state.cache.get(key)!;
@@ -105,8 +106,8 @@ async function latestPosts(node: Node, context: Context, state: State, attribute
     }
     item += `<a class="wp-block-latest-posts__post-title" href="${escape(url)}">${escape(title)}</a>`;
     if (a.displayAuthor && post.authorName) item += `<div class="wp-block-latest-posts__post-author">by ${escape(post.authorName)}</div>`;
-    const date = post.publishedAt || post.createdAt;
-    if (a.displayPostDate) item += `<time class="wp-block-latest-posts__post-date" datetime="${escape(new Date(date).toISOString())}">${escape(postDate(date, state))}</time>`;
+    const date = post.postDate;
+    if (a.displayPostDate) item += `<time class="wp-block-latest-posts__post-date" datetime="${escape(postCivilZoned(date,state.settings.timezone))}">${escape(formatPostCivil(date,state.settings.dateFormat,state.settings.timezone))}</time>`;
     if (a.displayPostContent) {
       if (a.displayPostContentRadio === "full_post") {
         const content = protectedPost(post) ? "This content is password protected." : context.contentIds.has(post.id) ? "" : await renderPostContent(post, { ...context, post, contentIds: new Set([...context.contentIds, post.id]) });
@@ -125,7 +126,7 @@ async function latestPosts(node: Node, context: Context, state: State, attribute
 
 async function latestComments(node: Node, state: State, attributes: (extra?: string) => string) {
   const a = node.attrs, limit = number(a.commentsToShow, 5);
-  const records = await cached(state, `widget-latest-comments:${limit}`, async () => (await state.db.query(`SELECT c.id,c.author_name AS "authorName",c.author_email AS "avatarEmail",c.author_url AS "authorUrl",c.user_id AS "userId",c.content AS "commentContent",c.created_at AS "commentDate",p.id AS "postId",p.title,p.slug,p.type,p.parent_id AS "parentId",p.published_at AS "publishedAt",p.created_at AS "createdAt",(p.password_hash IS NOT NULL) AS "hasPassword",${publication} AS "postDate",COALESCE((SELECT json_agg(json_build_object('id',t.id,'taxonomy',t.taxonomy,'slug',t.slug) ORDER BY t.name,t.id) FROM post_terms pt JOIN terms t ON t.id=pt.term_id WHERE pt.post_id=p.id),'[]'::json) AS terms FROM comments c JOIN posts p ON p.id=c.post_id WHERE c.status='approved' AND p.status='publish' ORDER BY c.created_at DESC,c.id DESC LIMIT $1`, [limit])).rows);
+  const records = await cached(state, `widget-latest-comments:${limit}`, async () => (await state.db.query(`SELECT c.id,c.author_name AS "authorName",c.author_email AS "avatarEmail",c.author_url AS "authorUrl",c.user_id AS "userId",c.content AS "commentContent",c.created_at AS "commentDate",p.id AS "postId",p.title,p.slug,p.type,p.parent_id AS "parentId",p.published_at AS "publishedAt",p.created_at AS "createdAt",(p.password_hash IS NOT NULL) AS "hasPassword",p.post_date AS "postDate",p.post_date_gmt AS "postDateGmt",COALESCE((SELECT json_agg(json_build_object('id',t.id,'taxonomy',t.taxonomy,'slug',t.slug) ORDER BY t.name,t.id) FROM post_terms pt JOIN terms t ON t.id=pt.term_id WHERE pt.post_id=p.id),'[]'::json) AS terms FROM comments c JOIN posts p ON p.id=c.post_id WHERE c.status='approved' AND p.status='publish' ORDER BY c.created_at DESC,c.id DESC LIMIT $1`, [limit])).rows);
   const display = a.displayExcerpt !== undefined ? a.displayExcerpt ? "excerpt" : "none" : ["none", "excerpt", "full"].includes(a.displayContent) ? a.displayContent : "excerpt";
   const classes = [a.displayAvatar !== false ? "has-avatars" : "", a.displayDate !== false ? "has-dates" : "", display !== "none" ? "has-excerpts" : "", !records.length ? "no-comments" : ""].filter(Boolean).join(" ");
   if (!records.length) return `<div${attributes(classes)}>No comments to show.</div>`;
@@ -169,7 +170,7 @@ async function tagCloud(node: Node, state: State, attributes: (extra?: string) =
 
 async function archives(node: Node, state: State, attributes: (extra?: string) => string) {
   const a = node.attrs, type = ["yearly", "daily", "weekly", "postbypost", "alpha"].includes(a.type) ? a.type : "monthly";
-  const args: unknown[] = [], local = dateArchiveLocalSQL(publication, args, state.settings.timezone), weekStart = state.settings.weekStartsOn || 0;
+  const args: unknown[] = [], local = "p.post_date::timestamp without time zone", weekStart = state.settings.weekStartsOn || 0;
   const columns = type === "yearly" ? `extract(year FROM ${local})::int AS year` : type === "monthly" ? `extract(year FROM ${local})::int AS year,extract(month FROM ${local})::int AS month` : type === "daily" ? `extract(year FROM ${local})::int AS year,extract(month FROM ${local})::int AS month,extract(day FROM ${local})::int AS day` : type === "weekly" ? `extract(year FROM ${local})::int AS year,${dateArchiveWeekSQL(local, weekStart)} AS week` : "";
   // The archive list is finite even on a site imported with an extreme number
   // of old posts; the render output budget remains an additional global cap.
@@ -204,11 +205,11 @@ async function calendar(node: Node, state: State, attributes: (extra?: string) =
   const a = node.attrs, timezone = state.settings.timezone, query = parseDateArchiveQuery(state.options.query || {}), now = localMoment(new Date(), timezone);
   const weeklyMonth = query?.week ? moment.utc(`${String(query.year).padStart(4, "0")}-01-01`, "YYYY-MM-DD", true).add((query.week - 1) * 7 + 6, "days").month() + 1 : undefined;
   const year = number(a.year ?? query?.year, now.year(), 1, 9999), month = number(a.month ?? query?.month ?? weeklyMonth, query ? 1 : now.month() + 1, 1, 12);
-  const archive = { year, month }, bounds = dateArchiveSQLBounds(archive, timezone), args: unknown[] = [bounds.start, bounds.end], local = dateArchiveLocalSQL(publication, args, timezone);
+  const archive = { year, month }, bounds = postCivilBounds(archive), args: unknown[] = [bounds.start, bounds.end], local = "p.post_date::timestamp without time zone";
   const data = await cached(state, `widget-calendar:${year}:${month}:${timezone}`, async () => {
     const [days, neighbours] = await Promise.all([
-      state.db.query(`SELECT DISTINCT extract(day FROM ${local})::int AS day FROM posts p WHERE ${published} AND ${publication}>=$1::timestamptz AND ${publication}<$2::timestamptz ORDER BY day`, args),
-      state.db.query(`(SELECT ${local}::text AS date,'previous' AS direction FROM posts p WHERE ${published} AND ${publication}<$1::timestamptz ORDER BY ${publication} DESC,p.id DESC LIMIT 1) UNION ALL (SELECT ${local}::text AS date,'next' AS direction FROM posts p WHERE ${published} AND ${publication}>=$2::timestamptz ORDER BY ${publication},p.id LIMIT 1)`, args),
+      state.db.query(`SELECT DISTINCT extract(day FROM ${local})::int AS day FROM posts p WHERE ${published} AND ${local}>=$1::timestamp without time zone AND ${local}<$2::timestamp without time zone ORDER BY day`, args),
+      state.db.query(`(SELECT ${local}::text AS date,'previous' AS direction FROM posts p WHERE ${published} AND ${local}<$1::timestamp without time zone ORDER BY ${local} DESC,p.id DESC LIMIT 1) UNION ALL (SELECT ${local}::text AS date,'next' AS direction FROM posts p WHERE ${published} AND ${local}>=$2::timestamp without time zone ORDER BY ${local},p.id LIMIT 1)`, args),
     ]);
     return { days: days.rows, neighbours: neighbours.rows };
   });

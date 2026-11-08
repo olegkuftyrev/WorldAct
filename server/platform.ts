@@ -1,3 +1,4 @@
+import {publicationPair,resolvePostDate,civilFromInstant} from "./post-date.js";
 import {normalizePingSource} from "./comment-policy.js";
 import {akismetKey,readAkismetSecretStatus,updateAkismetConfiguration} from "./bundled-plugins.js";
 import { validateFontChoices, withFontLibraryLock } from "./fonts.js";
@@ -1122,20 +1123,23 @@ router.delete("/tools/mail/:id", admin, async (req, res) => {
   res.json({ ok: true });
 });
 router.get("/tools/export", admin, async (_req, res) => {
+  const client=await pool.connect();
+  try {
+  await client.query("BEGIN ISOLATION LEVEL REPEATABLE READ READ ONLY");
   const [posts, terms, media, comments, menus, docs, styles, blockEntities, extensions] = await Promise.all(
-    ["posts", "terms", "media", "comments", "navigation_menus", "site_documents", "site_styles", "block_entities", "extensions"].map(table => pool.query(`SELECT * FROM ${table} ORDER BY ${table === "extensions" ? "slug" : "id"}`)),
+    ["posts", "terms", "media", "comments", "navigation_menus", "site_documents", "site_styles", "block_entities", "extensions"].map(table => client.query(`SELECT * FROM ${table} ORDER BY ${table === "extensions" ? "slug" : "id"}`)),
   );
   for (const records of [posts, terms, media, menus, docs, blockEntities]) if (records.rows.length > 1000) throw new HttpError(413, "Export at most 1000 records per section in a site archive.");
   if (comments.rows.length > 10000) throw new HttpError(413, "Export at most 10000 comments per archive.");
-  const relations = await pool.query("SELECT * FROM post_terms ORDER BY post_id,term_id");
-  const settings = await getSettings(), { defaultPingbackFlag: _outgoingFlag, pingServices: _pingServices, adminEmail: _contact, ...publicSettings } = settings;
+  const relations = await client.query("SELECT * FROM post_terms ORDER BY post_id,term_id");
+  const settings = await getSettings(client), { defaultPingbackFlag: _outgoingFlag, pingServices: _pingServices, adminEmail: _contact, ...publicSettings } = settings;
   const embedded = await exportMediaFiles(media.rows);
-  const fonts = await exportFontLibrary(pool, embedded.files.reduce((total, file) => total + file.size, 0));
-  const themeDesigns = (await pool.query("SELECT to_regclass('theme_designs') present")).rows[0].present
-    ? (await pool.query("SELECT theme,variation,styles FROM theme_designs ORDER BY theme")).rows : [];
+  const fonts = await exportFontLibrary(client, embedded.files.reduce((total, file) => total + file.size, 0));
+  const themeDesigns = (await client.query("SELECT to_regclass('theme_designs') present")).rows[0].present
+    ? (await client.query("SELECT theme,variation,styles FROM theme_designs ORDER BY theme")).rows : [];
   const archive = {
-    application: "WorldAct", version: 3, exportedAt: new Date().toISOString(),
-    posts: await Promise.all(posts.rows.map(async ({password_hash: password, ...post}) => ({...post, permalink: await postPermalink({...post, terms: terms.rows.filter(term => relations.rows.some(rel => rel.post_id === post.id && rel.term_id === term.id))}, settings), ...(password ? {status: "draft", passwordProtected: true} : {})}))),
+    application: "WorldAct", version: 4, exportedAt: new Date().toISOString(),
+    posts: await Promise.all(posts.rows.map(async ({password_hash: password, ...post}) => ({...post, permalink: await postPermalink({...post, terms: terms.rows.filter(term => relations.rows.some(rel => rel.post_id === post.id && rel.term_id === term.id))}, settings,client), ...(password ? {status: "draft", passwordProtected: true} : {})}))),
     terms: terms.rows, postTerms: relations.rows, media: media.rows, mediaFiles: embedded.files,
     comments: comments.rows, blockEntities: blockEntities.rows, menus: menus.rows, documents: docs.rows,
     styles: styles.rows[0]?.data || {}, themeDesigns, extensions: extensions.rows.map(extension => ({ ...extension, settings: publicExtensionSettings(extension.slug, extension.settings) })), settings: publicSettings,
@@ -1144,13 +1148,15 @@ router.get("/tools/export", admin, async (_req, res) => {
     note: "Local media and font bytes are embedded with SHA-256 checksums; font activation follows the explicit design replacement choice. Passwords, sessions and account credentials are excluded. Imported content belongs to the importing administrator. Existing content is retained; explicitly choose replaceDesign to activate imported site design and settings. Destination site URL and administrator contact remain unchanged.",
   };
   if (Buffer.byteLength(JSON.stringify(archive)) > MAX_ARCHIVE_JSON_BYTES) throw new HttpError(413, "The complete archive exceeds 96 MiB. Export a smaller site archive.");
+  await client.query("COMMIT");
   res.json(archive);
+  }catch(error){await client.query("ROLLBACK");throw error;}finally{client.release();}
 });
 router.post("/tools/import", admin, async (req: AuthRequest, res) => {
   const input = z
     .object({
       application: z.literal("WorldAct"),
-      version: z.number().int().min(1).max(3),
+      version: z.number().int().min(1).max(4),
       replaceDesign: z.boolean().optional(),
       media: z.array(z.record(z.string(), z.unknown())).max(1000).optional(),
       mediaFiles: z.array(z.record(z.string(), z.unknown())).max(5000).optional(),
@@ -1288,6 +1294,8 @@ router.post("/tools/import", admin, async (req: AuthRequest, res) => {
           created_at: z.iso.datetime({ offset: true }).optional(),
           updated_at: z.iso.datetime({ offset: true }).optional(),
           published_at: z.iso.datetime({ offset: true }).nullable().optional(),
+          post_date: z.string().optional(),
+          post_date_gmt: z.iso.datetime({offset:true}).nullable().optional(),
           passwordProtected: z.boolean().optional(),
           parent_id: nullableId.optional(),
           menu_order: z.number().int().min(-10000).max(10000).optional(),
@@ -1309,12 +1317,23 @@ router.post("/tools/import", admin, async (req: AuthRequest, res) => {
         post.status === "future" || post.passwordProtected
           ? "draft"
           : post.status;
+      const destinationDateSettings=await getSettings(client);
+      let datePair:{postDate:string;postDateGmt:string|null};
+      if(input.version===4){
+        if(post.post_date===undefined || post.post_date_gmt===undefined)throw new HttpError(400,"Version 4 posts require both post_date and nullable post_date_gmt.");
+        datePair=publicationPair(post.post_date,post.post_date_gmt);
+      }else{
+        const sourceZone=typeof (input as any).settings?.timezone==="string"?(input as any).settings.timezone:destinationDateSettings.timezone;
+        const effective=(post.status==="future"?post.scheduled_at:null) || post.published_at || post.created_at || new Date().toISOString();
+        datePair=publicationPair(civilFromInstant(effective,sourceZone),["draft","pending"].includes(post.status)&&!post.published_at&&!post.scheduled_at?null:effective);
+        addWarnings(["Historical civil publication dates were approximated once using the archive timezone, or the destination timezone when absent."]);
+      }
       const rewritten = remapImportedBlockReferences(
         post.raw_content || post.content, post.blocks, blockEntityMap, site.options,
       );
       addWarnings(rewritten.warnings);
       const r = await client.query(
-        "INSERT INTO posts(type,title,slug,content,excerpt,status,author_id,blocks,raw_content,menu_order,sticky,comment_status,created_at,updated_at,published_at,format,featured_media_id,scheduled_at,ping_status,template_slug,pre_trash_status) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,COALESCE($13::timestamptz,now()),COALESCE($14::timestamptz,now()),CASE WHEN $6::varchar='publish' THEN COALESCE($15::timestamptz,$13::timestamptz,now()) ELSE $15::timestamptz END,$16,$17,$18,$19,$20,$21) RETURNING id",
+        "INSERT INTO posts(type,title,slug,content,excerpt,status,author_id,blocks,raw_content,menu_order,sticky,comment_status,created_at,updated_at,published_at,format,featured_media_id,scheduled_at,ping_status,template_slug,pre_trash_status,post_date,post_date_gmt) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,COALESCE($13::timestamptz,now()),COALESCE($14::timestamptz,now()),CASE WHEN $6::varchar='publish' THEN COALESCE($15::timestamptz,$13::timestamptz,now()) ELSE $15::timestamptz END,$16,$17,$18,$19,$20,$21,$22,$23) RETURNING id",
         [
           post.type,
           plainText(post.title),
@@ -1337,6 +1356,7 @@ router.post("/tools/import", admin, async (req: AuthRequest, res) => {
           post.ping_status ?? "closed",
           site.mapPostTemplate(post.template_slug),
           post.status === "trash" ? post.pre_trash_status ?? null : null,
+          datePair.postDate,datePair.postDateGmt,
         ],
       );
       await client.query("UPDATE posts SET footnotes=$1::jsonb WHERE id=$2", [JSON.stringify(post.footnotes ?? []), r.rows[0].id]);

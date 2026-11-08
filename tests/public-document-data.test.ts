@@ -1,4 +1,5 @@
 import test, {after} from "./isolated-test.js";
+import {postPublicationKey} from "../shared/post-civil-date.js";
 import assert from "node:assert/strict";
 import {DOMParser} from "linkedom";
 import {pool} from "../server/db.js";
@@ -28,7 +29,7 @@ test("direct document models render all bundled themes with safe DTOs, selected 
   try {
     await f.ok("/api/settings","PUT",{permalinkStructure:"",frontPageMode:"posts",timezone:"UTC",dateFormat:"F j, Y",closeCommentsDays:0,threadComments:true,threadDepth:3,paginateComments:false,showAvatars:false,notifyComments:false,notifyModeration:false});
     const post=await f.post(),page=await f.post();
-    await pool.query("UPDATE posts SET content=$2,raw_content=$2,published_at='2024-06-07T12:00:00Z' WHERE id=$1",[post.id,"<p>PUBLIC-SSR-ONE</p><!--nextpage--><p>PUBLIC-SSR-TWO</p>"]);
+    await pool.query("UPDATE posts SET content=$2,raw_content=$2,post_date='2024-06-07T12:00:00',post_date_gmt='2024-06-07T12:00:00Z',published_at='2024-06-07T12:00:00Z' WHERE id=$1",[post.id,"<p>PUBLIC-SSR-ONE</p><!--nextpage--><p>PUBLIC-SSR-TWO</p>"]);
     await pool.query("UPDATE posts SET type='page',content='<p>NAVIGATION-BODY-ONLY</p>' WHERE id=$1",[page.id]);
     const root=(await pool.query("INSERT INTO comments(post_id,author_name,author_email,content,status) VALUES($1,'Safe Reader','PRIVATE-COMMENT@example.test','<p>VISIBLE-SSR-COMMENT</p>','approved') RETURNING id",[post.id])).rows[0].id;
     const child=(await pool.query("INSERT INTO comments(post_id,parent_id,author_name,author_email,content,status) VALUES($1,$2,'Child Reader','PRIVATE-CHILD@example.test','<p>CHILD COMMENT</p>','approved') RETURNING id",[post.id,root])).rows[0].id;
@@ -39,7 +40,7 @@ test("direct document models render all bundled themes with safe DTOs, selected 
       await f.ok("/api/settings","PUT",{theme});
       const response=await f.api("/api/public/document?"+new URLSearchParams({path}),"GET",undefined,"");assert.equal(response.response.status,200,JSON.stringify(response.data));
       const model=response.data;assert.equal(model.schema,1);assert.equal(model.post.id,post.id);assert.equal(model.route.kind,"singular");assert.equal(model.route.query.contentPage,2);assert.equal(model.route.query.blockPages["query-4-page"],2);assert.equal(model.route.query.archivePage,1);
-      assert.equal(model.controls.replyParentId,child);assert.equal(model.controls.replyParentName,"Child Reader");assert.equal(model.commentsPagination.totalComments,3);assert.equal(model.viewer,null);assert.equal(model.controls.dates[model.post.publishedAt],"June 7, 2024");
+      assert.equal(model.controls.replyParentId,child);assert.equal(model.controls.replyParentName,"Child Reader");assert.equal(model.commentsPagination.totalComments,3);assert.equal(model.viewer,null);assert.equal(model.controls.dates[postPublicationKey(model.post)],"June 7, 2024");
       const encoded=JSON.stringify(model);assert.match(encoded,/PUBLIC-SSR-TWO/);assert.doesNotMatch(encoded,/PUBLIC-SSR-ONE|NAVIGATION-BODY-ONLY|PRIVATE-COMMENT|PRIVATE-CHILD|adminEmail|rawContent|pendingCommentCount|passwordHash|_passwordHash|api_key|_avatarEmail/);
       if(theme!=="classic"){
         sourceHTML=model.presentation.html;
@@ -136,8 +137,8 @@ test("document date aliases and scalar validation match the actual legacy site A
   try {
     await f.ok("/api/settings","PUT",{frontPageMode:"posts",frontPageId:null,postsPageId:null,timezone:"UTC"});
     const june=await f.post(),july=await f.post();
-    await pool.query("UPDATE posts SET published_at='2024-06-15T12:00:00Z' WHERE id=$1",[june.id]);
-    await pool.query("UPDATE posts SET published_at='2024-07-15T12:00:00Z' WHERE id=$1",[july.id]);
+    await pool.query("UPDATE posts SET post_date='2024-06-15T12:00:00',post_date_gmt='2024-06-15T12:00:00Z',published_at='2024-06-15T12:00:00Z' WHERE id=$1",[june.id]);
+    await pool.query("UPDATE posts SET post_date='2024-07-15T12:00:00',post_date_gmt='2024-07-15T12:00:00Z',published_at='2024-07-15T12:00:00Z' WHERE id=$1",[july.id]);
     const rows=[
       ["year=2024&month=6",200],["year=2024&monthnum=6",200],["year=2024&month=06&monthnum=6",200],
       ["m=202406&month=6",200],["year=2024&month=6&day=15",200],

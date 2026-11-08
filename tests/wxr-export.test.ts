@@ -11,8 +11,8 @@ const block = (name: string, attrs: Record<string, unknown>) => `<!-- wp:${name}
 test("WXR filters accept fixed typed values and parameterize local month boundaries", () => {
   const input = readWxrExportFilters({ format: "wxr", content: "posts", author: "7", category: "9", startDate: "2025-01", endDate: "2025-02", status: "private" });
   const query = wxrExportWhere(input, "+05:30");
-  assert.deepEqual(query.args, ["post", 7, "private", 9, "+05:30", "2025-01-01", "2025-02-01"]);
-  assert.match(query.sql, /timezone\(\$5::interval/); assert.match(query.sql, /interval '1 month'/);
+  assert.deepEqual(query.args, ["post", 7, "private", 9, "2025-01-01", "2025-02-01"]);
+  assert.match(query.sql, /p\.post_date::timestamp without time zone/); assert.match(query.sql, /interval '1 month'/);
   assert.equal(readWxrExportFilters({ format: "wxr", startDate: "0001-01", endDate: "0999-12" }).startDate, "0001-01");
   for (const extra of [{ author: "1 OR true" }, { author: ["1", "2"] }, { author: ["1"] }, { category: ["1"] }, { author: true }, { category: -1 }, { startDate: "0000-01" }, { startDate: "2025-13" }, { endDate: "2025-00" }, { startDate: "2025-02", endDate: "2025-01" }, { status: "inherit" }, { content: "users" }, { executable: "anything" }])
     assert.throws(() => readWxrExportFilters({ format: "wxr", ...extra }));
@@ -49,7 +49,7 @@ test("actual WXR exports select posts/pages/media with related data and preserve
     const child = await entity("reusable", "-child", "<p>Nested selected pattern</p>"), outer = await entity("reusable", "-outer", block("block", { ref: child })), navigation = await entity("navigation", "-nav", "<p>Selected navigation</p>");
     await entity("reusable", "-unrelated", "<p>Unrelated pattern</p>");
     async function post(suffix: string, type: string, status: string, author: number, date: string, raw = "<p>Filtered content</p>") {
-      const id = (await pool.query("INSERT INTO posts(type,title,slug,content,raw_content,status,author_id,published_at,created_at) VALUES($1,$2,$2,$3,$3,$4,$5,$6,$6) RETURNING id", [type, stamp + suffix, raw, status, author, date])).rows[0].id; postIds.push(id); return id;
+      const id = (await pool.query("INSERT INTO posts(type,title,slug,content,raw_content,status,author_id,published_at,created_at,post_date,post_date_gmt) VALUES($1,$2,$2,$3,$3,$4,$5,$6,$6,to_char(CASE WHEN coalesce((SELECT data->>'timezone' FROM settings WHERE id=1),'America/Los_Angeles')~'^[+-]' THEN timezone(coalesce((SELECT data->>'timezone' FROM settings WHERE id=1),'America/Los_Angeles')::interval,coalesce(CASE WHEN $4::varchar='future' THEN NULL::timestamptz END,$6::timestamptz,$6::timestamptz,now())) ELSE timezone(coalesce((SELECT data->>'timezone' FROM settings WHERE id=1),'America/Los_Angeles'),coalesce(CASE WHEN $4::varchar='future' THEN NULL::timestamptz END,$6::timestamptz,$6::timestamptz,now())) END,'YYYY-MM-DD\"T\"HH24:MI:SS'),coalesce(CASE WHEN $4::varchar='future' THEN NULL::timestamptz END,$6::timestamptz,$6::timestamptz,now())) RETURNING id", [type, stamp + suffix, raw, status, author, date])).rows[0].id; postIds.push(id); return id;
     }
     const selected = await post("-selected", "post", "publish", adminId, "2025-02-01T07:59:59Z", block("navigation", { ref: child }) + block("block", { ref: outer }) + block("navigation", { ref: navigation }));
     const boundary = await post("-boundary", "post", "publish", adminId, "2025-02-01T08:00:00Z");

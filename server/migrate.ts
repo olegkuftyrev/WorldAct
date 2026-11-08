@@ -3,6 +3,7 @@ import path from "node:path";
 import { pool, rootDir } from "./db.js";
 import { syncBundledThemes } from "./themes.js";
 import { lockUserCreation } from "./user-nicenames.js";
+import {migratePostDates} from "./post-date-migration.js";
 import { migrateUserNicenames } from "./user-nicenames-migration.js";
 
 export async function migrate() {
@@ -74,6 +75,7 @@ export async function migrate() {
           `UPDATE ${table} SET raw_content=regexp_replace(raw_content,'(<!-- wp:[a-zA-Z0-9_/-]+[^<]*?)/ -->','\\1/-->','g') WHERE raw_content LIKE '%/ -->%'`,
         );
     }
+    await migratePostDates(client);
     await syncBundledThemes(client);
     await client.query("COMMIT");
   } catch (error) {

@@ -7,7 +7,7 @@ import { contentPagination, parseContentPage } from "./legacy-content.js";
 import { publicCommentWindow } from "./comment-window.js";
 import { renderedCommentContent } from "./comment-policy.js";
 import { avatarURL } from "./avatars.js";
-import { appendDateArchiveSQL, dateArchiveDTO, parseDateArchiveQuery } from "./date-archives.js";
+import { appendPostDateArchiveSQL, dateArchiveDTO, parseDateArchiveQuery } from "./date-archives.js";
 import { HttpError } from "./utils.js";
 
 export type PublicReadContext = {
@@ -100,7 +100,7 @@ export async function readPublicSite(context: PublicReadContext) {
       where += ` AND EXISTS(SELECT 1 FROM post_terms pt JOIN terms t ON t.id=pt.term_id WHERE pt.post_id=p.id AND t.taxonomy='${taxonomy}' AND t.slug=$${args.length})`;
     }
   const dateWhere: string[] = [];
-  appendDateArchiveSQL(dateWhere, args, "coalesce(p.published_at,p.created_at)", dateArchive, settings.timezone, settings.weekStartsOn);
+  appendPostDateArchiveSQL(dateWhere, args, "p.post_date::timestamp without time zone", dateArchive, settings.timezone, settings.weekStartsOn);
   if (dateWhere.length) where += " AND " + dateWhere.map((clause) => `(${clause})`).join(" AND ");
   const count = await pool.query(
     `SELECT count(*)::int AS total FROM posts p WHERE ${where}`,

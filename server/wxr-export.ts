@@ -1,7 +1,7 @@
 import { parse } from "@wordpress/block-serialization-default-parser";
 import { z } from "zod";
 import { dateArchiveLocalSQL } from "./date-archives.js";
-import { POST_DATE_SQL } from "./post-date.js";
+import { postCivilSQL } from "./post-date.js";
 import { HttpError } from "./utils.js";
 
 const month = z.string().regex(/^(?!0000)\d{4}-(?:0[1-9]|1[0-2])$/, "Choose a valid export month.");
@@ -29,7 +29,7 @@ export function wxrExportWhere(input: WxrExportFilters, timezone: string, media 
   if (!media && input.content === "posts" && input.category)
     where.push(`EXISTS(SELECT 1 FROM post_terms selected_term JOIN terms selected_category ON selected_category.id=selected_term.term_id WHERE selected_term.post_id=p.id AND selected_category.taxonomy='category' AND selected_category.id=${parameter(input.category)})`);
   if (input.startDate || input.endDate) {
-    const local = dateArchiveLocalSQL(media ? "m.created_at" : POST_DATE_SQL, args, timezone);
+    const local = media ? dateArchiveLocalSQL("m.created_at",args,timezone) : postCivilSQL();
     if (input.startDate) where.push(`${local}>=${parameter(input.startDate + "-01")}::date`);
     if (input.endDate) where.push(`${local}<(${parameter(input.endDate + "-01")}::date+interval '1 month')`);
   }

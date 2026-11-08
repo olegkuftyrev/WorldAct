@@ -38,8 +38,8 @@ import {validatePostTemplate} from "./post-templates.js";
 import { assertEditLease } from "./edit-lease.js";
 import { postFormats } from "../shared/post-formats.js";
 import { contributorCanEditPostStatus } from "./comment-access.js";
-import { appendDateArchiveSQL, dateArchiveLocalSQL } from "./date-archives.js";
-import { POST_DATE_SQL } from "./post-date.js";
+import { appendPostDateArchiveSQL, dateArchiveLocalSQL } from "./date-archives.js";
+import {POST_DATE_SQL,postCivilSQL,resolvePostDate} from "./post-date.js";
 import { parseFootnotes } from "./footnotes.js";
 import { withPreviewAutosave } from "./post-preview.js";
 import { contentPagination, parseContentPage } from "./legacy-content.js";
@@ -82,6 +82,9 @@ const postShape = {
   version: idSchema.optional(),
   scheduledAt: dateSchema.optional(),
   publishedAt: dateSchema.optional(),
+  postDate: z.string().nullable().optional(),
+  restDate: z.string().nullable().optional(),
+  restDateGmt: z.string().nullable().optional(),
   parentId: idSchema.nullable().optional(),
   menuOrder: z.number().int().min(-2_147_483_648).max(2_147_483_647).optional(),
   templateSlug:z.string().max(160).regex(/^[a-zA-Z0-9_-]*$/).optional(),
@@ -388,17 +391,6 @@ async function savePost(
     input.scheduledAt !== undefined
       ? input.scheduledAt
       : (existing?.scheduledAt ?? null);
-  if (status === "future") {
-    if (!scheduledAt)
-      throw new HttpError(
-        400,
-        "Choose a publication date before scheduling this post.",
-      );
-    if (new Date(scheduledAt).getTime() <= Date.now()) {
-      status = "publish";
-      assertNewAccess(user, type, status, existing?.status);
-    }
-  }
   const title =
     input.title === undefined
       ? (existing?.title ?? "")
@@ -518,11 +510,6 @@ async function savePost(
     input.publishedAt !== undefined
       ? input.publishedAt
       : (existing?.publishedAt ?? null);
-  if (status === "publish" && !publishedAt)
-    publishedAt =
-      scheduledAt && new Date(scheduledAt) <= new Date()
-        ? scheduledAt
-        : new Date();
   if (existing && comparable(existing) !== comparable(values))
     await saveRevision(client, existing, user.id);
   const baseSlug = values.slug;
@@ -537,6 +524,18 @@ async function savePost(
       [slug, existing?.id ?? 0],
     );
     if (collision.rowCount) continue;
+    const dateSettings=await getSettings(client),dateNow=new Date();
+    const pair=resolvePostDate(input,existing,status,dateSettings.timezone,dateNow);
+    if(status==="future"){
+      if(input.postDate!==undefined || input.restDate!==undefined || input.restDateGmt!==undefined)scheduledAt=pair.postDateGmt;
+      if(!scheduledAt || !pair.postDateGmt)throw new HttpError(400,"Choose a publication date before scheduling this post.");
+      if(new Date(scheduledAt).valueOf()<=dateNow.valueOf()){status="publish";assertNewAccess(user,type,status,existing?.status);}
+    }
+    if(input.postDate!==undefined || input.restDate!==undefined || input.restDateGmt!==undefined){
+      if(status!=="future")publishedAt=pair.postDateGmt;
+    }
+    if(status==="publish" && !publishedAt)publishedAt=pair.postDateGmt || dateNow;
+
     const args: unknown[] = [
       type,
       title,
@@ -557,18 +556,19 @@ async function savePost(
       format,
       authorId,
       values.pingStatus,
+      pair.postDate, pair.postDateGmt,
     ];
     let id: number;
     if (existing) {
       args.push(existing.id);
       await client.query(
-        `UPDATE posts SET type=$1,title=$2,slug=$3,content=$4,excerpt=$5,status=$6,blocks=$7::jsonb,scheduled_at=$8,parent_id=$9,menu_order=$10,featured_media_id=$11,comment_status=$12,sticky=$13,password_hash=$14,published_at=$15,raw_content=$16,format=$17,author_id=$18,ping_status=$19,version=version+1,updated_at=now() WHERE id=$20`,
+        `UPDATE posts SET type=$1,title=$2,slug=$3,content=$4,excerpt=$5,status=$6,blocks=$7::jsonb,scheduled_at=$8,parent_id=$9,menu_order=$10,featured_media_id=$11,comment_status=$12,sticky=$13,password_hash=$14,published_at=$15,raw_content=$16,format=$17,author_id=$18,ping_status=$19,post_date=$20,post_date_gmt=$21,version=version+1,updated_at=now() WHERE id=$22`,
         args,
       );
       id = existing.id;
     } else {
       const created = await client.query(
-        `INSERT INTO posts(type,title,slug,content,excerpt,status,blocks,scheduled_at,parent_id,menu_order,featured_media_id,comment_status,sticky,password_hash,published_at,raw_content,format,author_id,ping_status) VALUES($1,$2,$3,$4,$5,$6,$7::jsonb,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19) RETURNING id`,
+        `INSERT INTO posts(type,title,slug,content,excerpt,status,blocks,scheduled_at,parent_id,menu_order,featured_media_id,comment_status,sticky,password_hash,published_at,raw_content,format,author_id,ping_status,post_date,post_date_gmt) VALUES($1,$2,$3,$4,$5,$6,$7::jsonb,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21) RETURNING id`,
         args,
       );
       id = created.rows[0].id;
@@ -676,7 +676,7 @@ router.get("/posts", contentRoles, async (req: AuthRequest, res) => {
   // Source month choices belong to the accessible post type and Trash view,
   // independently of the currently selected search/month/category filters.
   const monthArgs = [...args], monthWhere = where + (filter.status === "trash" ? " AND p.status='trash'" : " AND p.status<>'trash'");
-  const monthDate = dateArchiveLocalSQL(POST_DATE_SQL, monthArgs, settings.timezone);
+  const monthDate = postCivilSQL();
   if (filter.search) {
     args.push(`%${filter.search}%`);
     where += ` AND (p.title ILIKE $${args.length} OR p.content ILIKE $${args.length})`;
@@ -694,7 +694,7 @@ router.get("/posts", contentRoles, async (req: AuthRequest, res) => {
   if (filter.month) {
     args.push(filter.month);
     const monthParameter = args.length;
-    const localDate = dateArchiveLocalSQL(POST_DATE_SQL, args, settings.timezone);
+    const localDate = postCivilSQL();
     where += ` AND to_char(${localDate},'YYYY-MM')=$${monthParameter}`;
   }
   const counts = await pool.query(
@@ -727,7 +727,7 @@ router.get("/posts", contentRoles, async (req: AuthRequest, res) => {
   }[filter.orderby];
   const [posts, months] = await Promise.all([
     pool.query(
-      `SELECT ${postFields},${POST_DATE_SQL} AS "postDate" FROM posts p JOIN users u ON u.id=p.author_id WHERE ${where} ORDER BY ${column} ${filter.order},p.id ${filter.order}${limit}`,
+      `SELECT ${postFields},p.post_date AS "postDate" FROM posts p JOIN users u ON u.id=p.author_id WHERE ${where} ORDER BY ${column} ${filter.order},p.id ${filter.order}${limit}`,
       args,
     ),
     pool.query(`SELECT DISTINCT to_char(${monthDate},'YYYY-MM') AS month FROM posts p WHERE ${monthWhere} ORDER BY month DESC`, monthArgs),
@@ -769,6 +769,7 @@ const bulkSchema = z.object({
     password: postShape.password,
     status: postShape.status,
     scheduledAt: postShape.scheduledAt,
+    postDate: postShape.postDate,
     menuOrder: postShape.menuOrder,
     templateSlug:postShape.templateSlug,
   }).strict().refine(changes => Object.keys(changes).length > 0, "Choose at least one field to change."),

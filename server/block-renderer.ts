@@ -4,12 +4,13 @@ import { pool, getSettings, postFields, postMetadataFields } from "./db.js";
 import { postPermalink } from "./permalinks.js";
 import { cleanContent, plainText, HttpError } from "./utils.js";
 import { restDateToUTC } from "./date.js";
+import {formatPostCivil,postCivilZoned} from "./post-date.js";
 import { date as formatBlockDate, humanTimeDiff } from "@wordpress/date";
 import { renderThemeBlock } from "./theme-blocks.js";
 import { renderWidgetBlock } from "./widget-blocks.js";
 import { renderRSSBlock } from "./rss-block.js";
 import { renderTermBlock, type RenderTerm } from "./term-blocks.js";
-import { appendDateArchiveSQL, dateArchiveTitle, parseDateArchiveQuery } from "./date-archives.js";
+import { appendPostDateArchiveSQL, dateArchiveTitle, parseDateArchiveQuery } from "./date-archives.js";
 import { gridTemplateColumns, isResponsiveGrid } from "./block-layout.js";
 import { backgroundStyles } from "./background-styles.js";
 import { renderFootnotes } from "./footnotes.js";
@@ -409,7 +410,7 @@ async function queryPosts(
   const args: unknown[] = [postType];
   const where = ["p.type=$1", "p.status='publish'"];
   const dateArchive = input.inherit ? parseDateArchiveQuery(inherited) : null;
-  appendDateArchiveSQL(where, args, "coalesce(p.published_at,p.created_at)", dateArchive, state.settings.timezone, state.settings.weekStartsOn);
+  appendPostDateArchiveSQL(where, args, "p.post_date::timestamp without time zone", dateArchive, state.settings.timezone, state.settings.weekStartsOn);
   const add = (sql: string, value: unknown) => {
     args.push(value);
     where.push(sql.replace("?", "$" + args.length));
@@ -604,6 +605,7 @@ function postDate(
   modified: boolean,
   state: State,
 ) {
+  if(!modified && post.postDate)return formatPostCivil(post.postDate,format || state.settings.dateFormat,state.settings.timezone);
   const value = dateValue(post, modified);
   if (!value || Number.isNaN(new Date(value).valueOf())) return "";
   return format === "human-diff"

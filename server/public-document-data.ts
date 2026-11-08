@@ -24,11 +24,13 @@ export async function publicDocumentContext(req: Pick<Request,"headers">, option
 // Explicit presentation allowlists prevent new administrative fields from
 // silently entering initial HTML when the database/API shapes grow.
 const settingsKeys = ["siteTitle","tagline","siteUrl","usersCanRegister","siteLogoId","siteIconId","siteIconUrl","siteIconSizes","timezone","dateFormat","timeFormat","weekStartsOn","postsPerPage","discourageSearchEngines","theme","frontPageMode","frontPageId","postsPageId","requireCommentNameEmail","commentRegistration","commentsPerPage","threadComments","threadDepth","closeCommentsDays","commentOrder","permalinkStructure","categoryBase","tagBase","privacyPageId","paginateComments","commentCookieConsent","showAvatars"] as const;
-const postKeys = ["id","type","format","title","slug","content","permalink","excerpt","status","authorId","authorName","commentCount","approvedCommentCount","createdAt","updatedAt","publishedAt","scheduledAt","version","terms","categories","tags","categoryIds","tagIds","parentId","menuOrder","templateSlug","featuredMediaId","commentStatus","sticky","hasPassword","locked","readingTime","contentPagination","footnotes"] as const;
+import {formatPostCivil} from "./post-date.js";
+import {postPublicationKey} from "../shared/post-civil-date.js";
+const postKeys = ["postDate","postDateGmt","id","type","format","title","slug","content","permalink","excerpt","status","authorId","authorName","commentCount","approvedCommentCount","createdAt","updatedAt","publishedAt","scheduledAt","version","terms","categories","tags","categoryIds","tagIds","parentId","menuOrder","templateSlug","featuredMediaId","commentStatus","sticky","hasPassword","locked","readingTime","contentPagination","footnotes"] as const;
 function pick(input: Record<string,any>, keys: readonly string[]) { return Object.fromEntries(keys.filter(key=>input[key]!==undefined).map(key=>[key,input[key]])); }
 function safePost(post: any): PublicPost {
   const result=pick(post,postKeys);
-  for(const key of ["createdAt","updatedAt","publishedAt","scheduledAt"])if(result[key] instanceof Date)result[key]=result[key].toISOString();
+  for(const key of ["createdAt","updatedAt","publishedAt","scheduledAt","postDateGmt"])if(result[key] instanceof Date)result[key]=result[key].toISOString();
   // Featured media presentation is safe; ownership/file bookkeeping is not.
   if(post.featuredMedia) result.featuredMedia=pick(post.featuredMedia,["id","url","title","alt","caption","mimeType","width","height"]);
   return result as PublicPost;
@@ -117,7 +119,7 @@ export async function readPublicDocument(path: string, context: PublicDocumentCo
     const open=Boolean(single && post && !post.locked && commentsOpen(post,site.settings));
     const parent=open && (!site.settings.commentRegistration || context.user) ? publicReplyParent(post!.id,query.values.replytocom,comments,site.settings):null;
     const dates:Record<string,string>={};
-    for(const item of [...site.posts,...site.pages,...(post?[post]:[])])if(item.publishedAt)dates[String(item.publishedAt)]=displayDate(item.publishedAt,site.settings);
+    for(const item of [...site.posts,...site.pages,...(post?[post]:[])])if((item as any).postDate)dates[postPublicationKey(item as any)]=formatPostCivil((item as any).postDate,site.settings.dateFormat || "F j, Y",site.settings.timezone || "UTC");
     for(const item of comments)dates[String(item.createdAt)]=displayDate(item.createdAt,site.settings);
     const returnPath=commentReturnPath(path,query.values);
     const model:PublicDocumentModel={schema:1,requestPath:path,status:resolution.status,route,viewer:context.user?{id:context.user.id,displayName:context.user.displayName,role:context.user.role,showAdminBar:context.user.showAdminBar!==false}:null,
