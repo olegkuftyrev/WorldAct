@@ -4,9 +4,24 @@ import { EditorPreferenceQueue, preferencePatch, type PreferenceSnapshot } from 
 import { DEFAULT_EDITOR_PREFERENCES as defaults } from "../shared/editor-preferences.js";
 import { editorShortcut } from "../src/editor/editorShortcuts.js";
 import { parseHTML } from "linkedom";
+import { documentRecovery, editorOwnerMatches, editorTargetMatches } from "../src/editor/documentRecovery.js";
 
 function deferred<T>() { let resolve!: (value: T) => void, reject!: (reason: Error) => void; const promise = new Promise<T>((yes, no) => { resolve = yes; reject = no; }); return { promise, resolve, reject }; }
 const tick = () => new Promise(resolve => setImmediate(resolve));
+test("document target authority rejects a preceding route while preserving an allocated new draft and safe recovery", () => {
+  assert.equal(editorTargetMatches("8", 7, null), false);
+  assert.equal(editorTargetMatches("8", 8, null), true);
+  assert.equal(editorTargetMatches(undefined, 7, null), false);
+  assert.equal(editorTargetMatches(undefined, 7, 7), true, "allocation must not unmount the live new-document canvas before its own route is committed");
+  assert.equal(editorTargetMatches(undefined, null, null), true);
+  assert.equal(editorOwnerMatches("1:post:new", "1:post:7", "1:post:new", 7, 7), true);
+  assert.equal(editorOwnerMatches("1:post:new", "2:post:7", "2:post:new", 7, 7), false, "a later account never adopts the preceding user's draft");
+  assert.equal(editorOwnerMatches("1:post:7", "1:page:7", "1:page:new", 7, null), false);
+  const source = { title: "Draft", content: '<!-- wp:image --><p>Native recovery</p><!-- /wp:image -->', blocks: [], excerpt: "", footnotes: [{ id: "retained", content: "Note" }], password: "not-for-recovery", status: "private" };
+  const copy = documentRecovery(source, 3, "2026-11-08T10:00:00.000Z");
+  assert.equal(copy.content, source.content); assert.deepEqual(copy.footnotes, source.footnotes); assert.equal(copy.version, 3);
+  assert.equal(Object.hasOwn(copy, "password"), false); assert.equal(Object.hasOwn(copy, "status"), false);
+});
 test("private preference writes survive delayed initialization, serialize and rebase newer intent after failure", async () => {
   const load = deferred<unknown>(), first = deferred<unknown>(), second = deferred<unknown>();
   const calls: unknown[] = [], snapshots: PreferenceSnapshot[] = [];

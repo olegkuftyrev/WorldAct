@@ -76,6 +76,7 @@ jobs:
           tests/profile-options.test.ts
           tests/editor-preferences.test.ts
           tests/editor-options-ui.test.ts
+          tests/native-caption-initialization.test.ts
           tests/media-format-preservation.test.ts
           tests/full-image-uploads.test.ts tests/media-upload-cleanup.test.ts
           tests/media-edit-transforms.test.ts tests/media-edit-copy.test.ts

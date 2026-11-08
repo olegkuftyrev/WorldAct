@@ -30,6 +30,23 @@ and accessibility navigation. Distraction free closes inserter/List View, uses
 fixed tools and hides chrome while native typing; pointer movement or F6 reveals
 tools, and the source keyboard shortcut exits directly.
 
+The installed native editable-root writing flow can let the browser move between
+RichText siblings after its own arrow handler honors `keepCaretInsideBlock`.
+`caretContainment.ts` uses public `@wordpress/dom` native edge/RTL utilities to
+contain only the unmodified, collapsed caret at those edges. It leaves ordinary
+movement, selection, composition, dialogs and Classic's own fields to their
+native owners. The public DOM package is pinned to supplied source version 5.1.0.
+
+Document identity includes account, content type, route and replacement session.
+Failed route loads never render the preceding record or enable its save actions;
+departing dirty canonical content gets an immediate, credential-free browser
+recovery copy. Late saves, autosaves, revision responses and retired canvas
+callbacks cannot replace the next document. A revision restore rebases its
+version while retaining newer typing entered after its dialog was closed.
+Preferences errors remain visible inside the source modal. Header and title
+measurements follow viewport, label and fullscreen layout changes without
+remounting the provider or changing the document.
+
 Implemented Preferences are General (List View default, breadcrumbs), Appearance
 (top toolbar, distraction free, spotlight) and Accessibility (native caret
 containment, text labels). Broader source collaboration, starter patterns,
