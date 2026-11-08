@@ -4,6 +4,7 @@ import { mkdir, writeFile, unlink } from "node:fs/promises";
 import { randomBytes } from "node:crypto";
 import type { Pool } from "pg";
 import { pool, uploadsDir } from "./db.js";
+import { HttpError } from "./utils.js";
 export type ImageSize = {
   filename: string;
   url: string;
@@ -68,42 +69,111 @@ export function uploadPrefix(settings: {
   }).formatToParts(new Date());
   return `${parts.find((p) => p.type === "year")!.value}/${parts.find((p) => p.type === "month")!.value}/`;
 }
+export type ImageResizeGeometry = {
+  left: number;
+  top: number;
+  cropWidth: number;
+  cropHeight: number;
+  width: number;
+  height: number;
+};
+/** Supplied media.php image_resize_dimensions/wp_constrain_dimensions, no filters. */
+export function imageResizeGeometry(
+  originalWidth: number,
+  originalHeight: number,
+  maxWidth: number,
+  maxHeight: number,
+  crop = false,
+): ImageResizeGeometry | null {
+  if (
+    ![originalWidth, originalHeight, maxWidth, maxHeight].every(Number.isInteger) ||
+    originalWidth <= 0 || originalHeight <= 0 || maxWidth < 0 || maxHeight < 0 ||
+    (!maxWidth && !maxHeight)
+  ) return null;
+  const wouldEnlarge = !maxHeight
+    ? originalWidth < maxWidth
+    : !maxWidth
+      ? originalHeight < maxHeight
+      : originalWidth < maxWidth && originalHeight < maxHeight;
+  if (wouldEnlarge) return null;
+  let width: number, height: number;
+  let cropWidth = originalWidth, cropHeight = originalHeight, left = 0, top = 0;
+  if (crop) {
+    width = Math.min(maxWidth, originalWidth);
+    height = Math.min(maxHeight, originalHeight);
+    if (!width) width = Math.round(height * originalWidth / originalHeight);
+    if (!height) height = Math.round(width * originalHeight / originalWidth);
+    const ratio = Math.max(width / originalWidth, height / originalHeight);
+    cropWidth = Math.round(width / ratio);
+    cropHeight = Math.round(height / ratio);
+    left = Math.floor((originalWidth - cropWidth) / 2);
+    top = Math.floor((originalHeight - cropHeight) / 2);
+  } else {
+    const widthRatio = maxWidth > 0 && originalWidth > maxWidth ? maxWidth / originalWidth : 1;
+    const heightRatio = maxHeight > 0 && originalHeight > maxHeight ? maxHeight / originalHeight : 1;
+    const larger = Math.max(widthRatio, heightRatio), smaller = Math.min(widthRatio, heightRatio);
+    const ratio = Math.round(originalWidth * larger) > maxWidth || Math.round(originalHeight * larger) > maxHeight
+      ? smaller : larger;
+    width = Math.max(1, Math.round(originalWidth * ratio));
+    height = Math.max(1, Math.round(originalHeight * ratio));
+    if (widthRatio < 1 && width === maxWidth - 1) width = maxWidth;
+    if (heightRatio < 1 && height === maxHeight - 1) height = maxHeight;
+  }
+  // Extremely thin crops can round one side to zero; no usable intermediate
+  // exists in that case, so retain the original instead of failing the upload.
+  if (Math.min(width, height, cropWidth, cropHeight) < 1) return null;
+  if (Math.abs(width - originalWidth) <= 1 && Math.abs(height - originalHeight) <= 1) return null;
+  return { left, top, cropWidth, cropHeight, width, height };
+}
 export async function buildSizes(
   buffer: Buffer,
   prefix: string,
   settings: Record<string, any>,
 ) {
   const result: Record<string, ImageSize> = {};
+  const metadata = await sharp(buffer, { limitInputPixels: 80_000_000 }).metadata();
+  // Geometry uses the same automatic EXIF orientation applied by the pipeline.
+  const swapped = metadata.orientation !== undefined && metadata.orientation >= 5 && metadata.orientation <= 8;
+  const originalWidth = swapped ? metadata.height : metadata.width;
+  const originalHeight = swapped ? metadata.width : metadata.height;
+  if (!originalWidth || !originalHeight) throw new HttpError(400, "The image could not be decoded.");
   await mkdir(path.join(uploadsDir, prefix), { recursive: true });
   try {
     for (const [name, w, h, crop] of [
       [
         "thumbnail",
-        settings.thumbnailWidth || 150,
-        settings.thumbnailHeight || 150,
+        settings.thumbnailWidth ?? 150,
+        settings.thumbnailHeight ?? 150,
         settings.thumbnailCrop !== false,
       ],
       [
         "medium",
-        settings.mediumWidth || 300,
-        settings.mediumHeight || 300,
+        settings.mediumWidth ?? 300,
+        settings.mediumHeight ?? 300,
         false,
       ],
       [
         "large",
-        settings.largeWidth || 1024,
-        settings.largeHeight || 1024,
+        settings.largeWidth ?? 1024,
+        settings.largeHeight ?? 1024,
         false,
       ],
     ] as const) {
+      const maximum = name === "thumbnail" ? 4096 : 8192;
+      if (![w, h].every(value => typeof value === "number" && Number.isInteger(value) && value >= 0 && value <= maximum)) {
+        throw new HttpError(400, "Image size dimensions must be whole numbers within the supported range.");
+      }
+      const geometry = imageResizeGeometry(originalWidth, originalHeight, w, h, crop);
+      if (!geometry) continue;
       const { data, info } = await sharp(buffer, {
         limitInputPixels: 80_000_000,
       })
         .rotate()
+        .extract({ left: geometry.left, top: geometry.top, width: geometry.cropWidth, height: geometry.cropHeight })
         .resize({
-          width: w,
-          height: h,
-          fit: crop ? "cover" : "inside",
+          width: geometry.width,
+          height: geometry.height,
+          fit: "fill",
           withoutEnlargement: true,
         })
         .png()
