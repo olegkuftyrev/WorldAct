@@ -14,6 +14,7 @@ import { backgroundStyles } from "./background-styles.js";
 import { renderFootnotes } from "./footnotes.js";
 import { excerptText } from "./excerpts.js";
 import { renderInteractiveBlock, createInteractiveRenderState, INTERACTIVE_BLOCKS, type InteractiveRenderState, type AccordionContext, type AccordionItemContext, type TabsContext } from "./interactive-blocks.js";
+import { renderNavigationWithOverlay, renderNavigationOverlayClose, NAVIGATION_OVERLAY_BLOCKS, type NavigationOverlayContext } from "./navigation-overlays.js";
 
 export type BlockDatabase = Pick<pg.Pool, "query"> | pg.PoolClient;
 export type RenderPost = Record<string, any>;
@@ -74,6 +75,7 @@ export type Context = {
   accordion?: AccordionContext;
   accordionItem?: AccordionItemContext;
   tabs?: TabsContext;
+  navigationOverlay?: NavigationOverlayContext;
 };
 export type State = {
   db: BlockDatabase;
@@ -91,6 +93,7 @@ export const CORE_DYNAMIC_BLOCKS = [
   "core/footnotes",
   ...TERM_BLOCKS,
   ...INTERACTIVE_BLOCKS,
+  ...NAVIGATION_OVERLAY_BLOCKS,
   "core/query",
   "core/post-template",
   "core/post-title",
@@ -769,6 +772,8 @@ async function renderNode(
     a = node.attrs || {},
     p = context.post;
   const attr = (extra = "") => attrsHTML(node, extra);
+  const overlayClose = renderNavigationOverlayClose(node, context, attr);
+  if (overlayClose !== undefined) return overlayClose;
   const interactiveBlock = await renderInteractiveBlock(node, context, state,
     (nodes, next) => renderChildren(nodes, next, state),
     (extra = "", override = a) => attrsHTML({ ...node, attrs: override }, extra), blockStyle);
@@ -908,50 +913,52 @@ async function renderNode(
   if (name === "core/home-link")
     return `<li${attr("wp-block-navigation-item")}><a href="/">${esc(a.label || "Home")}</a></li>`;
   if (name === "core/navigation") {
-    let inner = "";
-    if (a.ref) {
-      const entity = await cached(
-        state,
-        `entity:navigation:${a.ref}`,
-        async () =>
-          (
-            await state.db.query(
-              "SELECT raw_content AS \"rawContent\",content,blocks FROM block_entities WHERE id=$1 AND kind='navigation' AND status='publish'",
-              [integer(a.ref, 0, 1, 2147483647)],
-            )
-          ).rows[0],
-      );
-      if (entity && !context.refs.has("nav:" + a.ref))
-        inner = await renderChildren(
-          parseRenderNodes(entity),
-          { ...context, refs: new Set([...context.refs, "nav:" + a.ref]) },
+    const renderItems = async () => {
+      let inner = "";
+      const ref = Number.isSafeInteger(a.ref) && a.ref > 0 && a.ref <= 2147483647 ? a.ref : 0;
+      if (ref) {
+        const entity = await cached(
           state,
+          `entity:navigation:${ref}`,
+          async () =>
+            (
+              await state.db.query(
+                "SELECT raw_content AS \"rawContent\",content,blocks FROM block_entities WHERE id=$1 AND kind='navigation' AND status='publish'",
+                [ref],
+              )
+            ).rows[0],
         );
-    } else inner = await body();
-    if (!inner) {
-      const menus = await cached(
-        state,
-        "menus",
-        async () =>
-          (
-            await state.db.query(
-              "SELECT items FROM navigation_menus WHERE location='primary' ORDER BY id LIMIT 1",
-            )
-          ).rows,
-      );
-      inner = menus[0]
-        ? await navigationItems(menus[0].items || [], state)
-        : await pageList(
-            { name: "core/page-list", attrs: {}, children: [] },
-            context,
+        if (entity && !context.refs.has("nav:" + ref))
+          inner = await renderChildren(
+            parseRenderNodes(entity),
+            { ...context, refs: new Set([...context.refs, "nav:" + ref]) },
             state,
           );
-    }
-    const items = inner.replace(/^\s*<ul[^>]*>([\s\S]*)<\/ul>\s*$/, "$1"),
-      mode = ["always", "never"].includes(a.overlayMenu)
-        ? a.overlayMenu
-        : "mobile";
-    return `<nav${attr("worldact-overlay-" + mode)} aria-label="${esc(a.ariaLabel || "Navigation")}">${mode === "always" ? "" : `<ul class="wp-block-navigation__container worldact-navigation-desktop">${items}</ul>`}${mode === "never" ? "" : `<details class="worldact-navigation-toggle"><summary>Menu</summary><ul class="wp-block-navigation__container">${items}</ul></details>`}</nav>`;
+      } else inner = await body();
+      if (!inner) {
+        const menus = await cached(
+          state,
+          "menus",
+          async () =>
+            (
+              await state.db.query(
+                "SELECT items FROM navigation_menus WHERE location='primary' ORDER BY id LIMIT 1",
+              )
+            ).rows,
+        );
+        inner = menus[0]
+          ? await navigationItems(menus[0].items || [], state)
+          : await pageList(
+              { name: "core/page-list", attrs: {}, children: [] },
+              context,
+              state,
+            );
+      }
+      return inner.replace(/^\s*<ul[^>]*>([\s\S]*)<\/ul>\s*$/, "$1");
+    };
+    const items = await renderItems();
+    return renderNavigationWithOverlay(node, context, state, items, attr,
+      (document, next) => renderChildren(parseRenderNodes(document), next, state), renderItems);
   }
   if (name === "core/navigation-link" || name === "core/navigation-submenu") {
     let href = safeBlockURL(a.url);

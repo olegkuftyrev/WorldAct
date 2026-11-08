@@ -45,6 +45,7 @@ function reserve(state: State, desired: string, kind: string): string {
   while (ids.ids.has(id) || ids.ids.has("tab__" + id) || ids.ids.has(id + "-panel")) id = `${ids.prefix}-${kind}-${++ids.sequence}`;
   ids.ids.add(id); return id;
 }
+export const reserveInteractiveId = reserve;
 function supplementalStyle(attrs: Record<string, any>) {
   const style = attrs.style || {}, pairs: string[] = [];
   const preset = (value: string) => /^var:preset\|[a-z0-9-]+\|[a-z0-9-]+$/i.test(value) ? "var(--wp--preset--" + value.slice(11).replace(/\|/g, "--") + ")" : value;
