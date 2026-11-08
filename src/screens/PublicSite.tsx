@@ -1,5 +1,6 @@
 import { renderTemplate } from "../template";
 import { parseVideoEmbed } from "../embeds";
+import { enhanceInteractiveBlocks } from "../interactiveBlocks";
 import "@wordpress/block-library/build-style/style.css";
 import "@wordpress/block-library/build-style/theme.css";
 import {
@@ -342,6 +343,7 @@ export default function PublicSite({
   }, [post, site.data, design.data]);
   useEffect(() => {
     const cleanups = [...document.querySelectorAll(".public-site .public-content")].map(enhanceArchives);
+    cleanups.push(...[...document.querySelectorAll(".public-site .public-content")].map(enhanceInteractiveBlocks));
     return () => {for (const cleanup of cleanups) cleanup?.();};
   }, [post, site.data, design.data]);
   async function submit(event: FormEvent) {
@@ -1046,7 +1048,10 @@ function RenderedTemplate({
       active = false;
     };
   }, [request, document.updatedAt, preview]);
-  useEffect(() => enhanceArchives(root.current), [content, fallback, preview]);
+  useEffect(() => {
+    const archive = enhanceArchives(root.current), interactive = enhanceInteractiveBlocks(root.current);
+    return () => { archive?.(); interactive(); };
+  }, [content, fallback, preview]);
   if (preview)
     return (
       <div
@@ -1201,6 +1206,7 @@ function SourceThemeDocument({ document: template, postId, query, commentPage, u
     enhanceEmbeds(root.current);
     const cleanup = enhanceNavigation(root.current);
     const cleanupArchives = enhanceArchives(root.current);
+    const cleanupInteractive = enhanceInteractiveBlocks(root.current);
     let active=true;
     if(!userName)api<{author:{authorName:string;authorEmail:string;authorUrl:string}|null}>("/public/comment-author").then(({author})=>{
       if(!active || !author || !root.current)return;
@@ -1209,7 +1215,7 @@ function SourceThemeDocument({ document: template, postId, query, commentPage, u
       for(const key of ["authorName","authorEmail","authorUrl"] as const){const field=root.current.querySelector<HTMLInputElement>(`input[name="${key}"]`);if(field && !field.value)field.value=author[key] || "";}
       checkbox.checked=true;
     }).catch(()=>{});
-    return ()=>{active=false;cleanup();cleanupArchives?.();};
+    return ()=>{active=false;cleanup();cleanupArchives?.();cleanupInteractive();};
   }, [html]);
   async function submitComment(event: FormEvent<HTMLDivElement>) {
     const form = event.target as HTMLFormElement;

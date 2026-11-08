@@ -169,6 +169,14 @@ export const WORLDAct_DYNAMIC_BLOCKS = [
   "core/loginout",
   "core/page-list",
   "core/page-list-item",
+  "core/accordion",
+  "core/accordion-item",
+  "core/accordion-heading",
+  "core/accordion-panel",
+  "core/tabs",
+  "core/tab-list",
+  "core/tab-panels",
+  "core/tab-panel",
 ];
 export const WORLDAct_SITE_BLOCKS = [
   "core/site-title",
