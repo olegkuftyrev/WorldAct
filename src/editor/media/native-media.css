@@ -1,0 +1,15 @@
+/* Source base-styles snackbar-container placement for the host Undo notice. */
+.worldact-native-media-notice-stack {
+  position: fixed;
+  bottom: var(--wpds-dimension-size-md, 32px);
+  left: 0;
+  right: 0;
+  padding-inline: 16px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  pointer-events: none;
+  z-index: 100000;
+}
+.worldact-native-media-notices { position: static; width: auto; }
+.worldact-native-media-notices .components-snackbar { margin-inline: auto; }

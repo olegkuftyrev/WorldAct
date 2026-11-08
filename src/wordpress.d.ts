@@ -4,6 +4,10 @@ declare module "@wordpress/block-library" {
 }
 
 declare module "@wordpress/format-library";
+declare module "@worldact/wordpress-lock-unlock" {
+  /** The installed core module's actual lock/unlock pair, preserving private key identity. */
+  export function unlock<T = any>(value: object): T;
+}
 
 declare module "@arraypress/waveform-player/dist/waveform-player-no-autoinit.esm.js" {
   export { default } from "@arraypress/waveform-player";

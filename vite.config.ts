@@ -6,6 +6,10 @@ export default defineConfig({
   resolve: {
     alias: [
       {
+        find: "@worldact/wordpress-lock-unlock",
+        replacement: fileURLToPath(new URL("./node_modules/@wordpress/block-editor/build-module/lock-unlock.mjs", import.meta.url)),
+      },
+      {
         find: /^@arraypress\/waveform-player\/no-autoinit$/,
         replacement: fileURLToPath(
           new URL("./src/boundedWaveformPlayer.ts", import.meta.url),

@@ -17,7 +17,6 @@ import {
   BlockContextProvider,
   store as blockEditorStore,
   BlockCanvas,
-  BlockEditorProvider,
   BlockInspector,
   BlockToolbar,
   Inserter,
@@ -85,6 +84,7 @@ import { parseVideoEmbed } from "../embeds";
 import { compileThemeStyles, type ThemeJSON, type ThemeStyleOverrides } from "../themeStyles";
 import { ClassicSupport } from "./classic/ClassicSupport";
 import { NativeClassicEdit } from "./classic/NativeClassic";
+import { useNativeMediaEditor, NativeBlockEditorProvider as BlockEditorProvider } from "./media/NativeMediaEditor";
 import "./gutenberg.css";
 
 export type { SerializedBlock, GutenbergBlock } from "./types";
@@ -451,8 +451,8 @@ function mediaMatches(item: Media, allowedTypes?: string[]) {
 }
 
 
-// Core image and gallery blocks also read attachment entities. Adapt only this
-// narrow endpoint to our real Node API; no WordPress server is required.
+// Forward only the supported native REST namespaces to the Node implementation.
+// Attachment entities retain their actual edit context, filters and permissions.
 apiFetch.use(async (options, next) => {
   const path = options.path;
   if (path && /^\/?oembed\/1\.0\/proxy(?:\?|$)/.test(path)) {
@@ -478,107 +478,62 @@ apiFetch.use(async (options, next) => {
       html: `<iframe src="${embed.src.replace(/&/g, "&amp;")}" title="${embed.title}" width="${embed.width}" height="${embed.height}" allow="encrypted-media; picture-in-picture" allowfullscreen loading="lazy" referrerpolicy="strict-origin-when-cross-origin"></iframe>`,
     };
   }
-  if (!path || !/^\/?wp\/v2\/media(?:\/\d+)?(?:\?|$)/.test(path)) {
-    if (
-      !path ||
-      !(
-        path === "/" ||
-        path.startsWith("/?") ||
-        /^\/?(?:wp\/v2|wp-block-editor\/v1)\//.test(path)
-      )
-    )
-      return next(options);
-    const target = new URL(
-      path.startsWith("/?")
-        ? "/wp-json" + path
-        : path === "/"
-          ? "/wp-json/"
-          : "/wp-json/" + path.replace(/^\//, ""),
-      window.location.origin,
-    );
-    if (
-      /\/wp\/v2\/(posts|pages)$/.test(target.pathname) &&
-      options.method !== "POST"
-    )
-      target.searchParams.set("has_password", "false");
-    let data = options.data;
-    const entityPath = target.pathname.match(
-      /^\/wp-json\/wp\/v2\/(navigation|blocks|template-parts)\/(.+)$/,
-    );
-    if (
-      entityPath &&
-      data &&
-      typeof data === "object" &&
-      !Array.isArray(data) &&
-      ["POST", "PUT", "PATCH"].includes(
-        (options.method || "GET").toUpperCase(),
-      ) &&
-      !(data as any).version
-    ) {
-      const name =
-        entityPath[1] === "navigation"
-          ? "wp_navigation"
-          : entityPath[1] === "blocks"
-            ? "wp_block"
-            : "wp_template_part";
-      const id =
-        name === "wp_template_part"
-          ? decodeURIComponent(entityPath[2])
-          : Number(entityPath[2]);
-      const record = select(coreDataStore).getEntityRecord(
-        "postType",
-        name,
-        id,
-      ) as { version?: number } | undefined;
-      if (record?.version) data = { ...data, version: record.version };
-    }
-    // Continue through the official fetch-all middleware: per_page=-1 must
-    // follow every REST Link page, while parse:false retains native headers.
-    return next({ ...options, path: undefined, url: target.href, data });
-  }
   if (
-    options.method &&
-    !["GET", "OPTIONS"].includes(options.method.toUpperCase())
+    !path ||
+    !(
+      path === "/" ||
+      path.startsWith("/?") ||
+      /^\/?(?:wp\/v2|wp-block-editor\/v1)\//.test(path)
+    )
   )
     return next(options);
-  const target = new URL(path, window.location.origin);
-  const { media } = await api<{ media: Media[] }>("/media");
-  const id = target.pathname.match(/\/(\d+)$/)?.[1];
-  const include = target.searchParams.get("include")?.split(",").map(Number);
-  const search = target.searchParams.get("search")?.toLowerCase();
-  let records = media.filter(
-    (item) =>
-      (!include || include.includes(item.id)) &&
-      (!search ||
-        `${item.title} ${item.filename}`.toLowerCase().includes(search)),
+  const target = new URL(
+    path.startsWith("/?")
+      ? "/wp-json" + path
+      : path === "/"
+        ? "/wp-json/"
+        : "/wp-json/" + path.replace(/^\//, ""),
+    window.location.origin,
   );
-  const mime = target.searchParams.get("media_type");
-  if (mime)
-    records = records.filter((item) => item.mimeType.startsWith(`${mime}/`));
-  const selected = id
-    ? records.find((item) => item.id === Number(id))
-    : undefined;
-  if (id && !selected)
-    throw {
-      code: "rest_media_invalid_id",
-      message: "Media item not found.",
-      data: { status: 404 },
-    };
-  const result = id
-    ? attachment(selected!, true)
-    : records.map((item) => attachment(item, true));
-  if (options.parse === false) {
-    return new Response(JSON.stringify(result), {
-      status: 200,
-      headers: {
-        "Content-Type": "application/json",
-        "X-WP-Total": String(records.length),
-        "X-WP-TotalPages": "1",
-        Allow: "GET, POST, PUT, DELETE",
-      },
-    });
+  if (
+    /\/wp\/v2\/(posts|pages)$/.test(target.pathname) &&
+    options.method !== "POST"
+  )
+    target.searchParams.set("has_password", "false");
+  let data = options.data;
+  const entityPath = target.pathname.match(
+    /^\/wp-json\/wp\/v2\/(navigation|blocks|template-parts)\/(.+)$/,
+  );
+  if (
+    entityPath &&
+    data &&
+    typeof data === "object" &&
+    !Array.isArray(data) &&
+    ["POST", "PUT", "PATCH"].includes(
+      (options.method || "GET").toUpperCase(),
+    ) &&
+    !(data as any).version
+  ) {
+    const name =
+      entityPath[1] === "navigation"
+        ? "wp_navigation"
+        : entityPath[1] === "blocks"
+          ? "wp_block"
+          : "wp_template_part";
+    const id =
+      name === "wp_template_part"
+        ? decodeURIComponent(entityPath[2])
+        : Number(entityPath[2]);
+    const record = select(coreDataStore).getEntityRecord(
+      "postType",
+      name,
+      id,
+    ) as { version?: number } | undefined;
+    if (record?.version) data = { ...data, version: record.version };
   }
-  return result;
+  // Continue through the official fetch-all middleware: per_page=-1 must
+  // follow every REST Link page, while parse:false retains native headers.
+  return next({ ...options, path: undefined, url: target.href, data });
 });
 
 dispatch(coreDataStore).addEntities([
@@ -1434,16 +1389,6 @@ const GutenbergSession = forwardRef<
     [props.onUpload],
   );
 
-  useEffect(() => {
-    dispatch(coreDataStore).receiveEntityRecords(
-      "postType",
-      "attachment",
-      allMedia.map((item) => attachment(item, true)),
-      undefined,
-      false,
-    );
-  }, [allMedia]);
-
   const mediaUpload = useCallback(
     async ({
       filesList,
@@ -1488,6 +1433,7 @@ const GutenbergSession = forwardRef<
     [upload, reportError],
   );
 
+  const nativeMedia = useNativeMediaEditor(reportError, onMediaUpdate, canvasGeneration);
   const settings = useMemo(
     () => ({
       allowedBlockTypes: (
@@ -1504,7 +1450,7 @@ const GutenbergSession = forwardRef<
       supportsLayout: true,
       hasFixedToolbar: true,
       canLockBlocks: true,
-      imageEditing: false,
+      ...nativeMedia.settings,
       imageSizes: [
         { slug: "thumbnail", name: "Thumbnail" },
         { slug: "medium", name: "Medium" },
@@ -1606,7 +1552,7 @@ const GutenbergSession = forwardRef<
         ...(props.canvasCSS ? [{css:props.canvasCSS}] : []),
       ],
     }),
-    [mediaUpload, patterns, reusable, props.context, !!props.onMetadataChange, reportError, themeDocument, themeOverrides, props.canvasCSS, props.entityContext],
+    [mediaUpload, patterns, reusable, props.context, !!props.onMetadataChange, reportError, themeDocument, themeOverrides, props.canvasCSS, props.entityContext, nativeMedia.settings],
   );
 
   const keyDown = (event: KeyboardEvent<HTMLDivElement>) => {
@@ -1755,6 +1701,8 @@ const GutenbergSession = forwardRef<
               </>}
             </div>
           </BlockContextProvider>
+          {nativeMedia.modal}
+          {!editingPattern && nativeMedia.notices}
           {patternsOpen && (
             <Modal
               title={
