@@ -1465,7 +1465,8 @@ export async function unlockPublicPost(req:Request,res:Response) {
       .object({ password: z.string().min(1).max(1024) })
       .strict()
       .parse(req.body),
-    slug = z.string().min(1).max(220).parse(req.params.slug);
+    slug = z.string().min(1).max(220).parse(req.params.slug),
+    contentPage = parseContentPage(req.query.page);
   const row = (
     await pool.query(
       `SELECT ${postFields},p.password_hash AS "_passwordHash" FROM posts p JOIN users u ON u.id=p.author_id WHERE p.slug=$1 AND p.status='publish'`,
@@ -1492,7 +1493,7 @@ export async function unlockPublicPost(req:Request,res:Response) {
     });
   }
   res.json({
-    post: await publicPost(post, false, { query: req.query, user: (req as AuthRequest).user }),
+    post: await publicPost(post, false, { query: req.query, user: (req as AuthRequest).user, contentPage }),
     ...(await commentResponse(post.id, req)),
   });
 }

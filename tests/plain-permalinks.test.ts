@@ -23,7 +23,7 @@ test("Plain and numeric permalinks preserve public identity, protected access, p
     const login=await api("/api/auth/login","POST",{login:process.env.ADMIN_EMAIL,password:process.env.ADMIN_PASSWORD},"");cookie=login.response.headers.get("set-cookie")!.split(";")[0];
     await api("/api/settings","PUT",{permalinkStructure:"",commentModeration:false,commentPreviouslyApproved:false,closeCommentsDays:0,pingServices:[]});
     assert.equal((await getSettings()).permalinkStructure,"");
-    const story=await post({pingStatus:"open"}),parent=await post({type:"page"}),child=await post({type:"page",parentId:parent.id}),protectedPost=await post({password:"Plain-password-123",content:"<p>PLAIN-PROTECTED-BODY</p>"});
+    const story=await post({pingStatus:"open"}),parent=await post({type:"page"}),child=await post({type:"page",parentId:parent.id}),protectedPost=await post({password:"Plain-password-123",content:"<p>PLAIN-PROTECTED-FIRST</p><!--nextpage--><p>PLAIN-PROTECTED-SECOND</p>"});
     const draft=await post({status:"draft"}),privatePost=await post({status:"private"}),future=await post({status:"future",scheduledAt:new Date(Date.now()+86400000).toISOString()});
     await t.test("real settings persist empty structure and canonical post/page IDs keep content-page requests distinct",async()=>{
       assert.equal(story.permalink,"/?p="+story.id);assert.equal(parent.permalink,"/?page_id="+parent.id);assert.equal(child.permalink,"/?page_id="+child.id);
@@ -33,9 +33,11 @@ test("Plain and numeric permalinks preserve public identity, protected access, p
       assert.equal(second.data.post.contentPagination.links[1].url,story.permalink+"&page=2");
       assert.equal((await resolve(child.permalink)).data.post.id,child.id);
       for(const path of ["/?p="+parent.id,"/?page_id="+story.id,"/?p="+draft.id,"/?p="+privatePost.id,"/?p="+future.id])assert.equal((await resolve(path)).response.status,404,path);
-      const locked=await resolve(protectedPost.permalink);assert.equal(locked.response.status,200);assert.equal(locked.data.post.locked,true);assert.doesNotMatch(JSON.stringify(locked.data),/PLAIN-PROTECTED-BODY|Plain-password/);
-      const unlocked=await api("/api/public/posts/"+protectedPost.slug+"/unlock","POST",{password:"Plain-password-123"},"");const access=unlocked.response.headers.get("set-cookie")!.split(";")[0];
-      assert.match((await resolve(protectedPost.permalink,access)).data.post.content,/PLAIN-PROTECTED-BODY/);
+      const locked=await resolve(protectedPost.permalink);assert.equal(locked.response.status,200);assert.equal(locked.data.post.locked,true);assert.doesNotMatch(JSON.stringify(locked.data),/PLAIN-PROTECTED|Plain-password/);
+      const invalidUnlock=await request("/api/public/posts/"+protectedPost.slug+"/unlock?page[]=2","POST",{password:"Plain-password-123"},"");assert.equal(invalidUnlock.response.status,400);assert.equal((await pool.query("SELECT count(*)::int AS n FROM post_access_tokens WHERE post_id=$1",[protectedPost.id])).rows[0].n,0);
+      const unlocked=await api("/api/public/posts/"+protectedPost.slug+"/unlock?page=2","POST",{password:"Plain-password-123"},"");const access=unlocked.response.headers.get("set-cookie")!.split(";")[0];
+      assert.equal(unlocked.data.post.contentPagination.page,2);assert.match(unlocked.data.post.content,/PLAIN-PROTECTED-SECOND/);assert.doesNotMatch(unlocked.data.post.content,/PLAIN-PROTECTED-FIRST/);
+      assert.match((await resolve(protectedPost.permalink,access)).data.post.content,/PLAIN-PROTECTED-FIRST/);
     });
     await t.test("duplicate, array-shaped, mixed and oversized identities cannot silently become home or another post",async()=>{
       for(const query of ["p=0","p=-1","p=1.5","p=2147483648","p=999999999999999999999","p[]=1","p[x]=1","p=1&p=2","p=1&page_id=2","page_id=bad","p="+story.id+"&page=0","p="+story.id+"&page[]=2","p="+story.id+"&page=2&page=3"]){

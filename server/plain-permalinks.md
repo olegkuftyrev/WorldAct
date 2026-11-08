@@ -18,8 +18,12 @@ links continue to use the configured structure. Redirects are separate behavior.
 
 Resolution selects only the requested post/page type in published state. It then
 uses the existing public endpoint, password token, comment and renderer paths.
-No private/draft/future bodies become public through an ID. Source content-page
-links use `&page=N`; previews retain the existing private preview routes. Static
+No private/draft/future bodies become public through an ID.
+Password unlock validates body-page input before writing an access token and
+returns the requested content page, so unlocking page two cannot replace it with
+page one while keeping the old URL.
+Source content-page links use `&page=N`; previews retain the existing private
+preview routes. Static
 front-page pagination uses `/?page=N` in Plain mode, `/page/N` in Numeric mode,
 and `/page/N/` for a trailing-slash structure. Root `?page=N` resolves a selected
 published static front page with its body-page context; ordinary posts-home
