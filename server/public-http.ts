@@ -50,7 +50,7 @@ export function isPublicAddress(address: string): boolean {
   if ((words[0] === 0x2001 && words[1] < 0x200) || (words[0] === 0x2001 && words[1] === 0xdb8) || words[0] === 0x2002 || (words[0] === 0x3fff && words[1] < 0x1000)) return false;
   return true;
 }
-const canonicalAddress = (address: string) => {
+export const canonicalAddress = (address: string) => {
   const words = ipv6Words(address);
   if (!words) return address;
   if (words.slice(0, 5).every(word => word === 0) && words[5] === 0xffff) return `${words[6] >> 8}.${words[6] & 255}.${words[7] >> 8}.${words[7] & 255}`;

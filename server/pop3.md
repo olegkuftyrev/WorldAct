@@ -1,0 +1,13 @@
+# POP3 transport
+
+This fixed Node transport underlies configured Post via email. `mail-intake.md` describes the separate administrator service, private configuration/leases, MIME parsing, UIDL receipts, ordinary post transactions and deletion-after-commit. Browser configuration remains pending.
+
+Protocol reference: supplied `wp-includes/class-pop3.php` and [RFC 1939](https://www.rfc-editor.org/rfc/rfc1939). Supported fixed commands are USER, PASS, UIDL, LIST, RETR, DELE and QUIT. Retrieval never deletes automatically. The future intake owner must commit a unique mailbox/UIDL receipt and post before requesting DELE; remote deletion takes effect through successful QUIT. Aborted/failed deletion must be retryable through the receipt without duplicating a post.
+
+Connections use explicit source plaintext port 110 or implicit TLS port 995. TLS preserves the original hostname, certificate verification and pinned lookup; actual peer and TLS authorization are checked before credentials are sent. Other ports, STLS/APOP/SASL and non-ASCII credentials are not implemented. Host controls/URLs/credentials, private/special addresses, unsafe host forms and any private DNS answer are rejected. No localhost test exception exists.
+
+One physical connection is allowed per transport, with no unbounded connection queue. Overall deadline 30 seconds; socket inactivity 5 seconds. A logical timeout destroys its socket, but capacity remains reserved until actual close. At most two OS DNS calls remain outstanding across transports; timed-out lookups retain their slots until actual settlement. The application service will additionally need a persistent mailbox lease for multiple processes.
+
+Session wire bytes are capped at 8 MiB and 50,000 lines, a line at 16 KiB, an individual retrieved message at 1 MiB/20,000 lines. UIDL/LIST responses contain at most 1,000 entries and have separate byte caps. Duplicate numbers/UIDLs, inconsistent size maps, invalid status bytes and malformed identities fail safely. Multiline dot unstuffing preserves message bytes and CRLF. Credentials and remote error text never appear in thrown errors or connection options.
+
+Guarded service checks use injected resolver/socket peers and no Internet/DNS/SMTP requests. They exercise real fixed command sequencing, explicit deletion, TLS/DNS/actual-peer validation, key-independent safe errors, dot unstuffing, byte/line bounds, held physical socket closure and held physical DNS settlement. The intake owner requests `waitForPhysicalClose`, retaining ownership of a failed opening until its socket actually closes. Native mailbox UI verification is separate.

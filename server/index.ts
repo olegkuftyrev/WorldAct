@@ -50,6 +50,7 @@ import fontsRouter from "./fonts.js";
 import postTemplatesRouter from "./post-templates.js";
 import bundledPluginsRouter from "./bundled-plugins.js";
 import connectorsRouter from "./connectors.js";
+import mailIntakeRouter, { startMailIntakeWorker } from "./mail-intake.js";
 import { plainText, HttpError, parseId, needUser } from "./utils.js";
 
 export const app = express();
@@ -131,6 +132,7 @@ app.use("/api", fontsRouter);
 app.use("/api", postTemplatesRouter);
 app.use("/api", bundledPluginsRouter);
 app.use("/api", connectorsRouter);
+app.use("/api", mailIntakeRouter);
 app.use("/api", outgoingPingsRouter);
 app.use("/api", platformRouter);
 app.use("/api", coreRouter);
@@ -302,21 +304,22 @@ if (
   path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)
 ) {
   const stopScheduler = startScheduler();
-  let stopPings=()=>{};
+  let stopPings=()=>{}, stopMail=()=>{};
   const port = Number(process.env.PORT || 3001);
   const server = app.listen(port, "127.0.0.1", (error?:Error) => {
     if(error){
-      stopScheduler();stopPings();
+      stopScheduler();stopPings();stopMail();
       console.error("Could not start WorldAct API:",error.message);
       process.exitCode=1;
       void pool.end();
       return;
     }
     stopPings=startOutgoingPingWorker();
+    stopMail=startMailIntakeWorker();
     console.log(`WorldAct API listening on http://127.0.0.1:${port}`);
   });
   const stop = () => {
-    stopScheduler();stopPings();
+    stopScheduler();stopPings();stopMail();
     server.close(() => {
       void pool.end().then(() => process.exit(0));
     });
