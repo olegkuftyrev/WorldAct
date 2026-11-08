@@ -525,8 +525,10 @@ for (const [name, base, label] of [
   );
 function templatePartRecord(row: any, theme: string) {
   const area=row.area || "uncategorized";
-  const sourceArea=row.sourceMetadata?.area ?? sourceTemplatePartArea(getBundledTheme(theme)?.themeJSON || {},row.slug);
-  const custom=!row.sourceHash || row.rawContent !== row.sourceContent || area !== sourceArea;
+  const sourceTheme=getBundledTheme(theme),sourcePart=sourceTheme?.parts.find(part=>part.slug===row.slug);
+  const sourceArea=row.sourceMetadata?.area ?? sourceTemplatePartArea(sourceTheme?.themeJSON || {},row.slug);
+  const sourceTitle=row.sourceMetadata?.title ?? sourcePart?.title;
+  const custom=!row.sourceHash || row.rawContent !== row.sourceContent || area !== sourceArea || row.title !== sourceTitle;
   return {
     id: `${theme}//${row.slug}`,
     wp_id: row.id,

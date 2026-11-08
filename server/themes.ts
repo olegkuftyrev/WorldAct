@@ -87,20 +87,23 @@ export async function syncBundledThemes(database: Database = pool) {
         const canonical = cleanRawContent(source.content);
         // A few source filenames differ from their declared pattern slugs. Remove
         // only untouched rows created by the earlier filename-based importer.
-        await database.query("DELETE FROM site_documents WHERE theme=$1 AND type=$2 AND slug<>$3 AND source_hash=$4 AND source_metadata->>'source'=$5 AND raw_content=source_content AND (type<>'template-part' OR area=COALESCE(source_metadata->>'area',area))",[theme.id,type,source.slug,source.sourceHash,source.source]);
-        const previous = await database.query("SELECT id,content,raw_content,source_hash,source_content,source_metadata,area FROM site_documents WHERE theme=$1 AND type=$2 AND slug=$3", [theme.id,type,source.slug]);
+        await database.query("DELETE FROM site_documents WHERE theme=$1 AND type=$2 AND slug<>$3 AND source_hash=$4 AND source_metadata->>'source'=$5 AND raw_content=source_content AND title=COALESCE(source_metadata->>'title',$6) AND (type<>'template-part' OR area=COALESCE(source_metadata->>'area',area))",[theme.id,type,source.slug,source.sourceHash,source.source,source.title]);
+        const previous = await database.query("SELECT id,title,content,raw_content,source_hash,source_content,source_metadata,area FROM site_documents WHERE theme=$1 AND type=$2 AND slug=$3", [theme.id,type,source.slug]);
         const row = previous.rows[0];
         const area=type==='template-part'?sourceTemplatePartArea(theme.themeJSON,source.slug):'uncategorized';
         // Introduce trusted source area metadata once, including edited source
         // content. Subsequent migrations preserve deliberate area changes.
-        if(type==='template-part' && row?.source_hash && row.source_metadata?.area === undefined){
-          await database.query("UPDATE site_documents SET area=$2::varchar,source_metadata=source_metadata || jsonb_build_object('area',$2::varchar) WHERE id=$1",[row.id,area]);
-          row.area=area;row.source_metadata={...row.source_metadata,area};
+        if(row?.source_hash && (row.source_metadata?.title === undefined || (type==='template-part' && row.source_metadata?.area === undefined))){
+          const initialArea=type==='template-part' && row.source_metadata?.area === undefined?area:row.area;
+          const metadata={...row.source_metadata,...(row.source_metadata?.title===undefined?{title:source.title}:{}),...(type==='template-part' && row.source_metadata?.area===undefined?{area}: {})};
+          await database.query("UPDATE site_documents SET area=$2::varchar,source_metadata=$3::jsonb WHERE id=$1",[row.id,initialArea,JSON.stringify(metadata)]);
+          row.area=initialArea;row.source_metadata=metadata;
         }
         if (row && row.source_hash === source.sourceHash) continue;
         if (row && !(row.source_content && row.raw_content === row.source_content) && !legacyDefaults.has(row.content)) continue;
+        if(row?.source_hash && row.title !== row.source_metadata?.title)continue;
         if(row && type==='template-part' && row.source_hash && row.area !== row.source_metadata?.area)continue;
-        const metadata = {description:source.description,categories:source.categories,blockTypes:source.blockTypes,inserter:source.inserter,source:source.source,...(type==='template-part'?{area}: {})};
+        const metadata = {title:source.title,description:source.description,categories:source.categories,blockTypes:source.blockTypes,inserter:source.inserter,source:source.source,...(type==='template-part'?{area}: {})};
         await database.query(`INSERT INTO site_documents(theme,slug,title,type,content,raw_content,blocks,source_hash,source_content,source_metadata,area)
           VALUES($1,$2,$3,$4,$5,$6,$7,$8,$6,$9,$10)
           ON CONFLICT(theme,type,slug) DO UPDATE SET title=excluded.title,content=excluded.content,raw_content=excluded.raw_content,blocks=excluded.blocks,source_hash=excluded.source_hash,source_content=excluded.source_content,source_metadata=excluded.source_metadata,area=excluded.area,version=site_documents.version+1,updated_at=now()`,
@@ -111,8 +114,14 @@ export async function syncBundledThemes(database: Database = pool) {
 }
 
 /** A trusted source reset; imported metadata cannot designate arbitrary content as bundled. */
-export async function resetBundledDocument(id: number, database: Database = pool) {
-  const existing = await database.query("SELECT theme,type,slug FROM site_documents WHERE id=$1", [id]);
+export async function resetBundledDocument(id: number, database?: pg.PoolClient): Promise<any> {
+  if(!database){
+    const client=await pool.connect();
+    try{await client.query('BEGIN');const result=await resetBundledDocument(id,client);await client.query('COMMIT');return result;}
+    catch(error){await client.query('ROLLBACK');throw error;}
+    finally{client.release();}
+  }
+  const existing = await database.query("SELECT theme,type,slug FROM site_documents WHERE id=$1 FOR UPDATE", [id]);
   const row = existing.rows[0];
   const theme = row ? getBundledTheme(String(row.theme)) : undefined;
   const sources = row?.type === "template" ? theme?.templates : row?.type === "template-part" ? theme?.parts : theme?.patterns;
@@ -120,7 +129,7 @@ export async function resetBundledDocument(id: number, database: Database = pool
   if (!source) throw new HttpError(404, "This design has no bundled original.");
   const canonical = cleanRawContent(source.content);
   const area=row.type==='template-part'?sourceTemplatePartArea(theme!.themeJSON,row.slug):'uncategorized';
-  const metadata = {description:source.description,categories:source.categories,blockTypes:source.blockTypes,inserter:source.inserter,source:source.source,...(row.type==='template-part'?{area}: {})};
+  const metadata = {title:source.title,description:source.description,categories:source.categories,blockTypes:source.blockTypes,inserter:source.inserter,source:source.source,...(row.type==='template-part'?{area}: {})};
   const result = await database.query(`UPDATE site_documents SET title=$2,content=$3,raw_content=$4,blocks=$5::jsonb,source_hash=$6,source_content=$4,source_metadata=$7::jsonb,area=$8,version=version+1,updated_at=now() WHERE id=$1
     RETURNING id,slug,title,type,theme,area,content,raw_content AS "rawContent",blocks,source_metadata AS "sourceMetadata",version,updated_at AS "updatedAt"`,
     [id,source.title,cleanContent(source.content),canonical,JSON.stringify(canonicalBlocks(canonical)),source.sourceHash,JSON.stringify(metadata),area]);

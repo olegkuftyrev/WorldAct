@@ -100,6 +100,12 @@ test('template-part areas persist through native/platform writes, migration, res
       assert.equal((await api('/wp-json/wp/v2/template-parts/'+custom.id,'GET',undefined,cookie)).response.status,404);
       const source=(await request('/wp-json/wp/v2/template-parts/twentytwentyfive//footer-columns')).data;
       assert.equal((await api('/wp-json/wp/v2/template-parts/'+source.id+'?force=true','DELETE',undefined,cookie)).response.status,400);
+      const titled=(await request('/wp-json/wp/v2/template-parts/'+source.id,'POST',{title:'Custom footer title'})).data;
+      assert.equal(titled.is_custom,true);assert.equal(titled.source,'custom');
+      await pool.query('UPDATE site_documents SET source_hash=$1 WHERE id=$2',['0'.repeat(64),source.wp_id]);
+      await migrate();assert.equal((await request('/wp-json/wp/v2/template-parts/'+source.id)).data.title.raw,'Custom footer title');
+      await request('/wp-json/wp/v2/template-parts/'+source.id+'?force=true','DELETE');
+      const titleReset=(await request('/wp-json/wp/v2/template-parts/'+source.id)).data;assert.equal(titleReset.title.raw,source.title.raw);assert.equal(titleReset.is_custom,false);
       await request('/wp-json/wp/v2/template-parts/'+source.id,'POST',{area:'navigation-overlay'});
       const cleared=(await request('/wp-json/wp/v2/template-parts/'+source.id+'?force=true','DELETE')).data;assert.equal(cleared.previous.is_custom,true);
       const restored=(await request('/wp-json/wp/v2/template-parts/'+source.id)).data;assert.equal(restored.area,'footer');assert.equal(restored.source,'theme');assert.equal(restored.is_custom,false);
