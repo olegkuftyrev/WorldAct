@@ -6,7 +6,7 @@ after(() => pool.end());
 
 test("prior human approval follows exact guest identity and real registered account history", async t => {
   const f = await approvalFixture("approval-history"), post = await f.post(), email = f.stamp + "-exact@example.test";
-  const accepted = async (values: Record<string,unknown> = {}, auth = "") => { const result = await f.submit(post.id, values, auth); assert.equal(result.response.status, 201, JSON.stringify(result.data)); return result.data.comment; };
+  const accepted = async (values: Record<string,unknown> = {}, auth = "") => { await f.ageAdmissions(post.id); const result = await f.submit(post.id, values, auth); assert.equal(result.response.status, 201, JSON.stringify(result.data)); return result.data.comment; };
   try {
     await accepted({ authorName: "Exact guest", authorEmail: email });
     await accepted({ authorName: "Anonymous", authorEmail: email });

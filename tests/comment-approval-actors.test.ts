@@ -13,7 +13,7 @@ test("only actual human post authors and moderators bypass ordinary policy, whil
     await f.ok("/api/settings", "PUT", { commentModeration: true, commentPreviouslyApproved: true, commentMaxLinks: 1, commentModerationKeys: "moderate-marker", disallowedCommentKeys: "discard-marker" });
     const content = '<p>moderate-marker discard-marker <a href="https://example.test/">A link</a></p>';
     let sequence = 0;
-    const accepted = async (auth: string, values: Record<string,unknown> = {}) => { const result = await f.submit(post.id, { content: content + " case " + ++sequence, ...values }, auth); assert.equal(result.response.status, 201, JSON.stringify(result.data)); return result.data.comment; };
+    const accepted = async (auth: string, values: Record<string,unknown> = {}) => { await f.ageAdmissions(post.id); const result = await f.submit(post.id, { content: content + " case " + ++sequence, ...values }, auth); assert.equal(result.response.status, 201, JSON.stringify(result.data)); return result.data.comment; };
     await t.test("current admin, global editor and actual post author receive source approval", async () => {
       for (const auth of [f.admin, editor.auth, author.auth]) assert.equal((await accepted(auth)).status, "approved");
       assert.equal((await accepted(foreign.auth)).status, "trash");

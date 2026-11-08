@@ -42,6 +42,7 @@ import { withPreviewAutosave } from "./post-preview.js";
 import { contentPagination, parseContentPage } from "./legacy-content.js";
 import { publicCommentWindow } from "./comment-window.js";
 import { lockPageHierarchy, reparentDeletedPages } from "./page-hierarchy.js";
+import { assertCommentFloodAllowed, cleanupCommentFloodMetadata, commentAdmissionTime, recordCommentFloodMetadata } from "./comment-flood.js";
 
 const router = Router();
 const contentRoles = requireRole(
@@ -621,7 +622,9 @@ export async function publishDuePosts(
 }
 export function startScheduler(intervalMs = 30_000) {
   let lastPluginCleanup=0;
+  let floodCleanupRunning=false;
   const publish = () => {
+    if(!floodCleanupRunning){floodCleanupRunning=true;void cleanupCommentFloodMetadata().catch(error=>console.error("Comment metadata cleanup failed:",error.message)).finally(()=>{floodCleanupRunning=false;});}
     if(Date.now()-lastPluginCleanup>=60*60_000){lastPluginCleanup=Date.now();void pool.query("DELETE FROM akismet_comment_checks WHERE expires_at<=now()").catch(()=>{});}
     void publishDuePosts().catch((error) =>
       console.error("Scheduled publication failed:", error.message),
@@ -1613,15 +1616,18 @@ export async function submitPublicComment(req: Request, res: Response) {
       [post.id, input.parentId ?? null, authorName, submittedEmail, content],
     );
     if (duplicate.rowCount) throw new HttpError(409, "Duplicate comment detected; it looks as though you've already said that!");
+    const admittedAt = await commentAdmissionTime(client);
+    await assertCommentFloodAllowed(client, { actor, email: submittedEmail, ip: req.ip || "" }, admittedAt);
     let status = await moderateComment({type:"comment",authorName:cleanName,authorEmail:submittedEmail,authorUrl,content,rawContent:input.content,ip:req.ip || "",actor,postAuthorId:post.author_id},client,settings);
     const akismetInput:AkismetComment={userIP:req.ip || "",userAgent:req.get("user-agent") || "",referrer:req.get("referer") || "",authorName,authorEmail:submittedEmail,authorURL:input.authorUrl || "",content,permalink:new URL((await withPermalink(post,settings,client)).permalink,settings.siteUrl).href,userRole:actor?.role};
     const akismetResult=["trash","spam"].includes(status)?"skipped":await checkAkismetComment(akismetInput,client);
     if(akismetResult==="spam")status="spam";else if(akismetResult==="unavailable")status="pending";
     const result = await client.query(
-      "INSERT INTO comments(post_id,author_name,author_email,content,status,parent_id,author_url,user_id) VALUES($1,$2,$3,$4,$5,$6,$7,$8) RETURNING id",
-      [post.id, authorName, submittedEmail, content, status, input.parentId ?? null, authorUrl, actor?.id ?? null],
+      "INSERT INTO comments(post_id,author_name,author_email,content,status,parent_id,author_url,user_id,created_at) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9) RETURNING id",
+      [post.id, authorName, submittedEmail, content, status, input.parentId ?? null, authorUrl, actor?.id ?? null, admittedAt],
     );
     const comment = { id: result.rows[0].id, status };
+    await recordCommentFloodMetadata(client, comment.id, req.ip || "", admittedAt);
     await recordAkismetCheck(comment.id,akismetInput,akismetResult,client);
     let rememberedToken: string | null | undefined;
     if (!actor && (input.rememberAuthor !== undefined || !settings.commentCookieConsent)) {

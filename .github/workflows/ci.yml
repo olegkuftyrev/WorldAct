@@ -59,6 +59,9 @@ jobs:
           tests/comment-capabilities.test.ts tests/template-access.test.ts tests/server-startup.test.ts
           tests/comment-types.test.ts
           tests/comment-duplicates.test.ts
+          tests/comment-flood-policy.test.ts tests/comment-flood-http.test.ts tests/comment-flood-privacy.test.ts
+          tests/comment-flood-rest.test.ts tests/comment-flood-waits.test.ts tests/accounts.test.ts
+          tests/comment-flood-delete-locks.test.ts
           tests/comment-approval-history.test.ts tests/comment-approval-actors.test.ts tests/comment-approval-waits.test.ts
           tests/compat.test.ts tests/theme-blocks.test.ts
           tests/notification-mail-ui.test.ts

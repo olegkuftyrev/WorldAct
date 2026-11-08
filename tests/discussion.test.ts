@@ -33,6 +33,9 @@ test("Discussion controls enforce moderation, safe mail, private consent prefere
   const mail = async () => (await pool.query("SELECT id,recipient,subject,body,delivered FROM mail_outbox WHERE subject LIKE $1 ORDER BY id", ["%" + stamp + "%"])).rows;
   let submissionSequence = 0;
   const submit = async (post: any, values: Record<string, unknown> = {}, cookie = "") => {
+    // Each call tests a different Discussion setting, outside the independent
+    // flood interval. Only this fixture's successful predecessors are aged.
+    await pool.query("UPDATE comments SET created_at=date_trunc('second',clock_timestamp())-interval '20 seconds' WHERE id=ANY($1::int[])",[comments]);
     const result = await ok("/public/comments", "POST", { postId: post.id, authorName: "Temporary reader", authorEmail: email, content: "A useful comment " + ++submissionSequence, ...values }, cookie);
     comments.push(result.data.comment.id); return result;
   };

@@ -11,6 +11,7 @@ import { z } from "zod";
 import { pool, getSettings, type Role } from "./db.js";
 import { hashPassword, requireRole, type AuthRequest } from "./auth.js";
 import { HttpError, parseId, needUser } from "./utils.js";
+import { lockPageHierarchy } from "./page-hierarchy.js";
 const router = Router(),
   admin = requireRole("administrator");
 const CONFIRM_HOURS = 24,
@@ -33,6 +34,7 @@ export const privacyRetention = {
     "Account profile fields",
     "Comments linked to the email address or account",
     "Retained Akismet submission IP, browser, referrer and classification metadata",
+    "Unexpired comment flood-prevention IP addresses and expiry times",
   ],
   erased: [
     "Comment author names",
@@ -40,6 +42,7 @@ export const privacyRetention = {
     "Comment author website URLs",
     "Comment links to registered user accounts",
     "Akismet submission and feedback metadata for matching comments",
+    "Comment flood-prevention IP metadata for matching comments",
     "Existing personal-data export download links and files",
   ],
   retained: [
@@ -50,7 +53,7 @@ export const privacyRetention = {
     "Privacy request audit records",
   ],
   message:
-    "Erasure anonymizes matching comment authors, removes their Akismet submission metadata and revokes existing personal-data exports. User accounts, profile fields, posts, pages, media, comment text, moderation status and privacy request records are retained. Delete an account separately in Users if required.",
+    "Erasure anonymizes matching comment authors, removes their Akismet submission and comment flood-prevention IP metadata and revokes existing personal-data exports. User accounts, profile fields, posts, pages, media, comment text, moderation status and privacy request records are retained. Delete an account separately in Users if required.",
 };
 const requestFields = `r.id,r.email,r.type,r.status,r.created_at AS "createdAt",r.updated_at AS "updatedAt",r.confirmed_at AS "confirmedAt",r.completed_at AS "completedAt",r.confirmation_expires_at AS "confirmationExpiresAt",r.download_expires_at AS "downloadExpiresAt",(r.export_data IS NOT NULL AND r.download_expires_at>now()) AS "hasExport",r.result,r.error,coalesce(u.display_name,'Deleted administrator') AS "requestedByName"`;
 async function requestDto(
@@ -542,7 +545,7 @@ async function personalData(client: PoolClient, email: string) {
   const ids = accounts.map((user) => user.id);
   const size = (
     await client.query(
-      "SELECT count(*)::int AS total,coalesce(sum(octet_length(c.content)+octet_length(c.author_name)+octet_length(c.author_email)+octet_length(c.author_url)+coalesce(octet_length(m.user_ip)+octet_length(m.user_agent)+octet_length(m.referrer),0)),0)::bigint AS bytes FROM comments c LEFT JOIN akismet_comment_checks m ON m.comment_id=c.id AND m.expires_at>now() WHERE lower(c.author_email)=lower($1) OR c.user_id=ANY($2::int[])",
+      "SELECT count(*)::int AS total,coalesce(sum(octet_length(c.content)+octet_length(c.author_name)+octet_length(c.author_email)+octet_length(c.author_url)+coalesce(octet_length(m.user_ip)+octet_length(m.user_agent)+octet_length(m.referrer),0)+coalesce(octet_length(f.author_ip)+128,0)),0)::bigint AS bytes FROM comments c LEFT JOIN akismet_comment_checks m ON m.comment_id=c.id AND m.expires_at>now() LEFT JOIN comment_flood_metadata f ON f.comment_id=c.id AND f.expires_at>clock_timestamp() WHERE lower(c.author_email)=lower($1) OR c.user_id=ANY($2::int[])",
       [email, ids],
     )
   ).rows[0];
@@ -561,6 +564,7 @@ async function personalData(client: PoolClient, email: string) {
     )
   ).rows;
   const akismetChecks=(await client.query('SELECT m.comment_id AS "commentId",m.user_ip AS "userIP",m.user_agent AS "userAgent",m.referrer,m.verdict,m.checked_at AS "checkedAt",m.expires_at AS "expiresAt",m.feedback,m.feedback_status AS "feedbackStatus" FROM akismet_comment_checks m JOIN comments c ON c.id=m.comment_id WHERE (lower(c.author_email)=lower($1) OR c.user_id=ANY($2::int[])) AND m.expires_at>now() ORDER BY m.comment_id',[email,ids])).rows;
+  const commentFloodMetadata=(await client.query('SELECT m.comment_id AS "commentId",m.author_ip AS "authorIP",m.expires_at AS "expiresAt" FROM comment_flood_metadata m JOIN comments c ON c.id=m.comment_id WHERE (lower(c.author_email)=lower($1) OR c.user_id=ANY($2::int[])) AND m.expires_at>clock_timestamp() ORDER BY m.comment_id',[email,ids])).rows;
   const safeAccounts = accounts.map(({ profile, ...user }) => ({
     ...user,
     profile: Object.fromEntries(
@@ -578,6 +582,7 @@ async function personalData(client: PoolClient, email: string) {
     accounts: safeAccounts,
     comments,
     akismetChecks,
+    commentFloodMetadata,
     scope: privacyRetention.exported,
   };
 }
@@ -709,6 +714,13 @@ router.post("/tools/privacy/requests/:id/erase", admin, async (req, res) => {
           "Confirm this request before erasing personal data.",
         );
       started = true;
+      // Post/account cascades acquire the page hierarchy before comment rows.
+      // Serialize the entire multi-post cascade before taking comment hierarchy;
+      // global comment-ID ordering alone cannot order cross-post FK cascades.
+      await lockPageHierarchy(client);
+      // Admission inserts comment + IP atomically under this same lock. Fence
+      // erasure's metadata DELETE and later anonymization against a late commit.
+      await client.query("SELECT pg_advisory_xact_lock(hashtext('worldact-comment-hierarchy'))");
       const users = (
         await client.query(
           "SELECT id FROM users WHERE lower(email)=lower($1)",
@@ -716,6 +728,7 @@ router.post("/tools/privacy/requests/:id/erase", admin, async (req, res) => {
         )
       ).rows.map((user) => user.id);
       const removedAkismet=await client.query("DELETE FROM akismet_comment_checks m USING comments c WHERE m.comment_id=c.id AND (lower(c.author_email)=lower($1) OR c.user_id=ANY($2::int[])) RETURNING m.comment_id",[row.email,users]);
+      const removedFlood=await client.query("DELETE FROM comment_flood_metadata m USING comments c WHERE m.comment_id=c.id AND (lower(c.author_email)=lower($1) OR c.user_id=ANY($2::int[])) RETURNING m.comment_id",[row.email,users]);
       const erased = await client.query(
         "UPDATE comments SET author_name='Anonymous',author_email='',author_url='',user_id=NULL,version=version+1,updated_at=now() WHERE lower(author_email)=lower($1) OR user_id=ANY($2::int[]) RETURNING id",
         [row.email, users],
@@ -735,9 +748,10 @@ router.post("/tools/privacy/requests/:id/erase", admin, async (req, res) => {
       const result = {
         commentsAnonymized: erased.rowCount || 0,
         akismetChecksRemoved:removedAkismet.rowCount || 0,
+        commentFloodMetadataRemoved:removedFlood.rowCount || 0,
         exportsRevoked: revoked.rowCount || 0,
         messages: [
-          "Matching comment author names, email addresses, website URLs and account links were anonymized. Akismet submission metadata was removed. Existing personal-data exports were revoked.",
+          "Matching comment author names, email addresses, website URLs and account links were anonymized. Akismet submission and comment flood-prevention IP metadata was removed. Existing personal-data exports were revoked.",
         ],
         retained: privacyRetention.retained,
       };

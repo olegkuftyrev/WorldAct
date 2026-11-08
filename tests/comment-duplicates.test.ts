@@ -19,6 +19,9 @@ test("public duplicate admission serializes real retries before rows, author coo
     return result.data;
   }
   const mail = async () => Number((await pool.query("SELECT count(*) FROM mail_outbox WHERE subject LIKE $1", ["%" + stamp + "%"])).rows[0].count);
+  // Independent duplicate-identity cases must be outside the separate flood
+  // interval; age only this test's own predecessors, never the immediate retry.
+  const ageAdmissions = () => pool.query("UPDATE comments SET created_at=date_trunc('second',clock_timestamp())-interval '20 seconds' WHERE post_id=ANY($1::int[])",[posts]);
   try {
     const signed = await api("/api/auth/login", "POST", { login: process.env.ADMIN_EMAIL, password: process.env.ADMIN_PASSWORD }, "");
     assert.equal(signed.response.status, 200); admin = signed.response.headers.get("set-cookie")!.split(";")[0];
@@ -68,8 +71,10 @@ test("public duplicate admission serializes real retries before rows, author coo
       assert.equal(await mail(), before + 1);
     });
     await t.test("post, parent, name, email and content changes remain distinct; URL and email casing do not bypass duplicates", async () => {
-      for (const extra of [{ postId: posts[1] }, { parentId: parent.id }, { authorName: "Another guest" }, { authorEmail: stamp + "-other@example.test" }, { content: "<p>Different body</p>" }])
+      for (const extra of [{ postId: posts[1] }, { parentId: parent.id }, { authorName: "Another guest" }, { authorEmail: stamp + "-other@example.test" }, { content: "<p>Different body</p>" }]) {
+        await ageAdmissions();
         assert.equal((await submit(extra)).response.status, 201);
+      }
       for (const extra of [{ authorEmail: input.authorEmail.toUpperCase() }, { authorUrl: "https://example.test/new" }]) assert.equal((await submit(extra)).response.status, 409);
       await ok("/api/settings", "PUT", { requireCommentNameEmail: false });
       assert.equal((await submit({ authorEmail: "" })).response.status, 409, "a source no-email retry matches the same name/body regardless of the older email");
@@ -81,10 +86,12 @@ test("public duplicate admission serializes real retries before rows, author coo
         assert.equal((await submit()).response.status, 409);
       }
       await pool.query("UPDATE comments SET status='trash' WHERE id=$1", [admitted.data.comment.id]);
+      await ageAdmissions();
       const retry = await submit(); assert.equal(retry.response.status, 201);
       assert.notEqual(retry.data.comment.id, admitted.data.comment.id);
     });
     await t.test("native source forms and authenticated REST creation share the actual duplicate boundary", async () => {
+      await ageAdmissions();
       const form = new URLSearchParams({ comment_post_ID: String(posts[0]), author: "Native retry", email: stamp + "-native@example.test", comment: "<p>Native retry body</p>", "wp-comment-cookies-consent": "yes" });
       const count = await mail();
       const first = await fetch(base + "/wp-comments-post.php", { method: "POST", headers: { Origin: origin }, body: form, redirect: "manual" });

@@ -34,6 +34,13 @@ export async function approvalFixture(label: string) {
   async function submit(postId: number, values: Record<string, unknown> = {}, auth = "", headers: Record<string,string> = {}) {
     return api("/api/public/comments", "POST", { postId, authorName: "Guest reader", authorEmail: stamp + "-guest@example.test", content: "Approval body " + ++sequence, ...values }, auth, headers);
   }
+  // Approval cases intentionally exercise independent moderation states. Age
+  // only this fixture's predecessors when a caller explicitly starts a case;
+  // immediate duplicate/flood/wait tests never invoke this helper.
+  async function ageAdmissions(postId: number) {
+    assert.ok(posts.includes(postId), "only this fixture's own post can be aged");
+    await pool.query("UPDATE comments SET created_at=date_trunc('second',clock_timestamp())-interval '20 seconds' WHERE post_id=$1", [postId]);
+  }
   async function dispose() {
     await pool.query("DELETE FROM posts WHERE id=ANY($1::int[])", [posts]);
     await pool.query("DELETE FROM users WHERE id=ANY($1::int[])", [users]);
@@ -43,5 +50,5 @@ export async function approvalFixture(label: string) {
     for (const row of extensions) await pool.query("INSERT INTO extensions(slug,enabled,settings,installed_at) VALUES($1,$2,$3,$4)", [row.slug,row.enabled,row.settings,row.installed_at]);
     for (const row of secrets) await pool.query("INSERT INTO extension_secrets(slug,api_key,verified_site_url,verified_at,last_error_code,updated_at) VALUES($1,$2,$3,$4,$5,$6)", [row.slug,row.api_key,row.verified_site_url,row.verified_at,row.last_error_code,row.updated_at]);
   }
-  return { stamp, admin, adminUser: login.data.user, api, ok, account, post, submit, dispose };
+  return { stamp, admin, adminUser: login.data.user, api, ok, account, post, submit, ageAdmissions, dispose };
 }

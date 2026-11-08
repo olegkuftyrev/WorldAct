@@ -64,6 +64,7 @@ test("complete site archive crosses fresh databases with media, design and setti
       for (const label of ["Home", "Posts", "Privacy"]) pages.push((await ok("/api/posts", "POST", { type: "page", title: stamp + " " + label, status: "publish", content: `<p>Portable ${label} page</p>` })).post);
       const pageChild = (await ok("/api/posts", "POST", { type: "page", title: stamp + " Child", status: "publish", parentId: pages[0].id, content: "<p>Portable child page</p>" })).post;
       const parentComment = (await ok("/api/comments", "POST", { postId: post.id, authorName: "Portable reader", authorEmail: "reader@example.invalid", authorUrl: "https://reader.example.invalid", content: "<p>Portable parent comment</p>" })).comment;
+      await pool.query("INSERT INTO comment_flood_metadata(comment_id,author_ip,expires_at) VALUES($1,'192.0.2.245',clock_timestamp()+interval '1 hour')",[parentComment.id]);
       await ok("/api/comments", "POST", { postId: post.id, parentId: parentComment.id, content: "<p>Portable child comment</p>", status: "pending" });
       await ok("/api/menus", "POST", { name: stamp + " Legacy menu", location: "primary", items: [{ id: "home", label: "Portable main link", url: "https://archive-source.example.invalid" + post.permalink }, { id: "child", label: "Portable child link", url: pageChild.permalink, parentId: "home" }] });
       await ok("/api/settings", "PUT", { frontPageMode: "page", frontPageId: pages[0].id, postsPageId: pages[1].id, privacyPageId: pages[2].id, defaultCategoryId: childCategory.id, siteLogoId: image.id, siteIconId: image.id });
@@ -71,6 +72,7 @@ test("complete site archive crosses fresh databases with media, design and setti
       await ok("/api/plugins/custom-footer/install", "POST", {});
       await ok("/api/plugins/custom-footer", "PUT", { enabled: true, settings: { text: "Portable custom footer" } });
       const archive = await ok("/api/tools/export");
+      assert.doesNotMatch(JSON.stringify(archive),/192\.0\.2\.245|comment_flood_metadata|commentFloodMetadata|author_ip/);
       assert.equal(archive.version, 3); assert.ok(archive.mediaFiles.length >= 2); assert.equal(archive.settings.adminEmail, undefined);
       assert.ok(archive.mediaFiles.every((item: any) => item.data && /^[a-f0-9]{64}$/.test(item.sha256)));
       assert.equal(archive.extensions.find((item: any) => item.slug === "custom-footer")?.settings.text, "Portable custom footer");
@@ -81,6 +83,7 @@ test("complete site archive crosses fresh databases with media, design and setti
       const baseline = (await ok("/api/settings")).settings;
       const originalHeader = (await ok("/api/site-editor")).parts.find((item: any) => item.slug === "header");
       const copied = await ok("/api/tools/import", "POST", archive); ownedMedia.push(...copied.mediaIds);
+      assert.equal((await pool.query("SELECT count(*)::int AS n FROM comment_flood_metadata")).rows[0].n,0,"Fresh archive restore must not recreate source IP metadata");
       assert.equal(copied.restoredDesign, false);
       assert.equal((await ok("/api/settings")).settings.siteTitle, baseline.siteTitle);
       assert.ok(copied.warnings.some((message: string) => message.includes("retained")));

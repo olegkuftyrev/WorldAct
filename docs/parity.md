@@ -148,7 +148,7 @@ Independent Accordion/Tabs review returned PASS at 1440, 768 and 375 pixels. Act
 
 ## Remaining work
 
-- Complete remaining public document parity, including server-rendered initial content/no-JavaScript behavior, further pagination404 rules, and additional author/time permalink tokens. Ordinary source comment flood timing and age/registration-aware Reply controls remain separate continuations.
+- Complete remaining public document parity, including server-rendered initial content/no-JavaScript behavior, further pagination404 rules, and additional author/time permalink tokens. The fixed ordinary-human source15-second flood policy is implemented with private expiring metadata; incoming-ping flood enforcement and age/registration-aware Reply controls remain separate continuations.
 - Finish exact legacy media presentation and broader source media-view adapters; extend additional variations and entity formats.
 - Complete remaining localization/accessibility/profile preferences and less-common capability combinations.
 - Implement further Node-compatible extension/package installation, updates/recovery and hooks, source-equivalent classic Customizer/widget workflows, explicit outgoing trackbacks and conditional legacy screens.

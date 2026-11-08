@@ -16,6 +16,7 @@ import {checkAkismetComment,recordAkismetCheck,createAkismetClient,type AkismetC
 import {queueCommentNotifications} from './core.js';
 import {deliverMail} from './accounts.js';
 import type {PingHTTP} from './ping-protocol.js';
+import {commentAdmissionTime,recordCommentFloodMetadata} from './comment-flood.js';
 const esc=(s:string)=>s.replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;').replaceAll("'",'&apos;');
 const hash=(s:string)=>createHash('sha256').update(s).digest('hex');
 export class IncomingPingError extends Error{constructor(readonly code=0){super('Ping notification could not be accepted.');}}
@@ -122,7 +123,9 @@ export function createIncomingPings(options:{http?:PingHTTP;environment?:()=>Pin
     if(new URL(await postPermalink(post,snapshot.settings,client),snapshot.settings.siteUrl).href!==target.url)throw new IncomingPingError(33);
     if((await client.query("SELECT 1 FROM comments WHERE post_id=$1 AND (source_hash=$2 OR author_url=$3) LIMIT 1",[post.id,hash(source.href),source.href])).rowCount)throw new IncomingPingError(48);
     if(!(await client.query("SELECT token FROM incoming_ping_leases WHERE token=$1 AND expires_at>clock_timestamp() FOR UPDATE",[token])).rowCount)throw new IncomingPingError(0);
-    const result=await client.query("INSERT INTO comments(post_id,type,author_name,author_email,author_url,content,status) VALUES($1,$2,$3,'',$4,$5,$6) RETURNING id",[post.id,input.type,body.authorName,source.href,body.content,status]);
+    const admittedAt=await commentAdmissionTime(client);
+    const result=await client.query("INSERT INTO comments(post_id,type,author_name,author_email,author_url,content,status,created_at) VALUES($1,$2,$3,'',$4,$5,$6,$7) RETURNING id",[post.id,input.type,body.authorName,source.href,body.content,status,admittedAt]);
+    await recordCommentFloodMetadata(client,result.rows[0].id,input.ip,admittedAt);
     await recordAkismetCheck(result.rows[0].id,akismet,verdict,client);
     messages=await queueCommentNotifications(client,result.rows[0].id);
     if(!(await client.query('SELECT token FROM incoming_ping_leases WHERE token=$1 AND expires_at>clock_timestamp()',[token])).rowCount)throw new IncomingPingError(0);

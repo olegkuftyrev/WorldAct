@@ -1,4 +1,5 @@
 import {normalizePingSource,renderedCommentContent} from "./comment-policy.js";
+import {submitPublicComment} from "./core.js";
 import express, {
   type Request,
   type Response,
@@ -1232,18 +1233,28 @@ router.post("/wp-json/wp/v2/comments", async (req: AuthRequest, res) => {
     })
     .strict()
     .parse(req.body);
-  const result = await forward(req, "/public/comments", "POST", {
+  req.body = {
     postId: input.post,
     parentId: input.parent || null,
     authorName: input.author_name,
     authorEmail: input.author_email,
     authorUrl: input.author_url,
     content: input.content,
-  });
+  };
+  // Keep the actual request's IP/authentication rather than recording a
+  // loopback bridge socket as this comment's private submission address.
+  let result: { comment: { id: number } } | undefined;
+  const response = new Proxy(res, { get(target, key) {
+    if (key === "status") return () => response;
+    if (key === "json") return (value: typeof result) => { result = value; return response; };
+    const value = Reflect.get(target, key, target);
+    return typeof value === "function" ? value.bind(target) : value;
+  } }) as Response;
+  await submitPublicComment(req, response);
   const row = (
     await pool.query(
       `SELECT id,post_id AS "postId",parent_id AS "parentId",author_name AS "authorName",author_url AS "authorUrl",user_id AS "userId",content,type,status,created_at AS "createdAt" FROM comments WHERE id=$1`,
-      [result.data.comment.id],
+      [result!.comment.id],
     )
   ).rows[0];
   res.status(201).json(await wpComment(row));

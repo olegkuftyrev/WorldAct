@@ -32,8 +32,10 @@ pending/spam/trash, native form and authenticated REST creation. Discussion
 fixtures now use distinct comment bodies when testing different policy states.
 
 The existing process-local hourly attempt limit remains separate from this
-persisted duplicate rule. Source15-second flood-interval parity remains a
-separate continuation. No schema, dependency or UI change is required here.
+persisted duplicate rule. The fixed ordinary-human source15-second interval now
+runs after duplicate detection; see [comment-flood.md](comment-flood.md) for its
+identity, exact-time, private retention and incoming-ping enforcement boundaries.
+The duplicate rule itself requires no schema, dependency or UI change.
 
 Production build and52 source/52 compiled checks across nine files pass, with
 no failures or skips. Independent backend review remains pending.
