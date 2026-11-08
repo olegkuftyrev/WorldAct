@@ -49,6 +49,8 @@ import { parseFootnotes, serializeFootnotes, freshFootnoteIds, MAX_FOOTNOTES_BYT
 import { excerptText } from "./excerpts.js";
 import { postAccessReader, postHasPassword, protectedPostExcerpt, publicPostTitle } from "./post-passwords.js";
 import { legacyExcerptSource, parseContentPage } from "./legacy-content.js";
+import { readWxrExportFilters, wxrExportWhere, wxrEntityReferences } from "./wxr-export.js";
+import { dateArchiveLocalSQL } from "./date-archives.js";
 const router = express.Router();
 const admin = requireRole("administrator");
 const esc = (value: unknown) =>
@@ -1427,29 +1429,71 @@ router.get("/wp-json/wp/v2/statuses", (req: AuthRequest, res) =>
   ),
 );
 
+router.get("/api/tools/export/options", admin, async (_req, res) => {
+  const settings = await getSettings(), dateArgs: unknown[] = [], mediaDateArgs: unknown[] = [];
+  const local = dateArchiveLocalSQL("COALESCE(p.published_at,p.scheduled_at,p.created_at)", dateArgs, settings.timezone);
+  const mediaLocal = dateArchiveLocalSQL("m.created_at", mediaDateArgs, settings.timezone);
+  const [authors, categories, months, mediaMonths] = await Promise.all([
+    pool.query('SELECT id,display_name AS "displayName" FROM users WHERE EXISTS(SELECT 1 FROM posts WHERE author_id=users.id) OR EXISTS(SELECT 1 FROM media WHERE author_id=users.id) ORDER BY display_name,id'),
+    pool.query("SELECT id,name,parent_id AS \"parentId\" FROM terms WHERE taxonomy='category' ORDER BY name,id"),
+    pool.query(`SELECT DISTINCT p.type,to_char(${local},'YYYY-MM') AS month FROM posts p ORDER BY month DESC`, dateArgs),
+    pool.query(`SELECT DISTINCT to_char(${mediaLocal},'YYYY-MM') AS month FROM media m ORDER BY month DESC`, mediaDateArgs),
+  ]);
+  res.json({ authors: authors.rows, categories: categories.rows, months: { posts: months.rows.filter(row => row.type === "post").map(row => row.month), pages: months.rows.filter(row => row.type === "page").map(row => row.month), attachment: mediaMonths.rows.map(row => row.month) } });
+});
 router.get("/api/tools/export", admin, async (req, res, next) => {
   if (req.query.format !== "wxr") {
     next();
     return;
   }
-  const s = await getSettings();
-  const [posts, terms, comments, media, entities] = await Promise.all([
-    pool.query(
-      `SELECT ${postFields},p.raw_content AS "rawContent",u.username,u.email AS "authorEmail" FROM posts p JOIN users u ON u.id=p.author_id ORDER BY p.id`,
-    ),
-    pool.query("SELECT * FROM terms ORDER BY id"),
-    pool.query("SELECT * FROM comments ORDER BY id"),
-    pool.query(
-      "SELECT m.*,u.username FROM media m JOIN users u ON u.id=m.author_id ORDER BY m.id",
-    ),
-    pool.query('SELECT b.*,u.username,u.email AS "authorEmail",u.display_name AS "authorName",u.id AS "authorId" FROM block_entities b JOIN users u ON u.id=b.author_id ORDER BY b.id'),
-  ]);
+  const input = readWxrExportFilters(req.query), client = await pool.connect();
+  let s: Awaited<ReturnType<typeof getSettings>>, posts: { rows: any[] }, terms: { rows: any[] }, comments: { rows: any[] }, media: { rows: any[] }, entities: { rows: any[] };
+  try {
+    await client.query("BEGIN ISOLATION LEVEL REPEATABLE READ READ ONLY");
+    s = await getSettings(client);
+    const selected = wxrExportWhere(input, s.timezone);
+    posts = input.content === "attachment" ? { rows: [] } : await client.query(`SELECT ${postFields},u.username,u.email AS "authorEmail" FROM posts p JOIN users u ON u.id=p.author_id WHERE ${selected.sql} ORDER BY p.id`, selected.args);
+    const entityQuery = 'SELECT b.*,u.username,u.email AS "authorEmail",u.display_name AS "authorName",u.id AS "authorId" FROM block_entities b JOIN users u ON u.id=b.author_id';
+    entities = { rows: [] };
+    if (input.content === "all") entities = await client.query(entityQuery + " ORDER BY b.id");
+    else if (input.content !== "attachment") {
+      const wanted = wxrEntityReferences(posts.rows), visited = new Set<string>(), included = new Set<number>();
+      for (let round = 0;; round++) {
+        const ids = [...wanted].filter(([id, kinds]) => [...kinds].some(kind => !visited.has(id + ":" + kind))).map(([id]) => id);
+        if (!ids.length) break;
+        if (round >= 64) throw new HttpError(413, "This export contains too many nested pattern or navigation references.");
+        if (wanted.size > 10000) throw new HttpError(413, "This export references too many patterns or navigation entities.");
+        for (const id of ids) wanted.get(id)!.forEach(kind => visited.add(id + ":" + kind));
+        const found = await client.query(entityQuery + " WHERE b.id=ANY($1::int[]) ORDER BY b.id", [ids]);
+        for (const entity of found.rows) if (wanted.get(entity.id)?.has(entity.kind) && !included.has(entity.id)) {
+          included.add(entity.id);
+          entities.rows.push(entity);
+          for (const [id, kinds] of wxrEntityReferences([entity])) {
+            const previous = wanted.get(id) || new Set<"reusable" | "navigation">();
+            kinds.forEach(kind => previous.add(kind)); wanted.set(id, previous);
+          }
+        }
+      }
+      entities.rows.sort((a, b) => a.id - b.id);
+    }
+    const postIds = posts.rows.map(post => post.id);
+    terms = input.content === "all" ? await client.query("SELECT * FROM terms ORDER BY id") : await client.query("WITH RECURSIVE selected AS(SELECT t.* FROM terms t JOIN post_terms pt ON pt.term_id=t.id WHERE pt.post_id=ANY($1::int[]) UNION SELECT parent.* FROM terms parent JOIN selected child ON child.parent_id=parent.id) SELECT * FROM selected ORDER BY id", [postIds]);
+    comments = await client.query("SELECT * FROM comments WHERE post_id=ANY($1::int[]) ORDER BY id", [postIds]);
+    const mediaQuery = 'SELECT m.*,u.username,u.email AS "authorEmail",u.display_name AS "authorName",u.id AS "authorId" FROM media m JOIN users u ON u.id=m.author_id';
+    if (input.content === "all") media = await client.query(mediaQuery + " ORDER BY m.id");
+    else if (input.content === "attachment") {
+      const selectedMedia = wxrExportWhere(input, s.timezone, true);
+      media = await client.query(mediaQuery + ` WHERE ${selectedMedia.sql} ORDER BY m.id`, selectedMedia.args);
+    } else media = await client.query(mediaQuery + " WHERE m.attached_post_id=ANY($1::int[]) OR m.id=ANY($2::int[]) ORDER BY m.id", [postIds, posts.rows.map(post => post.featuredMediaId).filter(Boolean)]);
+    await client.query("COMMIT");
+  } catch (error) { await client.query("ROLLBACK"); throw error; }
+  finally { client.release(); }
   // WXR uses one post ID space for pages, posts, synced patterns and navigation.
   const usedIds=new Set<number>(posts.rows.map(p=>p.id)), entityIds=new Map<number,{id:number;kind:"reusable"|"navigation"}>();
   let nextId=1;
   for(const entity of entities.rows){while(usedIds.has(nextId))nextId++;usedIds.add(nextId);entityIds.set(entity.id,{id:nextId++,kind:entity.kind});}
   const exportedContent=(record:any)=>remapImportedBlockReferences(record.rawContent || record.raw_content || record.content,[],entityIds).rawContent;
-  const authors = [...new Map([...posts.rows,...entities.rows].map((p) => [p.authorId, p])).values()]
+  const authors = [...new Map([...posts.rows,...entities.rows,...media.rows].map((p) => [p.authorId, p])).values()]
     .map(
       (p) =>
         `<wp:author><wp:author_id>${p.authorId}</wp:author_id><wp:author_login>${cdata(p.username)}</wp:author_login><wp:author_email>${cdata(p.authorEmail)}</wp:author_email><wp:author_display_name>${cdata(p.authorName)}</wp:author_display_name><wp:author_first_name/><wp:author_last_name/></wp:author>`,
