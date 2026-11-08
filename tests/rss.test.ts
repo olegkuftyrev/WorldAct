@@ -156,6 +156,16 @@ test("actual native SSR/public persistence and internal own feeds never recurse,
     const data = parseFeedDocument(bytes, fixtureURL); await pool.query("INSERT INTO rss_feed_cache(cache_key,url,data,bytes,expires_at) VALUES($1,$2,$3,$4,now()+interval '12 hours')", [createHash("sha256").update(fixtureURL).digest("hex"), fixtureURL, JSON.stringify(data), Buffer.byteLength(JSON.stringify(data))]);
     const metadata = (await ok("/wp-json/wp/v2/block-types/core/rss")).data; assert.equal(metadata.attributes.itemsToShow.default, 5); assert.equal(metadata.is_dynamic, true);
     const preview = (await ok("/wp-json/wp/v2/block-renderer/core/rss", "POST", { attributes: { feedURL: fixtureURL, displayAuthor: true, rel: 'nofollow ugc \" onclick=\"bad() javascript:bad()', openInNewTab: true } })).data.rendered; assert.match(preview, /RSS &amp; safe/); assert.match(preview, /by Reader Name/); assert.equal(dom(preview).querySelector("a")!.getAttribute("rel"), "nofollow ugc noopener noreferrer"); assert.equal(dom(preview).querySelector("[onclick]"), null);
+    const typed = { feedURL: fixtureURL, itemsToShow: 1, blockLayout: "grid", columns: 3, displayExcerpt: true, excerptLength: 1, displayAuthor: false, displayDate: false, openInNewTab: false };
+    const query = new URLSearchParams(); for (const [key, value] of Object.entries(typed)) query.set(`attributes[${key}]`, String(value));
+    const getPreview = (await ok("/wp-json/wp/v2/block-renderer/core/rss?" + query)).data.rendered;
+    const postPreview = (await ok("/wp-json/wp/v2/block-renderer/core/rss", "POST", { attributes: typed })).data.rendered;
+    assert.equal(getPreview, postPreview, "Native bracket-query transport and JSON produce the same preview");
+    const typedPreview = dom(getPreview); assert.equal(typedPreview.querySelectorAll("li").length, 1); assert.ok(typedPreview.querySelector("ul.is-grid.columns-3"));
+    assert.equal(typedPreview.querySelector(".wp-block-rss__item-excerpt")!.textContent, "one […]");
+    assert.equal(typedPreview.querySelector("time, .wp-block-rss__item-author, a[target]"), null, "False query-string booleans remain false");
+    assert.equal((await ok("/wp-json/wp/v2/block-renderer/core/rss?attributes=" + encodeURIComponent(JSON.stringify(Object.fromEntries(Object.entries(typed).map(([key, value]) => [key, String(value)])))))).data.rendered, postPreview);
+    query.set("attributes[itemsToShow]", "invalid"); assert.equal((await api("/wp-json/wp/v2/block-renderer/core/rss?" + query)).response.status, 400);
     assert.equal((await api("/wp-json/wp/v2/block-renderer/core/rss", "POST", { attributes: { feedURL: fixtureURL } }, "")).response.status, 401);
     const settings = (await ok("/api/settings")).data.settings, localURL = new URL("/feed/", settings.siteUrl).href;
     for (const [title, status, extra] of [["Public", "publish", {}], ["Protected", "publish", { password: "Safe-RSS-password" }], ["Draft", "draft", {}]] as const) {

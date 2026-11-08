@@ -33,6 +33,7 @@ import { withPreviewAutosave } from "./post-preview.js";
 import { postFormats } from "../shared/post-formats.js";
 import { postPermalink, resolvePublicPath } from "./permalinks.js";
 import iconsRouter from "./icons.js";
+import { normalizeBlockRenderAttributes } from "./block-render-attributes.js";
 
 const escapeHTML = (value: unknown) =>
   String(value ?? "").replace(
@@ -764,6 +765,7 @@ router.all(
       }
     }
     attributes = z.record(z.string(), z.unknown()).parse(attributes || {});
+    attributes = normalizeBlockRenderAttributes(attributes, (await metadata(name)).attributes);
     const idValue =
       req.method === "POST" ? req.body?.post_id : req.query.post_id;
     let post = null;
