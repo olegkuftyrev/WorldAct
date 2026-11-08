@@ -69,6 +69,11 @@ jobs:
           tests/profile-email.test.ts tests/media-zero-dimensions.test.ts
           tests/profile-options.test.ts
           tests/shortcodes.test.ts
+      - name: Fresh browser installation on the compiled server
+        env:
+          ISOLATED_TEST_UNSEEDED: "true"
+          ISOLATED_TEST_COMPILED: "true"
+        run: node scripts/test-isolated.mjs tests/install.test.ts
       - name: Export site archive
         if: matrix.node == 24
         env:

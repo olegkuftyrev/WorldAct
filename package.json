@@ -16,6 +16,7 @@
     "db:seed": "tsx server/seed.ts",
     "test": "node scripts/test-isolated.mjs",
     "setup": "node scripts/setup.mjs",
+    "setup:browser": "node scripts/setup.mjs --browser",
     "test:isolated": "node scripts/test-isolated.mjs"
   },
   "dependencies": {

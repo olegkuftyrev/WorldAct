@@ -13,11 +13,14 @@ const original=new URL(process.env.DATABASE_URL);
 if(!['127.0.0.1','localhost','[::1]'].includes(original.hostname))throw new Error('Isolated tests require a local PostgreSQL server.');
 const adminURL=new URL(original);adminURL.pathname='/postgres';
 const database='worldact_test_'+Date.now()+'_'+randomBytes(4).toString('hex');
+const files=process.argv.slice(2),unseeded=process.env.ISOLATED_TEST_UNSEEDED==='true';
+if(unseeded && (files.length!==1 || files[0]!=='tests/install.test.ts'))throw new Error('Unseeded tests must select only tests/install.test.ts.');
 const testURL=new URL(original);testURL.pathname='/'+database;
 const port=Number(process.env.ISOLATED_TEST_PORT || 3004);
 if(!Number.isInteger(port)||port<1||port>65535)throw new Error('ISOLATED_TEST_PORT must be an integer from 1 to 65535.');
 const testUploads=await mkdtemp(path.join(os.tmpdir(),'worldact-test-uploads-'));
 const env={...process.env,DATABASE_URL:testURL.href,ADMIN_EMAIL:'isolated-admin@example.test',ADMIN_PASSWORD:randomBytes(32).toString('base64url'),APP_ORIGIN:'http://127.0.0.1:5173',PORT:String(port),HOST:'127.0.0.1',TEST_API_URL:'http://127.0.0.1:'+port,WORLDACT_MAIL_MODE:'outbox',WORLDACT_UPLOADS_DIR:testUploads,WORLDACT_ISOLATED_TEST:'1',ARCHIVE_PLUGIN_TEST:'1',NODE_ENV:'test'};
+if(unseeded)env.WORLDACT_INSTALL_TOKEN=randomBytes(32).toString('hex');
 const admin=new pg.Pool({connectionString:adminURL.href,connectionTimeoutMillis:5000});
 const processGroups=process.platform!=='win32',stops=new WeakMap();
 let server,activeChild,cancelled=false;
@@ -75,8 +78,7 @@ const interrupt=()=>cancel('SIGINT'),terminate=()=>cancel('SIGTERM');
 process.on('SIGINT',interrupt);process.on('SIGTERM',terminate);
 try{
  await admin.query('CREATE DATABASE '+database);
- await run(['--import','tsx','server/migrate.ts']);await run(['--import','tsx','server/seed.ts']);
- const files=process.argv.slice(2);
+ await run(['--import','tsx','server/migrate.ts']);if(!unseeded)await run(['--import','tsx','server/seed.ts']);
  const tests=files.length?files:(await readdir(path.join(root,'tests'))).filter(name=>name.endsWith('.test.ts')).sort().map(name=>'tests/'+name);
  console.log('Running against a disposable local database and upload directory; outgoing mail uses the local outbox.');
  for(const file of tests){

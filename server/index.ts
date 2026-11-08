@@ -38,6 +38,7 @@ import { authenticateLogin, loginRateLimit } from "./login.js";
 import editLocksRouter from "./edit-locks.js";
 import siteIdentityRouter from "./site-identity.js";
 import profileEmailRouter from "./profile-email.js";
+import installRouter from "./install.js";
 import diagnosticsRouter from "./diagnostics.js";
 import privacyPolicyRouter from "./privacy-policy.js";
 import fontsRouter from "./fonts.js";
@@ -111,6 +112,7 @@ app.get("/api/health", async (_req, res) => {
 });
 app.use("/api", attachUser);
 app.use("/api", accountsRouter);
+app.use("/api", installRouter);
 app.use("/api", commentsRouter);
 app.use("/api", usersRouter);
 app.use("/api", editLocksRouter);

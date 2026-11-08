@@ -4,6 +4,7 @@ import { spawnSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
 import { dirname, resolve } from "node:path";
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
+const browserInstall = process.argv.includes("--browser");
 if (!existsSync(resolve(root, ".env"))) {
   const template = readFileSync(resolve(root, ".env.example"), "utf8");
   writeFileSync(
@@ -17,10 +18,20 @@ if (!existsSync(resolve(root, ".env"))) {
   console.log("Created local .env with a unique administrator password.");
 }
 chmodSync(resolve(root, ".env"), 0o600);
+let installationToken;
+if (browserInstall) {
+  const envPath = resolve(root, ".env"), source = readFileSync(envPath, "utf8");
+  installationToken = randomBytes(32).toString("hex");
+  const line = "WORLDACT_INSTALL_TOKEN=" + installationToken;
+  const updated = /^WORLDACT_INSTALL_TOKEN=.*$/m.test(source)
+    ? source.replace(/^WORLDACT_INSTALL_TOKEN=.*$/m, line)
+    : source.replace(/\s*$/, "\n") + line + "\n";
+  writeFileSync(envPath, updated, { mode: 0o600 });
+}
 for (const [command, args] of [
   ["docker", ["compose", "up", "-d", "--wait", "db"]],
   ["npm", ["run", "db:migrate"]],
-  ["npm", ["run", "db:seed"]],
+  ...(!browserInstall ? [["npm", ["run", "db:seed"]]] : []),
 ]) {
   const result = spawnSync(command, args, { cwd: root, stdio: "inherit" });
   if (result.error || result.status !== 0) {
@@ -31,6 +42,11 @@ for (const [command, args] of [
     process.exit(result.status || 1);
   }
 }
-console.log(
-  "WorldAct is ready. Start with npm run dev. Login details are in .env (ADMIN_EMAIL and ADMIN_PASSWORD).",
-);
+if (browserInstall) {
+  const { default: dotenv } = await import("dotenv");
+  const settings = dotenv.parse(readFileSync(resolve(root, ".env")));
+  const url = new URL("/install", settings.APP_ORIGIN || "http://127.0.0.1:5173");
+  url.hash = "token=" + installationToken;
+  console.log("Database ready. Start npm run dev, then open this private installation link:");
+  console.log(url.href);
+} else console.log("WorldAct is ready. Start with npm run dev. Login details are in .env (ADMIN_EMAIL and ADMIN_PASSWORD).");
