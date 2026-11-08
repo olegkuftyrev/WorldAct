@@ -1,4 +1,5 @@
 import {pingbackHeader} from "./incoming-ping-policy.js";
+import {commentsOpen} from "../shared/comment-open.js";
 import {moderateComment,renderedCommentContent} from "./comment-policy.js";
 export {matchesCommentKeywords} from "./comment-policy.js";
 import {enqueuePublicationPings} from "./outgoing-pings.js";
@@ -1592,7 +1593,7 @@ export async function submitPublicComment(req: Request, res: Response) {
       "SELECT id,author_id,type,slug,parent_id,status,comment_status,password_hash,published_at,created_at,(SELECT jsonb_agg(jsonb_build_object('taxonomy',t.taxonomy,'slug',t.slug)) FROM terms t JOIN post_terms pt ON pt.term_id=t.id WHERE pt.post_id=posts.id) AS terms FROM posts WHERE id=$1 FOR SHARE", [input.postId],
     )).rows[0];
     if (!post || post.status !== "publish") throw new HttpError(404, "Post not found.");
-    if (post.comment_status !== "open" || (settings.closeCommentsDays > 0 && post.published_at && new Date(post.published_at).getTime() + settings.closeCommentsDays * 86_400_000 < Date.now()))
+    if (!commentsOpen(post, settings))
       throw new HttpError(409, "Comments are closed for this post.");
     if (!(await hasPostAccess(req, post.id, post.password_hash)))
       throw new HttpError(403, "Unlock this post before leaving a comment.");

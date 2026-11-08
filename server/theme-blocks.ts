@@ -1,4 +1,6 @@
 import {renderedCommentContent} from "./comment-policy.js";
+import {commentsOpen} from "../shared/comment-open.js";
+import {commentReturnPath,commentLoginHref} from "../shared/comment-links.js";
 import { date as formatDate } from "@wordpress/date";
 import socialIcons from "../src/theme-source/social-icons.json";
 import { MAX_RENDER_NODES, type Node, type Context, type State } from "./block-renderer.js";
@@ -131,7 +133,13 @@ export async function renderThemeBlock(
   }
   if(name==="core/comment-content")return c?`<div${attributes()}>${cleanContent(renderedCommentContent(c.content,c.type))}</div>`:"";
   if(name==="core/comment-edit-link")return c && p && state.options.user && canEditPostComments(state.options.user,{authorId:Number(p.authorId ?? p.author_id),type:p.type,status:p.status,preTrashStatus:p.preTrashStatus ?? p.pre_trash_status})?`<div${attributes()}><a href="/admin/comments?commentId=${c.id}">Edit</a></div>`:"";
-  if(name==="core/comment-reply-link")return c && (!c.type || c.type==="comment") && p?.commentStatus!=="closed" && state.settings.threadComments && context.commentDepth!==undefined && context.commentDepth<state.settings.threadDepth?`<div${attributes()}><a href="#respond" data-comment-reply="${int(c.id,0)}" data-comment-author="${esc(c.authorName)}">Reply</a></div>`:"";
+  if(name==="core/comment-reply-link") {
+    if(!c || c.type && c.type!=="comment" || !p || p.locked || state.options.preview || !commentsOpen(p,state.settings) || !state.settings.threadComments || context.commentDepth===undefined || context.commentDepth>=state.settings.threadDepth)return "";
+    const current=commentReturnPath(state.options.requestPath,state.options.query),id=int(c.id,0);
+    if(state.settings.commentRegistration && !state.options.user)return `<div${attributes()}><a rel="nofollow" class="comment-reply-login" href="${esc(commentLoginHref(current))}">Log in to Reply</a></div>`;
+    const label="Reply to "+c.authorName;
+    return `<div${attributes()}><a rel="nofollow" class="comment-reply-link" href="${esc(commentReturnPath(state.options.requestPath,state.options.query,id))}" data-commentid="${id}" data-postid="${p.id}" data-belowelement="comment-${id}" data-respondelement="respond" data-replyto="${esc(label)}" aria-label="${esc(label)}" data-comment-reply="${id}" data-comment-author="${esc(c.authorName)}">Reply</a></div>`;
+  }
   if(name==="core/comments-pagination")return `<nav${attributes("is-layout-flex")} aria-label="Comments pagination">${await body({...context,commentLoop:await comments(context,state)})}</nav>`;
   if(name?.startsWith("core/comments-pagination-")) {
     const loop=await comments(context,state);if(loop.totalPages<=1)return "";
@@ -145,9 +153,9 @@ export async function renderThemeBlock(
   }
   if(name==="core/post-comments-form") {
     if(state.options.preview)return "";
-    if(!p?.id || p.locked || p.commentStatus==="closed" || (state.settings.closeCommentsDays>0 && new Date(p.publishedAt || p.createdAt).valueOf()+state.settings.closeCommentsDays*86400000<Date.now()))return "";
+    if(!p?.id || p.locked || !commentsOpen(p,state.settings))return "";
     const user=state.options.user;
-    if(state.settings.commentRegistration && !user)return `<div${attributes()} id="respond"><p>You must be <a href="/login?redirect_to=${esc(encodeURIComponent(state.options.requestPath || "/"))}">logged in</a> to post a comment.</p></div>`;
+    if(state.settings.commentRegistration && !user)return `<div${attributes()} id="respond"><p>You must be <a href="${esc(commentLoginHref(commentReturnPath(state.options.requestPath,state.options.query)))}">logged in</a> to post a comment.</p></div>`;
     const required=state.settings.requireCommentNameEmail?" required":"";
     const akismet=await cached(state,"akismet-processing-disclosure",async()=>Boolean((await state.db.query("SELECT 1 FROM extensions WHERE slug='akismet' AND enabled AND settings @> '{\"sendComments\":true}'::jsonb")).rowCount));
     const privacy=akismet?'<p class="akismet_comment_form_privacy_notice">This site uses Akismet to reduce spam. <a href="https://akismet.com/privacy/" target="_blank" rel="noopener noreferrer">Learn how your comment data is processed.</a></p>':"";

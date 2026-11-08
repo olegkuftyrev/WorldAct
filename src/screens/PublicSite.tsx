@@ -4,6 +4,8 @@ import { parseVideoEmbed } from "../embeds";
 import { enhanceInteractiveBlocks } from "../interactiveBlocks";
 import { enhanceNavigationOverlays } from "../navigationOverlays";
 import { contentPageQuery } from "../contentPages";
+import { commentsOpen } from "../../shared/comment-open";
+import { commentReturnPath, commentLoginHref } from "../../shared/comment-links";
 import { readPlainPermalinkQuery } from "../../shared/plain-permalink-query";
 import { shouldResolveStaticFrontPage } from "../plainPermalinkRouting";
 import { scrollToMoreFragment } from "../contentFragments";
@@ -201,6 +203,16 @@ export default function PublicSite({
   const settings = site.data?.settings,
     title = settings?.siteTitle || "WorldAct",
     posts = site.data?.posts || [];
+  const replyReturn = commentReturnPath(requestLocation.pathname + requestLocation.search);
+  const replyLocation = useRef({key:"",applied:false});
+  useEffect(() => {
+    const key = requestLocation.pathname + requestLocation.search + ":" + (user?.id || 0);
+    if(replyLocation.current.key!==key){replyLocation.current={key,applied:false};setReply(null);}
+    if(replyLocation.current.applied || !post || loading || post.locked || !commentsOpen(post,settings) || settings?.commentRegistration && !user)return;
+    const id=Number(params.get("replytocom")),item=comments.find(comment=>comment.id===id);
+    if(!item || !document.querySelector(`[data-classic-comment-reply="${id}"]`))return;
+    replyLocation.current.applied=true;setReply({id:item.id,name:item.authorName});document.getElementById("comment-content")?.focus();
+  }, [post,comments,loading,settings,user?.id,requestLocation.pathname,requestLocation.search]);
   useEffect(() => {
     const icons=site.data?.settings.siteIconSizes || {}, fallback=site.data?.settings.siteIconUrl;
     const nodes: HTMLElement[]=[];
@@ -503,6 +515,7 @@ export default function PublicSite({
         {adminBar}
         <ResourceState loading={site.loading || loading} error={site.error || (missingPost ? "" : error)} retry={site.error ? site.reload : undefined} />
         {!loading && !site.loading && !site.error && (!error || missingPost) && <SourceThemeDocument
+          key={`${sourceTemplate.slug}:${displayedPost?.id || 0}:${user?.id || 0}:${user?.role || ""}`}
           document={sourceTemplate}
           postId={displaySingle ? displayedPost?.id : undefined}
           query={templateQuery.toString()}
@@ -663,6 +676,8 @@ export default function PublicSite({
                     threaded={settings?.threadComments !== false}
                     maxDepth={settings?.threadDepth || 5}
                     canReply={commentsOpen(post, settings)}
+                    loginHref={settings?.commentRegistration && !user ? commentLoginHref(replyReturn) : undefined}
+                    replyHref={id => commentReturnPath(requestLocation.pathname + requestLocation.search, {}, id)}
                     onReply={(item) => {
                       setReply({ id: item.id, name: item.authorName });
                       document
@@ -714,7 +729,7 @@ export default function PublicSite({
                   {commentsOpen(post, settings) ? (
                     settings?.commentRegistration && !user ? (
                       <p>
-                        You must be <Link to="/login">logged in</Link> to post a
+                        You must be <Link to={commentLoginHref(replyReturn)}>logged in</Link> to post a
                         comment.
                       </p>
                     ) : (
@@ -1186,7 +1201,8 @@ function SourceThemeDocument({ document: template, postId, query, commentPage, u
   document: SiteTemplate; postId?: number; query: string; commentPage?: number; userName?: string; preview?: boolean;
 }) {
   const location = useLocation(), root = useRef<HTMLDivElement>(null);
-  const [html, setHTML] = useState<string | null>(null), [error, setError] = useState("");
+  const [response, setResponse] = useState<{request:string;content:string} | null>(null), [error, setError] = useState("");
+  const requestedReply = useRef({key:"",applied:false});
   const [notice, setNotice] = useState(new URLSearchParams(location.search).get("comment-status") === "pending" ? "Your comment is awaiting moderation." : ""), [revision, setRevision] = useState(0), [busy, setBusy] = useState(false);
   const requestQuery = new URLSearchParams(location.search);
   for (const [key, value] of new URLSearchParams(query)) requestQuery.set(key, value);
@@ -1195,10 +1211,14 @@ function SourceThemeDocument({ document: template, postId, query, commentPage, u
   if(commentPage) requestQuery.set("commentPage", String(commentPage));
   if (postId) requestQuery.set("postId", String(postId));
   const request = `/public/templates/${encodeURIComponent(template.slug)}?${requestQuery}`;
+  const html=response?.request===request?response.content:null;
+  useEffect(() => {
+    setNotice(new URLSearchParams(location.search).get("comment-status")==="pending" ? "Your comment is awaiting moderation." : "");
+  }, [location.pathname,location.search]);
   useEffect(() => {
     let active = true;
     setError("");
-    api<{content:string}>(request).then((result) => { if (active) setHTML(result.content); })
+    api<{content:string}>(request).then((result) => { if (active) setResponse({request,content:result.content}); })
       .catch((reason) => { if (active) setError(errorText(reason)); });
     return () => { active = false; };
   }, [request, template.updatedAt, revision]);
@@ -1210,6 +1230,13 @@ function SourceThemeDocument({ document: template, postId, query, commentPage, u
     const cleanupInteractive = enhanceInteractiveBlocks(root.current);
     const cleanupFragment = scrollToMoreFragment(root.current);
     const cleanupPlaylist = enhancePlaylists(root.current);
+    const requested=Number(new URLSearchParams(location.search).get("replytocom")),reply=root.current.querySelector<HTMLAnchorElement>(`[data-comment-reply="${requested}"]`);
+    const replyKey=location.pathname+location.search;
+    if(requestedReply.current.key!==replyKey)requestedReply.current={key:replyKey,applied:false};
+    if(reply && !requestedReply.current.applied){
+      const form=root.current.querySelector<HTMLFormElement>("form.worldact-native-comment-form"),parent=form?.querySelector<HTMLInputElement>('[name="parentId"]');
+      if(parent){parent.value=String(requested);setNotice(`Replying to ${reply.dataset.commentAuthor || "comment"}.`);form?.querySelector<HTMLTextAreaElement>("textarea")?.focus();requestedReply.current.applied=true;}
+    }
     let active=true;
     if(!userName)api<{author:{authorName:string;authorEmail:string;authorUrl:string}|null}>("/public/comment-author").then(({author})=>{
       if(!active || !author || !root.current)return;
@@ -1219,7 +1246,7 @@ function SourceThemeDocument({ document: template, postId, query, commentPage, u
       checkbox.checked=true;
     }).catch(()=>{});
     return ()=>{active=false;cleanup();cleanupArchives?.();cleanupInteractive();cleanupFragment();cleanupPlaylist();};
-  }, [html]);
+  }, [html,request]);
   async function submitComment(event: FormEvent<HTMLDivElement>) {
     const form = event.target as HTMLFormElement;
     if(form.matches("form.worldact-native-password-form")){
@@ -1261,6 +1288,7 @@ function SourceThemeDocument({ document: template, postId, query, commentPage, u
     <div className="wp-site-blocks" ref={root} aria-busy={busy || undefined}
       onSubmit={submitComment}
       onClick={(event) => {
+        if(event.button || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey)return;
         const target = event.target as HTMLElement;
         const reply = target.closest<HTMLAnchorElement>("[data-comment-reply]");
         const cancel = target.closest<HTMLElement>("[data-comment-cancel]");
@@ -1407,15 +1435,3 @@ type CommentPagination = {
   totalComments: number;
   totalPages: number;
 };
-function commentsOpen(post: Post, settings: Partial<Settings> | undefined) {
-  return (
-    post.commentStatus !== "closed" &&
-    !(
-      settings?.closeCommentsDays &&
-      post.publishedAt &&
-      new Date(post.publishedAt).getTime() +
-        settings.closeCommentsDays * 86400000 <
-        Date.now()
-    )
-  );
-}
