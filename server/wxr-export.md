@@ -16,10 +16,14 @@ All content ignores selection filters, preserving the whole-site XML contract.
 JSON export remains the existing full archive. Invalid scalar, repeated, unknown
 or out-of-range query values return 400. SQL values always use parameters.
 The endpoint takes a repeatable-read, read-only snapshot of the selected records
-and releases the connection before XML formatting. Publication/schedule/creation
+and captures hierarchical permalinks with that same connection before releasing
+it for XML formatting. A concurrent ancestor rename cannot change those links.
+Repeated or structured format values return 400 before dispatch, rather than
+falling through to a full JSON archive. Publication/schedule/creation
 fallback dates and upload creation dates are converted to the configured IANA or
 fixed-offset site timezone before comparing civil month boundaries. The end
 month ends at the first instant of the following local month.
+Positive four-digit years `0001` through `9999` match the available-month options.
 
 Filtered Posts/Pages include their own comments, assigned terms and category
 ancestors, attached uploads and featured attachments. Nested fixed `core/block`

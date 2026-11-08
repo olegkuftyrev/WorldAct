@@ -3,7 +3,7 @@ import { z } from "zod";
 import { dateArchiveLocalSQL } from "./date-archives.js";
 import { HttpError } from "./utils.js";
 
-const month = z.string().regex(/^[1-9]\d{3}-(?:0[1-9]|1[0-2])$/, "Choose a valid export month.");
+const month = z.string().regex(/^(?!0000)\d{4}-(?:0[1-9]|1[0-2])$/, "Choose a valid export month.");
 const identifier = z.coerce.number().int().positive().max(2147483647);
 const filters = z.object({
   format: z.literal("wxr"),

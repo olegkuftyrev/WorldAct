@@ -12,7 +12,8 @@ test("WXR filters accept fixed typed values and parameterize local month boundar
   const query = wxrExportWhere(input, "+05:30");
   assert.deepEqual(query.args, ["post", 7, "private", 9, "+05:30", "2025-01-01", "2025-02-01"]);
   assert.match(query.sql, /timezone\(\$5::interval/); assert.match(query.sql, /interval '1 month'/);
-  for (const extra of [{ author: "1 OR true" }, { author: ["1", "2"] }, { category: -1 }, { startDate: "2025-13" }, { endDate: "2025-00" }, { startDate: "2025-02", endDate: "2025-01" }, { status: "inherit" }, { content: "users" }, { executable: "anything" }])
+  assert.equal(readWxrExportFilters({ format: "wxr", startDate: "0001-01", endDate: "0999-12" }).startDate, "0001-01");
+  for (const extra of [{ author: "1 OR true" }, { author: ["1", "2"] }, { category: -1 }, { startDate: "0000-01" }, { startDate: "2025-13" }, { endDate: "2025-00" }, { startDate: "2025-02", endDate: "2025-01" }, { status: "inherit" }, { content: "users" }, { executable: "anything" }])
     assert.throws(() => readWxrExportFilters({ format: "wxr", ...extra }));
   assert.deepEqual(wxrExportWhere(readWxrExportFilters({ format: "wxr", author: "7" }), "UTC"), { sql: "TRUE", args: [] }, "All content retains the full-site selection");
 });
@@ -91,6 +92,36 @@ test("actual WXR exports select posts/pages/media with related data and preserve
       const json = await api("/api/tools/export"); assert.equal(json.response.status, 200); assert.ok(JSON.stringify(json.data).includes(stamp + "-boundary")); assert.ok(JSON.stringify(json.data).includes(unrelatedMedia.filename));
       const options = await api("/api/tools/export/options"); assert.equal(options.response.status, 200); assert.ok(options.data.months.posts.includes("2025-01")); assert.ok(options.data.months.posts.includes("2025-02")); assert.ok(options.data.months.pages.includes("2025-01")); assert.ok(options.data.categories.some((row: any) => row.id === category && row.parentId === parent)); assert.doesNotMatch(JSON.stringify(options.data), /password_hash|@example.test|token_hash/);
     });
+    await t.test("every offered positive four-digit year month can be selected", async () => {
+      const early = await post("-early", "post", "draft", other, "0099-01-15T12:00:00Z");
+      const options = await api("/api/tools/export/options"); assert.ok(options.data.months.posts.includes("0099-01"));
+      const result = await exported(`&content=posts&author=${other}&startDate=0099-01&endDate=0099-01`); assert.deepEqual(result.items.map(row => Number(row["wp:post_id"])), [early]);
+    });
+    await t.test("page links and parent references share the same snapshot during concurrent ancestor renaming", async () => {
+      const ancestor = await post("-ancestor", "page", "publish", adminId, "2025-01-15T12:00:00Z");
+      await pool.query("UPDATE posts SET parent_id=$1 WHERE id=$2", [ancestor, page]);
+      const locker = await pool.connect(); let waiting: ReturnType<typeof exported> | undefined;
+      try {
+        await locker.query("BEGIN"); await locker.query("LOCK TABLE media IN ACCESS EXCLUSIVE MODE");
+        const pid = (await locker.query("SELECT pg_backend_pid() AS pid")).rows[0].pid;
+        waiting = exported(`&content=pages&author=${adminId}&status=private`);
+        let blocked = false;
+        for (let attempt = 0; attempt < 500; attempt++) {
+          const rows = await pool.query("SELECT 1 FROM pg_stat_activity WHERE datname=current_database() AND $1=ANY(pg_blocking_pids(pid)) AND query LIKE '%FROM media m JOIN users%'", [pid]);
+          if (rows.rowCount) { blocked = true; break; }
+          await new Promise(resolve => setTimeout(resolve, 10));
+        }
+        assert.ok(blocked, "The export holds its established snapshot while waiting for the media read");
+        await locker.query("UPDATE posts SET slug=$1 WHERE id=$2", [stamp + "-renamed", ancestor]); await locker.query("COMMIT");
+        const result = await waiting; waiting = undefined;
+        const child = result.items.find(row => Number(row["wp:post_id"]) === page)!;
+        assert.equal(Number(child["wp:post_parent"]), ancestor); assert.ok(child.link.endsWith(`/${stamp}-ancestor/${stamp}-page/`), child.link);
+        assert.equal((await pool.query("SELECT slug FROM posts WHERE id=$1", [ancestor])).rows[0].slug, stamp + "-renamed");
+      } finally {
+        await locker.query("ROLLBACK"); await waiting?.catch(() => {}); locker.release();
+        await pool.query("UPDATE posts SET slug=$1 WHERE id=$2", [stamp + "-ancestor", ancestor]);
+      }
+    });
     await t.test("cyclic dependencies terminate and excessive nesting returns a bounded error", async () => {
       await pool.query("UPDATE block_entities SET raw_content=$1 WHERE id=$2", [block("block", { ref: child }) + block("block", { ref: outer }), outer]);
       const cycle = await exported(`&content=posts&author=${adminId}&status=publish&startDate=2025-01&endDate=2025-01`); assert.equal(cycle.items.filter(row => row["wp:post_type"] === "wp_block").length, 2);
@@ -105,7 +136,7 @@ test("actual WXR exports select posts/pages/media with related data and preserve
       } finally { await pool.query("UPDATE posts SET raw_content=$1 WHERE id=$2", [originalRaw, selected]); }
     });
     await t.test("untrusted filters and unauthorized exports cannot read content", async () => {
-      for (const query of ["&author=1%20OR%20true", "&author=1&author=2", "&startDate=2025-14", "&startDate=2025-03&endDate=2025-01", "&status=invalid", "&content=users", "&extra=1"]) assert.equal((await fetch(base + "/api/tools/export?format=wxr" + query, { headers: { Cookie: cookie } })).status, 400);
+      for (const query of ["&format=wxr", "&format[]=wxr", "&format[nested]=wxr", "&author=1%20OR%20true", "&author=1&author=2", "&startDate=2025-14", "&startDate=2025-03&endDate=2025-01", "&status=invalid", "&content=users", "&extra=1"]) assert.equal((await fetch(base + "/api/tools/export?format=wxr" + query, { headers: { Cookie: cookie } })).status, 400);
       for (const path of ["/api/tools/export?format=wxr&content=posts", "/api/tools/export/options"]) assert.equal((await api(path, "GET", undefined, "")).response.status, 401);
     });
   } finally {
