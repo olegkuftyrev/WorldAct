@@ -1,0 +1,143 @@
+{
+  "codeSha": "82a61dc9764bd42bb4f7d9dc36cda4dff8d3e4df",
+  "baseSha": "7eb8cc2d9d84598ff5b0e31b9ce742b0b7010cf2",
+  "source": {
+    "path": "/tmp/worldact-body-page-portability-source.log",
+    "sha256": "6ca6748e878dcdf722a05f2bb862a97c103f56caefdef50f354e4d93d19cb1a2",
+    "tests": 109,
+    "pass": 109,
+    "fail": 0,
+    "cancelled": 0,
+    "skipped": 0
+  },
+  "sourceFiles": 15,
+  "compiled": {
+    "path": "/tmp/worldact-body-page-portability-compiled.log",
+    "sha256": "f3e2a33f9a67b104116047c88116f11b042c2e079fce9b62c00baa9766aeacb8",
+    "tests": 109,
+    "pass": 109,
+    "fail": 0,
+    "cancelled": 0,
+    "skipped": 0
+  },
+  "compiledFiles": 15,
+  "build": {
+    "typecheck": true,
+    "browserProduction": true,
+    "serverProduction": true,
+    "path": "/tmp/worldact-body-page-portability-build.log",
+    "sha256": "c6f6e85b07f0167dcfede0f806d1d0a9e78b361e082f088861ad4b263af5c8b6"
+  },
+  "expandedArchive": {
+    "export": {
+      "path": "/tmp/worldact-body-page-portability-archive-export.log",
+      "sha256": "959e3651d77acb77142887f65668d33d53a6983e05324e21dcff641c5fbc9807",
+      "tests": 1,
+      "pass": 1,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0
+    },
+    "restore-source": {
+      "path": "/tmp/worldact-body-page-portability-archive-restore-source.log",
+      "sha256": "995f21d79a409ff988311780fdeda13872fa7b6237f082a5cdf0e50353f5df89",
+      "tests": 1,
+      "pass": 1,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0
+    },
+    "restore-compiled": {
+      "path": "/tmp/worldact-body-page-portability-archive-restore-compiled.log",
+      "sha256": "af8afd548520b3f440dbebcb5dc8c9e0ef3cc25092637cd3c5884de1882ca9b1",
+      "tests": 1,
+      "pass": 1,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0
+    }
+  },
+  "unchangedOriginalProbe": {
+    "export-source": {
+      "path": "/tmp/worldact-core-CScUR8yM/body-page-original-probe-export-source.log",
+      "sha256": "9fb17afc81fb1aa938a9eea356adfcf47532579d48b3a5eb488959fdefadd870",
+      "tests": 1,
+      "pass": 1,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0
+    },
+    "restore-source": {
+      "path": "/tmp/worldact-core-CScUR8yM/body-page-original-probe-restore-source.log",
+      "sha256": "9f0d137ea82d5e0ad1d91b5374865dbb81007e76eb90112b856ca8665c6b3efc",
+      "tests": 1,
+      "pass": 1,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0
+    },
+    "restore-compiled": {
+      "path": "/tmp/worldact-core-CScUR8yM/body-page-original-probe-restore-compiled.log",
+      "sha256": "848b7d1c9c6d466e152fab72fa77bf71e744d0977d3c6d54a29fe9e0eae26b2e",
+      "tests": 1,
+      "pass": 1,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0
+    }
+  },
+  "exactRetainedArchiveComparison": {
+    "archive": "/var/folders/cz/t18p82ps0l9_hz170k46nk3r0000gn/T/worldact-time-token-body-repro-_kp7qlhl/archive.json",
+    "archiveSha256": "a25d68ee60af2d78cb54ee325138b9c64a2534d481e6da12333307263cf7e5a7",
+    "archiveUnchanged": true,
+    "originalProbeSha256": "b88b1c9081dc6247bf0dd9a23e82618258ce71511f122f0d69d0e970a570bd0e",
+    "results": [
+      {
+        "runtime": "source",
+        "exit": 0,
+        "log": "/tmp/worldact-core-CScUR8yM/body-page-original-retained-archive-source.log",
+        "sha256": "922293e0177c15d85d2337667237b66462f3e2544ae17d32aa74f59800269a80"
+      },
+      {
+        "runtime": "compiled",
+        "exit": 0,
+        "log": "/tmp/worldact-core-CScUR8yM/body-page-original-retained-archive-compiled.log",
+        "sha256": "22379154e3f5a12998979cdca9d6b5723f842584056a64e1b24a087beb16a364"
+      }
+    ]
+  },
+  "beforeFailure": {
+    "source": {
+      "path": "/tmp/worldact-core-CScUR8yM/permalink-time-body-suffix-repro-restore-source.log",
+      "sha256": "9473867ae45120c4438d5eef965e7cef6d7cc7042dcdaabb9102aa7a0df2790f",
+      "tests": 1,
+      "pass": 0,
+      "fail": 1,
+      "cancelled": 0,
+      "skipped": 0
+    },
+    "compiled": {
+      "path": "/tmp/worldact-core-CScUR8yM/permalink-time-body-suffix-repro-restore-compiled.log",
+      "sha256": "385bddedd9822d96e9581a64e6317193798d854d8f4408e83f92932cff3840a3",
+      "tests": 1,
+      "pass": 0,
+      "fail": 1,
+      "cancelled": 0,
+      "skipped": 0
+    }
+  },
+  "originalProbeSha256": "b88b1c9081dc6247bf0dd9a23e82618258ce71511f122f0d69d0e970a570bd0e",
+  "frozenTokenWorktreeUnchanged": true,
+  "originalFailureLogsAndArchivesUnchanged": true,
+  "fixtureOnlyFailedAttempts": [
+    "/tmp/worldact-body-page-portability-archive-fixture-selector-attempt.log",
+    "/tmp/worldact-body-page-portability-archive-term-fixture-attempt.log"
+  ],
+  "independentReview": "pending",
+  "mainChanged": false,
+  "limitations": [
+    "An omitted numeric source child can be indistinguishable from a valid parent body page in a partial archive; no complete absent-identity ambiguity guarantee is claimed.",
+    "Only known published normal posts/pages with published targets, explicit non-root pretty source canonicals and copied-body page count greater than one authorize suffix mapping.",
+    "Root/front aliases, missing source canonicals, nonpublic/draft imports, and source-Plain-to-Pretty body conversion are outside the new metadata contract."
+  ]
+}
