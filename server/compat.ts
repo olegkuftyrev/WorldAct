@@ -832,11 +832,13 @@ async function wpMedia(item: any) {
       ? "image"
       : "file",
     mime_type: item.mimeType || item.mime_type,
+    ...(item.originalUploadUrl ? { original_image_url: absolute(item.originalUploadUrl, s.siteUrl) } : {}),
     media_details: {
       ...(item.audioMetadata || item.audio_metadata || {}),
       width: item.width,
       height: item.height,
       file: item.filename,
+      ...(item.originalUploadUrl ? { original_image: item.originalUploadUrl.split("/").pop() } : {}),
       sizes: {
         ...Object.fromEntries(Object.entries(item.sizes || {}).map(([name, value]) => {
           const size = value as any;

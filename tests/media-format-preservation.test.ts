@@ -146,10 +146,11 @@ test("native API upload/edit/crop/scale/restore retain each actual image format 
       await api.ok(`/api/media/${image.id}`, "DELETE"); ids.delete(image.id); for (const url of history) assert.equal((await fetch(base + url)).status, 404, url);
     }
     const jpeg = formats[0], oriented = await sharp(await sample(jpeg)).withMetadata({ orientation: 6 }).jpeg().toBuffer(), image = await api.upload(oriented); ids.add(image.id);
+    const normalizedOriginal = await fetchBytes(image.url); assert.deepEqual(await fetchBytes(image.originalUploadUrl), oriented);
     assert.deepEqual(shape(image.sizes.medium), { width: 40, height: 60 });
     const edited = (await api.ok(`/api/media/${image.id}/edit`, "POST", { rotate: 90 })).media; assert.deepEqual(shape(edited), { width: 600, height: 400 }); await verified(await fetchBytes(edited.url), jpeg, shape(edited));
     assert.deepEqual((await sharp(await fetchBytes(edited.url)).metadata()).icc, (await sharp(oriented).metadata()).icc);
-    assert.deepEqual(await fetchBytes((await api.ok(`/api/media/${image.id}/restore`, "POST", {})).media.url), oriented);
+    assert.deepEqual(await fetchBytes((await api.ok(`/api/media/${image.id}/restore`, "POST", {})).media.url), normalizedOriginal);
     const orientedCrop = (await api.ok(`/api/media/${image.id}/edit`, "POST", { crop: { left: 0, top: 0, width: 300, height: 500 } })).media;
     assert.deepEqual(shape(orientedCrop), { width: 300, height: 500 }, "Crop coordinates refer to the EXIF-oriented 400×600 image"); await verified(await fetchBytes(orientedCrop.url), jpeg, shape(orientedCrop));
     const stamp = "format-owner-" + Date.now().toString(36), password = "Temporary-" + stamp;

@@ -41,8 +41,10 @@ import {
   safeStoredFile,
   unlinkUnreferencedMediaFiles,
   mediaBackups,
+  writeNewMediaFile,
 } from "./media-files.js";
-import { rasterOutput, encodeRaster } from "./image-formats.js";
+import { rasterOutput, encodeRaster, jpegAutoOrientation } from "./image-formats.js";
+import { stageImageUpload } from "./image-uploads.js";
 import { editMediaCopy } from "./media-edit-copy.js";
 import { remapImportedBlockReferences } from "./block-portability.js";
 import { SiteImport, allocateImportedBlockEntities, exportMediaFiles, exportFontLibrary, MAX_ARCHIVE_JSON_BYTES, MAX_STORED_CONTENT_BYTES } from "./site-portability.js";
@@ -805,59 +807,43 @@ router.post(
       /\.(php\d?|phtml|html?|svg|js|exe|sh)$/i.test(file.originalname)
     )
       throw new HttpError(400, "Executable files are not permitted.");
-    let width: number | null = null,
-      height: number | null = null;
-    if (type.mime.startsWith("image/")) {
-      const metadata = await sharp(file.buffer, {
-        limitInputPixels: 80_000_000,
-      })
-        .metadata()
-        .catch(() => null);
-      if (!metadata?.width || !metadata?.height)
-        throw new HttpError(400, "The image could not be decoded.");
-      width = metadata.width;
-      height = metadata.height;
-    }
     const inspection = await inspectAudioWithArtwork(file.buffer, type.mime), audioMetadata = inspection.metadata;
     const settings = await getSettings();
     const prefix = uploadPrefix(settings);
     await mkdir(path.join(uploadsDir, prefix), { recursive: true });
-    const filename = `${prefix}${randomBytes(20).toString("hex")}.${type.ext}`;
-    const sizes = type.mime.startsWith("image/")
-      ? await buildSizes(file.buffer, prefix, settings).catch(() => {
-          throw new HttpError(400, "The image could not be decoded.");
-        })
-      : {};
-    await writeFile(path.join(uploadsDir, filename), file.buffer, {
-      flag: "wx",
-    });
-    const createdFiles = new Set([filename, ...Object.values(sizes).map(size => size.filename)]);
+    const rawFilename = `${prefix}${randomBytes(20).toString("hex")}.${type.ext}`;
+    const createdFiles = new Set<string>();
     let mediaClient: PoolClient | undefined;
     try {
+      const image = type.mime.startsWith("image/")
+        ? await stageImageUpload(file.buffer, rawFilename, prefix, settings, createdFiles).catch(() => { throw new HttpError(400, "The image could not be decoded."); })
+        : null;
+      if (!image) await writeNewMediaFile(rawFilename, file.buffer, createdFiles);
       mediaClient = await pool.connect(); await mediaClient.query("BEGIN");
       const title = audioMetadata.title?.slice(0, 300) || plainText(path.basename(file.originalname).replace(/\.[^.]+$/, "")).slice(0, 300) || "Untitled file";
       const artwork = await storeAudioArtwork(inspection.artwork, mediaClient, needUser(req).id, title, prefix, settings);
       for (const file of artwork.files) createdFiles.add(file);
       const result = await mediaClient.query(
-        `INSERT INTO media(author_id,title,filename,mime_type,size,width,height,sizes,audio_metadata,artwork_media_id) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9::jsonb,$10) RETURNING ${expandedMediaFields}`,
+        `INSERT INTO media(author_id,title,filename,mime_type,size,width,height,sizes,audio_metadata,artwork_media_id,derivatives) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9::jsonb,$10,$11::jsonb) RETURNING ${expandedMediaFields}`,
         [
           needUser(req).id,
           title,
-          filename,
-          type.mime,
-          file.size,
-          width,
-          height,
-          JSON.stringify(sizes),
+          image?.filename || rawFilename,
+          image?.mimeType || type.mime,
+          image?.size ?? file.size,
+          image?.width ?? null,
+          image?.height ?? null,
+          JSON.stringify(image?.sizes || {}),
           JSON.stringify(audioMetadata),
           artwork.id,
+          JSON.stringify(image?.derivatives || {}),
         ],
       );
       await mediaClient.query("COMMIT");
       res.status(201).json({ media: result.rows[0] });
     } catch (e) {
       if (mediaClient) await mediaClient.query("ROLLBACK").catch(() => {});
-      await Promise.all([...createdFiles].map(file => unlink(path.join(uploadsDir, file)).catch(() => {})));
+      await unlinkUnreferencedMediaFiles(createdFiles);
       throw e;
     } finally { mediaClient?.release(); }
   },
@@ -896,10 +882,12 @@ router.post("/media/:id/edit", creators, async (req: AuthRequest, res) => {
   if (!item.mime_type.startsWith("image/"))
     throw new HttpError(400, "Only images can be edited.");
   const source = await readFile(path.join(uploadsDir, item.filename));
-  const output = await rasterOutput(source);
+  const metadata = await sharp(source, { limitInputPixels: 80_000_000 }).metadata();
+  const output = await rasterOutput(source, metadata);
   let pipeline = sharp(source, {
     limitInputPixels: 80_000_000,
-  }).autoOrient();
+  });
+  if (jpegAutoOrientation(metadata, output)) pipeline = pipeline.autoOrient();
   if (input.crop) pipeline = pipeline.extract(input.crop);
   if (input.rotate) pipeline = pipeline.rotate(input.rotate);
   if (input.flip) pipeline = pipeline.flip();
@@ -924,9 +912,11 @@ router.post("/media/:id/edit", creators, async (req: AuthRequest, res) => {
       ? ""
       : path.dirname(item.filename) + "/";
   const filename = `${prefix}${randomBytes(20).toString("hex")}.${output.extension}`;
-  const sizes = await buildSizes(data, prefix, await getSettings());
-  await writeFile(path.join(uploadsDir, filename), data, { flag: "wx" });
+  const owned = new Set<string>();
   try {
+    const sizes = await buildSizes(data, prefix, await getSettings());
+    Object.values(sizes).forEach(size => owned.add(size.filename));
+    await writeNewMediaFile(filename, data, owned);
     const result = await pool.query(
       `UPDATE media SET filename=$1,mime_type=$10,size=$2,width=$3,height=$4,original_filename=coalesce(original_filename,$5),derivatives=derivatives || $7::jsonb || jsonb_build_object($8::text,$5::text),sizes=$9::jsonb WHERE id=$6 AND filename=$5 RETURNING ${expandedMediaFields}`,
       [
@@ -951,12 +941,7 @@ router.post("/media/:id/edit", creators, async (req: AuthRequest, res) => {
     // reference their URLs. Permanent deletion removes the complete history.
     res.json({ media: result.rows[0] });
   } catch (error) {
-    await unlink(path.join(uploadsDir, filename)).catch(() => {});
-    await Promise.all(
-      Object.values(sizes).map((size) =>
-        unlink(path.join(uploadsDir, size.filename)).catch(() => {}),
-      ),
-    );
+    await unlinkUnreferencedMediaFiles(owned);
     throw error;
   }
 });
@@ -999,11 +984,7 @@ router.post("/media/:id/restore", creators, async (req: AuthRequest, res) => {
       );
     res.json({ media: result.rows[0] });
   } catch (error) {
-    await Promise.all(
-      Object.values(sizes).map((size) =>
-        unlink(path.join(uploadsDir, size.filename)).catch(() => {}),
-      ),
-    );
+    await unlinkUnreferencedMediaFiles(Object.values(sizes).map(size => size.filename));
     throw error;
   }
 });

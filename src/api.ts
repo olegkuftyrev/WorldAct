@@ -128,6 +128,7 @@ export type Media = {
   width?: number | null;
   height?: number | null;
   canRestore?: boolean;
+  originalUploadUrl?: string | null;
   sizes?: Record<
     string,
     {

@@ -22,12 +22,13 @@ animated inputs use the first frame, matching the supplied Imagick editor's
 explicit frame-zero selection. Original uploaded bytes remain unchanged.
 
 Generated files carry their actual extension and MIME in Media API/REST sizes.
-Edits normalize EXIF orientation before crop, manual rotation, and scaling;
+Edits normalize supported JPEG EXIF orientation before crop, manual rotation, and scaling;
 derived files retain color profiles while dropping private EXIF/IPTC metadata
-and stale orientation. The original is retained byte-for-byte, including its
-metadata, and Restore Original restores that file's verified format and
-rebuilds configured sizes in it. This does not add full-image upload
-normalization, new image formats, plugin format filters, or animated editing.
+and stale orientation. Uploaded originals remain byte-for-byte, including their
+metadata. Full-image upload scaling and JPEG orientation normalization are
+described in `image-uploads.md`. A manual edit backs up the current full image;
+Restore Original returns to that full image and rebuilds its registered sizes.
+This does not add new image formats, plugin format filters, or animated editing.
 Site Icon's dedicated PNG pipeline is a separate existing contract.
 
 Existing original, current, and previous size URLs remain available after edits

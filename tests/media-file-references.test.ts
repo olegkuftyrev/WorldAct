@@ -58,7 +58,7 @@ test("archive aliases retain current, original, derivative and size files until 
     const edited = await api(`/api/media/${uploaded.media.id}/edit`, "POST", { rotate: 90 }, cookie); assert.equal(edited.response.status, 200);
     const exported = (await api("/api/tools/export", "GET", undefined, cookie)).data;
     const record = exported.media.find((item: any) => item.id === uploaded.media.id);
-    assert.ok(record.original_filename); assert.ok(Object.keys(record.derivatives).length); assert.equal(Object.keys(record.sizes).length, 3);
+    assert.ok(record.original_filename); assert.ok(Object.keys(record.derivatives).length); assert.deepEqual(Object.keys(record.sizes).sort(), ["large", "medium", "medium_large", "thumbnail"]);
     const names = new Set(filenames(record));
     const files = exported.mediaFiles.filter((file: any) => names.has(file.filename));
     assert.equal(files.length, names.size);

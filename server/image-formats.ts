@@ -13,6 +13,10 @@ export type RasterOutput = typeof formats[keyof typeof formats] & {
   mimeType: keyof typeof formats;
   lossless: boolean;
 };
+/** The supplied maybe_exif_rotate() considers only JPEG EXIF orientations. */
+export function jpegAutoOrientation(metadata: Metadata, output: RasterOutput): boolean {
+  return output.mimeType === "image/jpeg" && Number.isInteger(metadata.orientation) && metadata.orientation! >= 2 && metadata.orientation! <= 8;
+}
 
 /** Inspect only local verified bytes; no filename, request MIME, or codec fallback. */
 export async function rasterOutput(buffer: Buffer, metadata?: Metadata): Promise<RasterOutput> {

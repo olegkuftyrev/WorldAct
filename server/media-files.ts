@@ -1,11 +1,11 @@
 import sharp from "sharp";
 import path from "node:path";
-import { mkdir, writeFile, unlink } from "node:fs/promises";
+import { mkdir, open, unlink } from "node:fs/promises";
 import { randomBytes } from "node:crypto";
 import type { Pool } from "pg";
 import { pool, uploadsDir } from "./db.js";
 import { HttpError } from "./utils.js";
-import { rasterOutput, encodeRaster } from "./image-formats.js";
+import { rasterOutput, encodeRaster, jpegAutoOrientation } from "./image-formats.js";
 export type ImageSize = {
   filename: string;
   url: string;
@@ -20,6 +20,18 @@ export function safeStoredFile(filename: unknown): filename is string {
     !filename.includes("\\") &&
     path.resolve(uploadsDir, filename).startsWith(uploadsDir + path.sep)
   );
+}
+
+/** Mark ownership only after exclusive creation, before any potentially partial write. */
+export async function writeNewMediaFile(filename: string, data: Buffer, owned: Set<string>) {
+  if (!safeStoredFile(filename)) throw new HttpError(400, "Use a safe upload-relative filename.");
+  const handle = await open(path.join(uploadsDir, filename), "wx");
+  owned.add(filename);
+  try { await handle.writeFile(data); }
+  finally { await handle.close(); }
+}
+export async function cleanupStagedMediaFiles(owned: Iterable<string>) {
+  await Promise.all([...owned].filter(safeStoredFile).map(filename => unlink(path.join(uploadsDir, filename)).catch(() => {})));
 }
 
 /** Run after the deleting transaction commits. Archives can share physical files. */
@@ -132,10 +144,12 @@ export async function buildSizes(
   settings: Record<string, any>,
 ) {
   const result: Record<string, ImageSize> = {};
+  const owned = new Set<string>();
   const metadata = await sharp(buffer, { limitInputPixels: 80_000_000 }).metadata();
   const output = await rasterOutput(buffer, metadata);
   // Geometry uses the same automatic EXIF orientation applied by the pipeline.
-  const swapped = metadata.orientation !== undefined && metadata.orientation >= 5 && metadata.orientation <= 8;
+  const orient = jpegAutoOrientation(metadata, output);
+  const swapped = orient && metadata.orientation! >= 5;
   const originalWidth = swapped ? metadata.height : metadata.width;
   const originalHeight = swapped ? metadata.width : metadata.height;
   if (!originalWidth || !originalHeight) throw new HttpError(400, "The image could not be decoded.");
@@ -160,6 +174,9 @@ export async function buildSizes(
         settings.largeHeight ?? 1024,
         false,
       ],
+      ["medium_large", 768, 0, false],
+      ["1536x1536", 1536, 1536, false],
+      ["2048x2048", 2048, 2048, false],
     ] as const) {
       const maximum = name === "thumbnail" ? 4096 : 8192;
       if (![w, h].every(value => typeof value === "number" && Number.isInteger(value) && value >= 0 && value <= maximum)) {
@@ -167,10 +184,11 @@ export async function buildSizes(
       }
       const geometry = imageResizeGeometry(originalWidth, originalHeight, w, h, crop);
       if (!geometry) continue;
-      const pipeline = sharp(buffer, {
+      let pipeline = sharp(buffer, {
         limitInputPixels: 80_000_000,
-      })
-        .rotate()
+      });
+      if (orient) pipeline = pipeline.autoOrient();
+      pipeline = pipeline
         .extract({ left: geometry.left, top: geometry.top, width: geometry.cropWidth, height: geometry.cropHeight })
         .resize({
           width: geometry.width,
@@ -180,7 +198,7 @@ export async function buildSizes(
         });
       const { data, info } = await encodeRaster(pipeline, output).toBuffer({ resolveWithObject: true });
       const filename = `${prefix}${randomBytes(20).toString("hex")}-${info.width}x${info.height}.${output.extension}`;
-      await writeFile(path.join(uploadsDir, filename), data, { flag: "wx" });
+      await writeNewMediaFile(filename, data, owned);
       result[name] = {
         filename,
         url: `/uploads/${filename}`,
@@ -194,11 +212,7 @@ export async function buildSizes(
     if (!Object.keys(result).length) await sharp(buffer, { limitInputPixels: 80_000_000 }).stats();
     return result;
   } catch (error) {
-    await Promise.all(
-      Object.values(result).map((item) =>
-        unlink(path.join(uploadsDir, item.filename)).catch(() => {}),
-      ),
-    );
+    await cleanupStagedMediaFiles(owned);
     throw error;
   }
 }

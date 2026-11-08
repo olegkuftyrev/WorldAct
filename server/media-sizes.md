@@ -23,7 +23,7 @@ Defaults remain 150×150, 300×300, and 1024×1024 when values are absent.
   omitted and the original remains available.
 
 The shared generator applies on new uploads, image edits, restore-original,
-and extracted audio covers. Its geometry accounts for automatic EXIF
+and extracted audio covers. Its geometry accounts for source-supported JPEG EXIF
 orientation. Generated sizes preserve their supported verified raster format;
 see `image-formats.md` for the source-derived encoder policy.
 Changing settings does not regenerate existing attachments or remove historical
@@ -32,6 +32,11 @@ still removes all unreferenced original, edited, and historical size files.
 
 JSON archives retain these zero settings and embed the existing verified image
 bytes. Import does not invent disabled sizes or regenerate stored sub-sizes.
+The supplied source also registers `medium_large` (768×0), `1536x1536`, and
+`2048x2048` independently of these three configured sizes. They are generated
+when source geometry permits a smaller size, including when the six configured
+dimensions are zero. The default native size chooser still exposes Thumbnail,
+Medium, Large, and Full; the additional sizes do not invent chooser labels.
 The native media REST response always includes `media_details.sizes.full`.
 The editor adapter and public featured-image, Latest Posts, and gallery paths
 already fall back to the full image when a named intermediate is absent.
