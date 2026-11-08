@@ -94,7 +94,7 @@ export default function PublicSite({
   const dateArchive = archive && "type" in archive && archive.type === "date" ? archive : null;
   const dateQuery = new URLSearchParams();
   for (const key of ["year", "monthnum", "day", "m", "w"])
-    if (params.has(key)) dateQuery.set(key, params.get(key)!);
+    if (params.get(key)) dateQuery.set(key, params.get(key)!);
   if (dateArchive) {
     // The resolved path is authoritative; unrelated search parameters cannot
     // silently replace the date represented by /YYYY/MM/DD/.
