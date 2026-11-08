@@ -56,6 +56,9 @@ test("real admission and source Reply/form agree for old posts, old pages, undat
       const before=Number((await pool.query("SELECT count(*) FROM comments WHERE post_id=$1",[post.id])).rows[0].count),submitted=await f.submit(post.id,{content:"Actual admission "+label});
       assert.equal(submitted.response.status,open?201:409,label+" admission");
       assert.equal(Number((await pool.query("SELECT count(*) FROM comments WHERE post_id=$1",[post.id])).rows[0].count),before+(open?1:0),label+" rows");
+      // Each row exercises a separate open-state policy. Age only its successful
+      // guest admission before the next row; immediate flooding is tested separately.
+      if (open) assert.equal((await pool.query("UPDATE comments SET created_at=date_trunc('second',clock_timestamp())-interval '20 seconds' WHERE id=$1 AND post_id=$2",[submitted.data.comment.id,post.id])).rowCount,1);
       assert.doesNotMatch(rendered.data.content,/private@example|_avatarEmail|_accountAvatarEmail/);
     }
     const draft=await f.post();await pool.query("UPDATE posts SET status='draft',published_at=NULL WHERE id=$1",[draft.id]);
