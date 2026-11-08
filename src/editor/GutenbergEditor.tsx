@@ -39,6 +39,7 @@ import {
   type Block,
 } from "@wordpress/blocks";
 import { registerCoreBlocks } from "@wordpress/block-library";
+import { registerClassicContentHandler } from "./classic/register";
 import {
   Button,
   Modal,
@@ -217,6 +218,7 @@ addFilter(
   (settings: any, name: string) => name === "core/freeform" ? { ...settings, edit: NativeClassicEdit } : settings,
 );
 if (!getBlockType("core/paragraph")) registerCoreBlocks();
+registerClassicContentHandler();
 const nativeFootnoteFormat=select(richTextStore).getFormatType("core/footnote");
 if(nativeFootnoteFormat?.edit){
   function AtomicFootnoteFormat(props:any){return ownsFootnotes(useContext(AtomicFootnotesContext),props.context)?<OwnedFootnoteFormat {...props}/>:null;}
