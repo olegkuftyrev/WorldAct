@@ -74,6 +74,7 @@ import { OwnedFootnoteFormat } from "./OwnedFootnoteFormat";
 import { footnoteEntityBoundaries } from "./footnoteScope";
 import type { SerializedBlock } from "./types";
 import { persistentBlockAttributes } from "./blockAttributes";
+import { editorBackgroundSettings } from "./backgroundSettings";
 import { parseVideoEmbed } from "../embeds";
 import { compileThemeStyles, type ThemeJSON, type ThemeStyleOverrides } from "../themeStyles";
 import "./gutenberg.css";
@@ -1523,7 +1524,8 @@ const GutenbergSession = forwardRef<
       ],
       __experimentalFeatures: {
         ...themeDocument?.settings,
-        appearanceTools: true,
+        appearanceTools: themeDocument?.settings?.appearanceTools ?? true,
+        background: editorBackgroundSettings({ appearanceTools: true, ...themeDocument?.settings }),
         color: {
           custom: true,
           customGradient: true,
