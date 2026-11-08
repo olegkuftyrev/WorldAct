@@ -212,3 +212,42 @@ test("playlist data never interprets expressions and rejects unsafe source/artwo
     [],
   );
 });
+
+test("missing artwork stays empty and empty track URLs never resolve to the page", () => {
+  const f = fixture(),
+    a = f.get("a");
+  const tracks = JSON.parse(a.getAttribute("data-worldact-playlist")!);
+  tracks[0].url = "";
+  for (const track of tracks) track.image = "";
+  a.setAttribute("data-worldact-playlist", JSON.stringify(tracks));
+  const parsed = readPlaylistTracks(
+    JSON.stringify(tracks),
+    "https://example.test/post/",
+  );
+  assert.equal(parsed[0].url, "");
+  assert.equal(parsed[1].image, "");
+  assert.equal(
+    readPlaylistTracks(
+      JSON.stringify([{ url: "audio.wav", image: "" }]),
+      "https://example.test/post/",
+    )[0].url,
+    "",
+  );
+  const cleanup = enhancePlaylists(a, f.factory);
+  assert.equal(f.made.length, 1);
+  assert.equal(f.made[0].options.src, "https://example.test/track-1.wav");
+  assert.equal(f.made[0].options.image, "");
+  f.event(a.querySelector("button")!, "click");
+  assert.equal(f.made.length, 1, "an empty track cannot load the current page");
+  cleanup();
+  tracks.forEach((track: { url: string }) => {
+    track.url = "";
+  });
+  a.setAttribute("data-worldact-playlist", JSON.stringify(tracks));
+  enhancePlaylists(a, f.factory)();
+  assert.equal(
+    f.made.length,
+    1,
+    "a playlist without playable URLs is left readable",
+  );
+});

@@ -42,6 +42,8 @@ const mounted = new WeakMap<
 function safeURL(value: unknown, origin: string) {
   if (
     typeof value !== "string" ||
+    !value.length ||
+    !/^(?:https?:\/\/|\/(?!\/))/i.test(value) ||
     value.length > 8192 ||
     /[\u0000-\u0020<>"'\\]/.test(value) ||
     value.startsWith("//")
