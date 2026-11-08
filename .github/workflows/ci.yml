@@ -100,6 +100,7 @@ jobs:
           tests/legacy-routes.test.ts tests/login-remember.test.ts tests/media-details-state.test.ts
           tests/dashboard.test.ts tests/dashboard-dates.test.ts
           tests/post-list-dates.test.ts
+          tests/post-list-date-format.test.ts tests/classic-comment-tree.test.ts
           tests/fresh-defaults.test.ts tests/admin-tools.test.ts
           tests/shortcodes.test.ts
       - name: Fresh browser installation on the compiled server
