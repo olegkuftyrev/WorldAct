@@ -59,13 +59,13 @@ test("a fresh migrated PostgreSQL site installs atomically once through its loca
     assert.equal((await pool.query("SELECT count(*)::int AS count FROM users")).rows[0].count, 0);
   });
   await t.test("a late initialization failure rolls back account, settings, content, markers and welcome mail", async () => {
-    await pool.query("CREATE FUNCTION worldact_install_test_failure() RETURNS trigger LANGUAGE plpgsql AS $$BEGIN RAISE EXCEPTION 'Controlled install content failure'; END$$; CREATE TRIGGER worldact_install_test_failure BEFORE INSERT ON comments FOR EACH ROW EXECUTE FUNCTION worldact_install_test_failure()");
+    await pool.query("CREATE FUNCTION worldact_install_test_failure() RETURNS trigger LANGUAGE plpgsql AS $$BEGIN RAISE EXCEPTION 'Controlled install content failure'; END$$; CREATE TRIGGER worldact_install_test_failure AFTER INSERT ON mail_outbox FOR EACH ROW EXECUTE FUNCTION worldact_install_test_failure()");
     try {
       assert.equal((await api("/api/install", "POST", input)).response.status, 500);
-      for (const table of ["users", "posts", "settings", "mail_outbox"]) assert.equal((await pool.query(`SELECT count(*)::int AS count FROM ${table}`)).rows[0].count, 0, table);
+      for (const table of ["users", "posts", "settings", "extensions", "extension_secrets", "mail_outbox"]) assert.equal((await pool.query(`SELECT count(*)::int AS count FROM ${table}`)).rows[0].count, 0, table);
       assert.equal((await pool.query("SELECT count(*)::int AS count FROM seed_markers WHERE name IN('initial-content-v1','browser-install-v1')")).rows[0].count, 0);
       assert.equal((await api("/api/install")).data.installed, false);
-    } finally { await pool.query("DROP TRIGGER worldact_install_test_failure ON comments; DROP FUNCTION worldact_install_test_failure()"); }
+    } finally { await pool.query("DROP TRIGGER worldact_install_test_failure ON mail_outbox; DROP FUNCTION worldact_install_test_failure()"); }
   });
   let userId = 0;
   await t.test("two concurrent installers create one administrator and one sample site", async () => {
@@ -74,7 +74,18 @@ test("a fresh migrated PostgreSQL site installs atomically once through its loca
     const result = responses.find(result => result.response.status === 201)!; userId = result.data.user.id;
     assert.equal(result.data.user.role, "administrator"); assert.equal(result.data.delivery, "local-outbox"); assert.equal(result.data.loginUrl, "/login"); assert.doesNotMatch(JSON.stringify(result.data), /password_hash|token_hash/); assert.ok(!JSON.stringify(result.data).includes(token));
     assert.equal((await pool.query("SELECT count(*)::int AS count FROM users")).rows[0].count, 1);
-    assert.equal((await pool.query("SELECT count(*)::int AS count FROM posts")).rows[0].count, 2); assert.equal((await pool.query("SELECT count(*)::int AS count FROM comments")).rows[0].count, 1);
+    assert.equal((await pool.query("SELECT count(*)::int AS count FROM posts")).rows[0].count, 3); assert.equal((await pool.query("SELECT count(*)::int AS count FROM comments")).rows[0].count, 1);
+    const defaults=(await pool.query("SELECT type,slug,status,comment_status,template_slug,raw_content FROM posts ORDER BY id")).rows;
+    assert.deepEqual(defaults.map(row=>row.status),["publish","publish","draft"]);
+    assert.deepEqual(defaults.map(row=>row.slug),["hello-world","sample-page","privacy-policy"]);
+    assert.ok(defaults.every(row=>row.raw_content.includes("<!-- wp:")));
+    assert.equal(defaults[1].comment_status,"closed");assert.equal(defaults[2].comment_status,"closed");assert.equal(defaults[2].template_slug,"");
+    const plugins=(await pool.query("SELECT slug,enabled FROM extensions ORDER BY slug")).rows;
+    assert.deepEqual(plugins,[{slug:"akismet",enabled:false},{slug:"hello-dolly",enabled:false}]);
+    const policy=(await pool.query("SELECT id FROM posts WHERE slug='privacy-policy'")).rows[0];
+    assert.equal((await pool.query("SELECT data->>'privacyPageId' AS id FROM settings WHERE id=1")).rows[0].id,String(policy.id));
+    assert.equal((await api("/api/public/posts/privacy-policy")).response.status,404);
+    const publicSite=await api("/api/public/site");assert.equal(publicSite.response.status,200);assert.equal(publicSite.data.pages.length,1);assert.equal(publicSite.data.posts.length,1);
     const settings = (await pool.query("SELECT data FROM settings WHERE id=1")).rows[0].data; assert.equal(settings.siteTitle, "My WorldAct Site"); assert.equal(settings.adminEmail, input.email); assert.equal(settings.discourageSearchEngines, true); assert.equal(settings.siteUrl, origin);
     const mail = (await pool.query("SELECT recipient,body FROM mail_outbox")).rows; assert.equal(mail.length, 1); assert.equal(mail[0].recipient, input.email); assert.ok(!mail[0].body.includes(input.password)); assert.ok(!mail[0].body.includes(token));
     const login = await api("/api/auth/login", "POST", { login: result.data.user.username, password: input.password }); assert.equal(login.response.status, 200); assert.equal(login.data.user.id, userId);
