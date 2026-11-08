@@ -1,0 +1,6413 @@
+{
+  "feature": "275d0dea7f6faab4d19bf54cf8e537583afaa798",
+  "base": "d5acf53995324465deaa0adc8000a8a0788cea10",
+  "generatedAt": "2026-11-08T15:24:39.654Z",
+  "authorOnlyIndependentReviewRequired": true,
+  "sourceReadOnly": true,
+  "codeFiles": {
+    "server/core.ts": "e1fc85dd019068a8ecc53891b2d7974c4ae1822e2ff7e3c602d52eff66c52cca",
+    "server/theme-blocks.ts": "b970445b7cb4b9fb783ce4a61cfc102416e8fca89135cf8582cecfad6e26221f",
+    "shared/comment-links.ts": "b9b32c89ab25619871db7a0a239792179cdd51ad2674ec26fbb72629531fb9a0",
+    "shared/comment-open.ts": "55b2e4bd63f122dafb14909f4be72790f8be4c97fa913c3b52849f406314cc16",
+    "src/components/ClassicCommentThread.tsx": "53ff86df2db3e0d821fe562468b904f53b5f4ee94e045efe4759761ef903ad0a",
+    "src/screens/PublicSite.tsx": "79c2a693eafde3dde88f002189ae7d27a875537e1bc576125bca6df0c6d5eaee",
+    "tests/classic-comment-tree.test.ts": "27532a514fc43648b393dc47b80a6a1634fc37c892deed6253de56d6bf7469c3",
+    "tests/public-comment-open.test.ts": "eb3e488a97bc5a87334c030764c6931a6397595b963066d8b7afa6370fda97c2"
+  },
+  "gates": {
+    "source": {
+      "tests": 21,
+      "files": 7,
+      "failures": 0,
+      "skips": 0
+    },
+    "compiled": {
+      "tests": 21,
+      "files": 7,
+      "failures": 0,
+      "skips": 0
+    },
+    "typecheck": true,
+    "productionFrontendBuild": true,
+    "bundledNodeBuild": true,
+    "diffCheck": true,
+    "browserErrors": []
+  },
+  "nativeStageProvenance": "Initial source 1440/768/375 and Classic 1440 saved flows preceded only the final two route-reset UI hunks. Classic 768/375, extras/ownership and final six-width route/focus/history smoke used final authored code. No author code changed after final smoke.",
+  "flows": [
+    {
+      "theme": "source",
+      "width": 1440,
+      "guest": {
+        "avatarCount": 0,
+        "bodyFirst": false,
+        "bodySecond": true,
+        "comments": [
+          {
+            "id": 3,
+            "width": 645
+          },
+          {
+            "id": 4,
+            "width": 613
+          },
+          {
+            "id": 5,
+            "width": 581
+          },
+          {
+            "id": 6,
+            "width": 581
+          },
+          {
+            "id": 7,
+            "width": 581
+          },
+          {
+            "id": 8,
+            "width": 581
+          },
+          {
+            "id": 9,
+            "width": 581
+          },
+          {
+            "id": 10,
+            "width": 581
+          },
+          {
+            "id": 11,
+            "width": 581
+          },
+          {
+            "id": 12,
+            "width": 581
+          },
+          {
+            "id": 13,
+            "width": 581
+          },
+          {
+            "id": 14,
+            "width": 581
+          },
+          {
+            "id": 15,
+            "width": 581
+          },
+          {
+            "id": 16,
+            "width": 581
+          },
+          {
+            "id": 17,
+            "width": 581
+          }
+        ],
+        "counters": {
+          "commentPage": "2",
+          "p": "4",
+          "page": "2",
+          "page_id": null,
+          "query-4-page": "2",
+          "replytocom": null
+        },
+        "draft": "",
+        "focused": false,
+        "form": false,
+        "links": [
+          {
+            "aria": null,
+            "href": "/login?redirect_to=%2F%3Fp%3D4%26page%3D2%26query-4-page%3D2%26commentPage%3D2%23respond",
+            "id": null,
+            "text": "Log in to Reply"
+          },
+          {
+            "aria": null,
+            "href": "/login?redirect_to=%2F%3Fp%3D4%26page%3D2%26query-4-page%3D2%26commentPage%3D2%23respond",
+            "id": null,
+            "text": "Log in to Reply"
+          }
+        ],
+        "loop": "Reply card 2",
+        "parent": null,
+        "path": "/?p=4&page=2&query-4-page=2&commentPage=2",
+        "privateLeak": false,
+        "scrollWidth": 1440,
+        "width": 1440
+      },
+      "loginPath": "/login?redirect_to=%2F%3Fp%3D4%26page%3D2%26query-4-page%3D2%26commentPage%3D2%23respond",
+      "returned": {
+        "avatarCount": 0,
+        "bodyFirst": false,
+        "bodySecond": true,
+        "comments": [
+          {
+            "id": 3,
+            "width": 645
+          },
+          {
+            "id": 4,
+            "width": 613
+          },
+          {
+            "id": 5,
+            "width": 581
+          },
+          {
+            "id": 6,
+            "width": 581
+          },
+          {
+            "id": 7,
+            "width": 581
+          },
+          {
+            "id": 8,
+            "width": 581
+          },
+          {
+            "id": 9,
+            "width": 581
+          },
+          {
+            "id": 10,
+            "width": 581
+          },
+          {
+            "id": 11,
+            "width": 581
+          },
+          {
+            "id": 12,
+            "width": 581
+          },
+          {
+            "id": 13,
+            "width": 581
+          },
+          {
+            "id": 14,
+            "width": 581
+          },
+          {
+            "id": 15,
+            "width": 581
+          },
+          {
+            "id": 16,
+            "width": 581
+          },
+          {
+            "id": 17,
+            "width": 581
+          }
+        ],
+        "counters": {
+          "commentPage": "2",
+          "p": "4",
+          "page": "2",
+          "page_id": null,
+          "query-4-page": "2",
+          "replytocom": null
+        },
+        "draft": "",
+        "focused": false,
+        "form": true,
+        "links": [
+          {
+            "aria": "Reply to RootA",
+            "href": "/?p=4&page=2&query-4-page=2&commentPage=2&replytocom=3#respond",
+            "id": 3,
+            "text": "Reply"
+          },
+          {
+            "aria": "Reply to DeepLevel1",
+            "href": "/?p=4&page=2&query-4-page=2&commentPage=2&replytocom=4#respond",
+            "id": 4,
+            "text": "Reply"
+          }
+        ],
+        "loop": "Reply card 2",
+        "parent": null,
+        "path": "/?p=4&page=2&query-4-page=2&commentPage=2#respond",
+        "privateLeak": false,
+        "scrollWidth": 1440,
+        "width": 1440
+      },
+      "active": {
+        "avatarCount": 0,
+        "bodyFirst": false,
+        "bodySecond": true,
+        "comments": [
+          {
+            "id": 3,
+            "width": 645
+          },
+          {
+            "id": 4,
+            "width": 613
+          },
+          {
+            "id": 5,
+            "width": 581
+          },
+          {
+            "id": 6,
+            "width": 581
+          },
+          {
+            "id": 7,
+            "width": 581
+          },
+          {
+            "id": 8,
+            "width": 581
+          },
+          {
+            "id": 9,
+            "width": 581
+          },
+          {
+            "id": 10,
+            "width": 581
+          },
+          {
+            "id": 11,
+            "width": 581
+          },
+          {
+            "id": 12,
+            "width": 581
+          },
+          {
+            "id": 13,
+            "width": 581
+          },
+          {
+            "id": 14,
+            "width": 581
+          },
+          {
+            "id": 15,
+            "width": 581
+          },
+          {
+            "id": 16,
+            "width": 581
+          },
+          {
+            "id": 17,
+            "width": 581
+          }
+        ],
+        "counters": {
+          "commentPage": "2",
+          "p": "4",
+          "page": "2",
+          "page_id": null,
+          "query-4-page": "2",
+          "replytocom": null
+        },
+        "draft": "source native registered reply 1440",
+        "focused": true,
+        "form": true,
+        "links": [
+          {
+            "aria": "Reply to RootA",
+            "href": "/?p=4&page=2&query-4-page=2&commentPage=2&replytocom=3#respond",
+            "id": 3,
+            "text": "Reply"
+          },
+          {
+            "aria": "Reply to DeepLevel1",
+            "href": "/?p=4&page=2&query-4-page=2&commentPage=2&replytocom=4#respond",
+            "id": 4,
+            "text": "Reply"
+          }
+        ],
+        "loop": "Reply card 2",
+        "parent": "4",
+        "path": "/?p=4&page=2&query-4-page=2&commentPage=2#respond",
+        "privateLeak": false,
+        "scrollWidth": 1440,
+        "width": 1440
+      },
+      "saved": {
+        "id": 22,
+        "parent_id": 4,
+        "user_id": 2,
+        "status": "approved"
+      },
+      "reloaded": {
+        "avatarCount": 0,
+        "bodyFirst": false,
+        "bodySecond": true,
+        "comments": [
+          {
+            "id": 3,
+            "width": 645
+          },
+          {
+            "id": 4,
+            "width": 613
+          },
+          {
+            "id": 5,
+            "width": 581
+          },
+          {
+            "id": 6,
+            "width": 581
+          },
+          {
+            "id": 7,
+            "width": 581
+          },
+          {
+            "id": 8,
+            "width": 581
+          },
+          {
+            "id": 9,
+            "width": 581
+          },
+          {
+            "id": 10,
+            "width": 581
+          },
+          {
+            "id": 11,
+            "width": 581
+          },
+          {
+            "id": 12,
+            "width": 581
+          },
+          {
+            "id": 13,
+            "width": 581
+          },
+          {
+            "id": 14,
+            "width": 581
+          },
+          {
+            "id": 15,
+            "width": 581
+          },
+          {
+            "id": 16,
+            "width": 581
+          },
+          {
+            "id": 17,
+            "width": 581
+          },
+          {
+            "id": 22,
+            "width": 581
+          }
+        ],
+        "counters": {
+          "commentPage": "2",
+          "p": "4",
+          "page": "2",
+          "page_id": null,
+          "query-4-page": "2",
+          "replytocom": null
+        },
+        "draft": "",
+        "focused": false,
+        "form": true,
+        "links": [
+          {
+            "aria": "Reply to RootA",
+            "href": "/?p=4&page=2&query-4-page=2&commentPage=2&replytocom=3#respond",
+            "id": 3,
+            "text": "Reply"
+          },
+          {
+            "aria": "Reply to DeepLevel1",
+            "href": "/?p=4&page=2&query-4-page=2&commentPage=2&replytocom=4#respond",
+            "id": 4,
+            "text": "Reply"
+          }
+        ],
+        "loop": "Reply card 2",
+        "parent": null,
+        "path": "/?p=4&page=2&query-4-page=2&commentPage=2#respond",
+        "privateLeak": false,
+        "scrollWidth": 1440,
+        "width": 1440
+      }
+    },
+    {
+      "theme": "source",
+      "width": 768,
+      "guest": {
+        "avatarCount": 0,
+        "bodyFirst": false,
+        "bodySecond": true,
+        "comments": [
+          {
+            "id": 3,
+            "width": 645
+          },
+          {
+            "id": 4,
+            "width": 613
+          },
+          {
+            "id": 5,
+            "width": 581
+          },
+          {
+            "id": 6,
+            "width": 581
+          },
+          {
+            "id": 7,
+            "width": 581
+          },
+          {
+            "id": 8,
+            "width": 581
+          },
+          {
+            "id": 9,
+            "width": 581
+          },
+          {
+            "id": 10,
+            "width": 581
+          },
+          {
+            "id": 11,
+            "width": 581
+          },
+          {
+            "id": 12,
+            "width": 581
+          },
+          {
+            "id": 13,
+            "width": 581
+          },
+          {
+            "id": 14,
+            "width": 581
+          },
+          {
+            "id": 15,
+            "width": 581
+          },
+          {
+            "id": 16,
+            "width": 581
+          },
+          {
+            "id": 17,
+            "width": 581
+          },
+          {
+            "id": 22,
+            "width": 581
+          }
+        ],
+        "counters": {
+          "commentPage": "2",
+          "p": "4",
+          "page": "2",
+          "page_id": null,
+          "query-4-page": "2",
+          "replytocom": null
+        },
+        "draft": "",
+        "focused": false,
+        "form": false,
+        "links": [
+          {
+            "aria": null,
+            "href": "/login?redirect_to=%2F%3Fp%3D4%26page%3D2%26query-4-page%3D2%26commentPage%3D2%23respond",
+            "id": null,
+            "text": "Log in to Reply"
+          },
+          {
+            "aria": null,
+            "href": "/login?redirect_to=%2F%3Fp%3D4%26page%3D2%26query-4-page%3D2%26commentPage%3D2%23respond",
+            "id": null,
+            "text": "Log in to Reply"
+          }
+        ],
+        "loop": "Reply card 2",
+        "parent": null,
+        "path": "/?p=4&page=2&query-4-page=2&commentPage=2",
+        "privateLeak": false,
+        "scrollWidth": 768,
+        "width": 768
+      },
+      "loginPath": "/login?redirect_to=%2F%3Fp%3D4%26page%3D2%26query-4-page%3D2%26commentPage%3D2%23respond",
+      "returned": {
+        "avatarCount": 0,
+        "bodyFirst": false,
+        "bodySecond": true,
+        "comments": [
+          {
+            "id": 3,
+            "width": 645
+          },
+          {
+            "id": 4,
+            "width": 613
+          },
+          {
+            "id": 5,
+            "width": 581
+          },
+          {
+            "id": 6,
+            "width": 581
+          },
+          {
+            "id": 7,
+            "width": 581
+          },
+          {
+            "id": 8,
+            "width": 581
+          },
+          {
+            "id": 9,
+            "width": 581
+          },
+          {
+            "id": 10,
+            "width": 581
+          },
+          {
+            "id": 11,
+            "width": 581
+          },
+          {
+            "id": 12,
+            "width": 581
+          },
+          {
+            "id": 13,
+            "width": 581
+          },
+          {
+            "id": 14,
+            "width": 581
+          },
+          {
+            "id": 15,
+            "width": 581
+          },
+          {
+            "id": 16,
+            "width": 581
+          },
+          {
+            "id": 17,
+            "width": 581
+          },
+          {
+            "id": 22,
+            "width": 581
+          }
+        ],
+        "counters": {
+          "commentPage": "2",
+          "p": "4",
+          "page": "2",
+          "page_id": null,
+          "query-4-page": "2",
+          "replytocom": null
+        },
+        "draft": "",
+        "focused": false,
+        "form": true,
+        "links": [
+          {
+            "aria": "Reply to RootA",
+            "href": "/?p=4&page=2&query-4-page=2&commentPage=2&replytocom=3#respond",
+            "id": 3,
+            "text": "Reply"
+          },
+          {
+            "aria": "Reply to DeepLevel1",
+            "href": "/?p=4&page=2&query-4-page=2&commentPage=2&replytocom=4#respond",
+            "id": 4,
+            "text": "Reply"
+          }
+        ],
+        "loop": "Reply card 2",
+        "parent": null,
+        "path": "/?p=4&page=2&query-4-page=2&commentPage=2#respond",
+        "privateLeak": false,
+        "scrollWidth": 768,
+        "width": 768
+      },
+      "active": {
+        "avatarCount": 0,
+        "bodyFirst": false,
+        "bodySecond": true,
+        "comments": [
+          {
+            "id": 3,
+            "width": 645
+          },
+          {
+            "id": 4,
+            "width": 613
+          },
+          {
+            "id": 5,
+            "width": 581
+          },
+          {
+            "id": 6,
+            "width": 581
+          },
+          {
+            "id": 7,
+            "width": 581
+          },
+          {
+            "id": 8,
+            "width": 581
+          },
+          {
+            "id": 9,
+            "width": 581
+          },
+          {
+            "id": 10,
+            "width": 581
+          },
+          {
+            "id": 11,
+            "width": 581
+          },
+          {
+            "id": 12,
+            "width": 581
+          },
+          {
+            "id": 13,
+            "width": 581
+          },
+          {
+            "id": 14,
+            "width": 581
+          },
+          {
+            "id": 15,
+            "width": 581
+          },
+          {
+            "id": 16,
+            "width": 581
+          },
+          {
+            "id": 17,
+            "width": 581
+          },
+          {
+            "id": 22,
+            "width": 581
+          }
+        ],
+        "counters": {
+          "commentPage": "2",
+          "p": "4",
+          "page": "2",
+          "page_id": null,
+          "query-4-page": "2",
+          "replytocom": null
+        },
+        "draft": "source native registered reply 768",
+        "focused": true,
+        "form": true,
+        "links": [
+          {
+            "aria": "Reply to RootA",
+            "href": "/?p=4&page=2&query-4-page=2&commentPage=2&replytocom=3#respond",
+            "id": 3,
+            "text": "Reply"
+          },
+          {
+            "aria": "Reply to DeepLevel1",
+            "href": "/?p=4&page=2&query-4-page=2&commentPage=2&replytocom=4#respond",
+            "id": 4,
+            "text": "Reply"
+          }
+        ],
+        "loop": "Reply card 2",
+        "parent": "4",
+        "path": "/?p=4&page=2&query-4-page=2&commentPage=2#respond",
+        "privateLeak": false,
+        "scrollWidth": 768,
+        "width": 768
+      },
+      "saved": {
+        "id": 23,
+        "parent_id": 4,
+        "user_id": 2,
+        "status": "approved"
+      },
+      "reloaded": {
+        "avatarCount": 0,
+        "bodyFirst": false,
+        "bodySecond": true,
+        "comments": [
+          {
+            "id": 3,
+            "width": 645
+          },
+          {
+            "id": 4,
+            "width": 613
+          },
+          {
+            "id": 5,
+            "width": 581
+          },
+          {
+            "id": 6,
+            "width": 581
+          },
+          {
+            "id": 7,
+            "width": 581
+          },
+          {
+            "id": 8,
+            "width": 581
+          },
+          {
+            "id": 9,
+            "width": 581
+          },
+          {
+            "id": 10,
+            "width": 581
+          },
+          {
+            "id": 11,
+            "width": 581
+          },
+          {
+            "id": 12,
+            "width": 581
+          },
+          {
+            "id": 13,
+            "width": 581
+          },
+          {
+            "id": 14,
+            "width": 581
+          },
+          {
+            "id": 15,
+            "width": 581
+          },
+          {
+            "id": 16,
+            "width": 581
+          },
+          {
+            "id": 17,
+            "width": 581
+          },
+          {
+            "id": 22,
+            "width": 581
+          },
+          {
+            "id": 23,
+            "width": 581
+          }
+        ],
+        "counters": {
+          "commentPage": "2",
+          "p": "4",
+          "page": "2",
+          "page_id": null,
+          "query-4-page": "2",
+          "replytocom": null
+        },
+        "draft": "",
+        "focused": false,
+        "form": true,
+        "links": [
+          {
+            "aria": "Reply to RootA",
+            "href": "/?p=4&page=2&query-4-page=2&commentPage=2&replytocom=3#respond",
+            "id": 3,
+            "text": "Reply"
+          },
+          {
+            "aria": "Reply to DeepLevel1",
+            "href": "/?p=4&page=2&query-4-page=2&commentPage=2&replytocom=4#respond",
+            "id": 4,
+            "text": "Reply"
+          }
+        ],
+        "loop": "Reply card 2",
+        "parent": null,
+        "path": "/?p=4&page=2&query-4-page=2&commentPage=2#respond",
+        "privateLeak": false,
+        "scrollWidth": 768,
+        "width": 768
+      }
+    },
+    {
+      "theme": "source",
+      "width": 375,
+      "guest": {
+        "avatarCount": 0,
+        "bodyFirst": false,
+        "bodySecond": true,
+        "comments": [
+          {
+            "id": 3,
+            "width": 315
+          },
+          {
+            "id": 4,
+            "width": 299
+          },
+          {
+            "id": 5,
+            "width": 283
+          },
+          {
+            "id": 6,
+            "width": 283
+          },
+          {
+            "id": 7,
+            "width": 283
+          },
+          {
+            "id": 8,
+            "width": 283
+          },
+          {
+            "id": 9,
+            "width": 283
+          },
+          {
+            "id": 10,
+            "width": 283
+          },
+          {
+            "id": 11,
+            "width": 283
+          },
+          {
+            "id": 12,
+            "width": 283
+          },
+          {
+            "id": 13,
+            "width": 283
+          },
+          {
+            "id": 14,
+            "width": 283
+          },
+          {
+            "id": 15,
+            "width": 283
+          },
+          {
+            "id": 16,
+            "width": 283
+          },
+          {
+            "id": 17,
+            "width": 283
+          },
+          {
+            "id": 22,
+            "width": 283
+          },
+          {
+            "id": 23,
+            "width": 283
+          }
+        ],
+        "counters": {
+          "commentPage": "2",
+          "p": "4",
+          "page": "2",
+          "page_id": null,
+          "query-4-page": "2",
+          "replytocom": null
+        },
+        "draft": "",
+        "focused": false,
+        "form": false,
+        "links": [
+          {
+            "aria": null,
+            "href": "/login?redirect_to=%2F%3Fp%3D4%26page%3D2%26query-4-page%3D2%26commentPage%3D2%23respond",
+            "id": null,
+            "text": "Log in to Reply"
+          },
+          {
+            "aria": null,
+            "href": "/login?redirect_to=%2F%3Fp%3D4%26page%3D2%26query-4-page%3D2%26commentPage%3D2%23respond",
+            "id": null,
+            "text": "Log in to Reply"
+          }
+        ],
+        "loop": "Reply card 2",
+        "parent": null,
+        "path": "/?p=4&page=2&query-4-page=2&commentPage=2",
+        "privateLeak": false,
+        "scrollWidth": 375,
+        "width": 375
+      },
+      "loginPath": "/login?redirect_to=%2F%3Fp%3D4%26page%3D2%26query-4-page%3D2%26commentPage%3D2%23respond",
+      "returned": {
+        "avatarCount": 0,
+        "bodyFirst": false,
+        "bodySecond": true,
+        "comments": [
+          {
+            "id": 3,
+            "width": 315
+          },
+          {
+            "id": 4,
+            "width": 299
+          },
+          {
+            "id": 5,
+            "width": 283
+          },
+          {
+            "id": 6,
+            "width": 283
+          },
+          {
+            "id": 7,
+            "width": 283
+          },
+          {
+            "id": 8,
+            "width": 283
+          },
+          {
+            "id": 9,
+            "width": 283
+          },
+          {
+            "id": 10,
+            "width": 283
+          },
+          {
+            "id": 11,
+            "width": 283
+          },
+          {
+            "id": 12,
+            "width": 283
+          },
+          {
+            "id": 13,
+            "width": 283
+          },
+          {
+            "id": 14,
+            "width": 283
+          },
+          {
+            "id": 15,
+            "width": 283
+          },
+          {
+            "id": 16,
+            "width": 283
+          },
+          {
+            "id": 17,
+            "width": 283
+          },
+          {
+            "id": 22,
+            "width": 283
+          },
+          {
+            "id": 23,
+            "width": 283
+          }
+        ],
+        "counters": {
+          "commentPage": "2",
+          "p": "4",
+          "page": "2",
+          "page_id": null,
+          "query-4-page": "2",
+          "replytocom": null
+        },
+        "draft": "",
+        "focused": false,
+        "form": true,
+        "links": [
+          {
+            "aria": "Reply to RootA",
+            "href": "/?p=4&page=2&query-4-page=2&commentPage=2&replytocom=3#respond",
+            "id": 3,
+            "text": "Reply"
+          },
+          {
+            "aria": "Reply to DeepLevel1",
+            "href": "/?p=4&page=2&query-4-page=2&commentPage=2&replytocom=4#respond",
+            "id": 4,
+            "text": "Reply"
+          }
+        ],
+        "loop": "Reply card 2",
+        "parent": null,
+        "path": "/?p=4&page=2&query-4-page=2&commentPage=2#respond",
+        "privateLeak": false,
+        "scrollWidth": 375,
+        "width": 375
+      },
+      "active": {
+        "avatarCount": 0,
+        "bodyFirst": false,
+        "bodySecond": true,
+        "comments": [
+          {
+            "id": 3,
+            "width": 315
+          },
+          {
+            "id": 4,
+            "width": 299
+          },
+          {
+            "id": 5,
+            "width": 283
+          },
+          {
+            "id": 6,
+            "width": 283
+          },
+          {
+            "id": 7,
+            "width": 283
+          },
+          {
+            "id": 8,
+            "width": 283
+          },
+          {
+            "id": 9,
+            "width": 283
+          },
+          {
+            "id": 10,
+            "width": 283
+          },
+          {
+            "id": 11,
+            "width": 283
+          },
+          {
+            "id": 12,
+            "width": 283
+          },
+          {
+            "id": 13,
+            "width": 283
+          },
+          {
+            "id": 14,
+            "width": 283
+          },
+          {
+            "id": 15,
+            "width": 283
+          },
+          {
+            "id": 16,
+            "width": 283
+          },
+          {
+            "id": 17,
+            "width": 283
+          },
+          {
+            "id": 22,
+            "width": 283
+          },
+          {
+            "id": 23,
+            "width": 283
+          }
+        ],
+        "counters": {
+          "commentPage": "2",
+          "p": "4",
+          "page": "2",
+          "page_id": null,
+          "query-4-page": "2",
+          "replytocom": null
+        },
+        "draft": "source native registered reply 375",
+        "focused": true,
+        "form": true,
+        "links": [
+          {
+            "aria": "Reply to RootA",
+            "href": "/?p=4&page=2&query-4-page=2&commentPage=2&replytocom=3#respond",
+            "id": 3,
+            "text": "Reply"
+          },
+          {
+            "aria": "Reply to DeepLevel1",
+            "href": "/?p=4&page=2&query-4-page=2&commentPage=2&replytocom=4#respond",
+            "id": 4,
+            "text": "Reply"
+          }
+        ],
+        "loop": "Reply card 2",
+        "parent": "4",
+        "path": "/?p=4&page=2&query-4-page=2&commentPage=2#respond",
+        "privateLeak": false,
+        "scrollWidth": 375,
+        "width": 375
+      },
+      "saved": {
+        "id": 24,
+        "parent_id": 4,
+        "user_id": 2,
+        "status": "approved"
+      },
+      "reloaded": {
+        "avatarCount": 0,
+        "bodyFirst": false,
+        "bodySecond": true,
+        "comments": [
+          {
+            "id": 3,
+            "width": 315
+          },
+          {
+            "id": 4,
+            "width": 299
+          },
+          {
+            "id": 5,
+            "width": 283
+          },
+          {
+            "id": 6,
+            "width": 283
+          },
+          {
+            "id": 7,
+            "width": 283
+          },
+          {
+            "id": 8,
+            "width": 283
+          },
+          {
+            "id": 9,
+            "width": 283
+          },
+          {
+            "id": 10,
+            "width": 283
+          },
+          {
+            "id": 11,
+            "width": 283
+          },
+          {
+            "id": 12,
+            "width": 283
+          },
+          {
+            "id": 13,
+            "width": 283
+          },
+          {
+            "id": 14,
+            "width": 283
+          },
+          {
+            "id": 15,
+            "width": 283
+          },
+          {
+            "id": 16,
+            "width": 283
+          },
+          {
+            "id": 17,
+            "width": 283
+          },
+          {
+            "id": 22,
+            "width": 283
+          },
+          {
+            "id": 23,
+            "width": 283
+          },
+          {
+            "id": 24,
+            "width": 283
+          }
+        ],
+        "counters": {
+          "commentPage": "2",
+          "p": "4",
+          "page": "2",
+          "page_id": null,
+          "query-4-page": "2",
+          "replytocom": null
+        },
+        "draft": "",
+        "focused": false,
+        "form": true,
+        "links": [
+          {
+            "aria": "Reply to RootA",
+            "href": "/?p=4&page=2&query-4-page=2&commentPage=2&replytocom=3#respond",
+            "id": 3,
+            "text": "Reply"
+          },
+          {
+            "aria": "Reply to DeepLevel1",
+            "href": "/?p=4&page=2&query-4-page=2&commentPage=2&replytocom=4#respond",
+            "id": 4,
+            "text": "Reply"
+          }
+        ],
+        "loop": "Reply card 2",
+        "parent": null,
+        "path": "/?p=4&page=2&query-4-page=2&commentPage=2#respond",
+        "privateLeak": false,
+        "scrollWidth": 375,
+        "width": 375
+      }
+    },
+    {
+      "theme": "classic",
+      "width": 1440,
+      "guest": {
+        "avatarCount": 0,
+        "bodyFirst": false,
+        "bodySecond": true,
+        "comments": [
+          {
+            "id": 3,
+            "width": 700
+          },
+          {
+            "id": 4,
+            "width": 656
+          },
+          {
+            "id": 5,
+            "width": 612
+          },
+          {
+            "id": 6,
+            "width": 612
+          },
+          {
+            "id": 7,
+            "width": 612
+          },
+          {
+            "id": 8,
+            "width": 612
+          },
+          {
+            "id": 9,
+            "width": 612
+          },
+          {
+            "id": 10,
+            "width": 612
+          },
+          {
+            "id": 11,
+            "width": 612
+          },
+          {
+            "id": 12,
+            "width": 612
+          },
+          {
+            "id": 13,
+            "width": 612
+          },
+          {
+            "id": 14,
+            "width": 612
+          },
+          {
+            "id": 15,
+            "width": 612
+          },
+          {
+            "id": 16,
+            "width": 612
+          },
+          {
+            "id": 17,
+            "width": 612
+          },
+          {
+            "id": 22,
+            "width": 612
+          },
+          {
+            "id": 23,
+            "width": 612
+          },
+          {
+            "id": 24,
+            "width": 612
+          }
+        ],
+        "counters": {
+          "commentPage": "2",
+          "p": "4",
+          "page": "2",
+          "page_id": null,
+          "query-4-page": "2",
+          "replytocom": null
+        },
+        "draft": "",
+        "focused": false,
+        "form": false,
+        "links": [
+          {
+            "aria": null,
+            "href": "/login?redirect_to=%2F%3Fp%3D4%26page%3D2%26query-4-page%3D2%26commentPage%3D2%23respond",
+            "id": null,
+            "text": "Log in to Reply"
+          },
+          {
+            "aria": null,
+            "href": "/login?redirect_to=%2F%3Fp%3D4%26page%3D2%26query-4-page%3D2%26commentPage%3D2%23respond",
+            "id": null,
+            "text": "Log in to Reply"
+          }
+        ],
+        "loop": null,
+        "parent": null,
+        "path": "/?p=4&page=2&query-4-page=2&commentPage=2",
+        "privateLeak": false,
+        "scrollWidth": 1440,
+        "width": 1440
+      },
+      "loginPath": "/login?redirect_to=%2F%3Fp%3D4%26page%3D2%26query-4-page%3D2%26commentPage%3D2%23respond",
+      "returned": {
+        "avatarCount": 0,
+        "bodyFirst": false,
+        "bodySecond": true,
+        "comments": [
+          {
+            "id": 3,
+            "width": 700
+          },
+          {
+            "id": 4,
+            "width": 656
+          },
+          {
+            "id": 5,
+            "width": 612
+          },
+          {
+            "id": 6,
+            "width": 612
+          },
+          {
+            "id": 7,
+            "width": 612
+          },
+          {
+            "id": 8,
+            "width": 612
+          },
+          {
+            "id": 9,
+            "width": 612
+          },
+          {
+            "id": 10,
+            "width": 612
+          },
+          {
+            "id": 11,
+            "width": 612
+          },
+          {
+            "id": 12,
+            "width": 612
+          },
+          {
+            "id": 13,
+            "width": 612
+          },
+          {
+            "id": 14,
+            "width": 612
+          },
+          {
+            "id": 15,
+            "width": 612
+          },
+          {
+            "id": 16,
+            "width": 612
+          },
+          {
+            "id": 17,
+            "width": 612
+          },
+          {
+            "id": 22,
+            "width": 612
+          },
+          {
+            "id": 23,
+            "width": 612
+          },
+          {
+            "id": 24,
+            "width": 612
+          }
+        ],
+        "counters": {
+          "commentPage": "2",
+          "p": "4",
+          "page": "2",
+          "page_id": null,
+          "query-4-page": "2",
+          "replytocom": null
+        },
+        "draft": "",
+        "focused": false,
+        "form": true,
+        "links": [
+          {
+            "aria": "Reply to RootA",
+            "href": "/?p=4&page=2&query-4-page=2&commentPage=2&replytocom=3#respond",
+            "id": 3,
+            "text": "Reply"
+          },
+          {
+            "aria": "Reply to DeepLevel1",
+            "href": "/?p=4&page=2&query-4-page=2&commentPage=2&replytocom=4#respond",
+            "id": 4,
+            "text": "Reply"
+          }
+        ],
+        "loop": null,
+        "parent": null,
+        "path": "/?p=4&page=2&query-4-page=2&commentPage=2#respond",
+        "privateLeak": false,
+        "scrollWidth": 1440,
+        "width": 1440
+      },
+      "active": {
+        "avatarCount": 0,
+        "bodyFirst": false,
+        "bodySecond": true,
+        "comments": [
+          {
+            "id": 3,
+            "width": 700
+          },
+          {
+            "id": 4,
+            "width": 656
+          },
+          {
+            "id": 5,
+            "width": 612
+          },
+          {
+            "id": 6,
+            "width": 612
+          },
+          {
+            "id": 7,
+            "width": 612
+          },
+          {
+            "id": 8,
+            "width": 612
+          },
+          {
+            "id": 9,
+            "width": 612
+          },
+          {
+            "id": 10,
+            "width": 612
+          },
+          {
+            "id": 11,
+            "width": 612
+          },
+          {
+            "id": 12,
+            "width": 612
+          },
+          {
+            "id": 13,
+            "width": 612
+          },
+          {
+            "id": 14,
+            "width": 612
+          },
+          {
+            "id": 15,
+            "width": 612
+          },
+          {
+            "id": 16,
+            "width": 612
+          },
+          {
+            "id": 17,
+            "width": 612
+          },
+          {
+            "id": 22,
+            "width": 612
+          },
+          {
+            "id": 23,
+            "width": 612
+          },
+          {
+            "id": 24,
+            "width": 612
+          }
+        ],
+        "counters": {
+          "commentPage": "2",
+          "p": "4",
+          "page": "2",
+          "page_id": null,
+          "query-4-page": "2",
+          "replytocom": null
+        },
+        "draft": "classic native registered reply 1440",
+        "focused": true,
+        "form": true,
+        "links": [
+          {
+            "aria": "Reply to RootA",
+            "href": "/?p=4&page=2&query-4-page=2&commentPage=2&replytocom=3#respond",
+            "id": 3,
+            "text": "Reply"
+          },
+          {
+            "aria": "Reply to DeepLevel1",
+            "href": "/?p=4&page=2&query-4-page=2&commentPage=2&replytocom=4#respond",
+            "id": 4,
+            "text": "Reply"
+          }
+        ],
+        "loop": null,
+        "parent": null,
+        "path": "/?p=4&page=2&query-4-page=2&commentPage=2#respond",
+        "privateLeak": false,
+        "scrollWidth": 1440,
+        "width": 1440
+      },
+      "saved": {
+        "id": 25,
+        "parent_id": 4,
+        "user_id": 2,
+        "status": "approved"
+      },
+      "reloaded": {
+        "avatarCount": 0,
+        "bodyFirst": false,
+        "bodySecond": true,
+        "comments": [
+          {
+            "id": 3,
+            "width": 700
+          },
+          {
+            "id": 4,
+            "width": 656
+          },
+          {
+            "id": 5,
+            "width": 612
+          },
+          {
+            "id": 6,
+            "width": 612
+          },
+          {
+            "id": 7,
+            "width": 612
+          },
+          {
+            "id": 8,
+            "width": 612
+          },
+          {
+            "id": 9,
+            "width": 612
+          },
+          {
+            "id": 10,
+            "width": 612
+          },
+          {
+            "id": 11,
+            "width": 612
+          },
+          {
+            "id": 12,
+            "width": 612
+          },
+          {
+            "id": 13,
+            "width": 612
+          },
+          {
+            "id": 14,
+            "width": 612
+          },
+          {
+            "id": 15,
+            "width": 612
+          },
+          {
+            "id": 16,
+            "width": 612
+          },
+          {
+            "id": 17,
+            "width": 612
+          },
+          {
+            "id": 22,
+            "width": 612
+          },
+          {
+            "id": 23,
+            "width": 612
+          },
+          {
+            "id": 24,
+            "width": 612
+          },
+          {
+            "id": 25,
+            "width": 612
+          }
+        ],
+        "counters": {
+          "commentPage": "2",
+          "p": "4",
+          "page": "2",
+          "page_id": null,
+          "query-4-page": "2",
+          "replytocom": null
+        },
+        "draft": "",
+        "focused": false,
+        "form": true,
+        "links": [
+          {
+            "aria": "Reply to RootA",
+            "href": "/?p=4&page=2&query-4-page=2&commentPage=2&replytocom=3#respond",
+            "id": 3,
+            "text": "Reply"
+          },
+          {
+            "aria": "Reply to DeepLevel1",
+            "href": "/?p=4&page=2&query-4-page=2&commentPage=2&replytocom=4#respond",
+            "id": 4,
+            "text": "Reply"
+          }
+        ],
+        "loop": null,
+        "parent": null,
+        "path": "/?p=4&page=2&query-4-page=2&commentPage=2#respond",
+        "privateLeak": false,
+        "scrollWidth": 1440,
+        "width": 1440
+      }
+    },
+    {
+      "theme": "classic",
+      "width": 768,
+      "guest": {
+        "avatarCount": 0,
+        "bodyFirst": false,
+        "bodySecond": true,
+        "comments": [
+          {
+            "id": 3,
+            "width": 691.21875
+          },
+          {
+            "id": 4,
+            "width": 647.21875
+          },
+          {
+            "id": 5,
+            "width": 603.21875
+          },
+          {
+            "id": 6,
+            "width": 603.21875
+          },
+          {
+            "id": 7,
+            "width": 603.21875
+          },
+          {
+            "id": 8,
+            "width": 603.21875
+          },
+          {
+            "id": 9,
+            "width": 603.21875
+          },
+          {
+            "id": 10,
+            "width": 603.21875
+          },
+          {
+            "id": 11,
+            "width": 603.21875
+          },
+          {
+            "id": 12,
+            "width": 603.21875
+          },
+          {
+            "id": 13,
+            "width": 603.21875
+          },
+          {
+            "id": 14,
+            "width": 603.21875
+          },
+          {
+            "id": 15,
+            "width": 603.21875
+          },
+          {
+            "id": 16,
+            "width": 603.21875
+          },
+          {
+            "id": 17,
+            "width": 603.21875
+          },
+          {
+            "id": 22,
+            "width": 603.21875
+          },
+          {
+            "id": 23,
+            "width": 603.21875
+          },
+          {
+            "id": 24,
+            "width": 603.21875
+          },
+          {
+            "id": 25,
+            "width": 603.21875
+          }
+        ],
+        "counters": {
+          "commentPage": "2",
+          "p": "4",
+          "page": "2",
+          "page_id": null,
+          "query-4-page": "2",
+          "replytocom": null
+        },
+        "draft": "",
+        "focused": false,
+        "form": false,
+        "links": [
+          {
+            "aria": null,
+            "href": "/login?redirect_to=%2F%3Fp%3D4%26page%3D2%26query-4-page%3D2%26commentPage%3D2%23respond",
+            "id": null,
+            "text": "Log in to Reply"
+          },
+          {
+            "aria": null,
+            "href": "/login?redirect_to=%2F%3Fp%3D4%26page%3D2%26query-4-page%3D2%26commentPage%3D2%23respond",
+            "id": null,
+            "text": "Log in to Reply"
+          }
+        ],
+        "loop": null,
+        "parent": null,
+        "path": "/?p=4&page=2&query-4-page=2&commentPage=2",
+        "privateLeak": false,
+        "scrollWidth": 768,
+        "width": 768
+      },
+      "loginPath": "/login?redirect_to=%2F%3Fp%3D4%26page%3D2%26query-4-page%3D2%26commentPage%3D2%23respond",
+      "returned": {
+        "avatarCount": 0,
+        "bodyFirst": false,
+        "bodySecond": true,
+        "comments": [
+          {
+            "id": 3,
+            "width": 691.21875
+          },
+          {
+            "id": 4,
+            "width": 647.21875
+          },
+          {
+            "id": 5,
+            "width": 603.21875
+          },
+          {
+            "id": 6,
+            "width": 603.21875
+          },
+          {
+            "id": 7,
+            "width": 603.21875
+          },
+          {
+            "id": 8,
+            "width": 603.21875
+          },
+          {
+            "id": 9,
+            "width": 603.21875
+          },
+          {
+            "id": 10,
+            "width": 603.21875
+          },
+          {
+            "id": 11,
+            "width": 603.21875
+          },
+          {
+            "id": 12,
+            "width": 603.21875
+          },
+          {
+            "id": 13,
+            "width": 603.21875
+          },
+          {
+            "id": 14,
+            "width": 603.21875
+          },
+          {
+            "id": 15,
+            "width": 603.21875
+          },
+          {
+            "id": 16,
+            "width": 603.21875
+          },
+          {
+            "id": 17,
+            "width": 603.21875
+          },
+          {
+            "id": 22,
+            "width": 603.21875
+          },
+          {
+            "id": 23,
+            "width": 603.21875
+          },
+          {
+            "id": 24,
+            "width": 603.21875
+          },
+          {
+            "id": 25,
+            "width": 603.21875
+          }
+        ],
+        "counters": {
+          "commentPage": "2",
+          "p": "4",
+          "page": "2",
+          "page_id": null,
+          "query-4-page": "2",
+          "replytocom": null
+        },
+        "draft": "",
+        "focused": false,
+        "form": true,
+        "links": [
+          {
+            "aria": "Reply to RootA",
+            "href": "/?p=4&page=2&query-4-page=2&commentPage=2&replytocom=3#respond",
+            "id": 3,
+            "text": "Reply"
+          },
+          {
+            "aria": "Reply to DeepLevel1",
+            "href": "/?p=4&page=2&query-4-page=2&commentPage=2&replytocom=4#respond",
+            "id": 4,
+            "text": "Reply"
+          }
+        ],
+        "loop": null,
+        "parent": null,
+        "path": "/?p=4&page=2&query-4-page=2&commentPage=2#respond",
+        "privateLeak": false,
+        "scrollWidth": 768,
+        "width": 768
+      },
+      "active": {
+        "avatarCount": 0,
+        "bodyFirst": false,
+        "bodySecond": true,
+        "comments": [
+          {
+            "id": 3,
+            "width": 691.21875
+          },
+          {
+            "id": 4,
+            "width": 647.21875
+          },
+          {
+            "id": 5,
+            "width": 603.21875
+          },
+          {
+            "id": 6,
+            "width": 603.21875
+          },
+          {
+            "id": 7,
+            "width": 603.21875
+          },
+          {
+            "id": 8,
+            "width": 603.21875
+          },
+          {
+            "id": 9,
+            "width": 603.21875
+          },
+          {
+            "id": 10,
+            "width": 603.21875
+          },
+          {
+            "id": 11,
+            "width": 603.21875
+          },
+          {
+            "id": 12,
+            "width": 603.21875
+          },
+          {
+            "id": 13,
+            "width": 603.21875
+          },
+          {
+            "id": 14,
+            "width": 603.21875
+          },
+          {
+            "id": 15,
+            "width": 603.21875
+          },
+          {
+            "id": 16,
+            "width": 603.21875
+          },
+          {
+            "id": 17,
+            "width": 603.21875
+          },
+          {
+            "id": 22,
+            "width": 603.21875
+          },
+          {
+            "id": 23,
+            "width": 603.21875
+          },
+          {
+            "id": 24,
+            "width": 603.21875
+          },
+          {
+            "id": 25,
+            "width": 603.21875
+          }
+        ],
+        "counters": {
+          "commentPage": "2",
+          "p": "4",
+          "page": "2",
+          "page_id": null,
+          "query-4-page": "2",
+          "replytocom": null
+        },
+        "draft": "classic native registered reply 768",
+        "focused": true,
+        "form": true,
+        "links": [
+          {
+            "aria": "Reply to RootA",
+            "href": "/?p=4&page=2&query-4-page=2&commentPage=2&replytocom=3#respond",
+            "id": 3,
+            "text": "Reply"
+          },
+          {
+            "aria": "Reply to DeepLevel1",
+            "href": "/?p=4&page=2&query-4-page=2&commentPage=2&replytocom=4#respond",
+            "id": 4,
+            "text": "Reply"
+          }
+        ],
+        "loop": null,
+        "parent": null,
+        "path": "/?p=4&page=2&query-4-page=2&commentPage=2#respond",
+        "privateLeak": false,
+        "scrollWidth": 768,
+        "width": 768
+      },
+      "saved": {
+        "id": 26,
+        "parent_id": 4,
+        "user_id": 2,
+        "status": "approved"
+      },
+      "reloaded": {
+        "avatarCount": 0,
+        "bodyFirst": false,
+        "bodySecond": true,
+        "comments": [
+          {
+            "id": 3,
+            "width": 691.21875
+          },
+          {
+            "id": 4,
+            "width": 647.21875
+          },
+          {
+            "id": 5,
+            "width": 603.21875
+          },
+          {
+            "id": 6,
+            "width": 603.21875
+          },
+          {
+            "id": 7,
+            "width": 603.21875
+          },
+          {
+            "id": 8,
+            "width": 603.21875
+          },
+          {
+            "id": 9,
+            "width": 603.21875
+          },
+          {
+            "id": 10,
+            "width": 603.21875
+          },
+          {
+            "id": 11,
+            "width": 603.21875
+          },
+          {
+            "id": 12,
+            "width": 603.21875
+          },
+          {
+            "id": 13,
+            "width": 603.21875
+          },
+          {
+            "id": 14,
+            "width": 603.21875
+          },
+          {
+            "id": 15,
+            "width": 603.21875
+          },
+          {
+            "id": 16,
+            "width": 603.21875
+          },
+          {
+            "id": 17,
+            "width": 603.21875
+          },
+          {
+            "id": 22,
+            "width": 603.21875
+          },
+          {
+            "id": 23,
+            "width": 603.21875
+          },
+          {
+            "id": 24,
+            "width": 603.21875
+          },
+          {
+            "id": 25,
+            "width": 603.21875
+          },
+          {
+            "id": 26,
+            "width": 603.21875
+          }
+        ],
+        "counters": {
+          "commentPage": "2",
+          "p": "4",
+          "page": "2",
+          "page_id": null,
+          "query-4-page": "2",
+          "replytocom": null
+        },
+        "draft": "",
+        "focused": false,
+        "form": true,
+        "links": [
+          {
+            "aria": "Reply to RootA",
+            "href": "/?p=4&page=2&query-4-page=2&commentPage=2&replytocom=3#respond",
+            "id": 3,
+            "text": "Reply"
+          },
+          {
+            "aria": "Reply to DeepLevel1",
+            "href": "/?p=4&page=2&query-4-page=2&commentPage=2&replytocom=4#respond",
+            "id": 4,
+            "text": "Reply"
+          }
+        ],
+        "loop": null,
+        "parent": null,
+        "path": "/?p=4&page=2&query-4-page=2&commentPage=2#respond",
+        "privateLeak": false,
+        "scrollWidth": 768,
+        "width": 768
+      }
+    },
+    {
+      "theme": "classic",
+      "width": 375,
+      "guest": {
+        "avatarCount": 0,
+        "bodyFirst": false,
+        "bodySecond": true,
+        "comments": [
+          {
+            "id": 3,
+            "width": 327
+          },
+          {
+            "id": 4,
+            "width": 309
+          },
+          {
+            "id": 5,
+            "width": 291
+          },
+          {
+            "id": 6,
+            "width": 291
+          },
+          {
+            "id": 7,
+            "width": 291
+          },
+          {
+            "id": 8,
+            "width": 291
+          },
+          {
+            "id": 9,
+            "width": 291
+          },
+          {
+            "id": 10,
+            "width": 291
+          },
+          {
+            "id": 11,
+            "width": 291
+          },
+          {
+            "id": 12,
+            "width": 291
+          },
+          {
+            "id": 13,
+            "width": 291
+          },
+          {
+            "id": 14,
+            "width": 291
+          },
+          {
+            "id": 15,
+            "width": 291
+          },
+          {
+            "id": 16,
+            "width": 291
+          },
+          {
+            "id": 17,
+            "width": 291
+          },
+          {
+            "id": 22,
+            "width": 291
+          },
+          {
+            "id": 23,
+            "width": 291
+          },
+          {
+            "id": 24,
+            "width": 291
+          },
+          {
+            "id": 25,
+            "width": 291
+          },
+          {
+            "id": 26,
+            "width": 291
+          }
+        ],
+        "counters": {
+          "commentPage": "2",
+          "p": "4",
+          "page": "2",
+          "page_id": null,
+          "query-4-page": "2",
+          "replytocom": null
+        },
+        "draft": "",
+        "focused": false,
+        "form": false,
+        "links": [
+          {
+            "aria": null,
+            "href": "/login?redirect_to=%2F%3Fp%3D4%26page%3D2%26query-4-page%3D2%26commentPage%3D2%23respond",
+            "id": null,
+            "text": "Log in to Reply"
+          },
+          {
+            "aria": null,
+            "href": "/login?redirect_to=%2F%3Fp%3D4%26page%3D2%26query-4-page%3D2%26commentPage%3D2%23respond",
+            "id": null,
+            "text": "Log in to Reply"
+          }
+        ],
+        "loop": null,
+        "parent": null,
+        "path": "/?p=4&page=2&query-4-page=2&commentPage=2",
+        "privateLeak": false,
+        "scrollWidth": 375,
+        "width": 375
+      },
+      "loginPath": "/login?redirect_to=%2F%3Fp%3D4%26page%3D2%26query-4-page%3D2%26commentPage%3D2%23respond",
+      "returned": {
+        "avatarCount": 0,
+        "bodyFirst": false,
+        "bodySecond": true,
+        "comments": [
+          {
+            "id": 3,
+            "width": 327
+          },
+          {
+            "id": 4,
+            "width": 309
+          },
+          {
+            "id": 5,
+            "width": 291
+          },
+          {
+            "id": 6,
+            "width": 291
+          },
+          {
+            "id": 7,
+            "width": 291
+          },
+          {
+            "id": 8,
+            "width": 291
+          },
+          {
+            "id": 9,
+            "width": 291
+          },
+          {
+            "id": 10,
+            "width": 291
+          },
+          {
+            "id": 11,
+            "width": 291
+          },
+          {
+            "id": 12,
+            "width": 291
+          },
+          {
+            "id": 13,
+            "width": 291
+          },
+          {
+            "id": 14,
+            "width": 291
+          },
+          {
+            "id": 15,
+            "width": 291
+          },
+          {
+            "id": 16,
+            "width": 291
+          },
+          {
+            "id": 17,
+            "width": 291
+          },
+          {
+            "id": 22,
+            "width": 291
+          },
+          {
+            "id": 23,
+            "width": 291
+          },
+          {
+            "id": 24,
+            "width": 291
+          },
+          {
+            "id": 25,
+            "width": 291
+          },
+          {
+            "id": 26,
+            "width": 291
+          }
+        ],
+        "counters": {
+          "commentPage": "2",
+          "p": "4",
+          "page": "2",
+          "page_id": null,
+          "query-4-page": "2",
+          "replytocom": null
+        },
+        "draft": "",
+        "focused": false,
+        "form": true,
+        "links": [
+          {
+            "aria": "Reply to RootA",
+            "href": "/?p=4&page=2&query-4-page=2&commentPage=2&replytocom=3#respond",
+            "id": 3,
+            "text": "Reply"
+          },
+          {
+            "aria": "Reply to DeepLevel1",
+            "href": "/?p=4&page=2&query-4-page=2&commentPage=2&replytocom=4#respond",
+            "id": 4,
+            "text": "Reply"
+          }
+        ],
+        "loop": null,
+        "parent": null,
+        "path": "/?p=4&page=2&query-4-page=2&commentPage=2#respond",
+        "privateLeak": false,
+        "scrollWidth": 375,
+        "width": 375
+      },
+      "active": {
+        "avatarCount": 0,
+        "bodyFirst": false,
+        "bodySecond": true,
+        "comments": [
+          {
+            "id": 3,
+            "width": 327
+          },
+          {
+            "id": 4,
+            "width": 309
+          },
+          {
+            "id": 5,
+            "width": 291
+          },
+          {
+            "id": 6,
+            "width": 291
+          },
+          {
+            "id": 7,
+            "width": 291
+          },
+          {
+            "id": 8,
+            "width": 291
+          },
+          {
+            "id": 9,
+            "width": 291
+          },
+          {
+            "id": 10,
+            "width": 291
+          },
+          {
+            "id": 11,
+            "width": 291
+          },
+          {
+            "id": 12,
+            "width": 291
+          },
+          {
+            "id": 13,
+            "width": 291
+          },
+          {
+            "id": 14,
+            "width": 291
+          },
+          {
+            "id": 15,
+            "width": 291
+          },
+          {
+            "id": 16,
+            "width": 291
+          },
+          {
+            "id": 17,
+            "width": 291
+          },
+          {
+            "id": 22,
+            "width": 291
+          },
+          {
+            "id": 23,
+            "width": 291
+          },
+          {
+            "id": 24,
+            "width": 291
+          },
+          {
+            "id": 25,
+            "width": 291
+          },
+          {
+            "id": 26,
+            "width": 291
+          }
+        ],
+        "counters": {
+          "commentPage": "2",
+          "p": "4",
+          "page": "2",
+          "page_id": null,
+          "query-4-page": "2",
+          "replytocom": null
+        },
+        "draft": "classic native registered reply 375",
+        "focused": true,
+        "form": true,
+        "links": [
+          {
+            "aria": "Reply to RootA",
+            "href": "/?p=4&page=2&query-4-page=2&commentPage=2&replytocom=3#respond",
+            "id": 3,
+            "text": "Reply"
+          },
+          {
+            "aria": "Reply to DeepLevel1",
+            "href": "/?p=4&page=2&query-4-page=2&commentPage=2&replytocom=4#respond",
+            "id": 4,
+            "text": "Reply"
+          }
+        ],
+        "loop": null,
+        "parent": null,
+        "path": "/?p=4&page=2&query-4-page=2&commentPage=2#respond",
+        "privateLeak": false,
+        "scrollWidth": 375,
+        "width": 375
+      },
+      "saved": {
+        "id": 27,
+        "parent_id": 4,
+        "user_id": 2,
+        "status": "approved"
+      },
+      "reloaded": {
+        "avatarCount": 0,
+        "bodyFirst": false,
+        "bodySecond": true,
+        "comments": [
+          {
+            "id": 3,
+            "width": 327
+          },
+          {
+            "id": 4,
+            "width": 309
+          },
+          {
+            "id": 5,
+            "width": 291
+          },
+          {
+            "id": 6,
+            "width": 291
+          },
+          {
+            "id": 7,
+            "width": 291
+          },
+          {
+            "id": 8,
+            "width": 291
+          },
+          {
+            "id": 9,
+            "width": 291
+          },
+          {
+            "id": 10,
+            "width": 291
+          },
+          {
+            "id": 11,
+            "width": 291
+          },
+          {
+            "id": 12,
+            "width": 291
+          },
+          {
+            "id": 13,
+            "width": 291
+          },
+          {
+            "id": 14,
+            "width": 291
+          },
+          {
+            "id": 15,
+            "width": 291
+          },
+          {
+            "id": 16,
+            "width": 291
+          },
+          {
+            "id": 17,
+            "width": 291
+          },
+          {
+            "id": 22,
+            "width": 291
+          },
+          {
+            "id": 23,
+            "width": 291
+          },
+          {
+            "id": 24,
+            "width": 291
+          },
+          {
+            "id": 25,
+            "width": 291
+          },
+          {
+            "id": 26,
+            "width": 291
+          },
+          {
+            "id": 27,
+            "width": 291
+          }
+        ],
+        "counters": {
+          "commentPage": "2",
+          "p": "4",
+          "page": "2",
+          "page_id": null,
+          "query-4-page": "2",
+          "replytocom": null
+        },
+        "draft": "",
+        "focused": false,
+        "form": true,
+        "links": [
+          {
+            "aria": "Reply to RootA",
+            "href": "/?p=4&page=2&query-4-page=2&commentPage=2&replytocom=3#respond",
+            "id": 3,
+            "text": "Reply"
+          },
+          {
+            "aria": "Reply to DeepLevel1",
+            "href": "/?p=4&page=2&query-4-page=2&commentPage=2&replytocom=4#respond",
+            "id": 4,
+            "text": "Reply"
+          }
+        ],
+        "loop": null,
+        "parent": null,
+        "path": "/?p=4&page=2&query-4-page=2&commentPage=2#respond",
+        "privateLeak": false,
+        "scrollWidth": 375,
+        "width": 375
+      }
+    }
+  ],
+  "extras": {
+    "source": {
+      "theme": "source",
+      "width": 375,
+      "age": [
+        {
+          "label": "oldPost",
+          "avatarCount": 0,
+          "bodyFirst": false,
+          "bodySecond": true,
+          "comments": [
+            {
+              "id": 19,
+              "width": 315
+            }
+          ],
+          "counters": {
+            "commentPage": "1",
+            "p": "5",
+            "page": "2",
+            "page_id": null,
+            "query-4-page": "2",
+            "replytocom": null
+          },
+          "draft": "",
+          "focused": false,
+          "form": false,
+          "links": [],
+          "loop": "Reply card 2",
+          "parent": null,
+          "path": "/?p=5&page=2&query-4-page=2&commentPage=1",
+          "privateLeak": false,
+          "scrollWidth": 375,
+          "width": 375
+        },
+        {
+          "label": "oldPage",
+          "avatarCount": 0,
+          "bodyFirst": false,
+          "bodySecond": true,
+          "comments": [
+            {
+              "id": 20,
+              "width": 315
+            }
+          ],
+          "counters": {
+            "commentPage": "1",
+            "p": null,
+            "page": "2",
+            "page_id": "6",
+            "query-4-page": "2",
+            "replytocom": null
+          },
+          "draft": "",
+          "focused": false,
+          "form": true,
+          "links": [
+            {
+              "aria": "Reply to Existing page",
+              "href": "/?page_id=6&page=2&query-4-page=2&commentPage=1&replytocom=20#respond",
+              "id": 20,
+              "text": "Reply"
+            }
+          ],
+          "loop": "Reply card 2",
+          "parent": null,
+          "path": "/?page_id=6&page=2&query-4-page=2&commentPage=1",
+          "privateLeak": false,
+          "scrollWidth": 375,
+          "width": 375
+        },
+        {
+          "label": "explicitClosed",
+          "avatarCount": 0,
+          "bodyFirst": false,
+          "bodySecond": true,
+          "comments": [
+            {
+              "id": 21,
+              "width": 315
+            }
+          ],
+          "counters": {
+            "commentPage": "1",
+            "p": null,
+            "page": "2",
+            "page_id": "7",
+            "query-4-page": "2",
+            "replytocom": null
+          },
+          "draft": "",
+          "focused": false,
+          "form": false,
+          "links": [],
+          "loop": "Reply card 2",
+          "parent": null,
+          "path": "/?page_id=7&page=2&query-4-page=2&commentPage=1",
+          "privateLeak": false,
+          "scrollWidth": 375,
+          "width": 375
+        },
+        {
+          "label": "disabledAge",
+          "avatarCount": 0,
+          "bodyFirst": false,
+          "bodySecond": true,
+          "comments": [
+            {
+              "id": 19,
+              "width": 315
+            }
+          ],
+          "counters": {
+            "commentPage": "1",
+            "p": "5",
+            "page": "2",
+            "page_id": null,
+            "query-4-page": "2",
+            "replytocom": null
+          },
+          "draft": "",
+          "focused": false,
+          "form": true,
+          "links": [
+            {
+              "aria": "Reply to Existing post",
+              "href": "/?p=5&page=2&query-4-page=2&commentPage=1&replytocom=19#respond",
+              "id": 19,
+              "text": "Reply"
+            }
+          ],
+          "loop": "Reply card 2",
+          "parent": null,
+          "path": "/?p=5&page=2&query-4-page=2&commentPage=1",
+          "privateLeak": false,
+          "scrollWidth": 375,
+          "width": 375
+        }
+      ],
+      "ping": {
+        "avatarCount": 0,
+        "bodyFirst": false,
+        "bodySecond": true,
+        "comments": [
+          {
+            "id": 18,
+            "width": 315
+          }
+        ],
+        "counters": {
+          "commentPage": "3",
+          "p": "4",
+          "page": "2",
+          "page_id": null,
+          "query-4-page": "2",
+          "replytocom": null
+        },
+        "draft": "",
+        "focused": false,
+        "form": true,
+        "links": [],
+        "loop": "Reply card 2",
+        "parent": null,
+        "path": "/?p=4&page=2&query-4-page=2&commentPage=3",
+        "privateLeak": false,
+        "scrollWidth": 375,
+        "width": 375
+      },
+      "directHref": {
+        "href": "/?p=4&page=2&query-4-page=2&commentPage=2&replytocom=4#respond",
+        "avatarCount": 0,
+        "bodyFirst": false,
+        "bodySecond": true,
+        "comments": [
+          {
+            "id": 3,
+            "width": 315
+          },
+          {
+            "id": 4,
+            "width": 299
+          },
+          {
+            "id": 5,
+            "width": 283
+          },
+          {
+            "id": 6,
+            "width": 283
+          },
+          {
+            "id": 7,
+            "width": 283
+          },
+          {
+            "id": 8,
+            "width": 283
+          },
+          {
+            "id": 9,
+            "width": 283
+          },
+          {
+            "id": 10,
+            "width": 283
+          },
+          {
+            "id": 11,
+            "width": 283
+          },
+          {
+            "id": 12,
+            "width": 283
+          },
+          {
+            "id": 13,
+            "width": 283
+          },
+          {
+            "id": 14,
+            "width": 283
+          },
+          {
+            "id": 15,
+            "width": 283
+          },
+          {
+            "id": 16,
+            "width": 283
+          },
+          {
+            "id": 17,
+            "width": 283
+          },
+          {
+            "id": 22,
+            "width": 283
+          },
+          {
+            "id": 23,
+            "width": 283
+          },
+          {
+            "id": 24,
+            "width": 283
+          },
+          {
+            "id": 25,
+            "width": 283
+          },
+          {
+            "id": 26,
+            "width": 283
+          },
+          {
+            "id": 27,
+            "width": 283
+          }
+        ],
+        "counters": {
+          "commentPage": "2",
+          "p": "4",
+          "page": "2",
+          "page_id": null,
+          "query-4-page": "2",
+          "replytocom": "4"
+        },
+        "draft": "",
+        "focused": true,
+        "form": true,
+        "links": [
+          {
+            "aria": "Reply to RootA",
+            "href": "/?p=4&page=2&query-4-page=2&commentPage=2&replytocom=3#respond",
+            "id": 3,
+            "text": "Reply"
+          },
+          {
+            "aria": "Reply to DeepLevel1",
+            "href": "/?p=4&page=2&query-4-page=2&commentPage=2&replytocom=4#respond",
+            "id": 4,
+            "text": "Reply"
+          }
+        ],
+        "loop": "Reply card 2",
+        "parent": "4",
+        "path": "/?p=4&page=2&query-4-page=2&commentPage=2&replytocom=4#respond",
+        "privateLeak": false,
+        "scrollWidth": 375,
+        "width": 375
+      },
+      "originalTab": {
+        "avatarCount": 0,
+        "bodyFirst": false,
+        "bodySecond": true,
+        "comments": [
+          {
+            "id": 3,
+            "width": 315
+          },
+          {
+            "id": 4,
+            "width": 299
+          },
+          {
+            "id": 5,
+            "width": 283
+          },
+          {
+            "id": 6,
+            "width": 283
+          },
+          {
+            "id": 7,
+            "width": 283
+          },
+          {
+            "id": 8,
+            "width": 283
+          },
+          {
+            "id": 9,
+            "width": 283
+          },
+          {
+            "id": 10,
+            "width": 283
+          },
+          {
+            "id": 11,
+            "width": 283
+          },
+          {
+            "id": 12,
+            "width": 283
+          },
+          {
+            "id": 13,
+            "width": 283
+          },
+          {
+            "id": 14,
+            "width": 283
+          },
+          {
+            "id": 15,
+            "width": 283
+          },
+          {
+            "id": 16,
+            "width": 283
+          },
+          {
+            "id": 17,
+            "width": 283
+          },
+          {
+            "id": 22,
+            "width": 283
+          },
+          {
+            "id": 23,
+            "width": 283
+          },
+          {
+            "id": 24,
+            "width": 283
+          },
+          {
+            "id": 25,
+            "width": 283
+          },
+          {
+            "id": 26,
+            "width": 283
+          },
+          {
+            "id": 27,
+            "width": 283
+          }
+        ],
+        "counters": {
+          "commentPage": "2",
+          "p": "4",
+          "page": "2",
+          "page_id": null,
+          "query-4-page": "2",
+          "replytocom": null
+        },
+        "draft": "",
+        "focused": false,
+        "form": true,
+        "links": [
+          {
+            "aria": "Reply to RootA",
+            "href": "/?p=4&page=2&query-4-page=2&commentPage=2&replytocom=3#respond",
+            "id": 3,
+            "text": "Reply"
+          },
+          {
+            "aria": "Reply to DeepLevel1",
+            "href": "/?p=4&page=2&query-4-page=2&commentPage=2&replytocom=4#respond",
+            "id": 4,
+            "text": "Reply"
+          }
+        ],
+        "loop": "Reply card 2",
+        "parent": null,
+        "path": "/?p=4&page=2&query-4-page=2&commentPage=2",
+        "privateLeak": false,
+        "scrollWidth": 375,
+        "width": 375
+      },
+      "pageLoginReturn": {
+        "avatarCount": 0,
+        "bodyFirst": false,
+        "bodySecond": true,
+        "comments": [
+          {
+            "id": 20,
+            "width": 315
+          }
+        ],
+        "counters": {
+          "commentPage": "1",
+          "p": null,
+          "page": "2",
+          "page_id": "6",
+          "query-4-page": "2",
+          "replytocom": null
+        },
+        "draft": "",
+        "focused": false,
+        "form": true,
+        "links": [
+          {
+            "aria": "Reply to Existing page",
+            "href": "/?page_id=6&page=2&query-4-page=2&commentPage=1&replytocom=20#respond",
+            "id": 20,
+            "text": "Reply"
+          }
+        ],
+        "loop": "Reply card 2",
+        "parent": null,
+        "path": "/?page_id=6&page=2&query-4-page=2&commentPage=1#respond",
+        "privateLeak": false,
+        "scrollWidth": 375,
+        "width": 375
+      },
+      "pageHistoryBack": {
+        "avatarCount": 0,
+        "bodyFirst": false,
+        "bodySecond": true,
+        "comments": [
+          {
+            "id": 20,
+            "width": 315
+          }
+        ],
+        "counters": {
+          "commentPage": "1",
+          "p": null,
+          "page": "2",
+          "page_id": "6",
+          "query-4-page": "2",
+          "replytocom": null
+        },
+        "draft": "",
+        "focused": false,
+        "form": true,
+        "links": [
+          {
+            "aria": "Reply to Existing page",
+            "href": "/?page_id=6&page=2&query-4-page=2&commentPage=1&replytocom=20#respond",
+            "id": 20,
+            "text": "Reply"
+          }
+        ],
+        "loop": "Reply card 2",
+        "parent": null,
+        "path": "/?page_id=6&page=2&query-4-page=2&commentPage=1#respond",
+        "privateLeak": false,
+        "scrollWidth": 375,
+        "width": 375
+      },
+      "pageHistoryForward": {
+        "avatarCount": 0,
+        "bodyFirst": false,
+        "bodySecond": true,
+        "comments": [
+          {
+            "id": 20,
+            "width": 315
+          }
+        ],
+        "counters": {
+          "commentPage": "1",
+          "p": null,
+          "page": "2",
+          "page_id": "6",
+          "query-4-page": "2",
+          "replytocom": null
+        },
+        "draft": "",
+        "focused": false,
+        "form": true,
+        "links": [
+          {
+            "aria": "Reply to Existing page",
+            "href": "/?page_id=6&page=2&query-4-page=2&commentPage=1&replytocom=20#respond",
+            "id": 20,
+            "text": "Reply"
+          }
+        ],
+        "loop": "Reply card 2",
+        "parent": null,
+        "path": "/?page_id=6&page=2&query-4-page=2&commentPage=1#respond",
+        "privateLeak": false,
+        "scrollWidth": 375,
+        "width": 375
+      }
+    },
+    "classic": {
+      "theme": "classic",
+      "width": 375,
+      "age": [
+        {
+          "label": "oldPost",
+          "avatarCount": 0,
+          "bodyFirst": false,
+          "bodySecond": true,
+          "comments": [
+            {
+              "id": 19,
+              "width": 327
+            }
+          ],
+          "counters": {
+            "commentPage": "1",
+            "p": "5",
+            "page": "2",
+            "page_id": null,
+            "query-4-page": "2",
+            "replytocom": null
+          },
+          "draft": "",
+          "focused": false,
+          "form": false,
+          "links": [],
+          "loop": null,
+          "parent": null,
+          "path": "/?p=5&page=2&query-4-page=2&commentPage=1",
+          "privateLeak": false,
+          "scrollWidth": 375,
+          "width": 375
+        },
+        {
+          "label": "oldPage",
+          "avatarCount": 0,
+          "bodyFirst": false,
+          "bodySecond": true,
+          "comments": [
+            {
+              "id": 20,
+              "width": 327
+            }
+          ],
+          "counters": {
+            "commentPage": "1",
+            "p": null,
+            "page": "2",
+            "page_id": "6",
+            "query-4-page": "2",
+            "replytocom": null
+          },
+          "draft": "",
+          "focused": false,
+          "form": true,
+          "links": [
+            {
+              "aria": "Reply to Existing page",
+              "href": "/?page_id=6&page=2&query-4-page=2&commentPage=1&replytocom=20#respond",
+              "id": 20,
+              "text": "Reply"
+            }
+          ],
+          "loop": null,
+          "parent": null,
+          "path": "/?page_id=6&page=2&query-4-page=2&commentPage=1",
+          "privateLeak": false,
+          "scrollWidth": 375,
+          "width": 375
+        },
+        {
+          "label": "explicitClosed",
+          "avatarCount": 0,
+          "bodyFirst": false,
+          "bodySecond": true,
+          "comments": [
+            {
+              "id": 21,
+              "width": 327
+            }
+          ],
+          "counters": {
+            "commentPage": "1",
+            "p": null,
+            "page": "2",
+            "page_id": "7",
+            "query-4-page": "2",
+            "replytocom": null
+          },
+          "draft": "",
+          "focused": false,
+          "form": false,
+          "links": [],
+          "loop": null,
+          "parent": null,
+          "path": "/?page_id=7&page=2&query-4-page=2&commentPage=1",
+          "privateLeak": false,
+          "scrollWidth": 375,
+          "width": 375
+        },
+        {
+          "label": "disabledAge",
+          "avatarCount": 0,
+          "bodyFirst": false,
+          "bodySecond": true,
+          "comments": [
+            {
+              "id": 19,
+              "width": 327
+            }
+          ],
+          "counters": {
+            "commentPage": "1",
+            "p": "5",
+            "page": "2",
+            "page_id": null,
+            "query-4-page": "2",
+            "replytocom": null
+          },
+          "draft": "",
+          "focused": false,
+          "form": true,
+          "links": [
+            {
+              "aria": "Reply to Existing post",
+              "href": "/?p=5&page=2&query-4-page=2&commentPage=1&replytocom=19#respond",
+              "id": 19,
+              "text": "Reply"
+            }
+          ],
+          "loop": null,
+          "parent": null,
+          "path": "/?p=5&page=2&query-4-page=2&commentPage=1",
+          "privateLeak": false,
+          "scrollWidth": 375,
+          "width": 375
+        }
+      ],
+      "ping": {
+        "avatarCount": 0,
+        "bodyFirst": false,
+        "bodySecond": true,
+        "comments": [
+          {
+            "id": 18,
+            "width": 327
+          }
+        ],
+        "counters": {
+          "commentPage": "3",
+          "p": "4",
+          "page": "2",
+          "page_id": null,
+          "query-4-page": "2",
+          "replytocom": null
+        },
+        "draft": "",
+        "focused": false,
+        "form": true,
+        "links": [],
+        "loop": null,
+        "parent": null,
+        "path": "/?p=4&page=2&query-4-page=2&commentPage=3",
+        "privateLeak": false,
+        "scrollWidth": 375,
+        "width": 375
+      },
+      "directHref": {
+        "href": "/?p=4&page=2&query-4-page=2&commentPage=2&replytocom=4#respond",
+        "avatarCount": 0,
+        "bodyFirst": false,
+        "bodySecond": true,
+        "comments": [
+          {
+            "id": 3,
+            "width": 327
+          },
+          {
+            "id": 4,
+            "width": 309
+          },
+          {
+            "id": 5,
+            "width": 291
+          },
+          {
+            "id": 6,
+            "width": 291
+          },
+          {
+            "id": 7,
+            "width": 291
+          },
+          {
+            "id": 8,
+            "width": 291
+          },
+          {
+            "id": 9,
+            "width": 291
+          },
+          {
+            "id": 10,
+            "width": 291
+          },
+          {
+            "id": 11,
+            "width": 291
+          },
+          {
+            "id": 12,
+            "width": 291
+          },
+          {
+            "id": 13,
+            "width": 291
+          },
+          {
+            "id": 14,
+            "width": 291
+          },
+          {
+            "id": 15,
+            "width": 291
+          },
+          {
+            "id": 16,
+            "width": 291
+          },
+          {
+            "id": 17,
+            "width": 291
+          },
+          {
+            "id": 22,
+            "width": 291
+          },
+          {
+            "id": 23,
+            "width": 291
+          },
+          {
+            "id": 24,
+            "width": 291
+          },
+          {
+            "id": 25,
+            "width": 291
+          },
+          {
+            "id": 26,
+            "width": 291
+          },
+          {
+            "id": 27,
+            "width": 291
+          }
+        ],
+        "counters": {
+          "commentPage": "2",
+          "p": "4",
+          "page": "2",
+          "page_id": null,
+          "query-4-page": "2",
+          "replytocom": "4"
+        },
+        "draft": "",
+        "focused": true,
+        "form": true,
+        "links": [
+          {
+            "aria": "Reply to RootA",
+            "href": "/?p=4&page=2&query-4-page=2&commentPage=2&replytocom=3#respond",
+            "id": 3,
+            "text": "Reply"
+          },
+          {
+            "aria": "Reply to DeepLevel1",
+            "href": "/?p=4&page=2&query-4-page=2&commentPage=2&replytocom=4#respond",
+            "id": 4,
+            "text": "Reply"
+          }
+        ],
+        "loop": null,
+        "parent": null,
+        "path": "/?p=4&page=2&query-4-page=2&commentPage=2&replytocom=4#respond",
+        "privateLeak": false,
+        "scrollWidth": 375,
+        "width": 375
+      },
+      "originalTab": {
+        "avatarCount": 0,
+        "bodyFirst": false,
+        "bodySecond": true,
+        "comments": [
+          {
+            "id": 3,
+            "width": 327
+          },
+          {
+            "id": 4,
+            "width": 309
+          },
+          {
+            "id": 5,
+            "width": 291
+          },
+          {
+            "id": 6,
+            "width": 291
+          },
+          {
+            "id": 7,
+            "width": 291
+          },
+          {
+            "id": 8,
+            "width": 291
+          },
+          {
+            "id": 9,
+            "width": 291
+          },
+          {
+            "id": 10,
+            "width": 291
+          },
+          {
+            "id": 11,
+            "width": 291
+          },
+          {
+            "id": 12,
+            "width": 291
+          },
+          {
+            "id": 13,
+            "width": 291
+          },
+          {
+            "id": 14,
+            "width": 291
+          },
+          {
+            "id": 15,
+            "width": 291
+          },
+          {
+            "id": 16,
+            "width": 291
+          },
+          {
+            "id": 17,
+            "width": 291
+          },
+          {
+            "id": 22,
+            "width": 291
+          },
+          {
+            "id": 23,
+            "width": 291
+          },
+          {
+            "id": 24,
+            "width": 291
+          },
+          {
+            "id": 25,
+            "width": 291
+          },
+          {
+            "id": 26,
+            "width": 291
+          },
+          {
+            "id": 27,
+            "width": 291
+          }
+        ],
+        "counters": {
+          "commentPage": "2",
+          "p": "4",
+          "page": "2",
+          "page_id": null,
+          "query-4-page": "2",
+          "replytocom": null
+        },
+        "draft": "",
+        "focused": false,
+        "form": true,
+        "links": [
+          {
+            "aria": "Reply to RootA",
+            "href": "/?p=4&page=2&query-4-page=2&commentPage=2&replytocom=3#respond",
+            "id": 3,
+            "text": "Reply"
+          },
+          {
+            "aria": "Reply to DeepLevel1",
+            "href": "/?p=4&page=2&query-4-page=2&commentPage=2&replytocom=4#respond",
+            "id": 4,
+            "text": "Reply"
+          }
+        ],
+        "loop": null,
+        "parent": null,
+        "path": "/?p=4&page=2&query-4-page=2&commentPage=2",
+        "privateLeak": false,
+        "scrollWidth": 375,
+        "width": 375
+      },
+      "pageLoginReturn": {
+        "avatarCount": 0,
+        "bodyFirst": false,
+        "bodySecond": true,
+        "comments": [
+          {
+            "id": 20,
+            "width": 327
+          }
+        ],
+        "counters": {
+          "commentPage": "1",
+          "p": null,
+          "page": "2",
+          "page_id": "6",
+          "query-4-page": "2",
+          "replytocom": null
+        },
+        "draft": "",
+        "focused": false,
+        "form": true,
+        "links": [
+          {
+            "aria": "Reply to Existing page",
+            "href": "/?page_id=6&page=2&query-4-page=2&commentPage=1&replytocom=20#respond",
+            "id": 20,
+            "text": "Reply"
+          }
+        ],
+        "loop": null,
+        "parent": null,
+        "path": "/?page_id=6&page=2&query-4-page=2&commentPage=1#respond",
+        "privateLeak": false,
+        "scrollWidth": 375,
+        "width": 375
+      },
+      "pageHistoryBack": {
+        "avatarCount": 0,
+        "bodyFirst": false,
+        "bodySecond": true,
+        "comments": [
+          {
+            "id": 20,
+            "width": 327
+          }
+        ],
+        "counters": {
+          "commentPage": "1",
+          "p": null,
+          "page": "2",
+          "page_id": "6",
+          "query-4-page": "2",
+          "replytocom": null
+        },
+        "draft": "",
+        "focused": false,
+        "form": true,
+        "links": [
+          {
+            "aria": "Reply to Existing page",
+            "href": "/?page_id=6&page=2&query-4-page=2&commentPage=1&replytocom=20#respond",
+            "id": 20,
+            "text": "Reply"
+          }
+        ],
+        "loop": null,
+        "parent": null,
+        "path": "/?page_id=6&page=2&query-4-page=2&commentPage=1#respond",
+        "privateLeak": false,
+        "scrollWidth": 375,
+        "width": 375
+      },
+      "pageHistoryForward": {
+        "avatarCount": 0,
+        "bodyFirst": false,
+        "bodySecond": true,
+        "comments": [
+          {
+            "id": 20,
+            "width": 327
+          }
+        ],
+        "counters": {
+          "commentPage": "1",
+          "p": null,
+          "page": "2",
+          "page_id": "6",
+          "query-4-page": "2",
+          "replytocom": null
+        },
+        "draft": "",
+        "focused": false,
+        "form": true,
+        "links": [
+          {
+            "aria": "Reply to Existing page",
+            "href": "/?page_id=6&page=2&query-4-page=2&commentPage=1&replytocom=20#respond",
+            "id": 20,
+            "text": "Reply"
+          }
+        ],
+        "loop": null,
+        "parent": null,
+        "path": "/?page_id=6&page=2&query-4-page=2&commentPage=1#respond",
+        "privateLeak": false,
+        "scrollWidth": 375,
+        "width": 375
+      }
+    }
+  },
+  "ownership": {
+    "heldAuthenticatedResponse": true,
+    "before": {
+      "avatarCount": 0,
+      "bodyFirst": false,
+      "bodySecond": true,
+      "comments": [
+        {
+          "id": 3,
+          "width": 315
+        },
+        {
+          "id": 4,
+          "width": 299
+        },
+        {
+          "id": 5,
+          "width": 283
+        },
+        {
+          "id": 6,
+          "width": 283
+        },
+        {
+          "id": 7,
+          "width": 283
+        },
+        {
+          "id": 8,
+          "width": 283
+        },
+        {
+          "id": 9,
+          "width": 283
+        },
+        {
+          "id": 10,
+          "width": 283
+        },
+        {
+          "id": 11,
+          "width": 283
+        },
+        {
+          "id": 12,
+          "width": 283
+        },
+        {
+          "id": 13,
+          "width": 283
+        },
+        {
+          "id": 14,
+          "width": 283
+        },
+        {
+          "id": 15,
+          "width": 283
+        },
+        {
+          "id": 16,
+          "width": 283
+        },
+        {
+          "id": 17,
+          "width": 283
+        },
+        {
+          "id": 22,
+          "width": 283
+        },
+        {
+          "id": 23,
+          "width": 283
+        },
+        {
+          "id": 24,
+          "width": 283
+        },
+        {
+          "id": 25,
+          "width": 283
+        },
+        {
+          "id": 26,
+          "width": 283
+        },
+        {
+          "id": 27,
+          "width": 283
+        }
+      ],
+      "counters": {
+        "commentPage": "2",
+        "p": "4",
+        "page": "2",
+        "page_id": null,
+        "query-4-page": "2",
+        "replytocom": null
+      },
+      "draft": "",
+      "focused": false,
+      "form": false,
+      "links": [
+        {
+          "aria": null,
+          "href": "/login?redirect_to=%2F%3Fp%3D4%26page%3D2%26query-4-page%3D2%26commentPage%3D2%23respond",
+          "id": null,
+          "text": "Log in to Reply"
+        },
+        {
+          "aria": null,
+          "href": "/login?redirect_to=%2F%3Fp%3D4%26page%3D2%26query-4-page%3D2%26commentPage%3D2%23respond",
+          "id": null,
+          "text": "Log in to Reply"
+        }
+      ],
+      "loop": "Reply card 2",
+      "parent": null,
+      "path": "/?p=4&page=2&query-4-page=2&commentPage=2#respond",
+      "privateLeak": false,
+      "scrollWidth": 375,
+      "width": 375
+    },
+    "after": {
+      "avatarCount": 0,
+      "bodyFirst": false,
+      "bodySecond": true,
+      "comments": [
+        {
+          "id": 3,
+          "width": 315
+        },
+        {
+          "id": 4,
+          "width": 299
+        },
+        {
+          "id": 5,
+          "width": 283
+        },
+        {
+          "id": 6,
+          "width": 283
+        },
+        {
+          "id": 7,
+          "width": 283
+        },
+        {
+          "id": 8,
+          "width": 283
+        },
+        {
+          "id": 9,
+          "width": 283
+        },
+        {
+          "id": 10,
+          "width": 283
+        },
+        {
+          "id": 11,
+          "width": 283
+        },
+        {
+          "id": 12,
+          "width": 283
+        },
+        {
+          "id": 13,
+          "width": 283
+        },
+        {
+          "id": 14,
+          "width": 283
+        },
+        {
+          "id": 15,
+          "width": 283
+        },
+        {
+          "id": 16,
+          "width": 283
+        },
+        {
+          "id": 17,
+          "width": 283
+        },
+        {
+          "id": 22,
+          "width": 283
+        },
+        {
+          "id": 23,
+          "width": 283
+        },
+        {
+          "id": 24,
+          "width": 283
+        },
+        {
+          "id": 25,
+          "width": 283
+        },
+        {
+          "id": 26,
+          "width": 283
+        },
+        {
+          "id": 27,
+          "width": 283
+        }
+      ],
+      "counters": {
+        "commentPage": "2",
+        "p": "4",
+        "page": "2",
+        "page_id": null,
+        "query-4-page": "2",
+        "replytocom": null
+      },
+      "draft": "",
+      "focused": false,
+      "form": false,
+      "links": [
+        {
+          "aria": null,
+          "href": "/login?redirect_to=%2F%3Fp%3D4%26page%3D2%26query-4-page%3D2%26commentPage%3D2%23respond",
+          "id": null,
+          "text": "Log in to Reply"
+        },
+        {
+          "aria": null,
+          "href": "/login?redirect_to=%2F%3Fp%3D4%26page%3D2%26query-4-page%3D2%26commentPage%3D2%23respond",
+          "id": null,
+          "text": "Log in to Reply"
+        }
+      ],
+      "loop": "Reply card 2",
+      "parent": null,
+      "path": "/?p=4&page=2&query-4-page=2&commentPage=2#respond",
+      "privateLeak": false,
+      "scrollWidth": 375,
+      "width": 375
+    },
+    "reauthenticated": {
+      "avatarCount": 0,
+      "bodyFirst": false,
+      "bodySecond": true,
+      "comments": [
+        {
+          "id": 3,
+          "width": 315
+        },
+        {
+          "id": 4,
+          "width": 299
+        },
+        {
+          "id": 5,
+          "width": 283
+        },
+        {
+          "id": 6,
+          "width": 283
+        },
+        {
+          "id": 7,
+          "width": 283
+        },
+        {
+          "id": 8,
+          "width": 283
+        },
+        {
+          "id": 9,
+          "width": 283
+        },
+        {
+          "id": 10,
+          "width": 283
+        },
+        {
+          "id": 11,
+          "width": 283
+        },
+        {
+          "id": 12,
+          "width": 283
+        },
+        {
+          "id": 13,
+          "width": 283
+        },
+        {
+          "id": 14,
+          "width": 283
+        },
+        {
+          "id": 15,
+          "width": 283
+        },
+        {
+          "id": 16,
+          "width": 283
+        },
+        {
+          "id": 17,
+          "width": 283
+        },
+        {
+          "id": 22,
+          "width": 283
+        },
+        {
+          "id": 23,
+          "width": 283
+        },
+        {
+          "id": 24,
+          "width": 283
+        },
+        {
+          "id": 25,
+          "width": 283
+        },
+        {
+          "id": 26,
+          "width": 283
+        },
+        {
+          "id": 27,
+          "width": 283
+        }
+      ],
+      "counters": {
+        "commentPage": "2",
+        "p": "4",
+        "page": "2",
+        "page_id": null,
+        "query-4-page": "2",
+        "replytocom": null
+      },
+      "draft": "",
+      "focused": false,
+      "form": true,
+      "links": [
+        {
+          "aria": "Reply to RootA",
+          "href": "/?p=4&page=2&query-4-page=2&commentPage=2&replytocom=3#respond",
+          "id": 3,
+          "text": "Reply"
+        },
+        {
+          "aria": "Reply to DeepLevel1",
+          "href": "/?p=4&page=2&query-4-page=2&commentPage=2&replytocom=4#respond",
+          "id": 4,
+          "text": "Reply"
+        }
+      ],
+      "loop": "Reply card 2",
+      "parent": null,
+      "path": "/?p=4&page=2&query-4-page=2&commentPage=2#respond",
+      "privateLeak": false,
+      "scrollWidth": 375,
+      "width": 375
+    }
+  },
+  "finalCodeSmoke": {
+    "rows": [
+      {
+        "theme": "source",
+        "width": 1440,
+        "active": {
+          "avatarCount": 0,
+          "bodyFirst": false,
+          "bodySecond": true,
+          "comments": [
+            {
+              "id": 3,
+              "width": 645
+            },
+            {
+              "id": 4,
+              "width": 613
+            },
+            {
+              "id": 5,
+              "width": 581
+            },
+            {
+              "id": 6,
+              "width": 581
+            },
+            {
+              "id": 7,
+              "width": 581
+            },
+            {
+              "id": 8,
+              "width": 581
+            },
+            {
+              "id": 9,
+              "width": 581
+            },
+            {
+              "id": 10,
+              "width": 581
+            },
+            {
+              "id": 11,
+              "width": 581
+            },
+            {
+              "id": 12,
+              "width": 581
+            },
+            {
+              "id": 13,
+              "width": 581
+            },
+            {
+              "id": 14,
+              "width": 581
+            },
+            {
+              "id": 15,
+              "width": 581
+            },
+            {
+              "id": 16,
+              "width": 581
+            },
+            {
+              "id": 17,
+              "width": 581
+            },
+            {
+              "id": 22,
+              "width": 581
+            },
+            {
+              "id": 23,
+              "width": 581
+            },
+            {
+              "id": 24,
+              "width": 581
+            },
+            {
+              "id": 25,
+              "width": 581
+            },
+            {
+              "id": 26,
+              "width": 581
+            },
+            {
+              "id": 27,
+              "width": 581
+            }
+          ],
+          "counters": {
+            "commentPage": "2",
+            "p": "4",
+            "page": "2",
+            "page_id": null,
+            "query-4-page": "2",
+            "replytocom": null
+          },
+          "draft": "Final route smoke source 1440",
+          "focused": true,
+          "form": true,
+          "links": [
+            {
+              "aria": "Reply to RootA",
+              "href": "/?p=4&page=2&query-4-page=2&commentPage=2&replytocom=3#respond",
+              "id": 3,
+              "text": "Reply"
+            },
+            {
+              "aria": "Reply to DeepLevel1",
+              "href": "/?p=4&page=2&query-4-page=2&commentPage=2&replytocom=4#respond",
+              "id": 4,
+              "text": "Reply"
+            }
+          ],
+          "loop": "Reply card 2",
+          "parent": "4",
+          "path": "/?p=4&page=2&query-4-page=2&commentPage=2",
+          "privateLeak": false,
+          "scrollWidth": 1440,
+          "width": 1440
+        },
+        "direct": {
+          "avatarCount": 0,
+          "bodyFirst": false,
+          "bodySecond": true,
+          "comments": [
+            {
+              "id": 3,
+              "width": 645
+            },
+            {
+              "id": 4,
+              "width": 613
+            },
+            {
+              "id": 5,
+              "width": 581
+            },
+            {
+              "id": 6,
+              "width": 581
+            },
+            {
+              "id": 7,
+              "width": 581
+            },
+            {
+              "id": 8,
+              "width": 581
+            },
+            {
+              "id": 9,
+              "width": 581
+            },
+            {
+              "id": 10,
+              "width": 581
+            },
+            {
+              "id": 11,
+              "width": 581
+            },
+            {
+              "id": 12,
+              "width": 581
+            },
+            {
+              "id": 13,
+              "width": 581
+            },
+            {
+              "id": 14,
+              "width": 581
+            },
+            {
+              "id": 15,
+              "width": 581
+            },
+            {
+              "id": 16,
+              "width": 581
+            },
+            {
+              "id": 17,
+              "width": 581
+            },
+            {
+              "id": 22,
+              "width": 581
+            },
+            {
+              "id": 23,
+              "width": 581
+            },
+            {
+              "id": 24,
+              "width": 581
+            },
+            {
+              "id": 25,
+              "width": 581
+            },
+            {
+              "id": 26,
+              "width": 581
+            },
+            {
+              "id": 27,
+              "width": 581
+            }
+          ],
+          "counters": {
+            "commentPage": "2",
+            "p": "4",
+            "page": "2",
+            "page_id": null,
+            "query-4-page": "2",
+            "replytocom": "4"
+          },
+          "draft": "",
+          "focused": true,
+          "form": true,
+          "links": [
+            {
+              "aria": "Reply to RootA",
+              "href": "/?p=4&page=2&query-4-page=2&commentPage=2&replytocom=3#respond",
+              "id": 3,
+              "text": "Reply"
+            },
+            {
+              "aria": "Reply to DeepLevel1",
+              "href": "/?p=4&page=2&query-4-page=2&commentPage=2&replytocom=4#respond",
+              "id": 4,
+              "text": "Reply"
+            }
+          ],
+          "loop": "Reply card 2",
+          "parent": "4",
+          "path": "/?p=4&page=2&query-4-page=2&commentPage=2&replytocom=4#respond",
+          "privateLeak": false,
+          "scrollWidth": 1440,
+          "width": 1440
+        },
+        "back": {
+          "avatarCount": 0,
+          "bodyFirst": false,
+          "bodySecond": true,
+          "comments": [
+            {
+              "id": 3,
+              "width": 645
+            },
+            {
+              "id": 4,
+              "width": 613
+            },
+            {
+              "id": 5,
+              "width": 581
+            },
+            {
+              "id": 6,
+              "width": 581
+            },
+            {
+              "id": 7,
+              "width": 581
+            },
+            {
+              "id": 8,
+              "width": 581
+            },
+            {
+              "id": 9,
+              "width": 581
+            },
+            {
+              "id": 10,
+              "width": 581
+            },
+            {
+              "id": 11,
+              "width": 581
+            },
+            {
+              "id": 12,
+              "width": 581
+            },
+            {
+              "id": 13,
+              "width": 581
+            },
+            {
+              "id": 14,
+              "width": 581
+            },
+            {
+              "id": 15,
+              "width": 581
+            },
+            {
+              "id": 16,
+              "width": 581
+            },
+            {
+              "id": 17,
+              "width": 581
+            },
+            {
+              "id": 22,
+              "width": 581
+            },
+            {
+              "id": 23,
+              "width": 581
+            },
+            {
+              "id": 24,
+              "width": 581
+            },
+            {
+              "id": 25,
+              "width": 581
+            },
+            {
+              "id": 26,
+              "width": 581
+            },
+            {
+              "id": 27,
+              "width": 581
+            }
+          ],
+          "counters": {
+            "commentPage": "2",
+            "p": "4",
+            "page": "2",
+            "page_id": null,
+            "query-4-page": "2",
+            "replytocom": null
+          },
+          "draft": "",
+          "focused": false,
+          "form": true,
+          "links": [
+            {
+              "aria": "Reply to RootA",
+              "href": "/?p=4&page=2&query-4-page=2&commentPage=2&replytocom=3#respond",
+              "id": 3,
+              "text": "Reply"
+            },
+            {
+              "aria": "Reply to DeepLevel1",
+              "href": "/?p=4&page=2&query-4-page=2&commentPage=2&replytocom=4#respond",
+              "id": 4,
+              "text": "Reply"
+            }
+          ],
+          "loop": "Reply card 2",
+          "parent": null,
+          "path": "/?p=4&page=2&query-4-page=2&commentPage=2",
+          "privateLeak": false,
+          "scrollWidth": 1440,
+          "width": 1440
+        }
+      },
+      {
+        "theme": "source",
+        "width": 768,
+        "active": {
+          "avatarCount": 0,
+          "bodyFirst": false,
+          "bodySecond": true,
+          "comments": [
+            {
+              "id": 3,
+              "width": 645
+            },
+            {
+              "id": 4,
+              "width": 613
+            },
+            {
+              "id": 5,
+              "width": 581
+            },
+            {
+              "id": 6,
+              "width": 581
+            },
+            {
+              "id": 7,
+              "width": 581
+            },
+            {
+              "id": 8,
+              "width": 581
+            },
+            {
+              "id": 9,
+              "width": 581
+            },
+            {
+              "id": 10,
+              "width": 581
+            },
+            {
+              "id": 11,
+              "width": 581
+            },
+            {
+              "id": 12,
+              "width": 581
+            },
+            {
+              "id": 13,
+              "width": 581
+            },
+            {
+              "id": 14,
+              "width": 581
+            },
+            {
+              "id": 15,
+              "width": 581
+            },
+            {
+              "id": 16,
+              "width": 581
+            },
+            {
+              "id": 17,
+              "width": 581
+            },
+            {
+              "id": 22,
+              "width": 581
+            },
+            {
+              "id": 23,
+              "width": 581
+            },
+            {
+              "id": 24,
+              "width": 581
+            },
+            {
+              "id": 25,
+              "width": 581
+            },
+            {
+              "id": 26,
+              "width": 581
+            },
+            {
+              "id": 27,
+              "width": 581
+            }
+          ],
+          "counters": {
+            "commentPage": "2",
+            "p": "4",
+            "page": "2",
+            "page_id": null,
+            "query-4-page": "2",
+            "replytocom": null
+          },
+          "draft": "Final route smoke source 768",
+          "focused": true,
+          "form": true,
+          "links": [
+            {
+              "aria": "Reply to RootA",
+              "href": "/?p=4&page=2&query-4-page=2&commentPage=2&replytocom=3#respond",
+              "id": 3,
+              "text": "Reply"
+            },
+            {
+              "aria": "Reply to DeepLevel1",
+              "href": "/?p=4&page=2&query-4-page=2&commentPage=2&replytocom=4#respond",
+              "id": 4,
+              "text": "Reply"
+            }
+          ],
+          "loop": "Reply card 2",
+          "parent": "4",
+          "path": "/?p=4&page=2&query-4-page=2&commentPage=2",
+          "privateLeak": false,
+          "scrollWidth": 768,
+          "width": 768
+        },
+        "direct": {
+          "avatarCount": 0,
+          "bodyFirst": false,
+          "bodySecond": true,
+          "comments": [
+            {
+              "id": 3,
+              "width": 645
+            },
+            {
+              "id": 4,
+              "width": 613
+            },
+            {
+              "id": 5,
+              "width": 581
+            },
+            {
+              "id": 6,
+              "width": 581
+            },
+            {
+              "id": 7,
+              "width": 581
+            },
+            {
+              "id": 8,
+              "width": 581
+            },
+            {
+              "id": 9,
+              "width": 581
+            },
+            {
+              "id": 10,
+              "width": 581
+            },
+            {
+              "id": 11,
+              "width": 581
+            },
+            {
+              "id": 12,
+              "width": 581
+            },
+            {
+              "id": 13,
+              "width": 581
+            },
+            {
+              "id": 14,
+              "width": 581
+            },
+            {
+              "id": 15,
+              "width": 581
+            },
+            {
+              "id": 16,
+              "width": 581
+            },
+            {
+              "id": 17,
+              "width": 581
+            },
+            {
+              "id": 22,
+              "width": 581
+            },
+            {
+              "id": 23,
+              "width": 581
+            },
+            {
+              "id": 24,
+              "width": 581
+            },
+            {
+              "id": 25,
+              "width": 581
+            },
+            {
+              "id": 26,
+              "width": 581
+            },
+            {
+              "id": 27,
+              "width": 581
+            }
+          ],
+          "counters": {
+            "commentPage": "2",
+            "p": "4",
+            "page": "2",
+            "page_id": null,
+            "query-4-page": "2",
+            "replytocom": "4"
+          },
+          "draft": "",
+          "focused": true,
+          "form": true,
+          "links": [
+            {
+              "aria": "Reply to RootA",
+              "href": "/?p=4&page=2&query-4-page=2&commentPage=2&replytocom=3#respond",
+              "id": 3,
+              "text": "Reply"
+            },
+            {
+              "aria": "Reply to DeepLevel1",
+              "href": "/?p=4&page=2&query-4-page=2&commentPage=2&replytocom=4#respond",
+              "id": 4,
+              "text": "Reply"
+            }
+          ],
+          "loop": "Reply card 2",
+          "parent": "4",
+          "path": "/?p=4&page=2&query-4-page=2&commentPage=2&replytocom=4#respond",
+          "privateLeak": false,
+          "scrollWidth": 768,
+          "width": 768
+        },
+        "back": {
+          "avatarCount": 0,
+          "bodyFirst": false,
+          "bodySecond": true,
+          "comments": [
+            {
+              "id": 3,
+              "width": 645
+            },
+            {
+              "id": 4,
+              "width": 613
+            },
+            {
+              "id": 5,
+              "width": 581
+            },
+            {
+              "id": 6,
+              "width": 581
+            },
+            {
+              "id": 7,
+              "width": 581
+            },
+            {
+              "id": 8,
+              "width": 581
+            },
+            {
+              "id": 9,
+              "width": 581
+            },
+            {
+              "id": 10,
+              "width": 581
+            },
+            {
+              "id": 11,
+              "width": 581
+            },
+            {
+              "id": 12,
+              "width": 581
+            },
+            {
+              "id": 13,
+              "width": 581
+            },
+            {
+              "id": 14,
+              "width": 581
+            },
+            {
+              "id": 15,
+              "width": 581
+            },
+            {
+              "id": 16,
+              "width": 581
+            },
+            {
+              "id": 17,
+              "width": 581
+            },
+            {
+              "id": 22,
+              "width": 581
+            },
+            {
+              "id": 23,
+              "width": 581
+            },
+            {
+              "id": 24,
+              "width": 581
+            },
+            {
+              "id": 25,
+              "width": 581
+            },
+            {
+              "id": 26,
+              "width": 581
+            },
+            {
+              "id": 27,
+              "width": 581
+            }
+          ],
+          "counters": {
+            "commentPage": "2",
+            "p": "4",
+            "page": "2",
+            "page_id": null,
+            "query-4-page": "2",
+            "replytocom": null
+          },
+          "draft": "",
+          "focused": false,
+          "form": true,
+          "links": [
+            {
+              "aria": "Reply to RootA",
+              "href": "/?p=4&page=2&query-4-page=2&commentPage=2&replytocom=3#respond",
+              "id": 3,
+              "text": "Reply"
+            },
+            {
+              "aria": "Reply to DeepLevel1",
+              "href": "/?p=4&page=2&query-4-page=2&commentPage=2&replytocom=4#respond",
+              "id": 4,
+              "text": "Reply"
+            }
+          ],
+          "loop": "Reply card 2",
+          "parent": null,
+          "path": "/?p=4&page=2&query-4-page=2&commentPage=2",
+          "privateLeak": false,
+          "scrollWidth": 768,
+          "width": 768
+        }
+      },
+      {
+        "theme": "source",
+        "width": 375,
+        "active": {
+          "avatarCount": 0,
+          "bodyFirst": false,
+          "bodySecond": true,
+          "comments": [
+            {
+              "id": 3,
+              "width": 315
+            },
+            {
+              "id": 4,
+              "width": 299
+            },
+            {
+              "id": 5,
+              "width": 283
+            },
+            {
+              "id": 6,
+              "width": 283
+            },
+            {
+              "id": 7,
+              "width": 283
+            },
+            {
+              "id": 8,
+              "width": 283
+            },
+            {
+              "id": 9,
+              "width": 283
+            },
+            {
+              "id": 10,
+              "width": 283
+            },
+            {
+              "id": 11,
+              "width": 283
+            },
+            {
+              "id": 12,
+              "width": 283
+            },
+            {
+              "id": 13,
+              "width": 283
+            },
+            {
+              "id": 14,
+              "width": 283
+            },
+            {
+              "id": 15,
+              "width": 283
+            },
+            {
+              "id": 16,
+              "width": 283
+            },
+            {
+              "id": 17,
+              "width": 283
+            },
+            {
+              "id": 22,
+              "width": 283
+            },
+            {
+              "id": 23,
+              "width": 283
+            },
+            {
+              "id": 24,
+              "width": 283
+            },
+            {
+              "id": 25,
+              "width": 283
+            },
+            {
+              "id": 26,
+              "width": 283
+            },
+            {
+              "id": 27,
+              "width": 283
+            }
+          ],
+          "counters": {
+            "commentPage": "2",
+            "p": "4",
+            "page": "2",
+            "page_id": null,
+            "query-4-page": "2",
+            "replytocom": null
+          },
+          "draft": "Final route smoke source 375",
+          "focused": true,
+          "form": true,
+          "links": [
+            {
+              "aria": "Reply to RootA",
+              "href": "/?p=4&page=2&query-4-page=2&commentPage=2&replytocom=3#respond",
+              "id": 3,
+              "text": "Reply"
+            },
+            {
+              "aria": "Reply to DeepLevel1",
+              "href": "/?p=4&page=2&query-4-page=2&commentPage=2&replytocom=4#respond",
+              "id": 4,
+              "text": "Reply"
+            }
+          ],
+          "loop": "Reply card 2",
+          "parent": "4",
+          "path": "/?p=4&page=2&query-4-page=2&commentPage=2",
+          "privateLeak": false,
+          "scrollWidth": 375,
+          "width": 375
+        },
+        "direct": {
+          "avatarCount": 0,
+          "bodyFirst": false,
+          "bodySecond": true,
+          "comments": [
+            {
+              "id": 3,
+              "width": 315
+            },
+            {
+              "id": 4,
+              "width": 299
+            },
+            {
+              "id": 5,
+              "width": 283
+            },
+            {
+              "id": 6,
+              "width": 283
+            },
+            {
+              "id": 7,
+              "width": 283
+            },
+            {
+              "id": 8,
+              "width": 283
+            },
+            {
+              "id": 9,
+              "width": 283
+            },
+            {
+              "id": 10,
+              "width": 283
+            },
+            {
+              "id": 11,
+              "width": 283
+            },
+            {
+              "id": 12,
+              "width": 283
+            },
+            {
+              "id": 13,
+              "width": 283
+            },
+            {
+              "id": 14,
+              "width": 283
+            },
+            {
+              "id": 15,
+              "width": 283
+            },
+            {
+              "id": 16,
+              "width": 283
+            },
+            {
+              "id": 17,
+              "width": 283
+            },
+            {
+              "id": 22,
+              "width": 283
+            },
+            {
+              "id": 23,
+              "width": 283
+            },
+            {
+              "id": 24,
+              "width": 283
+            },
+            {
+              "id": 25,
+              "width": 283
+            },
+            {
+              "id": 26,
+              "width": 283
+            },
+            {
+              "id": 27,
+              "width": 283
+            }
+          ],
+          "counters": {
+            "commentPage": "2",
+            "p": "4",
+            "page": "2",
+            "page_id": null,
+            "query-4-page": "2",
+            "replytocom": "4"
+          },
+          "draft": "",
+          "focused": true,
+          "form": true,
+          "links": [
+            {
+              "aria": "Reply to RootA",
+              "href": "/?p=4&page=2&query-4-page=2&commentPage=2&replytocom=3#respond",
+              "id": 3,
+              "text": "Reply"
+            },
+            {
+              "aria": "Reply to DeepLevel1",
+              "href": "/?p=4&page=2&query-4-page=2&commentPage=2&replytocom=4#respond",
+              "id": 4,
+              "text": "Reply"
+            }
+          ],
+          "loop": "Reply card 2",
+          "parent": "4",
+          "path": "/?p=4&page=2&query-4-page=2&commentPage=2&replytocom=4#respond",
+          "privateLeak": false,
+          "scrollWidth": 375,
+          "width": 375
+        },
+        "back": {
+          "avatarCount": 0,
+          "bodyFirst": false,
+          "bodySecond": true,
+          "comments": [
+            {
+              "id": 3,
+              "width": 315
+            },
+            {
+              "id": 4,
+              "width": 299
+            },
+            {
+              "id": 5,
+              "width": 283
+            },
+            {
+              "id": 6,
+              "width": 283
+            },
+            {
+              "id": 7,
+              "width": 283
+            },
+            {
+              "id": 8,
+              "width": 283
+            },
+            {
+              "id": 9,
+              "width": 283
+            },
+            {
+              "id": 10,
+              "width": 283
+            },
+            {
+              "id": 11,
+              "width": 283
+            },
+            {
+              "id": 12,
+              "width": 283
+            },
+            {
+              "id": 13,
+              "width": 283
+            },
+            {
+              "id": 14,
+              "width": 283
+            },
+            {
+              "id": 15,
+              "width": 283
+            },
+            {
+              "id": 16,
+              "width": 283
+            },
+            {
+              "id": 17,
+              "width": 283
+            },
+            {
+              "id": 22,
+              "width": 283
+            },
+            {
+              "id": 23,
+              "width": 283
+            },
+            {
+              "id": 24,
+              "width": 283
+            },
+            {
+              "id": 25,
+              "width": 283
+            },
+            {
+              "id": 26,
+              "width": 283
+            },
+            {
+              "id": 27,
+              "width": 283
+            }
+          ],
+          "counters": {
+            "commentPage": "2",
+            "p": "4",
+            "page": "2",
+            "page_id": null,
+            "query-4-page": "2",
+            "replytocom": null
+          },
+          "draft": "",
+          "focused": false,
+          "form": true,
+          "links": [
+            {
+              "aria": "Reply to RootA",
+              "href": "/?p=4&page=2&query-4-page=2&commentPage=2&replytocom=3#respond",
+              "id": 3,
+              "text": "Reply"
+            },
+            {
+              "aria": "Reply to DeepLevel1",
+              "href": "/?p=4&page=2&query-4-page=2&commentPage=2&replytocom=4#respond",
+              "id": 4,
+              "text": "Reply"
+            }
+          ],
+          "loop": "Reply card 2",
+          "parent": null,
+          "path": "/?p=4&page=2&query-4-page=2&commentPage=2",
+          "privateLeak": false,
+          "scrollWidth": 375,
+          "width": 375
+        }
+      },
+      {
+        "theme": "classic",
+        "width": 1440,
+        "active": {
+          "avatarCount": 0,
+          "bodyFirst": false,
+          "bodySecond": true,
+          "comments": [
+            {
+              "id": 3,
+              "width": 700
+            },
+            {
+              "id": 4,
+              "width": 656
+            },
+            {
+              "id": 5,
+              "width": 612
+            },
+            {
+              "id": 6,
+              "width": 612
+            },
+            {
+              "id": 7,
+              "width": 612
+            },
+            {
+              "id": 8,
+              "width": 612
+            },
+            {
+              "id": 9,
+              "width": 612
+            },
+            {
+              "id": 10,
+              "width": 612
+            },
+            {
+              "id": 11,
+              "width": 612
+            },
+            {
+              "id": 12,
+              "width": 612
+            },
+            {
+              "id": 13,
+              "width": 612
+            },
+            {
+              "id": 14,
+              "width": 612
+            },
+            {
+              "id": 15,
+              "width": 612
+            },
+            {
+              "id": 16,
+              "width": 612
+            },
+            {
+              "id": 17,
+              "width": 612
+            },
+            {
+              "id": 22,
+              "width": 612
+            },
+            {
+              "id": 23,
+              "width": 612
+            },
+            {
+              "id": 24,
+              "width": 612
+            },
+            {
+              "id": 25,
+              "width": 612
+            },
+            {
+              "id": 26,
+              "width": 612
+            },
+            {
+              "id": 27,
+              "width": 612
+            }
+          ],
+          "counters": {
+            "commentPage": "2",
+            "p": "4",
+            "page": "2",
+            "page_id": null,
+            "query-4-page": "2",
+            "replytocom": null
+          },
+          "draft": "Final route smoke classic 1440",
+          "focused": true,
+          "form": true,
+          "links": [
+            {
+              "aria": "Reply to RootA",
+              "href": "/?p=4&page=2&query-4-page=2&commentPage=2&replytocom=3#respond",
+              "id": 3,
+              "text": "Reply"
+            },
+            {
+              "aria": "Reply to DeepLevel1",
+              "href": "/?p=4&page=2&query-4-page=2&commentPage=2&replytocom=4#respond",
+              "id": 4,
+              "text": "Reply"
+            }
+          ],
+          "loop": null,
+          "parent": null,
+          "path": "/?p=4&page=2&query-4-page=2&commentPage=2",
+          "privateLeak": false,
+          "scrollWidth": 1440,
+          "width": 1440
+        },
+        "direct": {
+          "avatarCount": 0,
+          "bodyFirst": false,
+          "bodySecond": true,
+          "comments": [
+            {
+              "id": 3,
+              "width": 700
+            },
+            {
+              "id": 4,
+              "width": 656
+            },
+            {
+              "id": 5,
+              "width": 612
+            },
+            {
+              "id": 6,
+              "width": 612
+            },
+            {
+              "id": 7,
+              "width": 612
+            },
+            {
+              "id": 8,
+              "width": 612
+            },
+            {
+              "id": 9,
+              "width": 612
+            },
+            {
+              "id": 10,
+              "width": 612
+            },
+            {
+              "id": 11,
+              "width": 612
+            },
+            {
+              "id": 12,
+              "width": 612
+            },
+            {
+              "id": 13,
+              "width": 612
+            },
+            {
+              "id": 14,
+              "width": 612
+            },
+            {
+              "id": 15,
+              "width": 612
+            },
+            {
+              "id": 16,
+              "width": 612
+            },
+            {
+              "id": 17,
+              "width": 612
+            },
+            {
+              "id": 22,
+              "width": 612
+            },
+            {
+              "id": 23,
+              "width": 612
+            },
+            {
+              "id": 24,
+              "width": 612
+            },
+            {
+              "id": 25,
+              "width": 612
+            },
+            {
+              "id": 26,
+              "width": 612
+            },
+            {
+              "id": 27,
+              "width": 612
+            }
+          ],
+          "counters": {
+            "commentPage": "2",
+            "p": "4",
+            "page": "2",
+            "page_id": null,
+            "query-4-page": "2",
+            "replytocom": "4"
+          },
+          "draft": "",
+          "focused": true,
+          "form": true,
+          "links": [
+            {
+              "aria": "Reply to RootA",
+              "href": "/?p=4&page=2&query-4-page=2&commentPage=2&replytocom=3#respond",
+              "id": 3,
+              "text": "Reply"
+            },
+            {
+              "aria": "Reply to DeepLevel1",
+              "href": "/?p=4&page=2&query-4-page=2&commentPage=2&replytocom=4#respond",
+              "id": 4,
+              "text": "Reply"
+            }
+          ],
+          "loop": null,
+          "parent": null,
+          "path": "/?p=4&page=2&query-4-page=2&commentPage=2&replytocom=4#respond",
+          "privateLeak": false,
+          "scrollWidth": 1440,
+          "width": 1440
+        },
+        "back": {
+          "avatarCount": 0,
+          "bodyFirst": false,
+          "bodySecond": true,
+          "comments": [
+            {
+              "id": 3,
+              "width": 700
+            },
+            {
+              "id": 4,
+              "width": 656
+            },
+            {
+              "id": 5,
+              "width": 612
+            },
+            {
+              "id": 6,
+              "width": 612
+            },
+            {
+              "id": 7,
+              "width": 612
+            },
+            {
+              "id": 8,
+              "width": 612
+            },
+            {
+              "id": 9,
+              "width": 612
+            },
+            {
+              "id": 10,
+              "width": 612
+            },
+            {
+              "id": 11,
+              "width": 612
+            },
+            {
+              "id": 12,
+              "width": 612
+            },
+            {
+              "id": 13,
+              "width": 612
+            },
+            {
+              "id": 14,
+              "width": 612
+            },
+            {
+              "id": 15,
+              "width": 612
+            },
+            {
+              "id": 16,
+              "width": 612
+            },
+            {
+              "id": 17,
+              "width": 612
+            },
+            {
+              "id": 22,
+              "width": 612
+            },
+            {
+              "id": 23,
+              "width": 612
+            },
+            {
+              "id": 24,
+              "width": 612
+            },
+            {
+              "id": 25,
+              "width": 612
+            },
+            {
+              "id": 26,
+              "width": 612
+            },
+            {
+              "id": 27,
+              "width": 612
+            }
+          ],
+          "counters": {
+            "commentPage": "2",
+            "p": "4",
+            "page": "2",
+            "page_id": null,
+            "query-4-page": "2",
+            "replytocom": null
+          },
+          "draft": "",
+          "focused": false,
+          "form": true,
+          "links": [
+            {
+              "aria": "Reply to RootA",
+              "href": "/?p=4&page=2&query-4-page=2&commentPage=2&replytocom=3#respond",
+              "id": 3,
+              "text": "Reply"
+            },
+            {
+              "aria": "Reply to DeepLevel1",
+              "href": "/?p=4&page=2&query-4-page=2&commentPage=2&replytocom=4#respond",
+              "id": 4,
+              "text": "Reply"
+            }
+          ],
+          "loop": null,
+          "parent": null,
+          "path": "/?p=4&page=2&query-4-page=2&commentPage=2",
+          "privateLeak": false,
+          "scrollWidth": 1440,
+          "width": 1440
+        }
+      },
+      {
+        "theme": "classic",
+        "width": 768,
+        "active": {
+          "avatarCount": 0,
+          "bodyFirst": false,
+          "bodySecond": true,
+          "comments": [
+            {
+              "id": 3,
+              "width": 691.21875
+            },
+            {
+              "id": 4,
+              "width": 647.21875
+            },
+            {
+              "id": 5,
+              "width": 603.21875
+            },
+            {
+              "id": 6,
+              "width": 603.21875
+            },
+            {
+              "id": 7,
+              "width": 603.21875
+            },
+            {
+              "id": 8,
+              "width": 603.21875
+            },
+            {
+              "id": 9,
+              "width": 603.21875
+            },
+            {
+              "id": 10,
+              "width": 603.21875
+            },
+            {
+              "id": 11,
+              "width": 603.21875
+            },
+            {
+              "id": 12,
+              "width": 603.21875
+            },
+            {
+              "id": 13,
+              "width": 603.21875
+            },
+            {
+              "id": 14,
+              "width": 603.21875
+            },
+            {
+              "id": 15,
+              "width": 603.21875
+            },
+            {
+              "id": 16,
+              "width": 603.21875
+            },
+            {
+              "id": 17,
+              "width": 603.21875
+            },
+            {
+              "id": 22,
+              "width": 603.21875
+            },
+            {
+              "id": 23,
+              "width": 603.21875
+            },
+            {
+              "id": 24,
+              "width": 603.21875
+            },
+            {
+              "id": 25,
+              "width": 603.21875
+            },
+            {
+              "id": 26,
+              "width": 603.21875
+            },
+            {
+              "id": 27,
+              "width": 603.21875
+            }
+          ],
+          "counters": {
+            "commentPage": "2",
+            "p": "4",
+            "page": "2",
+            "page_id": null,
+            "query-4-page": "2",
+            "replytocom": null
+          },
+          "draft": "Final route smoke classic 768",
+          "focused": true,
+          "form": true,
+          "links": [
+            {
+              "aria": "Reply to RootA",
+              "href": "/?p=4&page=2&query-4-page=2&commentPage=2&replytocom=3#respond",
+              "id": 3,
+              "text": "Reply"
+            },
+            {
+              "aria": "Reply to DeepLevel1",
+              "href": "/?p=4&page=2&query-4-page=2&commentPage=2&replytocom=4#respond",
+              "id": 4,
+              "text": "Reply"
+            }
+          ],
+          "loop": null,
+          "parent": null,
+          "path": "/?p=4&page=2&query-4-page=2&commentPage=2",
+          "privateLeak": false,
+          "scrollWidth": 768,
+          "width": 768
+        },
+        "direct": {
+          "avatarCount": 0,
+          "bodyFirst": false,
+          "bodySecond": true,
+          "comments": [
+            {
+              "id": 3,
+              "width": 691.21875
+            },
+            {
+              "id": 4,
+              "width": 647.21875
+            },
+            {
+              "id": 5,
+              "width": 603.21875
+            },
+            {
+              "id": 6,
+              "width": 603.21875
+            },
+            {
+              "id": 7,
+              "width": 603.21875
+            },
+            {
+              "id": 8,
+              "width": 603.21875
+            },
+            {
+              "id": 9,
+              "width": 603.21875
+            },
+            {
+              "id": 10,
+              "width": 603.21875
+            },
+            {
+              "id": 11,
+              "width": 603.21875
+            },
+            {
+              "id": 12,
+              "width": 603.21875
+            },
+            {
+              "id": 13,
+              "width": 603.21875
+            },
+            {
+              "id": 14,
+              "width": 603.21875
+            },
+            {
+              "id": 15,
+              "width": 603.21875
+            },
+            {
+              "id": 16,
+              "width": 603.21875
+            },
+            {
+              "id": 17,
+              "width": 603.21875
+            },
+            {
+              "id": 22,
+              "width": 603.21875
+            },
+            {
+              "id": 23,
+              "width": 603.21875
+            },
+            {
+              "id": 24,
+              "width": 603.21875
+            },
+            {
+              "id": 25,
+              "width": 603.21875
+            },
+            {
+              "id": 26,
+              "width": 603.21875
+            },
+            {
+              "id": 27,
+              "width": 603.21875
+            }
+          ],
+          "counters": {
+            "commentPage": "2",
+            "p": "4",
+            "page": "2",
+            "page_id": null,
+            "query-4-page": "2",
+            "replytocom": "4"
+          },
+          "draft": "",
+          "focused": true,
+          "form": true,
+          "links": [
+            {
+              "aria": "Reply to RootA",
+              "href": "/?p=4&page=2&query-4-page=2&commentPage=2&replytocom=3#respond",
+              "id": 3,
+              "text": "Reply"
+            },
+            {
+              "aria": "Reply to DeepLevel1",
+              "href": "/?p=4&page=2&query-4-page=2&commentPage=2&replytocom=4#respond",
+              "id": 4,
+              "text": "Reply"
+            }
+          ],
+          "loop": null,
+          "parent": null,
+          "path": "/?p=4&page=2&query-4-page=2&commentPage=2&replytocom=4#respond",
+          "privateLeak": false,
+          "scrollWidth": 768,
+          "width": 768
+        },
+        "back": {
+          "avatarCount": 0,
+          "bodyFirst": false,
+          "bodySecond": true,
+          "comments": [
+            {
+              "id": 3,
+              "width": 691.21875
+            },
+            {
+              "id": 4,
+              "width": 647.21875
+            },
+            {
+              "id": 5,
+              "width": 603.21875
+            },
+            {
+              "id": 6,
+              "width": 603.21875
+            },
+            {
+              "id": 7,
+              "width": 603.21875
+            },
+            {
+              "id": 8,
+              "width": 603.21875
+            },
+            {
+              "id": 9,
+              "width": 603.21875
+            },
+            {
+              "id": 10,
+              "width": 603.21875
+            },
+            {
+              "id": 11,
+              "width": 603.21875
+            },
+            {
+              "id": 12,
+              "width": 603.21875
+            },
+            {
+              "id": 13,
+              "width": 603.21875
+            },
+            {
+              "id": 14,
+              "width": 603.21875
+            },
+            {
+              "id": 15,
+              "width": 603.21875
+            },
+            {
+              "id": 16,
+              "width": 603.21875
+            },
+            {
+              "id": 17,
+              "width": 603.21875
+            },
+            {
+              "id": 22,
+              "width": 603.21875
+            },
+            {
+              "id": 23,
+              "width": 603.21875
+            },
+            {
+              "id": 24,
+              "width": 603.21875
+            },
+            {
+              "id": 25,
+              "width": 603.21875
+            },
+            {
+              "id": 26,
+              "width": 603.21875
+            },
+            {
+              "id": 27,
+              "width": 603.21875
+            }
+          ],
+          "counters": {
+            "commentPage": "2",
+            "p": "4",
+            "page": "2",
+            "page_id": null,
+            "query-4-page": "2",
+            "replytocom": null
+          },
+          "draft": "",
+          "focused": false,
+          "form": true,
+          "links": [
+            {
+              "aria": "Reply to RootA",
+              "href": "/?p=4&page=2&query-4-page=2&commentPage=2&replytocom=3#respond",
+              "id": 3,
+              "text": "Reply"
+            },
+            {
+              "aria": "Reply to DeepLevel1",
+              "href": "/?p=4&page=2&query-4-page=2&commentPage=2&replytocom=4#respond",
+              "id": 4,
+              "text": "Reply"
+            }
+          ],
+          "loop": null,
+          "parent": null,
+          "path": "/?p=4&page=2&query-4-page=2&commentPage=2",
+          "privateLeak": false,
+          "scrollWidth": 768,
+          "width": 768
+        }
+      },
+      {
+        "theme": "classic",
+        "width": 375,
+        "active": {
+          "avatarCount": 0,
+          "bodyFirst": false,
+          "bodySecond": true,
+          "comments": [
+            {
+              "id": 3,
+              "width": 327
+            },
+            {
+              "id": 4,
+              "width": 309
+            },
+            {
+              "id": 5,
+              "width": 291
+            },
+            {
+              "id": 6,
+              "width": 291
+            },
+            {
+              "id": 7,
+              "width": 291
+            },
+            {
+              "id": 8,
+              "width": 291
+            },
+            {
+              "id": 9,
+              "width": 291
+            },
+            {
+              "id": 10,
+              "width": 291
+            },
+            {
+              "id": 11,
+              "width": 291
+            },
+            {
+              "id": 12,
+              "width": 291
+            },
+            {
+              "id": 13,
+              "width": 291
+            },
+            {
+              "id": 14,
+              "width": 291
+            },
+            {
+              "id": 15,
+              "width": 291
+            },
+            {
+              "id": 16,
+              "width": 291
+            },
+            {
+              "id": 17,
+              "width": 291
+            },
+            {
+              "id": 22,
+              "width": 291
+            },
+            {
+              "id": 23,
+              "width": 291
+            },
+            {
+              "id": 24,
+              "width": 291
+            },
+            {
+              "id": 25,
+              "width": 291
+            },
+            {
+              "id": 26,
+              "width": 291
+            },
+            {
+              "id": 27,
+              "width": 291
+            }
+          ],
+          "counters": {
+            "commentPage": "2",
+            "p": "4",
+            "page": "2",
+            "page_id": null,
+            "query-4-page": "2",
+            "replytocom": null
+          },
+          "draft": "Final route smoke classic 375",
+          "focused": true,
+          "form": true,
+          "links": [
+            {
+              "aria": "Reply to RootA",
+              "href": "/?p=4&page=2&query-4-page=2&commentPage=2&replytocom=3#respond",
+              "id": 3,
+              "text": "Reply"
+            },
+            {
+              "aria": "Reply to DeepLevel1",
+              "href": "/?p=4&page=2&query-4-page=2&commentPage=2&replytocom=4#respond",
+              "id": 4,
+              "text": "Reply"
+            }
+          ],
+          "loop": null,
+          "parent": null,
+          "path": "/?p=4&page=2&query-4-page=2&commentPage=2",
+          "privateLeak": false,
+          "scrollWidth": 375,
+          "width": 375
+        },
+        "direct": {
+          "avatarCount": 0,
+          "bodyFirst": false,
+          "bodySecond": true,
+          "comments": [
+            {
+              "id": 3,
+              "width": 327
+            },
+            {
+              "id": 4,
+              "width": 309
+            },
+            {
+              "id": 5,
+              "width": 291
+            },
+            {
+              "id": 6,
+              "width": 291
+            },
+            {
+              "id": 7,
+              "width": 291
+            },
+            {
+              "id": 8,
+              "width": 291
+            },
+            {
+              "id": 9,
+              "width": 291
+            },
+            {
+              "id": 10,
+              "width": 291
+            },
+            {
+              "id": 11,
+              "width": 291
+            },
+            {
+              "id": 12,
+              "width": 291
+            },
+            {
+              "id": 13,
+              "width": 291
+            },
+            {
+              "id": 14,
+              "width": 291
+            },
+            {
+              "id": 15,
+              "width": 291
+            },
+            {
+              "id": 16,
+              "width": 291
+            },
+            {
+              "id": 17,
+              "width": 291
+            },
+            {
+              "id": 22,
+              "width": 291
+            },
+            {
+              "id": 23,
+              "width": 291
+            },
+            {
+              "id": 24,
+              "width": 291
+            },
+            {
+              "id": 25,
+              "width": 291
+            },
+            {
+              "id": 26,
+              "width": 291
+            },
+            {
+              "id": 27,
+              "width": 291
+            }
+          ],
+          "counters": {
+            "commentPage": "2",
+            "p": "4",
+            "page": "2",
+            "page_id": null,
+            "query-4-page": "2",
+            "replytocom": "4"
+          },
+          "draft": "",
+          "focused": true,
+          "form": true,
+          "links": [
+            {
+              "aria": "Reply to RootA",
+              "href": "/?p=4&page=2&query-4-page=2&commentPage=2&replytocom=3#respond",
+              "id": 3,
+              "text": "Reply"
+            },
+            {
+              "aria": "Reply to DeepLevel1",
+              "href": "/?p=4&page=2&query-4-page=2&commentPage=2&replytocom=4#respond",
+              "id": 4,
+              "text": "Reply"
+            }
+          ],
+          "loop": null,
+          "parent": null,
+          "path": "/?p=4&page=2&query-4-page=2&commentPage=2&replytocom=4#respond",
+          "privateLeak": false,
+          "scrollWidth": 375,
+          "width": 375
+        },
+        "back": {
+          "avatarCount": 0,
+          "bodyFirst": false,
+          "bodySecond": true,
+          "comments": [
+            {
+              "id": 3,
+              "width": 327
+            },
+            {
+              "id": 4,
+              "width": 309
+            },
+            {
+              "id": 5,
+              "width": 291
+            },
+            {
+              "id": 6,
+              "width": 291
+            },
+            {
+              "id": 7,
+              "width": 291
+            },
+            {
+              "id": 8,
+              "width": 291
+            },
+            {
+              "id": 9,
+              "width": 291
+            },
+            {
+              "id": 10,
+              "width": 291
+            },
+            {
+              "id": 11,
+              "width": 291
+            },
+            {
+              "id": 12,
+              "width": 291
+            },
+            {
+              "id": 13,
+              "width": 291
+            },
+            {
+              "id": 14,
+              "width": 291
+            },
+            {
+              "id": 15,
+              "width": 291
+            },
+            {
+              "id": 16,
+              "width": 291
+            },
+            {
+              "id": 17,
+              "width": 291
+            },
+            {
+              "id": 22,
+              "width": 291
+            },
+            {
+              "id": 23,
+              "width": 291
+            },
+            {
+              "id": 24,
+              "width": 291
+            },
+            {
+              "id": 25,
+              "width": 291
+            },
+            {
+              "id": 26,
+              "width": 291
+            },
+            {
+              "id": 27,
+              "width": 291
+            }
+          ],
+          "counters": {
+            "commentPage": "2",
+            "p": "4",
+            "page": "2",
+            "page_id": null,
+            "query-4-page": "2",
+            "replytocom": null
+          },
+          "draft": "",
+          "focused": false,
+          "form": true,
+          "links": [
+            {
+              "aria": "Reply to RootA",
+              "href": "/?p=4&page=2&query-4-page=2&commentPage=2&replytocom=3#respond",
+              "id": 3,
+              "text": "Reply"
+            },
+            {
+              "aria": "Reply to DeepLevel1",
+              "href": "/?p=4&page=2&query-4-page=2&commentPage=2&replytocom=4#respond",
+              "id": 4,
+              "text": "Reply"
+            }
+          ],
+          "loop": null,
+          "parent": null,
+          "path": "/?p=4&page=2&query-4-page=2&commentPage=2",
+          "privateLeak": false,
+          "scrollWidth": 375,
+          "width": 375
+        }
+      }
+    ]
+  },
+  "cleanup": {
+    "ownedDatabaseDropped": true,
+    "ownedUploadsRemoved": true,
+    "privateEnvRemoved": true,
+    "privateFixtureRemoved": true,
+    "nativeConfigRemoved": true,
+    "ownedViteCacheRemoved": true,
+    "browserClosed": true,
+    "fixtureVaultProfileDeleted": true,
+    "ports3010_5180_3012_3013Free": true,
+    "dependencySymlinkRetained": true,
+    "noInstallsOrSharedViteTempWrites": true,
+    "ownerCachesLeftUntouchedAfterInitialSetupCorrection": true,
+    "screenshotsRetained": true,
+    "mainFrozenWorktreeSourceAndReviewer3035Untouched": true
+  },
+  "screenshots": {
+    "classic-explicitClosed-375.png": "dbd85737d393ab36054ac870b872bcd2d1fb89e1429da932778a5506605b206a",
+    "classic-final-reply-1440.png": "e3d18a1dcf407db8223eddb3c8e481d76770f5b16aa30f6ebd32879c2b77c1e6",
+    "classic-final-reply-375.png": "efd67c768eb22a7360c9d91c46562ebf4ee86c0a35b81156a1c836586e7f75bf",
+    "classic-final-reply-768.png": "3b0b3f14ed42c6f6a68af605f7b9c0918f3ab7470de07506d5fa4826d85b1a07",
+    "classic-guest-1440.png": "2efb14189dcdfcb6922f6f25fdd1535ee1a1ab4987adbe4474b0556baf988269",
+    "classic-guest-375.png": "c46895c47928e831d69d33acbe8db5e66831cd57ca42f12dee0559818f718331",
+    "classic-guest-768.png": "ea220d1265ed11f6ecc8b5bf94ebee8838531b0ed2d84a2eb3d6df7853e5a178",
+    "classic-oldPage-375.png": "b5d92c3f3dec08412e3cd8f824c0b685a990252e78761231dd6827bede207201",
+    "classic-oldPost-375.png": "523031247ceeeac35d5d4919364ac0b41e3429dd8b7e061805e9c1f43442b3d7",
+    "classic-ordinary-href-375.png": "36612c933d58214a475dbc7f18e824a7ec74a82d4df70401ddb8750cab77ad68",
+    "classic-page-login-history-375.png": "b5d92c3f3dec08412e3cd8f824c0b685a990252e78761231dd6827bede207201",
+    "classic-reply-1440.png": "b306a22c23c70fa7a5b997f40579b6423239460a1510dc66dc649f9db2468495",
+    "classic-reply-375.png": "eedce3286140d2e851a3bf0618ef344d4bf7a0e7e36ada69a93ca0ae938810d9",
+    "classic-reply-768.png": "f592e131b1a6e31e2a4d3faf4502c3159dae176601a9acf56e682e0417c8e937",
+    "classic-saved-1440.png": "fd9261a7df01d4807d2482e21014b871b7e4a6890f85590485014de75e9911b3",
+    "classic-saved-375.png": "c97cb230960bb7d94c5812230258b542f41df87bf3e35a0b4ef7746e641a5141",
+    "classic-saved-768.png": "12315a14ad0e83ca8a00725b54aadb92efc00202f160d247da2649fad14ab4f8",
+    "source-explicitClosed-375.png": "13fae1c53bdcc62d13250cc32817f88a0bbacdac001ebb21e0ea51d5a4175cbd",
+    "source-final-reply-1440.png": "b2a39a60f21e46b36468d08c8186036c48a03948eaf2238aab0a04aa3a824b3a",
+    "source-final-reply-375.png": "d34f0d7b50e32bd8f0524bb17f5fbd36f2f5a6d4335eb0ca2baa533766ab5a4e",
+    "source-final-reply-768.png": "5d6885f14df66f89ef1bc2a18219fe56dfdcf361b87f4c12412adbffbb315dc5",
+    "source-guest-1440.png": "0b28d71ae388a0a2596b5ce5cdaf638b246523cc214e43bf907ae74d4298a7e6",
+    "source-guest-375.png": "0a82a4098f69ece49624de14587256f901e4548148218ef273ef871dd65aee3c",
+    "source-guest-768.png": "48e5d61b1e5c769f1675b837509288872319be11bc7e7eb7cdbb5b09b3d051d5",
+    "source-late-owner-logout-375.png": "359378a06327b55a77a3c68f91f97e8ddd6397ee6378a8874ab6d4228e485bb3",
+    "source-oldPage-375.png": "329b5acf93355f3301ee9a0471f46592dd1e55b6b01b01b802f6c49fdacad5ae",
+    "source-oldPost-375.png": "e91d4a7feef95f8bbd102146463f8a0917899afe594e247a6ba1dca7f4f622c1",
+    "source-ordinary-href-375.png": "72a658bdba65d72ccb718ce1412570dbdf1dccb4e92b9df7b4d2bb937558ef2a",
+    "source-page-login-history-375.png": "329b5acf93355f3301ee9a0471f46592dd1e55b6b01b01b802f6c49fdacad5ae",
+    "source-reply-1440.png": "e8066fdf16682ad8a7874bd1d1c04c9ffad874ce37f3031ce16d9c7ecbd43ad2",
+    "source-reply-375.png": "2a773bf7b0315cced704259460a565e3aab822f6abb4943d1891bf8066789e33",
+    "source-reply-768.png": "0564be77ba692fa9e293180c3f2f722ecee3e98b10ba0d8f08b13874cc007447",
+    "source-saved-1440.png": "c4f9ed396c5264b5564427673a51d3814764daf779170027c4690a0978763ad0",
+    "source-saved-375.png": "16305085b21a134dce7595efef8612c6e593839d7a95c5a783c1e2ee4b540ba9",
+    "source-saved-768.png": "778d23abfedec8299cac4d4341b0062e6e03beec82ea66cf333a29f50d1bd460"
+  }
+}
