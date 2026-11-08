@@ -67,6 +67,7 @@ jobs:
           tests/notification-mail-ui.test.ts
           tests/comment-avatar-context.test.ts
           tests/comment-window.test.ts
+          tests/public-comment-open.test.ts
           tests/widget-blocks.test.ts tests/widget-layout.test.ts tests/date-archives.test.ts
           tests/footnotes.test.ts tests/term-blocks.test.ts tests/loginout.test.ts tests/auth-reset.test.ts
           tests/interactive-blocks.test.ts tests/background-styles.test.ts tests/template-areas.test.ts
