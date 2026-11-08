@@ -270,7 +270,7 @@ export default function Dashboard() {
                     </p>
                     {!human && <p className="comment-author">{comment.authorName}</p>}
                     <blockquote><p>{decodeEntities(comment.content.replace(/<[^>]+>/g, "")).slice(0, 120)}</p></blockquote>
-                    {comment.canEdit && <p className="row-actions"><Link to={`/admin/comments?postId=${comment.postId}`}>Moderate comments</Link></p>}
+                    {comment.canEdit && <p className="row-actions"><Link to={`/admin/comments?postId=${comment.postId}${human ? "" : "&type=pings"}`}>Moderate comments</Link></p>}
                   </div>
                 </li>;
               })}
