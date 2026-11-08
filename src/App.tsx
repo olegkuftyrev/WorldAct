@@ -22,6 +22,7 @@ import {
   SiteEditor,
   ToolsSuite,
   Themes,
+  Fonts,
   LostPassword,
   ResetPassword,
 } from "./screens/Platform";
@@ -238,6 +239,7 @@ export default function App() {
             <Route path="appearance" element={user?.role === "administrator" ? <Themes /> : <Navigate to="/admin" replace />} />
             <Route path="appearance/editor" element={user?.role === "administrator" ? <SiteEditor /> : <Navigate to="/admin" replace />} />
             <Route path="appearance/menus" element={user?.role === "administrator" ? <Menus /> : <Navigate to="/admin" replace />} />
+            <Route path="appearance/fonts" element={user?.role === "administrator" ? <Fonts /> : <Navigate to="/admin" replace />} />
             <Route path="plugins" element={<Plugins />} />
             <Route path="tools" element={<ToolsRoute />} />
             <Route path="about" element={<About />} />
@@ -533,7 +535,7 @@ function AdminShell({ children, editor = false }: { children?: ReactNode; editor
       to: "/admin/media",
       label: "Media",
       icon: "admin-media",
-      sub: [["Library", "/admin/media"]],
+      sub: [["Library", "/admin/media"], ["Add Media File", "/admin/media?upload=1"]],
     },
     {
       to: "/admin/pages",
@@ -553,15 +555,17 @@ function AdminShell({ children, editor = false }: { children?: ReactNode; editor
         ...(administrator ? [["Themes", "/admin/appearance"]] : []),
         ["Editor", "/admin/appearance/editor"],
         ["Menus", "/admin/appearance/menus"],
+        ...(administrator ? [["Fonts", "/admin/appearance/fonts"]] : []),
       ],
     },
-    { to: "/admin/plugins", label: "Plugins", icon: "admin-plugins" },
+    { to: "/admin/plugins", label: "Plugins", icon: "admin-plugins", sub: [["Installed Plugins", "/admin/plugins"], ["Add Plugin", "/admin/plugins?tab=add"]] },
     {
       to: "/admin/users",
       label: "Users",
       icon: "admin-users",
       sub: [
         ["All Users", "/admin/users"],
+        ["Add User", "/admin/users?new=1"],
         ["Profile", "/admin/profile"],
       ],
     },

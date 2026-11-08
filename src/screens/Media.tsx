@@ -48,6 +48,7 @@ type BulkResult = {
   updated: number;
   errors: { id: number; message: string }[];
 };
+const canUploadMedia = (role: string | undefined) => Boolean(role && role !== "contributor" && role !== "subscriber");
 export function MediaPreview({
   item,
   full = false,
@@ -131,8 +132,8 @@ export default function MediaLibrary() {
   const detail = useResource<{ media: MediaItem }>(
     id ? `/media/${encodeURIComponent(id)}` : null,
   );
-  const [uploader, setUploader] = useState(false),
-    [selected, setSelected] = useState<MediaItem | null>(null);
+  const uploader = canUploadMedia(user?.role) && params.get("upload") === "1";
+  const [selected, setSelected] = useState<MediaItem | null>(null);
   const [searchDraft, setSearchDraft] = useState(search),
     [monthDraft, setMonthDraft] = useState(month);
   const [checked, setChecked] = useState<number[]>([]),
@@ -147,7 +148,7 @@ export default function MediaLibrary() {
   const items = resource.data?.media || [],
     pagination = resource.data?.pagination;
   const currentPage = pagination?.page || page;
-  const canUpload = user?.role !== "contributor" && user?.role !== "subscriber";
+  const canUpload = canUploadMedia(user?.role);
   useEffect(() => {
     setSearchDraft(search);
     setMonthDraft(month);
@@ -394,7 +395,7 @@ export default function MediaLibrary() {
         {canUpload && (
           <button
             className="page-title-action"
-            onClick={() => setUploader(!uploader)}
+            onClick={() => change({ upload: uploader ? "" : "1" })}
           >
             Add New Media File
           </button>
@@ -414,7 +415,7 @@ export default function MediaLibrary() {
           hidden
           onChange={(event) => void upload(event.target.files)}
         />
-        {uploader && (
+        {uploader && canUpload && (
           <div
             className="upload-ui"
             onDragOver={(event) => event.preventDefault()}
@@ -599,7 +600,7 @@ export default function MediaLibrary() {
               <button
                 className="button button-primary"
                 onClick={() => {
-                  setUploader(true);
+                  change({ upload: "1" });
                   fileInput.current?.click();
                 }}
               >
