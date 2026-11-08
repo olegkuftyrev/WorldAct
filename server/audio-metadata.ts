@@ -53,20 +53,25 @@ export async function inspectAudio(buffer: Buffer, mime: string): Promise<AudioM
   if (!buffer.length || buffer.length > 32 * 1024 * 1024) throw new HttpError(400, "Audio metadata requires a file from 1 byte to 32 MiB.");
   if (activeParsers >= 2) throw new HttpError(503, "Two audio files are being checked. Try uploading again shortly.");
   activeParsers++;
+  let worker: Worker | undefined;
   try {
     const parserURL = pathToFileURL(createRequire(path.join(rootDir, "package.json")).resolve("music-metadata")).href;
     const metadata = await new Promise<AudioMetadata>(resolve => {
       let settled = false;
-      const worker = new Worker(workerSource, { eval: true, name: "WorldAct audio metadata", workerData: { parserURL, bytes: buffer, mime }, resourceLimits: { maxOldGenerationSizeMb: 64, maxYoungGenerationSizeMb: 16, stackSizeMb: 4 } });
+      worker = new Worker(workerSource, { eval: true, name: "WorldAct audio metadata", workerData: { parserURL, bytes: buffer, mime }, resourceLimits: { maxOldGenerationSizeMb: 64, maxYoungGenerationSizeMb: 16, stackSizeMb: 4 } });
+      const owned = worker;
       const finish = (value: unknown = {}) => {
-        if (settled) return; settled = true; clearTimeout(timer); void worker.terminate();
-        const parsed = audioMetadataSchema.safeParse(value); resolve(parsed.success ? parsed.data : {});
+        if (settled) return; settled = true; clearTimeout(timer);
+        const parsed = audioMetadataSchema.safeParse(value);
+        // A completed parse is still a live worker until physical exit. Await
+        // termination before returning, and release its slot only on exit.
+        void Promise.resolve().then(() => owned.terminate()).then(() => resolve(parsed.success ? parsed.data : {}), () => resolve({}));
       };
       const timer = setTimeout(finish, 5000);
-      worker.once("message", finish); worker.once("error", () => finish()); worker.once("exit", () => finish());
+      owned.once("message", finish); owned.once("error", () => finish()); owned.once("exit", () => { activeParsers--; finish(); });
     });
     // HTML is stripped once at the trust boundary, including script contents.
     for (const field of ["title", "artist", "album", "genre", "codec", "fileformat"] as const) if (metadata[field]) metadata[field] = plainText(metadata[field]!).trim();
     return metadata;
-  } finally { activeParsers--; }
+  } finally { if (!worker) activeParsers--; }
 }

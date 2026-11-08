@@ -10,6 +10,8 @@ Each parse runs in a separate worker with 64 MiB old-generation memory,
 16 MiB young-generation memory, a 4 MiB stack, five seconds of wall time,
 4 MiB per metadata allocation and 1,000 entries per metadata list. At most two
 parsers run concurrently. Files retain the existing 32 MiB upload/archive bound.
+Parser reservations remain held until physical worker exit; a message, error,
+timeout or rejected termination cannot release a still-live worker's slot.
 Worker failure or unsupported metadata yields an empty metadata object without
 discarding an otherwise accepted media file. Excess concurrency returns 503.
 

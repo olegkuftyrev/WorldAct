@@ -4,6 +4,8 @@ import test, { after } from "node:test";
 import { DOMParser } from "linkedom";
 import { inspectAudio } from "../server/audio-metadata.js";
 import { pool } from "../server/db.js";
+import { createRequire, syncBuiltinESMExports } from "node:module";
+import { EventEmitter } from "node:events";
 
 after(async () => { await pool.end(); });
 const chunk = (name: string, data: Buffer) => { const head = Buffer.alloc(8); head.write(name); head.writeUInt32LE(data.length, 4); return Buffer.concat([head, data, ...(data.length % 2 ? [Buffer.alloc(1)] : [])]); };
@@ -34,6 +36,38 @@ test("audio metadata strips active tags, ignores nonaudio, fails malformed data 
   assert.equal(results.filter(result => result.status === "fulfilled").length, 2);
   assert.ok(results.some(result => result.status === "rejected" && /Two audio files/.test(result.reason.message)));
   assert.equal((await inspectAudio(wave(), "audio/wav")).length, 2, "Worker completion releases the parser reservation");
+});
+
+test("audio parser reservations outlive message/error results until workers physically exit", async () => {
+  const threads = createRequire(import.meta.url)("node:worker_threads"), original = threads.Worker;
+  let live = 0, maximum = 0;
+  const workers: DelayedWorker[] = [];
+  class DelayedWorker extends EventEmitter {
+    finish?: () => void;
+    constructor() { super(); workers.push(this); maximum = Math.max(maximum, ++live); queueMicrotask(() => workers.indexOf(this) === 1 ? this.emit("error", new Error("Controlled parser failure")) : this.emit("message", { length: 2, length_formatted: "0:02" })); }
+    terminate() { return new Promise<number>((resolve, reject) => { this.finish = () => { live--; this.emit("exit", 0); resolve(0); }; if (workers.indexOf(this) === 2) reject(new Error("Controlled termination failure")); }); }
+  }
+  const pending: Promise<unknown>[] = [];
+  try {
+    threads.Worker = DelayedWorker; syncBuiltinESMExports();
+    let settled = 0;
+    const first = inspectAudio(wave(), "audio/wav").then(value => { settled++; return value; }); pending.push(first);
+    const second = inspectAudio(wave(), "audio/wav").then(value => { settled++; return value; }); pending.push(second);
+    await new Promise(resolve => setImmediate(resolve));
+    assert.equal(workers.length, 2); assert.equal(live, 2); assert.equal(settled, 0, "Neither successful nor failed parsing finishes before termination");
+    await assert.rejects(inspectAudio(wave(), "audio/wav"), /Two audio files/);
+    assert.equal(workers.length, 2); assert.equal(maximum, 2);
+    workers[0].finish!(); assert.equal((await first).length, 2);
+    const third = inspectAudio(wave(), "audio/wav"); pending.push(third); await new Promise(resolve => setImmediate(resolve));
+    assert.equal(live, 2); assert.equal(maximum, 2);
+    assert.deepEqual(await third, {}, "Termination failure returns no metadata");
+    await assert.rejects(inspectAudio(wave(), "audio/wav"), /Two audio files/, "A failed termination retains its live worker reservation");
+    workers[1].finish!(); workers[2].finish!(); assert.deepEqual(await second, {});
+    assert.equal(live, 0); assert.equal(maximum, 2);
+  } finally {
+    for (const worker of workers) if (worker.finish) { const finish = worker.finish; worker.finish = undefined; if (worker.listenerCount("exit")) finish(); }
+    await Promise.allSettled(pending); threads.Worker = original; syncBuiltinESMExports();
+  }
 });
 
 test("real audio uploads expose native metadata and archive copies recompute it from verified bytes", async () => {
