@@ -68,6 +68,7 @@ jobs:
           tests/wxr-export.test.ts
           tests/profile-email.test.ts tests/media-zero-dimensions.test.ts
           tests/profile-options.test.ts
+          tests/media-format-preservation.test.ts
           tests/shortcodes.test.ts
       - name: Fresh browser installation on the compiled server
         env:
@@ -86,6 +87,18 @@ jobs:
           SITE_ARCHIVE_STAGE: restore
           SITE_ARCHIVE_PATH: ${{ runner.temp }}/worldact-site.json
         run: node scripts/test-isolated.mjs tests/portability-site.test.ts
+      - name: Export image format archive
+        if: matrix.node == 24
+        env:
+          IMAGE_FORMAT_ARCHIVE_STAGE: export
+          IMAGE_FORMAT_ARCHIVE_PATH: ${{ runner.temp }}/worldact-images.json
+        run: node scripts/test-isolated.mjs tests/media-format-preservation.test.ts
+      - name: Restore image format archive to a fresh database
+        if: matrix.node == 24
+        env:
+          IMAGE_FORMAT_ARCHIVE_STAGE: restore
+          IMAGE_FORMAT_ARCHIVE_PATH: ${{ runner.temp }}/worldact-images.json
+        run: node scripts/test-isolated.mjs tests/media-format-preservation.test.ts
       - name: Export font archive
         if: matrix.node == 24
         env:
