@@ -29,3 +29,9 @@ The supplied Hello Dolly 1.7.2 and Akismet 5.7.2 plugins are reimplemented as No
 React, Express, PostgreSQL, Sharp, fontkit, file-type, fast-xml-parser, Nodemailer, Vite, and other dependencies retain their respective upstream licenses and copyright notices in their distributions. Generated build outputs and installed dependency data are not a replacement for those notices.
 
 Enabled public avatars load Gravatar URLs using the source-equivalent SHA-256 identity hash, rating and default style. Disabling avatars suppresses those images. Optional YouTube and Vimeo embeds load player resources from their respective providers. WorldAct constructs player URLs from validated provider/video IDs; those services and media remain subject to their owners' terms and rights. SMTP contacts the configured mail server only when configured; local development otherwise uses a database mail outbox.
+
+## Classic block JavaScript
+
+The Classic block lazily loads the supplied TinyMCE **4.9.11** JavaScript, themes, plugins, skins and fonts under `public/vendor/wordpress/wp-includes/js/tinymce/`. TinyMCE is copyright its original Moxiecode/Tiny Technologies authors and contributors and is distributed under LGPL 2.1; its complete supplied `license.txt` is preserved beside the assets. WordPress-specific editor/plugins/link scripts and CSS retain their WordPress contributor/source notices and GPL terms.
+
+Copied jQuery **3.7.1** and jQuery UI **1.14.2** are copyright OpenJS Foundation and other contributors and distributed under the MIT license. Their source headers are retained, with the MIT permission notice in `public/vendor/wordpress/wp-includes/js/jquery/LICENSE-MIT.txt`. English legacy-editor strings and keyboard shortcut labels are statically extracted from the supplied WordPress editor reference; no PHP loader, interpreter or server executes.
