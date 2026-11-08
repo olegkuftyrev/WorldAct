@@ -57,7 +57,7 @@ function assemble(index:string,head:string,root:string,data:string) {
   return result;
 }
 export function renderFrameworkDocument(index:string) {
-  return assemble(index,'<title>WorldAct</title><meta name="description" content="WorldAct — a personal publishing platform.">',"","");
+  return assemble(index,'<title data-worldact-default-head="">WorldAct</title><meta data-worldact-default-head="" name="description" content="WorldAct — a personal publishing platform.">',"","");
 }
 export function renderPublicDocument(index:string,model:PublicDocumentModel) {
   const json=serializePublicDocument(model);
