@@ -1,0 +1,86 @@
+{
+  "sha": "c0587edf1e88f4ebeb0a696156e5ef43a1f8849c",
+  "rows": [
+    {
+      "theme": "twentytwentyfive",
+      "width": 375,
+      "before": {
+        "length": 9,
+        "push": 0
+      },
+      "after": {
+        "body2": true,
+        "commentPage": "2",
+        "errors": [],
+        "length": 9,
+        "push": 0,
+        "query2": true,
+        "scroll": 375,
+        "url": "/by/native-author_case/4/author-identity-native-post/2/?query-4-page=2&commentPage=2&replytocom=4",
+        "width": 375
+      },
+      "saved": {
+        "id": 16,
+        "parent_id": 4,
+        "user_id": 1,
+        "status": "approved"
+      },
+      "requests": [
+        {
+          "method": "POST",
+          "path": "/api/public/comments",
+          "status": 201
+        },
+        {
+          "method": "GET",
+          "path": "/api/public/document?path=%2Fby%2Fnative-author_case%2F4%2Fauthor-identity-native-post%2F2%2F%3Fquery-4-page%3D2%26commentPage%3D2%26replytocom%3D4",
+          "status": 200
+        }
+      ],
+      "screenshot": "js-comment-twentytwentyfive-375.png"
+    },
+    {
+      "theme": "classic",
+      "width": 375,
+      "before": {
+        "length": 9,
+        "push": 0
+      },
+      "after": {
+        "body2": true,
+        "commentPage": "2",
+        "errors": [],
+        "length": 9,
+        "push": 0,
+        "query2": true,
+        "scroll": 375,
+        "url": "/by/native-author_case/4/author-identity-native-post/2/?query-4-page=2&commentPage=2&replytocom=4",
+        "width": 375
+      },
+      "saved": {
+        "id": 17,
+        "parent_id": 4,
+        "user_id": 1,
+        "status": "approved"
+      },
+      "requests": [
+        {
+          "method": "POST",
+          "path": "/api/public/comments",
+          "status": 201
+        },
+        {
+          "method": "GET",
+          "path": "/api/public/document?path=%2Fby%2Fnative-author_case%2F4%2Fauthor-identity-native-post%2F2%2F%3Fquery-4-page%3D2%26commentPage%3D2%26replytocom%3D4",
+          "status": 200
+        }
+      ],
+      "screenshot": "js-comment-classic-375.png"
+    }
+  ],
+  "sanitizedFromReceipt": {
+    "filename": "author-native-final-js-comment-proof.json",
+    "sha256": "73ef521b1a8d6f530543fea9db731097ccc9c0764d4df30ff6ce7f0cde72a67f"
+  },
+  "overallBackendStatus": "NEEDS_REVISION: separate accumulated different-author body wait finding remains"
+}

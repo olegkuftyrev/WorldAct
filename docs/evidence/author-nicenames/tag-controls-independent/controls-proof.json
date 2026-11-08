@@ -1,0 +1,3374 @@
+{
+  "sha": "701e7f4f5bfa426f506d639e6b8719bf8fc3137c",
+  "componentCommit": "b9fef5d5d250b6da21ff5a47c18c42cc0a9ccee6",
+  "rows": [
+    {
+      "width": 1440,
+      "initial": {
+        "buttons": [
+          {
+            "label": "year (The year of the post, four digits, for example 2004.)",
+            "pressed": "false",
+            "text": "%year%",
+            "type": "button"
+          },
+          {
+            "label": "monthnum (Month of the year, for example 05.)",
+            "pressed": "false",
+            "text": "%monthnum%",
+            "type": "button"
+          },
+          {
+            "label": "day (Day of the month, for example 28.)",
+            "pressed": "false",
+            "text": "%day%",
+            "type": "button"
+          },
+          {
+            "label": "hour (Hour of the day, for example 15.)",
+            "pressed": "false",
+            "text": "%hour%",
+            "type": "button"
+          },
+          {
+            "label": "minute (Minute of the hour, for example 43.)",
+            "pressed": "false",
+            "text": "%minute%",
+            "type": "button"
+          },
+          {
+            "label": "second (Second of the minute, for example 33.)",
+            "pressed": "false",
+            "text": "%second%",
+            "type": "button"
+          },
+          {
+            "label": "post_id (already used in permalink structure)",
+            "pressed": "true",
+            "text": "%post_id%",
+            "type": "button"
+          },
+          {
+            "label": "postname (already used in permalink structure)",
+            "pressed": "true",
+            "text": "%postname%",
+            "type": "button"
+          },
+          {
+            "label": "category (Category slug. Nested sub-categories appear as nested directories in the URL.)",
+            "pressed": "false",
+            "text": "%category%",
+            "type": "button"
+          },
+          {
+            "label": "author (already used in permalink structure)",
+            "pressed": "true",
+            "text": "%author%",
+            "type": "button"
+          }
+        ],
+        "end": 34,
+        "focus": "BODY",
+        "live": "",
+        "notice": "",
+        "selected": "custom_selection",
+        "start": 34,
+        "value": "/by/%author%/%post_id%/%postname%/"
+      },
+      "firstAdd": {
+        "buttons": [
+          {
+            "label": "year (already used in permalink structure)",
+            "pressed": "true",
+            "text": "%year%",
+            "type": "button"
+          },
+          {
+            "label": "monthnum (Month of the year, for example 05.)",
+            "pressed": "false",
+            "text": "%monthnum%",
+            "type": "button"
+          },
+          {
+            "label": "day (Day of the month, for example 28.)",
+            "pressed": "false",
+            "text": "%day%",
+            "type": "button"
+          },
+          {
+            "label": "hour (Hour of the day, for example 15.)",
+            "pressed": "false",
+            "text": "%hour%",
+            "type": "button"
+          },
+          {
+            "label": "minute (Minute of the hour, for example 43.)",
+            "pressed": "false",
+            "text": "%minute%",
+            "type": "button"
+          },
+          {
+            "label": "second (Second of the minute, for example 33.)",
+            "pressed": "false",
+            "text": "%second%",
+            "type": "button"
+          },
+          {
+            "label": "post_id (already used in permalink structure)",
+            "pressed": "true",
+            "text": "%post_id%",
+            "type": "button"
+          },
+          {
+            "label": "postname (already used in permalink structure)",
+            "pressed": "true",
+            "text": "%postname%",
+            "type": "button"
+          },
+          {
+            "label": "category (Category slug. Nested sub-categories appear as nested directories in the URL.)",
+            "pressed": "false",
+            "text": "%category%",
+            "type": "button"
+          },
+          {
+            "label": "author (already used in permalink structure)",
+            "pressed": "true",
+            "text": "%author%",
+            "type": "button"
+          }
+        ],
+        "end": 41,
+        "focus": "%year%",
+        "live": "year added to permalink structure",
+        "notice": "",
+        "selected": "custom_selection",
+        "start": 41,
+        "value": "/by/%author%/%post_id%/%postname%/%year%/"
+      },
+      "firstRemove": {
+        "buttons": [
+          {
+            "label": "year (The year of the post, four digits, for example 2004.)",
+            "pressed": "false",
+            "text": "%year%",
+            "type": "button"
+          },
+          {
+            "label": "monthnum (Month of the year, for example 05.)",
+            "pressed": "false",
+            "text": "%monthnum%",
+            "type": "button"
+          },
+          {
+            "label": "day (Day of the month, for example 28.)",
+            "pressed": "false",
+            "text": "%day%",
+            "type": "button"
+          },
+          {
+            "label": "hour (Hour of the day, for example 15.)",
+            "pressed": "false",
+            "text": "%hour%",
+            "type": "button"
+          },
+          {
+            "label": "minute (Minute of the hour, for example 43.)",
+            "pressed": "false",
+            "text": "%minute%",
+            "type": "button"
+          },
+          {
+            "label": "second (Second of the minute, for example 33.)",
+            "pressed": "false",
+            "text": "%second%",
+            "type": "button"
+          },
+          {
+            "label": "post_id (already used in permalink structure)",
+            "pressed": "true",
+            "text": "%post_id%",
+            "type": "button"
+          },
+          {
+            "label": "postname (already used in permalink structure)",
+            "pressed": "true",
+            "text": "%postname%",
+            "type": "button"
+          },
+          {
+            "label": "category (Category slug. Nested sub-categories appear as nested directories in the URL.)",
+            "pressed": "false",
+            "text": "%category%",
+            "type": "button"
+          },
+          {
+            "label": "author (already used in permalink structure)",
+            "pressed": "true",
+            "text": "%author%",
+            "type": "button"
+          }
+        ],
+        "end": 34,
+        "focus": "%year%",
+        "live": "year removed from permalink structure",
+        "notice": "",
+        "selected": "custom_selection",
+        "start": 34,
+        "value": "/by/%author%/%post_id%/%postname%/"
+      },
+      "presetRemove": {
+        "buttons": [
+          {
+            "label": "year (The year of the post, four digits, for example 2004.)",
+            "pressed": "false",
+            "text": "%year%",
+            "type": "button"
+          },
+          {
+            "label": "monthnum (Month of the year, for example 05.)",
+            "pressed": "false",
+            "text": "%monthnum%",
+            "type": "button"
+          },
+          {
+            "label": "day (Day of the month, for example 28.)",
+            "pressed": "false",
+            "text": "%day%",
+            "type": "button"
+          },
+          {
+            "label": "hour (Hour of the day, for example 15.)",
+            "pressed": "false",
+            "text": "%hour%",
+            "type": "button"
+          },
+          {
+            "label": "minute (Minute of the hour, for example 43.)",
+            "pressed": "false",
+            "text": "%minute%",
+            "type": "button"
+          },
+          {
+            "label": "second (Second of the minute, for example 33.)",
+            "pressed": "false",
+            "text": "%second%",
+            "type": "button"
+          },
+          {
+            "label": "post_id (The unique ID of the post, for example 423.)",
+            "pressed": "false",
+            "text": "%post_id%",
+            "type": "button"
+          },
+          {
+            "label": "postname (The sanitized post title (slug).)",
+            "pressed": "false",
+            "text": "%postname%",
+            "type": "button"
+          },
+          {
+            "label": "category (Category slug. Nested sub-categories appear as nested directories in the URL.)",
+            "pressed": "false",
+            "text": "%category%",
+            "type": "button"
+          },
+          {
+            "label": "author (A sanitized version of the author name.)",
+            "pressed": "false",
+            "text": "%author%",
+            "type": "button"
+          }
+        ],
+        "end": 0,
+        "focus": "%postname%",
+        "live": "postname removed from permalink structure",
+        "notice": "",
+        "selected": "permalink-input-post-name",
+        "start": 0,
+        "value": ""
+      },
+      "custom": {
+        "buttons": [
+          {
+            "label": "year (The year of the post, four digits, for example 2004.)",
+            "pressed": "false",
+            "text": "%year%",
+            "type": "button"
+          },
+          {
+            "label": "monthnum (Month of the year, for example 05.)",
+            "pressed": "false",
+            "text": "%monthnum%",
+            "type": "button"
+          },
+          {
+            "label": "day (Day of the month, for example 28.)",
+            "pressed": "false",
+            "text": "%day%",
+            "type": "button"
+          },
+          {
+            "label": "hour (Hour of the day, for example 15.)",
+            "pressed": "false",
+            "text": "%hour%",
+            "type": "button"
+          },
+          {
+            "label": "minute (Minute of the hour, for example 43.)",
+            "pressed": "false",
+            "text": "%minute%",
+            "type": "button"
+          },
+          {
+            "label": "second (Second of the minute, for example 33.)",
+            "pressed": "false",
+            "text": "%second%",
+            "type": "button"
+          },
+          {
+            "label": "post_id (The unique ID of the post, for example 423.)",
+            "pressed": "false",
+            "text": "%post_id%",
+            "type": "button"
+          },
+          {
+            "label": "postname (already used in permalink structure)",
+            "pressed": "true",
+            "text": "%postname%",
+            "type": "button"
+          },
+          {
+            "label": "category (Category slug. Nested sub-categories appear as nested directories in the URL.)",
+            "pressed": "false",
+            "text": "%category%",
+            "type": "button"
+          },
+          {
+            "label": "author (A sanitized version of the author name.)",
+            "pressed": "false",
+            "text": "%author%",
+            "type": "button"
+          }
+        ],
+        "end": 12,
+        "focus": "custom_selection",
+        "live": "postname removed from permalink structure",
+        "notice": "",
+        "selected": "custom_selection",
+        "start": 12,
+        "value": "/%postname%/"
+      },
+      "focusOnly": {
+        "buttons": [
+          {
+            "label": "year (The year of the post, four digits, for example 2004.)",
+            "pressed": "false",
+            "text": "%year%",
+            "type": "button"
+          },
+          {
+            "label": "monthnum (Month of the year, for example 05.)",
+            "pressed": "false",
+            "text": "%monthnum%",
+            "type": "button"
+          },
+          {
+            "label": "day (Day of the month, for example 28.)",
+            "pressed": "false",
+            "text": "%day%",
+            "type": "button"
+          },
+          {
+            "label": "hour (Hour of the day, for example 15.)",
+            "pressed": "false",
+            "text": "%hour%",
+            "type": "button"
+          },
+          {
+            "label": "minute (Minute of the hour, for example 43.)",
+            "pressed": "false",
+            "text": "%minute%",
+            "type": "button"
+          },
+          {
+            "label": "second (Second of the minute, for example 33.)",
+            "pressed": "false",
+            "text": "%second%",
+            "type": "button"
+          },
+          {
+            "label": "post_id (The unique ID of the post, for example 423.)",
+            "pressed": "false",
+            "text": "%post_id%",
+            "type": "button"
+          },
+          {
+            "label": "postname (already used in permalink structure)",
+            "pressed": "true",
+            "text": "%postname%",
+            "type": "button"
+          },
+          {
+            "label": "category (Category slug. Nested sub-categories appear as nested directories in the URL.)",
+            "pressed": "false",
+            "text": "%category%",
+            "type": "button"
+          },
+          {
+            "label": "author (A sanitized version of the author name.)",
+            "pressed": "false",
+            "text": "%author%",
+            "type": "button"
+          }
+        ],
+        "end": 12,
+        "focus": "permalink_structure",
+        "live": "postname removed from permalink structure",
+        "notice": "",
+        "selected": "permalink-input-post-name",
+        "start": 0,
+        "value": "/%postname%/"
+      },
+      "selected": {
+        "buttons": [
+          {
+            "label": "year (The year of the post, four digits, for example 2004.)",
+            "pressed": "false",
+            "text": "%year%",
+            "type": "button"
+          },
+          {
+            "label": "monthnum (Month of the year, for example 05.)",
+            "pressed": "false",
+            "text": "%monthnum%",
+            "type": "button"
+          },
+          {
+            "label": "day (Day of the month, for example 28.)",
+            "pressed": "false",
+            "text": "%day%",
+            "type": "button"
+          },
+          {
+            "label": "hour (Hour of the day, for example 15.)",
+            "pressed": "false",
+            "text": "%hour%",
+            "type": "button"
+          },
+          {
+            "label": "minute (Minute of the hour, for example 43.)",
+            "pressed": "false",
+            "text": "%minute%",
+            "type": "button"
+          },
+          {
+            "label": "second (Second of the minute, for example 33.)",
+            "pressed": "false",
+            "text": "%second%",
+            "type": "button"
+          },
+          {
+            "label": "post_id (The unique ID of the post, for example 423.)",
+            "pressed": "false",
+            "text": "%post_id%",
+            "type": "button"
+          },
+          {
+            "label": "postname (already used in permalink structure)",
+            "pressed": "true",
+            "text": "%postname%",
+            "type": "button"
+          },
+          {
+            "label": "category (Category slug. Nested sub-categories appear as nested directories in the URL.)",
+            "pressed": "false",
+            "text": "%category%",
+            "type": "button"
+          },
+          {
+            "label": "author (A sanitized version of the author name.)",
+            "pressed": "false",
+            "text": "%author%",
+            "type": "button"
+          }
+        ],
+        "end": 8,
+        "focus": "permalink_structure",
+        "live": "postname removed from permalink structure",
+        "notice": "",
+        "selected": "custom_selection",
+        "start": 5,
+        "value": "alphaXYZomega"
+      },
+      "inserted": {
+        "buttons": [
+          {
+            "label": "year (The year of the post, four digits, for example 2004.)",
+            "pressed": "false",
+            "text": "%year%",
+            "type": "button"
+          },
+          {
+            "label": "monthnum (Month of the year, for example 05.)",
+            "pressed": "false",
+            "text": "%monthnum%",
+            "type": "button"
+          },
+          {
+            "label": "day (Day of the month, for example 28.)",
+            "pressed": "false",
+            "text": "%day%",
+            "type": "button"
+          },
+          {
+            "label": "hour (Hour of the day, for example 15.)",
+            "pressed": "false",
+            "text": "%hour%",
+            "type": "button"
+          },
+          {
+            "label": "minute (Minute of the hour, for example 43.)",
+            "pressed": "false",
+            "text": "%minute%",
+            "type": "button"
+          },
+          {
+            "label": "second (Second of the minute, for example 33.)",
+            "pressed": "false",
+            "text": "%second%",
+            "type": "button"
+          },
+          {
+            "label": "post_id (The unique ID of the post, for example 423.)",
+            "pressed": "false",
+            "text": "%post_id%",
+            "type": "button"
+          },
+          {
+            "label": "postname (The sanitized post title (slug).)",
+            "pressed": "false",
+            "text": "%postname%",
+            "type": "button"
+          },
+          {
+            "label": "category (Category slug. Nested sub-categories appear as nested directories in the URL.)",
+            "pressed": "false",
+            "text": "%category%",
+            "type": "button"
+          },
+          {
+            "label": "author (already used in permalink structure)",
+            "pressed": "true",
+            "text": "%author%",
+            "type": "button"
+          }
+        ],
+        "end": 15,
+        "focus": "permalink_structure",
+        "live": "author added to permalink structure",
+        "notice": "",
+        "selected": "custom_selection",
+        "start": 15,
+        "value": "alpha/%author%/omega"
+      },
+      "removed": {
+        "buttons": [
+          {
+            "label": "year (The year of the post, four digits, for example 2004.)",
+            "pressed": "false",
+            "text": "%year%",
+            "type": "button"
+          },
+          {
+            "label": "monthnum (Month of the year, for example 05.)",
+            "pressed": "false",
+            "text": "%monthnum%",
+            "type": "button"
+          },
+          {
+            "label": "day (Day of the month, for example 28.)",
+            "pressed": "false",
+            "text": "%day%",
+            "type": "button"
+          },
+          {
+            "label": "hour (Hour of the day, for example 15.)",
+            "pressed": "false",
+            "text": "%hour%",
+            "type": "button"
+          },
+          {
+            "label": "minute (Minute of the hour, for example 43.)",
+            "pressed": "false",
+            "text": "%minute%",
+            "type": "button"
+          },
+          {
+            "label": "second (Second of the minute, for example 33.)",
+            "pressed": "false",
+            "text": "%second%",
+            "type": "button"
+          },
+          {
+            "label": "post_id (The unique ID of the post, for example 423.)",
+            "pressed": "false",
+            "text": "%post_id%",
+            "type": "button"
+          },
+          {
+            "label": "postname (The sanitized post title (slug).)",
+            "pressed": "false",
+            "text": "%postname%",
+            "type": "button"
+          },
+          {
+            "label": "category (Category slug. Nested sub-categories appear as nested directories in the URL.)",
+            "pressed": "false",
+            "text": "%category%",
+            "type": "button"
+          },
+          {
+            "label": "author (A sanitized version of the author name.)",
+            "pressed": "false",
+            "text": "%author%",
+            "type": "button"
+          }
+        ],
+        "end": 11,
+        "focus": "%author%",
+        "live": "author removed from permalink structure",
+        "notice": "",
+        "selected": "custom_selection",
+        "start": 11,
+        "value": "alpha/omega"
+      },
+      "slash": {
+        "buttons": [
+          {
+            "label": "year (The year of the post, four digits, for example 2004.)",
+            "pressed": "false",
+            "text": "%year%",
+            "type": "button"
+          },
+          {
+            "label": "monthnum (already used in permalink structure)",
+            "pressed": "true",
+            "text": "%monthnum%",
+            "type": "button"
+          },
+          {
+            "label": "day (Day of the month, for example 28.)",
+            "pressed": "false",
+            "text": "%day%",
+            "type": "button"
+          },
+          {
+            "label": "hour (Hour of the day, for example 15.)",
+            "pressed": "false",
+            "text": "%hour%",
+            "type": "button"
+          },
+          {
+            "label": "minute (Minute of the hour, for example 43.)",
+            "pressed": "false",
+            "text": "%minute%",
+            "type": "button"
+          },
+          {
+            "label": "second (Second of the minute, for example 33.)",
+            "pressed": "false",
+            "text": "%second%",
+            "type": "button"
+          },
+          {
+            "label": "post_id (The unique ID of the post, for example 423.)",
+            "pressed": "false",
+            "text": "%post_id%",
+            "type": "button"
+          },
+          {
+            "label": "postname (The sanitized post title (slug).)",
+            "pressed": "false",
+            "text": "%postname%",
+            "type": "button"
+          },
+          {
+            "label": "category (Category slug. Nested sub-categories appear as nested directories in the URL.)",
+            "pressed": "false",
+            "text": "%category%",
+            "type": "button"
+          },
+          {
+            "label": "author (A sanitized version of the author name.)",
+            "pressed": "false",
+            "text": "%author%",
+            "type": "button"
+          }
+        ],
+        "end": 16,
+        "focus": "permalink_structure",
+        "live": "monthnum added to permalink structure",
+        "notice": "",
+        "selected": "custom_selection",
+        "start": 16,
+        "value": "/left/%monthnum%/"
+      },
+      "trailing": {
+        "buttons": [
+          {
+            "label": "year (The year of the post, four digits, for example 2004.)",
+            "pressed": "false",
+            "text": "%year%",
+            "type": "button"
+          },
+          {
+            "label": "monthnum (Month of the year, for example 05.)",
+            "pressed": "false",
+            "text": "%monthnum%",
+            "type": "button"
+          },
+          {
+            "label": "day (Day of the month, for example 28.)",
+            "pressed": "false",
+            "text": "%day%",
+            "type": "button"
+          },
+          {
+            "label": "hour (Hour of the day, for example 15.)",
+            "pressed": "false",
+            "text": "%hour%",
+            "type": "button"
+          },
+          {
+            "label": "minute (Minute of the hour, for example 43.)",
+            "pressed": "false",
+            "text": "%minute%",
+            "type": "button"
+          },
+          {
+            "label": "second (Second of the minute, for example 33.)",
+            "pressed": "false",
+            "text": "%second%",
+            "type": "button"
+          },
+          {
+            "label": "post_id (The unique ID of the post, for example 423.)",
+            "pressed": "false",
+            "text": "%post_id%",
+            "type": "button"
+          },
+          {
+            "label": "postname (already used in permalink structure)",
+            "pressed": "true",
+            "text": "%postname%",
+            "type": "button"
+          },
+          {
+            "label": "category (Category slug. Nested sub-categories appear as nested directories in the URL.)",
+            "pressed": "false",
+            "text": "%category%",
+            "type": "button"
+          },
+          {
+            "label": "author (A sanitized version of the author name.)",
+            "pressed": "false",
+            "text": "%author%",
+            "type": "button"
+          }
+        ],
+        "end": 11,
+        "focus": "%postname%",
+        "live": "postname removed from permalink structure",
+        "notice": "",
+        "selected": "custom_selection",
+        "start": 11,
+        "value": "/%postname%"
+      },
+      "all": {
+        "buttons": [
+          {
+            "label": "year (already used in permalink structure)",
+            "pressed": "true",
+            "text": "%year%",
+            "type": "button"
+          },
+          {
+            "label": "monthnum (already used in permalink structure)",
+            "pressed": "true",
+            "text": "%monthnum%",
+            "type": "button"
+          },
+          {
+            "label": "day (already used in permalink structure)",
+            "pressed": "true",
+            "text": "%day%",
+            "type": "button"
+          },
+          {
+            "label": "hour (already used in permalink structure)",
+            "pressed": "true",
+            "text": "%hour%",
+            "type": "button"
+          },
+          {
+            "label": "minute (already used in permalink structure)",
+            "pressed": "true",
+            "text": "%minute%",
+            "type": "button"
+          },
+          {
+            "label": "second (already used in permalink structure)",
+            "pressed": "true",
+            "text": "%second%",
+            "type": "button"
+          },
+          {
+            "label": "post_id (already used in permalink structure)",
+            "pressed": "true",
+            "text": "%post_id%",
+            "type": "button"
+          },
+          {
+            "label": "postname (already used in permalink structure)",
+            "pressed": "true",
+            "text": "%postname%",
+            "type": "button"
+          },
+          {
+            "label": "category (already used in permalink structure)",
+            "pressed": "true",
+            "text": "%category%",
+            "type": "button"
+          },
+          {
+            "label": "author (already used in permalink structure)",
+            "pressed": "true",
+            "text": "%author%",
+            "type": "button"
+          }
+        ],
+        "end": 91,
+        "focus": "permalink_structure",
+        "live": "author added to permalink structure",
+        "notice": "",
+        "selected": "custom_selection",
+        "start": 91,
+        "value": "/%year%/%monthnum%/%day%/%hour%/%minute%/%second%/%post_id%/%postname%/%category%/%author%/"
+      },
+      "savedCalls": [
+        {
+          "method": "PUT",
+          "path": "/api/settings",
+          "status": 200
+        }
+      ],
+      "layout": {
+        "buttons": [
+          {
+            "bottom": 771,
+            "height": 40,
+            "left": 422,
+            "pressed": "false",
+            "right": 507.671875,
+            "text": "%year%",
+            "top": 731,
+            "width": 85.671875
+          },
+          {
+            "bottom": 771,
+            "height": 40,
+            "left": 512.671875,
+            "pressed": "false",
+            "right": 638,
+            "text": "%monthnum%",
+            "top": 731,
+            "width": 125.328125
+          },
+          {
+            "bottom": 771,
+            "height": 40,
+            "left": 643,
+            "pressed": "false",
+            "right": 724.171875,
+            "text": "%day%",
+            "top": 731,
+            "width": 81.171875
+          },
+          {
+            "bottom": 771,
+            "height": 40,
+            "left": 729.171875,
+            "pressed": "false",
+            "right": 816.34375,
+            "text": "%hour%",
+            "top": 731,
+            "width": 87.171875
+          },
+          {
+            "bottom": 771,
+            "height": 40,
+            "left": 821.34375,
+            "pressed": "false",
+            "right": 922.671875,
+            "text": "%minute%",
+            "top": 731,
+            "width": 101.328125
+          },
+          {
+            "bottom": 771,
+            "height": 40,
+            "left": 927.671875,
+            "pressed": "false",
+            "right": 1031.75,
+            "text": "%second%",
+            "top": 731,
+            "width": 104.078125
+          },
+          {
+            "bottom": 771,
+            "height": 40,
+            "left": 1036.75,
+            "pressed": "true",
+            "right": 1142.15625,
+            "text": "%post_id%",
+            "top": 731,
+            "width": 105.40625
+          },
+          {
+            "bottom": 817,
+            "height": 40,
+            "left": 422,
+            "pressed": "true",
+            "right": 542.28125,
+            "text": "%postname%",
+            "top": 777,
+            "width": 120.28125
+          },
+          {
+            "bottom": 817,
+            "height": 40,
+            "left": 547.28125,
+            "pressed": "false",
+            "right": 661.140625,
+            "text": "%category%",
+            "top": 777,
+            "width": 113.859375
+          },
+          {
+            "bottom": 817,
+            "height": 40,
+            "left": 666.140625,
+            "pressed": "true",
+            "right": 765.4375,
+            "text": "%author%",
+            "top": 777,
+            "width": 99.296875
+          }
+        ],
+        "missingDescriptions": [],
+        "scroll": 1440,
+        "width": 1440
+      },
+      "invalid": {
+        "buttons": [
+          {
+            "label": "year (The year of the post, four digits, for example 2004.)",
+            "pressed": "false",
+            "text": "%year%",
+            "type": "button"
+          },
+          {
+            "label": "monthnum (Month of the year, for example 05.)",
+            "pressed": "false",
+            "text": "%monthnum%",
+            "type": "button"
+          },
+          {
+            "label": "day (Day of the month, for example 28.)",
+            "pressed": "false",
+            "text": "%day%",
+            "type": "button"
+          },
+          {
+            "label": "hour (Hour of the day, for example 15.)",
+            "pressed": "false",
+            "text": "%hour%",
+            "type": "button"
+          },
+          {
+            "label": "minute (Minute of the hour, for example 43.)",
+            "pressed": "false",
+            "text": "%minute%",
+            "type": "button"
+          },
+          {
+            "label": "second (Second of the minute, for example 33.)",
+            "pressed": "false",
+            "text": "%second%",
+            "type": "button"
+          },
+          {
+            "label": "post_id (already used in permalink structure)",
+            "pressed": "true",
+            "text": "%post_id%",
+            "type": "button"
+          },
+          {
+            "label": "postname (already used in permalink structure)",
+            "pressed": "true",
+            "text": "%postname%",
+            "type": "button"
+          },
+          {
+            "label": "category (Category slug. Nested sub-categories appear as nested directories in the URL.)",
+            "pressed": "false",
+            "text": "%category%",
+            "type": "button"
+          },
+          {
+            "label": "author (already used in permalink structure)",
+            "pressed": "true",
+            "text": "%author%",
+            "type": "button"
+          }
+        ],
+        "end": 24,
+        "focus": "permalink_structure",
+        "live": "",
+        "notice": "permalinkStructure: Use an empty structure for Plain links, or a unique path beginning with / and containing %postname% or %post_id%. Supported tokens: %year%, %monthnum%, %day%, %hour%, %minute%, %second%, %post_id%, %postname%, %category%, %author%.Dismiss",
+        "selected": "custom_selection",
+        "start": 24,
+        "value": "/by/%author%-%postname%/"
+      },
+      "invalidCalls": [
+        {
+          "method": "PUT",
+          "path": "/api/settings",
+          "status": 400
+        }
+      ],
+      "afterError": {
+        "buttons": [
+          {
+            "label": "year (already used in permalink structure)",
+            "pressed": "true",
+            "text": "%year%",
+            "type": "button"
+          },
+          {
+            "label": "monthnum (Month of the year, for example 05.)",
+            "pressed": "false",
+            "text": "%monthnum%",
+            "type": "button"
+          },
+          {
+            "label": "day (Day of the month, for example 28.)",
+            "pressed": "false",
+            "text": "%day%",
+            "type": "button"
+          },
+          {
+            "label": "hour (Hour of the day, for example 15.)",
+            "pressed": "false",
+            "text": "%hour%",
+            "type": "button"
+          },
+          {
+            "label": "minute (Minute of the hour, for example 43.)",
+            "pressed": "false",
+            "text": "%minute%",
+            "type": "button"
+          },
+          {
+            "label": "second (Second of the minute, for example 33.)",
+            "pressed": "false",
+            "text": "%second%",
+            "type": "button"
+          },
+          {
+            "label": "post_id (The unique ID of the post, for example 423.)",
+            "pressed": "false",
+            "text": "%post_id%",
+            "type": "button"
+          },
+          {
+            "label": "postname (already used in permalink structure)",
+            "pressed": "true",
+            "text": "%postname%",
+            "type": "button"
+          },
+          {
+            "label": "category (Category slug. Nested sub-categories appear as nested directories in the URL.)",
+            "pressed": "false",
+            "text": "%category%",
+            "type": "button"
+          },
+          {
+            "label": "author (already used in permalink structure)",
+            "pressed": "true",
+            "text": "%author%",
+            "type": "button"
+          }
+        ],
+        "end": 31,
+        "focus": "permalink_structure",
+        "live": "year added to permalink structure",
+        "notice": "permalinkStructure: Use an empty structure for Plain links, or a unique path beginning with / and containing %postname% or %post_id%. Supported tokens: %year%, %monthnum%, %day%, %hour%, %minute%, %second%, %post_id%, %postname%, %category%, %author%.Dismiss",
+        "selected": "custom_selection",
+        "start": 31,
+        "value": "/by/%author%-%postname%/%year%/"
+      },
+      "screenshot": "1440.png",
+      "viewport": "1440-viewport.png",
+      "invalidScreenshot": null
+    },
+    {
+      "width": 768,
+      "initial": {
+        "buttons": [
+          {
+            "label": "year (The year of the post, four digits, for example 2004.)",
+            "pressed": "false",
+            "text": "%year%",
+            "type": "button"
+          },
+          {
+            "label": "monthnum (Month of the year, for example 05.)",
+            "pressed": "false",
+            "text": "%monthnum%",
+            "type": "button"
+          },
+          {
+            "label": "day (Day of the month, for example 28.)",
+            "pressed": "false",
+            "text": "%day%",
+            "type": "button"
+          },
+          {
+            "label": "hour (Hour of the day, for example 15.)",
+            "pressed": "false",
+            "text": "%hour%",
+            "type": "button"
+          },
+          {
+            "label": "minute (Minute of the hour, for example 43.)",
+            "pressed": "false",
+            "text": "%minute%",
+            "type": "button"
+          },
+          {
+            "label": "second (Second of the minute, for example 33.)",
+            "pressed": "false",
+            "text": "%second%",
+            "type": "button"
+          },
+          {
+            "label": "post_id (already used in permalink structure)",
+            "pressed": "true",
+            "text": "%post_id%",
+            "type": "button"
+          },
+          {
+            "label": "postname (already used in permalink structure)",
+            "pressed": "true",
+            "text": "%postname%",
+            "type": "button"
+          },
+          {
+            "label": "category (Category slug. Nested sub-categories appear as nested directories in the URL.)",
+            "pressed": "false",
+            "text": "%category%",
+            "type": "button"
+          },
+          {
+            "label": "author (already used in permalink structure)",
+            "pressed": "true",
+            "text": "%author%",
+            "type": "button"
+          }
+        ],
+        "end": 34,
+        "focus": "BODY",
+        "live": "",
+        "notice": "",
+        "selected": "custom_selection",
+        "start": 34,
+        "value": "/by/%author%/%post_id%/%postname%/"
+      },
+      "firstAdd": {
+        "buttons": [
+          {
+            "label": "year (already used in permalink structure)",
+            "pressed": "true",
+            "text": "%year%",
+            "type": "button"
+          },
+          {
+            "label": "monthnum (Month of the year, for example 05.)",
+            "pressed": "false",
+            "text": "%monthnum%",
+            "type": "button"
+          },
+          {
+            "label": "day (Day of the month, for example 28.)",
+            "pressed": "false",
+            "text": "%day%",
+            "type": "button"
+          },
+          {
+            "label": "hour (Hour of the day, for example 15.)",
+            "pressed": "false",
+            "text": "%hour%",
+            "type": "button"
+          },
+          {
+            "label": "minute (Minute of the hour, for example 43.)",
+            "pressed": "false",
+            "text": "%minute%",
+            "type": "button"
+          },
+          {
+            "label": "second (Second of the minute, for example 33.)",
+            "pressed": "false",
+            "text": "%second%",
+            "type": "button"
+          },
+          {
+            "label": "post_id (already used in permalink structure)",
+            "pressed": "true",
+            "text": "%post_id%",
+            "type": "button"
+          },
+          {
+            "label": "postname (already used in permalink structure)",
+            "pressed": "true",
+            "text": "%postname%",
+            "type": "button"
+          },
+          {
+            "label": "category (Category slug. Nested sub-categories appear as nested directories in the URL.)",
+            "pressed": "false",
+            "text": "%category%",
+            "type": "button"
+          },
+          {
+            "label": "author (already used in permalink structure)",
+            "pressed": "true",
+            "text": "%author%",
+            "type": "button"
+          }
+        ],
+        "end": 41,
+        "focus": "%year%",
+        "live": "year added to permalink structure",
+        "notice": "",
+        "selected": "custom_selection",
+        "start": 41,
+        "value": "/by/%author%/%post_id%/%postname%/%year%/"
+      },
+      "firstRemove": {
+        "buttons": [
+          {
+            "label": "year (The year of the post, four digits, for example 2004.)",
+            "pressed": "false",
+            "text": "%year%",
+            "type": "button"
+          },
+          {
+            "label": "monthnum (Month of the year, for example 05.)",
+            "pressed": "false",
+            "text": "%monthnum%",
+            "type": "button"
+          },
+          {
+            "label": "day (Day of the month, for example 28.)",
+            "pressed": "false",
+            "text": "%day%",
+            "type": "button"
+          },
+          {
+            "label": "hour (Hour of the day, for example 15.)",
+            "pressed": "false",
+            "text": "%hour%",
+            "type": "button"
+          },
+          {
+            "label": "minute (Minute of the hour, for example 43.)",
+            "pressed": "false",
+            "text": "%minute%",
+            "type": "button"
+          },
+          {
+            "label": "second (Second of the minute, for example 33.)",
+            "pressed": "false",
+            "text": "%second%",
+            "type": "button"
+          },
+          {
+            "label": "post_id (already used in permalink structure)",
+            "pressed": "true",
+            "text": "%post_id%",
+            "type": "button"
+          },
+          {
+            "label": "postname (already used in permalink structure)",
+            "pressed": "true",
+            "text": "%postname%",
+            "type": "button"
+          },
+          {
+            "label": "category (Category slug. Nested sub-categories appear as nested directories in the URL.)",
+            "pressed": "false",
+            "text": "%category%",
+            "type": "button"
+          },
+          {
+            "label": "author (already used in permalink structure)",
+            "pressed": "true",
+            "text": "%author%",
+            "type": "button"
+          }
+        ],
+        "end": 34,
+        "focus": "%year%",
+        "live": "year removed from permalink structure",
+        "notice": "",
+        "selected": "custom_selection",
+        "start": 34,
+        "value": "/by/%author%/%post_id%/%postname%/"
+      },
+      "presetRemove": {
+        "buttons": [
+          {
+            "label": "year (The year of the post, four digits, for example 2004.)",
+            "pressed": "false",
+            "text": "%year%",
+            "type": "button"
+          },
+          {
+            "label": "monthnum (Month of the year, for example 05.)",
+            "pressed": "false",
+            "text": "%monthnum%",
+            "type": "button"
+          },
+          {
+            "label": "day (Day of the month, for example 28.)",
+            "pressed": "false",
+            "text": "%day%",
+            "type": "button"
+          },
+          {
+            "label": "hour (Hour of the day, for example 15.)",
+            "pressed": "false",
+            "text": "%hour%",
+            "type": "button"
+          },
+          {
+            "label": "minute (Minute of the hour, for example 43.)",
+            "pressed": "false",
+            "text": "%minute%",
+            "type": "button"
+          },
+          {
+            "label": "second (Second of the minute, for example 33.)",
+            "pressed": "false",
+            "text": "%second%",
+            "type": "button"
+          },
+          {
+            "label": "post_id (The unique ID of the post, for example 423.)",
+            "pressed": "false",
+            "text": "%post_id%",
+            "type": "button"
+          },
+          {
+            "label": "postname (The sanitized post title (slug).)",
+            "pressed": "false",
+            "text": "%postname%",
+            "type": "button"
+          },
+          {
+            "label": "category (Category slug. Nested sub-categories appear as nested directories in the URL.)",
+            "pressed": "false",
+            "text": "%category%",
+            "type": "button"
+          },
+          {
+            "label": "author (A sanitized version of the author name.)",
+            "pressed": "false",
+            "text": "%author%",
+            "type": "button"
+          }
+        ],
+        "end": 0,
+        "focus": "%postname%",
+        "live": "postname removed from permalink structure",
+        "notice": "",
+        "selected": "permalink-input-post-name",
+        "start": 0,
+        "value": ""
+      },
+      "custom": {
+        "buttons": [
+          {
+            "label": "year (The year of the post, four digits, for example 2004.)",
+            "pressed": "false",
+            "text": "%year%",
+            "type": "button"
+          },
+          {
+            "label": "monthnum (Month of the year, for example 05.)",
+            "pressed": "false",
+            "text": "%monthnum%",
+            "type": "button"
+          },
+          {
+            "label": "day (Day of the month, for example 28.)",
+            "pressed": "false",
+            "text": "%day%",
+            "type": "button"
+          },
+          {
+            "label": "hour (Hour of the day, for example 15.)",
+            "pressed": "false",
+            "text": "%hour%",
+            "type": "button"
+          },
+          {
+            "label": "minute (Minute of the hour, for example 43.)",
+            "pressed": "false",
+            "text": "%minute%",
+            "type": "button"
+          },
+          {
+            "label": "second (Second of the minute, for example 33.)",
+            "pressed": "false",
+            "text": "%second%",
+            "type": "button"
+          },
+          {
+            "label": "post_id (The unique ID of the post, for example 423.)",
+            "pressed": "false",
+            "text": "%post_id%",
+            "type": "button"
+          },
+          {
+            "label": "postname (already used in permalink structure)",
+            "pressed": "true",
+            "text": "%postname%",
+            "type": "button"
+          },
+          {
+            "label": "category (Category slug. Nested sub-categories appear as nested directories in the URL.)",
+            "pressed": "false",
+            "text": "%category%",
+            "type": "button"
+          },
+          {
+            "label": "author (A sanitized version of the author name.)",
+            "pressed": "false",
+            "text": "%author%",
+            "type": "button"
+          }
+        ],
+        "end": 12,
+        "focus": "custom_selection",
+        "live": "postname removed from permalink structure",
+        "notice": "",
+        "selected": "custom_selection",
+        "start": 12,
+        "value": "/%postname%/"
+      },
+      "focusOnly": {
+        "buttons": [
+          {
+            "label": "year (The year of the post, four digits, for example 2004.)",
+            "pressed": "false",
+            "text": "%year%",
+            "type": "button"
+          },
+          {
+            "label": "monthnum (Month of the year, for example 05.)",
+            "pressed": "false",
+            "text": "%monthnum%",
+            "type": "button"
+          },
+          {
+            "label": "day (Day of the month, for example 28.)",
+            "pressed": "false",
+            "text": "%day%",
+            "type": "button"
+          },
+          {
+            "label": "hour (Hour of the day, for example 15.)",
+            "pressed": "false",
+            "text": "%hour%",
+            "type": "button"
+          },
+          {
+            "label": "minute (Minute of the hour, for example 43.)",
+            "pressed": "false",
+            "text": "%minute%",
+            "type": "button"
+          },
+          {
+            "label": "second (Second of the minute, for example 33.)",
+            "pressed": "false",
+            "text": "%second%",
+            "type": "button"
+          },
+          {
+            "label": "post_id (The unique ID of the post, for example 423.)",
+            "pressed": "false",
+            "text": "%post_id%",
+            "type": "button"
+          },
+          {
+            "label": "postname (already used in permalink structure)",
+            "pressed": "true",
+            "text": "%postname%",
+            "type": "button"
+          },
+          {
+            "label": "category (Category slug. Nested sub-categories appear as nested directories in the URL.)",
+            "pressed": "false",
+            "text": "%category%",
+            "type": "button"
+          },
+          {
+            "label": "author (A sanitized version of the author name.)",
+            "pressed": "false",
+            "text": "%author%",
+            "type": "button"
+          }
+        ],
+        "end": 12,
+        "focus": "permalink_structure",
+        "live": "postname removed from permalink structure",
+        "notice": "",
+        "selected": "permalink-input-post-name",
+        "start": 0,
+        "value": "/%postname%/"
+      },
+      "selected": {
+        "buttons": [
+          {
+            "label": "year (The year of the post, four digits, for example 2004.)",
+            "pressed": "false",
+            "text": "%year%",
+            "type": "button"
+          },
+          {
+            "label": "monthnum (Month of the year, for example 05.)",
+            "pressed": "false",
+            "text": "%monthnum%",
+            "type": "button"
+          },
+          {
+            "label": "day (Day of the month, for example 28.)",
+            "pressed": "false",
+            "text": "%day%",
+            "type": "button"
+          },
+          {
+            "label": "hour (Hour of the day, for example 15.)",
+            "pressed": "false",
+            "text": "%hour%",
+            "type": "button"
+          },
+          {
+            "label": "minute (Minute of the hour, for example 43.)",
+            "pressed": "false",
+            "text": "%minute%",
+            "type": "button"
+          },
+          {
+            "label": "second (Second of the minute, for example 33.)",
+            "pressed": "false",
+            "text": "%second%",
+            "type": "button"
+          },
+          {
+            "label": "post_id (The unique ID of the post, for example 423.)",
+            "pressed": "false",
+            "text": "%post_id%",
+            "type": "button"
+          },
+          {
+            "label": "postname (already used in permalink structure)",
+            "pressed": "true",
+            "text": "%postname%",
+            "type": "button"
+          },
+          {
+            "label": "category (Category slug. Nested sub-categories appear as nested directories in the URL.)",
+            "pressed": "false",
+            "text": "%category%",
+            "type": "button"
+          },
+          {
+            "label": "author (A sanitized version of the author name.)",
+            "pressed": "false",
+            "text": "%author%",
+            "type": "button"
+          }
+        ],
+        "end": 8,
+        "focus": "permalink_structure",
+        "live": "postname removed from permalink structure",
+        "notice": "",
+        "selected": "custom_selection",
+        "start": 5,
+        "value": "alphaXYZomega"
+      },
+      "inserted": {
+        "buttons": [
+          {
+            "label": "year (The year of the post, four digits, for example 2004.)",
+            "pressed": "false",
+            "text": "%year%",
+            "type": "button"
+          },
+          {
+            "label": "monthnum (Month of the year, for example 05.)",
+            "pressed": "false",
+            "text": "%monthnum%",
+            "type": "button"
+          },
+          {
+            "label": "day (Day of the month, for example 28.)",
+            "pressed": "false",
+            "text": "%day%",
+            "type": "button"
+          },
+          {
+            "label": "hour (Hour of the day, for example 15.)",
+            "pressed": "false",
+            "text": "%hour%",
+            "type": "button"
+          },
+          {
+            "label": "minute (Minute of the hour, for example 43.)",
+            "pressed": "false",
+            "text": "%minute%",
+            "type": "button"
+          },
+          {
+            "label": "second (Second of the minute, for example 33.)",
+            "pressed": "false",
+            "text": "%second%",
+            "type": "button"
+          },
+          {
+            "label": "post_id (The unique ID of the post, for example 423.)",
+            "pressed": "false",
+            "text": "%post_id%",
+            "type": "button"
+          },
+          {
+            "label": "postname (The sanitized post title (slug).)",
+            "pressed": "false",
+            "text": "%postname%",
+            "type": "button"
+          },
+          {
+            "label": "category (Category slug. Nested sub-categories appear as nested directories in the URL.)",
+            "pressed": "false",
+            "text": "%category%",
+            "type": "button"
+          },
+          {
+            "label": "author (already used in permalink structure)",
+            "pressed": "true",
+            "text": "%author%",
+            "type": "button"
+          }
+        ],
+        "end": 15,
+        "focus": "permalink_structure",
+        "live": "author added to permalink structure",
+        "notice": "",
+        "selected": "custom_selection",
+        "start": 15,
+        "value": "alpha/%author%/omega"
+      },
+      "removed": {
+        "buttons": [
+          {
+            "label": "year (The year of the post, four digits, for example 2004.)",
+            "pressed": "false",
+            "text": "%year%",
+            "type": "button"
+          },
+          {
+            "label": "monthnum (Month of the year, for example 05.)",
+            "pressed": "false",
+            "text": "%monthnum%",
+            "type": "button"
+          },
+          {
+            "label": "day (Day of the month, for example 28.)",
+            "pressed": "false",
+            "text": "%day%",
+            "type": "button"
+          },
+          {
+            "label": "hour (Hour of the day, for example 15.)",
+            "pressed": "false",
+            "text": "%hour%",
+            "type": "button"
+          },
+          {
+            "label": "minute (Minute of the hour, for example 43.)",
+            "pressed": "false",
+            "text": "%minute%",
+            "type": "button"
+          },
+          {
+            "label": "second (Second of the minute, for example 33.)",
+            "pressed": "false",
+            "text": "%second%",
+            "type": "button"
+          },
+          {
+            "label": "post_id (The unique ID of the post, for example 423.)",
+            "pressed": "false",
+            "text": "%post_id%",
+            "type": "button"
+          },
+          {
+            "label": "postname (The sanitized post title (slug).)",
+            "pressed": "false",
+            "text": "%postname%",
+            "type": "button"
+          },
+          {
+            "label": "category (Category slug. Nested sub-categories appear as nested directories in the URL.)",
+            "pressed": "false",
+            "text": "%category%",
+            "type": "button"
+          },
+          {
+            "label": "author (A sanitized version of the author name.)",
+            "pressed": "false",
+            "text": "%author%",
+            "type": "button"
+          }
+        ],
+        "end": 11,
+        "focus": "%author%",
+        "live": "author removed from permalink structure",
+        "notice": "",
+        "selected": "custom_selection",
+        "start": 11,
+        "value": "alpha/omega"
+      },
+      "slash": {
+        "buttons": [
+          {
+            "label": "year (The year of the post, four digits, for example 2004.)",
+            "pressed": "false",
+            "text": "%year%",
+            "type": "button"
+          },
+          {
+            "label": "monthnum (already used in permalink structure)",
+            "pressed": "true",
+            "text": "%monthnum%",
+            "type": "button"
+          },
+          {
+            "label": "day (Day of the month, for example 28.)",
+            "pressed": "false",
+            "text": "%day%",
+            "type": "button"
+          },
+          {
+            "label": "hour (Hour of the day, for example 15.)",
+            "pressed": "false",
+            "text": "%hour%",
+            "type": "button"
+          },
+          {
+            "label": "minute (Minute of the hour, for example 43.)",
+            "pressed": "false",
+            "text": "%minute%",
+            "type": "button"
+          },
+          {
+            "label": "second (Second of the minute, for example 33.)",
+            "pressed": "false",
+            "text": "%second%",
+            "type": "button"
+          },
+          {
+            "label": "post_id (The unique ID of the post, for example 423.)",
+            "pressed": "false",
+            "text": "%post_id%",
+            "type": "button"
+          },
+          {
+            "label": "postname (The sanitized post title (slug).)",
+            "pressed": "false",
+            "text": "%postname%",
+            "type": "button"
+          },
+          {
+            "label": "category (Category slug. Nested sub-categories appear as nested directories in the URL.)",
+            "pressed": "false",
+            "text": "%category%",
+            "type": "button"
+          },
+          {
+            "label": "author (A sanitized version of the author name.)",
+            "pressed": "false",
+            "text": "%author%",
+            "type": "button"
+          }
+        ],
+        "end": 16,
+        "focus": "permalink_structure",
+        "live": "monthnum added to permalink structure",
+        "notice": "",
+        "selected": "custom_selection",
+        "start": 16,
+        "value": "/left/%monthnum%/"
+      },
+      "trailing": {
+        "buttons": [
+          {
+            "label": "year (The year of the post, four digits, for example 2004.)",
+            "pressed": "false",
+            "text": "%year%",
+            "type": "button"
+          },
+          {
+            "label": "monthnum (Month of the year, for example 05.)",
+            "pressed": "false",
+            "text": "%monthnum%",
+            "type": "button"
+          },
+          {
+            "label": "day (Day of the month, for example 28.)",
+            "pressed": "false",
+            "text": "%day%",
+            "type": "button"
+          },
+          {
+            "label": "hour (Hour of the day, for example 15.)",
+            "pressed": "false",
+            "text": "%hour%",
+            "type": "button"
+          },
+          {
+            "label": "minute (Minute of the hour, for example 43.)",
+            "pressed": "false",
+            "text": "%minute%",
+            "type": "button"
+          },
+          {
+            "label": "second (Second of the minute, for example 33.)",
+            "pressed": "false",
+            "text": "%second%",
+            "type": "button"
+          },
+          {
+            "label": "post_id (The unique ID of the post, for example 423.)",
+            "pressed": "false",
+            "text": "%post_id%",
+            "type": "button"
+          },
+          {
+            "label": "postname (already used in permalink structure)",
+            "pressed": "true",
+            "text": "%postname%",
+            "type": "button"
+          },
+          {
+            "label": "category (Category slug. Nested sub-categories appear as nested directories in the URL.)",
+            "pressed": "false",
+            "text": "%category%",
+            "type": "button"
+          },
+          {
+            "label": "author (A sanitized version of the author name.)",
+            "pressed": "false",
+            "text": "%author%",
+            "type": "button"
+          }
+        ],
+        "end": 11,
+        "focus": "%postname%",
+        "live": "postname removed from permalink structure",
+        "notice": "",
+        "selected": "custom_selection",
+        "start": 11,
+        "value": "/%postname%"
+      },
+      "all": {
+        "buttons": [
+          {
+            "label": "year (already used in permalink structure)",
+            "pressed": "true",
+            "text": "%year%",
+            "type": "button"
+          },
+          {
+            "label": "monthnum (already used in permalink structure)",
+            "pressed": "true",
+            "text": "%monthnum%",
+            "type": "button"
+          },
+          {
+            "label": "day (already used in permalink structure)",
+            "pressed": "true",
+            "text": "%day%",
+            "type": "button"
+          },
+          {
+            "label": "hour (already used in permalink structure)",
+            "pressed": "true",
+            "text": "%hour%",
+            "type": "button"
+          },
+          {
+            "label": "minute (already used in permalink structure)",
+            "pressed": "true",
+            "text": "%minute%",
+            "type": "button"
+          },
+          {
+            "label": "second (already used in permalink structure)",
+            "pressed": "true",
+            "text": "%second%",
+            "type": "button"
+          },
+          {
+            "label": "post_id (already used in permalink structure)",
+            "pressed": "true",
+            "text": "%post_id%",
+            "type": "button"
+          },
+          {
+            "label": "postname (already used in permalink structure)",
+            "pressed": "true",
+            "text": "%postname%",
+            "type": "button"
+          },
+          {
+            "label": "category (already used in permalink structure)",
+            "pressed": "true",
+            "text": "%category%",
+            "type": "button"
+          },
+          {
+            "label": "author (already used in permalink structure)",
+            "pressed": "true",
+            "text": "%author%",
+            "type": "button"
+          }
+        ],
+        "end": 91,
+        "focus": "permalink_structure",
+        "live": "author added to permalink structure",
+        "notice": "",
+        "selected": "custom_selection",
+        "start": 91,
+        "value": "/%year%/%monthnum%/%day%/%hour%/%minute%/%second%/%post_id%/%postname%/%category%/%author%/"
+      },
+      "savedCalls": [
+        {
+          "method": "PUT",
+          "path": "/api/settings",
+          "status": 200
+        }
+      ],
+      "layout": {
+        "buttons": [
+          {
+            "bottom": 861.34375,
+            "height": 40,
+            "left": 39,
+            "pressed": "false",
+            "right": 124.234375,
+            "text": "%year%",
+            "top": 821.34375,
+            "width": 85.234375
+          },
+          {
+            "bottom": 861.34375,
+            "height": 40,
+            "left": 129.234375,
+            "pressed": "false",
+            "right": 256.90625,
+            "text": "%monthnum%",
+            "top": 821.34375,
+            "width": 127.671875
+          },
+          {
+            "bottom": 861.34375,
+            "height": 40,
+            "left": 261.90625,
+            "pressed": "false",
+            "right": 342.375,
+            "text": "%day%",
+            "top": 821.34375,
+            "width": 80.46875
+          },
+          {
+            "bottom": 861.34375,
+            "height": 40,
+            "left": 347.375,
+            "pressed": "false",
+            "right": 434.21875,
+            "text": "%hour%",
+            "top": 821.34375,
+            "width": 86.84375
+          },
+          {
+            "bottom": 861.34375,
+            "height": 40,
+            "left": 439.21875,
+            "pressed": "false",
+            "right": 541.1875,
+            "text": "%minute%",
+            "top": 821.34375,
+            "width": 101.96875
+          },
+          {
+            "bottom": 861.34375,
+            "height": 40,
+            "left": 546.1875,
+            "pressed": "false",
+            "right": 651.109375,
+            "text": "%second%",
+            "top": 821.34375,
+            "width": 104.921875
+          },
+          {
+            "bottom": 911.34375,
+            "height": 40,
+            "left": 39,
+            "pressed": "true",
+            "right": 145.28125,
+            "text": "%post_id%",
+            "top": 871.34375,
+            "width": 106.28125
+          },
+          {
+            "bottom": 911.34375,
+            "height": 40,
+            "left": 150.28125,
+            "pressed": "true",
+            "right": 272.515625,
+            "text": "%postname%",
+            "top": 871.34375,
+            "width": 122.234375
+          },
+          {
+            "bottom": 911.34375,
+            "height": 40,
+            "left": 277.515625,
+            "pressed": "false",
+            "right": 392.828125,
+            "text": "%category%",
+            "top": 871.34375,
+            "width": 115.3125
+          },
+          {
+            "bottom": 911.34375,
+            "height": 40,
+            "left": 397.828125,
+            "pressed": "true",
+            "right": 497.59375,
+            "text": "%author%",
+            "top": 871.34375,
+            "width": 99.765625
+          }
+        ],
+        "missingDescriptions": [],
+        "scroll": 768,
+        "width": 768
+      },
+      "invalid": {
+        "buttons": [
+          {
+            "label": "year (The year of the post, four digits, for example 2004.)",
+            "pressed": "false",
+            "text": "%year%",
+            "type": "button"
+          },
+          {
+            "label": "monthnum (Month of the year, for example 05.)",
+            "pressed": "false",
+            "text": "%monthnum%",
+            "type": "button"
+          },
+          {
+            "label": "day (Day of the month, for example 28.)",
+            "pressed": "false",
+            "text": "%day%",
+            "type": "button"
+          },
+          {
+            "label": "hour (Hour of the day, for example 15.)",
+            "pressed": "false",
+            "text": "%hour%",
+            "type": "button"
+          },
+          {
+            "label": "minute (Minute of the hour, for example 43.)",
+            "pressed": "false",
+            "text": "%minute%",
+            "type": "button"
+          },
+          {
+            "label": "second (Second of the minute, for example 33.)",
+            "pressed": "false",
+            "text": "%second%",
+            "type": "button"
+          },
+          {
+            "label": "post_id (already used in permalink structure)",
+            "pressed": "true",
+            "text": "%post_id%",
+            "type": "button"
+          },
+          {
+            "label": "postname (already used in permalink structure)",
+            "pressed": "true",
+            "text": "%postname%",
+            "type": "button"
+          },
+          {
+            "label": "category (Category slug. Nested sub-categories appear as nested directories in the URL.)",
+            "pressed": "false",
+            "text": "%category%",
+            "type": "button"
+          },
+          {
+            "label": "author (already used in permalink structure)",
+            "pressed": "true",
+            "text": "%author%",
+            "type": "button"
+          }
+        ],
+        "end": 24,
+        "focus": "permalink_structure",
+        "live": "",
+        "notice": "permalinkStructure: Use an empty structure for Plain links, or a unique path beginning with / and containing %postname% or %post_id%. Supported tokens: %year%, %monthnum%, %day%, %hour%, %minute%, %second%, %post_id%, %postname%, %category%, %author%.Dismiss",
+        "selected": "custom_selection",
+        "start": 24,
+        "value": "/by/%author%-%postname%/"
+      },
+      "invalidCalls": [
+        {
+          "method": "PUT",
+          "path": "/api/settings",
+          "status": 400
+        }
+      ],
+      "afterError": {
+        "buttons": [
+          {
+            "label": "year (already used in permalink structure)",
+            "pressed": "true",
+            "text": "%year%",
+            "type": "button"
+          },
+          {
+            "label": "monthnum (Month of the year, for example 05.)",
+            "pressed": "false",
+            "text": "%monthnum%",
+            "type": "button"
+          },
+          {
+            "label": "day (Day of the month, for example 28.)",
+            "pressed": "false",
+            "text": "%day%",
+            "type": "button"
+          },
+          {
+            "label": "hour (Hour of the day, for example 15.)",
+            "pressed": "false",
+            "text": "%hour%",
+            "type": "button"
+          },
+          {
+            "label": "minute (Minute of the hour, for example 43.)",
+            "pressed": "false",
+            "text": "%minute%",
+            "type": "button"
+          },
+          {
+            "label": "second (Second of the minute, for example 33.)",
+            "pressed": "false",
+            "text": "%second%",
+            "type": "button"
+          },
+          {
+            "label": "post_id (The unique ID of the post, for example 423.)",
+            "pressed": "false",
+            "text": "%post_id%",
+            "type": "button"
+          },
+          {
+            "label": "postname (already used in permalink structure)",
+            "pressed": "true",
+            "text": "%postname%",
+            "type": "button"
+          },
+          {
+            "label": "category (Category slug. Nested sub-categories appear as nested directories in the URL.)",
+            "pressed": "false",
+            "text": "%category%",
+            "type": "button"
+          },
+          {
+            "label": "author (already used in permalink structure)",
+            "pressed": "true",
+            "text": "%author%",
+            "type": "button"
+          }
+        ],
+        "end": 31,
+        "focus": "permalink_structure",
+        "live": "year added to permalink structure",
+        "notice": "permalinkStructure: Use an empty structure for Plain links, or a unique path beginning with / and containing %postname% or %post_id%. Supported tokens: %year%, %monthnum%, %day%, %hour%, %minute%, %second%, %post_id%, %postname%, %category%, %author%.Dismiss",
+        "selected": "custom_selection",
+        "start": 31,
+        "value": "/by/%author%-%postname%/%year%/"
+      },
+      "screenshot": "768.png",
+      "viewport": "768-viewport.png",
+      "invalidScreenshot": null
+    },
+    {
+      "width": 375,
+      "initial": {
+        "buttons": [
+          {
+            "label": "year (The year of the post, four digits, for example 2004.)",
+            "pressed": "false",
+            "text": "%year%",
+            "type": "button"
+          },
+          {
+            "label": "monthnum (Month of the year, for example 05.)",
+            "pressed": "false",
+            "text": "%monthnum%",
+            "type": "button"
+          },
+          {
+            "label": "day (Day of the month, for example 28.)",
+            "pressed": "false",
+            "text": "%day%",
+            "type": "button"
+          },
+          {
+            "label": "hour (Hour of the day, for example 15.)",
+            "pressed": "false",
+            "text": "%hour%",
+            "type": "button"
+          },
+          {
+            "label": "minute (Minute of the hour, for example 43.)",
+            "pressed": "false",
+            "text": "%minute%",
+            "type": "button"
+          },
+          {
+            "label": "second (Second of the minute, for example 33.)",
+            "pressed": "false",
+            "text": "%second%",
+            "type": "button"
+          },
+          {
+            "label": "post_id (already used in permalink structure)",
+            "pressed": "true",
+            "text": "%post_id%",
+            "type": "button"
+          },
+          {
+            "label": "postname (already used in permalink structure)",
+            "pressed": "true",
+            "text": "%postname%",
+            "type": "button"
+          },
+          {
+            "label": "category (Category slug. Nested sub-categories appear as nested directories in the URL.)",
+            "pressed": "false",
+            "text": "%category%",
+            "type": "button"
+          },
+          {
+            "label": "author (already used in permalink structure)",
+            "pressed": "true",
+            "text": "%author%",
+            "type": "button"
+          }
+        ],
+        "end": 34,
+        "focus": "BODY",
+        "live": "",
+        "notice": "",
+        "selected": "custom_selection",
+        "start": 34,
+        "value": "/by/%author%/%post_id%/%postname%/"
+      },
+      "firstAdd": {
+        "buttons": [
+          {
+            "label": "year (already used in permalink structure)",
+            "pressed": "true",
+            "text": "%year%",
+            "type": "button"
+          },
+          {
+            "label": "monthnum (Month of the year, for example 05.)",
+            "pressed": "false",
+            "text": "%monthnum%",
+            "type": "button"
+          },
+          {
+            "label": "day (Day of the month, for example 28.)",
+            "pressed": "false",
+            "text": "%day%",
+            "type": "button"
+          },
+          {
+            "label": "hour (Hour of the day, for example 15.)",
+            "pressed": "false",
+            "text": "%hour%",
+            "type": "button"
+          },
+          {
+            "label": "minute (Minute of the hour, for example 43.)",
+            "pressed": "false",
+            "text": "%minute%",
+            "type": "button"
+          },
+          {
+            "label": "second (Second of the minute, for example 33.)",
+            "pressed": "false",
+            "text": "%second%",
+            "type": "button"
+          },
+          {
+            "label": "post_id (already used in permalink structure)",
+            "pressed": "true",
+            "text": "%post_id%",
+            "type": "button"
+          },
+          {
+            "label": "postname (already used in permalink structure)",
+            "pressed": "true",
+            "text": "%postname%",
+            "type": "button"
+          },
+          {
+            "label": "category (Category slug. Nested sub-categories appear as nested directories in the URL.)",
+            "pressed": "false",
+            "text": "%category%",
+            "type": "button"
+          },
+          {
+            "label": "author (already used in permalink structure)",
+            "pressed": "true",
+            "text": "%author%",
+            "type": "button"
+          }
+        ],
+        "end": 41,
+        "focus": "%year%",
+        "live": "year added to permalink structure",
+        "notice": "",
+        "selected": "custom_selection",
+        "start": 41,
+        "value": "/by/%author%/%post_id%/%postname%/%year%/"
+      },
+      "firstRemove": {
+        "buttons": [
+          {
+            "label": "year (The year of the post, four digits, for example 2004.)",
+            "pressed": "false",
+            "text": "%year%",
+            "type": "button"
+          },
+          {
+            "label": "monthnum (Month of the year, for example 05.)",
+            "pressed": "false",
+            "text": "%monthnum%",
+            "type": "button"
+          },
+          {
+            "label": "day (Day of the month, for example 28.)",
+            "pressed": "false",
+            "text": "%day%",
+            "type": "button"
+          },
+          {
+            "label": "hour (Hour of the day, for example 15.)",
+            "pressed": "false",
+            "text": "%hour%",
+            "type": "button"
+          },
+          {
+            "label": "minute (Minute of the hour, for example 43.)",
+            "pressed": "false",
+            "text": "%minute%",
+            "type": "button"
+          },
+          {
+            "label": "second (Second of the minute, for example 33.)",
+            "pressed": "false",
+            "text": "%second%",
+            "type": "button"
+          },
+          {
+            "label": "post_id (already used in permalink structure)",
+            "pressed": "true",
+            "text": "%post_id%",
+            "type": "button"
+          },
+          {
+            "label": "postname (already used in permalink structure)",
+            "pressed": "true",
+            "text": "%postname%",
+            "type": "button"
+          },
+          {
+            "label": "category (Category slug. Nested sub-categories appear as nested directories in the URL.)",
+            "pressed": "false",
+            "text": "%category%",
+            "type": "button"
+          },
+          {
+            "label": "author (already used in permalink structure)",
+            "pressed": "true",
+            "text": "%author%",
+            "type": "button"
+          }
+        ],
+        "end": 34,
+        "focus": "%year%",
+        "live": "year removed from permalink structure",
+        "notice": "",
+        "selected": "custom_selection",
+        "start": 34,
+        "value": "/by/%author%/%post_id%/%postname%/"
+      },
+      "presetRemove": {
+        "buttons": [
+          {
+            "label": "year (The year of the post, four digits, for example 2004.)",
+            "pressed": "false",
+            "text": "%year%",
+            "type": "button"
+          },
+          {
+            "label": "monthnum (Month of the year, for example 05.)",
+            "pressed": "false",
+            "text": "%monthnum%",
+            "type": "button"
+          },
+          {
+            "label": "day (Day of the month, for example 28.)",
+            "pressed": "false",
+            "text": "%day%",
+            "type": "button"
+          },
+          {
+            "label": "hour (Hour of the day, for example 15.)",
+            "pressed": "false",
+            "text": "%hour%",
+            "type": "button"
+          },
+          {
+            "label": "minute (Minute of the hour, for example 43.)",
+            "pressed": "false",
+            "text": "%minute%",
+            "type": "button"
+          },
+          {
+            "label": "second (Second of the minute, for example 33.)",
+            "pressed": "false",
+            "text": "%second%",
+            "type": "button"
+          },
+          {
+            "label": "post_id (The unique ID of the post, for example 423.)",
+            "pressed": "false",
+            "text": "%post_id%",
+            "type": "button"
+          },
+          {
+            "label": "postname (The sanitized post title (slug).)",
+            "pressed": "false",
+            "text": "%postname%",
+            "type": "button"
+          },
+          {
+            "label": "category (Category slug. Nested sub-categories appear as nested directories in the URL.)",
+            "pressed": "false",
+            "text": "%category%",
+            "type": "button"
+          },
+          {
+            "label": "author (A sanitized version of the author name.)",
+            "pressed": "false",
+            "text": "%author%",
+            "type": "button"
+          }
+        ],
+        "end": 0,
+        "focus": "%postname%",
+        "live": "postname removed from permalink structure",
+        "notice": "",
+        "selected": "permalink-input-post-name",
+        "start": 0,
+        "value": ""
+      },
+      "custom": {
+        "buttons": [
+          {
+            "label": "year (The year of the post, four digits, for example 2004.)",
+            "pressed": "false",
+            "text": "%year%",
+            "type": "button"
+          },
+          {
+            "label": "monthnum (Month of the year, for example 05.)",
+            "pressed": "false",
+            "text": "%monthnum%",
+            "type": "button"
+          },
+          {
+            "label": "day (Day of the month, for example 28.)",
+            "pressed": "false",
+            "text": "%day%",
+            "type": "button"
+          },
+          {
+            "label": "hour (Hour of the day, for example 15.)",
+            "pressed": "false",
+            "text": "%hour%",
+            "type": "button"
+          },
+          {
+            "label": "minute (Minute of the hour, for example 43.)",
+            "pressed": "false",
+            "text": "%minute%",
+            "type": "button"
+          },
+          {
+            "label": "second (Second of the minute, for example 33.)",
+            "pressed": "false",
+            "text": "%second%",
+            "type": "button"
+          },
+          {
+            "label": "post_id (The unique ID of the post, for example 423.)",
+            "pressed": "false",
+            "text": "%post_id%",
+            "type": "button"
+          },
+          {
+            "label": "postname (already used in permalink structure)",
+            "pressed": "true",
+            "text": "%postname%",
+            "type": "button"
+          },
+          {
+            "label": "category (Category slug. Nested sub-categories appear as nested directories in the URL.)",
+            "pressed": "false",
+            "text": "%category%",
+            "type": "button"
+          },
+          {
+            "label": "author (A sanitized version of the author name.)",
+            "pressed": "false",
+            "text": "%author%",
+            "type": "button"
+          }
+        ],
+        "end": 12,
+        "focus": "custom_selection",
+        "live": "postname removed from permalink structure",
+        "notice": "",
+        "selected": "custom_selection",
+        "start": 12,
+        "value": "/%postname%/"
+      },
+      "focusOnly": {
+        "buttons": [
+          {
+            "label": "year (The year of the post, four digits, for example 2004.)",
+            "pressed": "false",
+            "text": "%year%",
+            "type": "button"
+          },
+          {
+            "label": "monthnum (Month of the year, for example 05.)",
+            "pressed": "false",
+            "text": "%monthnum%",
+            "type": "button"
+          },
+          {
+            "label": "day (Day of the month, for example 28.)",
+            "pressed": "false",
+            "text": "%day%",
+            "type": "button"
+          },
+          {
+            "label": "hour (Hour of the day, for example 15.)",
+            "pressed": "false",
+            "text": "%hour%",
+            "type": "button"
+          },
+          {
+            "label": "minute (Minute of the hour, for example 43.)",
+            "pressed": "false",
+            "text": "%minute%",
+            "type": "button"
+          },
+          {
+            "label": "second (Second of the minute, for example 33.)",
+            "pressed": "false",
+            "text": "%second%",
+            "type": "button"
+          },
+          {
+            "label": "post_id (The unique ID of the post, for example 423.)",
+            "pressed": "false",
+            "text": "%post_id%",
+            "type": "button"
+          },
+          {
+            "label": "postname (already used in permalink structure)",
+            "pressed": "true",
+            "text": "%postname%",
+            "type": "button"
+          },
+          {
+            "label": "category (Category slug. Nested sub-categories appear as nested directories in the URL.)",
+            "pressed": "false",
+            "text": "%category%",
+            "type": "button"
+          },
+          {
+            "label": "author (A sanitized version of the author name.)",
+            "pressed": "false",
+            "text": "%author%",
+            "type": "button"
+          }
+        ],
+        "end": 12,
+        "focus": "permalink_structure",
+        "live": "postname removed from permalink structure",
+        "notice": "",
+        "selected": "permalink-input-post-name",
+        "start": 0,
+        "value": "/%postname%/"
+      },
+      "selected": {
+        "buttons": [
+          {
+            "label": "year (The year of the post, four digits, for example 2004.)",
+            "pressed": "false",
+            "text": "%year%",
+            "type": "button"
+          },
+          {
+            "label": "monthnum (Month of the year, for example 05.)",
+            "pressed": "false",
+            "text": "%monthnum%",
+            "type": "button"
+          },
+          {
+            "label": "day (Day of the month, for example 28.)",
+            "pressed": "false",
+            "text": "%day%",
+            "type": "button"
+          },
+          {
+            "label": "hour (Hour of the day, for example 15.)",
+            "pressed": "false",
+            "text": "%hour%",
+            "type": "button"
+          },
+          {
+            "label": "minute (Minute of the hour, for example 43.)",
+            "pressed": "false",
+            "text": "%minute%",
+            "type": "button"
+          },
+          {
+            "label": "second (Second of the minute, for example 33.)",
+            "pressed": "false",
+            "text": "%second%",
+            "type": "button"
+          },
+          {
+            "label": "post_id (The unique ID of the post, for example 423.)",
+            "pressed": "false",
+            "text": "%post_id%",
+            "type": "button"
+          },
+          {
+            "label": "postname (already used in permalink structure)",
+            "pressed": "true",
+            "text": "%postname%",
+            "type": "button"
+          },
+          {
+            "label": "category (Category slug. Nested sub-categories appear as nested directories in the URL.)",
+            "pressed": "false",
+            "text": "%category%",
+            "type": "button"
+          },
+          {
+            "label": "author (A sanitized version of the author name.)",
+            "pressed": "false",
+            "text": "%author%",
+            "type": "button"
+          }
+        ],
+        "end": 8,
+        "focus": "permalink_structure",
+        "live": "postname removed from permalink structure",
+        "notice": "",
+        "selected": "custom_selection",
+        "start": 5,
+        "value": "alphaXYZomega"
+      },
+      "inserted": {
+        "buttons": [
+          {
+            "label": "year (The year of the post, four digits, for example 2004.)",
+            "pressed": "false",
+            "text": "%year%",
+            "type": "button"
+          },
+          {
+            "label": "monthnum (Month of the year, for example 05.)",
+            "pressed": "false",
+            "text": "%monthnum%",
+            "type": "button"
+          },
+          {
+            "label": "day (Day of the month, for example 28.)",
+            "pressed": "false",
+            "text": "%day%",
+            "type": "button"
+          },
+          {
+            "label": "hour (Hour of the day, for example 15.)",
+            "pressed": "false",
+            "text": "%hour%",
+            "type": "button"
+          },
+          {
+            "label": "minute (Minute of the hour, for example 43.)",
+            "pressed": "false",
+            "text": "%minute%",
+            "type": "button"
+          },
+          {
+            "label": "second (Second of the minute, for example 33.)",
+            "pressed": "false",
+            "text": "%second%",
+            "type": "button"
+          },
+          {
+            "label": "post_id (The unique ID of the post, for example 423.)",
+            "pressed": "false",
+            "text": "%post_id%",
+            "type": "button"
+          },
+          {
+            "label": "postname (The sanitized post title (slug).)",
+            "pressed": "false",
+            "text": "%postname%",
+            "type": "button"
+          },
+          {
+            "label": "category (Category slug. Nested sub-categories appear as nested directories in the URL.)",
+            "pressed": "false",
+            "text": "%category%",
+            "type": "button"
+          },
+          {
+            "label": "author (already used in permalink structure)",
+            "pressed": "true",
+            "text": "%author%",
+            "type": "button"
+          }
+        ],
+        "end": 15,
+        "focus": "permalink_structure",
+        "live": "author added to permalink structure",
+        "notice": "",
+        "selected": "custom_selection",
+        "start": 15,
+        "value": "alpha/%author%/omega"
+      },
+      "removed": {
+        "buttons": [
+          {
+            "label": "year (The year of the post, four digits, for example 2004.)",
+            "pressed": "false",
+            "text": "%year%",
+            "type": "button"
+          },
+          {
+            "label": "monthnum (Month of the year, for example 05.)",
+            "pressed": "false",
+            "text": "%monthnum%",
+            "type": "button"
+          },
+          {
+            "label": "day (Day of the month, for example 28.)",
+            "pressed": "false",
+            "text": "%day%",
+            "type": "button"
+          },
+          {
+            "label": "hour (Hour of the day, for example 15.)",
+            "pressed": "false",
+            "text": "%hour%",
+            "type": "button"
+          },
+          {
+            "label": "minute (Minute of the hour, for example 43.)",
+            "pressed": "false",
+            "text": "%minute%",
+            "type": "button"
+          },
+          {
+            "label": "second (Second of the minute, for example 33.)",
+            "pressed": "false",
+            "text": "%second%",
+            "type": "button"
+          },
+          {
+            "label": "post_id (The unique ID of the post, for example 423.)",
+            "pressed": "false",
+            "text": "%post_id%",
+            "type": "button"
+          },
+          {
+            "label": "postname (The sanitized post title (slug).)",
+            "pressed": "false",
+            "text": "%postname%",
+            "type": "button"
+          },
+          {
+            "label": "category (Category slug. Nested sub-categories appear as nested directories in the URL.)",
+            "pressed": "false",
+            "text": "%category%",
+            "type": "button"
+          },
+          {
+            "label": "author (A sanitized version of the author name.)",
+            "pressed": "false",
+            "text": "%author%",
+            "type": "button"
+          }
+        ],
+        "end": 11,
+        "focus": "%author%",
+        "live": "author removed from permalink structure",
+        "notice": "",
+        "selected": "custom_selection",
+        "start": 11,
+        "value": "alpha/omega"
+      },
+      "slash": {
+        "buttons": [
+          {
+            "label": "year (The year of the post, four digits, for example 2004.)",
+            "pressed": "false",
+            "text": "%year%",
+            "type": "button"
+          },
+          {
+            "label": "monthnum (already used in permalink structure)",
+            "pressed": "true",
+            "text": "%monthnum%",
+            "type": "button"
+          },
+          {
+            "label": "day (Day of the month, for example 28.)",
+            "pressed": "false",
+            "text": "%day%",
+            "type": "button"
+          },
+          {
+            "label": "hour (Hour of the day, for example 15.)",
+            "pressed": "false",
+            "text": "%hour%",
+            "type": "button"
+          },
+          {
+            "label": "minute (Minute of the hour, for example 43.)",
+            "pressed": "false",
+            "text": "%minute%",
+            "type": "button"
+          },
+          {
+            "label": "second (Second of the minute, for example 33.)",
+            "pressed": "false",
+            "text": "%second%",
+            "type": "button"
+          },
+          {
+            "label": "post_id (The unique ID of the post, for example 423.)",
+            "pressed": "false",
+            "text": "%post_id%",
+            "type": "button"
+          },
+          {
+            "label": "postname (The sanitized post title (slug).)",
+            "pressed": "false",
+            "text": "%postname%",
+            "type": "button"
+          },
+          {
+            "label": "category (Category slug. Nested sub-categories appear as nested directories in the URL.)",
+            "pressed": "false",
+            "text": "%category%",
+            "type": "button"
+          },
+          {
+            "label": "author (A sanitized version of the author name.)",
+            "pressed": "false",
+            "text": "%author%",
+            "type": "button"
+          }
+        ],
+        "end": 16,
+        "focus": "permalink_structure",
+        "live": "monthnum added to permalink structure",
+        "notice": "",
+        "selected": "custom_selection",
+        "start": 16,
+        "value": "/left/%monthnum%/"
+      },
+      "trailing": {
+        "buttons": [
+          {
+            "label": "year (The year of the post, four digits, for example 2004.)",
+            "pressed": "false",
+            "text": "%year%",
+            "type": "button"
+          },
+          {
+            "label": "monthnum (Month of the year, for example 05.)",
+            "pressed": "false",
+            "text": "%monthnum%",
+            "type": "button"
+          },
+          {
+            "label": "day (Day of the month, for example 28.)",
+            "pressed": "false",
+            "text": "%day%",
+            "type": "button"
+          },
+          {
+            "label": "hour (Hour of the day, for example 15.)",
+            "pressed": "false",
+            "text": "%hour%",
+            "type": "button"
+          },
+          {
+            "label": "minute (Minute of the hour, for example 43.)",
+            "pressed": "false",
+            "text": "%minute%",
+            "type": "button"
+          },
+          {
+            "label": "second (Second of the minute, for example 33.)",
+            "pressed": "false",
+            "text": "%second%",
+            "type": "button"
+          },
+          {
+            "label": "post_id (The unique ID of the post, for example 423.)",
+            "pressed": "false",
+            "text": "%post_id%",
+            "type": "button"
+          },
+          {
+            "label": "postname (already used in permalink structure)",
+            "pressed": "true",
+            "text": "%postname%",
+            "type": "button"
+          },
+          {
+            "label": "category (Category slug. Nested sub-categories appear as nested directories in the URL.)",
+            "pressed": "false",
+            "text": "%category%",
+            "type": "button"
+          },
+          {
+            "label": "author (A sanitized version of the author name.)",
+            "pressed": "false",
+            "text": "%author%",
+            "type": "button"
+          }
+        ],
+        "end": 11,
+        "focus": "%postname%",
+        "live": "postname removed from permalink structure",
+        "notice": "",
+        "selected": "custom_selection",
+        "start": 11,
+        "value": "/%postname%"
+      },
+      "all": {
+        "buttons": [
+          {
+            "label": "year (already used in permalink structure)",
+            "pressed": "true",
+            "text": "%year%",
+            "type": "button"
+          },
+          {
+            "label": "monthnum (already used in permalink structure)",
+            "pressed": "true",
+            "text": "%monthnum%",
+            "type": "button"
+          },
+          {
+            "label": "day (already used in permalink structure)",
+            "pressed": "true",
+            "text": "%day%",
+            "type": "button"
+          },
+          {
+            "label": "hour (already used in permalink structure)",
+            "pressed": "true",
+            "text": "%hour%",
+            "type": "button"
+          },
+          {
+            "label": "minute (already used in permalink structure)",
+            "pressed": "true",
+            "text": "%minute%",
+            "type": "button"
+          },
+          {
+            "label": "second (already used in permalink structure)",
+            "pressed": "true",
+            "text": "%second%",
+            "type": "button"
+          },
+          {
+            "label": "post_id (already used in permalink structure)",
+            "pressed": "true",
+            "text": "%post_id%",
+            "type": "button"
+          },
+          {
+            "label": "postname (already used in permalink structure)",
+            "pressed": "true",
+            "text": "%postname%",
+            "type": "button"
+          },
+          {
+            "label": "category (already used in permalink structure)",
+            "pressed": "true",
+            "text": "%category%",
+            "type": "button"
+          },
+          {
+            "label": "author (already used in permalink structure)",
+            "pressed": "true",
+            "text": "%author%",
+            "type": "button"
+          }
+        ],
+        "end": 91,
+        "focus": "permalink_structure",
+        "live": "author added to permalink structure",
+        "notice": "",
+        "selected": "custom_selection",
+        "start": 91,
+        "value": "/%year%/%monthnum%/%day%/%hour%/%minute%/%second%/%post_id%/%postname%/%category%/%author%/"
+      },
+      "savedCalls": [
+        {
+          "method": "PUT",
+          "path": "/api/settings",
+          "status": 200
+        }
+      ],
+      "layout": {
+        "buttons": [
+          {
+            "bottom": 1065.21875,
+            "height": 40,
+            "left": 39,
+            "pressed": "false",
+            "right": 124.234375,
+            "text": "%year%",
+            "top": 1025.21875,
+            "width": 85.234375
+          },
+          {
+            "bottom": 1065.21875,
+            "height": 40,
+            "left": 129.234375,
+            "pressed": "false",
+            "right": 256.90625,
+            "text": "%monthnum%",
+            "top": 1025.21875,
+            "width": 127.671875
+          },
+          {
+            "bottom": 1065.21875,
+            "height": 40,
+            "left": 261.90625,
+            "pressed": "false",
+            "right": 342.375,
+            "text": "%day%",
+            "top": 1025.21875,
+            "width": 80.46875
+          },
+          {
+            "bottom": 1115.21875,
+            "height": 40,
+            "left": 39,
+            "pressed": "false",
+            "right": 125.84375,
+            "text": "%hour%",
+            "top": 1075.21875,
+            "width": 86.84375
+          },
+          {
+            "bottom": 1115.21875,
+            "height": 40,
+            "left": 130.84375,
+            "pressed": "false",
+            "right": 232.8125,
+            "text": "%minute%",
+            "top": 1075.21875,
+            "width": 101.96875
+          },
+          {
+            "bottom": 1115.21875,
+            "height": 40,
+            "left": 237.8125,
+            "pressed": "false",
+            "right": 342.734375,
+            "text": "%second%",
+            "top": 1075.21875,
+            "width": 104.921875
+          },
+          {
+            "bottom": 1165.21875,
+            "height": 40,
+            "left": 39,
+            "pressed": "true",
+            "right": 145.28125,
+            "text": "%post_id%",
+            "top": 1125.21875,
+            "width": 106.28125
+          },
+          {
+            "bottom": 1165.21875,
+            "height": 40,
+            "left": 150.28125,
+            "pressed": "true",
+            "right": 272.515625,
+            "text": "%postname%",
+            "top": 1125.21875,
+            "width": 122.234375
+          },
+          {
+            "bottom": 1215.21875,
+            "height": 40,
+            "left": 39,
+            "pressed": "false",
+            "right": 154.3125,
+            "text": "%category%",
+            "top": 1175.21875,
+            "width": 115.3125
+          },
+          {
+            "bottom": 1215.21875,
+            "height": 40,
+            "left": 159.3125,
+            "pressed": "true",
+            "right": 259.078125,
+            "text": "%author%",
+            "top": 1175.21875,
+            "width": 99.765625
+          }
+        ],
+        "missingDescriptions": [],
+        "scroll": 375,
+        "width": 375
+      },
+      "invalid": {
+        "buttons": [
+          {
+            "label": "year (The year of the post, four digits, for example 2004.)",
+            "pressed": "false",
+            "text": "%year%",
+            "type": "button"
+          },
+          {
+            "label": "monthnum (Month of the year, for example 05.)",
+            "pressed": "false",
+            "text": "%monthnum%",
+            "type": "button"
+          },
+          {
+            "label": "day (Day of the month, for example 28.)",
+            "pressed": "false",
+            "text": "%day%",
+            "type": "button"
+          },
+          {
+            "label": "hour (Hour of the day, for example 15.)",
+            "pressed": "false",
+            "text": "%hour%",
+            "type": "button"
+          },
+          {
+            "label": "minute (Minute of the hour, for example 43.)",
+            "pressed": "false",
+            "text": "%minute%",
+            "type": "button"
+          },
+          {
+            "label": "second (Second of the minute, for example 33.)",
+            "pressed": "false",
+            "text": "%second%",
+            "type": "button"
+          },
+          {
+            "label": "post_id (already used in permalink structure)",
+            "pressed": "true",
+            "text": "%post_id%",
+            "type": "button"
+          },
+          {
+            "label": "postname (already used in permalink structure)",
+            "pressed": "true",
+            "text": "%postname%",
+            "type": "button"
+          },
+          {
+            "label": "category (Category slug. Nested sub-categories appear as nested directories in the URL.)",
+            "pressed": "false",
+            "text": "%category%",
+            "type": "button"
+          },
+          {
+            "label": "author (already used in permalink structure)",
+            "pressed": "true",
+            "text": "%author%",
+            "type": "button"
+          }
+        ],
+        "end": 24,
+        "focus": "permalink_structure",
+        "live": "",
+        "notice": "permalinkStructure: Use an empty structure for Plain links, or a unique path beginning with / and containing %postname% or %post_id%. Supported tokens: %year%, %monthnum%, %day%, %hour%, %minute%, %second%, %post_id%, %postname%, %category%, %author%.Dismiss",
+        "selected": "custom_selection",
+        "start": 24,
+        "value": "/by/%author%-%postname%/"
+      },
+      "invalidCalls": [
+        {
+          "method": "PUT",
+          "path": "/api/settings",
+          "status": 400
+        }
+      ],
+      "afterError": {
+        "buttons": [
+          {
+            "label": "year (already used in permalink structure)",
+            "pressed": "true",
+            "text": "%year%",
+            "type": "button"
+          },
+          {
+            "label": "monthnum (Month of the year, for example 05.)",
+            "pressed": "false",
+            "text": "%monthnum%",
+            "type": "button"
+          },
+          {
+            "label": "day (Day of the month, for example 28.)",
+            "pressed": "false",
+            "text": "%day%",
+            "type": "button"
+          },
+          {
+            "label": "hour (Hour of the day, for example 15.)",
+            "pressed": "false",
+            "text": "%hour%",
+            "type": "button"
+          },
+          {
+            "label": "minute (Minute of the hour, for example 43.)",
+            "pressed": "false",
+            "text": "%minute%",
+            "type": "button"
+          },
+          {
+            "label": "second (Second of the minute, for example 33.)",
+            "pressed": "false",
+            "text": "%second%",
+            "type": "button"
+          },
+          {
+            "label": "post_id (The unique ID of the post, for example 423.)",
+            "pressed": "false",
+            "text": "%post_id%",
+            "type": "button"
+          },
+          {
+            "label": "postname (already used in permalink structure)",
+            "pressed": "true",
+            "text": "%postname%",
+            "type": "button"
+          },
+          {
+            "label": "category (Category slug. Nested sub-categories appear as nested directories in the URL.)",
+            "pressed": "false",
+            "text": "%category%",
+            "type": "button"
+          },
+          {
+            "label": "author (already used in permalink structure)",
+            "pressed": "true",
+            "text": "%author%",
+            "type": "button"
+          }
+        ],
+        "end": 31,
+        "focus": "permalink_structure",
+        "live": "year added to permalink structure",
+        "notice": "permalinkStructure: Use an empty structure for Plain links, or a unique path beginning with / and containing %postname% or %post_id%. Supported tokens: %year%, %monthnum%, %day%, %hour%, %minute%, %second%, %post_id%, %postname%, %category%, %author%.Dismiss",
+        "selected": "custom_selection",
+        "start": 31,
+        "value": "/by/%author%-%postname%/%year%/"
+      },
+      "screenshot": "375.png",
+      "viewport": "375-viewport.png",
+      "invalidScreenshot": "375-invalid.png"
+    }
+  ],
+  "sanitizedFromReceipt": {
+    "filename": "author-native-tag-ui-proof.json",
+    "sha256": "48b7b955d04a652730cb95b5a923bebbbc28172ccc8d0e74d2ff948cf34e29c8"
+  },
+  "overallBackendStatus": "NEEDS_REVISION: UI-only scoped observations do not close accumulated different-author body wait"
+}

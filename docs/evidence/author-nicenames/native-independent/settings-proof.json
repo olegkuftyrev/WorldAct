@@ -1,0 +1,356 @@
+{
+  "sha": "c0587edf1e88f4ebeb0a696156e5ef43a1f8849c",
+  "status": "observations pending complete review",
+  "rows": [
+    {
+      "width": 1440,
+      "invalid": {
+        "saved": "/by/%author%/%post_id%/%postname%/",
+        "calls": [
+          {
+            "method": "PUT",
+            "path": "/api/settings",
+            "status": 400
+          }
+        ],
+        "error": true
+      },
+      "after": {
+        "checked": true,
+        "describedBy": "permalink-custom permalink-tags",
+        "help": "Available tags: %year%, %monthnum%, %day%, %hour%, %minute%, %second%, %post_id%, %postname%, %category%, %author%.",
+        "scroll": 1440,
+        "value": "/by/%author%/%post_id%/%postname%/",
+        "width": 1440
+      },
+      "validCalls": [
+        {
+          "method": "PUT",
+          "path": "/api/settings",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/api/public/site",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/admin/settings?tab=permalinks",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/assets/index-DlY6Kh03.js",
+          "status": 304
+        },
+        {
+          "method": "GET",
+          "path": "/assets/index-BsgYOWhl.css",
+          "status": 304
+        },
+        {
+          "method": "GET",
+          "path": "/assets/playlists-B6HK4GV9.js",
+          "status": 304
+        },
+        {
+          "method": "GET",
+          "path": "/assets/App-CMvjQ72B.css",
+          "status": 304
+        },
+        {
+          "method": "GET",
+          "path": "/assets/App-Cd3r5a7r.js",
+          "status": 304
+        },
+        {
+          "method": "GET",
+          "path": "/api/session",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/vendor/wordpress/wp-admin/css/colors/modern/colors.css",
+          "status": 304
+        },
+        {
+          "method": "GET",
+          "path": "/api/admin/plugin-notices",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/api/settings",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/api/public/site",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/api/terms?taxonomy=category",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/api/profile",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/api/profile",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/api/profile",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/api/public/site",
+          "status": 200
+        }
+      ],
+      "screenshot": "c058-settings-1440.png"
+    },
+    {
+      "width": 768,
+      "invalid": {
+        "saved": "/by/%author%/%post_id%/%postname%/",
+        "calls": [
+          {
+            "method": "PUT",
+            "path": "/api/settings",
+            "status": 400
+          }
+        ],
+        "error": true
+      },
+      "after": {
+        "checked": true,
+        "describedBy": "permalink-custom permalink-tags",
+        "help": "Available tags: %year%, %monthnum%, %day%, %hour%, %minute%, %second%, %post_id%, %postname%, %category%, %author%.",
+        "scroll": 768,
+        "value": "/by/%author%/%post_id%/%postname%/",
+        "width": 768
+      },
+      "validCalls": [
+        {
+          "method": "PUT",
+          "path": "/api/settings",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/api/public/site",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/admin/settings?tab=permalinks",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/assets/index-BsgYOWhl.css",
+          "status": 304
+        },
+        {
+          "method": "GET",
+          "path": "/assets/index-DlY6Kh03.js",
+          "status": 304
+        },
+        {
+          "method": "GET",
+          "path": "/assets/App-Cd3r5a7r.js",
+          "status": 304
+        },
+        {
+          "method": "GET",
+          "path": "/assets/playlists-B6HK4GV9.js",
+          "status": 304
+        },
+        {
+          "method": "GET",
+          "path": "/assets/App-CMvjQ72B.css",
+          "status": 304
+        },
+        {
+          "method": "GET",
+          "path": "/api/session",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/vendor/wordpress/wp-admin/css/colors/modern/colors.css",
+          "status": 304
+        },
+        {
+          "method": "GET",
+          "path": "/api/admin/plugin-notices",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/api/settings",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/api/public/site",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/api/terms?taxonomy=category",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/api/profile",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/api/profile",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/api/profile",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/api/public/site",
+          "status": 200
+        }
+      ],
+      "screenshot": "c058-settings-768.png"
+    },
+    {
+      "width": 375,
+      "invalid": {
+        "saved": "/by/%author%/%post_id%/%postname%/",
+        "calls": [
+          {
+            "method": "PUT",
+            "path": "/api/settings",
+            "status": 400
+          }
+        ],
+        "error": true
+      },
+      "after": {
+        "checked": true,
+        "describedBy": "permalink-custom permalink-tags",
+        "help": "Available tags: %year%, %monthnum%, %day%, %hour%, %minute%, %second%, %post_id%, %postname%, %category%, %author%.",
+        "scroll": 375,
+        "value": "/by/%author%/%post_id%/%postname%/",
+        "width": 375
+      },
+      "validCalls": [
+        {
+          "method": "PUT",
+          "path": "/api/settings",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/api/public/site",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/admin/settings?tab=permalinks",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/assets/index-DlY6Kh03.js",
+          "status": 304
+        },
+        {
+          "method": "GET",
+          "path": "/assets/index-BsgYOWhl.css",
+          "status": 304
+        },
+        {
+          "method": "GET",
+          "path": "/assets/App-Cd3r5a7r.js",
+          "status": 304
+        },
+        {
+          "method": "GET",
+          "path": "/assets/App-CMvjQ72B.css",
+          "status": 304
+        },
+        {
+          "method": "GET",
+          "path": "/assets/playlists-B6HK4GV9.js",
+          "status": 304
+        },
+        {
+          "method": "GET",
+          "path": "/api/session",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/vendor/wordpress/wp-admin/css/colors/modern/colors.css",
+          "status": 304
+        },
+        {
+          "method": "GET",
+          "path": "/api/admin/plugin-notices",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/api/settings",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/api/public/site",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/api/terms?taxonomy=category",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/api/profile",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/api/profile",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/api/profile",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/api/public/site",
+          "status": 200
+        }
+      ],
+      "screenshot": "c058-settings-375.png"
+    }
+  ],
+  "sanitizedFromReceipt": {
+    "filename": "author-native-final-c058-settings-proof.json",
+    "sha256": "c4efe542146546295962032be7aff3c7117282b6083885f94eb1f755d874b004"
+  },
+  "overallBackendStatus": "NEEDS_REVISION: separate accumulated different-author body wait finding remains"
+}
