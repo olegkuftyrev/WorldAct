@@ -5,7 +5,7 @@ import {pool,getSettings} from '../server/db.js';
 import {publishDuePosts} from '../server/core.js';
 import {enqueuePublicationPings,claimOutgoingPings,finishOutgoingPing,createOutgoingPingWorker,pruneOutgoingPings} from '../server/outgoing-pings.js';
 const base=process.env.TEST_API_URL!,origin=process.env.APP_ORIGIN!;
-const stamp='outgoing-'+Date.now();let cookie='';const posts:number[]=[];
+const stamp='outgoing-'+Date.now();let cookie='';const posts:number[]=[],terms:number[]=[];
 const targetHash=(url:string)=>createHash('sha256').update(url).digest('hex');
 after(async()=>{await pool.end();});
 async function api(path:string,method='GET',body?:unknown,auth=cookie){const response=await fetch(base+path,{method,headers:{Origin:origin,'Content-Type':'application/json',...(auth?{Cookie:auth}:{})},body:body===undefined?undefined:JSON.stringify(body)});return {response,data:await response.json()};}
@@ -53,9 +53,23 @@ test('transactional publication hooks, durable two-worker delivery, leases, supp
    const protectedRows=(await pool.query("SELECT state,outcome FROM outgoing_ping_jobs WHERE post_id=$1 AND kind='pingback' AND target LIKE '%/new'",[document.id])).rows;assert.equal(protectedRows[0].outcome,'protected');
    await ok('/api/posts/'+document.id,'PUT',{password:'',content:'<a href="https://target.example.test/removed">Remove</a>'});await enqueue(document.id);await worker.runOnce();await ok('/api/posts/'+document.id,'PUT',{content:'<p>Link removed</p>'});await worker.runOnce();assert.equal(calls,3);assert.equal((await pool.query("SELECT outcome FROM outgoing_ping_jobs WHERE post_id=$1 AND target LIKE '%/removed'",[document.id])).rows[0].outcome,'link_removed');
   });
+  await t.test('worker source URLs match core historical category/date permalinks in the site timezone and creation fallback',async()=>{
+   await clearJobs();const before=await getSettings();
+   try{
+    await ok('/api/settings','PUT',{pingServices:[],defaultPingbackFlag:true,timezone:'America/Los_Angeles',permalinkStructure:'/%year%/%monthnum%/%day%/%category%/%postname%/'});
+    const category=(await ok('/api/terms','POST',{taxonomy:'category',name:stamp+' dated category'})).data.term;terms.push(category.id);
+    const document=await post({publishedAt:'2012-01-01T07:30:00Z',categoryIds:[category.id],content:'<a href="https://target.example.test/historical">Historical</a>'});
+    assert.match(document.permalink,new RegExp('^/2011/12/31/'+category.slug+'/'));
+    const sources:string[]=[];const worker=createOutgoingPingWorker({environment:()=> 'production',protocol:{...noNetwork,async pingback(_target,source){sources.push(source);return 'sent';}}});
+    await enqueue(document.id);await worker.runOnce();await worker.runOnce();assert.equal(sources[0],new URL(document.permalink,before.siteUrl).href);
+    await pool.query("UPDATE posts SET published_at=NULL,created_at='2010-06-01T06:30:00Z',content=$1,raw_content=$1 WHERE id=$2",['<a href="https://target.example.test/creation">Fallback</a>',document.id]);
+    const fallback=(await ok('/api/posts/'+document.id)).data.post;assert.match(fallback.permalink,new RegExp('^/2010/05/31/'+category.slug+'/'));
+    await enqueue(document.id);await worker.runOnce();await worker.runOnce();assert.equal(sources[1],new URL(fallback.permalink,before.siteUrl).href);
+   }finally{await ok('/api/settings','PUT',{timezone:before.timezone,permalinkStructure:before.permalinkStructure});}
+  });
   await t.test('leases are SKIP LOCKED, stale completion cannot win and restarted work retries at most three times',async()=>{
    await clearJobs();const documents=await Promise.all([post(),post(),post()]);for(const item of documents)await enqueue(item.id);
-   const [a,b]=await Promise.all([claimOutgoingPings(pool,2),claimOutgoingPings(pool,2)]);assert.equal(new Set([...a,...b].map(job=>job.id)).size,2);assert.ok(a.length===0 || b.length===0);await pool.query("UPDATE outgoing_ping_jobs SET state='suppressed' WHERE post_id=ANY($1::int[]) AND state='pending'",[documents.map(item=>item.id)]);
+   const [a,b]=await Promise.all([claimOutgoingPings(pool,2),claimOutgoingPings(pool,2)]);assert.equal(new Set([...a,...b].map(job=>job.id)).size,2,JSON.stringify({a:a.map(job=>job.id),b:b.map(job=>job.id),rows:(await pool.query("SELECT id,state,attempts,lease_until,now() AS current_time FROM outgoing_ping_jobs WHERE post_id=ANY($1::int[])",[documents.map(item=>item.id)])).rows}));assert.ok(a.length===0 || b.length===0);await pool.query("UPDATE outgoing_ping_jobs SET state='suppressed' WHERE post_id=ANY($1::int[]) AND state='pending'",[documents.map(item=>item.id)]);
    for(let round=0;round<20;round++){
     await pool.query("UPDATE outgoing_ping_jobs SET state='pending',attempts=0,lease_token=NULL,lease_until=NULL WHERE post_id=ANY($1::int[])",[documents.map(item=>item.id)]);
     const claims=await Promise.all([claimOutgoingPings(pool,2),claimOutgoingPings(pool,2)]);assert.equal(claims.flat().length,2);
@@ -118,6 +132,6 @@ test('transactional publication hooks, durable two-worker delivery, leases, supp
   });
  }finally{
   await pool.query('DROP TRIGGER IF EXISTS outgoing_test_fail ON outgoing_ping_jobs');await pool.query('DROP FUNCTION IF EXISTS outgoing_test_fail()');
-  await clearJobs();await pool.query('DELETE FROM posts WHERE id=ANY($1::int[])',[posts]);await pool.query('UPDATE settings SET data=$1::jsonb WHERE id=1',[JSON.stringify(original)]);await api('/api/auth/logout','POST',{});
+  await clearJobs();await pool.query('DELETE FROM posts WHERE id=ANY($1::int[])',[posts]);await pool.query('DELETE FROM terms WHERE id=ANY($1::int[])',[terms]);await pool.query('UPDATE settings SET data=$1::jsonb WHERE id=1',[JSON.stringify(original)]);await api('/api/auth/logout','POST',{});
  }
 });

@@ -47,8 +47,8 @@ export async function claimOutgoingPings(db:PingDatabase=pool,limit=2):Promise<P
   const running=(await client.query("SELECT count(*)::int AS n FROM outgoing_ping_jobs WHERE state='running' AND lease_until>now()")).rows[0].n;
   const capacity=Math.max(0,Math.min(2-running,limit));
   const token=randomUUID();
-  const rows=await client.query<PingJob>(`UPDATE outgoing_ping_jobs j SET state='running',attempts=j.attempts+1,lease_token=$1,lease_until=now()+interval '90 seconds',updated_at=now() FROM
-   (SELECT id FROM outgoing_ping_jobs WHERE attempts<3 AND ((state='pending' AND due_at<=now()) OR (state='running' AND lease_until<=now())) ORDER BY due_at,id FOR UPDATE SKIP LOCKED LIMIT $2) ready WHERE j.id=ready.id RETURNING j.*`,[token,capacity]);
+  const rows=await client.query<PingJob>(`WITH ready AS MATERIALIZED (SELECT id FROM outgoing_ping_jobs WHERE attempts<3 AND ((state='pending' AND due_at<=now()) OR (state='running' AND lease_until<=now())) ORDER BY due_at,id FOR UPDATE SKIP LOCKED LIMIT $2)
+   UPDATE outgoing_ping_jobs j SET state='running',attempts=j.attempts+1,lease_token=$1,lease_until=now()+interval '90 seconds',updated_at=now() FROM ready WHERE j.id=ready.id RETURNING j.*`,[token,capacity]);
   await client.query('COMMIT');return rows.rows;
  }catch(error){await client.query('ROLLBACK');throw error;}finally{client.release();}
 }
@@ -80,7 +80,7 @@ export function createOutgoingPingWorker(options:{db?:PingDatabase;protocol?:Pro
     await protocol.service(job.target,settings.siteTitle,new URL(home.pathname.replace(/\/$/,'')+'/',home).href,new URL('/feed/',home).href,origins);
     await finishOutgoingPing(job,'sent','delivered',db);return;
    }
-   const row=(await db.query(`SELECT p.id,p.type,p.status,p.slug,p.parent_id AS "parentId",(p.password_hash IS NOT NULL) AS protected,
+   const row=(await db.query(`SELECT p.id,p.type,p.status,p.slug,p.published_at AS "publishedAt",p.created_at AS "createdAt",p.parent_id AS "parentId",(p.password_hash IS NOT NULL) AS protected,
     CASE WHEN p.status='publish' AND p.password_hash IS NULL THEN p.raw_content ELSE '' END AS "rawContent",
     CASE WHEN p.status='publish' AND p.password_hash IS NULL THEN p.content ELSE '' END AS content,
     COALESCE((SELECT json_agg(json_build_object('taxonomy',t.taxonomy,'slug',t.slug) ORDER BY t.name,t.id) FROM post_terms pt JOIN terms t ON t.id=pt.term_id WHERE pt.post_id=p.id),'[]'::json) AS terms
