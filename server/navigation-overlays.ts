@@ -1,10 +1,11 @@
 import sanitizeHTML from "sanitize-html";
+import { randomBytes } from "node:crypto";
 import type { Context, Node, State, RenderDocument } from "./block-renderer.js";
 import { reserveInteractiveId } from "./interactive-blocks.js";
 import { cleanContent, plainText } from "./utils.js";
 
 export const NAVIGATION_OVERLAY_BLOCKS = ["core/navigation-overlay-close"];
-export type NavigationOverlayContext = { id: string; closeCount: number };
+export type NavigationOverlayContext = { id: string; closeTokens: Set<string> };
 type Attributes = (extra?: string) => string;
 type RenderDocumentContent = (document: RenderDocument, context: Context) => Promise<string>;
 const escape = (value: unknown) => String(value ?? "").replace(/[&<>"']/g, character => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[character]!);
@@ -30,16 +31,25 @@ export function renderNavigationOverlayClose(node: Node, context: Context, attri
   });
   const text = plainText(sanitizedText).trim() ? sanitizedText : "Close";
   const overlay = context.navigationOverlay;
-  if (overlay) overlay.closeCount++;
-  return `<button${attributes()} type="button"${mode === "icon" ? ' aria-label="Close"' : ""}${overlay ? ` data-worldact-navigation-close="${escape(overlay.id)}"` : ""}>${mode === "text" ? "" : closeIcon}${mode === "icon" ? "" : `<span class="wp-block-navigation-overlay-close__text">${text}</span>`}</button>`;
+  const token = overlay ? randomBytes(16).toString("hex") : "";
+  if (overlay) overlay.closeTokens.add(token);
+  return `<button${attributes()} type="button"${mode === "icon" ? ' aria-label="Close"' : ""}${overlay ? ` data-worldact-navigation-close="${escape(overlay.id)}" data-worldact-internal-close="${token}"` : ""}>${mode === "text" ? "" : closeIcon}${mode === "icon" ? "" : `<span class="wp-block-navigation-overlay-close__text">${text}</span>`}</button>`;
 }
 
-function lowerImagePriority(html: string) {
-  if (!/<img\b/i.test(html)) return html;
-  return sanitizeHTML(html, {
+function prepareCustomOverlay(html: string, overlay: NavigationOverlayContext) {
+  let hasClose = false;
+  const content = sanitizeHTML(cleanContent(html, true), {
     allowedTags: false, allowedAttributes: false, allowVulnerableTags: true,
-    transformTags: { img: (_tag, attrs) => ({ tagName: "img", attribs: { ...attrs, fetchpriority: "low" } }) },
+    transformTags: {
+      "*": (tag, attrs) => {
+        const { "data-worldact-internal-close": token, ...safe } = attrs;
+        if (tag === "button" && overlay.closeTokens.has(token) && safe["data-worldact-navigation-close"] === overlay.id) hasClose = true;
+        if (tag === "img") safe.fetchpriority = "low";
+        return { tagName: tag, attribs: safe };
+      },
+    },
   });
+  return { content, hasClose };
 }
 function overlayColors(node: Node) {
   const a = node.attrs, classes: string[] = [], styles: string[] = [];
@@ -61,7 +71,7 @@ export async function renderNavigationWithOverlay(
   const label = plainText(String(node.attrs.ariaLabel || "Navigation"));
   const desktop = mode === "always" ? "" : `<ul class="wp-block-navigation__container worldact-navigation-desktop">${items}</ul>`;
   if (mode === "never") return `<nav${attributes("worldact-overlay-never")} aria-label="${escape(label)}">${desktop}</nav>`;
-  const panelId = reserveInteractiveId(state, "", "navigation"), overlay: NavigationOverlayContext = { id: panelId, closeCount: 0 };
+  const panelId = reserveInteractiveId(state, "", "navigation"), overlay: NavigationOverlayContext = { id: panelId, closeTokens: new Set() };
   const reference = navigationOverlayReference(node.attrs.overlay, state.settings.theme);
   let custom = "";
   if (reference) {
@@ -72,13 +82,17 @@ export async function renderNavigationWithOverlay(
       if (document) custom = await renderDocument(document, { ...context, navigationOverlay: overlay, refs: new Set([...context.refs, key]) });
     }
   }
-  const hasCustom = !!custom.trim(), showIcon = node.attrs.hasIcon !== false;
-  const fallbackClose = hasCustom && overlay.closeCount ? "" : `<button type="button" class="wp-block-navigation__responsive-container-close" data-worldact-navigation-close="${escape(panelId)}"${showIcon ? ' aria-label="Close menu"' : ""}>${showIcon ? defaultCloseIcon : "Close"}</button>`;
+  // A malformed parent may render a child and then discard that child's HTML.
+  // Verify a genuine generated close survived the actual sanitized markup;
+  // saved classes/data attributes alone cannot suppress the fallback.
+  const prepared = prepareCustomOverlay(custom, overlay);
+  const hasCustom = !!prepared.content.trim(), showIcon = node.attrs.hasIcon !== false;
+  const fallbackClose = hasCustom && prepared.hasClose ? "" : `<button type="button" class="wp-block-navigation__responsive-container-close" data-worldact-navigation-close="${escape(panelId)}"${showIcon ? ' aria-label="Close menu"' : ""}>${showIcon ? defaultCloseIcon : "Close"}</button>`;
   // Desktop and mobile fallbacks are distinct DOM instances. Render controls
   // afresh so Search/interactive IDs remain local; entity and query reads still
   // share the same cache, traversal state and cumulative resource budgets.
   const mobileItems = !hasCustom && mode === "mobile" ? await renderItems() : items;
-  const content = hasCustom ? `<div class="wp-block-navigation__overlay-container" style="display:block">${lowerImagePriority(custom)}</div>` : `<ul class="wp-block-navigation__container">${mobileItems}</ul>`;
+  const content = hasCustom ? `<div class="wp-block-navigation__overlay-container" style="display:block">${prepared.content}</div>` : `<ul class="wp-block-navigation__container">${mobileItems}</ul>`;
   const colors = hasCustom ? { classes: [], styles: [] } : overlayColors(node);
   const panelClasses = ["wp-block-navigation__responsive-container",mode === "always" ? "hidden-by-default" : "",hasCustom ? "disable-default-overlay" : "",...colors.classes].filter(Boolean).join(" ");
   const panelStyle = ["display:block",...colors.styles].join(";");

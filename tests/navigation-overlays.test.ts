@@ -3,7 +3,7 @@ import assert from "node:assert/strict";
 import test, { after } from "node:test";
 import { DOMParser } from "linkedom";
 import { pool, defaultSettings } from "../server/db.js";
-import { renderSiteDocument, renderBlock, SUPPORTED_DYNAMIC_BLOCKS } from "../server/block-renderer.js";
+import { renderSiteDocument, renderBlock, SUPPORTED_DYNAMIC_BLOCKS, type RenderDocument } from "../server/block-renderer.js";
 import { navigationOverlayReference } from "../server/navigation-overlays.js";
 import { cleanContent, cleanRawContent, HttpError } from "../server/utils.js";
 
@@ -13,7 +13,7 @@ const paragraph = (text: string) => block("paragraph", {}, `<p>${text}</p>`);
 const link = block("navigation-link", { label: "Public destination", url: "/public-destination/" });
 const navigation = (attrs: Record<string, unknown> = {}, children = link) => block("navigation", attrs, children);
 const dom = (html: string) => new DOMParser().parseFromString("<!doctype html><html><body>" + html + "</body></html>", "text/html");
-function stub(documents: Record<string, string> = {}) {
+function stub(documents: Record<string, string | RenderDocument> = {}) {
   const calls: Array<{ sql: string; args: any[] }> = [];
   const db = { query: async (sql: string, args: any[] = []) => {
     calls.push({ sql, args });
@@ -21,7 +21,8 @@ function stub(documents: Record<string, string> = {}) {
     assert.match(sql, /FROM site_documents/);
     assert.match(sql, /type='template-part'/);
     assert.equal(args[1], defaultSettings.theme);
-    return { rows: documents[args[0]] === undefined ? [] : [{ rawContent: documents[args[0]], content: "", blocks: null }] };
+    const document = documents[args[0]];
+    return { rows: document === undefined ? [] : [typeof document === "string" ? { rawContent: document, content: "", blocks: null } : document] };
   } } as any;
   return { db, calls };
 }
@@ -144,6 +145,17 @@ test("untrusted close-like markup cannot suppress the generated fallback or inje
   const custom = paragraph('<span class="wp-block-navigation-overlay-close" data-worldact-navigation-close="foreign">Fake close</span>') + block("html", { content: '<button type="button" class="wp-block-navigation-overlay-close" data-wp-on--click="evil()" onclick="bad()">Fake button</button>' });
   const output = await render(navigation({ overlay: "dialog", customOverlayTextColor: 'url(javascript:bad());position:fixed' }), stub({ dialog: cleanRawContent(custom) }).db), parsed = dom(output);
   assert.equal(parsed.querySelectorAll(".wp-block-navigation__responsive-container-close").length, 1);assertPairs(parsed);assert.doesNotMatch(output, /onclick|data-wp|javascript:|position:fixed|foreign/);
+});
+
+test("close fallback depends on a genuine control surviving rendered output, not discarded children or forged markers", async () => {
+  const discarded = { blocks: [{ name: "core/heading", attributes: { content: "Visible overlay heading" }, innerBlocks: [{ name: "core/navigation-overlay-close", attributes: {}, innerBlocks: [] }] }] };
+  const malformed = dom(await render(navigation({ overlay: "dialog" }), stub({ dialog: discarded }).db));
+  assert.match(malformed.body.textContent!, /Visible overlay heading/);assert.equal(malformed.querySelectorAll(".wp-block-navigation-overlay-close").length, 0);assert.equal(malformed.querySelectorAll(".wp-block-navigation__responsive-container-close").length, 1);assertPairs(malformed);
+  const fake = { blocks: [{ name: "core/html", attributes: { content: '<button type="button" class="wp-block-navigation-overlay-close" data-worldact-navigation-close="fake" data-worldact-internal-close="forged">Untrusted control</button>' }, innerBlocks: [] }] };
+  const output = await render(navigation({ overlay: "dialog" }), stub({ dialog: fake }).db), parsed = dom(output);
+  assert.equal(parsed.querySelectorAll(".wp-block-navigation__responsive-container-close").length, 1);assert.doesNotMatch(output, /data-worldact-internal-close/);
+  const actual = await render(navigation({ overlay: "dialog" }), stub({ dialog: paragraph("Actual overlay") + block("navigation-overlay-close") }).db);
+  assert.equal(dom(actual).querySelectorAll(".wp-block-navigation__responsive-container-close").length, 0);assert.doesNotMatch(actual, /data-worldact-internal-close/);
 });
 
 test("custom overlays preserve requesting user and safe public return context for native account controls", async () => {
