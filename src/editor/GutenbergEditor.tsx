@@ -937,6 +937,13 @@ body.editor-styles-wrapper { padding: 36px 32px 120px; box-sizing: border-box; }
 .editor-styles-wrapper .wp-block-button__link { border-radius: 0; background-color: #111; color: #fff; }
 .editor-styles-wrapper .wp-block-image img { max-width: 100%; height: auto; }
 .editor-styles-wrapper .wp-block-table table { border-collapse: collapse; width: 100%; }
+/* Tab List has no inner BlockList on which the native layout hook can place
+   default flex declarations; retain the source's generated layout in the iframe. */
+.editor-styles-wrapper .wp-block-tab-list.is-layout-flex { display: flex; flex-wrap: wrap; align-items: center; gap: var(--wp--style--block-gap, 1.2rem); }
+.editor-styles-wrapper .wp-block-tab-list.is-content-justification-left { justify-content: flex-start; }
+.editor-styles-wrapper .wp-block-tab-list.is-content-justification-center { justify-content: center; }
+.editor-styles-wrapper .wp-block-tab-list.is-content-justification-right { justify-content: flex-end; }
+.editor-styles-wrapper .wp-block-tab-list.is-content-justification-space-between { justify-content: space-between; }
 .has-base-color { color: var(--wp--preset--color--base); } .has-base-background-color { background-color: var(--wp--preset--color--base); } .has-contrast-color { color: var(--wp--preset--color--contrast); } .has-contrast-background-color { background-color: var(--wp--preset--color--contrast); } .has-accent-1-color { color: var(--wp--preset--color--accent-1); } .has-accent-1-background-color { background-color: var(--wp--preset--color--accent-1); } .has-accent-2-color { color: var(--wp--preset--color--accent-2); } .has-accent-2-background-color { background-color: var(--wp--preset--color--accent-2); } .has-accent-3-color { color: var(--wp--preset--color--accent-3); } .has-accent-3-background-color { background-color: var(--wp--preset--color--accent-3); }
 .has-small-font-size { font-size: var(--wp--preset--font-size--small); } .has-medium-font-size { font-size: var(--wp--preset--font-size--medium); } .has-large-font-size { font-size: var(--wp--preset--font-size--large); } .has-x-large-font-size { font-size: var(--wp--preset--font-size--x-large); } .has-xx-large-font-size { font-size: var(--wp--preset--font-size--xx-large); }
 .worldact-binding-preview { border: 1px dashed #c3c4c7; padding: 20px; min-height: 64px; box-sizing: border-box; } .worldact-binding-label { display: block; font: 500 11px/1.4 -apple-system,BlinkMacSystemFont,sans-serif; text-transform: uppercase; color: #646970; margin-bottom: 8px; } .worldact-binding-content { display: block; }
