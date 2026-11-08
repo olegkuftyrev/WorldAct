@@ -18,7 +18,8 @@ import {
   type FormEvent,
 } from "react";
 import { Link, useSearchParams } from "react-router-dom";
-import { api, json, date, type Post, type Term } from "../api";
+import { api, json, type Post, type Term } from "../api";
+import { postListDate, postListMonthLabel } from "../postListDates";
 import {
   Session,
   Icon,
@@ -30,6 +31,7 @@ import {
 } from "../components/AdminUI";
 
 type ListedPost = Post & {
+  postDate: string | null;
   commentCount?: number;
   approvedCommentCount?: number;
   pendingCommentCount?: number;
@@ -37,6 +39,8 @@ type ListedPost = Post & {
 type PostResult = {
   posts: ListedPost[];
   counts: Record<string, number>;
+  months: string[];
+  timezone: string;
   pagination: {
     page: number;
     perPage: number;
@@ -99,6 +103,10 @@ export default function PostList({ type }: { type: "post" | "page" }) {
   }, [search, status, type, page, category, month]);
   const posts = resource.data?.posts || [],
     pagination = resource.data?.pagination;
+  const months = resource.data?.months;
+  // Match the source select: an unavailable URL month falls back to All dates.
+  // Draft selection stays local and is not overwritten by background refreshes.
+  const selectedMonth = months?.includes(filterMonth) ? filterMonth : "";
   const canPublish = user?.role !== "contributor";
   function change(changes: Record<string, string>) {
     const next = new URLSearchParams(params);
@@ -397,19 +405,17 @@ export default function PostList({ type }: { type: "post" | "page" }) {
             className="alignleft actions post-list-filters"
             onSubmit={(e) => {
               e.preventDefault();
-              change({ month: filterMonth, category: filterCategory });
+              change({ month: selectedMonth, category: filterCategory });
             }}
           >
-            <label className="screen-reader-text" htmlFor="filter-month">
-              Filter by date
-            </label>
-            <input
-              id="filter-month"
-              type="month"
-              aria-label="Filter by month"
-              value={filterMonth}
-              onChange={(e) => setFilterMonth(e.target.value)}
-            />
+            {(!months || months.length > 0) && <>
+              <label className="screen-reader-text" htmlFor="filter-by-date">Filter by date</label>
+              <select id="filter-by-date" name="month" value={selectedMonth} disabled={!months}
+                onChange={(e) => setFilterMonth(e.target.value)}>
+                <option value="">{months ? "All dates" : resource.error ? "Dates unavailable" : "Loading dates…"}</option>
+                {months?.map(value => <option key={value} value={value}>{postListMonthLabel(value)}</option>)}
+              </select>
+            </>}
             {type === "post" && (
               <>
                 <label className="screen-reader-text" htmlFor="filter-category">
@@ -429,7 +435,7 @@ export default function PostList({ type }: { type: "post" | "page" }) {
                 </select>
               </>
             )}
-            <button className="button">Filter</button>
+            <button className="button" disabled={!months}>Filter</button>
             {(category ||
               month ||
               params.has("tag") ||
@@ -644,21 +650,7 @@ export default function PostList({ type }: { type: "post" | "page" }) {
                       </Link>
                     )}
                   </td>
-                  <td className="date column-date">
-                    {post.status === "publish"
-                      ? "Published"
-                      : post.status === "future"
-                        ? "Scheduled"
-                        : "Last Modified"}
-                    <br />
-                    {date(
-                      post.status === "future"
-                        ? post.scheduledAt
-                        : post.status === "publish"
-                          ? post.publishedAt
-                          : post.updatedAt,
-                    )}
-                  </td>
+                  <PostDateCell post={post} timezone={resource.data?.timezone} />
                 </tr>
                 {editing?.id === post.id && (
                   <tr className="inline-edit-row">
@@ -702,6 +694,12 @@ export default function PostList({ type }: { type: "post" | "page" }) {
       </main>
     </>
   );
+}
+function PostDateCell({ post, timezone }: { post: ListedPost; timezone: string | undefined }) {
+  const value = postListDate(post.postDate, timezone, post.status);
+  return <td className="date column-date">
+    {value.missed ? <strong className="error-message">{value.label}</strong> : value.label}<br />{value.text}
+  </td>;
 }
 function QuickEdit({
   post,
