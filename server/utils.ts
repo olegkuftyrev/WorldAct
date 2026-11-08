@@ -37,6 +37,7 @@ const color =
 const border =
   /^(?:0|none|(?:\d+(?:\.\d+)?)(?:px|em|rem)?\s+(?:solid|dashed|dotted|double)\s+(?:#[a-f\d]{3,8}|[a-z]+|var\(--wp--[a-z\d-]+\)))$/i;
 const allowedStyles: Record<string, RegExp[]> = {
+  rotate: [/^-?(?:\d{1,5}|[12]\d{5}|3[0-5]\d{4}|360000)deg$/],
   "--separator": [/^"[^"\\\u0000-\u001f]{0,40}"$/u],
   border: [border],
   "border-top": [border],
@@ -88,6 +89,10 @@ const allowedStyles: Record<string, RegExp[]> = {
   "max-height": [length],
   "border-width": [length],
   "border-radius": [length],
+  "border-top-left-radius": [length],
+  "border-top-right-radius": [length],
+  "border-bottom-left-radius": [length],
+  "border-bottom-right-radius": [length],
   "border-style": [/^(?:none|solid|dashed|dotted|double)$/],
   "border-top-width": [length],
   "border-right-width": [length],
@@ -97,6 +102,10 @@ const allowedStyles: Record<string, RegExp[]> = {
   "border-right-color": [color],
   "border-bottom-color": [color],
   "border-left-color": [color],
+  "border-top-style": [/^(?:none|solid|dashed|dotted|double)$/],
+  "border-right-style": [/^(?:none|solid|dashed|dotted|double)$/],
+  "border-bottom-style": [/^(?:none|solid|dashed|dotted|double)$/],
+  "border-left-style": [/^(?:none|solid|dashed|dotted|double)$/],
   display: [/^(?:block|inline|inline-block|flex|inline-flex|grid|none)$/],
   "flex-direction": [/^(?:row|column|row-reverse|column-reverse)$/],
   "justify-content": [

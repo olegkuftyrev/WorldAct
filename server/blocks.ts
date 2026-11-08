@@ -32,6 +32,7 @@ import { postAccessReader } from "./post-passwords.js";
 import { withPreviewAutosave } from "./post-preview.js";
 import { postFormats } from "../shared/post-formats.js";
 import { postPermalink, resolvePublicPath } from "./permalinks.js";
+import iconsRouter from "./icons.js";
 
 const escapeHTML = (value: unknown) =>
   String(value ?? "").replace(
@@ -79,6 +80,7 @@ router.use("/wp-json", (req, res, next) => {
   next();
 });
 const iso = (date: any) => new Date(date).toISOString().replace(/Z$/, "");
+router.use(iconsRouter);
 const unwrap = (value: unknown) =>
   typeof value === "object" && value !== null && "raw" in value
     ? String((value as any).raw ?? "")

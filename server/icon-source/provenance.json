@@ -1,0 +1,7 @@
+{
+  "source": "Supplied WordPress wp-includes/assets/icon-library-manifest.php and wp-includes/images/icon-library/*.svg",
+  "license": "GPL-2.0-or-later",
+  "manifestSHA256": "4226c76915f22de22d432b8bea17c02244d0f8991fd59def628d640c57b4fe2b",
+  "iconCount": 88,
+  "extraction": "Static text manifest extraction; no PHP was executed."
+}

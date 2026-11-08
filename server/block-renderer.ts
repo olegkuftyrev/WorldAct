@@ -18,6 +18,7 @@ import { postHasPassword, postNeedsPassword, postPasswordForm, protectedPostExce
 import { renderNavigationWithOverlay, renderNavigationOverlayClose, type NavigationOverlayContext } from "./navigation-overlays.js";
 import { hasLegacyContent, legacyExcerptSource, selectLegacyContent, type ContentMode } from "./legacy-content.js";
 import { CORE_DYNAMIC_BLOCKS, SUPPORTED_DYNAMIC_BLOCKS, hasDynamicBlocks } from "../shared/dynamic-blocks.js";
+import { renderIconBlock } from "./icons.js";
 
 export type BlockDatabase = Pick<pg.Pool, "query"> | pg.PoolClient;
 export type RenderPost = Record<string, any>;
@@ -775,6 +776,9 @@ async function renderNode(
     (nodes, next) => renderChildren(nodes, next, state),
     (extra = "", override = a) => attrsHTML({ ...node, attrs: override }, extra), blockStyle);
   if (interactiveBlock !== undefined) return interactiveBlock;
+  const iconBlock = renderIconBlock(node,
+    (extra = "", override = a) => attrsHTML({ ...node, attrs: override }, extra), blockStyle);
+  if (iconBlock !== undefined) return iconBlock;
   const themeBlock = await renderThemeBlock(node, context, state,
     (nodes, next) => renderChildren(nodes, next, state), attr);
   if (themeBlock !== undefined) return themeBlock;
