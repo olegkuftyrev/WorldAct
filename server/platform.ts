@@ -45,6 +45,7 @@ import { SiteImport, allocateImportedBlockEntities, exportMediaFiles, exportFont
 import { postPermalink } from "./permalinks.js";
 import { dateArchiveLocalSQL } from "./date-archives.js";
 import { parseFootnotes, freshFootnoteIds } from "./footnotes.js";
+import { inspectAudio } from "./audio-metadata.js";
 
 import { settingSchema, menuSchema, validMenu, styleSchema, documentSchema, validateExtensionSettings } from "./site-validation.js";
 import { readThemeDesign, validateThemeDesign, resetBundledDocument } from "./themes.js";
@@ -799,6 +800,7 @@ router.post(
       width = metadata.width;
       height = metadata.height;
     }
+    const audioMetadata = await inspectAudio(file.buffer, type.mime);
     const settings = await getSettings();
     const prefix = uploadPrefix(settings);
     await mkdir(path.join(uploadsDir, prefix), { recursive: true });
@@ -813,10 +815,10 @@ router.post(
     });
     try {
       const result = await pool.query(
-        `INSERT INTO media(author_id,title,filename,mime_type,size,width,height,sizes) VALUES($1,$2,$3,$4,$5,$6,$7,$8) RETURNING ${expandedMediaFields}`,
+        `INSERT INTO media(author_id,title,filename,mime_type,size,width,height,sizes,audio_metadata) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9::jsonb) RETURNING ${expandedMediaFields}`,
         [
           needUser(req).id,
-          plainText(
+          audioMetadata.title?.slice(0, 300) || plainText(
             path.basename(file.originalname).replace(/\.[^.]+$/, ""),
           ).slice(0, 300) || "Untitled file",
           filename,
@@ -825,6 +827,7 @@ router.post(
           width,
           height,
           JSON.stringify(sizes),
+          JSON.stringify(audioMetadata),
         ],
       );
       res.status(201).json({ media: result.rows[0] });

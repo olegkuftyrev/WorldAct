@@ -830,6 +830,7 @@ async function wpMedia(item: any) {
       : "file",
     mime_type: item.mimeType || item.mime_type,
     media_details: {
+      ...(item.audioMetadata || item.audio_metadata || {}),
       width: item.width,
       height: item.height,
       file: item.filename,
