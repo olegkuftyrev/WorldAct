@@ -31,7 +31,7 @@ import {hasPostAccess,assertPostAccess} from "./core.js";
 import { postAccessReader } from "./post-passwords.js";
 import { withPreviewAutosave } from "./post-preview.js";
 import { postFormats } from "../shared/post-formats.js";
-import { postPermalink } from "./permalinks.js";
+import { postPermalink, resolvePublicPath } from "./permalinks.js";
 
 const escapeHTML = (value: unknown) =>
   String(value ?? "").replace(
@@ -822,6 +822,14 @@ router.get("/api/public/templates/:slug", async (req:AuthRequest, res) => {
   const requestPath = String(req.query.requestPath || "/").slice(0, 2000);
   if (!requestPath.startsWith("/") || requestPath.startsWith("//"))
     throw new HttpError(400, "Use a site-relative request path.");
+  let contentPage = parseContentPage(req.query.contentPage ?? (post ? req.query.page : undefined));
+  if (post && req.query.contentPage === undefined && req.query.page === undefined) {
+    // Source templates are requested separately from their public path. Match
+    // the actual resolved identity before treating a numeric suffix as a page;
+    // a real numeric child page must never paginate its parent document.
+    const resolved = await resolvePublicPath(requestPath);
+    if (resolved?.id === post.id && resolved.contentPage) contentPage = resolved.contentPage;
+  }
   const query: Record<string, unknown> = {};
   for (const [key, value] of Object.entries(req.query))
     if (
@@ -843,7 +851,7 @@ router.get("/api/public/templates/:slug", async (req:AuthRequest, res) => {
       templateSlug: doc.slug,
       query,
       page: Number(req.query.page) || 1,
-      contentPage: parseContentPage(req.query.contentPage ?? (post ? req.query.page : undefined)),
+      contentPage,
       placeholderBindings: false,
       user: (req as AuthRequest).user,
       preview,

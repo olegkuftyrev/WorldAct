@@ -104,6 +104,8 @@ export function selectLegacyContent(document: RenderDocument, post: RenderPost, 
   const page = mode === "complete" || mode === "archive" || mode === "feed" ? 1 : Math.min(pages.length, Math.max(1, Math.trunc(requested) || 1));
   const selected = mode === "complete" ? pages.flat() : pages[page - 1], more = selected.findIndex(piece => "type" in piece && piece.type === "more");
   const moreMarker = more < 0 ? undefined : selected[more] as Extract<Marker, { type: "more" }>;
+  // Source get_the_content checks the entire stored post for noteaser, but
+  // strips the selected page's teaser only on page one of multipage content.
   const noTeaser = all.some(piece => "type" in piece && (piece.type === "noteaser" || (piece.type === "more" && piece.noTeaser)));
   let shown = mode === "archive" && more >= 0 ? selected.slice(0, more) : selected;
   if (mode !== "archive" && mode !== "complete" && page === 1 && noTeaser && more >= 0) shown = shown.slice(more);
