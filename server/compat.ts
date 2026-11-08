@@ -40,6 +40,7 @@ import {
   withPermalink,
 } from "./permalinks.js";
 import { z } from "zod";
+import { projectRestFields } from "./rest-fields.js";
 import { readTermQuery } from "./term-blocks.js";
 import { assertPostAccess } from "./core.js";
 import { postFormats } from "../shared/post-formats.js";
@@ -339,18 +340,7 @@ function pagination(req: Request, res: Response, total: number) {
   return { page, perPage, offset: (page - 1) * perPage };
 }
 function wpFields(req: Request, value: any) {
-  const fields =
-    typeof req.query._fields === "string"
-      ? req.query._fields.split(",").map((s) => s.trim())
-      : null;
-  if (!fields) return value;
-  const pick = (item: any) =>
-    Object.fromEntries(
-      fields
-        .filter((f) => Object.prototype.hasOwnProperty.call(item, f))
-        .map((f) => [f, item[f]]),
-    );
-  return Array.isArray(value) ? value.map(pick) : pick(value);
+  return projectRestFields(value, req.query._fields);
 }
 const embeddedRecords = new WeakMap<Request, Map<string, Promise<any>>>();
 function embeddingRequested(req: Request, relation: string) {
@@ -811,7 +801,20 @@ for (const collection of ["posts", "pages"] as const) {
     },
   );
 }
-async function wpMedia(item: any) {
+function requireMediaEditContext(req: AuthRequest, item?: any) {
+  const user = needUser(req);
+  if (!["administrator", "editor", "author"].includes(user.role)) throw new HttpError(403, "You are not allowed to edit media.");
+  if (item && user.role === "author" && (item.authorId ?? item.author_id) !== user.id) throw new HttpError(403, "You can only edit your own media.");
+  return user;
+}
+const mediaContext = (req: Request) => z.enum(["view", "embed", "edit"]).default("view").parse(req.query.context);
+function mediaQueryIds(value: unknown, zero = false): number[] | undefined {
+  if (value === undefined) return undefined;
+  const scalar = z.union([z.string().regex(/^\d+$/), z.number().int()]).transform(Number).pipe(z.number().int().min(zero ? 0 : 1).max(2147483647));
+  const values = typeof value === "string" ? (value.trim() ? value.split(",") : []) : Array.isArray(value) ? value : [value];
+  return [...new Set(z.array(scalar).max(100).parse(values))];
+}
+async function wpMedia(item: any, edit = false) {
   const s = await getSettings(),
     url = absolute(item.url || "/uploads/" + item.filename, s.siteUrl);
   return {
@@ -822,10 +825,10 @@ async function wpMedia(item: any) {
     status: "inherit",
     type: "attachment",
     link: url,
-    title: { rendered: esc(item.title) },
+    title: { ...(edit ? { raw: item.title } : {}), rendered: esc(item.title) },
     author: item.authorId || item.author_id,
-    description: { rendered: item.description || "" },
-    caption: { rendered: item.caption || "" },
+    description: { ...(edit ? { raw: item.description || "" } : {}), rendered: item.description || "" },
+    caption: { ...(edit ? { raw: item.caption || "" } : {}), rendered: esc(item.caption || "") },
     alt_text: item.alt,
     ...(item.image ? { image: { ...item.image, src: absolute(item.image.src, s.siteUrl) } } : {}),
     media_type: String(item.mimeType || item.mime_type).startsWith("image/")
@@ -852,19 +855,47 @@ async function wpMedia(item: any) {
     source_url: url,
   };
 }
-router.get("/wp-json/wp/v2/media", async (req, res) => {
-  const total = (await pool.query("SELECT count(*)::int AS total FROM media"))
+router.get("/wp-json/wp/v2/media", async (req: AuthRequest, res) => {
+  const edit = mediaContext(req) === "edit";
+  const user = edit ? requireMediaEditContext(req) : undefined;
+  const owner = user?.role === "author" ? user.id : null;
+  const include = mediaQueryIds(req.query.include), exclude = mediaQueryIds(req.query.exclude), authors = mediaQueryIds(req.query.author), parents = mediaQueryIds(req.query.parent, true);
+  const search = z.string().trim().max(200).optional().parse(req.query.search);
+  const type = z.enum(["image", "audio", "video", "text", "application"]).optional().parse(req.query.media_type);
+  const mime = z.string().max(100).regex(/^[a-z0-9!#$&^_.+-]+\/[a-z0-9!#$&^_.+-]+$/i).optional().parse(req.query.mime_type);
+  const order = z.enum(["asc", "desc"]).default("desc").parse(req.query.order);
+  const orderby = z.enum(["date", "id", "title", "author", "parent", "include"]).default("date").parse(req.query.orderby);
+  if (orderby === "include" && !include?.length) throw new HttpError(400, "Provide attachment IDs when ordering by include.");
+  const values: unknown[] = [owner], where = ["($1::int IS NULL OR author_id=$1)"];
+  const parameter = (value: unknown) => { values.push(value); return "$" + values.length; };
+  let includeParameter = "";
+  if (include?.length) { includeParameter = parameter(include); where.push(`id=ANY(${includeParameter}::int[])`); }
+  if (exclude?.length) where.push(`NOT(id=ANY(${parameter(exclude)}::int[]))`);
+  if (authors?.length) where.push(`author_id=ANY(${parameter(authors)}::int[])`);
+  if (parents?.length) where.push(`coalesce(attached_post_id,0)=ANY(${parameter(parents)}::int[])`);
+  if (type) where.push(`mime_type LIKE ${parameter(type + "/%")}`);
+  if (mime) where.push(`mime_type=${parameter(mime)}`);
+  if (search) {
+    const term = parameter("%" + search.replace(/[\\%_]/g, "\\$&") + "%");
+    where.push(`(title ILIKE ${term} OR filename ILIKE ${term} OR caption ILIKE ${term} OR description ILIKE ${term})`);
+  }
+  const predicate = "WHERE " + where.join(" AND ");
+  const total = (await pool.query(`SELECT count(*)::int AS total FROM media ${predicate}`, values))
     .rows[0].total;
   const { perPage, offset } = pagination(req, res, total);
+  const sorting = orderby === "include" ? `array_position(${includeParameter}::int[],id) ASC` : `${{ date: "created_at", id: "id", title: "lower(title)", author: "author_id", parent: "coalesce(attached_post_id,0)" }[orderby]} ${order}`;
+  const limit = parameter(perPage), skip = parameter(offset);
   const rows = (
     await pool.query(
-      `SELECT ${mediaFields},author_id AS "authorId",width,height,sizes,description,attached_post_id,comment_status FROM media ORDER BY created_at DESC,id DESC LIMIT $1 OFFSET $2`,
-      [perPage, offset],
+      `SELECT ${mediaFields},author_id AS "authorId",width,height,sizes,description,attached_post_id,comment_status FROM media ${predicate} ORDER BY ${sorting},id ${order} LIMIT ${limit} OFFSET ${skip}`,
+      values,
     )
   ).rows;
-  res.json(wpFields(req, await Promise.all(rows.map(wpMedia))));
+  res.json(wpFields(req, await Promise.all(rows.map(item => wpMedia(item, edit)))));
 });
-router.get("/wp-json/wp/v2/media/:id", async (req, res) => {
+router.get("/wp-json/wp/v2/media/:id", async (req: AuthRequest, res) => {
+  const edit = mediaContext(req) === "edit";
+  if (edit) requireMediaEditContext(req);
   const item = (
     await pool.query(
       `SELECT ${mediaFields},author_id AS "authorId",width,height,sizes,description,attached_post_id,comment_status FROM media WHERE id=$1`,
@@ -872,12 +903,13 @@ router.get("/wp-json/wp/v2/media/:id", async (req, res) => {
     )
   ).rows[0];
   if (!item) throw new HttpError(404, "Media not found.");
-  res.json(wpFields(req, await wpMedia(item)));
+  if (edit) requireMediaEditContext(req, item);
+  res.json(wpFields(req, await wpMedia(item, edit)));
 });
 router.post("/wp-json/wp/v2/media", async (req: AuthRequest, res) => {
   needUser(req);
   const result = await forward(req, "/media", "POST", undefined, true);
-  res.status(result.status).json(await wpMedia(result.data.media));
+  res.status(result.status).json(await wpMedia(result.data.media, true));
 });
 router.post("/wp-json/wp/v2/media/:id", async (req: AuthRequest, res) => {
   needUser(req);
@@ -900,12 +932,12 @@ router.post("/wp-json/wp/v2/media/:id", async (req: AuthRequest, res) => {
     ...(input.post === undefined ? {} : {attachedPostId:input.post || null}),
     ...(input.comment_status === undefined ? {} : {commentStatus:input.comment_status}),
   });
-  res.json(await wpMedia(result.data.media));
+  res.json(await wpMedia(result.data.media, true));
 });
 router.post("/wp-json/wp/v2/media/:id/edit", async (req: AuthRequest, res) => {
   needUser(req);
   const result = await forward(req, "/media/" + parseId(req.params.id) + "/edit-copy", "POST", req.body);
-  const media = await wpMedia(result.data.media);
+  const media = await wpMedia(result.data.media, true);
   res.status(201).location(`/wp-json/wp/v2/media/${media.id}`).json(wpFields(req, media));
 });
 router.delete("/wp-json/wp/v2/media/:id", async (req: AuthRequest, res) => {
