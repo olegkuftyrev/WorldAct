@@ -1155,8 +1155,13 @@ const GutenbergSession = forwardRef<
     return record && record.meta?.footnotes || "[]";
   },[props.postId,props.postType,!!props.onMetadataChange]);
   const previewOwner=useRef(Symbol("editor-preview"));
+  const [canvasGeneration,setCanvasGeneration]=useState(0);
   const closeEntityEditor=()=>{
     activateEditorPreview(previewOwner.current);
+    // Inner-block controllers unregister their lists when the canvas is suspended.
+    // Seed a fresh native store from the intact controlled document before those
+    // controllers mount again; otherwise unchanged inline menus look dirty.
+    setCanvasGeneration(generation=>generation+1);
     setEditingPattern(null);
   };
   const entityKey=props.entityContext===undefined?"post-preview":props.entityContext?`${props.entityContext.type}:${props.entityContext.id}:${props.entityContext.record.area || ""}`:"site-pattern";
@@ -1660,6 +1665,7 @@ const GutenbergSession = forwardRef<
       <AtomicFootnotesContext.Provider value={props.onMetadataChange?{postId:props.postId,postType:props.postType || "post"}:null}>
       <SlotFillProvider>
         <BlockEditorProvider
+          key={canvasGeneration}
           value={blocks}
           onInput={(next) => emit(next, "input")}
           onChange={(next) => emit(next, "change")}
