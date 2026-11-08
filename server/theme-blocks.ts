@@ -1,3 +1,4 @@
+import {renderedCommentContent} from "./comment-policy.js";
 import { date as formatDate } from "@wordpress/date";
 import socialIcons from "../src/theme-source/social-icons.json";
 import type { Node, Context, State } from "./block-renderer.js";
@@ -35,7 +36,7 @@ async function comments(context:Context,state:State) {
     const totalPages=state.settings.paginateComments?Math.max(1,Math.ceil(total/perPage)):1;
     const page=state.settings.paginateComments?Math.min(requested || ((state.settings.defaultCommentPage==="newest")===(state.settings.commentOrder==="asc")?totalPages:1),totalPages):1;
     const order=state.settings.commentOrder==="desc"?"DESC":"ASC";
-    const records=(await state.db.query(`SELECT id,parent_id AS "parentId",author_name AS "authorName",author_email AS "_avatarEmail",author_url AS "authorUrl",user_id AS "userId",content,created_at AS "createdAt" FROM comments WHERE post_id=$1 AND status='approved' ORDER BY created_at ${order},id ${order}${state.settings.paginateComments?" LIMIT $2 OFFSET $3":""}`,state.settings.paginateComments?[postId,perPage,(page-1)*perPage]:[postId])).rows;
+    const records=(await state.db.query(`SELECT id,parent_id AS "parentId",author_name AS "authorName",author_email AS "_avatarEmail",author_url AS "authorUrl",user_id AS "userId",content,type,created_at AS "createdAt" FROM comments WHERE post_id=$1 AND status='approved' ORDER BY created_at ${order},id ${order}${state.settings.paginateComments?" LIMIT $2 OFFSET $3":""}`,state.settings.paginateComments?[postId,perPage,(page-1)*perPage]:[postId])).rows;
     return {comments:records,total,page,perPage:state.settings.paginateComments?perPage:Math.max(1,total),totalPages};
   });
 }
@@ -100,7 +101,7 @@ export async function renderThemeBlock(
         visited.add(comment.id);
         const atLimit=depth>=state.settings.threadDepth-1;
         const nested=state.settings.threadComments?await renderList(comment.id,atLimit?depth:depth+1):"";
-        out.push(`<li id="comment-${comment.id}" class="comment ${depth%2?"odd":"even"}">${await body({...context,comment,commentLoop:loop})}${nested && !atLimit?`<ol class="children">${nested}</ol>`:""}</li>${atLimit?nested:""}`);
+        out.push(`<li id="comment-${comment.id}" class="${comment.type || "comment"} ${depth%2?"odd":"even"}">${await body({...context,comment,commentLoop:loop})}${nested && !atLimit?`<ol class="children">${nested}</ol>`:""}</li>${atLimit?nested:""}`);
       }
       return out.join("");
     };
@@ -116,9 +117,9 @@ export async function renderThemeBlock(
     const date=formatDate(a.format || state.settings.dateFormat,new Date(c.createdAt),state.settings.timezone),time=`<time datetime="${esc(new Date(c.createdAt).toISOString())}">${esc(date)}</time>`;
     return `<div${attributes()}>${a.isLink===false?time:`<a href="#comment-${int(c.id,0)}">${time}</a>`}</div>`;
   }
-  if(name==="core/comment-content")return c?`<div${attributes()}>${cleanContent(c.content)}</div>`:"";
+  if(name==="core/comment-content")return c?`<div${attributes()}>${cleanContent(renderedCommentContent(c.content,c.type))}</div>`:"";
   if(name==="core/comment-edit-link")return c && p && state.options.user && canEditPostComments(state.options.user,{authorId:Number(p.authorId ?? p.author_id),type:p.type,status:p.status,preTrashStatus:p.preTrashStatus ?? p.pre_trash_status})?`<div${attributes()}><a href="/admin/comments?commentId=${c.id}">Edit</a></div>`:"";
-  if(name==="core/comment-reply-link")return c && p?.commentStatus!=="closed" && state.settings.threadComments?`<div${attributes()}><a href="#respond" data-comment-reply="${int(c.id,0)}" data-comment-author="${esc(c.authorName)}">Reply</a></div>`:"";
+  if(name==="core/comment-reply-link")return c && (!c.type || c.type==="comment") && p?.commentStatus!=="closed" && state.settings.threadComments?`<div${attributes()}><a href="#respond" data-comment-reply="${int(c.id,0)}" data-comment-author="${esc(c.authorName)}">Reply</a></div>`:"";
   if(name==="core/comments-pagination")return `<nav${attributes("is-layout-flex")} aria-label="Comments pagination">${await body({...context,commentLoop:await comments(context,state)})}</nav>`;
   if(name?.startsWith("core/comments-pagination-")) {
     const loop=await comments(context,state);if(loop.totalPages<=1)return "";

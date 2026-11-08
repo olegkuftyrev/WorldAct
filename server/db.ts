@@ -60,7 +60,7 @@ export const mediaFields = `id, title, '/uploads/' || filename AS url, mime_type
   (SELECT jsonb_build_object('id',art.id,'src','/uploads/' || art.filename,'alt',art.alt,'width',art.width,'height',art.height) FROM media art WHERE art.id=media.artwork_media_id AND art.mime_type LIKE 'image/%') AS image,
   created_at AS "createdAt"`;
 export const commentFields = `c.id, c.author_name AS "authorName", c.author_email AS "authorEmail",
-  c.author_url AS "authorUrl",c.user_id AS "userId",c.content, c.status, c.version,c.updated_at AS "updatedAt",c.parent_id AS "parentId", c.post_id AS "postId", p.title AS "postTitle", c.created_at AS "createdAt"`;
+  c.author_url AS "authorUrl",c.user_id AS "userId",c.content, c.type, c.status, c.version,c.updated_at AS "updatedAt",c.parent_id AS "parentId", c.post_id AS "postId", p.title AS "postTitle", c.created_at AS "createdAt"`;
 
 export const defaultSettings = {
   siteTitle: "WorldAct",
@@ -92,6 +92,7 @@ export const defaultSettings = {
   feedItems: 10,
   feedExcerpt: false,
   defaultCommentStatus: "open" as "open" | "closed",
+  defaultPingStatus: "open" as "open" | "closed",
   requireCommentNameEmail: true,
   commentRegistration: false,
   commentModeration: true,

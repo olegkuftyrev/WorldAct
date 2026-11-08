@@ -35,6 +35,8 @@ export default defineConfig({
       "/wp-comments-post.php": "http://127.0.0.1:3001",
       "/public-login": "http://127.0.0.1:3001",
       "/logout": "http://127.0.0.1:3001",
+      "/xmlrpc.php": "http://127.0.0.1:3001",
+      "/wp-trackback.php": "http://127.0.0.1:3001",
       "/post-password": "http://127.0.0.1:3001",
       "/feed": "http://127.0.0.1:3001",
       "/comments/feed": "http://127.0.0.1:3001",

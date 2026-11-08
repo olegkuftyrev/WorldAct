@@ -556,7 +556,7 @@ async function personalData(client: PoolClient, email: string) {
     );
   const comments = (
     await client.query(
-      `SELECT id,post_id AS "postId",parent_id AS "parentId",author_name AS "authorName",author_email AS "authorEmail",author_url AS "authorUrl",content,status,created_at AS "createdAt" FROM comments WHERE lower(author_email)=lower($1) OR user_id=ANY($2::int[]) ORDER BY id`,
+      `SELECT id,post_id AS "postId",parent_id AS "parentId",author_name AS "authorName",author_email AS "authorEmail",author_url AS "authorUrl",content,type,status,created_at AS "createdAt" FROM comments WHERE lower(author_email)=lower($1) OR user_id=ANY($2::int[]) ORDER BY id`,
       [email, ids],
     )
   ).rows;

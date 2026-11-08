@@ -36,6 +36,7 @@ export async function migrate() {
       "footnotes-schema.sql",
       "rss-schema.sql",
       "outgoing-pings-schema.sql",
+      "incoming-pings-schema.sql",
     ]) {
       const extension = await readFile(
         path.join(rootDir, "server", schema),

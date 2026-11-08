@@ -232,6 +232,7 @@ export async function verifyAkismetKey(
   });
 }
 export interface AkismetComment {
+  type?: "comment"|"pingback"|"trackback";
   userIP: string;
   userAgent: string;
   referrer: string;
@@ -254,7 +255,7 @@ export function akismetFields(
     user_ip: input.userIP,
     user_agent: input.userAgent.slice(0, 1024),
     referrer: safeServiceURL(input.referrer),
-    comment_type: "comment",
+    comment_type: input.type || "comment",
     comment_author: input.authorName.slice(0, 160),
     comment_author_email: input.authorEmail.slice(0, 254),
     comment_author_url: safeServiceURL(input.authorURL),
@@ -336,7 +337,7 @@ export async function reportAkismetTransition(
     return "skipped";
   const row = (
     await database.query(
-      "SELECT c.*,m.user_ip,m.user_agent,m.referrer,p.type,p.slug,p.parent_id AS post_parent_id,p.published_at FROM comments c JOIN akismet_comment_checks m ON m.comment_id=c.id AND m.expires_at>now() JOIN posts p ON p.id=c.post_id WHERE c.id=$1",
+      "SELECT c.*,c.type AS comment_type,m.user_ip,m.user_agent,m.referrer,p.type,p.slug,p.parent_id AS post_parent_id,p.published_at FROM comments c JOIN akismet_comment_checks m ON m.comment_id=c.id AND m.expires_at>now() JOIN posts p ON p.id=c.post_id WHERE c.id=$1",
       [commentId],
     )
   ).rows[0];
@@ -353,6 +354,7 @@ export async function reportAkismetTransition(
     feedback,
     akismetFields(
       {
+        type: row.comment_type,
         userIP: row.user_ip,
         userAgent: row.user_agent,
         referrer: row.referrer,
@@ -409,7 +411,7 @@ bundledPluginsRouter.post(
     const commentId = parseId(req.params.id),
       row = (
         await pool.query(
-          "SELECT c.*,p.slug,p.type,p.parent_id AS post_parent_id,p.published_at FROM comments c JOIN posts p ON p.id=c.post_id WHERE c.id=$1",
+          "SELECT c.*,c.type AS comment_type,p.slug,p.type,p.parent_id AS post_parent_id,p.published_at FROM comments c JOIN posts p ON p.id=c.post_id WHERE c.id=$1",
           [commentId],
         )
       ).rows[0],
@@ -427,6 +429,7 @@ bundledPluginsRouter.post(
       );
     const settings = await getSettings();
     const input: AkismetComment = {
+      type: row.comment_type,
       userIP: meta.user_ip,
       userAgent: meta.user_agent,
       referrer: meta.referrer,

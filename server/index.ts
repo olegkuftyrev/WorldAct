@@ -1,3 +1,6 @@
+import {pingbackHeader} from "./incoming-ping-policy.js";
+import {resolvePublicPath} from "./permalinks.js";
+import incomingPingsRouter from "./incoming-pings.js";
 import outgoingPingsRouter,{startOutgoingPingWorker} from "./outgoing-pings.js";
 import "dotenv/config";
 import express, {
@@ -16,6 +19,7 @@ import {
   postFields,
   mediaFields,
   commentFields,
+  getSettings,
   type User,
 } from "./db.js";
 import {
@@ -69,6 +73,7 @@ app.use((_req, res, next) => {
   res.setHeader("Referrer-Policy", "strict-origin-when-cross-origin");
   next();
 });
+app.use(incomingPingsRouter);
 app.use(["/api", "/wp-json", "/wp-comments-post.php", "/logout", "/post-password", "/public-login"], attachUser);
 app.use("/api", (_req, res, next) => {
   res.setHeader("Cache-Control", "no-store");
@@ -215,9 +220,13 @@ const distDir = path.resolve(
   process.env.STATIC_DIR || path.join(rootDir, "dist"),
 );
 app.use(express.static(distDir, { index: false }));
-app.get("/{*splat}", async (_req, res, next) => {
+app.get("/{*splat}", async (req, res, next) => {
   try {
     await access(path.join(distDir, "index.html"));
+    if(!/^\/(api|admin|wp-json|uploads)(?:\/|$)/.test(req.path)){
+      const identity=await resolvePublicPath(req.path);
+      if(identity){const post=(await pool.query('SELECT id,type,status,ping_status AS "pingStatus",published_at AS "publishedAt",password_hash IS NOT NULL AS "hasPassword" FROM posts WHERE id=$1',[identity.id])).rows[0];const pingback=pingbackHeader(post,await getSettings());if(pingback)res.setHeader("X-Pingback",pingback);}
+    }
     res.sendFile(path.join(distDir, "index.html"));
   } catch {
     next(

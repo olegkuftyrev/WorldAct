@@ -1,3 +1,4 @@
+import {normalizePingSource} from "./comment-policy.js";
 import {akismetKey,readAkismetSecretStatus,updateAkismetConfiguration} from "./bundled-plugins.js";
 import { validateFontChoices, withFontLibraryLock } from "./fonts.js";
 import express from "express";
@@ -1366,6 +1367,7 @@ router.post("/tools/import", admin, async (req: AuthRequest, res) => {
         .object({
           id,
           post_id: id,
+          type: z.enum(["comment","pingback","trackback"]).default("comment"),
           author_name: text(1, 160),
           author_email: z.union([z.email().max(254), z.literal("")]),
           author_url: z
@@ -1391,15 +1393,16 @@ router.post("/tools/import", admin, async (req: AuthRequest, res) => {
       const post = postMap.get(comment.post_id);
       if (!post) { site.warn(`Comment ${comment.id} referred to a missing post and was not imported.`); continue; }
       const result = await client.query(
-        "INSERT INTO comments(post_id,author_name,author_email,content,status,author_url,created_at) VALUES($1,$2,$3,$4,$5,$6,coalesce($7::timestamptz,now())) RETURNING id",
+        "INSERT INTO comments(post_id,author_name,author_email,content,status,author_url,created_at,type) VALUES($1,$2,$3,$4,$5,$6,coalesce($7::timestamptz,now()),$8) RETURNING id",
         [
           post,
           normalizedText(comment.author_name),
           comment.author_email,
           cleanContent(comment.content),
           comment.status,
-          comment.author_url,
+          comment.type==="comment"?comment.author_url:normalizePingSource(comment.author_url),
           comment.created_at ?? null,
+          comment.type,
         ],
       );
       commentMap.set(comment.id, result.rows[0].id);

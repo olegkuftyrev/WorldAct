@@ -43,12 +43,12 @@ test("author assignment and bulk editorial updates preserve permissions, version
         assert.ok(list.authors.some((person: any) => person.id === people.contributor.id));
         assert.ok(!list.authors.some((person: any) => person.id === people.subscriber.id));
         for (const person of list.authors) assert.deepEqual(Object.keys(person).sort(), ["displayName", "id", "role", "username"]);
-        assert.equal(list.defaults.pingStatus, "closed"); assert.ok(list.defaults.format); assert.ok(list.defaults.commentStatus);
+        assert.equal(list.defaults.pingStatus, "open"); assert.ok(list.defaults.format); assert.ok(list.defaults.commentStatus);
       }
       for (const role of ["author", "contributor"]) assert.deepEqual((await ok("/authors", "GET", undefined, people[role].cookie)).authors.map((person: any) => person.id), [people[role].id]);
     });
     await t.test("creation and reassignment restrict target roles and preserve ownership boundaries", async () => {
-      one = await create({ authorId: people.author.id, content: '<!-- wp:paragraph --><p>Persistent body</p><!-- /wp:paragraph -->', blocks: [{ name: "core/paragraph", attributes: { content: "Persistent body" }, innerBlocks: [] }] }, people.editor.cookie);
+      one = await create({ authorId: people.author.id, pingStatus:"closed", content: '<!-- wp:paragraph --><p>Persistent body</p><!-- /wp:paragraph -->', blocks: [{ name: "core/paragraph", attributes: { content: "Persistent body" }, innerBlocks: [] }] }, people.editor.cookie);
       assert.equal(one.authorId, people.author.id);
       two = await create({ authorId: people.contributor.id });
       assert.equal(two.authorId, people.contributor.id);
@@ -58,7 +58,7 @@ test("author assignment and bulk editorial updates preserve permissions, version
       assert.equal((await call(`/posts/${one.id}`, "PUT", { type: "page" }, people.author.cookie)).response.status, 403);
       owned = await create({ title: stamp + " Own" }, people.author.cookie);
       assert.equal(owned.authorId, people.author.id);
-      assert.equal(owned.pingStatus, "closed");
+      assert.equal(owned.pingStatus, "open");
       assert.equal((await call(`/posts/${owned.id}`, "PUT", { sticky: true }, people.author.cookie)).response.status, 403);
       assert.equal((await call(`/posts/${one.id}`, "PUT", { authorId: people.subscriber.id })).response.status, 400);
     });

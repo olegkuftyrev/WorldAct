@@ -1,3 +1,4 @@
+import {pingbackHeader} from "./incoming-ping-policy.js";
 import express, { type Request, type Response } from "express";
 import { createHash } from "node:crypto";
 import { randomBytes } from "node:crypto";
@@ -823,6 +824,7 @@ router.get("/api/public/templates/:slug", async (req:AuthRequest, res) => {
     }
     delete post.passwordHash;
   }
+  if(!preview && post){const pingback=pingbackHeader(post,settings);if(pingback)res.setHeader("X-Pingback",pingback);}
   const requestPath = String(req.query.requestPath || "/").slice(0, 2000);
   if (!requestPath.startsWith("/") || requestPath.startsWith("//"))
     throw new HttpError(400, "Use a site-relative request path.");

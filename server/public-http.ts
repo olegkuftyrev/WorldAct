@@ -10,7 +10,7 @@ export class PublicHTTPError extends Error {}
 export type PublicAddress = { address: string; family: number };
 type Request = (options: RequestOptions, callback: (response: IncomingMessage) => void) => ClientRequest;
 export type PublicHTTPOptions = { resolve?: (host: string) => Promise<PublicAddress[]>; request?: Request; timeoutMs?: number; dnsTimeoutMs?: number; concurrency?: number };
-export type PublicHTTPInput = { representation?: "feed" | "html"; method?: "GET" | "HEAD" | "POST_XML"; body?: string; redirects?: number; maxWireBytes?: number; maxBodyBytes?: number };
+export type PublicHTTPInput = { waitForPhysicalClose?: boolean; representation?: "feed" | "html"; method?: "GET" | "HEAD" | "POST_XML"; body?: string; redirects?: number; maxWireBytes?: number; maxBodyBytes?: number };
 export type PublicHTTPResult = { body: Buffer; url: string; status: number; headers: { pingback?: string; contentType?: string } };
 
 export function normalizePublicURL(input: unknown): URL {
@@ -132,7 +132,7 @@ export function createPublicHTTPTransport(options: PublicHTTPOptions = {}) {
     });
   }
   return async (urlInput: string, input: PublicHTTPInput = {}, ownOrigins: ReadonlySet<string> = new Set()): Promise<PublicHTTPResult> => {
-    if (![undefined,"feed","html"].includes(input.representation) || ![undefined,"GET","HEAD","POST_XML"].includes(input.method) || (input.redirects!==undefined && (!Number.isInteger(input.redirects) || input.redirects<0 || input.redirects>3)) || [input.maxWireBytes,input.maxBodyBytes].some(value=>value!==undefined && (!Number.isInteger(value) || value<1 || value>MAX_HTTP_BODY_BYTES)) || (input.body && (input.method !== "POST_XML" || Buffer.byteLength(input.body)>8192))) throw new PublicHTTPError("The remote request is invalid.");
+    if ((input.waitForPhysicalClose!==undefined && typeof input.waitForPhysicalClose!=="boolean") || ![undefined,"feed","html"].includes(input.representation) || ![undefined,"GET","HEAD","POST_XML"].includes(input.method) || (input.redirects!==undefined && (!Number.isInteger(input.redirects) || input.redirects<0 || input.redirects>3)) || [input.maxWireBytes,input.maxBodyBytes].some(value=>value!==undefined && (!Number.isInteger(value) || value<1 || value>MAX_HTTP_BODY_BYTES)) || (input.body && (input.method !== "POST_XML" || Buffer.byteLength(input.body)>8192))) throw new PublicHTTPError("The remote request is invalid.");
     const signal = AbortSignal.timeout(options.timeoutMs ?? 8000); await acquire(signal);
     let releaseWanted=false, released=false; const pending=new Set<ClientRequest>();
     const maybeRelease=()=>{if(releaseWanted && !pending.size && !released){released=true;release();}};
@@ -165,7 +165,7 @@ export function createPublicHTTPTransport(options: PublicHTTPOptions = {}) {
         try { const location = result.location; if (/[\u0000-\u0020\u007f\\]/.test(location)) throw new Error(); url = normalizePublicURL(new URL(location, url).href); } catch { throw new PublicHTTPError("The remote redirect URL is invalid."); }
       }
       throw new PublicHTTPError("The remote could not be retrieved.");
-    } finally { releaseWanted=true;maybeRelease(); }
+    } finally { if(input.waitForPhysicalClose && pending.size)await Promise.all([...physicalCloses.values()]);releaseWanted=true;maybeRelease(); }
   };
 }
 export const publicHTTP = createPublicHTTPTransport({concurrency:2});

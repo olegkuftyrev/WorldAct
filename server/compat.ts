@@ -1,3 +1,4 @@
+import {normalizePingSource,renderedCommentContent} from "./comment-policy.js";
 import express, {
   type Request,
   type Response,
@@ -1158,7 +1159,7 @@ async function wpComment(comment: any, edit = false, timezone?: string) {
     date: restLocalDate(comment.createdAt, timezone),
     date_gmt: iso(comment.createdAt).replace(/Z$/, ""),
     content: {
-      rendered: comment.content,
+      rendered: renderedCommentContent(comment.content,comment.type),
       ...(edit ? { raw: comment.content } : {}),
     },
     link: "",
@@ -1168,7 +1169,7 @@ async function wpComment(comment: any, edit = false, timezone?: string) {
         : comment.status === "pending"
           ? "hold"
           : comment.status,
-    type: "comment",
+    type: comment.type || "comment",
     author_avatar_urls: {},
     meta: [],
   };
@@ -1180,20 +1181,23 @@ router.get("/wp-json/wp/v2/comments", async (req: AuthRequest, res) => {
     (!req.user || !["administrator", "editor"].includes(req.user.role))
   )
     throw new HttpError(req.user ? 403 : 401, "You cannot moderate comments.");
+  const type=z.enum(["comment","pingback","trackback",""]).parse(req.query.type ?? "comment");
+  if(type!=="comment" && (!req.user || !["administrator","editor","author","contributor"].includes(req.user.role)))throw new HttpError(req.user?403:401,"You cannot filter this comment type.");
   const args: unknown[] = [];
   let where = edit
     ? "true"
     : "c.status='approved' AND p.status='publish' AND p.password_hash IS NULL";
+  if(type){args.push(type);where+=` AND c.type=$${args.length}`;}
   if (req.query.post !== undefined) {
     args.push(integerList(req.query.post));
     where += ` AND c.post_id=ANY($${args.length}::int[])`;
   }
-  if (edit && req.query.status !== undefined) {
+  if (edit) {
     const status = z
-      .enum(["approved", "hold", "spam", "trash", "all"])
-      .parse(req.query.status);
+      .enum(["approved", "approve", "hold", "spam", "trash", "all"])
+      .parse(req.query.status ?? "approve");
     if (status !== "all") {
-      args.push(status === "hold" ? "pending" : status);
+      args.push(status === "hold" ? "pending" : status === "approve" ? "approved" : status);
       where += ` AND c.status=$${args.length}`;
     }
   }
@@ -1207,7 +1211,7 @@ router.get("/wp-json/wp/v2/comments", async (req: AuthRequest, res) => {
   args.push(perPage, offset);
   const rows = (
     await pool.query(
-      `SELECT c.id,c.post_id AS "postId",c.parent_id AS "parentId",c.author_name AS "authorName",c.author_email AS "authorEmail",c.author_url AS "authorUrl",c.user_id AS "userId",c.content,c.status,c.created_at AS "createdAt" FROM comments c JOIN posts p ON p.id=c.post_id WHERE ${where} ORDER BY c.created_at DESC,c.id DESC LIMIT $${args.length - 1} OFFSET $${args.length}`,
+      `SELECT c.id,c.post_id AS "postId",c.parent_id AS "parentId",c.author_name AS "authorName",c.author_email AS "authorEmail",c.author_url AS "authorUrl",c.user_id AS "userId",c.content,c.type,c.status,c.created_at AS "createdAt" FROM comments c JOIN posts p ON p.id=c.post_id WHERE ${where} ORDER BY c.created_at DESC,c.id DESC LIMIT $${args.length - 1} OFFSET $${args.length}`,
       args,
     )
   ).rows;
@@ -1225,7 +1229,7 @@ router.get("/wp-json/wp/v2/comments/:id", async (req: AuthRequest, res) => {
     throw new HttpError(req.user ? 403 : 401, "You cannot moderate comments.");
   const row = (
     await pool.query(
-      `SELECT c.id,c.post_id AS "postId",c.parent_id AS "parentId",c.author_name AS "authorName",c.author_email AS "authorEmail",c.author_url AS "authorUrl",c.user_id AS "userId",c.content,c.status,c.created_at AS "createdAt",p.author_id AS "postAuthorId",p.type AS "postType",p.status AS "postStatus",p.pre_trash_status AS "postPreTrashStatus",p.password_hash AS protected FROM comments c JOIN posts p ON p.id=c.post_id WHERE c.id=$1`,
+      `SELECT c.id,c.post_id AS "postId",c.parent_id AS "parentId",c.author_name AS "authorName",c.author_email AS "authorEmail",c.author_url AS "authorUrl",c.user_id AS "userId",c.content,c.type,c.status,c.created_at AS "createdAt",p.author_id AS "postAuthorId",p.type AS "postType",p.status AS "postStatus",p.pre_trash_status AS "postPreTrashStatus",p.password_hash AS protected FROM comments c JOIN posts p ON p.id=c.post_id WHERE c.id=$1`,
       [parseId(req.params.id)],
     )
   ).rows[0];
@@ -1245,6 +1249,7 @@ router.post("/wp-json/wp/v2/comments", async (req: AuthRequest, res) => {
   needUser(req);
   const input = z
     .object({
+      type: z.literal("comment").optional(),
       post: z.number().int().positive(),
       parent: z.number().int().min(0).optional(),
       author_name: z.string().optional(),
@@ -1264,7 +1269,7 @@ router.post("/wp-json/wp/v2/comments", async (req: AuthRequest, res) => {
   });
   const row = (
     await pool.query(
-      `SELECT id,post_id AS "postId",parent_id AS "parentId",author_name AS "authorName",author_url AS "authorUrl",user_id AS "userId",content,status,created_at AS "createdAt" FROM comments WHERE id=$1`,
+      `SELECT id,post_id AS "postId",parent_id AS "parentId",author_name AS "authorName",author_url AS "authorUrl",user_id AS "userId",content,type,status,created_at AS "createdAt" FROM comments WHERE id=$1`,
       [result.data.comment.id],
     )
   ).rows[0];
@@ -1274,6 +1279,7 @@ async function updateWPComment(req: AuthRequest, res: Response) {
   needUser(req);
   const input = z
     .object({
+      type: z.enum(["comment","pingback","trackback"]).optional(),
       status: z
         .enum(["approved", "approve", "hold", "unapproved", "spam", "trash"])
         .optional(),
@@ -1291,6 +1297,7 @@ async function updateWPComment(req: AuthRequest, res: Response) {
     )
     .parse(req.body);
   const patch: Record<string, unknown> = {};
+  if(input.type!==undefined)patch.type=input.type;
   if (input.status !== undefined)
     patch.status = {
       approved: "approved",
@@ -1613,7 +1620,7 @@ router.get("/api/tools/export", admin, async (req, res, next) => {
           .filter((c) => c.post_id === p.id)
           .map(
             (c) =>
-              `<wp:comment><wp:comment_id>${c.id}</wp:comment_id><wp:comment_author>${cdata(c.author_name)}</wp:comment_author><wp:comment_author_email>${esc(c.author_email)}</wp:comment_author_email><wp:comment_author_url>${esc(c.author_url || "")}</wp:comment_author_url><wp:comment_date>${wpDate(c.created_at)}</wp:comment_date><wp:comment_date_gmt>${wpDate(c.created_at)}</wp:comment_date_gmt><wp:comment_content>${cdata(c.content)}</wp:comment_content><wp:comment_approved>${c.status === "approved" ? "1" : c.status === "pending" ? "0" : c.status}</wp:comment_approved><wp:comment_type/><wp:comment_parent>${c.parent_id || 0}</wp:comment_parent><wp:comment_user_id>0</wp:comment_user_id></wp:comment>`,
+              `<wp:comment><wp:comment_id>${c.id}</wp:comment_id><wp:comment_author>${cdata(c.author_name)}</wp:comment_author><wp:comment_author_email>${esc(c.author_email)}</wp:comment_author_email><wp:comment_author_url>${esc(c.author_url || "")}</wp:comment_author_url><wp:comment_date>${wpDate(c.created_at)}</wp:comment_date><wp:comment_date_gmt>${wpDate(c.created_at)}</wp:comment_date_gmt><wp:comment_content>${cdata(c.content)}</wp:comment_content><wp:comment_approved>${c.status === "approved" ? "1" : c.status === "pending" ? "0" : c.status}</wp:comment_approved><wp:comment_type>${esc(c.type || "comment")}</wp:comment_type><wp:comment_parent>${c.parent_id || 0}</wp:comment_parent><wp:comment_user_id>0</wp:comment_user_id></wp:comment>`,
           )
           .join("")}${p.footnotes?.length ? `<wp:postmeta><wp:meta_key>footnotes</wp:meta_key><wp:meta_value>${cdata(serializeFootnotes(p.footnotes))}</wp:meta_value></wp:postmeta>` : ""}</item>`,
     ),
@@ -1924,7 +1931,7 @@ router.post("/api/tools/import", admin, async (req: AuthRequest, res, next) => {
         const comment = commentDefinitions[ci];
         if (
           text(comment["wp:comment_type"]) &&
-          !["comment", ""].includes(text(comment["wp:comment_type"]))
+          !["comment", "", "pingback", "trackback"].includes(text(comment["wp:comment_type"]))
         )
           continue;
         const oldComment = zero(comment["wp:comment_id"]) || ci + 1;
@@ -1943,7 +1950,7 @@ router.post("/api/tools/import", admin, async (req: AuthRequest, res, next) => {
             } as Record<string, string>
           )[text(comment["wp:comment_approved"])] || "pending";
         const row = await client.query(
-          "INSERT INTO comments(post_id,author_name,author_email,content,status,created_at,author_url) VALUES($1,$2,$3,$4,$5,coalesce($6,now()),$7) RETURNING id",
+          "INSERT INTO comments(post_id,author_name,author_email,content,status,created_at,author_url,type) VALUES($1,$2,$3,$4,$5,coalesce($6,now()),$7,$8) RETURNING id",
           [
             id,
             plainText(text(comment["wp:comment_author"])).slice(0, 160) ||
@@ -1954,9 +1961,10 @@ router.post("/api/tools/import", admin, async (req: AuthRequest, res, next) => {
             parsedDate(
               comment["wp:comment_date_gmt"] || comment["wp:comment_date"],
             ),
-            /^https?:\/\//i.test(text(comment["wp:comment_author_url"]))
+            ["pingback","trackback"].includes(text(comment["wp:comment_type"])) ? normalizePingSource(text(comment["wp:comment_author_url"])) : /^https?:\/\//i.test(text(comment["wp:comment_author_url"]))
               ? text(comment["wp:comment_author_url"]).slice(0, 2000)
               : "",
+            text(comment["wp:comment_type"]) || "comment",
           ],
         );
         commentMap.set(oldComment, row.rows[0].id);

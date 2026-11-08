@@ -1,3 +1,4 @@
+import {normalizePingSource} from "./comment-policy.js";
 import {reportAkismetTransition} from "./bundled-plugins.js";
 import express from "express";
 import { z } from "zod";
@@ -43,6 +44,7 @@ router.get("/comments", async (req:AuthRequest, res) => {
       status: z
         .enum(["all", "approved", "pending", "spam", "trash"])
         .default("all"),
+      type: z.enum(["all","comment","pingback","trackback"]).default("all"),
       excludeTrashSpam: z.enum(["true", "false"]).default("false"),
       search: z.string().trim().max(300).optional(),
       postId: z.coerce.number().int().positive().max(2_147_483_647).optional(),
@@ -63,6 +65,7 @@ router.get("/comments", async (req:AuthRequest, res) => {
   const editable=editableCommentPostsSQL(user,parameter);
   where.push(`(${editable} OR (p.status='publish' AND p.password_hash IS NULL))`);
   if (input.postId) where.push(`c.post_id=${parameter(input.postId)}`);
+  if(input.type!=="all")where.push(`c.type=${parameter(input.type)}`);
   const countParams=params.slice(),countWhere=where.join(" AND ");
   if (input.mine === "true") where.push(`c.user_id=${parameter(user.id)}`);
   if (input.status !== "all") where.push(`c.status=${parameter(input.status)}`);
@@ -236,7 +239,7 @@ router.put("/comments/:id", async (req:AuthRequest, res) => {
   const commentId = parseId(req.params.id);
   const input = fields
     .partial()
-    .extend({ version: z.number().int().positive().optional(), restore:z.literal(true).optional() })
+    .extend({ version: z.number().int().positive().optional(), restore:z.literal(true).optional(), type:z.enum(["comment","pingback","trackback"]).optional() })
     .strict()
     .refine(
       (value) => Object.keys(value).some((key) => key !== "version"),
@@ -260,6 +263,7 @@ router.put("/comments/:id", async (req:AuthRequest, res) => {
     const previous = found.rows[0];
     previousStatus=previous?.status || "";
     if (!previous) throw new HttpError(404, "Comment not found.");
+    if(input.type!==undefined && input.type!==previous.type)throw new HttpError(400,"A comment type cannot be changed.");
     if(input.restore && input.status)throw new HttpError(400,"Choose restore or a specific status.");
     if(input.restore && !["spam","trash"].includes(previous.status))throw new HttpError(400,"Only spam or trashed comments can be restored.");
     nextStatus=input.restore?(previous.previous_status || "pending"):(input.status ?? previous.status);
@@ -295,7 +299,7 @@ router.put("/comments/:id", async (req:AuthRequest, res) => {
           ? previous.author_name
           : cleanText(input.authorName, "a name"),
         (input.authorEmail ?? previous.author_email).toLowerCase(),
-        input.authorUrl ?? previous.author_url,
+        previous.type==="comment" ? input.authorUrl ?? previous.author_url : normalizePingSource(input.authorUrl ?? previous.author_url),
         input.content === undefined
           ? previous.content
           : cleanBody(input.content),

@@ -66,6 +66,7 @@ export const settingSchema = z
     feedItems: z.number().int().min(1).max(100),
     feedExcerpt: z.boolean(),
     defaultCommentStatus: z.enum(["open", "closed"]),
+    defaultPingStatus: z.enum(["open", "closed"]),
     requireCommentNameEmail: z.boolean(),
     commentRegistration: z.boolean(),
     commentModeration: z.boolean(),

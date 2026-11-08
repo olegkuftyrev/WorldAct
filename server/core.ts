@@ -1,3 +1,6 @@
+import {pingbackHeader} from "./incoming-ping-policy.js";
+import {moderateComment,renderedCommentContent} from "./comment-policy.js";
+export {matchesCommentKeywords} from "./comment-policy.js";
 import {enqueuePublicationPings} from "./outgoing-pings.js";
 import {checkAkismetComment,recordAkismetCheck,type AkismetComment} from "./bundled-plugins.js";
 import { Router, type Request, type Response } from "express";
@@ -478,7 +481,7 @@ async function savePost(
       existing?.commentStatus ??
       settings?.defaultCommentStatus ??
       "open",
-    pingStatus: input.pingStatus ?? existing?.pingStatus ?? "closed",
+    pingStatus: input.pingStatus ?? existing?.pingStatus ?? (type === "post" ? settings?.defaultPingStatus ?? "open" : "closed"),
     sticky: type === "post" ? input.sticky ?? existing?.sticky ?? false : false,
     categoryIds: terms
       .filter((term) => term.taxonomy === "category")
@@ -701,7 +704,7 @@ router.get("/authors", contentRoles, async (req: AuthRequest, res) => {
     `SELECT id,display_name AS "displayName",username,role FROM users WHERE role IN('administrator','editor','author','contributor')${ownOnly(user) ? " AND id=$1" : ""} ORDER BY lower(display_name),id`,
     ownOnly(user) ? [user.id] : [],
   );
-  res.json({ authors: authors.rows, defaults: { format: settings.defaultPostFormat, commentStatus: settings.defaultCommentStatus, pingStatus: "closed" } });
+  res.json({ authors: authors.rows, defaults: { format: settings.defaultPostFormat, commentStatus: settings.defaultCommentStatus, pingStatus: settings.defaultPingStatus } });
 });
 const bulkSchema = z.object({
   ids: z.array(idSchema).min(1).max(100).transform(ids => [...new Set(ids)]),
@@ -1243,10 +1246,10 @@ async function publicPost(post: any, locked = false, options: RenderOptions = {}
 async function publicComments(postId: number, page: number, settings: Awaited<ReturnType<typeof getSettings>>) {
   return (
     await pool.query(
-      `SELECT c.id,c.author_name AS "authorName",c.author_url AS "authorUrl",c.author_email AS "_authorEmail",c.user_id AS "userId",c.content,c.status,c.parent_id AS "parentId",c.post_id AS "postId",p.title AS "postTitle",c.created_at AS "createdAt" FROM comments c JOIN posts p ON p.id=c.post_id WHERE c.post_id=$1 AND c.status='approved' ORDER BY c.created_at ${settings.commentOrder === "desc" ? "DESC" : "ASC"},c.id ${settings.commentOrder === "desc" ? "DESC" : "ASC"}${settings.paginateComments ? " LIMIT $2 OFFSET $3" : ""}`,
+      `SELECT c.id,c.author_name AS "authorName",c.author_url AS "authorUrl",c.author_email AS "_authorEmail",c.user_id AS "userId",c.content,c.type,c.status,c.parent_id AS "parentId",c.post_id AS "postId",p.title AS "postTitle",c.created_at AS "createdAt" FROM comments c JOIN posts p ON p.id=c.post_id WHERE c.post_id=$1 AND c.status='approved' ORDER BY c.created_at ${settings.commentOrder === "desc" ? "DESC" : "ASC"},c.id ${settings.commentOrder === "desc" ? "DESC" : "ASC"}${settings.paginateComments ? " LIMIT $2 OFFSET $3" : ""}`,
       settings.paginateComments ? [postId, settings.commentsPerPage, (page - 1) * settings.commentsPerPage] : [postId],
     )
-  ).rows.map(({ _authorEmail, ...comment }) => ({ ...comment, avatarUrl: avatarURL(_authorEmail, settings) }));
+  ).rows.map(({ _authorEmail, ...comment }) => ({ ...comment, content:renderedCommentContent(comment.content,comment.type), avatarUrl: avatarURL(_authorEmail, settings) }));
 }
 async function commentResponse(postId: number, req: Request, locked = false) {
   const requestedPage = z.coerce
@@ -1405,6 +1408,7 @@ router.get("/public/posts/:slug", async (req, res) => {
   if (!row) throw new HttpError(404, "Post not found.");
   const { _passwordHash, ...post } = row;
   const locked = !(await hasPostAccess(req, post.id, _passwordHash));
+  const pingback=pingbackHeader(post,await getSettings());if(pingback)res.setHeader("X-Pingback",pingback);
   await setRobots(res);
   res.json({
     post: await publicPost(post, locked, { query: req.query, user: (req as AuthRequest).user, contentPage: parseContentPage(req.query.page), canReadProtectedPost: postAccessReader(req) }),
@@ -1465,15 +1469,10 @@ export async function unlockPublicPost(req:Request,res:Response) {
 }
 router.post("/public/posts/:slug/unlock",unlockPublicPost);
 const commentAttempts = new Map<string, { count: number; expires: number }>();
-export function matchesCommentKeywords(keys: string, fields: string[]) {
-  const normalized = fields.map(field => field.toLowerCase());
-  return keys.split(/\r?\n/).map(key => key.trim().toLowerCase()).filter(Boolean)
-    .some(key => normalized.some(field => field.includes(key)));
-}
 export async function queueCommentNotifications(client: PoolClient, commentId: number, actorId?: number) {
   const settings = await getSettings(client);
   const comment = (await client.query(
-    "SELECT c.author_name,c.author_email,c.author_url,c.content,c.status,p.id AS post_id,p.title,p.author_id,u.email AS post_author_email,u.role AS post_author_role FROM comments c JOIN posts p ON p.id=c.post_id JOIN users u ON u.id=p.author_id WHERE c.id=$1",
+    "SELECT c.author_name,c.author_email,c.author_url,c.content,c.status,c.type,p.id AS post_id,p.title,p.author_id,u.email AS post_author_email,u.role AS post_author_role FROM comments c JOIN posts p ON p.id=c.post_id JOIN users u ON u.id=p.author_id WHERE c.id=$1",
     [commentId],
   )).rows[0];
   if (!comment || !["approved", "pending"].includes(comment.status)) return [];
@@ -1484,9 +1483,9 @@ export async function queueCommentNotifications(client: PoolClient, commentId: n
   }
   if (comment.status === "approved" && settings.notifyComments && actorId !== comment.author_id)
     recipients.add(comment.post_author_email.toLowerCase());
-  const subject = `[${settings.siteTitle}] ${comment.status === "pending" ? "Please moderate" : "New comment"}: ${comment.title}`;
+  const subject = `[${settings.siteTitle}] ${comment.status === "pending" ? "Please moderate" : "New " + comment.type}: ${comment.title}`;
   const link = new URL(`/admin/comments?postId=${comment.post_id}`, process.env.APP_ORIGIN || "http://127.0.0.1:5173").href;
-  const body = `A ${comment.status === "pending" ? "comment is awaiting moderation" : "new comment was approved"} on "${comment.title}".\n\nAuthor: ${comment.author_name}\nEmail: ${comment.author_email}\nWebsite: ${comment.author_url || ""}\n\n${plainText(comment.content)}\n\nReview comments:\n${link}`;
+  const body = `A ${comment.status === "pending" ? comment.type + " is awaiting moderation" : "new " + comment.type + " was approved"} on "${comment.title}".\n\nAuthor: ${comment.author_name}\nEmail: ${comment.author_email}\nWebsite: ${comment.author_url || ""}\n\n${plainText(comment.content)}\n\nReview comments:\n${link}`;
   const messages: Awaited<ReturnType<typeof queueMail>>[] = [];
   for (const recipient of recipients) messages.push(await queueMail(client, recipient, subject, body));
   return messages;
@@ -1570,17 +1569,7 @@ export async function submitPublicComment(req: Request, res: Response) {
       if (ancestors.rows[0].depth >= settings.threadDepth)
         throw new HttpError(400, "This comment thread has reached its maximum depth.");
     }
-    const fields = [authorName, submittedEmail, authorUrl, input.content, content, plainText(content), req.ip || ""];
-    const anchors = (content.match(/<a\b[^>]*\bhref\s*=/gi) || []).length;
-    const bareLinks = (content.replace(/<a\b[^>]*>[\s\S]*?<\/a>/gi, " ").match(/https?:\/\//gi) || []).length;
-    const previous = settings.commentPreviouslyApproved && submittedEmail
-      ? !!(await client.query("SELECT 1 FROM comments WHERE lower(author_email)=$1 AND status='approved' LIMIT 1", [submittedEmail])).rowCount
-      : false;
-    let status = matchesCommentKeywords(settings.disallowedCommentKeys, fields) ? "trash"
-      : await classifySpam(content) ? "spam"
-      : settings.commentModeration || matchesCommentKeywords(settings.commentModerationKeys, fields) ||
-        (settings.commentMaxLinks > 0 && anchors + bareLinks >= settings.commentMaxLinks) ||
-        (settings.commentPreviouslyApproved && !previous) ? "pending" : "approved";
+    let status = await moderateComment({type:"comment",authorName,authorEmail:submittedEmail,authorUrl,content,rawContent:input.content,ip:req.ip || ""},client,settings);
     const akismetInput:AkismetComment={userIP:req.ip || "",userAgent:req.get("user-agent") || "",referrer:req.get("referer") || "",authorName,authorEmail:submittedEmail,authorURL:input.authorUrl || "",content,permalink:new URL((await withPermalink(post,settings,client)).permalink,settings.siteUrl).href,userRole:user?.role};
     const akismetResult=["trash","spam"].includes(status)?"skipped":await checkAkismetComment(akismetInput,client);
     if(akismetResult==="spam")status="spam";else if(akismetResult==="unavailable")status="pending";

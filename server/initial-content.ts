@@ -48,10 +48,10 @@ export async function seedInitialContent(client: PoolClient, adminId: number) {
   if (!marker.rowCount) return;
   const settings = await getSettings(client);
   const post = await client.query(
-    `INSERT INTO posts (type,title,slug,content,raw_content,excerpt,status,author_id,published_at)
-     VALUES ('post','Hello world!','hello-world',$1,$2,'','publish',$3,now())
+    `INSERT INTO posts (type,title,slug,content,raw_content,excerpt,status,author_id,published_at,ping_status)
+     VALUES ('post','Hello world!','hello-world',$1,$2,'','publish',$3,now(),$4)
      ON CONFLICT (slug) DO NOTHING RETURNING id`,
-    [cleanContent(initialHelloContent), cleanRawContent(initialHelloContent), adminId],
+    [cleanContent(initialHelloContent), cleanRawContent(initialHelloContent), adminId, settings.defaultPingStatus],
   );
   await client.query(
     `INSERT INTO posts (type,title,slug,content,raw_content,excerpt,status,author_id,published_at,comment_status,template_slug)
