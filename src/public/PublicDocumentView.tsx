@@ -18,10 +18,11 @@ export type PublicDocumentActions = {
  comment?:(comment:PublicInteractionState["comment"])=>void; password?:(value:string)=>void;
  rememberAuthor?:(value:boolean)=>void; publicSearch?:(value:string)=>void;
  sourceSubmit?:(event:FormEvent<HTMLDivElement>)=>void; sourceClick?:(event:MouseEvent<HTMLDivElement>)=>void;
+ navigate?:(event:MouseEvent<HTMLAnchorElement>)=>void;
  sourceRoot?:RefObject<HTMLDivElement|null>;
 };
 export function initialPublicInteraction(model:PublicDocumentModel):PublicInteractionState {
- return {error:"",notice:new URL(model.requestPath,"https://worldact.invalid").searchParams.get("comment-status")==="pending" ? "Your comment is awaiting moderation." : "",busy:false,password:"",publicSearch:model.route.query.search,
+ return {error:"",notice:model.presentation.kind==="source" && model.controls.replyParentId ? `Replying to ${model.controls.replyParentName || "comment"}.` : new URL(model.requestPath,"https://worldact.invalid").searchParams.get("comment-status")==="pending" ? "Your comment is awaiting moderation." : "",busy:false,password:"",publicSearch:model.route.query.search,
  reply:model.controls.replyParentId ? {id:model.controls.replyParentId,name:model.controls.replyParentName || "comment"}:null,
  rememberAuthor:false,comment:{authorName:"",authorEmail:"",authorUrl:"",content:""}};
 }
@@ -46,11 +47,11 @@ export function PublicDocumentView({model,state=initialPublicInteraction(model),
  const displayDate=(value:string|null)=>value ? model.controls.dates[value] || "—" : "—";
   const adminBar = (user && user.showAdminBar !== false && (
         <div className="public-admin-bar">
-          <a href={user.role === "subscriber" ? "/" : "/admin"}>
+          <a onClick={actions.navigate} href={user.role === "subscriber" ? "/" : "/admin"}>
             <Brand />
             WorldAct
           </a>
-          {user.role !== "subscriber" && <a href="/admin">Dashboard</a>}
+          {user.role !== "subscriber" && <a onClick={actions.navigate} href="/admin">Dashboard</a>}
           {detail &&
             post &&
             (user.role === "administrator" ||
@@ -58,13 +59,13 @@ export function PublicDocumentView({model,state=initialPublicInteraction(model),
               (["author", "contributor"].includes(user.role) &&
                 post.type === "post" &&
                 post.authorId === user.id)) && (
-              <a
+              <a onClick={actions.navigate}
                 href={`/admin/${post.type === "page" ? "pages" : "posts"}/${post.id}`}
               >
                 Edit {post.type}
               </a>
             )}
-          <a
+          <a onClick={actions.navigate}
             className="public-howdy"
             href={user.role === "subscriber" ? "/" : "/admin"}
           >
@@ -77,7 +78,7 @@ export function PublicDocumentView({model,state=initialPublicInteraction(model),
       ));
   const content = (item: PublicPost) => (
     <div
-      className="public-content"
+      className="public-content" data-worldact-public-island="true"
       dangerouslySetInnerHTML={{ __html: item.content }}
     />
   );
@@ -103,21 +104,21 @@ export function PublicDocumentView({model,state=initialPublicInteraction(model),
         <Slot html={customHeader.html} className="custom-template-part" />
       ) : (
         <header className="site-header">
-          <a className="site-title" href="/">
+          <a onClick={actions.navigate} className="site-title" href="/">
             {title}
           </a>
           <nav aria-label="Primary navigation">
             {primaryMenu ? (
-              <Navigation items={primaryMenu.items} />
+              <Navigation items={primaryMenu.items} onNavigate={actions.navigate} />
             ) : (
               site.data?.pages.map((item) => (
-                <a key={item.id} href={postLink(item)}>
+                <a onClick={actions.navigate} key={item.id} href={postLink(item)}>
                   {item.title}
                 </a>
               ))
             )}
             {!primaryMenu && !site.data?.pages.length && (
-              <a href="/">Home</a>
+              <a onClick={actions.navigate} href="/">Home</a>
             )}
           </nav>
         </header>
@@ -132,7 +133,7 @@ export function PublicDocumentView({model,state=initialPublicInteraction(model),
           <section className="public-not-found">
             <h1>Page not found</h1>
             <p>It looks like nothing was found at this location.</p>
-            <a href="/">Return to home</a>
+            <a onClick={actions.navigate} href="/">Return to home</a>
           </section>
         ) : displaySingle ? (
           displayedPost &&
@@ -200,7 +201,7 @@ export function PublicDocumentView({model,state=initialPublicInteraction(model),
                           aria-label="Post categories and tags"
                         >
                           {post.terms.map((term) => (
-                            <a
+                            <a onClick={actions.navigate}
                               key={term.id}
                               href={`/?${term.taxonomy}=${encodeURIComponent(term.slug)}`}
                             >
@@ -222,6 +223,7 @@ export function PublicDocumentView({model,state=initialPublicInteraction(model),
                   </h2>
                   <ClassicCommentThread
                     comments={comments}
+                    onNavigate={actions.navigate}
                     displayDate={displayDate}
                     threaded={settings?.threadComments !== false}
                     maxDepth={settings?.threadDepth || 5}
@@ -236,18 +238,18 @@ export function PublicDocumentView({model,state=initialPublicInteraction(model),
                       className="public-pagination"
                       aria-label="Comments pagination"
                     >
-                      <PageLink path={model.requestPath} field="commentPage" page={commentsPagination.page - 1} disabled={commentsPagination.page <= 1}>← Previous comments</PageLink>
+                      <PageLink onNavigate={actions.navigate} path={model.requestPath} field="commentPage" page={commentsPagination.page - 1} disabled={commentsPagination.page <= 1}>← Previous comments</PageLink>
                       <span>
                         {commentsPagination.page} of{" "}
                         {commentsPagination.totalPages}
                       </span>
-                      <PageLink path={model.requestPath} field="commentPage" page={commentsPagination.page + 1} disabled={commentsPagination.page >= commentsPagination.totalPages}>Next comments →</PageLink>
+                      <PageLink onNavigate={actions.navigate} path={model.requestPath} field="commentPage" page={commentsPagination.page + 1} disabled={commentsPagination.page >= commentsPagination.totalPages}>Next comments →</PageLink>
                     </nav>
                   )}
                   {model.controls.commentsOpen ? (
                     settings?.commentRegistration && !user ? (
                       <p>
-                        You must be <a href={model.controls.loginHref}>logged in</a> to post a
+                        You must be <a onClick={actions.navigate} href={model.controls.loginHref}>logged in</a> to post a
                         comment.
                       </p>
                     ) : (
@@ -343,7 +345,7 @@ export function PublicDocumentView({model,state=initialPublicInteraction(model),
                               {(settings as Partial<Settings> & {commentCookieConsent?:boolean})?.commentCookieConsent !== false && <label className="public-comment-consent"><input type="checkbox" name="rememberAuthor" checked={rememberAuthor} onChange={(event)=>actions.rememberAuthor?.(event.target.checked)}/> Save my name, email, and website in this browser for the next time I comment.</label>}
                             </>
                           )}
-                          {enabledPlugin("akismet")?.settings.sendComments === true && <p className="akismet_comment_form_privacy_notice">This site uses Akismet to reduce spam. <a href="https://akismet.com/privacy/" target="_blank" rel="noreferrer">Learn how your comment data is processed.</a></p>}
+                          {enabledPlugin("akismet")?.settings.sendComments === true && <p className="akismet_comment_form_privacy_notice">This site uses Akismet to reduce spam. <a onClick={actions.navigate} href="https://akismet.com/privacy/" target="_blank" rel="noreferrer">Learn how your comment data is processed.</a></p>}
                           <button disabled={busy}>
                             {busy ? "Submitting…" : "Post Comment"}
                           </button>
@@ -399,7 +401,7 @@ export function PublicDocumentView({model,state=initialPublicInteraction(model),
                   {(searchTerm ||
                     categoryFilter ||
                     tagFilter ||
-                    params.get("author") || hasDateFilter) && <a href="/">Show all posts</a>}
+                    params.get("author") || hasDateFilter) && <a onClick={actions.navigate} href="/">Show all posts</a>}
                 </form>
                 <div className="public-posts">
                   {posts.map((item) => (
@@ -408,7 +410,7 @@ export function PublicDocumentView({model,state=initialPublicInteraction(model),
                       key={item.id}
                     >
                       <h2>
-                        <a href={postLink(item)}>
+                        <a onClick={actions.navigate} href={postLink(item)}>
                           {item.title || "(no title)"}
                         </a>
                       </h2>
@@ -428,7 +430,7 @@ export function PublicDocumentView({model,state=initialPublicInteraction(model),
                       {item.locked ? (
                         <p>
                           This content is password protected.{" "}
-                          <a href={postLink(item)}>
+                          <a onClick={actions.navigate} href={postLink(item)}>
                             Enter the password to read it.
                           </a>
                         </p>
@@ -447,11 +449,11 @@ export function PublicDocumentView({model,state=initialPublicInteraction(model),
             )}
             {pagination && pagination.totalPages > 1 && (
               <nav className="public-pagination" aria-label="Posts pagination">
-                <PageLink path={model.requestPath} field="page" page={pagination.page - 1} disabled={pagination.page <= 1}>← Newer posts</PageLink>
+                <PageLink onNavigate={actions.navigate} path={model.requestPath} field="page" page={pagination.page - 1} disabled={pagination.page <= 1}>← Newer posts</PageLink>
                 <span>
                   {pagination.page} of {pagination.totalPages}
                 </span>
-                <PageLink path={model.requestPath} field="page" page={pagination.page + 1} disabled={pagination.page >= pagination.totalPages}>Older posts →</PageLink>
+                <PageLink onNavigate={actions.navigate} path={model.requestPath} field="page" page={pagination.page + 1} disabled={pagination.page >= pagination.totalPages}>Older posts →</PageLink>
               </nav>
             )}
           </>
@@ -462,7 +464,7 @@ export function PublicDocumentView({model,state=initialPublicInteraction(model),
       ) : (
         <footer className="site-footer">
           <div>
-            <a className="site-title" href="/">
+            <a onClick={actions.navigate} className="site-title" href="/">
               {title}
             </a>
             {settings?.tagline && <p>{settings.tagline}</p>}
@@ -470,13 +472,13 @@ export function PublicDocumentView({model,state=initialPublicInteraction(model),
           <div>
             {footerMenu ? (
               <nav aria-label="Footer navigation">
-                <Navigation items={footerMenu.items} />
+                <Navigation items={footerMenu.items} onNavigate={actions.navigate} />
               </nav>
             ) : (
               <>
-                <a href="/">Blog</a>
+                <a onClick={actions.navigate} href="/">Blog</a>
                 {site.data?.pages.slice(0, 4).map((item) => (
-                  <a key={item.id} href={postLink(item)}>
+                  <a onClick={actions.navigate} key={item.id} href={postLink(item)}>
                     {item.title}
                   </a>
                 ))}
@@ -485,7 +487,7 @@ export function PublicDocumentView({model,state=initialPublicInteraction(model),
           </div>
           <div className="site-credit">
             <p>Designed with WorldAct</p>
-            <a href="/login">Log in</a>
+            <a onClick={actions.navigate} href="/login">Log in</a>
           </div>
         </footer>
       )}
@@ -502,15 +504,15 @@ function SourceDocument({model,state,actions}:{model:PublicDocumentModel;state:P
  if(model.presentation.kind!=="source")return null;
  return <>
   {(!state.errorLocal && state.error || state.notice && !state.error) && <div className="worldact-public-notice" role={state.error ? "alert":"status"}>{state.error || state.notice}</div>}
-  <div className="wp-site-blocks" ref={actions.sourceRoot} aria-busy={state.busy || undefined} onSubmit={actions.sourceSubmit} onClick={actions.sourceClick} dangerouslySetInnerHTML={{__html:model.presentation.html}} />
+  <div className="wp-site-blocks" data-worldact-public-island="true" ref={actions.sourceRoot} aria-busy={state.busy || undefined} onSubmit={actions.sourceSubmit} onClick={actions.sourceClick} dangerouslySetInnerHTML={{__html:model.presentation.html}} />
   {state.busy && <p className="worldact-public-loading" role="status">Submitting…</p>}
   {model.viewer && <span className="screen-reader-text">Logged in as {model.viewer.displayName}.</span>}
  </>;
 }
-function Slot({html,className}:{html:string;className:string}) {return <div className={className} dangerouslySetInnerHTML={{__html:html}}/>;}
-function PageLink({path,field,page,disabled,children}:{path:string;field:string;page:number;disabled:boolean;children:ReactNode}) {
+function Slot({html,className}:{html:string;className:string}) {return <div className={className} data-worldact-public-island="true" dangerouslySetInnerHTML={{__html:html}}/>;}
+function PageLink({path,field,page,disabled,children,onNavigate}:{path:string;field:string;page:number;disabled:boolean;children:ReactNode;onNavigate?:PublicDocumentActions["navigate"]}) {
  const target=new URL(path,"https://worldact.invalid");target.searchParams.set(field,String(Math.max(1,page)));
- return disabled ? <button disabled>{children}</button> : <a className="public-page-link" href={target.pathname+target.search}>{children}</a>;
+ return disabled ? <button disabled>{children}</button> : <a onClick={onNavigate} className="public-page-link" href={target.pathname+target.search}>{children}</a>;
 }
 function fontStack(name: string | undefined) {
   if (!name) return undefined;
@@ -526,7 +528,9 @@ function Navigation({
   items,
   parent = null,
   depth = 0,
+  onNavigate,
 }: {
+  onNavigate?:PublicDocumentActions["navigate"];
   items: NavigationItem[];
   parent?: string | null;
   depth?: number;
@@ -538,7 +542,7 @@ function Navigation({
         .filter((item) => (item.parentId || null) === parent)
         .map((item) => (
           <li key={item.id}>
-            <a
+            <a onClick={onNavigate}
               href={item.url}
               target={item.target || "_self"}
               rel={item.target === "_blank" ? "noopener noreferrer" : undefined}
@@ -546,7 +550,7 @@ function Navigation({
               {item.label}
             </a>
             {items.some((child) => child.parentId === item.id) && (
-              <Navigation items={items} parent={item.id} depth={depth + 1} />
+              <Navigation items={items} parent={item.id} depth={depth + 1} onNavigate={onNavigate} />
             )}
           </li>
         ))}

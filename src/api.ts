@@ -288,6 +288,8 @@ export async function api<T>(
       response.status,
       data,
     );
+  if (typeof window !== "undefined" && options.method && options.method !== "GET" && /^\/auth\/(?:login|logout)$/.test(path))
+    window.dispatchEvent(new Event("worldact-session-change"));
   return data as T;
 }
 export const json = (method: string, value?: unknown): RequestInit => ({

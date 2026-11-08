@@ -1,11 +1,12 @@
-import type { ReactNode } from "react";
+import type { ReactNode, MouseEvent } from "react";
 import type { Comment } from "../api";
 import { commentTypeLabel, isNotification } from "../commentTypes";
 import { classicCommentTree, commentDisplayDepth, type ClassicCommentNode } from "../classicCommentTree";
 
-export default function ClassicCommentThread({ comments, displayDate, threaded, maxDepth, canReply, onReply, loginHref, replyHref }: {
+export default function ClassicCommentThread({ comments, displayDate, threaded, maxDepth, canReply, onReply, loginHref, replyHref, onNavigate }: {
   comments: Comment[]; displayDate: (date: string | null) => string; threaded: boolean;
   maxDepth: number; canReply: boolean; onReply: (comment: Comment) => void;
+  onNavigate?:(event:MouseEvent<HTMLAnchorElement>)=>void;
   loginHref?: string; replyHref: (id: number) => string;
 }) {
   const roots = classicCommentTree(comments, threaded, maxDepth), rendered = new Map<number, ReactNode>();
@@ -27,7 +28,7 @@ export default function ClassicCommentThread({ comments, displayDate, threaded, 
           <p className="comment-date">{displayDate(item.createdAt)}</p>
           <div dangerouslySetInnerHTML={{ __html: item.content }} />
           {!isNotification(item) && threaded && canReply && node.depth < commentDisplayDepth(maxDepth) - 1 &&
-            (loginHref ? <a className="public-comment-reply comment-reply-login" rel="nofollow" href={loginHref}>Log in to Reply</a> :
+            (loginHref ? <a onClick={onNavigate} className="public-comment-reply comment-reply-login" rel="nofollow" href={loginHref}>Log in to Reply</a> :
             <a className="button-link public-comment-reply comment-reply-link" rel="nofollow" href={replyHref(item.id)} data-classic-comment-reply={item.id} aria-label={`Reply to ${item.authorName}`} onClick={event => {if(event.button || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey)return;event.preventDefault();onReply(item);}}>Reply</a>)}
         </div>
       </article>

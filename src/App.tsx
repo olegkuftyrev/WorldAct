@@ -43,6 +43,7 @@ import { EditorPreferencesProvider } from "./editor/EditorPreferences";
 import {
   useContext,
   useEffect,
+  useLayoutEffect,
   useState,
   lazy,
   Suspense,
@@ -70,11 +71,12 @@ import {
 
 const Editor = lazy(() => import("./screens/Editor"));
 
-export default function App() {
+export default function App({onSessionReady}:{onSessionReady?:()=>void} = {}) {
   const [user, setUser] = useState<User | null>(null),
     [ready, setReady] = useState(false),
     [error, setError] = useState("");
   const location = useLocation();
+  useLayoutEffect(() => {if(ready)onSessionReady?.();},[ready,onSessionReady]);
   useEffect(() => {
     api<{ user: User | null }>("/session")
       .then((data) => setUser(data.user))
