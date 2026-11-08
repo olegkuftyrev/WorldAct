@@ -41,6 +41,7 @@ import {
 } from "./permalinks.js";
 import { z } from "zod";
 import { projectRestFields } from "./rest-fields.js";
+import { mediaCaptionHTML, renderedMediaCaption, mediaCaptionSchema } from "./media-captions.js";
 import { readTermQuery } from "./term-blocks.js";
 import { assertPostAccess } from "./core.js";
 import { postFormats } from "../shared/post-formats.js";
@@ -816,7 +817,8 @@ function mediaQueryIds(value: unknown, zero = false): number[] | undefined {
 }
 async function wpMedia(item: any, edit = false) {
   const s = await getSettings(),
-    url = absolute(item.url || "/uploads/" + item.filename, s.siteUrl);
+    url = absolute(item.url || "/uploads/" + item.filename, s.siteUrl),
+    caption = mediaCaptionHTML(item.caption || "");
   return {
     id: item.id,
     date: restLocalDate(item.createdAt || item.created_at, s.timezone),
@@ -828,7 +830,7 @@ async function wpMedia(item: any, edit = false) {
     title: { ...(edit ? { raw: item.title } : {}), rendered: esc(item.title) },
     author: item.authorId || item.author_id,
     description: { ...(edit ? { raw: item.description || "" } : {}), rendered: item.description || "" },
-    caption: { ...(edit ? { raw: item.caption || "" } : {}), rendered: esc(item.caption || "") },
+    caption: { ...(edit ? { raw: caption } : {}), rendered: renderedMediaCaption(caption) },
     alt_text: item.alt,
     ...(item.image ? { image: { ...item.image, src: absolute(item.image.src, s.siteUrl) } } : {}),
     media_type: String(item.mimeType || item.mime_type).startsWith("image/")
@@ -918,7 +920,7 @@ router.post("/wp-json/wp/v2/media/:id", async (req: AuthRequest, res) => {
     .object({
       id: z.number().int().positive().max(2147483647).optional(),
       title: z.string().optional(),
-      caption: z.string().optional(),
+      caption: mediaCaptionSchema.optional(),
       description:z.string().optional(),
       post:z.number().int().min(0).optional(),
       comment_status:z.enum(["open","closed"]).optional(),
@@ -1567,7 +1569,7 @@ router.get("/api/tools/export", admin, async (req, res, next) => {
   const mediaXml = media.rows
     .map(
       (m) =>
-        `<item><title>${cdata(m.title)}</title><content:encoded>${cdata(m.caption)}</content:encoded><wp:post_id>${m.id + 2147483648}</wp:post_id><wp:post_type>attachment</wp:post_type><wp:status>inherit</wp:status><wp:post_name>${cdata(m.filename)}</wp:post_name><wp:post_parent>0</wp:post_parent><wp:attachment_url>${esc(absolute("/uploads/" + m.filename, s.siteUrl))}</wp:attachment_url></item>`,
+        `<item><title>${cdata(m.title)}</title><content:encoded>${cdata(m.description || "")}</content:encoded><excerpt:encoded>${cdata(mediaCaptionHTML(m.caption, m.caption_is_html))}</excerpt:encoded><wp:post_id>${m.id + 2147483648}</wp:post_id><wp:post_type>attachment</wp:post_type><wp:status>inherit</wp:status><wp:post_name>${cdata(m.filename)}</wp:post_name><wp:post_parent>0</wp:post_parent><wp:attachment_url>${esc(absolute("/uploads/" + m.filename, s.siteUrl))}</wp:attachment_url></item>`,
     )
     .join("");
   const xml = `<?xml version="1.0" encoding="UTF-8"?><rss version="2.0" xmlns:excerpt="http://wordpress.org/export/1.2/excerpt/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:wfw="http://wellformedweb.org/CommentAPI/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:wp="http://wordpress.org/export/1.2/"><channel><title>${esc(s.siteTitle)}</title><link>${esc(s.siteUrl)}</link><description>${esc(s.tagline)}</description><pubDate>${new Date().toUTCString()}</pubDate><language>en-US</language><wp:wxr_version>1.2</wp:wxr_version><wp:base_site_url>${esc(s.siteUrl)}</wp:base_site_url><wp:base_blog_url>${esc(s.siteUrl)}</wp:base_blog_url>${authors}${termXml}${itemXml.join("")}${entityXml}${mediaXml}</channel></rss>`;

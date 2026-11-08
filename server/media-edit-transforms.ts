@@ -2,6 +2,7 @@ import sharp from "sharp";
 import { z } from "zod";
 import { rasterOutput, encodeRaster } from "./image-formats.js";
 import { HttpError } from "./utils.js";
+import { mediaCaptionSchema } from "./media-captions.js";
 
 const percent = z.number().min(0).max(100);
 const flip = z.object({ horizontal: z.boolean(), vertical: z.boolean() }).strict();
@@ -21,7 +22,7 @@ export const mediaEditCopySchema = z.object({
   x: percent.optional(), y: percent.optional(),
   width: percent.gt(0).optional(), height: percent.gt(0).optional(),
   title: z.string().trim().min(1).max(300).optional(),
-  caption: z.string().max(20_000).optional(),
+  caption: mediaCaptionSchema.optional(),
   description: z.string().max(20_000).optional(),
   alt_text: z.string().max(1000).optional(),
   post: z.number().int().min(0).max(2147483647).optional(),

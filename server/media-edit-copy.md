@@ -35,7 +35,12 @@ under an actor lock; lock order is actor, source media, requested parent post,
 matching existing attachment updates and account deletion. Source row locks
 hold its immutable file graph while transformations finish.
 
-Title, caption, description and alt text default to the source. Explicit string
+Title, caption, description and alt text default to the source. Caption defaults
+preserve canonical safe HTML; explicit captions use the same sanitizer and
+120000-character canonical limit as metadata saves. Native `caption.raw` is HTML
+and `rendered` applies source paragraph formatting. Legacy plaintext is escaped
+once by its format migration, including old archives; see `media-captions.md`.
+Explicit string
 values are sanitized through the existing media rules. Optional `post` selects
 an authorized parent; its default is unattached, and comments default closed.
 The new file graph uses the same normalized-full/raw-upload/sub-size pipeline

@@ -15,6 +15,7 @@ import { validateThemeDesign, getBundledTheme } from "./themes.js";
 import { sourceTemplatePartArea } from "../shared/template-areas.js";
 import { inspectFont, bundledFontCollection, validateFontChoices } from "./fonts.js";
 import { inspectAudio } from "./audio-metadata.js";
+import { importedMediaCaption } from "./media-captions.js";
 
 export const MAX_ARCHIVE_FILE_BYTES = 32 * 1024 * 1024;
 export const MAX_ARCHIVE_MEDIA_BYTES = 64 * 1024 * 1024;
@@ -252,6 +253,7 @@ export class SiteImport {
     };
     for (const item of records) {
       const sourceId = id.parse(item.id);
+      const caption = importedMediaCaption(item.caption, item.caption_is_html);
       const main = await copy(item.filename);
       if (!main) { this.warn(`Media record ${sourceId} could not be restored; its ID references were detached.`); continue; }
       const original = await copy(item.original_filename), derivatives: Record<string, string> = {}, sizes: Record<string, any> = {};
@@ -269,7 +271,7 @@ export class SiteImport {
       }
       let width = null, height = null;
       if (main.mime.startsWith("image/")) { const metadata = await sharp(main.data, { limitInputPixels: 80_000_000 }).metadata(); width = metadata.width ?? null; height = metadata.height ?? null; }
-      const row = await this.client.query("INSERT INTO media(author_id,title,filename,mime_type,alt,caption,size,width,height,original_filename,derivatives,sizes,created_at) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11::jsonb,$12::jsonb,coalesce($13::timestamptz,now())) RETURNING id", [this.user.id, plainText(z.string().max(300).parse(item.title)), main.filename, main.mime, plainText(z.string().max(1000).parse(item.alt || "")), plainText(z.string().max(20000).parse(item.caption || "")), main.data.length, width, height, original?.filename || null, JSON.stringify(derivatives), JSON.stringify(sizes), z.iso.datetime({ offset: true }).optional().parse(item.created_at) ?? null]);
+      const row = await this.client.query("INSERT INTO media(author_id,title,filename,mime_type,alt,caption,size,width,height,original_filename,derivatives,sizes,created_at) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11::jsonb,$12::jsonb,coalesce($13::timestamptz,now())) RETURNING id", [this.user.id, plainText(z.string().max(300).parse(item.title)), main.filename, main.mime, plainText(z.string().max(1000).parse(item.alt || "")), caption, main.data.length, width, height, original?.filename || null, JSON.stringify(derivatives), JSON.stringify(sizes), z.iso.datetime({ offset: true }).optional().parse(item.created_at) ?? null]);
       this.media.set(sourceId, row.rows[0].id);
       // Recompute descriptive metadata from the verified restored bytes;
       // imported JSON fields cannot inject tags, paths or fabricated durations.

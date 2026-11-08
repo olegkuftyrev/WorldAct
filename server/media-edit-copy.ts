@@ -6,6 +6,7 @@ import { assertActiveAccountAuthentication, type AuthRequest } from "./auth.js";
 import { needUser, HttpError, plainText, cleanContent } from "./utils.js";
 import { safeStoredFile, uploadPrefix, unlinkUnreferencedMediaFiles } from "./media-files.js";
 import { stageImageUpload } from "./image-uploads.js";
+import { mediaCaptionHTML } from "./media-captions.js";
 import { applyMediaModifiers, mediaEditCopySchema, mediaEditModifiers } from "./media-edit-transforms.js";
 
 /** Compare known local paths only. The request URL is never opened or fetched. */
@@ -76,7 +77,7 @@ export async function editMediaCopy(req: AuthRequest, sourceId: number, body: un
        VALUES($1,$2,$3,$4,$5,$6,$7,$8::jsonb,$9::jsonb,$10,$11,$12,$13,$14) RETURNING ${mediaFields}`,
       [actorId, title, staged.filename, staged.mimeType, staged.size, staged.width, staged.height,
         JSON.stringify(staged.sizes), JSON.stringify(staged.derivatives), plainText(input.alt_text ?? item.alt),
-        plainText(input.caption ?? item.caption), cleanContent(input.description ?? item.description), input.post || null, input.comment_status ?? "closed"],
+        mediaCaptionHTML(input.caption ?? item.caption, input.caption === undefined ? item.caption_is_html : true), cleanContent(input.description ?? item.description), input.post || null, input.comment_status ?? "closed"],
     );
     await database.query("COMMIT");
     return result.rows[0];

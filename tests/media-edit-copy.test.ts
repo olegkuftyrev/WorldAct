@@ -61,7 +61,7 @@ test("native crop duplicates real image bytes and metadata while preserving the 
   assert.equal(result.response.headers.get("location"), `/wp-json/wp/v2/media/${result.data.id}`);
   assert.equal(result.data.media_details.width, 6); assert.equal(result.data.media_details.height, 10);
   assert.equal(result.data.title.rendered, "Original title"); assert.equal(result.data.alt_text, "Original alt");
-  assert.equal(result.data.caption.rendered, "Original caption"); assert.equal(result.data.description.rendered, "<p>Original description</p>");
+  assert.equal(result.data.caption.raw, "Original caption"); assert.equal(result.data.caption.rendered, "<p>Original caption</p>\n"); assert.equal(result.data.description.rendered, "<p>Original description</p>");
   assert.equal(result.data.post, 0); assert.equal(result.data.comment_status, "closed");
   assert.deepEqual((await pool.query("SELECT * FROM media WHERE id=$1", [source.id])).rows[0], before);
   assert.deepEqual(await readFile(path.join(uploadsDir, before.filename)), image);
@@ -83,7 +83,7 @@ test("native editing accepts only current metadata URLs and uses the retained ra
   const result = await copy(source.id, { src: selected, modifiers: [crop(0, 0, 50, 100)], title: "Copied image", caption: "<b>New caption</b>", alt_text: "<i>new alt</i>", description: "<p>New<script>bad()</script></p>" });
   assert.equal(result.response.status, 201, JSON.stringify(result.data));
   assert.equal(result.data.media_details.width, 1500); assert.equal(result.data.media_details.height, 1200);
-  assert.equal(result.data.title.rendered, "Copied image"); assert.equal(result.data.caption.rendered, "New caption"); assert.equal(result.data.alt_text, "new alt"); assert.equal(result.data.description.rendered, "<p>New</p>");
+  assert.equal(result.data.title.rendered, "Copied image"); assert.equal(result.data.caption.raw, "<b>New caption</b>"); assert.equal(result.data.caption.rendered, "<p><b>New caption</b></p>\n"); assert.equal(result.data.alt_text, "new alt"); assert.equal(result.data.description.rendered, "<p>New</p>");
   const rawResult = await copy(source.id, { src: native.original_image_url, modifiers: [rotate(180)] });
   assert.equal(rawResult.response.status, 201); assert.equal(rawResult.data.media_details.width, 2560); assert.equal(rawResult.data.media_details.height, 1024); assert.ok(rawResult.data.original_image_url);
   const clone = (await api(`/api/media/${rawResult.data.id}`)).data.media;

@@ -43,7 +43,8 @@ test("native media edit responses expose saved raw fields to permitted editors w
     id: item.id, title: "Image &amp; title", caption: "Caption &amp; &lt;img src=x onerror=bad()&gt;", description: "<p>Real <strong>description</strong><script>bad()</script></p>",
   });
   assert.equal(updated.response.status, 200); assert.equal(updated.data.title.raw, "Image & title"); assert.equal(updated.data.title.rendered, "Image &amp; title");
-  assert.equal(updated.data.caption.raw, "Caption & <img src=x onerror=bad()>");
+  assert.equal(updated.data.caption.raw, "Caption &amp; &lt;img src=x onerror=bad()&gt;");
+  assert.equal(updated.data.caption.rendered, "<p>Caption &amp; &lt;img src=x onerror=bad()&gt;</p>\n");
   assert.equal(parseHTML("<body>" + updated.data.caption.rendered + "</body>").document.querySelectorAll("img,script").length, 0);
   assert.equal(updated.data.description.raw, "<p>Real <strong>description</strong></p>"); assert.equal(updated.data.description.rendered, updated.data.description.raw);
   const mismatched = await api(`/wp-json/wp/v2/media/${item.id}`, "POST", { id: item.id + 1, title: "Must not replace" }); assert.equal(mismatched.response.status, 400);

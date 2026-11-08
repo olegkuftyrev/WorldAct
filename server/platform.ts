@@ -46,6 +46,7 @@ import {
 import { rasterOutput, encodeRaster, jpegAutoOrientation } from "./image-formats.js";
 import { stageImageUpload } from "./image-uploads.js";
 import { editMediaCopy } from "./media-edit-copy.js";
+import { mediaCaptionSchema, mediaCaptionHTML } from "./media-captions.js";
 import { remapImportedBlockReferences } from "./block-portability.js";
 import { SiteImport, allocateImportedBlockEntities, exportMediaFiles, exportFontLibrary, MAX_ARCHIVE_JSON_BYTES, MAX_STORED_CONTENT_BYTES } from "./site-portability.js";
 import { postPermalink } from "./permalinks.js";
@@ -755,7 +756,7 @@ router.get("/media", creators, async (req: AuthRequest, res) => {
   const result=await pool.query(`SELECT ${expandedMediaFields} FROM media ${predicate} ORDER BY ${sort} ${input.order},id ${input.order} LIMIT $${values.length-1} OFFSET $${values.length}`,values);
   res.json({media:result.rows,counts:counts.rows[0],months:months.rows.map(row=>row.month),pagination:{page,perPage:input.perPage,total,totalPages}});
 });
-const mediaUpdate=z.object({title:z.string().trim().min(1).max(300).optional(),alt:z.string().max(1000).optional(),caption:z.string().max(20_000).optional(),description:z.string().max(20_000).optional(),commentStatus:z.enum(["open","closed"]).optional(),attachedPostId:z.number().int().positive().max(2147483647).nullable().optional()}).strict().refine(value=>Object.keys(value).length>0,"Provide a field to update.");
+const mediaUpdate=z.object({title:z.string().trim().min(1).max(300).optional(),alt:z.string().max(1000).optional(),caption:mediaCaptionSchema.optional(),description:z.string().max(20_000).optional(),commentStatus:z.enum(["open","closed"]).optional(),attachedPostId:z.number().int().positive().max(2147483647).nullable().optional()}).strict().refine(value=>Object.keys(value).length>0,"Provide a field to update.");
 async function updateMedia(req:AuthRequest,id:number,body:unknown){
   const input=mediaUpdate.parse(body),client=await pool.connect();
   try{
@@ -767,7 +768,7 @@ async function updateMedia(req:AuthRequest,id:number,body:unknown){
       if(needUser(req).role==="author" && (post.author_id!==needUser(req).id || post.type!=="post"))throw new HttpError(403,"You can only attach files to your own posts.");
     }
     const title=normalizedText(input.title ?? existing.title);
-    const result=await client.query(`UPDATE media SET title=$1,alt=$2,caption=$3,description=$4,comment_status=$5,attached_post_id=$6 WHERE id=$7 RETURNING ${expandedMediaFields}`,[title,plainText(input.alt ?? existing.alt),plainText(input.caption ?? existing.caption),cleanContent(input.description ?? existing.description),input.commentStatus ?? existing.comment_status,input.attachedPostId===undefined?existing.attached_post_id:input.attachedPostId,id]);
+    const result=await client.query(`UPDATE media SET title=$1,alt=$2,caption=$3,caption_is_html=true,description=$4,comment_status=$5,attached_post_id=$6 WHERE id=$7 RETURNING ${expandedMediaFields}`,[title,plainText(input.alt ?? existing.alt),mediaCaptionHTML(input.caption ?? existing.caption, input.caption === undefined ? existing.caption_is_html : true),cleanContent(input.description ?? existing.description),input.commentStatus ?? existing.comment_status,input.attachedPostId===undefined?existing.attached_post_id:input.attachedPostId,id]);
     await client.query("COMMIT");return result.rows[0];
   }catch(error){await client.query("ROLLBACK");throw error;}finally{client.release();}
 }

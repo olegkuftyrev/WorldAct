@@ -25,6 +25,7 @@ export async function migrate() {
       "themes-schema.sql",
       "template-areas-schema.sql",
       "media-schema.sql",
+      "media-captions-schema.sql",
       "edit-locks-schema.sql",
       "site-identity-schema.sql",
       "profile-email-schema.sql",

@@ -5,8 +5,11 @@ attachment `title`, `caption` and `description` raw values in edit context. The
 fixed native Media endpoints return `{raw,rendered}` for an authorized
 `context=edit` GET and successful upload/metadata/edit-copy mutations. Public
 view/embed GET keeps rendered fields only. Description uses existing sanitized
-HTML; stored caption/title remain the existing text values, with escaped
-rendered output. Alt/caption/description storage rules are unchanged.
+HTML. Title and alternative text keep their plain-text contracts. Captions use
+canonical safe HTML in `raw`, with source paragraph rendering in `rendered`.
+The once-only format-marker migration preserves existing literal text and old
+archives; see `media-captions.md` for sanitization, marker and 120000-character
+canonical limits.
 
 Edit context requires an administrator, editor or author. Authors read only
 their own attachments in edit context, including filtered collection totals;
