@@ -1,0 +1,1253 @@
+{
+  "rows": [
+    {
+      "name": "initial",
+      "end": 18,
+      "focus": "WWorldActNewPostMediaPageUserHowdy, AdministratorAdministratorLog OutDashboardDashboardHomeAbout WorldActPostsPostsAll PostsAdd New PostCategoriesTagsMediaMediaLibraryAdd Media FilePagesPagesAll PagesAdd New PageCommentsAppearanceAppearanceThemesEditorMenusFontsPluginsPluginsInstalled PluginsAdd PluginUsersUsersAll UsersAdd UserProfileToolsToolsSite HealthExportImportExport Personal DataErase Personal DataMailSettingsSettingsGeneralConnectorsWritingReadingDiscussionMediaPermalinksPrivacyCollapse menuOverviewChoose a settings section to configure your site. Changes are applied when you select Save Changes. Only administrators can change site-wide settings.General controls your site identity and registration. Writing and Reading configure content defaults and the homepage. Discussion, Media, Permalinks, and Privacy control their corresponding site behavior.For more information:About WorldActVisit your siteHelp Permalink SettingsGeneralWritingReadingDiscussionMediaPermalinksPrivacyCommon SettingsSelect the permalink structure for your website. Including the %postname% tag makes links easy to understand.Permalink structurePermalink structurePlainhttp://127.0.0.1:3044/?p=123Day and namehttp://127.0.0.1:3044/2026/11/08/sample-post/Month and namehttp://127.0.0.1:3044/2026/11/sample-post/Numerichttp://127.0.0.1:3044/archives/123Post namehttp://127.0.0.1:3044/sample-post/Custom StructureCustomize permalink structure by selecting available tagshttp://127.0.0.1:3044Available tags:%year%%monthnum%%day%%hour%%minute%%second%%post_id%%postname%%category%Category baseTag baseSave ChangesThank you for creating with WorldAct.Version 0.4.0",
+      "live": "",
+      "puts": [],
+      "selected": "custom_selection",
+      "start": 18,
+      "tags": [
+        {
+          "label": "year (The year of the post, four digits, for example 2004.)",
+          "name": "%year%",
+          "pressed": "false"
+        },
+        {
+          "label": "monthnum (Month of the year, for example 05.)",
+          "name": "%monthnum%",
+          "pressed": "false"
+        },
+        {
+          "label": "day (Day of the month, for example 28.)",
+          "name": "%day%",
+          "pressed": "false"
+        },
+        {
+          "label": "hour (Hour of the day, for example 15.)",
+          "name": "%hour%",
+          "pressed": "false"
+        },
+        {
+          "label": "minute (Minute of the hour, for example 43.)",
+          "name": "%minute%",
+          "pressed": "false"
+        },
+        {
+          "label": "second (Second of the minute, for example 33.)",
+          "name": "%second%",
+          "pressed": "false"
+        },
+        {
+          "label": "post_id (The unique ID of the post, for example 423.)",
+          "name": "%post_id%",
+          "pressed": "false"
+        },
+        {
+          "label": "postname (already used in permalink structure)",
+          "name": "%postname%",
+          "pressed": "true"
+        },
+        {
+          "label": "category (Category slug. Nested sub-categories appear as nested directories in the URL.)",
+          "name": "%category%",
+          "pressed": "false"
+        }
+      ],
+      "value": "/posts/%postname%/"
+    },
+    {
+      "name": "first-focus-never-append",
+      "end": 25,
+      "focus": "%year%",
+      "live": "year added to permalink structure",
+      "puts": [],
+      "selected": "custom_selection",
+      "start": 25,
+      "tags": [
+        {
+          "label": "year (already used in permalink structure)",
+          "name": "%year%",
+          "pressed": "true"
+        },
+        {
+          "label": "monthnum (Month of the year, for example 05.)",
+          "name": "%monthnum%",
+          "pressed": "false"
+        },
+        {
+          "label": "day (Day of the month, for example 28.)",
+          "name": "%day%",
+          "pressed": "false"
+        },
+        {
+          "label": "hour (Hour of the day, for example 15.)",
+          "name": "%hour%",
+          "pressed": "false"
+        },
+        {
+          "label": "minute (Minute of the hour, for example 43.)",
+          "name": "%minute%",
+          "pressed": "false"
+        },
+        {
+          "label": "second (Second of the minute, for example 33.)",
+          "name": "%second%",
+          "pressed": "false"
+        },
+        {
+          "label": "post_id (The unique ID of the post, for example 423.)",
+          "name": "%post_id%",
+          "pressed": "false"
+        },
+        {
+          "label": "postname (already used in permalink structure)",
+          "name": "%postname%",
+          "pressed": "true"
+        },
+        {
+          "label": "category (Category slug. Nested sub-categories appear as nested directories in the URL.)",
+          "name": "%category%",
+          "pressed": "false"
+        }
+      ],
+      "value": "/posts/%postname%/%year%/"
+    },
+    {
+      "name": "used-tag-removal",
+      "end": 18,
+      "focus": "%year%",
+      "live": "year removed from permalink structure",
+      "puts": [],
+      "selected": "custom_selection",
+      "start": 18,
+      "tags": [
+        {
+          "label": "year (The year of the post, four digits, for example 2004.)",
+          "name": "%year%",
+          "pressed": "false"
+        },
+        {
+          "label": "monthnum (Month of the year, for example 05.)",
+          "name": "%monthnum%",
+          "pressed": "false"
+        },
+        {
+          "label": "day (Day of the month, for example 28.)",
+          "name": "%day%",
+          "pressed": "false"
+        },
+        {
+          "label": "hour (Hour of the day, for example 15.)",
+          "name": "%hour%",
+          "pressed": "false"
+        },
+        {
+          "label": "minute (Minute of the hour, for example 43.)",
+          "name": "%minute%",
+          "pressed": "false"
+        },
+        {
+          "label": "second (Second of the minute, for example 33.)",
+          "name": "%second%",
+          "pressed": "false"
+        },
+        {
+          "label": "post_id (The unique ID of the post, for example 423.)",
+          "name": "%post_id%",
+          "pressed": "false"
+        },
+        {
+          "label": "postname (already used in permalink structure)",
+          "name": "%postname%",
+          "pressed": "true"
+        },
+        {
+          "label": "category (Category slug. Nested sub-categories appear as nested directories in the URL.)",
+          "name": "%category%",
+          "pressed": "false"
+        }
+      ],
+      "value": "/posts/%postname%/"
+    },
+    {
+      "name": "custom-radio-keeps-focus",
+      "end": 12,
+      "focus": "custom_selection",
+      "live": "year removed from permalink structure",
+      "puts": [],
+      "selected": "custom_selection",
+      "start": 12,
+      "tags": [
+        {
+          "label": "year (The year of the post, four digits, for example 2004.)",
+          "name": "%year%",
+          "pressed": "false"
+        },
+        {
+          "label": "monthnum (Month of the year, for example 05.)",
+          "name": "%monthnum%",
+          "pressed": "false"
+        },
+        {
+          "label": "day (Day of the month, for example 28.)",
+          "name": "%day%",
+          "pressed": "false"
+        },
+        {
+          "label": "hour (Hour of the day, for example 15.)",
+          "name": "%hour%",
+          "pressed": "false"
+        },
+        {
+          "label": "minute (Minute of the hour, for example 43.)",
+          "name": "%minute%",
+          "pressed": "false"
+        },
+        {
+          "label": "second (Second of the minute, for example 33.)",
+          "name": "%second%",
+          "pressed": "false"
+        },
+        {
+          "label": "post_id (The unique ID of the post, for example 423.)",
+          "name": "%post_id%",
+          "pressed": "false"
+        },
+        {
+          "label": "postname (already used in permalink structure)",
+          "name": "%postname%",
+          "pressed": "true"
+        },
+        {
+          "label": "category (Category slug. Nested sub-categories appear as nested directories in the URL.)",
+          "name": "%category%",
+          "pressed": "false"
+        }
+      ],
+      "value": "/%postname%/"
+    },
+    {
+      "name": "tab-to-input-does-not-change-radio",
+      "end": 12,
+      "focus": "permalink_structure",
+      "live": "year removed from permalink structure",
+      "puts": [],
+      "selected": "permalink-input-post-name",
+      "start": 0,
+      "tags": [
+        {
+          "label": "year (The year of the post, four digits, for example 2004.)",
+          "name": "%year%",
+          "pressed": "false"
+        },
+        {
+          "label": "monthnum (Month of the year, for example 05.)",
+          "name": "%monthnum%",
+          "pressed": "false"
+        },
+        {
+          "label": "day (Day of the month, for example 28.)",
+          "name": "%day%",
+          "pressed": "false"
+        },
+        {
+          "label": "hour (Hour of the day, for example 15.)",
+          "name": "%hour%",
+          "pressed": "false"
+        },
+        {
+          "label": "minute (Minute of the hour, for example 43.)",
+          "name": "%minute%",
+          "pressed": "false"
+        },
+        {
+          "label": "second (Second of the minute, for example 33.)",
+          "name": "%second%",
+          "pressed": "false"
+        },
+        {
+          "label": "post_id (The unique ID of the post, for example 423.)",
+          "name": "%post_id%",
+          "pressed": "false"
+        },
+        {
+          "label": "postname (already used in permalink structure)",
+          "name": "%postname%",
+          "pressed": "true"
+        },
+        {
+          "label": "category (Category slug. Nested sub-categories appear as nested directories in the URL.)",
+          "name": "%category%",
+          "pressed": "false"
+        }
+      ],
+      "value": "/%postname%/"
+    },
+    {
+      "name": "native-selected-middle",
+      "end": 10,
+      "focus": "permalink_structure",
+      "live": "year removed from permalink structure",
+      "puts": [],
+      "selected": "custom_selection",
+      "start": 7,
+      "tags": [
+        {
+          "label": "year (The year of the post, four digits, for example 2004.)",
+          "name": "%year%",
+          "pressed": "false"
+        },
+        {
+          "label": "monthnum (Month of the year, for example 05.)",
+          "name": "%monthnum%",
+          "pressed": "false"
+        },
+        {
+          "label": "day (Day of the month, for example 28.)",
+          "name": "%day%",
+          "pressed": "false"
+        },
+        {
+          "label": "hour (Hour of the day, for example 15.)",
+          "name": "%hour%",
+          "pressed": "false"
+        },
+        {
+          "label": "minute (Minute of the hour, for example 43.)",
+          "name": "%minute%",
+          "pressed": "false"
+        },
+        {
+          "label": "second (Second of the minute, for example 33.)",
+          "name": "%second%",
+          "pressed": "false"
+        },
+        {
+          "label": "post_id (The unique ID of the post, for example 423.)",
+          "name": "%post_id%",
+          "pressed": "false"
+        },
+        {
+          "label": "postname (already used in permalink structure)",
+          "name": "%postname%",
+          "pressed": "true"
+        },
+        {
+          "label": "category (Category slug. Nested sub-categories appear as nested directories in the URL.)",
+          "name": "%category%",
+          "pressed": "false"
+        }
+      ],
+      "value": "/start/end/"
+    },
+    {
+      "name": "enter-replaces-selection-preserves-existing-slashes",
+      "end": 13,
+      "focus": "permalink_structure",
+      "live": "year added to permalink structure",
+      "puts": [],
+      "selected": "custom_selection",
+      "start": 13,
+      "tags": [
+        {
+          "label": "year (already used in permalink structure)",
+          "name": "%year%",
+          "pressed": "true"
+        },
+        {
+          "label": "monthnum (Month of the year, for example 05.)",
+          "name": "%monthnum%",
+          "pressed": "false"
+        },
+        {
+          "label": "day (Day of the month, for example 28.)",
+          "name": "%day%",
+          "pressed": "false"
+        },
+        {
+          "label": "hour (Hour of the day, for example 15.)",
+          "name": "%hour%",
+          "pressed": "false"
+        },
+        {
+          "label": "minute (Minute of the hour, for example 43.)",
+          "name": "%minute%",
+          "pressed": "false"
+        },
+        {
+          "label": "second (Second of the minute, for example 33.)",
+          "name": "%second%",
+          "pressed": "false"
+        },
+        {
+          "label": "post_id (The unique ID of the post, for example 423.)",
+          "name": "%post_id%",
+          "pressed": "false"
+        },
+        {
+          "label": "postname (The sanitized post title (slug).)",
+          "name": "%postname%",
+          "pressed": "false"
+        },
+        {
+          "label": "category (Category slug. Nested sub-categories appear as nested directories in the URL.)",
+          "name": "%category%",
+          "pressed": "false"
+        }
+      ],
+      "value": "/start/%year%/"
+    },
+    {
+      "name": "collapsed-middle-adds-both-slashes",
+      "end": 17,
+      "focus": "permalink_structure",
+      "live": "minute added to permalink structure",
+      "puts": [],
+      "selected": "custom_selection",
+      "start": 17,
+      "tags": [
+        {
+          "label": "year (The year of the post, four digits, for example 2004.)",
+          "name": "%year%",
+          "pressed": "false"
+        },
+        {
+          "label": "monthnum (Month of the year, for example 05.)",
+          "name": "%monthnum%",
+          "pressed": "false"
+        },
+        {
+          "label": "day (Day of the month, for example 28.)",
+          "name": "%day%",
+          "pressed": "false"
+        },
+        {
+          "label": "hour (Hour of the day, for example 15.)",
+          "name": "%hour%",
+          "pressed": "false"
+        },
+        {
+          "label": "minute (already used in permalink structure)",
+          "name": "%minute%",
+          "pressed": "true"
+        },
+        {
+          "label": "second (Second of the minute, for example 33.)",
+          "name": "%second%",
+          "pressed": "false"
+        },
+        {
+          "label": "post_id (The unique ID of the post, for example 423.)",
+          "name": "%post_id%",
+          "pressed": "false"
+        },
+        {
+          "label": "postname (The sanitized post title (slug).)",
+          "name": "%postname%",
+          "pressed": "false"
+        },
+        {
+          "label": "category (Category slug. Nested sub-categories appear as nested directories in the URL.)",
+          "name": "%category%",
+          "pressed": "false"
+        }
+      ],
+      "value": "/prefix/%minute%/suffix/"
+    },
+    {
+      "name": "space-inserts-at-start",
+      "end": 11,
+      "focus": "permalink_structure",
+      "live": "monthnum added to permalink structure",
+      "puts": [],
+      "selected": "custom_selection",
+      "start": 11,
+      "tags": [
+        {
+          "label": "year (The year of the post, four digits, for example 2004.)",
+          "name": "%year%",
+          "pressed": "false"
+        },
+        {
+          "label": "monthnum (already used in permalink structure)",
+          "name": "%monthnum%",
+          "pressed": "true"
+        },
+        {
+          "label": "day (Day of the month, for example 28.)",
+          "name": "%day%",
+          "pressed": "false"
+        },
+        {
+          "label": "hour (Hour of the day, for example 15.)",
+          "name": "%hour%",
+          "pressed": "false"
+        },
+        {
+          "label": "minute (already used in permalink structure)",
+          "name": "%minute%",
+          "pressed": "true"
+        },
+        {
+          "label": "second (Second of the minute, for example 33.)",
+          "name": "%second%",
+          "pressed": "false"
+        },
+        {
+          "label": "post_id (The unique ID of the post, for example 423.)",
+          "name": "%post_id%",
+          "pressed": "false"
+        },
+        {
+          "label": "postname (The sanitized post title (slug).)",
+          "name": "%postname%",
+          "pressed": "false"
+        },
+        {
+          "label": "category (Category slug. Nested sub-categories appear as nested directories in the URL.)",
+          "name": "%category%",
+          "pressed": "false"
+        }
+      ],
+      "value": "/%monthnum%/prefix/%minute%/suffix/"
+    },
+    {
+      "name": "removal-preserves-preset-radio",
+      "end": 0,
+      "focus": "%postname%",
+      "live": "postname removed from permalink structure",
+      "puts": [],
+      "selected": "permalink-input-post-name",
+      "start": 0,
+      "tags": [
+        {
+          "label": "year (The year of the post, four digits, for example 2004.)",
+          "name": "%year%",
+          "pressed": "false"
+        },
+        {
+          "label": "monthnum (Month of the year, for example 05.)",
+          "name": "%monthnum%",
+          "pressed": "false"
+        },
+        {
+          "label": "day (Day of the month, for example 28.)",
+          "name": "%day%",
+          "pressed": "false"
+        },
+        {
+          "label": "hour (Hour of the day, for example 15.)",
+          "name": "%hour%",
+          "pressed": "false"
+        },
+        {
+          "label": "minute (Minute of the hour, for example 43.)",
+          "name": "%minute%",
+          "pressed": "false"
+        },
+        {
+          "label": "second (Second of the minute, for example 33.)",
+          "name": "%second%",
+          "pressed": "false"
+        },
+        {
+          "label": "post_id (The unique ID of the post, for example 423.)",
+          "name": "%post_id%",
+          "pressed": "false"
+        },
+        {
+          "label": "postname (The sanitized post title (slug).)",
+          "name": "%postname%",
+          "pressed": "false"
+        },
+        {
+          "label": "category (Category slug. Nested sub-categories appear as nested directories in the URL.)",
+          "name": "%category%",
+          "pressed": "false"
+        }
+      ],
+      "value": ""
+    },
+    {
+      "name": "source-no-trailing-slash-removal-quirk",
+      "end": 19,
+      "focus": "%post_id%",
+      "live": "post_id removed from permalink structure",
+      "puts": [],
+      "selected": "permalink-input-numeric",
+      "start": 19,
+      "tags": [
+        {
+          "label": "year (The year of the post, four digits, for example 2004.)",
+          "name": "%year%",
+          "pressed": "false"
+        },
+        {
+          "label": "monthnum (Month of the year, for example 05.)",
+          "name": "%monthnum%",
+          "pressed": "false"
+        },
+        {
+          "label": "day (Day of the month, for example 28.)",
+          "name": "%day%",
+          "pressed": "false"
+        },
+        {
+          "label": "hour (Hour of the day, for example 15.)",
+          "name": "%hour%",
+          "pressed": "false"
+        },
+        {
+          "label": "minute (Minute of the hour, for example 43.)",
+          "name": "%minute%",
+          "pressed": "false"
+        },
+        {
+          "label": "second (Second of the minute, for example 33.)",
+          "name": "%second%",
+          "pressed": "false"
+        },
+        {
+          "label": "post_id (already used in permalink structure)",
+          "name": "%post_id%",
+          "pressed": "true"
+        },
+        {
+          "label": "postname (The sanitized post title (slug).)",
+          "name": "%postname%",
+          "pressed": "false"
+        },
+        {
+          "label": "category (Category slug. Nested sub-categories appear as nested directories in the URL.)",
+          "name": "%category%",
+          "pressed": "false"
+        }
+      ],
+      "value": "/archives/%post_id%"
+    },
+    {
+      "name": "manual-edit-blur-updates-used-state",
+      "end": 19,
+      "focus": "%year%",
+      "live": "post_id removed from permalink structure",
+      "puts": [],
+      "selected": "custom_selection",
+      "start": 19,
+      "tags": [
+        {
+          "label": "year (already used in permalink structure)",
+          "name": "%year%",
+          "pressed": "true"
+        },
+        {
+          "label": "monthnum (Month of the year, for example 05.)",
+          "name": "%monthnum%",
+          "pressed": "false"
+        },
+        {
+          "label": "day (Day of the month, for example 28.)",
+          "name": "%day%",
+          "pressed": "false"
+        },
+        {
+          "label": "hour (Hour of the day, for example 15.)",
+          "name": "%hour%",
+          "pressed": "false"
+        },
+        {
+          "label": "minute (Minute of the hour, for example 43.)",
+          "name": "%minute%",
+          "pressed": "false"
+        },
+        {
+          "label": "second (Second of the minute, for example 33.)",
+          "name": "%second%",
+          "pressed": "false"
+        },
+        {
+          "label": "post_id (The unique ID of the post, for example 423.)",
+          "name": "%post_id%",
+          "pressed": "false"
+        },
+        {
+          "label": "postname (already used in permalink structure)",
+          "name": "%postname%",
+          "pressed": "true"
+        },
+        {
+          "label": "category (Category slug. Nested sub-categories appear as nested directories in the URL.)",
+          "name": "%category%",
+          "pressed": "false"
+        }
+      ],
+      "value": "/%year%/%postname%/"
+    }
+  ],
+  "save": {
+    "before": {
+      "end": 82,
+      "focus": "permalink_structure",
+      "notice": "",
+      "puts": [],
+      "selected": "custom_selection",
+      "start": 82,
+      "value": "/%year%/%monthnum%/%day%/%hour%/%minute%/%second%/%post_id%/%postname%/%category%/"
+    },
+    "after": {
+      "end": 82,
+      "focus": "permalink_structure",
+      "notice": "Settings saved.Dismiss",
+      "puts": [
+        {
+          "body": {
+            "categoryBase": "category",
+            "permalinkStructure": "/%year%/%monthnum%/%day%/%hour%/%minute%/%second%/%post_id%/%postname%/%category%/",
+            "tagBase": "tag"
+          },
+          "method": "PUT",
+          "status": 200
+        }
+      ],
+      "selected": "custom_selection",
+      "start": 82,
+      "value": "/%year%/%monthnum%/%day%/%hour%/%minute%/%second%/%post_id%/%postname%/%category%/"
+    },
+    "reloaded": {
+      "end": 82,
+      "focus": "WWorldActNewPostMediaPageUserHowdy, AdministratorAdministratorLog OutDashboardDashboardHomeAbout WorldActPostsPostsAll PostsAdd New PostCategoriesTagsMediaMediaLibraryAdd Media FilePagesPagesAll PagesAdd New PageCommentsAppearanceAppearanceThemesEditorMenusFontsPluginsPluginsInstalled PluginsAdd PluginUsersUsersAll UsersAdd UserProfileToolsToolsSite HealthExportImportExport Personal DataErase Personal DataMailSettingsSettingsGeneralConnectorsWritingReadingDiscussionMediaPermalinksPrivacyCollapse menuOverviewChoose a settings section to configure your site. Changes are applied when you select Save Changes. Only administrators can change site-wide settings.General controls your site identity and registration. Writing and Reading configure content defaults and the homepage. Discussion, Media, Permalinks, and Privacy control their corresponding site behavior.For more information:About WorldActVisit your siteHelp Permalink SettingsGeneralWritingReadingDiscussionMediaPermalinksPrivacyCommon SettingsSelect the permalink structure for your website. Including the %postname% tag makes links easy to understand.Permalink structurePermalink structurePlainhttp://127.0.0.1:3044/?p=123Day and namehttp://127.0.0.1:3044/2026/11/08/sample-post/Month and namehttp://127.0.0.1:3044/2026/11/sample-post/Numerichttp://127.0.0.1:3044/archives/123Post namehttp://127.0.0.1:3044/sample-post/Custom StructureCustomize permalink structure by selecting available tagshttp://127.0.0.1:3044Available tags:%year%%monthnum%%day%%hour%%minute%%second%%post_id%%postname%%category%Category baseTag baseSave ChangesThank you for creating with WorldAct.Version 0.4.0",
+      "notice": "",
+      "puts": [],
+      "selected": "custom_selection",
+      "start": 82,
+      "value": "/%year%/%monthnum%/%day%/%hour%/%minute%/%second%/%post_id%/%postname%/%category%/"
+    }
+  },
+  "responsive": [
+    {
+      "buttons": [
+        {
+          "bottom": 608,
+          "height": 40,
+          "left": 422,
+          "right": 507.671875,
+          "text": "%year%",
+          "top": 568,
+          "visible": true,
+          "width": 85.671875
+        },
+        {
+          "bottom": 608,
+          "height": 40,
+          "left": 512.671875,
+          "right": 638,
+          "text": "%monthnum%",
+          "top": 568,
+          "visible": true,
+          "width": 125.328125
+        },
+        {
+          "bottom": 608,
+          "height": 40,
+          "left": 643,
+          "right": 724.171875,
+          "text": "%day%",
+          "top": 568,
+          "visible": true,
+          "width": 81.171875
+        },
+        {
+          "bottom": 608,
+          "height": 40,
+          "left": 729.171875,
+          "right": 816.34375,
+          "text": "%hour%",
+          "top": 568,
+          "visible": true,
+          "width": 87.171875
+        },
+        {
+          "bottom": 608,
+          "height": 40,
+          "left": 821.34375,
+          "right": 922.671875,
+          "text": "%minute%",
+          "top": 568,
+          "visible": true,
+          "width": 101.328125
+        },
+        {
+          "bottom": 608,
+          "height": 40,
+          "left": 927.671875,
+          "right": 1031.75,
+          "text": "%second%",
+          "top": 568,
+          "visible": true,
+          "width": 104.078125
+        },
+        {
+          "bottom": 608,
+          "height": 40,
+          "left": 1036.75,
+          "right": 1142.15625,
+          "text": "%post_id%",
+          "top": 568,
+          "visible": true,
+          "width": 105.40625
+        },
+        {
+          "bottom": 654,
+          "height": 40,
+          "left": 422,
+          "right": 542.28125,
+          "text": "%postname%",
+          "top": 614,
+          "visible": true,
+          "width": 120.28125
+        },
+        {
+          "bottom": 654,
+          "height": 40,
+          "left": 547.28125,
+          "right": 661.140625,
+          "text": "%category%",
+          "top": 614,
+          "visible": true,
+          "width": 113.859375
+        }
+      ],
+      "clientWidth": 1440,
+      "invalidDescribedBy": [],
+      "scrollWidth": 1440,
+      "tags": {
+        "left": 422,
+        "right": 1268
+      },
+      "width": 1440,
+      "screenshot": "1440.png"
+    },
+    {
+      "buttons": [
+        {
+          "bottom": 581.34375,
+          "height": 40,
+          "left": 39,
+          "right": 124.234375,
+          "text": "%year%",
+          "top": 541.34375,
+          "visible": true,
+          "width": 85.234375
+        },
+        {
+          "bottom": 581.34375,
+          "height": 40,
+          "left": 129.234375,
+          "right": 256.90625,
+          "text": "%monthnum%",
+          "top": 541.34375,
+          "visible": true,
+          "width": 127.671875
+        },
+        {
+          "bottom": 581.34375,
+          "height": 40,
+          "left": 261.90625,
+          "right": 342.375,
+          "text": "%day%",
+          "top": 541.34375,
+          "visible": true,
+          "width": 80.46875
+        },
+        {
+          "bottom": 581.34375,
+          "height": 40,
+          "left": 347.375,
+          "right": 434.21875,
+          "text": "%hour%",
+          "top": 541.34375,
+          "visible": true,
+          "width": 86.84375
+        },
+        {
+          "bottom": 581.34375,
+          "height": 40,
+          "left": 439.21875,
+          "right": 541.1875,
+          "text": "%minute%",
+          "top": 541.34375,
+          "visible": true,
+          "width": 101.96875
+        },
+        {
+          "bottom": 581.34375,
+          "height": 40,
+          "left": 546.1875,
+          "right": 651.109375,
+          "text": "%second%",
+          "top": 541.34375,
+          "visible": true,
+          "width": 104.921875
+        },
+        {
+          "bottom": 631.34375,
+          "height": 40,
+          "left": 39,
+          "right": 145.28125,
+          "text": "%post_id%",
+          "top": 591.34375,
+          "visible": true,
+          "width": 106.28125
+        },
+        {
+          "bottom": 631.34375,
+          "height": 40,
+          "left": 150.28125,
+          "right": 272.515625,
+          "text": "%postname%",
+          "top": 591.34375,
+          "visible": true,
+          "width": 122.234375
+        },
+        {
+          "bottom": 631.34375,
+          "height": 40,
+          "left": 277.515625,
+          "right": 392.828125,
+          "text": "%category%",
+          "top": 591.34375,
+          "visible": true,
+          "width": 115.3125
+        }
+      ],
+      "clientWidth": 768,
+      "invalidDescribedBy": [],
+      "scrollWidth": 768,
+      "tags": {
+        "left": 39,
+        "right": 751
+      },
+      "width": 768,
+      "screenshot": "768.png"
+    },
+    {
+      "buttons": [
+        {
+          "bottom": 482.21875,
+          "height": 40,
+          "left": 39,
+          "right": 124.234375,
+          "text": "%year%",
+          "top": 442.21875,
+          "visible": true,
+          "width": 85.234375
+        },
+        {
+          "bottom": 482.21875,
+          "height": 40,
+          "left": 129.234375,
+          "right": 256.90625,
+          "text": "%monthnum%",
+          "top": 442.21875,
+          "visible": true,
+          "width": 127.671875
+        },
+        {
+          "bottom": 482.21875,
+          "height": 40,
+          "left": 261.90625,
+          "right": 342.375,
+          "text": "%day%",
+          "top": 442.21875,
+          "visible": true,
+          "width": 80.46875
+        },
+        {
+          "bottom": 532.21875,
+          "height": 40,
+          "left": 39,
+          "right": 125.84375,
+          "text": "%hour%",
+          "top": 492.21875,
+          "visible": true,
+          "width": 86.84375
+        },
+        {
+          "bottom": 532.21875,
+          "height": 40,
+          "left": 130.84375,
+          "right": 232.8125,
+          "text": "%minute%",
+          "top": 492.21875,
+          "visible": true,
+          "width": 101.96875
+        },
+        {
+          "bottom": 532.21875,
+          "height": 40,
+          "left": 237.8125,
+          "right": 342.734375,
+          "text": "%second%",
+          "top": 492.21875,
+          "visible": true,
+          "width": 104.921875
+        },
+        {
+          "bottom": 582.21875,
+          "height": 40,
+          "left": 39,
+          "right": 145.28125,
+          "text": "%post_id%",
+          "top": 542.21875,
+          "visible": true,
+          "width": 106.28125
+        },
+        {
+          "bottom": 582.21875,
+          "height": 40,
+          "left": 150.28125,
+          "right": 272.515625,
+          "text": "%postname%",
+          "top": 542.21875,
+          "visible": true,
+          "width": 122.234375
+        },
+        {
+          "bottom": 632.21875,
+          "height": 40,
+          "left": 39,
+          "right": 154.3125,
+          "text": "%category%",
+          "top": 592.21875,
+          "visible": true,
+          "width": 115.3125
+        }
+      ],
+      "clientWidth": 375,
+      "invalidDescribedBy": [],
+      "scrollWidth": 375,
+      "tags": {
+        "left": 39,
+        "right": 358
+      },
+      "width": 375,
+      "screenshot": "375.png"
+    }
+  ],
+  "invalid": {
+    "end": 18,
+    "focus": "permalink_structure",
+    "notice": "permalinkStructure: Use an empty structure for Plain links, or a unique path beginning with / and containing %postname% or %post_id%. Supported tokens: %year%, %monthnum%, %day%, %hour%, %minute%, %second%, %post_id%, %postname%, %category%.Dismiss",
+    "puts": [
+      {
+        "body": {
+          "categoryBase": "category",
+          "permalinkStructure": "/review/%missing%/",
+          "tagBase": "tag"
+        },
+        "method": "PUT",
+        "status": 400
+      }
+    ],
+    "selected": "custom_selection",
+    "start": 18,
+    "value": "/review/%missing%/",
+    "screenshot": "375-invalid.png"
+  },
+  "invalidAfterTag": {
+    "end": 25,
+    "focus": "permalink_structure",
+    "notice": "permalinkStructure: Use an empty structure for Plain links, or a unique path beginning with / and containing %postname% or %post_id%. Supported tokens: %year%, %monthnum%, %day%, %hour%, %minute%, %second%, %post_id%, %postname%, %category%.Dismiss",
+    "puts": [
+      {
+        "body": {
+          "categoryBase": "category",
+          "permalinkStructure": "/review/%missing%/",
+          "tagBase": "tag"
+        },
+        "method": "PUT",
+        "status": 400
+      }
+    ],
+    "selected": "custom_selection",
+    "start": 25,
+    "value": "/review/%missing%/%hour%/"
+  },
+  "keyboardWidths": [
+    {
+      "width": 1440,
+      "selected": {
+        "end": 11,
+        "focus": "permalink_structure",
+        "live": "",
+        "puts": [],
+        "selected": "custom_selection",
+        "start": 6,
+        "value": "/left/right/"
+      },
+      "inserted": {
+        "end": 12,
+        "focus": "permalink_structure",
+        "live": "year added to permalink structure",
+        "puts": [],
+        "selected": "custom_selection",
+        "start": 12,
+        "value": "/left/%year%/"
+      },
+      "removed": {
+        "end": 6,
+        "focus": "%year%",
+        "live": "year removed from permalink structure",
+        "puts": [],
+        "selected": "custom_selection",
+        "start": 6,
+        "value": "/left/"
+      },
+      "customRadio": {
+        "end": 12,
+        "focus": "custom_selection",
+        "live": "year removed from permalink structure",
+        "puts": [],
+        "selected": "custom_selection",
+        "start": 12,
+        "value": "/%postname%/"
+      },
+      "cleared": {
+        "end": 0,
+        "focus": "permalink_structure",
+        "live": "year removed from permalink structure",
+        "puts": [],
+        "selected": "custom_selection",
+        "start": 0,
+        "value": ""
+      },
+      "restored": {
+        "end": 82,
+        "focus": "%year%",
+        "live": "year removed from permalink structure",
+        "puts": [],
+        "selected": "custom_selection",
+        "start": 82,
+        "value": "/%year%/%monthnum%/%day%/%hour%/%minute%/%second%/%post_id%/%postname%/%category%/"
+      },
+      "screenshot": "1440-viewport.png"
+    },
+    {
+      "width": 768,
+      "selected": {
+        "end": 11,
+        "focus": "permalink_structure",
+        "live": "year removed from permalink structure",
+        "puts": [],
+        "selected": "custom_selection",
+        "start": 6,
+        "value": "/left/right/"
+      },
+      "inserted": {
+        "end": 12,
+        "focus": "permalink_structure",
+        "live": "year added to permalink structure",
+        "puts": [],
+        "selected": "custom_selection",
+        "start": 12,
+        "value": "/left/%year%/"
+      },
+      "removed": {
+        "end": 6,
+        "focus": "%year%",
+        "live": "year removed from permalink structure",
+        "puts": [],
+        "selected": "custom_selection",
+        "start": 6,
+        "value": "/left/"
+      },
+      "customRadio": {
+        "end": 12,
+        "focus": "custom_selection",
+        "live": "year removed from permalink structure",
+        "puts": [],
+        "selected": "custom_selection",
+        "start": 12,
+        "value": "/%postname%/"
+      },
+      "cleared": {
+        "end": 0,
+        "focus": "permalink_structure",
+        "live": "year removed from permalink structure",
+        "puts": [],
+        "selected": "custom_selection",
+        "start": 0,
+        "value": ""
+      },
+      "restored": {
+        "end": 82,
+        "focus": "%year%",
+        "live": "year removed from permalink structure",
+        "puts": [],
+        "selected": "custom_selection",
+        "start": 82,
+        "value": "/%year%/%monthnum%/%day%/%hour%/%minute%/%second%/%post_id%/%postname%/%category%/"
+      },
+      "screenshot": "768-viewport.png"
+    },
+    {
+      "width": 375,
+      "selected": {
+        "end": 11,
+        "focus": "permalink_structure",
+        "live": "year removed from permalink structure",
+        "puts": [],
+        "selected": "custom_selection",
+        "start": 6,
+        "value": "/left/right/"
+      },
+      "inserted": {
+        "end": 12,
+        "focus": "permalink_structure",
+        "live": "year added to permalink structure",
+        "puts": [],
+        "selected": "custom_selection",
+        "start": 12,
+        "value": "/left/%year%/"
+      },
+      "removed": {
+        "end": 6,
+        "focus": "%year%",
+        "live": "year removed from permalink structure",
+        "puts": [],
+        "selected": "custom_selection",
+        "start": 6,
+        "value": "/left/"
+      },
+      "customRadio": {
+        "end": 12,
+        "focus": "custom_selection",
+        "live": "year removed from permalink structure",
+        "puts": [],
+        "selected": "custom_selection",
+        "start": 12,
+        "value": "/%postname%/"
+      },
+      "cleared": {
+        "end": 0,
+        "focus": "permalink_structure",
+        "live": "year removed from permalink structure",
+        "puts": [],
+        "selected": "custom_selection",
+        "start": 0,
+        "value": ""
+      },
+      "restored": {
+        "end": 82,
+        "focus": "%year%",
+        "live": "year removed from permalink structure",
+        "puts": [],
+        "selected": "custom_selection",
+        "start": 82,
+        "value": "/%year%/%monthnum%/%day%/%hour%/%minute%/%second%/%post_id%/%postname%/%category%/"
+      },
+      "screenshot": "375-viewport.png"
+    }
+  ]
+}

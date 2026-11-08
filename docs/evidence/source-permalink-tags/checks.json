@@ -1,0 +1,89 @@
+{
+  "base": "4731fa5a09e0a12ad538e1b9b56e096f773b30ad",
+  "codeCommit": "b9fef5d5d250b6da21ff5a47c18c42cc0a9ccee6",
+  "componentSHA256": "b83d3a06dcbf112382b772397170583ed792ce3d64d472985c84c9ffd4196996",
+  "scope": [
+    "src/components/PermalinkSettings.tsx"
+  ],
+  "sourceReferences": {
+    "wp-admin/options-permalink.php": {
+      "path": "supplied WordPress/wp-admin/options-permalink.php",
+      "sha256": "194e35380c9c404abdfed4e850a7492dfdb78ffe9698550e638cbcfe287d7945"
+    },
+    "wp-admin/js/common.js": {
+      "path": "supplied WordPress/wp-admin/js/common.js",
+      "sha256": "b513570e6123bd0143d3f5c0f392b0754e04ea915402766243a4d7a2af38babe"
+    },
+    "wp-admin/css/forms.css": {
+      "path": "supplied WordPress/wp-admin/css/forms.css",
+      "sha256": "7e947a1d2a7eedf1d160c74e7ab7fa3edef612b185dbd19a90f3757df809dc6a"
+    },
+    "wp-includes/version.php": {
+      "path": "supplied WordPress/wp-includes/version.php",
+      "sha256": "7163a7bfaf1fbac5024c0382931f17f9993076e15ff245e93254f009e0e34cc5"
+    }
+  },
+  "gates": {
+    "source": {
+      "tests": 42,
+      "pass": 42,
+      "fail": 0,
+      "skipped": 0,
+      "files": [
+        "tests/platform.test.ts",
+        "tests/plain-permalinks.test.ts",
+        "tests/permalink-time-tokens.test.ts"
+      ],
+      "exit": 0,
+      "log": "worldact-source-permalink-tags-source.log"
+    },
+    "compiled": {
+      "tests": 42,
+      "pass": 42,
+      "fail": 0,
+      "skipped": 0,
+      "files": [
+        "tests/platform.test.ts",
+        "tests/plain-permalinks.test.ts",
+        "tests/permalink-time-tokens.test.ts"
+      ],
+      "exit": 0,
+      "log": "worldact-source-permalink-tags-compiled.log"
+    },
+    "build": {
+      "typecheckExit": 0,
+      "typecheckLog": "worldact-source-permalink-tags-typecheck.log",
+      "viteConfigLoader": "runner",
+      "clientBuildPassed": true,
+      "serverBuildPassed": true,
+      "log": "worldact-source-permalink-tags-build.log"
+    }
+  },
+  "native": {
+    "checkpoints": 12,
+    "widths": [
+      1440,
+      768,
+      375
+    ],
+    "saveStatus": 200,
+    "invalidStatus": 400,
+    "screenshotsDirectlyOpened": 7,
+    "noOverflowWidths": [
+      1440,
+      768,
+      375
+    ]
+  },
+  "limits": [
+    "Static supplied WordPress source correspondence; no live WordPress render or pixel comparison.",
+    "Shared inventory currently has nine tokens. Author token is not enabled on this base and needs focused integration validation when added.",
+    "Standalone React admin screen requires JavaScript.",
+    "Independent post-integration visual/native review is a separate gate."
+  ],
+  "harnessCorrections": [
+    "Initial cursor expectation counted the leading slash incorrectly for monthnum: corrected expected cursor10 to11; no application change.",
+    "First save harness used CLI fill-empty and started with stale rendered draft; changed setup to actual Plain radio and explicit input focus. Real native Home/Shift+End/Backspace deletion was separately verified at all three widths.",
+    "Responsive aria-describedby harness regex was incorrectly escaped inside a template literal; corrected harness to split IDs by spaces. No missing application description targets or application changes."
+  ]
+}
