@@ -377,6 +377,17 @@ router.put("/preferences", auth, async (req: AuthRequest, res) => {
       hiddenWidgets: z.array(z.string().max(100)).max(30).optional(),
       welcome: z.boolean().optional(),
       postsPerPage: z.number().int().min(1).max(100).optional(),
+      editor: z.object({
+        editorMode: z.enum(["visual", "text"]).optional(),
+        fixedToolbar: z.boolean().optional(),
+        distractionFree: z.boolean().optional(),
+        focusMode: z.boolean().optional(),
+        fullscreenMode: z.boolean().optional(),
+        showBlockBreadcrumbs: z.boolean().optional(),
+        showListViewByDefault: z.boolean().optional(),
+        showIconLabels: z.boolean().optional(),
+        keepCaretInsideBlock: z.boolean().optional(),
+      }).strict().optional(),
       listTables: z.partialRecord(
         z.enum(["posts", "pages", "comments", "categories", "tags", "users", "media"]),
         z.object({
@@ -389,7 +400,11 @@ router.put("/preferences", auth, async (req: AuthRequest, res) => {
     .strict()
     .parse(req.body);
   const result = await pool.query(
-    `UPDATE users SET preferences=(preferences || ($1::jsonb-'listTables'))
+    `UPDATE users SET preferences=(preferences || ($1::jsonb-'listTables'-'editor'))
+      || CASE WHEN $1::jsonb ? 'editor' THEN jsonb_build_object('editor',
+        CASE WHEN jsonb_typeof(preferences->'editor')='object'
+          THEN preferences->'editor' ELSE '{}'::jsonb END || ($1::jsonb->'editor'))
+        ELSE '{}'::jsonb END
       || CASE WHEN $1::jsonb ? 'listTables' THEN jsonb_build_object('listTables',
         coalesce(preferences->'listTables','{}'::jsonb) || coalesce((
           SELECT jsonb_object_agg(entry.key,
