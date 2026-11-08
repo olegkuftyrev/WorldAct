@@ -50,10 +50,11 @@ test("complete site archive crosses fresh databases with media, design and setti
       const reusable = await ok("/wp-json/wp/v2/blocks", "POST", { title: stamp + " Reusable", status: "publish", content: block("paragraph", {}, "<p>Portable reusable payload</p>") });
       const nested = await ok("/wp-json/wp/v2/blocks", "POST", { title: stamp + " Nested", status: "publish", content: block("block", { ref: reusable.id }) });
       const nav = await ok("/wp-json/wp/v2/navigation", "POST", { title: stamp + " Navigation", status: "publish", content: block("navigation-link", { label: "Portable navigation payload", url: "/" }) });
-      const part = (await ok("/api/site-editor/documents", "POST", { title: stamp + " Part", slug: stamp + "-part", type: "template-part", content: block("group", {}, "<section>" + block("block", { ref: nested.id }) + "</section>") })).document;
+      const part = (await ok("/api/site-editor/documents", "POST", { title: stamp + " Part", slug: stamp + "-part", type: "template-part", area: "navigation-overlay", content: block("group", {}, "<section>" + block("block", { ref: nested.id }) + "</section>") })).document;
       await ok("/api/site-editor/documents", "POST", { title: stamp + " Template", slug: stamp + "-template", type: "template", content: block("template-part", { slug: part.slug }) + block("post-content") });
-      const raw = block("template-part", { slug: part.slug }) + block("navigation", { ref: nav.id }) + block("image", { id: image.id }, `<figure class="wp-block-image"><img class="wp-image-${image.id}" src="https://archive-source.example.invalid${edited.url}" alt="Portable image" /></figure>`);
-      const post = (await ok("/api/posts", "POST", { title: stamp + " Main Post", status: "publish", content: raw, featuredMediaId: image.id, categoryIds: [childCategory.id], blocks: [{ name: "core/template-part", attributes: { slug: part.slug }, innerBlocks: [] }, { name: "core/image", attributes: { id: image.id, url: edited.url }, innerBlocks: [] }] })).post;
+      const background = { backgroundImage: { url: edited.url }, backgroundSize: "contain" };
+      const raw = block("template-part", { slug: part.slug }) + block("navigation", { ref: nav.id }) + block("image", { id: image.id }, `<figure class="wp-block-image"><img class="wp-image-${image.id}" src="https://archive-source.example.invalid${edited.url}" alt="Portable image" /></figure>`) + block("group", { style: { background } }, `<div class="wp-block-group" style="padding:20px;background-image:url(&quot;${edited.url}&quot;);background-size:contain"><p>Portable background image</p></div>`);
+      const post = (await ok("/api/posts", "POST", { title: stamp + " Main Post", status: "publish", content: raw, featuredMediaId: image.id, categoryIds: [childCategory.id], blocks: [{ name: "core/template-part", attributes: { slug: part.slug }, innerBlocks: [] }, { name: "core/image", attributes: { id: image.id, url: edited.url }, innerBlocks: [] }, { name: "core/group", attributes: { style: { background } }, innerBlocks: [] }] })).post;
       await ok(`/api/media/${image.id}`,"PUT",{attachedPostId:post.id,description:"<p>Portable attachment description</p>",commentStatus:"open"});
       const expanded = (await ok("/api/posts", "POST", { title: stamp + " Expanded text", status: "draft", content: "&".repeat(210000) })).post;
       assert.ok(expanded.content.length > 1_000_000);
@@ -99,10 +100,16 @@ test("complete site archive crosses fresh databases with media, design and setti
       const home = exported.posts.find((item: any) => item.id === settings.frontPageId); assert.equal(home.title, fixture.stamp + " Home");
       assert.equal(exported.posts.find((item: any) => restored.postIds.includes(item.id) && item.title === fixture.stamp + " Child").parent_id, home.id);
       assert.equal(exported.terms.find((item: any) => item.id === settings.defaultCategoryId).name, fixture.stamp + " Child Category");
+      const restoredPart = (await ok("/api/site-editor")).parts.find((item: any) => item.title === fixture.stamp + " Part" && restored.documentIds.includes(item.id));
+      assert.equal(restoredPart.area, "navigation-overlay");
+      const background = post.blocks.find((item: any) => item.name === "core/group").attributes.style.background;
+      assert.equal(background.backgroundImage.url, "/uploads/" + media.filename);
+      assert.ok(post.raw_content.includes(`background-image:url(&quot;/uploads/${media.filename}&quot;)`));
       const comments = (await ok(`/api/comments?postId=${post.id}`)).comments; assert.equal(comments.length, 2); assert.ok(comments.some((item: any) => item.parentId));
       const rendered = (await ok(`/api/public/posts/${post.slug}`)).post.content;
       assert.match(rendered, /Portable reusable payload/); assert.match(rendered, /Portable navigation payload/); assert.doesNotMatch(rendered, /archive-source\.example\.invalid/);
       assert.match(rendered, new RegExp(`wp-image-${media.id}`));
+      assert.ok(rendered.includes(`background-image:url(&quot;/uploads/${media.filename}&quot;)`));
       const imageResponse = await fetch(base + "/uploads/" + media.filename); assert.equal(imageResponse.status, 200); assert.match(imageResponse.headers.get("content-type") || "", /image\/png/);
       const sourceMedia=archive.media.find((item:any)=>item.id===fixture.mediaId);
       for(const [oldName,newName] of [[sourceMedia.filename,media.filename],[sourceMedia.original_filename,media.original_filename],...Object.keys(sourceMedia.sizes).map(key=>[sourceMedia.sizes[key].filename,media.sizes[key].filename])]){

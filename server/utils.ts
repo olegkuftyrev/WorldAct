@@ -1,6 +1,7 @@
 import sanitizeHtml from "sanitize-html";
 import type { AuthRequest } from "./auth.js";
 import { gridTemplateColumnsPattern } from "./block-layout.js";
+import { backgroundImagePattern, backgroundSizePattern, backgroundPositionPattern, backgroundRepeatPattern, backgroundAttachmentPattern } from "./background-styles.js";
 
 export class HttpError extends Error {
   constructor(
@@ -42,7 +43,11 @@ const allowedStyles: Record<string, RegExp[]> = {
   "border-left": [border],
   color: [color],
   background: [color, gradient],
-  "background-image": [gradient],
+  "background-image": [gradient,backgroundImagePattern],
+  "background-size": [backgroundSizePattern],
+  "background-position": [backgroundPositionPattern],
+  "background-repeat": [backgroundRepeatPattern],
+  "background-attachment": [backgroundAttachmentPattern],
   "box-shadow": [shadow],
   "text-shadow": [shadow],
   "object-position": [

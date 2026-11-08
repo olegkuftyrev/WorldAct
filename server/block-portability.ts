@@ -70,7 +70,9 @@ export function remapImportedBlockReferences(
   const rewriteText = (value: string) => {
     // Match a whole URL, never a local-looking path or mapped origin nested
     // inside an unrelated URL's path/query. Apply each mapping only once.
-    if (urls.length) value = value.replace(/(?:[a-z][a-z0-9+.-]*:|\/\/)[^\s"'<>]+|(^|[\s"'(=])(\/[^\s"'<>),]*)/gi, (match, prefix: string | undefined, local: string | undefined) => {
+    // CSS declarations (padding:..., etc.) are not URL schemes. Recognize
+    // hierarchical URLs and the opaque schemes used by content separately.
+    if (urls.length) value = value.replace(/(?:[a-z][a-z0-9+.-]*:\/\/|\/\/|(?:mailto|tel|data|blob|javascript):)[^\s"'<>]+|(^|[\s"'(=]|&(?:quot|apos|#34|#39|#x22|#x27);)(\/[^\s"'<>),]*)/gi, (match, prefix: string | undefined, local: string | undefined) => {
       const token = local === undefined ? match : local;
       const mapping = urls.find(([source]) => source && (token === source || (token.startsWith(source) && (/^[?#&]/.test(token.slice(source.length)) || /^\)+[,.;]?$/.test(token.slice(source.length))))));
       const rewritten = mapping ? mapping[1] + token.slice(mapping[0].length) : token;

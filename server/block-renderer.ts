@@ -10,6 +10,7 @@ import { renderWidgetBlock, WIDGET_BLOCKS } from "./widget-blocks.js";
 import { renderTermBlock, TERM_BLOCKS, type RenderTerm } from "./term-blocks.js";
 import { appendDateArchiveSQL, dateArchiveTitle, parseDateArchiveQuery } from "./date-archives.js";
 import { gridTemplateColumns, isResponsiveGrid } from "./block-layout.js";
+import { backgroundStyles } from "./background-styles.js";
 import { renderFootnotes } from "./footnotes.js";
 import { excerptText } from "./excerpts.js";
 import { renderInteractiveBlock, createInteractiveRenderState, INTERACTIVE_BLOCKS, type InteractiveRenderState, type AccordionContext, type AccordionItemContext, type TabsContext } from "./interactive-blocks.js";
@@ -211,6 +212,7 @@ function classNames(name: string, attrs: Record<string, any>, extra = "") {
     attrs.backgroundColor
       ? `has-${slug(attrs.backgroundColor)}-background-color has-background`
       : "",
+    backgroundStyles(attrs.style?.background) ? "has-background" : "",
     attrs.textColor ? `has-${slug(attrs.textColor)}-color has-text-color` : "",
     attrs.fontSize ? `has-${slug(attrs.fontSize)}-font-size` : "",
     attrs.fontFamily ? `has-${slug(attrs.fontFamily)}-font-family` : "",
@@ -291,7 +293,7 @@ function blockStyle(attrs: Record<string, any>) {
       gridTemplateColumns(attrs.layout, style.spacing?.blockGap),
     );
   }
-  return pairs.map(([key, value]) => `${key}:${String(value)}`).join(";");
+  return [pairs.map(([key, value]) => `${key}:${String(value)}`).join(";"),backgroundStyles(style.background)].filter(Boolean).join(";");
 }
 function attrsHTML(node: Node, extra = "") {
   const classes = classNames(node.name || "", node.attrs, extra);

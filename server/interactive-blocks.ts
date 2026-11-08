@@ -61,7 +61,7 @@ function wrapper(node: Node, attributes: Attributes, extra = "", override = node
   const transient = node.name === "core/accordion-item" ? ["is-open"] : node.name === "core/accordion-heading" ? ["has-icon", "has-icon-left", "has-icon-right"] : [];
   const savedClasses = (saved?.getAttribute("class") || "").split(/\s+/).filter(value => !transient.includes(value)).join(" ");
   const classes = [...new Set((savedClasses + " " + (computed.getAttribute("class") || "")).trim().split(/\s+/).filter(Boolean))].join(" ");
-  const styles = [saved?.getAttribute("style"), computed.getAttribute("style"), supplementalStyle(override)].filter(Boolean).join(";");
+  const styles = [saved?.getAttribute("style"), supplementalStyle(override), computed.getAttribute("style")].filter(Boolean).join(";");
   const anchor = id ?? safeAnchor(node.attrs.anchor);
   const label = typeof node.attrs.ariaLabel === "string" ? plainText(node.attrs.ariaLabel) : saved?.getAttribute("aria-label") || "";
   return `${classes ? ` class="${escape(classes)}"` : ""}${anchor ? ` id="${escape(anchor)}"` : ""}${styles ? ` style="${escape(styles)}"` : ""}${label ? ` aria-label="${escape(label)}"` : ""}`;
@@ -124,7 +124,7 @@ export async function renderInteractiveBlock(
     const extra = config.showIcon ? `has-icon has-icon-${config.iconPosition}` : "";
     if (!context.accordionItem || context.accordionItem.heading !== node) return `<h${number}${wrapper(node, attributes, extra, parts.wrapper)}>${title}</h${number}>`;
     const item = context.accordionItem;
-    return `<h${number}${wrapper(node, attributes, extra, parts.wrapper)}><button type="button" class="wp-block-accordion-heading__toggle" id="${item.toggleId}" aria-controls="${item.panelId}" aria-expanded="${item.open}"${styleAttribute(savedButton?.getAttribute("style"), [styleFor(parts.button), supplementalStyle(parts.button)].filter(Boolean).join(";"))}>${config.showIcon && config.iconPosition === "left" ? icon : ""}<span class="wp-block-accordion-heading__toggle-title"${styleAttribute(savedTitle?.getAttribute("style"), styleFor(parts.title))}>${title}</span>${config.showIcon && config.iconPosition === "right" ? icon : ""}</button></h${number}>`;
+    return `<h${number}${wrapper(node, attributes, extra, parts.wrapper)}><button type="button" class="wp-block-accordion-heading__toggle" id="${item.toggleId}" aria-controls="${item.panelId}" aria-expanded="${item.open}"${styleAttribute(savedButton?.getAttribute("style"), [supplementalStyle(parts.button), styleFor(parts.button)].filter(Boolean).join(";"))}>${config.showIcon && config.iconPosition === "left" ? icon : ""}<span class="wp-block-accordion-heading__toggle-title"${styleAttribute(savedTitle?.getAttribute("style"), styleFor(parts.title))}>${title}</span>${config.showIcon && config.iconPosition === "right" ? icon : ""}</button></h${number}>`;
   }
   if (name === "core/accordion-panel") {
     const item = context.accordionItem?.panel === node ? context.accordionItem : undefined;
@@ -150,7 +150,7 @@ export async function renderInteractiveBlock(
       const panel = panelList[index], saved = buttons[index], classes = [saved?.getAttribute("class"), parts.classes].filter(Boolean).join(" ");
       const label = labels[index] ?? panel?.label ?? "", active = context.tabs?.activeIndex === index;
       if (!panel) return `<span${classes ? ` class="${escape(classes)}"` : ""}>${label}</span>`;
-      return `<button type="button" role="tab" id="tab__${panel.id}" aria-controls="${panel.id}" aria-selected="${active}" tabindex="${active ? 0 : -1}"${classes ? ` class="${escape(classes)}"` : ""}${styleAttribute(saved?.getAttribute("style"), [styleFor(parts.button), supplementalStyle(parts.button)].filter(Boolean).join(";"))}>${label}</button>`;
+      return `<button type="button" role="tab" id="tab__${panel.id}" aria-controls="${panel.id}" aria-selected="${active}" tabindex="${active ? 0 : -1}"${classes ? ` class="${escape(classes)}"` : ""}${styleAttribute(saved?.getAttribute("style"), [supplementalStyle(parts.button), styleFor(parts.button)].filter(Boolean).join(";"))}>${label}</button>`;
     }).join("");
     const label = plainText(typeof a.ariaLabel === "string" && a.ariaLabel ? a.ariaLabel : "Tabbed content");
     // wrapper aria-label is replaced here to avoid duplicate attributes.
