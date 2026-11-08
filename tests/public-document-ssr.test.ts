@@ -105,7 +105,7 @@ test("native replies explicitly select the oldest root page when the default com
   try {
     await f.ok("/api/settings","PUT",{theme:"classic",frontPageMode:"posts",frontPageId:null,postsPageId:null,permalinkStructure:"",threadComments:true,threadDepth:3,paginateComments:true,commentsPerPage:1,commentOrder:"desc",defaultCommentPage:"newest",notifyComments:false,notifyModeration:false});
     const post=await f.post();await f.ok("/api/posts/"+post.id,"PUT",{content:"<p>NATIVE NEWEST FIRST</p><!--nextpage--><p>NATIVE NEWEST SECOND</p>"});
-    const roots:number[]=[];for(const day of [1,2])roots.push((await pool.query("INSERT INTO comments(post_id,author_name,content,status,created_at) VALUES($1,'Native root','<p>Old root</p>','approved',$2) RETURNING id",[post.id,`2025-01-0${day}T12:00:00Z`])).rows[0].id);
+    const roots:number[]=[];for(const day of [1,2])roots.push((await pool.query("INSERT INTO comments(post_id,author_name,author_email,content,status,created_at) VALUES($1,'Native root','native-root@example.test','<p>Old root</p>','approved',$2) RETURNING id",[post.id,`2025-01-0${day}T12:00:00Z`])).rows[0].id);
     const body=new URLSearchParams({postId:String(post.id),parentId:String(roots[0]),content:"Native newest reply "+f.stamp,redirect_to:`/?p=${post.id}&page=2&query-4-page=2`});
     const saved=await fetch(base+"/wp-comments-post.php",{method:"POST",redirect:"manual",headers:{Origin:origin,Cookie:f.admin},body});assert.equal(saved.status,303);
     const target=new URL(saved.headers.get("location")!,origin);assert.equal(target.searchParams.get("commentPage"),"1");assert.equal(target.searchParams.get("page"),"2");assert.equal(target.searchParams.get("query-4-page"),"2");
