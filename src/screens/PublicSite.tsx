@@ -2,6 +2,7 @@ import { renderTemplate } from "../template";
 import { parseVideoEmbed } from "../embeds";
 import { enhanceInteractiveBlocks } from "../interactiveBlocks";
 import { enhanceNavigationOverlays } from "../navigationOverlays";
+import { contentPageQuery } from "../contentPages";
 import "@wordpress/block-library/build-style/style.css";
 import "@wordpress/block-library/build-style/theme.css";
 import {
@@ -63,6 +64,7 @@ export default function PublicSite({
   slugOverride,
   archive,
   notFound = false,
+  contentPage,
 }: {
   detail?: boolean;
   page?: boolean;
@@ -70,6 +72,7 @@ export default function PublicSite({
   slugOverride?: string;
   archive?: PublicArchive;
   notFound?: boolean;
+  contentPage?: number;
 }) {
   const { slug: routeSlug, id: previewId } = useParams(),
     { user, setUser } = useContext(Session);
@@ -100,7 +103,8 @@ export default function PublicSite({
   const blockQuery = new URLSearchParams(
     [...params.entries()].filter(([name]) => /^query-\d+-page$/.test(name)),
   ).toString();
-  const commentQuery = [commentPageParam ? `commentPage=${commentPage}` : "",blockQuery].filter(Boolean).join("&");
+  const bodyPagination=contentPageQuery(params,contentPage);
+  const commentQuery = [commentPageParam ? `commentPage=${commentPage}` : "",blockQuery,detail?bodyPagination.query.toString():""].filter(Boolean).join("&");
   const publicQuery = new URLSearchParams({
     page: String(detail ? 1 : requestedPage),
   });
@@ -114,6 +118,8 @@ export default function PublicSite({
   for (const [key, value] of new URLSearchParams(blockQuery))
     publicQuery.set(key, value);
   for (const [key, value] of dateQuery) publicQuery.set(key, value);
+  const templateQuery=new URLSearchParams(publicQuery);
+  if(detail)templateQuery.set("contentPage",String(bodyPagination.page));
   const design = useResource<PublicDesign>("/public/design");
   const site = useResource<{
     settings: Partial<Settings>;
@@ -158,7 +164,7 @@ export default function PublicSite({
       commentsPagination?: CommentPagination;
     }>(
       preview
-        ? `/posts/${previewId}/preview${blockQuery ? "?" + blockQuery : ""}`
+        ? `/posts/${previewId}/preview${commentQuery ? "?" + commentQuery : ""}`
         : `/public/posts/${encodeURIComponent(slug!)}${commentQuery ? "?" + commentQuery : ""}`,
     )
       .then((data) => {
@@ -474,7 +480,7 @@ export default function PublicSite({
         {!loading && !site.loading && !site.error && (!error || missingPost) && <SourceThemeDocument
           document={sourceTemplate}
           postId={displayedPost?.id}
-          query={publicQuery.toString()}
+          query={templateQuery.toString()}
           commentPage={commentPageParam ? commentPage : undefined}
           userName={user?.displayName}
           preview={preview}
@@ -494,7 +500,7 @@ export default function PublicSite({
         <RenderedTemplate
           document={customHeader}
           postId={displayedPost?.locked ? undefined : displayedPost?.id}
-          query={publicQuery.toString()}
+          query={templateQuery.toString()}
           className="custom-template-part"
           fallback={renderTemplate(customHeader.content, templateValues())}
           preview={preview}
@@ -534,7 +540,7 @@ export default function PublicSite({
                 <RenderedTemplate
                   document={customSingle}
                   postId={post.id}
-                  query={publicQuery.toString()}
+                  query={templateQuery.toString()}
                   className={`custom-post-template format-${post.format || "standard"}`}
                   fallback={renderTemplate(
                     customSingle.content,
@@ -789,7 +795,7 @@ export default function PublicSite({
             {customIndex ? (
               <RenderedTemplate
                 document={customIndex}
-                query={publicQuery.toString()}
+                query={templateQuery.toString()}
                 className="custom-index-template"
                 fallback={renderTemplate(customIndex.content, templateValues())}
                 preview={preview}
@@ -920,7 +926,7 @@ export default function PublicSite({
         <RenderedTemplate
           document={customFooter}
           postId={displayedPost?.locked ? undefined : displayedPost?.id}
-          query={publicQuery.toString()}
+          query={templateQuery.toString()}
           className="custom-template-part"
           fallback={renderTemplate(customFooter.content, {
             ...templateValues(),
@@ -1321,6 +1327,7 @@ export function PermalinkResolver() {
   const resource = useResource<{
     post?: Post;
     archive?: PublicArchive;
+    contentPage?: number;
   }>(`/public/resolve?path=${encodeURIComponent(location.pathname)}`);
   if (resource.error === "This page could not be found." || resource.error === "Page not found." || resource.error === "Post not found.") return <PublicSite notFound />;
   if (resource.loading || resource.error)
@@ -1344,6 +1351,7 @@ export function PermalinkResolver() {
         detail
         page={resource.data.post.type === "page"}
         slugOverride={resource.data.post.slug}
+        contentPage={resource.data.contentPage}
       />
     );
   return <PublicSite notFound />;

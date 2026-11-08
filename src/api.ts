@@ -44,6 +44,7 @@ export type Term = {
 };
 export type Footnote = { id: string; content: string };
 export type Post = {
+  contentPagination?: {page:number;totalPages:number;links:Array<{page:number;url:string;current:boolean}>};
   footnotes?: Footnote[];
   templateSlug?:string;
   id: number;

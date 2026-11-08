@@ -74,7 +74,7 @@ import { OwnedFootnoteFormat } from "./OwnedFootnoteFormat";
 import { footnoteEntityBoundaries } from "./footnoteScope";
 import type { SerializedBlock } from "./types";
 import { persistentBlockAttributes } from "./blockAttributes";
-import { editorBackgroundSettings } from "./backgroundSettings";
+import { editorBackgroundSettings, editorDimensionSettings } from "./backgroundSettings";
 import { editorSelectorContext, isNavigationOverlayEntity, ownsEntityEdit, type EditorEntityContext } from "./entityContext";
 import { overlayPickerReference } from "./navigationOverlayReference";
 import { parseVideoEmbed } from "../embeds";
@@ -87,6 +87,10 @@ export type { SerializedBlock, GutenbergBlock } from "./types";
 // Query, navigation and other entity-backed blocks belong to the site renderer.
 export const WORLDAct_CONTENT_BLOCKS = [
   "core/paragraph",
+  "core/math",
+  "core/icon",
+  "core/more",
+  "core/nextpage",
   "core/heading",
   "core/list",
   "core/list-item",
@@ -1556,6 +1560,7 @@ const GutenbergSession = forwardRef<
         ...themeDocument?.settings,
         appearanceTools: themeDocument?.settings?.appearanceTools ?? true,
         background: editorBackgroundSettings({ appearanceTools: true, ...themeDocument?.settings }),
+        dimensions: editorDimensionSettings({ appearanceTools:true, ...themeDocument?.settings }),
         color: {
           custom: true,
           customGradient: true,
