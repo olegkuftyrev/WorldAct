@@ -1,0 +1,2 @@
+# Preserve the supplied third-party license byte-for-byte, including whitespace.
+public/vendor/wordpress/wp-includes/js/tinymce/license.txt -whitespace
