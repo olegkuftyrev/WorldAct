@@ -5,18 +5,19 @@ import { postPermalink } from "./permalinks.js";
 import { cleanContent, plainText, HttpError } from "./utils.js";
 import { restDateToUTC } from "./date.js";
 import { date as formatBlockDate, humanTimeDiff } from "@wordpress/date";
-import { renderThemeBlock, THEME_BLOCKS } from "./theme-blocks.js";
-import { renderWidgetBlock, WIDGET_BLOCKS } from "./widget-blocks.js";
-import { renderTermBlock, TERM_BLOCKS, type RenderTerm } from "./term-blocks.js";
+import { renderThemeBlock } from "./theme-blocks.js";
+import { renderWidgetBlock } from "./widget-blocks.js";
+import { renderTermBlock, type RenderTerm } from "./term-blocks.js";
 import { appendDateArchiveSQL, dateArchiveTitle, parseDateArchiveQuery } from "./date-archives.js";
 import { gridTemplateColumns, isResponsiveGrid } from "./block-layout.js";
 import { backgroundStyles } from "./background-styles.js";
 import { renderFootnotes } from "./footnotes.js";
 import { excerptText } from "./excerpts.js";
-import { renderInteractiveBlock, createInteractiveRenderState, reserveInteractiveId, INTERACTIVE_BLOCKS, type InteractiveRenderState, type AccordionContext, type AccordionItemContext, type TabsContext } from "./interactive-blocks.js";
+import { renderInteractiveBlock, createInteractiveRenderState, reserveInteractiveId, type InteractiveRenderState, type AccordionContext, type AccordionItemContext, type TabsContext } from "./interactive-blocks.js";
 import { postHasPassword, postNeedsPassword, postPasswordForm, protectedPostExcerpt, publicPostTitle } from "./post-passwords.js";
-import { renderNavigationWithOverlay, renderNavigationOverlayClose, NAVIGATION_OVERLAY_BLOCKS, type NavigationOverlayContext } from "./navigation-overlays.js";
+import { renderNavigationWithOverlay, renderNavigationOverlayClose, type NavigationOverlayContext } from "./navigation-overlays.js";
 import { hasLegacyContent, legacyExcerptSource, selectLegacyContent, type ContentMode } from "./legacy-content.js";
+import { CORE_DYNAMIC_BLOCKS, SUPPORTED_DYNAMIC_BLOCKS, hasDynamicBlocks } from "../shared/dynamic-blocks.js";
 
 export type BlockDatabase = Pick<pg.Pool, "query"> | pg.PoolClient;
 export type RenderPost = Record<string, any>;
@@ -92,44 +93,7 @@ export type State = {
   cache: Map<string, Promise<any>>;
   interactive?: InteractiveRenderState;
 };
-export const CORE_DYNAMIC_BLOCKS = [
-  ...THEME_BLOCKS,
-  ...WIDGET_BLOCKS,
-  "core/footnotes",
-  ...TERM_BLOCKS,
-  ...INTERACTIVE_BLOCKS,
-  ...NAVIGATION_OVERLAY_BLOCKS,
-  "core/query",
-  "core/post-template",
-  "core/post-title",
-  "core/post-content",
-  "core/post-excerpt",
-  "core/post-date",
-  "core/post-author",
-  "core/post-author-name",
-  "core/post-author-biography",
-  "core/post-featured-image",
-  "core/post-terms",
-  "core/read-more",
-  "core/query-pagination",
-  "core/query-pagination-next",
-  "core/query-pagination-previous",
-  "core/query-pagination-numbers",
-  "core/query-no-results",
-  "core/query-title",
-  "core/site-title",
-  "core/site-tagline",
-  "core/site-logo",
-  "core/navigation",
-  "core/navigation-link",
-  "core/navigation-submenu",
-  "core/page-list",
-  "core/home-link",
-  "core/template-part",
-  "core/block",
-  "core/pattern",
-];
-export const SUPPORTED_DYNAMIC_BLOCKS = new Set(CORE_DYNAMIC_BLOCKS);
+export { CORE_DYNAMIC_BLOCKS, SUPPORTED_DYNAMIC_BLOCKS };
 const esc = (value: unknown) =>
   String(value ?? "").replace(
     /[&<>"']/g,
@@ -1264,16 +1228,6 @@ async function createState(options: RenderOptions, document: RenderDocument = {}
     queries: 0,
     cache: new Map(),
   };
-}
-function hasDynamicBlocks(
-  blocks: SerializedNode[] | null | undefined,
-): boolean {
-  return !!blocks?.some(
-    (block) =>
-      SUPPORTED_DYNAMIC_BLOCKS.has(block.name) ||
-      block.name.startsWith("worldact/") ||
-      hasDynamicBlocks(block.innerBlocks),
-  );
 }
 function storedStaticHTML(document: RenderDocument): string | undefined {
   const raw =

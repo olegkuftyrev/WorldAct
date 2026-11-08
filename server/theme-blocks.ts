@@ -8,12 +8,8 @@ import {avatarURL} from "./avatars.js";
 import {canEditPostComments} from "./comment-access.js";
 import {normalizeLoginRedirect} from "../shared/login-redirect.js";
 
-export const THEME_BLOCKS = [
-  "core/term-description", "core/social-links", "core/social-link", "core/avatar", "core/post-navigation-link", "core/search",
-  "core/comments", "core/comments-title", "core/comment-template", "core/comment-date", "core/comment-author-name", "core/comment-content",
-  "core/comment-edit-link", "core/comment-reply-link", "core/comments-pagination", "core/comments-pagination-previous",
-  "core/comments-pagination-numbers", "core/comments-pagination-next", "core/post-comments-form", "core/categories", "core/loginout",
-];
+import { THEME_BLOCKS } from "../shared/dynamic-blocks.js";
+export { THEME_BLOCKS };
 const esc = (value: unknown) => String(value ?? "").replace(/[&<>"']/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"})[c]!);
 const int = (value: unknown, fallback: number, max=2147483647) => Number.isInteger(Number(value)) && Number(value)>0 ? Math.min(max,Number(value)) : fallback;
 async function cached<T>(state: State,key:string,fn:()=>Promise<T>):Promise<T> {

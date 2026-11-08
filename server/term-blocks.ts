@@ -4,7 +4,8 @@ import { postPermalink } from "./permalinks.js";
 import { dateArchivePath, parseDateArchivePath, parseDateArchiveQuery } from "./date-archives.js";
 import { cleanContent, plainText } from "./utils.js";
 
-export const TERM_BLOCKS = ["core/terms-query", "core/term-template", "core/term-name", "core/term-count", "core/breadcrumbs", "core/page-list-item"];
+import { TERM_BLOCKS } from "../shared/dynamic-blocks.js";
+export { TERM_BLOCKS };
 export type RenderTerm = { id: number; taxonomy: "category" | "tag"; name: string; slug: string; description: string; parentId: number | null; count: number };
 export type TermQueryOptions = {
   taxonomy: "category" | "tag";

@@ -4,10 +4,8 @@ import sanitizeHTML from "sanitize-html";
 import type { Context, Node, State, RenderDocument, RenderOptions } from "./block-renderer.js";
 import { cleanContent, plainText } from "./utils.js";
 
-export const INTERACTIVE_BLOCKS = [
-  "core/accordion", "core/accordion-item", "core/accordion-heading", "core/accordion-panel",
-  "core/tabs", "core/tab-list", "core/tab-panels", "core/tab-panel",
-];
+import { INTERACTIVE_BLOCKS } from "../shared/dynamic-blocks.js";
+export { INTERACTIVE_BLOCKS };
 export type InteractiveRenderState = { prefix: string; sequence: number; ids: Set<string> };
 export type AccordionContext = { iconPosition: "left" | "right"; showIcon: boolean; headingLevel: number };
 export type AccordionItemContext = { toggleId: string; panelId: string; open: boolean; heading: Node; panel: Node };

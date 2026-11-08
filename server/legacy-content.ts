@@ -1,6 +1,7 @@
 import sanitizeHTML from "sanitize-html";
 import { z } from "zod";
 import type { RenderDocument, RenderPost, SerializedNode } from "./block-renderer.js";
+import { hasDynamicBlocks } from "../shared/dynamic-blocks.js";
 
 export type ContentMode = "singular" | "archive" | "complete" | "feed";
 export type ContentPagination = { page: number; totalPages: number; links: Array<{ page: number; url: string; current: boolean }> };
@@ -60,9 +61,13 @@ function jsonPieces(blocks: SerializedNode[], depth = 0): Piece[] {
   }
   return pieces;
 }
+function usesJSON(document: RenderDocument): boolean {
+  const raw = document.rawContent || document.raw_content || document.content || "";
+  return !raw.includes("<!-- wp:") && !/<!--(?:more(?:[ \t]|-->)|noteaser-->|nextpage-->)/i.test(raw) && !!document.blocks?.length && (!raw.length || hasLegacyContent(document) || hasDynamicBlocks(document.blocks));
+}
 function pieces(document: RenderDocument): Piece[] {
   const raw = document.rawContent || document.raw_content || document.content || "";
-  return raw.includes("<!-- wp:") || /<!--(?:more(?:[ \t]|-->)|noteaser-->|nextpage-->)/i.test(raw) || !document.blocks?.length ? rawPieces(raw) : jsonPieces(document.blocks);
+  return usesJSON(document) ? jsonPieces(document.blocks!) : rawPieces(raw);
 }
 function splitPages(content: Piece[]): Piece[][] {
   const pages: Piece[][] = [[]];let atStart = true;
@@ -115,8 +120,7 @@ export function selectLegacyContent(document: RenderDocument, post: RenderPost, 
     else if ("block" in piece) blocks.push(piece.block);
     else if (piece.type === "more" && mode !== "archive" && mode !== "complete") { const anchor = `<span id="more-${Number(post.id) || 0}"></span>`;raw.push(anchor);blocks.push({ name: "core/html", attributes: { content: anchor }, innerBlocks: [] }); }
   }
-  const source = String(document.rawContent || document.raw_content || document.content || "");
-  const isJSON = !source.includes("<!-- wp:") && !/<!--(?:more(?:[ \t]|-->)|noteaser-->|nextpage-->)/i.test(source) && !!document.blocks?.length;
+  const isJSON = usesJSON(document);
   const output: RenderDocument = isJSON ? { blocks } : { rawContent: raw.join("") };
   const title = text(post.title || ""), label = moreMarker?.text ? escape(moreMarker.text) : `<span aria-label="Continue reading ${escape(title)}">(more…)</span>`;
   const moreLink = mode === "archive" && more >= 0 ? ` <a href="${escape(permalink + "#more-" + (Number(post.id) || 0))}" class="more-link">${label}</a>` : "";

@@ -4,7 +4,8 @@ import type { Context, Node, State, RenderDocument } from "./block-renderer.js";
 import { reserveInteractiveId } from "./interactive-blocks.js";
 import { cleanContent, plainText } from "./utils.js";
 
-export const NAVIGATION_OVERLAY_BLOCKS = ["core/navigation-overlay-close"];
+import { NAVIGATION_OVERLAY_BLOCKS } from "../shared/dynamic-blocks.js";
+export { NAVIGATION_OVERLAY_BLOCKS };
 export type NavigationOverlayContext = { id: string; closeTokens: Set<string> };
 type Attributes = (extra?: string) => string;
 type RenderDocumentContent = (document: RenderDocument, context: Context) => Promise<string>;

@@ -10,10 +10,8 @@ import { dateArchiveSQLBounds, dateArchiveLocalSQL, dateArchivePath, dateArchive
 import { gridColumnCount } from "./block-layout.js";
 import { postHasPassword, postNeedsPassword as protectedPost, publicPostTitle as titleOf } from "./post-passwords.js";
 
-export const WIDGET_BLOCKS = [
-  "core/latest-posts", "core/latest-comments", "core/archives", "core/calendar", "core/tag-cloud",
-  "core/post-comments-count", "core/post-comments-link", "core/post-time-to-read", "core/query-total",
-];
+import { WIDGET_BLOCKS } from "../shared/dynamic-blocks.js";
+export { WIDGET_BLOCKS };
 const escape = (value: unknown) => String(value ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]!);
 const number = (value: unknown, fallback: number, min = 1, max = 100) => Number.isFinite(Number(value)) ? Math.min(max, Math.max(min, Math.trunc(Number(value)))) : fallback;
 const safeURL = (value: unknown) => /^(?:https?:\/\/|\/(?!\/)|#)/i.test(String(value ?? "")) && !/[\u0000-\u0020<>"']/.test(String(value)) ? String(value) : "";

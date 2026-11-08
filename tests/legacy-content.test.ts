@@ -2,6 +2,7 @@ import "dotenv/config";
 import assert from "node:assert/strict";
 import test, {after} from "node:test";
 import {DOMParser} from "linkedom";
+import {XMLParser} from "fast-xml-parser";
 import {pool,defaultSettings,getPost} from "../server/db.js";
 import {cleanRawContent,cleanContent,HttpError} from "../server/utils.js";
 import {renderPublicContent,renderSiteDocument,type SerializedNode} from "../server/block-renderer.js";
@@ -91,6 +92,28 @@ test("public APIs preserve pagination and excerpts across save/history/restore/i
       const archive=await api("/api/public/site?search="+stamp,"GET",undefined,"");assert.match(archive.data.posts[0].content,/First teaser/);assert.doesNotMatch(archive.data.posts[0].content,/First remainder|Second page/);
       const rest=await api("/wp-json/wp/v2/posts/"+p.id,"GET",undefined,"");assert.match(rest.data.content.rendered,/First remainder/);assert.match(rest.data.content.rendered,/Second page/);assert.doesNotMatch(rest.data.excerpt.rendered,/First remainder|Second page/);
       assert.equal((await api("/api/public/posts/"+p.slug+"?page[]=2","GET",undefined,"")).response.status,400);
+    });
+    await t.test("RSS and Atom expose the first full content page without singular page navigation",async()=>{
+      for(const path of ["/feed/","/feed/atom/"]){
+        const response=await fetch(base+path);assert.equal(response.status,200);
+        const parsed=new XMLParser({parseTagValue:false}).parse(await response.text());
+        const values=parsed.rss?parsed.rss.channel.item:parsed.feed.entry,items=Array.isArray(values)?values:[values];
+        const item=items.find((item:any)=>parsed.rss?item.guid==="worldact:"+p.id:item.id==="urn:worldact:post:"+p.id);assert.ok(item);
+        const body=parsed.rss?item["content:encoded"]:item.content;
+        assert.match(body,/First teaser/);assert.match(body,/First remainder/);assert.doesNotMatch(body,/Second page|post-nav-links|post-page-numbers/);
+      }
+    });
+    await t.test("stored HTML survives incomplete structural JSON in excerpts, widgets and REST",async()=>{
+      const content="<p>Visible stored paragraph.</p>",blocks=[{name:"core/paragraph",attributes:{},innerBlocks:[]}];
+      assert.equal(legacyExcerptSource({rawContent:content,content,blocks}),content);
+      const dynamicSnapshot={rawContent:"<h2>Old title snapshot</h2>",blocks:[{name:"core/post-title",attributes:{},innerBlocks:[]}]};
+      const dynamic=await renderPublicContent({...post(),...dynamicSnapshot,title:"Current live title"},{db});
+      assert.match(dynamic,/Current live title/);assert.doesNotMatch(dynamic,/Old title snapshot/);
+      const created=await api("/api/posts","POST",{title:stamp+" structural",status:"publish",content,blocks});assert.equal(created.response.status,201);const legacy=created.data.post;ids.push(legacy.id);
+      const excerpt=await api("/wp-json/wp/v2/block-renderer/core/post-excerpt?post_id="+legacy.id);assert.match(excerpt.data.rendered,/Visible stored paragraph/);
+      const rest=await api("/wp-json/wp/v2/posts/"+legacy.id,"GET",undefined,"");assert.match(rest.data.excerpt.rendered,/Visible stored paragraph/);assert.match(rest.data.content.rendered,/Visible stored paragraph/);
+      const attributes=encodeURIComponent(JSON.stringify({postsToShow:100,displayPostContent:true,displayPostContentRadio:"full_post"}));
+      const widget=await api("/wp-json/wp/v2/block-renderer/core/latest-posts?attributes="+attributes);assert.match(widget.data.rendered,/Visible stored paragraph/);
     });
     await t.test("raw separators persist through revisions, autosave recovery and JSON/WXR export/import",async()=>{
       const edit=(await api("/api/posts/"+p.id)).data.post;assert.match(edit.rawContent,/<!--more Continue the story-->/);assert.match(edit.rawContent,/<!--nextpage-->/);
