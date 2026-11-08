@@ -92,10 +92,11 @@ export default function MediaLibrary() {
     { id } = useParams(),
     route = useLocation(),
     navigate = useNavigate();
-  const scopeRef = useRef({ key: route.key, user, active: true });
-  if (scopeRef.current.key !== route.key || scopeRef.current.user !== user) {
+  const actor = user ? `${user.id}:${user.role}` : "anonymous";
+  const scopeRef = useRef({ key: route.key, actor, active: true });
+  if (scopeRef.current.key !== route.key || scopeRef.current.actor !== actor) {
     scopeRef.current.active = false;
-    scopeRef.current = { key: route.key, user, active: true };
+    scopeRef.current = { key: route.key, actor, active: true };
   }
   const scope = scopeRef.current;
   const ownsOpening = () => scope.active && scopeRef.current === scope;
@@ -146,10 +147,10 @@ export default function MediaLibrary() {
     [attaching, setAttaching] = useState<number[] | null>(null);
   const fileInput = useRef<HTMLInputElement>(null);
   const navigationDrafts = useRef(new Map<number, MediaMetadataDraft>());
-  const navigationSet = useRef({ user, query: query.toString() });
-  if (navigationSet.current.user !== user || navigationSet.current.query !== query.toString()) {
+  const navigationSet = useRef({ actor, query: query.toString() });
+  if (navigationSet.current.actor !== actor || navigationSet.current.query !== query.toString()) {
     navigationDrafts.current.clear();
-    navigationSet.current = { user, query: query.toString() };
+    navigationSet.current = { actor, query: query.toString() };
   }
   const detailBaseline = useRef<MediaItem | null>(null);
   const navigationFocus = useRef<"previous" | "next" | null>(null);

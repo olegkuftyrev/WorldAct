@@ -40,9 +40,10 @@ export const errorText = (error: unknown) =>
     : "Something went wrong. Please try again.";
 export function useResource<T>(path: string | null) {
   const { user } = useContext(Session);
-  const ownerRef = useRef({ path, user });
-  if (ownerRef.current.path !== path || ownerRef.current.user !== user)
-    ownerRef.current = { path, user };
+  const actor = user ? `${user.id}:${user.role}` : "anonymous";
+  const ownerRef = useRef({ path, actor });
+  if (ownerRef.current.path !== path || ownerRef.current.actor !== actor)
+    ownerRef.current = { path, actor };
   const owner = ownerRef.current;
   const mounted = useRef(false);
   const requestId = useRef(0);
