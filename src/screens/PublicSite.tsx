@@ -1,3 +1,4 @@
+import { createPortal } from "react-dom";
 import { renderTemplate } from "../template";
 import ClassicCommentThread from "../components/ClassicCommentThread";
 import { parseVideoEmbed } from "../embeds";
@@ -15,6 +16,7 @@ import "@wordpress/block-library/build-style/theme.css";
 import {
   useContext,
   useEffect,
+  useLayoutEffect,
   useState,
   useRef,
   type FormEvent,
@@ -1212,6 +1214,11 @@ function SourceThemeDocument({ document: template, postId, query, commentPage, u
   if (postId) requestQuery.set("postId", String(postId));
   const request = `/public/templates/${encodeURIComponent(template.slug)}?${requestQuery}`;
   const html=response?.request===request?response.content:null;
+  const [feedbackForm, setFeedbackForm] = useState<HTMLFormElement | null>(null);
+  const localError = error && feedbackForm?.isConnected ? feedbackForm : null;
+  useLayoutEffect(() => {
+    localError?.querySelector<HTMLElement>('[data-worldact-comment-error]')?.scrollIntoView({block:"nearest"});
+  }, [error, localError]);
   useEffect(() => {
     setNotice(new URLSearchParams(location.search).get("comment-status")==="pending" ? "Your comment is awaiting moderation." : "");
   }, [location.pathname,location.search]);
@@ -1279,11 +1286,12 @@ function SourceThemeDocument({ document: template, postId, query, commentPage, u
       const parent = form.querySelector<HTMLInputElement>('[name="parentId"],[name="comment_parent"]');
       if (parent) parent.value = "0";
       if (result.comment.status === "approved") setRevision((value) => value + 1);
-    } catch (reason) { setError(errorText(reason)); }
+    } catch (reason) { setFeedbackForm(form); setError(errorText(reason)); }
     finally { setBusy(false); }
   }
   return <>
-    {(error || notice) && <div className="worldact-public-notice" role={error ? "alert" : "status"}>{error || notice}</div>}
+    {localError && createPortal(<div className="worldact-public-notice" role="alert" data-worldact-comment-error="true">{error}</div>, localError)}
+    {(!localError && error || notice && !error) && <div className="worldact-public-notice" role={error ? "alert" : "status"}>{error || notice}</div>}
     {html === null && !error && <p className="worldact-public-loading" role="status">Loading…</p>}
     <div className="wp-site-blocks" ref={root} aria-busy={busy || undefined}
       onSubmit={submitComment}
