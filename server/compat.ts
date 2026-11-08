@@ -900,6 +900,12 @@ router.post("/wp-json/wp/v2/media/:id", async (req: AuthRequest, res) => {
   });
   res.json(await wpMedia(result.data.media));
 });
+router.post("/wp-json/wp/v2/media/:id/edit", async (req: AuthRequest, res) => {
+  needUser(req);
+  const result = await forward(req, "/media/" + parseId(req.params.id) + "/edit-copy", "POST", req.body);
+  const media = await wpMedia(result.data.media);
+  res.status(201).location(`/wp-json/wp/v2/media/${media.id}`).json(wpFields(req, media));
+});
 router.delete("/wp-json/wp/v2/media/:id", async (req: AuthRequest, res) => {
   needUser(req);
   const id = parseId(req.params.id),

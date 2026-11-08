@@ -43,6 +43,7 @@ import {
   mediaBackups,
 } from "./media-files.js";
 import { rasterOutput, encodeRaster } from "./image-formats.js";
+import { editMediaCopy } from "./media-edit-copy.js";
 import { remapImportedBlockReferences } from "./block-portability.js";
 import { SiteImport, allocateImportedBlockEntities, exportMediaFiles, exportFontLibrary, MAX_ARCHIVE_JSON_BYTES, MAX_STORED_CONTENT_BYTES } from "./site-portability.js";
 import { postPermalink } from "./permalinks.js";
@@ -861,6 +862,10 @@ router.post(
     } finally { mediaClient?.release(); }
   },
 );
+router.post("/media/:id/edit-copy", creators, async (req: AuthRequest, res) => {
+  const media = await editMediaCopy(req, parseId(req.params.id), req.body, expandedMediaFields);
+  res.status(201).location(`/api/media/${media.id}`).json({ media });
+});
 router.post("/media/:id/edit", creators, async (req: AuthRequest, res) => {
   const input = z
     .object({
