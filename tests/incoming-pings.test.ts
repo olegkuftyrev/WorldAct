@@ -4,11 +4,11 @@ import express from 'express';
 import {createServer} from 'node:http';
 import {EventEmitter} from 'node:events';
 import {Readable} from 'node:stream';
-import {mkdtemp,writeFile,rm} from 'node:fs/promises';
+import {mkdtemp,readFile,writeFile,rm} from 'node:fs/promises';
 import {tmpdir} from 'node:os';
 import path from 'node:path';
 import {gzipSync} from 'node:zlib';
-import {pool,getSettings} from '../server/db.js';
+import {pool,getSettings,rootDir} from '../server/db.js';
 import {parseIncomingPing,verifyPingHTML,IncomingPingError,createIncomingPings,createIncomingPingsRouter,pingsOpen,pingbackHeader} from '../server/incoming-pings.js';
 import {pingRPC,parsePingReply} from '../server/ping-protocol.js';
 import {akismetFields,createAkismetClient} from '../server/bundled-plugins.js';
@@ -179,11 +179,11 @@ test('incoming typed notifications enforce public state, protocol, transaction, 
   });
   await t.test('X-Pingback appears on real production singular HTTP responses only for public open unprotected targets',async()=>{
    const settings=await getSettings(),directory=await mkdtemp(path.join(tmpdir(),'worldact-incoming-static-')),oldStatic=process.env.STATIC_DIR;
-   await writeFile(path.join(directory,'index.html'),'<!doctype html><title>Public application</title>');process.env.STATIC_DIR=directory;
+   await writeFile(path.join(directory,'index.html'),await readFile(path.join(rootDir,'dist','index.html')));process.env.STATIC_DIR=directory;
    const {app:actual}=await import('../server/index.js'),http=createServer(actual);await new Promise<void>(done=>http.listen(0,'127.0.0.1',done));const url='http://127.0.0.1:'+(http.address() as any).port;
    try{
     process.env.WORLDACT_ENVIRONMENT_TYPE='production';assert.equal(pingbackHeader(publicPost,settings),new URL('/xmlrpc.php',settings.siteUrl).href);
-    for(const route of ['/api/public/posts/'+publicPost.slug,publicPost.permalink]){const response=await fetch(url+route);assert.equal(response.headers.get('x-pingback'),new URL('/xmlrpc.php',settings.siteUrl).href);}
+    for(const route of ['/api/public/posts/'+publicPost.slug,publicPost.permalink]){const response=await fetch(url+route);assert.equal(response.status,200,route);assert.equal(response.headers.get('x-pingback'),new URL('/xmlrpc.php',settings.siteUrl).href);}
     const protectedPost=await post({password:'protected-header'});assert.equal((await fetch(url+'/api/public/posts/'+protectedPost.slug)).headers.get('x-pingback'),null);
     for(const p of [{...publicPost,pingStatus:'closed'},{...publicPost,status:'private'},{...publicPost,hasPassword:true}])assert.equal(pingbackHeader(p,settings),null);
     process.env.WORLDACT_ENVIRONMENT_TYPE='local';assert.equal((await fetch(url+publicPost.permalink)).headers.get('x-pingback'),null);
