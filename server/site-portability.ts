@@ -1,7 +1,7 @@
 import { createHash, randomBytes } from "node:crypto";
 import { readFile, writeFile, mkdir, unlink, rmdir, stat } from "node:fs/promises";
 import path from "node:path";
-import { fileTypeFromBuffer } from "file-type";
+import { detectMediaType } from "./media-types.js";
 import sharp from "sharp";
 import { z } from "zod";
 import type { PoolClient } from "pg";
@@ -68,7 +68,7 @@ export async function exportMediaFiles(media: any[]) {
     catch (error) { if ((error as NodeJS.ErrnoException).code !== "ENOENT") throw error; warn(`Uploaded file ${name} is missing from disk and is not embedded in the archive.`); continue; }
     bytes += data.length;
     if (data.length > MAX_ARCHIVE_FILE_BYTES || bytes > MAX_ARCHIVE_MEDIA_BYTES) throw new HttpError(413, "The archive exceeds 32 MiB per file or 64 MiB of uploaded files. Export a smaller media library.");
-    const type = await fileTypeFromBuffer(data);
+    const type = await detectMediaType(data);
     if (!type || !supportedMimes.has(type.mime)) { warn(`Uploaded file ${name} has an unsupported signature and is not embedded.`); continue; }
     files.push({ filename: name, mimeType: type.mime, size: data.length, sha256: createHash("sha256").update(data).digest("hex"), data: data.toString("base64") });
   }
@@ -217,7 +217,7 @@ export class SiteImport {
       const data = Buffer.from(file.data, "base64"); byteCount += data.length;
       if (data.toString("base64") !== file.data || data.length !== file.size || createHash("sha256").update(data).digest("hex") !== file.sha256) throw new HttpError(400, "An embedded media file failed its size or checksum check.");
       if (byteCount > MAX_ARCHIVE_MEDIA_BYTES) throw new HttpError(413, "Import at most 64 MiB of uploaded files per archive.");
-      const type = await fileTypeFromBuffer(data);
+      const type = await detectMediaType(data);
       if (!type || type.mime !== file.mimeType || !supportedMimes.has(type.mime)) throw new HttpError(400, "An embedded media file has an unsupported or mismatched MIME signature.");
       if (type.mime.startsWith("image/")) await sharp(data, { limitInputPixels: 80_000_000 }).metadata().catch(() => { throw new HttpError(400, "An embedded image cannot be decoded safely."); });
       embedded.set(file.filename, { data, mime: type.mime, ext: type.ext });
@@ -235,7 +235,7 @@ export class SiteImport {
         try { const info = await stat(path.join(uploadsDir, source)); if (info.size > MAX_ARCHIVE_FILE_BYTES || byteCount + info.size > MAX_ARCHIVE_MEDIA_BYTES) throw new HttpError(413, "Local media exceeds the archive size limit."); data = await readFile(path.join(uploadsDir, source)); } catch (error) { if ((error as NodeJS.ErrnoException).code !== "ENOENT") throw error; this.warn(`Media file ${source} is not available locally and was not downloaded.`); return null; }
         byteCount += data.length;
         if (data.length > MAX_ARCHIVE_FILE_BYTES || byteCount > MAX_ARCHIVE_MEDIA_BYTES) throw new HttpError(413, "Local media exceeds the archive file limit.");
-        const type = await fileTypeFromBuffer(data);
+        const type = await detectMediaType(data);
         if (!type || !supportedMimes.has(type.mime)) throw new HttpError(400, "A local media file has an unsupported MIME signature.");
         file = { data, mime: type.mime, ext: type.ext };
         this.warn(`Media file ${source} was copied from the existing local upload library.`);

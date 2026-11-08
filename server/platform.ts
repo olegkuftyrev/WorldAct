@@ -3,7 +3,7 @@ import { validateFontChoices, withFontLibraryLock } from "./fonts.js";
 import express from "express";
 import multer from "multer";
 import sharp from "sharp";
-import { fileTypeFromBuffer } from "file-type";
+import { detectMediaType } from "./media-types.js";
 import { z } from "zod";
 import { postFormats } from "../shared/post-formats.js";
 import { createHash, randomBytes } from "node:crypto";
@@ -774,7 +774,7 @@ router.post(
     const file = req.file;
     if (!file?.buffer.length)
       throw new HttpError(400, "Choose a file to upload.");
-    const type = await fileTypeFromBuffer(file.buffer).catch(() => undefined);
+    const type = await detectMediaType(file.buffer).catch(() => undefined);
     if (!type || !allowedMimes.has(type.mime))
       throw new HttpError(
         400,
@@ -944,7 +944,7 @@ router.post("/media/:id/restore", creators, async (req: AuthRequest, res) => {
   if (!item.original_filename)
     throw new HttpError(400, "This image has no original to restore.");
   const buffer = await readFile(path.join(uploadsDir, item.original_filename)),
-    type = await fileTypeFromBuffer(buffer),
+    type = await detectMediaType(buffer),
     metadata = await sharp(buffer).metadata();
   const prefix =
     path.dirname(item.original_filename) === "."
