@@ -1,4 +1,4 @@
-# Canonical category paths
+# Canonical post paths
 
 Custom structures also support `%hour%`, `%minute%`, and `%second%`, alongside
 `%year%`, `%monthnum%`, `%day%`, `%post_id%`, `%postname%`, and `%category%`.
@@ -68,5 +68,9 @@ Two-stage site archive coverage asserts nested source/destination URLs and menu
 rebasing on different fresh databases after source files are removed.
 
 The Plain query-ID backend is described in [its separate contract](plain-permalinks.md).
-Matching settings controls/React routing and additional source tokens remain
-separate integration work.
+The shared nine-token inventory also supplies the current native Settings help.
+Additional author identities, canonical redirects and historical civil dates
+remain separate work. Known published multipage archive links use the bounded
+[body-page remapping contract](body-page-portability.md). Fresh-ID copies were
+also verified through actual Node HTML and native comment303 return context,
+not only the legacy JSON resolver.
