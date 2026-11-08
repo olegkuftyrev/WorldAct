@@ -73,6 +73,7 @@ import { setEditorPreview, removeEditorPreview } from "./editorPreviewStore";
 import { OwnedFootnoteFormat } from "./OwnedFootnoteFormat";
 import { footnoteEntityBoundaries } from "./footnoteScope";
 import type { SerializedBlock } from "./types";
+import { persistentBlockAttributes } from "./blockAttributes";
 import { parseVideoEmbed } from "../embeds";
 import { compileThemeStyles, type ThemeJSON, type ThemeStyleOverrides } from "../themeStyles";
 import "./gutenberg.css";
@@ -804,11 +805,7 @@ addFilter(
 function toStored(blocks: Block[]): SerializedBlock[] {
   return blocks.map((block) => ({
     name: block.name,
-    // RichTextData implements toJSON; this also detaches Gutenberg's mutable data.
-    attributes: JSON.parse(JSON.stringify(block.attributes)) as Record<
-      string,
-      unknown
-    >,
+    attributes: persistentBlockAttributes(block.attributes, getBlockType(block.name)?.attributes),
     innerBlocks: toStored(block.innerBlocks || []),
   }));
 }
@@ -909,7 +906,7 @@ function restoreBlocks(blocks: SerializedBlock[]): Block[] {
     }
     return createBlock(
       block.name,
-      block.attributes,
+      persistentBlockAttributes(block.attributes, getBlockType(block.name)?.attributes),
       restoreBlocks(block.innerBlocks || []),
     );
   });
