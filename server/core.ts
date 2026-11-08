@@ -12,6 +12,7 @@ import {
   hashPassword,
   verifyPassword,
   requireRole,
+  assertActiveAccountAuthentication,
   type AuthRequest,
 } from "./auth.js";
 import {
@@ -1562,19 +1563,20 @@ export async function submitPublicComment(req: Request, res: Response) {
     .parse(req.body);
   const user = (req as AuthRequest).user;
   const saved = await transaction(async client => {
-    let profileWebsite = "";
+    let profileWebsite = "", actor: Pick<User,"id"|"displayName"|"email"|"role"> | undefined;
     if (user) {
       // Match account deletion's lock order before protecting the post.
-      const account = (await client.query("SELECT profile FROM users WHERE id=$1 FOR KEY SHARE", [user.id])).rows[0];
+      const account = (await client.query('SELECT id,display_name AS "displayName",email,role,profile FROM users WHERE id=$1 FOR SHARE', [user.id])).rows[0];
       if (!account) throw new HttpError(401, "Please log in again before commenting.");
+      actor = account;
       if (typeof account.profile?.website === "string" && /^https?:\/\//i.test(account.profile.website)) profileWebsite = account.profile.website;
     }
     await client.query("SELECT pg_advisory_xact_lock(hashtext('worldact-comment-hierarchy'))");
     const settings = await getSettings(client);
-    if (settings.commentRegistration && !user)
+    if (settings.commentRegistration && !actor)
       throw new HttpError(401, "Please log in to leave a comment.");
-    const submittedName = user?.displayName ?? input.authorName ?? "",
-      submittedEmail = (user?.email ?? input.authorEmail ?? "").toLowerCase();
+    const submittedName = actor?.displayName ?? input.authorName ?? "",
+      submittedEmail = (actor?.email ?? input.authorEmail ?? "").toLowerCase();
     if (settings.requireCommentNameEmail && (!submittedName.trim() || !submittedEmail))
       throw new HttpError(400, "Enter your name and email address.");
     const cleanName = plainText(submittedName).trim();
@@ -1583,7 +1585,7 @@ export async function submitPublicComment(req: Request, res: Response) {
       authorUrl = input.authorUrl ?? profileWebsite;
     if (!plainText(content).trim()) throw new HttpError(400, "Write a comment before submitting.");
     const post = (await client.query(
-      "SELECT id,type,slug,parent_id,status,comment_status,password_hash,published_at,created_at,(SELECT jsonb_agg(jsonb_build_object('taxonomy',t.taxonomy,'slug',t.slug)) FROM terms t JOIN post_terms pt ON pt.term_id=t.id WHERE pt.post_id=posts.id) AS terms FROM posts WHERE id=$1 FOR SHARE", [input.postId],
+      "SELECT id,author_id,type,slug,parent_id,status,comment_status,password_hash,published_at,created_at,(SELECT jsonb_agg(jsonb_build_object('taxonomy',t.taxonomy,'slug',t.slug)) FROM terms t JOIN post_terms pt ON pt.term_id=t.id WHERE pt.post_id=posts.id) AS terms FROM posts WHERE id=$1 FOR SHARE", [input.postId],
     )).rows[0];
     if (!post || post.status !== "publish") throw new HttpError(404, "Post not found.");
     if (post.comment_status !== "open" || (settings.closeCommentsDays > 0 && post.published_at && new Date(post.published_at).getTime() + settings.closeCommentsDays * 86_400_000 < Date.now()))
@@ -1600,6 +1602,9 @@ export async function submitPublicComment(req: Request, res: Response) {
       if (ancestors.rows[0].depth >= settings.threadDepth)
         throw new HttpError(400, "This comment thread has reached its maximum depth.");
     }
+    // Actor, hierarchy and post locks can all wait. Never grant approval from a
+    // session/application password that was revoked or expired during a wait.
+    if (actor) await assertActiveAccountAuthentication(req as AuthRequest, client);
     // The hierarchy lock also serializes public admission across processes.
     // Reject a retry before external filters, author tokens or notifications.
     const duplicate = await client.query(
@@ -1607,18 +1612,18 @@ export async function submitPublicComment(req: Request, res: Response) {
       [post.id, input.parentId ?? null, authorName, submittedEmail, content],
     );
     if (duplicate.rowCount) throw new HttpError(409, "Duplicate comment detected; it looks as though you've already said that!");
-    let status = await moderateComment({type:"comment",authorName,authorEmail:submittedEmail,authorUrl,content,rawContent:input.content,ip:req.ip || ""},client,settings);
-    const akismetInput:AkismetComment={userIP:req.ip || "",userAgent:req.get("user-agent") || "",referrer:req.get("referer") || "",authorName,authorEmail:submittedEmail,authorURL:input.authorUrl || "",content,permalink:new URL((await withPermalink(post,settings,client)).permalink,settings.siteUrl).href,userRole:user?.role};
+    let status = await moderateComment({type:"comment",authorName:cleanName,authorEmail:submittedEmail,authorUrl,content,rawContent:input.content,ip:req.ip || "",actor,postAuthorId:post.author_id},client,settings);
+    const akismetInput:AkismetComment={userIP:req.ip || "",userAgent:req.get("user-agent") || "",referrer:req.get("referer") || "",authorName,authorEmail:submittedEmail,authorURL:input.authorUrl || "",content,permalink:new URL((await withPermalink(post,settings,client)).permalink,settings.siteUrl).href,userRole:actor?.role};
     const akismetResult=["trash","spam"].includes(status)?"skipped":await checkAkismetComment(akismetInput,client);
     if(akismetResult==="spam")status="spam";else if(akismetResult==="unavailable")status="pending";
     const result = await client.query(
       "INSERT INTO comments(post_id,author_name,author_email,content,status,parent_id,author_url,user_id) VALUES($1,$2,$3,$4,$5,$6,$7,$8) RETURNING id",
-      [post.id, authorName, submittedEmail, content, status, input.parentId ?? null, authorUrl, user?.id ?? null],
+      [post.id, authorName, submittedEmail, content, status, input.parentId ?? null, authorUrl, actor?.id ?? null],
     );
     const comment = { id: result.rows[0].id, status };
     await recordAkismetCheck(comment.id,akismetInput,akismetResult,client);
     let rememberedToken: string | null | undefined;
-    if (!user && (input.rememberAuthor !== undefined || !settings.commentCookieConsent)) {
+    if (!actor && (input.rememberAuthor !== undefined || !settings.commentCookieConsent)) {
       const previousToken = rememberedAuthorToken(req);
       if (previousToken) await client.query("DELETE FROM comment_author_tokens WHERE token_hash=$1", [tokenHash(previousToken)]);
       rememberedToken = null;
@@ -1628,7 +1633,7 @@ export async function submitPublicComment(req: Request, res: Response) {
         await client.query("INSERT INTO comment_author_tokens(token_hash,comment_id,expires_at) VALUES($1,$2,now()+interval '347 days')", [tokenHash(rememberedToken), comment.id]);
       }
     }
-    const messages = await queueCommentNotifications(client, comment.id, user?.id);
+    const messages = await queueCommentNotifications(client, comment.id, actor?.id);
     return { comment, messages, rememberedToken };
   });
   if (saved.rememberedToken) res.cookie(commentAuthorCookie, saved.rememberedToken, { path: "/", httpOnly: true, sameSite: "lax", secure: process.env.NODE_ENV === "production", maxAge: 347 * 86_400_000 });
