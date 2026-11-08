@@ -50,7 +50,8 @@ test("archive aliases retain current, original, derivative and size files until 
   try {
     const login = await api("/api/auth/login", "POST", { login: process.env.ADMIN_EMAIL, password: process.env.ADMIN_PASSWORD });
     assert.equal(login.response.status, 200); cookie = login.response.headers.get("set-cookie")!.split(";")[0];
-    const image = await sharp({ create: { width: 20, height: 12, channels: 3, background: "#2658aa" } }).png().toBuffer();
+    // Exercise real generated sizes now that unchanged/tiny copies are omitted.
+    const image = await sharp({ create: { width: 1200, height: 800, channels: 3, background: "#2658aa" } }).png().toBuffer();
     const form = new FormData(); form.append("file", new Blob([new Uint8Array(image)], { type: "image/png" }), stamp + ".png");
     const upload = await fetch(base + "/api/media", { method: "POST", headers: { Origin: origin, Cookie: cookie }, body: form });
     const uploaded = await upload.json(); assert.equal(upload.status, 201); media.add(uploaded.media.id);
