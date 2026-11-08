@@ -21,8 +21,11 @@ All endpoints below require the same signed-in account, including confirmation:
 | `POST /api/profile/email/confirmation` | `{token}`; returns `{ok:true,user,pending:null,delivery}` after commit. |
 
 Pending notices contain only `{email,createdAt,expiresAt,expired}`. The emailed
-route is `/confirm-profile-email?token=…`; the later React screen must require
-sign-in to the matching account, show the preview, and offer explicit Confirm.
+route is `/confirm-profile-email?token=…`; the React screen requires sign-in to
+the matching account, preserves the return URL through normal login, shows the
+preview, and offers explicit Confirm. Profile and the administrator's own-user
+edit route show the active address plus pending, resend, cancellation and
+delivery notices. Another-account editing remains immediate.
 Email scanning/GET never updates an account. Invalid, expired, replaced, wrong-
 account or used links return 410; missing sign-in returns 401; another actor is
 rejected. A newly claimed destination email/username returns 409 and consumes

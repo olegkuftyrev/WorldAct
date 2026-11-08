@@ -4,6 +4,7 @@ import {
 } from "../components/ScreenOptions";
 import {
   Fragment,
+  useContext,
   useEffect,
   useRef,
   useState,
@@ -18,8 +19,10 @@ import {
   Notice,
   ResourceState,
   ScreenTabs,
+  Session,
   useResource,
 } from "../components/AdminUI";
+import { commentShortcut } from "../commentShortcuts";
 import "../comments.css";
 
 type Status = Comment["status"] | "all";
@@ -44,6 +47,7 @@ const statuses: [Status, string][] = [
 ];
 
 export default function Comments() {
+  const { user } = useContext(Session);
   const [params, setParams] = useSearchParams();
   const tablePreferences = useListTablePreferences("comments");
   const requestedStatus = params.get("status") as Status;
@@ -93,6 +97,35 @@ export default function Comments() {
   const comments = resource.data?.comments || [];
   const counts = resource.data?.counts || {};
   const totalPages = resource.data?.pagination.totalPages || 1;
+  const [currentId, setCurrentId] = useState<number | null>(null);
+  const pendingEdge = useRef<"first" | "last" | null>(null);
+  const previousIndex = useRef(0);
+  const shortcuts =
+    user?.commentShortcuts === true && user.role !== "subscriber";
+  function highlight(id: number) {
+    setCurrentId(id);
+    const row = document.getElementById(`comment-${id}`);
+    row?.focus({ preventScroll: true });
+    row?.scrollIntoView({ block: "nearest" });
+  }
+  useEffect(() => {
+    if (!shortcuts || resource.loading) return;
+    if (pendingEdge.current && comments.length) {
+      highlight(
+        comments[pendingEdge.current === "first" ? 0 : comments.length - 1].id,
+      );
+      pendingEdge.current = null;
+    } else if (
+      currentId !== null &&
+      !comments.some((comment) => comment.id === currentId)
+    ) {
+      if (comments.length)
+        highlight(
+          comments[Math.min(previousIndex.current, comments.length - 1)].id,
+        );
+      else setCurrentId(null);
+    }
+  }, [resource.data, resource.loading, shortcuts]);
   function change(values: Record<string, string>) {
     const next = new URLSearchParams(params);
     for (const [key, value] of Object.entries(values))
@@ -193,11 +226,138 @@ export default function Comments() {
     setEditing({ comment, mode });
     setError("");
   }
+  function closeEditor() {
+    const previous = editing;
+    setEditing(null);
+    if (previous)
+      requestAnimationFrame(() => {
+        document
+          .querySelector<HTMLButtonElement>(
+            `#comment-${previous.comment.id} [data-comment-action="${previous.mode}"]`,
+          )
+          ?.focus();
+      });
+  }
   async function saved(message: string) {
     setEditing(null);
     setNotice(message);
     await resource.reload();
   }
+  useEffect(() => {
+    if (!shortcuts) return;
+    function keydown(event: KeyboardEvent) {
+      if (
+        event.defaultPrevented ||
+        event.isComposing ||
+        event.ctrlKey ||
+        event.metaKey ||
+        event.altKey ||
+        event.repeat ||
+        busy ||
+        resource.loading ||
+        editing ||
+        deleting ||
+        emptyReview
+      )
+        return;
+      const target = event.target;
+      if (
+        target instanceof Element &&
+        (target.closest(
+          'textarea,select,[contenteditable]:not([contenteditable="false"]),[role="textbox"],[role="dialog"]',
+        ) ||
+          (target.closest("button,a") &&
+            !target.closest(".comments .row-actions")) ||
+          (target.closest("input") &&
+            !target.matches('.check-column input[type="checkbox"]')))
+      )
+        return;
+      const key = event.key.toLowerCase();
+      if (!event.shiftKey && (key === "j" || key === "k")) {
+        if (!comments.length) return;
+        event.preventDefault();
+        const current = comments.findIndex(
+          (comment) => comment.id === currentId,
+        );
+        const next = current < 0 ? 0 : current + (key === "j" ? 1 : -1);
+        if (next >= 0 && next < comments.length) {
+          previousIndex.current = next;
+          highlight(comments[next].id);
+        } else if (
+          (key === "j" && page < totalPages) ||
+          (key === "k" && page > 1)
+        ) {
+          pendingEdge.current = key === "j" ? "first" : "last";
+          change({ page: String(page + (key === "j" ? 1 : -1)) });
+        }
+        return;
+      }
+      if (key === "x" && canBulk) {
+        if (event.shiftKey) {
+          event.preventDefault();
+          setSelected(
+            comments.every((comment) => selected.includes(comment.id))
+              ? []
+              : comments.map((comment) => comment.id),
+          );
+        } else if (currentId !== null) {
+          event.preventDefault();
+          setSelected(
+            selected.includes(currentId)
+              ? selected.filter((id) => id !== currentId)
+              : [...selected, currentId],
+          );
+        }
+        return;
+      }
+      if (event.shiftKey) {
+        if (
+          !canBulk ||
+          !selected.length ||
+          !["a", "u", "s", "d", "t", "z"].includes(key)
+        )
+          return;
+        const eligible = comments
+          .filter((comment) => selected.includes(comment.id))
+          .map((comment) => ({
+            comment,
+            operation: commentShortcut(comment, key, true),
+          }))
+          .filter((item) => item.operation);
+        if (!eligible.length) return;
+        event.preventDefault();
+        void action(
+          eligible.map((item) => item.comment.id),
+          eligible[0].operation!,
+        );
+        return;
+      }
+      const comment = comments.find((item) => item.id === currentId);
+      if (!comment) return;
+      const operation = commentShortcut(comment, key, false);
+      if (!operation) return;
+      event.preventDefault();
+      previousIndex.current = comments.indexOf(comment);
+      if (["reply", "quick", "edit"].includes(operation))
+        begin(comment, operation as Editing["mode"]);
+      else void action([comment.id], operation);
+    }
+    document.addEventListener("keydown", keydown);
+    return () => document.removeEventListener("keydown", keydown);
+  }, [
+    shortcuts,
+    comments,
+    currentId,
+    selected,
+    busy,
+    resource.loading,
+    editing,
+    deleting,
+    emptyReview,
+    page,
+    totalPages,
+    canBulk,
+  ]);
   const paging = (
     <div className="tablenav-pages comment-pagination">
       <span className="displaying-num">
@@ -421,8 +581,9 @@ export default function Comments() {
             {comments.map((comment) => (
               <Fragment key={comment.id}>
                 <tr
-                  className={comment.status === "pending" ? "unapproved" : ""}
+                  className={`${comment.status === "pending" ? "unapproved" : ""}${shortcuts && currentId === comment.id ? " vim-current" : ""}`}
                   id={`comment-${comment.id}`}
+                  tabIndex={shortcuts ? -1 : undefined}
                 >
                   {canBulk && (
                     <th scope="row" className="check-column">
@@ -513,7 +674,7 @@ export default function Comments() {
                         <CommentForm
                           key={`${comment.id}-${editing.mode}`}
                           editing={editing}
-                          close={() => setEditing(null)}
+                          close={closeEditor}
                           saved={saved}
                           onConflict={resource.reload}
                         />
@@ -531,7 +692,7 @@ export default function Comments() {
         </table>
         <div className="tablenav bottom">{paging}</div>
         {editing?.mode === "edit" && (
-          <Modal title="Edit Comment" close={() => setEditing(null)}>
+          <Modal title="Edit Comment" close={closeEditor}>
             <p>
               Comment on <strong>{editing.comment.postTitle}</strong>, submitted{" "}
               {date(editing.comment.createdAt)}.
@@ -539,7 +700,7 @@ export default function Comments() {
             <CommentForm
               key={editing.comment.id}
               editing={editing}
-              close={() => setEditing(null)}
+              close={closeEditor}
               saved={saved}
               onConflict={resource.reload}
             />
@@ -645,6 +806,7 @@ function CommentActions({
       node: (
         <button
           className={`button-link${danger ? " button-link-delete" : ""}`}
+          data-comment-action={key}
           disabled={busy}
           onClick={onClick}
         >
@@ -712,6 +874,7 @@ function CommentForm({
     [error, setError] = useState(""),
     [conflict, setConflict] = useState(false);
   const textarea = useRef<HTMLTextAreaElement>(null);
+  const contextMenu = useRef(false);
   function wrap(start: string, end: string) {
     const area = textarea.current;
     if (!area) return;
@@ -760,7 +923,29 @@ function CommentForm({
     }
   }
   return (
-    <form className="comment-edit-form" onSubmit={submit}>
+    <form
+      className="comment-edit-form"
+      onSubmit={submit}
+      onContextMenu={() => {
+        contextMenu.current = true;
+      }}
+      onKeyDown={(event) => {
+        if (
+          event.key !== "Escape" ||
+          event.nativeEvent.isComposing ||
+          busy ||
+          mode === "edit"
+        )
+          return;
+        if (contextMenu.current) {
+          contextMenu.current = false;
+          return;
+        }
+        event.preventDefault();
+        event.stopPropagation();
+        close();
+      }}
+    >
       <h2>
         {reply
           ? `Reply to ${comment.authorName}`

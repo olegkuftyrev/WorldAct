@@ -854,6 +854,13 @@ export default function MediaLibrary() {
                       onFocus={(event) => event.target.select()}
                     />
                   </label>
+                  {selected.originalUploadUrl && (
+                    <p className="description">
+                      <a href={selected.originalUploadUrl} download>
+                        Download original
+                      </a>
+                    </p>
+                  )}
                   <button
                     type="button"
                     className="button"

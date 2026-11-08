@@ -209,6 +209,15 @@ export function screenHelp(pathname: string, search = ""): HelpTab[] {
             Use the row checkboxes and bulk actions to moderate multiple
             comments. Permanently deleting a comment cannot be undone.
           </p>
+          <p>
+            Enable keyboard shortcuts in your Profile to use j/k for the next
+            or previous comment and x to select it. Available row actions use
+            a (approve), u (unapprove), s (spam), d (trash or delete), z
+            (restore), r (reply), q (Quick Edit), and e (Edit). Shift +
+            A/U/S/T/D/Z applies the available bulk action to selected comments;
+            Shift + X toggles all. Shortcuts pause while you use a form or
+            dialog.
+          </p>
         </>,
       ),
       tab(

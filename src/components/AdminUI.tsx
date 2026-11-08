@@ -162,7 +162,7 @@ export function Modal({
     const previous = document.activeElement as HTMLElement | null;
     ref.current?.focus();
     const keydown = (e: KeyboardEvent) => {
-      if (e.key === "Escape") closeRef.current();
+      if (e.key === "Escape" && !e.isComposing && !e.defaultPrevented) closeRef.current();
       if (e.key === "Tab" && ref.current) {
         const focusable = Array.from(
           ref.current.querySelectorAll<HTMLElement>(

@@ -426,7 +426,7 @@ export default function PublicSite({
       setError(errorText(e));
     }
   }
-  const adminBar = (user && (
+  const adminBar = (user && user.showAdminBar !== false && (
         <div className="public-admin-bar">
           <Link to={user.role === "subscriber" ? "/" : "/admin"}>
             <Brand />

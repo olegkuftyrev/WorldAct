@@ -38,5 +38,8 @@ URLs in WXR; import still reports them without downloading.
 
 `GET /api/tools/export/options` returns administrator-only safe author labels,
 category hierarchy and available local months for the three selectable types.
-It returns no account email, password or credential metadata. Native filter
-controls are an independent frontend implementation and review step.
+It returns no account email, password or credential metadata. React Tools →
+Export presents source-style All content, Posts, Pages and Media choices with
+only the applicable filters, hierarchy-safe categories and local month labels.
+Validated URLSearchParams carry the XML selection; a separate full-JSON button
+does not use these filters. Native controls still require independent review.

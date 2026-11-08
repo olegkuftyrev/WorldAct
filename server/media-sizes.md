@@ -41,11 +41,10 @@ The native media REST response always includes `media_details.sizes.full`.
 The editor adapter and public featured-image, Latest Posts, and gallery paths
 already fall back to the full image when a named intermediate is absent.
 
-Frontend handoff: set all six Media settings input minimums to `0`, retaining
-the current maximums. Explain that `0 × 0` disables a size and a single zero
-leaves its axis unconstrained. Image-editor scale/crop dimensions remain
-strictly positive; they are a separate contract. No UI is changed by this
-backend batch.
+The React Media settings form sets all six input minimums to `0`, retaining
+the current maximums, and explains that `0 × 0` disables a size while a single
+zero leaves its axis unconstrained. Image-editor scale/crop dimensions remain
+strictly positive; they are a separate contract.
 
 Verification lives in `tests/media-zero-dimensions.test.ts`, with actual image
 bytes, oriented JPEG geometry, source crop and rounding cases, missing settings,

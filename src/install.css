@@ -1,0 +1,27 @@
+/* The supplied install.css is loaded only while the installer is mounted. */
+body.worldact-install-body #root {
+  min-height: 0;
+}
+body.worldact-install-body {
+  height: auto;
+}
+body.worldact-install-body .worldact-install #logo {
+  background: none;
+  text-indent: 0;
+  overflow: visible;
+}
+.worldact-install #logo .worldact-mark {
+  width: 84px;
+  height: 84px;
+  font-size: 76px;
+  border-width: 4px;
+}
+.worldact-install .install-generate {
+  margin-top: 8px;
+}
+.worldact-install .password-input-wrapper {
+  min-width: 0;
+}
+.worldact-install .message {
+  overflow-wrap: anywhere;
+}

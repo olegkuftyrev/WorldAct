@@ -1,6 +1,8 @@
 import {postFormats} from "../../shared/post-formats";
 import AkismetSettings from "../components/AkismetSettings";
 import ApplicationPasswords from "./ApplicationPasswords";
+import ExportContent from "./ExportContent";
+import { ProfileEmailNotice, deliveryMessage, type PendingProfileEmail } from "./ProfileEmail";
 import { HealthDetails, PrivacyPolicyGuide } from "./ToolsExtras";
 import { SiteIconControl, PendingEmailNotice, DateFormatControl, type PendingAdminEmail } from "./SiteIdentity";
 import { compileThemeStyles, type ThemeJSON } from "../themeStyles";
@@ -11,6 +13,7 @@ import {
   Suspense,
   useContext,
   useEffect,
+  useLayoutEffect,
   useRef,
   useState,
   type FormEvent,
@@ -54,22 +57,30 @@ function useAction() {
   async function run<T>(
     work: () => Promise<T>,
     message = "",
+    isCurrent: () => boolean = () => true,
   ): Promise<T | undefined> {
+    if (!isCurrent()) return undefined;
     setBusy(true);
     setError("");
     setNotice("");
     try {
       const result = await work();
+      if (!isCurrent()) return undefined;
       setNotice(message);
       return result;
     } catch (reason) {
-      setError(errorText(reason));
+      if (isCurrent()) setError(errorText(reason));
       return undefined;
     } finally {
-      setBusy(false);
+      if (isCurrent()) setBusy(false);
     }
   }
-  return { busy, error, notice, run, setError, setNotice };
+  const reset = () => {
+    setBusy(false);
+    setError("");
+    setNotice("");
+  };
+  return { busy, error, notice, run, setError, setNotice, reset };
 }
 
 function Feedback({ action }: { action: ReturnType<typeof useAction> }) {
@@ -156,59 +167,115 @@ export function Profile() {
     preferences: Record<string, unknown>;
   }>(endpoint);
   const { user, setUser } = useContext(Session);
+  const self = !id || Number(id) === user?.id;
+  const pendingResource = useResource<{ pending: PendingProfileEmail | null }>(
+    self ? "/profile/email" : null,
+  );
   const [form, setForm] = useState<User | null>(null);
   const [password, setPassword] = useState("");
   const [currentPassword, setCurrentPassword] = useState("");
   const action = useAction();
+  const activeEndpoint = useRef(endpoint),
+    generation = useRef(0),
+    mounted = useRef(true);
+  if (activeEndpoint.current !== endpoint) {
+    activeEndpoint.current = endpoint;
+    generation.current++;
+  }
+  useLayoutEffect(() => {
+    mounted.current = true;
+    return () => {
+      mounted.current = false;
+      generation.current++;
+    };
+  }, []);
+  function captureTarget() {
+    const currentGeneration = generation.current,
+      currentEndpoint = endpoint;
+    return () =>
+      mounted.current &&
+      generation.current === currentGeneration &&
+      activeEndpoint.current === currentEndpoint;
+  }
+  const targetId = id ? Number(id) : user?.id;
+  const currentForm = form?.id === targetId && !resource.loading;
+  useEffect(() => {
+    setForm(null);
+    setPassword("");
+    setCurrentPassword("");
+    action.reset();
+  }, [endpoint]);
   useEffect(() => {
     if (resource.data) setForm(resource.data.user);
   }, [resource.data]);
-  const set = (key: keyof User, value: string) =>
+  const set = (key: keyof User, value: string | boolean) =>
     setForm((current) => (current ? { ...current, [key]: value } : current));
   async function submit(event: FormEvent) {
     event.preventDefault();
-    if (!form) return;
-    await action.run(async () => {
-      const {
-        email,
-        displayName,
-        firstName = "",
-        lastName = "",
-        nickname = "",
-        bio = "",
-        website = "",
-        adminColor = "modern",
-        locale = "en_US",
-      } = form;
-      const result = await api<{ user: User }>(
-        endpoint,
-        json("PUT", {
+    if (!form || !currentForm) return;
+    const isCurrent = captureTarget();
+    const message = await action.run(
+      async () => {
+        const {
           email,
           displayName,
-          firstName,
-          lastName,
-          nickname,
-          bio,
-          website,
-          adminColor,
-          locale,
-          ...(password
-            ? { password, ...(form.id === user?.id ? { currentPassword } : {}) }
-            : {}),
-          ...(form.id !== user?.id ? { role: form.role } : {}),
-        }),
-      );
-      setForm(result.user);
-      if (form.id === user?.id) setUser({ ...user, ...result.user });
-      setPassword("");
-      setCurrentPassword("");
-    }, "Profile updated.");
+          firstName = "",
+          lastName = "",
+          nickname = "",
+          bio = "",
+          website = "",
+          adminColor = "modern",
+          locale = "en_US",
+          showAdminBar = true,
+          commentShortcuts = false,
+        } = form;
+        const result = await api<{
+          user: User;
+          pendingEmail: PendingProfileEmail | null;
+          delivery?: string;
+        }>(
+          endpoint,
+          json("PUT", {
+            email,
+            displayName,
+            firstName,
+            lastName,
+            nickname,
+            bio,
+            website,
+            adminColor,
+            locale,
+            showAdminBar,
+            commentShortcuts,
+            ...(password
+              ? {
+                  password,
+                  ...(form.id === user?.id ? { currentPassword } : {}),
+                }
+              : {}),
+            ...(form.id !== user?.id ? { role: form.role } : {}),
+          }),
+        );
+        if (!isCurrent()) return;
+        setForm(result.user);
+        if (form.id === user?.id) setUser({ ...user, ...result.user });
+        if (self) pendingResource.setData({ pending: result.pendingEmail });
+        setPassword("");
+        setCurrentPassword("");
+        return result.pendingEmail && result.delivery
+          ? `Profile updated. ${deliveryMessage(result.delivery)}`
+          : "Profile updated.";
+      },
+      "",
+      isCurrent,
+    );
+    if (message && isCurrent()) action.setNotice(message);
   }
   return (
-    <Screen title={id && form?.id !== user?.id ? "Edit User" : "Profile"}>
+    <Screen title={id && targetId !== user?.id ? "Edit User" : "Profile"}>
       <Feedback action={action} />
       <ResourceState {...resource} retry={resource.reload} />
-      {form && (
+      {form && currentForm && (
         <form onSubmit={submit}>
           <h2>Personal Options</h2>
           <table className="form-table">
@@ -240,6 +307,37 @@ export function Profile() {
                   ))}
                 </div>
               </Field>
+              <Field label="Toolbar">
+                <label>
+                  <input
+                    type="checkbox"
+                    checked={form.showAdminBar !== false}
+                    onChange={(event) =>
+                      set("showAdminBar", event.target.checked)
+                    }
+                  />{" "}
+                  Show Toolbar when viewing site
+                </label>
+              </Field>
+              {(!self || form.role !== "subscriber") && (
+                <Field label="Keyboard Shortcuts">
+                  <label>
+                    <input
+                      type="checkbox"
+                      checked={form.commentShortcuts === true}
+                      onChange={(event) =>
+                        set("commentShortcuts", event.target.checked)
+                      }
+                    />{" "}
+                    Enable keyboard shortcuts for comment moderation.
+                  </label>
+                  <p className="description">
+                    <a href="https://wordpress.org/documentation/article/keyboard-shortcuts-classic-editor/#keyboard-shortcuts-for-comments">
+                      Documentation on Keyboard Shortcuts
+                    </a>
+                  </p>
+                </Field>
+              )}
               <Field label="Language">
                 <select
                   aria-label="Language"
@@ -325,6 +423,29 @@ export function Profile() {
                   value={form.email}
                   onChange={(e) => set("email", e.target.value)}
                 />
+                {self && (
+                  <>
+                    <p className="description">
+                      If you change this, an email will be sent to your new
+                      address to confirm it. The new address will not become
+                      active until confirmed.
+                    </p>
+                    <ResourceState
+                      loading={pendingResource.loading}
+                      error={pendingResource.error}
+                      retry={pendingResource.reload}
+                    />
+                    <ProfileEmailNotice
+                      pending={pendingResource.data?.pending || null}
+                      currentEmail={
+                        resource.data?.user.email || user?.email || ""
+                      }
+                      onChanged={(pending) =>
+                        pendingResource.setData({ pending })
+                      }
+                    />
+                  </>
+                )}
               </Field>
               <Field label="Website">
                 <input
@@ -396,6 +517,7 @@ export function Profile() {
                         () =>
                           api("/profile/logout-other-sessions", json("POST")),
                         "All other sessions have been logged out.",
+                        captureTarget(),
                       )
                     }
                   >
@@ -415,7 +537,9 @@ export function Profile() {
           </p>
         </form>
       )}
-      {form && <ApplicationPasswords userId={form.id} self={form.id === user?.id} />}
+      {form && currentForm && (
+        <ApplicationPasswords userId={form.id} self={form.id === user?.id} />
+      )}
     </Screen>
   );
 }
@@ -874,11 +998,11 @@ export function SettingsSuite() {
                   <Field label="Thumbnail size">
                     <label>
                       Width{" "}
-                      {number("thumbnailWidth", "Thumbnail width", 1, 4096)}
+                      {number("thumbnailWidth", "Thumbnail width", 0, 4096)}
                     </label>{" "}
                     <label>
                       Height{" "}
-                      {number("thumbnailHeight", "Thumbnail height", 1, 4096)}
+                      {number("thumbnailHeight", "Thumbnail height", 0, 4096)}
                     </label>
                     <p>
                       {check(
@@ -889,19 +1013,20 @@ export function SettingsSuite() {
                   </Field>
                   <Field label="Medium size">
                     <label>
-                      Max width {number("mediumWidth", "Medium width")}
+                      Max width {number("mediumWidth", "Medium width", 0, 8192)}
                     </label>{" "}
                     <label>
-                      Max height {number("mediumHeight", "Medium height")}
+                      Max height {number("mediumHeight", "Medium height", 0, 8192)}
                     </label>
                   </Field>
                   <Field label="Large size">
                     <label>
-                      Max width {number("largeWidth", "Large width")}
+                      Max width {number("largeWidth", "Large width", 0, 8192)}
                     </label>{" "}
                     <label>
-                      Max height {number("largeHeight", "Large height")}
+                      Max height {number("largeHeight", "Large height", 0, 8192)}
                     </label>
+                    <p className="description">Set both dimensions to 0 to disable a size. A single zero leaves that dimension unconstrained.</p>
                   </Field>
                   <Field label="Uploading Files">
                     {check(
@@ -2247,7 +2372,6 @@ export function ToolsSuite() {
   );
   const [fileName, setFileName] = useState("");
   const [replaceDesign, setReplaceDesign] = useState(false);
-  const [exportFormat, setExportFormat] = useState("json");
   const [importCount, setImportCount] = useState(0);
   const action = useAction();
   const tabs = admin
@@ -2262,7 +2386,7 @@ export function ToolsSuite() {
     : [["privacy", "Personal Data"]];
   const active = admin ? tab : "privacy";
   return (
-    <Screen title="Tools">
+    <Screen title={active === "export" ? "Export" : active === "import" ? "Import" : "Tools"}>
       <Feedback action={action} />
       <nav className="nav-tab-wrapper">
         {tabs.map(([value, label]) => (
@@ -2309,52 +2433,7 @@ export function ToolsSuite() {
           </ul>
         </HealthDetails>
       )}
-      {active === "export" && (
-        <div className="worldact-tool-panel">
-          <h2>Export your content</h2>
-          <p>
-            Download a WorldAct JSON archive of posts, pages, terms, comments,
-            navigation, templates, styles, settings, and supported media files.
-            JSON archives embed up to 64 MiB of media. Account passwords and
-            session data are excluded.
-          </p>
-          <p>
-            <label>
-              Format{" "}
-              <select
-                aria-label="Export format"
-                value={exportFormat}
-                onChange={(e) => setExportFormat(e.target.value)}
-              >
-                <option value="json">WorldAct JSON</option>
-                <option value="wxr">WordPress XML (WXR)</option>
-              </select>
-            </label>
-          </p>
-          <button
-            className="button button-primary"
-            disabled={action.busy}
-            onClick={() =>
-              void action.run(async () => {
-                if (exportFormat === "wxr") {
-                  const response = await fetch("/api/tools/export?format=wxr", {
-                    credentials: "same-origin",
-                  });
-                  if (!response.ok)
-                    throw new Error("The XML export could not be generated.");
-                  downloadBlob("worldact-export.xml", await response.blob());
-                } else
-                  downloadJSON(
-                    `worldact-export-${new Date().toISOString().slice(0, 10)}.json`,
-                    await api("/tools/export"),
-                  );
-              }, "Export downloaded.")
-            }
-          >
-            Download Export File
-          </button>
-        </div>
-      )}
+      {active === "export" && <ExportContent />}
       {active === "import" && (
         <div className="worldact-tool-panel">
           <h2>Import content</h2>

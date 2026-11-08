@@ -71,7 +71,10 @@ jobs:
           tests/media-format-preservation.test.ts
           tests/full-image-uploads.test.ts tests/media-upload-cleanup.test.ts
           tests/media-edit-transforms.test.ts tests/media-edit-copy.test.ts
+          tests/media-native-rest.test.ts tests/rest-fields.test.ts
           tests/classic-editor.test.ts tests/classic-persistence.test.ts
+          tests/classic-parser.test.ts tests/block-history.test.ts
+          tests/account-tools-ui.test.ts
           tests/shortcodes.test.ts
       - name: Fresh browser installation on the compiled server
         env:

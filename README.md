@@ -22,6 +22,8 @@ Open [WorldAct admin](http://127.0.0.1:5173/admin). Sign in with `ADMIN_EMAIL` a
 
 Setup starts PostgreSQL 17 on `127.0.0.1:54329`, migrates the schema, and seeds the administrator, Hello world! post, Sample Page, sample comment, and default site designs. Re-running setup preserves existing content. Copy and edit `.env.example` before first setup to choose your own configuration. Changing the environment password afterward does not replace an existing account password.
 
+For a fresh site, use `npm run setup:browser` instead of `npm run setup` to choose the site title and administrator in the browser. Preparation migrates PostgreSQL without seeding and prints a private `/install#token=…` link. Start `npm run dev` and open that link; the installer clears the fragment immediately and keeps its token in memory only. Installation runs once, then directs you to normal login. An initialized site cannot be reset through the installer.
+
 Vite runs at `127.0.0.1:5173`; the Node API runs at `127.0.0.1:3001`. PostgreSQL uses the persistent `worldact_pgdata` Docker volume. Uploaded files and generated image sizes live in the ignored `uploads/` directory. Back up **both the database and uploads**; content exports are not complete backups.
 
 ## Included workflows
@@ -44,6 +46,8 @@ JSON v3 archives embed supported uploads, original versions, generated image siz
 WXR carries implemented posts/pages, terms/hierarchy, threaded comments, synced patterns and block-navigation entities. It rewrites nested references, allocates a shared export ID space and rolls back failed imports. Remote attachment files are not downloaded; original URLs remain and warnings identify skipped files. WXR import is limited to 8 MB. Neither format replaces database and filesystem backups, user accounts, all history or unsupported extension data.
 
 Password recovery writes to **Tools → Mail** by default, with no external delivery. Optional SMTP uses `SMTP_HOST`, `SMTP_PORT`, `SMTP_SECURE`, `SMTP_USER`, `SMTP_PASSWORD`, and `SMTP_FROM`. Without SMTP, an administrator can retrieve local reset messages from the mail outbox.
+
+Profile email changes also require confirmation while signed in to the account that requested the change. The active email remains in use until confirmation; Profile shows the pending address, expiry, resend and cancel controls. An administrator editing another account updates that address immediately. Personal Options control the public toolbar and opt-in comment keyboard shortcuts; the administration toolbar remains visible. Tools → Export offers filtered Posts, Pages and Media XML separately from the full JSON archive. Settings → Media accepts zero to disable a configured size or leave one axis unconstrained.
 
 Registration is disabled by default. Enable it in Settings → General and choose the default role. New users receive a single-use password-setting link through the configured mail channel. Privacy requests require email confirmation or explicit administrator confirmation. Export links expire after three days. Erasure anonymizes matching comment authors and revokes earlier exports; accounts, profile fields, authored content, comment text and request records are retained. Account deletion is a separate Users workflow.
 

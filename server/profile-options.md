@@ -9,17 +9,19 @@ needed. They are selected only for private login/session/application-password
 authentication and profile responses; public author DTOs and site archives
 continue to exclude account preferences.
 
-Frontend handoff: source Personal Options checkbox labels are “Show Toolbar when
-viewing site” and “Enable keyboard shortcuts for comment moderation.” Apply the
-toolbar preference only to the public toolbar. The administrator shell toolbar
+The React Profile implements the source Personal Options checkbox labels “Show
+Toolbar when viewing site” and “Enable keyboard shortcuts for comment
+moderation.” The toolbar preference applies only to the public toolbar. The administrator shell toolbar
 remains present. Comment shortcuts are opt-in and meaningful only where the
 account can moderate; the profile source hides that checkbox on a self-profile
-without edit-posts capability. Do not add an inert toggle before implementing
-the behavior. The supplied `wp-admin/js/edit-comments.js` table-hotkeys section
+without edit-posts capability. The supplied `wp-admin/js/edit-comments.js` table-hotkeys section
 and `wp-includes/js/jquery/jquery.table-hotkeys.js` define row navigation,
 selection, per-row and shifted bulk actions, editable-field exclusions, paging
 and focus behavior. Existing React comment mutations and permission checks must
-remain authoritative. Native UI and keyboard behavior require independent review.
+remain authoritative. The client implements these keys through the existing
+permission-bearing row actions, keeps modal and editable fields isolated, and
+returns focus after Quick Edit/Reply. Native UI and keyboard behavior require
+independent review.
 
 `tests/profile-options.test.ts` exercises genuine profile writes, partial-save
 preservation, default values, invalid data, other-account permissions, renewed

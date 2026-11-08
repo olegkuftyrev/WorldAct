@@ -8,11 +8,14 @@ configured locally and migrated before the Node API starts. The normal
 mode 0600, rotates a random 256-bit `WORLDACT_INSTALL_TOKEN`, starts the configured
 local PostgreSQL service and migrates without seeding. It prints a private
 `/install#token=…` link for the server operator. The fragment keeps the token out
-of HTTP paths/query logs and referrers. The React screen is a separate pending
-implementation: read the fragment into memory, clear it with replaceState,
-collect source-style site title/username/password/email/search-visibility fields,
-and submit the token only in the JSON body. Do not store it in localStorage or
-send it to third parties. English is the implemented interface language.
+of HTTP paths/query logs and referrers. The React `/install` screen reads the
+fragment into memory, clears it with replaceState, collects source-style site
+title/username/password/email/search-visibility fields, and submits the token
+only in the JSON body. It does not store the token in localStorage or send it to
+third parties. Supplied install CSS and local zxcvbn provide the setup form and
+password-strength display, with password generation/reveal and weak-password
+confirmation. Success leads to normal login; initialized sites show an
+already-installed screen. English is the implemented interface language.
 
 - `GET /api/install` returns only `{installed,available,language}`. GET never
   creates or changes a site and returns no credential or account identity.

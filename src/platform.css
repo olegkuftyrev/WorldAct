@@ -634,3 +634,10 @@
     flex-wrap: wrap;
   }
 }
+.worldact-export .export-content-choice > p { margin: 12px 0; }
+.worldact-export .export-content-choice > p > label { font-weight: 600; }
+.worldact-export .export-filters { margin: 0 0 22px 24px; }
+.worldact-export .export-filters p { margin: 10px 0; }
+.worldact-export .export-date-range { display: flex; flex-wrap: wrap; gap: 8px; }
+.worldact-export .export-filters select { max-width: 100%; }
+.worldact-export > hr { margin: 28px 0; }
