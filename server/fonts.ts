@@ -254,10 +254,11 @@ export async function inspectFont(buffer: Buffer) {
       "Two fonts are being checked. Try uploading again shortly.",
     );
   activeParsers++;
+  let worker: Worker | undefined;
   try {
     const metadata = await new Promise<FontMetadata>((resolve, reject) => {
       let settled = false;
-      const worker = new Worker(workerSource, {
+      const currentWorker = new Worker(workerSource, {
         eval: true,
         name: "WorldAct font verification",
         workerData: {
@@ -270,12 +271,17 @@ export async function inspectFont(buffer: Buffer) {
           stackSizeMb: 4,
         },
       });
+      worker = currentWorker;
       const finish = (error: Error | null, value?: FontMetadata) => {
         if (settled) return;
         settled = true;
         clearTimeout(timer);
-        void worker.terminate();
-        error ? reject(error) : resolve(value!);
+        // A result or timeout does not mean the worker has stopped. Keep the
+        // reservation until its physical exit, including termination failures.
+        void Promise.resolve().then(() => currentWorker.terminate()).then(
+          () => error ? reject(error) : resolve(value!),
+          () => reject(error || new HttpError(400, "This font could not be verified safely.")),
+        );
       };
       const timer = setTimeout(
         () =>
@@ -287,7 +293,7 @@ export async function inspectFont(buffer: Buffer) {
           ),
         5000,
       );
-      worker.once("message", (result) => {
+      currentWorker.once("message", (result) => {
         if (!result.ok) finish(new HttpError(400, result.error));
         else {
           const parsed = description.safeParse(result.metadata);
@@ -301,10 +307,11 @@ export async function inspectFont(buffer: Buffer) {
               );
         }
       });
-      worker.once("error", () =>
+      currentWorker.once("error", () =>
         finish(new HttpError(400, "This font could not be verified safely.")),
       );
-      worker.once("exit", (code) => {
+      currentWorker.once("exit", (code) => {
+        activeParsers--;
         if (!settled)
           finish(
             new HttpError(
@@ -318,7 +325,8 @@ export async function inspectFont(buffer: Buffer) {
     });
     return { ...format, metadata };
   } finally {
-    activeParsers--;
+    // A constructed worker owns its reservation until the exit listener runs.
+    if (!worker) activeParsers--;
   }
 }
 const normalizedFamily = (value: string) =>
