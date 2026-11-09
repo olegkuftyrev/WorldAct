@@ -33,9 +33,12 @@ export async function resolvePublicDocumentRoute(path:string,options:{namedPin?:
   // Safe404 surroundings must not reinterpret a retained missing path as a
   // new root name listing. Fixed identities likewise ignore valid selectors.
   if(resolution.status===404)return missingPublicListing(resolution);
-  if(!namedAuthorInput(query))return ordinaryListingPageRequested({},path)
-    ?applyOrdinaryListingPage(resolution,query,await getSettings(),pool,options.authenticated):resolution;
+  const named=namedAuthorInput(query);
+  // Secondary site acquisition receives archivePage=1 for a selected body.
+  // Retain its resolved kind rather than merging that counter with body page.
   if(resolution.kind==="singular"||resolution.kind==="front-page")return {...resolution,listing:{kind:resolution.kind,archive:resolution.archive || null}};
+  if(!named)return ordinaryListingPageRequested({},path)
+    ?applyOrdinaryListingPage(resolution,query,await getSettings(),pool,options.authenticated):resolution;
   return applyNamedAuthorListing(path,resolution,query,await getSettings(),pool,options.namedPin,options.authenticated);
 }
 async function resolvePublicDocumentRouteBase(path: string): Promise<PublicDocumentResolution> {
