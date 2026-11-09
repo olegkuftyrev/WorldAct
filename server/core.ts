@@ -40,7 +40,8 @@ import { assertEditLease } from "./edit-lease.js";
 import { postFormats } from "../shared/post-formats.js";
 import { contributorCanEditPostStatus } from "./comment-access.js";
 import { appendPostDateArchiveSQL, dateArchiveLocalSQL } from "./date-archives.js";
-import {POST_DATE_SQL,postCivilSQL,resolvePostDate} from "./post-date.js";
+import {POST_DATE_SQL,postCivilSQL,resolvePostDate,civilFromInstant,postCivilInstant} from "./post-date.js";
+import {publicationStatusAt} from "../shared/publication-status.js";
 import { parseFootnotes } from "./footnotes.js";
 import { withPreviewAutosave } from "./post-preview.js";
 import { contentPagination, parseContentPage } from "./legacy-content.js";
@@ -109,6 +110,9 @@ type PostInput = z.infer<typeof createSchema>;
 // Only the internal mail wrapper can relax the normal author-role check for a
 // new pending post. This authority cannot be supplied by any request body.
 const mailPostAuthority = Symbol("pending-mail-post");
+// Only the bulk handler can request this date reset. It carries no permission
+// authority and cannot be supplied through either strict mutation schema.
+const bulkPublishNowIntent = Symbol("bulk-publish-now");
 function ownOnly(user: User) {
   return user.role === "author" || user.role === "contributor";
 }
@@ -367,6 +371,7 @@ async function savePost(
   existing?: any,
   oldPasswordHash?: string | null,
   authority?: typeof mailPostAuthority,
+  intent?: typeof bulkPublishNowIntent,
 ) {
   const type = input.type ?? existing?.type ?? "post";
   const templateSlug=input.templateSlug ?? existing?.templateSlug ?? "";
@@ -525,21 +530,37 @@ async function savePost(
     );
     if (collision.rowCount) continue;
     const dateSettings=await getSettings(client),dateNow=new Date();
-    const pair=resolvePostDate(input,existing,status,dateSettings.timezone,dateNow);
+    const bulkPublishNow=intent===bulkPublishNowIntent && input.status==="publish" && existing && ["draft","future"].includes(existing.status);
+    // A server-owned reset must not hide invalid user dates, including a
+    // simultaneous legacy null that would otherwise take reset precedence.
+    if(bulkPublishNow && input.postDate!==undefined && input.postDate!==null)resolvePostDate({postDate:input.postDate},existing,status,dateSettings.timezone,dateNow);
+    let pair=resolvePostDate(input,existing,status,dateSettings.timezone,dateNow);
+    if(bulkPublishNow)pair=resolvePostDate({postDate:null},existing,status,dateSettings.timezone,dateNow);
     const civilIntent=input.postDate!==undefined || input.restDate!==undefined && input.restDate!=="" || input.restDateGmt!==undefined && input.restDateGmt!=="";
     const changedSchedule=input.scheduledAt!==undefined && input.scheduledAt!==null && (!existing?.scheduledAt || new Date(input.scheduledAt).valueOf()!==new Date(existing.scheduledAt).valueOf());
-    const clearedDate=input.postDate===null || input.restDate===null || input.restDateGmt===null || status!=="future" && input.publishedAt===null;
+    const clearedDate=bulkPublishNow || input.postDate===null || input.restDate===null || input.restDateGmt===null || status!=="future" && input.publishedAt===null;
     if(status==="future"){
       // No date intent must not synthesize a new schedule. A saved fixed draft
       // reuses its selected GMT, overriding an inactive legacy due value; a
       // genuinely changed explicit UTC schedule retains its existing priority.
-      if(!civilIntent && (input.scheduledAt===null || !changedSchedule && !existing?.postDateGmt))throw new HttpError(400,"Choose a publication date before scheduling this post.");
-      if(civilIntent || existing?.status!=="future" && !changedSchedule && existing?.postDateGmt)scheduledAt=pair.postDateGmt;
-      if(!scheduledAt && input.scheduledAt===undefined && existing?.postDateGmt)scheduledAt=pair.postDateGmt;
-      if(!scheduledAt || !pair.postDateGmt)throw new HttpError(400,"Choose a publication date before scheduling this post.");
-      if(new Date(scheduledAt).valueOf()<=dateNow.valueOf()){status="publish";assertNewAccess(user,type,status,existing?.status);}
+      const existingSelection=existing?.postDateGmt || existing?.status==="future" && existing?.postDate;
+      if(!civilIntent && (input.scheduledAt===null || !changedSchedule && !existingSelection))throw new HttpError(400,"Choose a publication date before scheduling this post.");
     }
-    if(civilIntent && status!=="future")publishedAt=pair.postDateGmt;
+    if(status==="publish" || status==="future"){
+      // A null selected GMT has no fixed instant to reinterpret. Touched
+      // nonfloating rows fix it from their unchanged civil value in this same
+      // late zone snapshot, rejecting gaps instead of rolling their date.
+      if(pair.postDateGmt===null){
+        const gmt=postCivilInstant(pair.postDate,dateSettings.timezone);
+        if(civilFromInstant(gmt,dateSettings.timezone)!==pair.postDate)throw new HttpError(400,"This local time does not exist in the selected timezone. Choose another time.");
+        pair={postDate:pair.postDate,postDateGmt:gmt};
+      }
+      status=publicationStatusAt(status,pair.postDateGmt,dateNow);
+      assertNewAccess(user,type,status,existing?.status);
+      if(status==="future")scheduledAt=pair.postDateGmt;
+      else if(existing?.status!=="publish")publishedAt=pair.postDateGmt;
+    }
+    if((civilIntent || bulkPublishNow) && status!=="future")publishedAt=pair.postDateGmt;
     if(clearedDate && status!=="future")scheduledAt=null;
     if(status==="publish" && !publishedAt)publishedAt=pair.postDateGmt || dateNow;
 
@@ -605,12 +626,11 @@ export async function createMailPost(
   recognized: boolean,
 ) {
   const publishing = recognized && ["administrator", "editor", "author"].includes(author.role);
-  const future = publishing && input.date !== null && Date.parse(input.date) > Date.now() + 60_000;
   const data = createSchema.parse({
     type: "post", authorId: author.id, title: input.title, content: input.content,
     categoryIds: input.categoryId === null ? [] : [input.categoryId],
-    status: future ? "future" : publishing ? "publish" : "pending",
-    ...(future ? { scheduledAt: input.date } : input.date ? { publishedAt: input.date } : {}),
+    status: publishing ? "publish" : "pending",
+    ...(input.date ? { publishedAt: input.date } : {}),
   });
   return savePost(client, data, author, undefined, undefined,
     !publishing ? mailPostAuthority : undefined);
@@ -795,7 +815,8 @@ router.post("/posts/bulk", contentRoles, async (req: AuthRequest, res) => {
         const changes = { ...input.changes };
         if (changes.categoryIds !== undefined && input.categoryMode === "add") changes.categoryIds = [...new Set([...post.categoryIds, ...changes.categoryIds])];
         if (changes.tagIds !== undefined && input.tagMode === "add") changes.tagIds = [...new Set([...post.tagIds, ...changes.tagIds])];
-        return savePost(client, changes, user, post, passwordHash);
+        return savePost(client, changes, user, post, passwordHash,undefined,
+          changes.status==="publish" && ["draft","future"].includes(post.status)?bulkPublishNowIntent:undefined);
       });
       posts.push(saved);
     } catch (error) {
