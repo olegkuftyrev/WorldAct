@@ -42,7 +42,7 @@ import { useEditorShortcuts } from "../editor/editorShortcuts";
 import type { EditorPreferencePatch } from "../editor/preferenceQueue";
 import { documentRecovery, editorOwnerMatches, editorTargetMatches } from "../editor/documentRecovery";
 import { formatPostCivil } from "../../shared/post-civil-date";
-import { publicationActionInstant, publicationDateChange, publicationDatePayload } from "../editor/publicationDate";
+import { publicationAction, publicationDateChange, publicationDatePayload } from "../editor/publicationDate";
 
 type DocumentState = {
   title: string;
@@ -724,9 +724,9 @@ export default function Editor({ type }: { type: "post" | "page" }) {
     if (!documentReady || busyRef.current || !leaseReady.current) return;
     if (
       nextStatus === "future" &&
-      (!scheduleInstant || Date.parse(scheduleInstant) <= Date.now())
+      !publication.canSubmitSchedule
     ) {
-      setError("Choose a future publication date before scheduling.");
+      setError("Choose a valid publication date before scheduling.");
       return;
     }
     if (
@@ -964,15 +964,13 @@ export default function Editor({ type }: { type: "post" | "page" }) {
     }
     return candidate.id === postId;
   }
-  const scheduleInstant = publicationActionInstant(doc, timezone);
+  const publication = publicationAction(doc, timezone, new Date());
   const primaryStatus: Post["status"] = !canPublish
     ? doc.status === "private"
       ? "private"
       : "pending"
     : doc.status === "draft" || doc.status === "pending"
-      ? scheduleInstant && Date.parse(scheduleInstant) > Date.now()
-        ? "future"
-        : "publish"
+      ? publication.status
       : doc.status;
   const primaryLabel =
     primaryStatus === "pending"

@@ -1,4 +1,5 @@
 import { civilFromInstant, parsePostCivil, postCivilInstant } from "../../shared/post-civil-date";
+import { publicationStatusAt } from "../../shared/publication-status";
 
 /** datetime-local can omit zero seconds. Keep the API's canonical civil grammar. */
 export function publicationDateInput(value: string): string {
@@ -36,4 +37,18 @@ export function publicationActionInstant(value: {
     return value.postDateGmt && Number.isFinite(Date.parse(value.postDateGmt)) ? value.postDateGmt : null;
   if (value.postDateIntent === null || !timezone) return null;
   return publicationInstant(value.postDate, timezone);
+}
+
+/** Hints share the server's minute boundary. A valid chosen date can still be
+ * submitted after that window passes; only the response decides saved status. */
+export function publicationAction(
+  value: Parameters<typeof publicationActionInstant>[0],
+  timezone: string | undefined,
+  now: Date,
+): { status: "publish" | "future"; canSubmitSchedule: boolean } {
+  const instant = publicationActionInstant(value, timezone);
+  return {
+    status: publicationStatusAt("publish", instant ?? now, now),
+    canSubmitSchedule: instant !== null,
+  };
 }
