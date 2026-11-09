@@ -179,7 +179,7 @@ test("explicit archive QueryTitle is absent for actual singular templates and bo
     settingsRestore = Object.fromEntries(["theme", "timezone", "frontPageMode", "permalinkStructure"].map(key => [key, settings[key]]));
     await setup("/api/settings", "PUT", { theme: "twentytwentyfive", timezone: "UTC", frontPageMode: "posts", permalinkStructure: "/%postname%/" });
     const explicitTitle = (anchor: string) => '<!-- wp:query-title ' + JSON.stringify({ type: "archive", anchor }) + ' /-->';
-    const group = (anchor: string, inner: string) => '<!-- wp:group ' + JSON.stringify({ tagName: "main", anchor }) + ' --><main class="wp-block-group">' + inner + '</main><!-- /wp:group -->';
+    const group = (anchor: string, inner: string) => '<!-- wp:group ' + JSON.stringify({ tagName: "main", anchor }) + ' --><main id="' + anchor + '" class="wp-block-group">' + inner + '</main><!-- /wp:group -->';
     const assignedContent = group(mainId, "<p>" + marker + "</p>" + explicitTitle(titleId) + '<!-- wp:post-title {"level":1} /--><!-- wp:post-content /-->');
     const assigned = (await setup("/api/site-editor/documents", "POST", { type: "template", slug, title: slug, content: assignedContent }, 201)).document;
     assert.equal(assigned.slug, slug, "SETUP actual assigned slug");
@@ -200,7 +200,7 @@ test("explicit archive QueryTitle is absent for actual singular templates and bo
     assert.match(dateDocument.rawContent, /wp:query-title\s+\{[^}]*"type"\s*:\s*"archive"/, "SETUP retained date archive type");
     const make = async (type: "post" | "page"): Promise<Fixture> => {
       const bodyId = stamp + "-" + type + "-body", bodyTitleId = stamp + "-" + type + "-body-title", bodyMarker = "BODY-" + type.toUpperCase() + "-" + stamp;
-      const content = '<!-- wp:group ' + JSON.stringify({ tagName: "section", anchor: bodyId }) + ' --><section class="wp-block-group"><p>'
+      const content = '<!-- wp:group ' + JSON.stringify({ tagName: "section", anchor: bodyId }) + ' --><section id="' + bodyId + '" class="wp-block-group"><p>'
         + bodyMarker + '</p>' + explicitTitle(bodyTitleId) + '</section><!-- /wp:group -->';
       const created = (await setup("/api/posts", "POST", { type, title: stamp + " " + type, slug: stamp + "-" + type,
         status: "publish", commentStatus: "closed", templateSlug: slug, postDate: "2001-02-03T04:05:37", content }, 201)).post;
