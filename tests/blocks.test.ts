@@ -4,6 +4,7 @@ import assert from "node:assert/strict";
 import { parse } from "@wordpress/block-serialization-default-parser";
 import { DOMParser } from "linkedom";
 import { pool, postFields, getSettings } from "../server/db.js";
+import {authorArchivePath} from "../shared/author-archive.js";
 import {
   renderPublicContent,
   renderSiteDocument,
@@ -671,7 +672,8 @@ test("block entity REST permissions, canonical persistence and optimistic confli
     const unlocked = await request(templatePath, "GET", undefined, access);
     assert.equal(unlocked.response.status, 200, JSON.stringify(unlocked.data));
     assert.match(unlocked.data.content, new RegExp("Confidential " + name));
-    assert.match(unlocked.data.content, /href="\/author\/[a-z0-9_-]+\/"/);
+    const author=(await pool.query("SELECT id,nicename FROM users WHERE id=$1",[createdPost.data.post.authorId])).rows[0];
+    assert.equal(new DOMParser().parseFromString(unlocked.data.content,"text/html").querySelector(".wp-block-post-author-name a")?.getAttribute("href"),authorArchivePath(author,await getSettings()));
     const privatePost = await request(
       "/api/posts",
       "POST",
