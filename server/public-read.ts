@@ -89,7 +89,8 @@ export function readPublicSite(context:PublicReadContext){
 async function readPublicSiteOnce(context: PublicReadContext,selection:{author?:AuthorArchive}) {
   const selectedAuthor=context.authorArchive || selection.author;
   if(selectedAuthor)observePublicAuthor(context.canReadProtectedPost,selectedAuthor);
-  const pretty=context.requestPath?await resolvePrettyAuthorArchive(authorArchiveRequestPath(context.requestPath,context.query)):null;
+  const settings=await getSettings();
+  const pretty=context.requestPath?await resolvePrettyAuthorArchive(authorArchiveRequestPath(context.requestPath,context.query,settings),settings):null;
   if(pretty?.recognized && !pretty.archive)throw new HttpError(404,"Author archive not found.");
   if(selectedAuthor && (!pretty?.archive || pretty.archive.authorId!==selectedAuthor.authorId || pretty.archive.slug!==selectedAuthor.slug))throw new HttpError(404,"The author archive identity changed.");
   if(pretty?.archive){selection.author ||= pretty.archive;observePublicAuthor(context.canReadProtectedPost,pretty.archive);}
@@ -102,8 +103,7 @@ async function readPublicSiteOnce(context: PublicReadContext,selection:{author?:
       author: z.coerce.number().int().positive().max(2147483647).optional(),
     })
     .parse({...context.query,...(pretty?.archive?{author:pretty.archive.authorId,page:pretty.archive.page || context.query.page}: {})});
-  const settings = await getSettings(),
-    args: unknown[] = [];
+  const args: unknown[] = [];
   const dateArchive = parseDateArchiveQuery(context.query);
   let where = "p.type='post' AND p.status='publish'";
   if (filter.author) { args.push(filter.author); where += ` AND p.author_id=$${args.length}`; }
