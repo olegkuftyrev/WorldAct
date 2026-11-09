@@ -1,0 +1,74 @@
+{
+  "status": "NO_ACTIVE_GUARD_RESOURCES_OWN_AFTER_CONFIG_LINK_RETAINED_PENDING_ROOT_REVIEW",
+  "head": "e5ce276f93b011fb7a5a5f7df98a189b7b7b35a0",
+  "frozenMatches": {
+    "head": true,
+    "tree": true,
+    "sourceFiles": true,
+    "testFiles": true,
+    "buildFiles": true
+  },
+  "sourceInventoryEntries": 354,
+  "selectedTestFiles": 12,
+  "buildFiles": 411,
+  "journalDatabases": [
+    "worldact_test_1794241909608_1580f38a",
+    "worldact_test_1794241965024_094db666"
+  ],
+  "neverCreatedAnchor": "worldact_archive_title_home_independent_after_anchor",
+  "remainingDatabaseRows": [],
+  "journalApplications": [
+    "worldact_listing_independent_home-title-after-source",
+    "worldact_listing_independent_home-title-after-compiled"
+  ],
+  "remainingSessionRows": [],
+  "ports": [
+    {
+      "port": 3068,
+      "exitCode": 1,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "port": 3069,
+      "exitCode": 1,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "port": 3070,
+      "exitCode": 1,
+      "stdout": "",
+      "stderr": ""
+    }
+  ],
+  "config": {
+    "uid": 501,
+    "mode": 384,
+    "sha256": "4934b095e618deba847bed2e5ac059ecf66ce31b6804acb39d8d1fb7c6986ca3",
+    "retained": true,
+    "reason": "Explicit root instruction until final review; minimalDATABASE_URL only, no anchor exists."
+  },
+  "dependencyLink": {
+    "uid": 501,
+    "target": "<verified-dependency-owner>/node_modules",
+    "retained": true
+  },
+  "dependencyOwner": {
+    "uid": 501,
+    "mode": 493,
+    "symlink": false,
+    "lockSHA256": "233888ed8f864581a8835aab0b4c33ccd7fbc391f2a98650b63fcf8db8814892"
+  },
+  "beforePreservation": {
+    "checkout": "<before-checkout>",
+    "fixtureSHA256": "14dc9e1cc335174df1b4f826ddf57699e97d0add3daffacfb80639c9adf0264b",
+    "nodeSHA256": "300199e4aebe00b526fee49af14904d50cacd20333b07c99c2ded6ba3ddf7070",
+    "all411BeforeBuildFilesUnchanged": true,
+    "beforeEnvAndLinkAbsent": true
+  },
+  "uploads": "Both successful guarded runners reached their normal finally removal of each owned random upload directory. Exact random paths not separately journaled; no glob deletion or independent per-path claim.",
+  "noArchiveCreated": true,
+  "noTestSourceUiCiMainMutation": true,
+  "gitStatus": ""
+}

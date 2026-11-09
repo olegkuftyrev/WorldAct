@@ -1,0 +1,115 @@
+{
+  "scope": "DOCS_ONLY_FIVE_PATH_SANITIZED_AFTER_PAYLOADS_PLUS_README_AND_MANIFEST",
+  "certificateCommit": "e5ce276f93b011fb7a5a5f7df98a189b7b7b35a0",
+  "runtimeEquivalentTo": "90dc05ec16f95c9fad60eb95840154ef37c7daca",
+  "nodeSHA256": "7f5e15d054e0a888ae362f95b055c587dab1dff8c9fd836b0d98ea1eafb96093",
+  "sourcePayloads": [
+    {
+      "file": "review.md",
+      "privateOriginalBasename": "archive-query-title-home-independent-after-review.md",
+      "privateOriginalSHA256": "e29e139f7a6eb6c62817ed49bf9ac3c19ec3c14a55ab1d26553afcedc25218da",
+      "packagedSHA256": "e29e139f7a6eb6c62817ed49bf9ac3c19ec3c14a55ab1d26553afcedc25218da",
+      "privateOriginalBytes": 6075,
+      "packagedBytes": 6075,
+      "replacementLedger": []
+    },
+    {
+      "file": "checks.json",
+      "privateOriginalBasename": "archive-query-title-home-independent-after-checks.json",
+      "privateOriginalSHA256": "6a117c2e4f31bb202cd04fdfa0558bb147998c490278bbcc7effcf565b888ead",
+      "packagedSHA256": "416a0f8620495a21f1bccce5e0a87be6ab47608d99f34597fdf6c9b390f8d818",
+      "privateOriginalBytes": 10444,
+      "packagedBytes": 10255,
+      "replacementLedger": [
+        {
+          "prefixRole": "private-evidence-root",
+          "originalPrefixSHA256": "bed2b4e9ad41742e6ebeda187ea3ea933b7132f2f43d2957981041c67030ea89",
+          "replacement": "<private-evidence>/",
+          "count": 23
+        },
+        {
+          "prefixRole": "private-log-root",
+          "originalPrefixSHA256": "45a34ef8e75ba2f9a30a7a2a6fc4b812e60f797996daebd11a097af966503dbf",
+          "replacement": "<private-log>/worldact-public-listing-independent-",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "file": "cleanup.json",
+      "privateOriginalBasename": "archive-query-title-home-independent-after-cleanup.json",
+      "privateOriginalSHA256": "96204c380481086cc30cc17444f34e0297896d4761a176b5b7e4f74a1f95ac73",
+      "packagedSHA256": "9dd9521ae03c9148e17604e9392fe0d103b048d6d967bb0a95d4901ab612c6a4",
+      "privateOriginalBytes": 2301,
+      "packagedBytes": 2248,
+      "replacementLedger": [
+        {
+          "prefixRole": "before-checkout-root",
+          "originalPrefixSHA256": "1a13daca6ee41e72f40fbe47bd979c1e2ed64b0a759abcce4e720a95f7c371f2",
+          "replacement": "<before-checkout>",
+          "count": 1
+        },
+        {
+          "prefixRole": "verified-dependency-owner-root",
+          "originalPrefixSHA256": "30c3b5ce6819c5c86dd7b89fa4672575a167d1923d0e237f9722baac8d2173a4",
+          "replacement": "<verified-dependency-owner>",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "file": "observations.json",
+      "privateOriginalBasename": "archive-query-title-home-independent-after-observations.json",
+      "privateOriginalSHA256": "71ee96485a6855b6e3df726e9c625336179de2ee4fcab2820fda5abebff1ae51",
+      "packagedSHA256": "599e472eca5985d4178d4bc6946b8abaa08ffef282a82cb9901e8782569f4f2e",
+      "privateOriginalBytes": 32475,
+      "packagedBytes": 32385,
+      "replacementLedger": [
+        {
+          "prefixRole": "private-evidence-root",
+          "originalPrefixSHA256": "bed2b4e9ad41742e6ebeda187ea3ea933b7132f2f43d2957981041c67030ea89",
+          "replacement": "<private-evidence>/",
+          "count": 10
+        }
+      ]
+    },
+    {
+      "file": "owned-cleanup.json",
+      "privateOriginalBasename": "archive-query-title-home-independent-after-owned-cleanup.json",
+      "privateOriginalSHA256": "f494f1bbdff0f71f1a5656e9832266ac324db5518f99f2f06f3526b308b91600",
+      "packagedSHA256": "45dc189f6a2ae3e26ae48418abff447800ebebc67d50e4043024b06a9480e304",
+      "privateOriginalBytes": 2277,
+      "packagedBytes": 2179,
+      "replacementLedger": [
+        {
+          "prefixRole": "physical-after-checkout-root",
+          "originalPrefixSHA256": "9637df6bf380f11b3a8865add1ca38c98c2599616693210f23261edfd0a5a85c",
+          "replacement": "<physical-after-checkout>",
+          "count": 2
+        },
+        {
+          "prefixRole": "verified-dependency-owner-root",
+          "originalPrefixSHA256": "30c3b5ce6819c5c86dd7b89fa4672575a167d1923d0e237f9722baac8d2173a4",
+          "replacement": "<verified-dependency-owner>",
+          "count": 1
+        }
+      ]
+    }
+  ],
+  "otherFiles": {
+    "README.md": "e36daac199b4151d88e8cadca09299c6b31a5202dd7efa6f83030f403d99e1f1"
+  },
+  "actualCounts": {
+    "sourcePass": 58,
+    "compiledApiPass": 58,
+    "sourceInventoryEntries": 354,
+    "selectedTestFiles": 12,
+    "buildFiles": 411,
+    "targetedResponsesPerMode": 64
+  },
+  "sanitization": "Only known path-prefix substitutions, no result rewrites. Exact mapping is retained privately; public ledger uses prefix role/hash and replacement counts.",
+  "privateBeforeEvidenceRetained": true,
+  "rawProofLogsConfigAuthArchiveIncluded": false,
+  "totalFiles": 7,
+  "executionsForThisDocsPackage": 0
+}

@@ -1,0 +1,70 @@
+{
+  "status": "AUTHORIZED_ONLY_OWN_AFTER_CONFIG_AND_LINK_REMOVED",
+  "head": "e5ce276f93b011fb7a5a5f7df98a189b7b7b35a0",
+  "config": {
+    "path": "<physical-after-checkout>/.env",
+    "uid": 501,
+    "mode": 384,
+    "sha256": "4934b095e618deba847bed2e5ac059ecf66ce31b6804acb39d8d1fb7c6986ca3",
+    "removed": true
+  },
+  "dependencyLink": {
+    "path": "<physical-after-checkout>/node_modules",
+    "uid": 501,
+    "target": "<verified-dependency-owner>/node_modules",
+    "removed": true
+  },
+  "dependencyOwner": {
+    "uid": 501,
+    "mode": 493,
+    "symlink": false,
+    "lockSHA256": "233888ed8f864581a8835aab0b4c33ccd7fbc391f2a98650b63fcf8db8814892"
+  },
+  "ports": [
+    {
+      "port": 3068,
+      "exitCode": 1,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "port": 3069,
+      "exitCode": 1,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "port": 3070,
+      "exitCode": 1,
+      "stdout": "",
+      "stderr": ""
+    }
+  ],
+  "historicalGuardCleanup": {
+    "receipt": "archive-query-title-home-independent-after-cleanup.json",
+    "sha256": "96204c380481086cc30cc17444f34e0297896d4761a176b5b7e4f74a1f95ac73",
+    "journalDatabases": [
+      "worldact_test_1794241909608_1580f38a",
+      "worldact_test_1794241965024_094db666"
+    ],
+    "neverCreatedAnchor": "worldact_archive_title_home_independent_after_anchor",
+    "remainingDatabaseRows": [],
+    "journalApplications": [
+      "worldact_listing_independent_home-title-after-source",
+      "worldact_listing_independent_home-title-after-compiled"
+    ],
+    "remainingSessionRows": [],
+    "scope": "Historical normal-runner SQL closure subsequently independently reverified by root; no new SQL session for this unlink-only step."
+  },
+  "preserved": {
+    "afterNodeSHA256": "7f5e15d054e0a888ae362f95b055c587dab1dff8c9fd836b0d98ea1eafb96093",
+    "sourceEntries": 354,
+    "testFiles": 12,
+    "afterBuildFiles": 411,
+    "beforeNodeSHA256": "300199e4aebe00b526fee49af14904d50cacd20333b07c99c2ded6ba3ddf7070",
+    "all411BeforeBuildFilesUnchanged": true,
+    "allPrivateProofsAndOriginalsRetained": true
+  },
+  "noArchiveCreated": true,
+  "noRerunsOrRuntimeUiCiTestMainChanges": true
+}

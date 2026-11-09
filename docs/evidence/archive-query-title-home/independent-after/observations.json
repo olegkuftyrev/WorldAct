@@ -1,0 +1,1246 @@
+{
+  "source": {
+    "targetedResponses": 64,
+    "outer": {
+      "path": "<private-evidence>/archive-query-title-home-independent-after-source-outer-proof.json",
+      "sha256": "d7bd44851d7b6f7cd2f62a048cfb5f9ac70b4215187747da36682012bee159ab",
+      "dispatches": 6,
+      "groups": [
+        {
+          "label": "home",
+          "statuses": [
+            200,
+            200,
+            200
+          ],
+          "headBytes": 0,
+          "routeKind": "home",
+          "selectedTemplate": {
+            "id": 10,
+            "slug": "home",
+            "title": "Home",
+            "type": "template",
+            "version": 2,
+            "updatedAt": "2026-11-09T16:31:52.954Z",
+            "isCustom": true
+          },
+          "nativeTitles": [],
+          "modelTitles": []
+        },
+        {
+          "label": "date",
+          "statuses": [
+            200,
+            200,
+            200
+          ],
+          "headBytes": 0,
+          "routeKind": "archive",
+          "selectedTemplate": {
+            "id": 215,
+            "slug": "date",
+            "title": "archive-home-mw9hb4e2 date",
+            "type": "template",
+            "version": 1,
+            "updatedAt": "2026-11-09T16:31:52.983Z",
+            "isCustom": true
+          },
+          "nativeTitles": [
+            {
+              "id": "archive-home-mw9hb4e2-date-title",
+              "text": "Year: 2001"
+            }
+          ],
+          "modelTitles": [
+            {
+              "id": "archive-home-mw9hb4e2-date-title",
+              "text": "Year: 2001"
+            }
+          ]
+        }
+      ]
+    },
+    "body": {
+      "path": "<private-evidence>/archive-query-title-home-independent-after-source-body-proof.json",
+      "sha256": "a8167c49f1cf6417c5efe3018ceefef77c4de79365ef9089c8889c4fa5136e29",
+      "dispatches": 16,
+      "fixture": {
+        "id": 5,
+        "excerpt": "",
+        "bodyId": "home-title-body-mw9hb5fm-body",
+        "titleId": "home-title-body-mw9hb5fm-title",
+        "marker": "INDEPENDENT-POST-BODY-home-title-body-mw9hb5fm"
+      },
+      "groups": [
+        {
+          "label": "source-home",
+          "statuses": {
+            "get": 200,
+            "head": 200,
+            "model": 200,
+            "site": 200
+          },
+          "headBytes": 0,
+          "routeKind": "home",
+          "archive": null,
+          "theme": "twentytwentyfive",
+          "presentationKind": "source",
+          "classicCustomIndex": null,
+          "modelPost": {
+            "id": 5,
+            "excerpt": "",
+            "locked": false,
+            "body": {
+              "found": true,
+              "id": "home-title-body-mw9hb5fm-body",
+              "markerCount": 1,
+              "titles": []
+            }
+          },
+          "sitePost": {
+            "id": 5,
+            "excerpt": "",
+            "locked": false,
+            "body": {
+              "found": true,
+              "id": "home-title-body-mw9hb5fm-body",
+              "markerCount": 1,
+              "titles": []
+            }
+          },
+          "native": {
+            "rowOrCard": true,
+            "actualLink": "/home-title-body-mw9hb5fm-post/",
+            "title": "home-title-body-mw9hb5fm owned post",
+            "body": {
+              "found": true,
+              "id": "home-title-body-mw9hb5fm-body",
+              "markerCount": 1,
+              "titles": []
+            }
+          },
+          "modelPresentationBody": {
+            "found": true,
+            "id": "home-title-body-mw9hb5fm-body",
+            "markerCount": 1,
+            "titles": []
+          }
+        },
+        {
+          "label": "source-date",
+          "statuses": {
+            "get": 200,
+            "head": 200,
+            "model": 200,
+            "site": 200
+          },
+          "headBytes": 0,
+          "routeKind": "archive",
+          "archive": {
+            "type": "date",
+            "year": 2001,
+            "name": "Year: 2001",
+            "permalink": "/2001/"
+          },
+          "theme": "twentytwentyfive",
+          "presentationKind": "source",
+          "classicCustomIndex": null,
+          "modelPost": {
+            "id": 5,
+            "excerpt": "",
+            "locked": false,
+            "body": {
+              "found": true,
+              "id": "home-title-body-mw9hb5fm-body",
+              "markerCount": 1,
+              "titles": [
+                {
+                  "id": "home-title-body-mw9hb5fm-title",
+                  "text": "Year: 2001"
+                }
+              ]
+            }
+          },
+          "sitePost": {
+            "id": 5,
+            "excerpt": "",
+            "locked": false,
+            "body": {
+              "found": true,
+              "id": "home-title-body-mw9hb5fm-body",
+              "markerCount": 1,
+              "titles": [
+                {
+                  "id": "home-title-body-mw9hb5fm-title",
+                  "text": "Year: 2001"
+                }
+              ]
+            }
+          },
+          "native": {
+            "rowOrCard": true,
+            "actualLink": "/home-title-body-mw9hb5fm-post/",
+            "title": "home-title-body-mw9hb5fm owned post",
+            "body": {
+              "found": true,
+              "id": "home-title-body-mw9hb5fm-body",
+              "markerCount": 1,
+              "titles": [
+                {
+                  "id": "home-title-body-mw9hb5fm-title",
+                  "text": "Year: 2001"
+                }
+              ]
+            }
+          },
+          "modelPresentationBody": {
+            "found": true,
+            "id": "home-title-body-mw9hb5fm-body",
+            "markerCount": 1,
+            "titles": [
+              {
+                "id": "home-title-body-mw9hb5fm-title",
+                "text": "Year: 2001"
+              }
+            ]
+          }
+        },
+        {
+          "label": "classic-home",
+          "statuses": {
+            "get": 200,
+            "head": 200,
+            "model": 200,
+            "site": 200
+          },
+          "headBytes": 0,
+          "routeKind": "home",
+          "archive": null,
+          "theme": "classic",
+          "presentationKind": "classic",
+          "classicCustomIndex": null,
+          "modelPost": {
+            "id": 5,
+            "excerpt": "",
+            "locked": false,
+            "body": {
+              "found": true,
+              "id": "home-title-body-mw9hb5fm-body",
+              "markerCount": 1,
+              "titles": []
+            }
+          },
+          "sitePost": {
+            "id": 5,
+            "excerpt": "",
+            "locked": false,
+            "body": {
+              "found": true,
+              "id": "home-title-body-mw9hb5fm-body",
+              "markerCount": 1,
+              "titles": []
+            }
+          },
+          "native": {
+            "rowOrCard": true,
+            "actualLink": "/home-title-body-mw9hb5fm-post/",
+            "title": "home-title-body-mw9hb5fm owned post",
+            "body": {
+              "found": true,
+              "id": "home-title-body-mw9hb5fm-body",
+              "markerCount": 1,
+              "titles": []
+            }
+          }
+        },
+        {
+          "label": "classic-date",
+          "statuses": {
+            "get": 200,
+            "head": 200,
+            "model": 200,
+            "site": 200
+          },
+          "headBytes": 0,
+          "routeKind": "archive",
+          "archive": {
+            "type": "date",
+            "year": 2001,
+            "name": "Year: 2001",
+            "permalink": "/2001/"
+          },
+          "theme": "classic",
+          "presentationKind": "classic",
+          "classicCustomIndex": null,
+          "modelPost": {
+            "id": 5,
+            "excerpt": "",
+            "locked": false,
+            "body": {
+              "found": true,
+              "id": "home-title-body-mw9hb5fm-body",
+              "markerCount": 1,
+              "titles": [
+                {
+                  "id": "home-title-body-mw9hb5fm-title",
+                  "text": "Year: 2001"
+                }
+              ]
+            }
+          },
+          "sitePost": {
+            "id": 5,
+            "excerpt": "",
+            "locked": false,
+            "body": {
+              "found": true,
+              "id": "home-title-body-mw9hb5fm-body",
+              "markerCount": 1,
+              "titles": [
+                {
+                  "id": "home-title-body-mw9hb5fm-title",
+                  "text": "Year: 2001"
+                }
+              ]
+            }
+          },
+          "native": {
+            "rowOrCard": true,
+            "actualLink": "/home-title-body-mw9hb5fm-post/",
+            "title": "home-title-body-mw9hb5fm owned post",
+            "body": {
+              "found": true,
+              "id": "home-title-body-mw9hb5fm-body",
+              "markerCount": 1,
+              "titles": [
+                {
+                  "id": "home-title-body-mw9hb5fm-title",
+                  "text": "Year: 2001"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    "direct": {
+      "path": "<private-evidence>/archive-query-title-home-independent-after-source-direct-proof.json",
+      "sha256": "1e66035684f14b4d12d86ca3ecfacc7ebd527d4be1e624d3589d0232f8448727",
+      "dispatches": 6,
+      "pairs": [
+        {
+          "label": "home",
+          "statuses": [
+            200,
+            200
+          ],
+          "headBytes": 0,
+          "actualTemplate": {
+            "id": 217,
+            "slug": "qt-direct-mw9hb6ig",
+            "title": "Owned direct title mw9hb6ig",
+            "type": "template",
+            "version": 1
+          },
+          "titles": []
+        },
+        {
+          "label": "path-only-date",
+          "statuses": [
+            200,
+            200
+          ],
+          "headBytes": 0,
+          "actualTemplate": {
+            "id": 217,
+            "slug": "qt-direct-mw9hb6ig",
+            "title": "Owned direct title mw9hb6ig",
+            "type": "template",
+            "version": 1
+          },
+          "titles": [
+            {
+              "id": "qt-direct-mw9hb6ig-title",
+              "text": "Blog"
+            }
+          ]
+        },
+        {
+          "label": "transport-only-date",
+          "statuses": [
+            200,
+            200
+          ],
+          "headBytes": 0,
+          "actualTemplate": {
+            "id": 217,
+            "slug": "qt-direct-mw9hb6ig",
+            "title": "Owned direct title mw9hb6ig",
+            "type": "template",
+            "version": 1
+          },
+          "titles": [
+            {
+              "id": "qt-direct-mw9hb6ig-title",
+              "text": "Year: 2001"
+            }
+          ]
+        }
+      ]
+    },
+    "singular": {
+      "path": "<private-evidence>/archive-query-title-home-independent-after-source-singular-proof.json",
+      "sha256": "fb93b6a11629f3878e0cca836cedbdb6fcc003d62b4c51a83b99f10f2aa353ed",
+      "dispatches": 23,
+      "publicGroups": [
+        {
+          "label": "post-bare",
+          "statuses": [
+            200,
+            200,
+            200
+          ],
+          "headBytes": 0,
+          "routeKind": "singular",
+          "selectedId": 6,
+          "postId": 6,
+          "nativeTitles": [],
+          "modelTitles": []
+        },
+        {
+          "label": "post-year",
+          "statuses": [
+            200,
+            200,
+            200
+          ],
+          "headBytes": 0,
+          "routeKind": "singular",
+          "selectedId": 6,
+          "postId": 6,
+          "nativeTitles": [],
+          "modelTitles": []
+        },
+        {
+          "label": "page-bare",
+          "statuses": [
+            200,
+            200,
+            200
+          ],
+          "headBytes": 0,
+          "routeKind": "singular",
+          "selectedId": 7,
+          "postId": 7,
+          "nativeTitles": [],
+          "modelTitles": []
+        },
+        {
+          "label": "page-year",
+          "statuses": [
+            200,
+            200,
+            200
+          ],
+          "headBytes": 0,
+          "routeKind": "singular",
+          "selectedId": 7,
+          "postId": 7,
+          "nativeTitles": [],
+          "modelTitles": []
+        },
+        {
+          "label": "date-archive",
+          "statuses": [
+            200,
+            200,
+            200
+          ],
+          "headBytes": 0,
+          "routeKind": "archive",
+          "nativeTitles": [
+            {
+              "id": "archive-title-mw9hb7cs-date-title",
+              "text": "Year: 2001"
+            },
+            {
+              "id": "archive-title-mw9hb7cs-loop-title",
+              "text": "Year: 2001"
+            },
+            {
+              "id": "archive-title-mw9hb7cs-post-body-title",
+              "text": "Year: 2001"
+            }
+          ],
+          "modelTitles": [
+            {
+              "id": "archive-title-mw9hb7cs-date-title",
+              "text": "Year: 2001"
+            },
+            {
+              "id": "archive-title-mw9hb7cs-loop-title",
+              "text": "Year: 2001"
+            },
+            {
+              "id": "archive-title-mw9hb7cs-post-body-title",
+              "text": "Year: 2001"
+            }
+          ]
+        }
+      ],
+      "directGroups": [
+        {
+          "label": "direct-bare",
+          "statuses": [
+            200,
+            200
+          ],
+          "titles": []
+        },
+        {
+          "label": "direct-year",
+          "statuses": [
+            200,
+            200
+          ],
+          "titles": []
+        }
+      ],
+      "bodyGroups": [
+        {
+          "label": "body-bare",
+          "statuses": [
+            200,
+            200
+          ],
+          "postId": 6,
+          "titles": []
+        },
+        {
+          "label": "body-year",
+          "statuses": [
+            200,
+            200
+          ],
+          "postId": 6,
+          "titles": []
+        }
+      ]
+    },
+    "postsPage": {
+      "path": "<private-evidence>/archive-query-title-home-independent-after-source-posts-page-proof.json",
+      "sha256": "12850aa4700f2afe5bc60d21395dbbb27902eab16ba1b3cd02d7aeaa293b88b1",
+      "dispatches": 13,
+      "pairs": [
+        {
+          "label": "configured-pretty",
+          "statuses": [
+            200,
+            200
+          ],
+          "headBytes": 0,
+          "postId": 8,
+          "titles": [
+            {
+              "id": "query-title-posts-page-mw9hb8in-configured-archive",
+              "text": "Blog"
+            }
+          ]
+        },
+        {
+          "label": "configured-plain",
+          "statuses": [
+            200,
+            200
+          ],
+          "headBytes": 0,
+          "postId": 8,
+          "titles": [
+            {
+              "id": "query-title-posts-page-mw9hb8in-configured-archive",
+              "text": "Blog"
+            }
+          ]
+        },
+        {
+          "label": "ordinary-pretty",
+          "statuses": [
+            200,
+            200
+          ],
+          "headBytes": 0,
+          "postId": 9,
+          "titles": []
+        },
+        {
+          "label": "ordinary-plain",
+          "statuses": [
+            200,
+            200
+          ],
+          "headBytes": 0,
+          "postId": 9,
+          "titles": []
+        },
+        {
+          "label": "configured-standalone",
+          "statuses": [
+            200,
+            200
+          ],
+          "headBytes": 0,
+          "postId": 8,
+          "titles": []
+        }
+      ],
+      "document": {
+        "statuses": [
+          200,
+          200,
+          200
+        ],
+        "routeKind": "posts-page",
+        "selectedId": 8,
+        "postId": 8,
+        "bodyTitles": [
+          {
+            "id": "query-title-posts-page-mw9hb8in-configured-archive",
+            "text": "Blog"
+          }
+        ],
+        "chosenTemplate": {
+          "id": 10,
+          "slug": "home",
+          "title": "Home",
+          "type": "template",
+          "version": 5,
+          "updatedAt": "2026-11-09T16:31:54.643Z",
+          "isCustom": true
+        },
+        "nativeListing": true
+      }
+    }
+  },
+  "compiled": {
+    "targetedResponses": 64,
+    "outer": {
+      "path": "<private-evidence>/archive-query-title-home-independent-after-compiled-outer-proof.json",
+      "sha256": "7eb966f40d5e5911b9e6432668bc6e7f26f38dbf330e437dc897506fca04f096",
+      "dispatches": 6,
+      "groups": [
+        {
+          "label": "home",
+          "statuses": [
+            200,
+            200,
+            200
+          ],
+          "headBytes": 0,
+          "routeKind": "home",
+          "selectedTemplate": {
+            "id": 10,
+            "slug": "home",
+            "title": "Home",
+            "type": "template",
+            "version": 2,
+            "updatedAt": "2026-11-09T16:32:47.595Z",
+            "isCustom": true
+          },
+          "nativeTitles": [],
+          "modelTitles": []
+        },
+        {
+          "label": "date",
+          "statuses": [
+            200,
+            200,
+            200
+          ],
+          "headBytes": 0,
+          "routeKind": "archive",
+          "selectedTemplate": {
+            "id": 215,
+            "slug": "date",
+            "title": "archive-home-mw9hcak1 date",
+            "type": "template",
+            "version": 1,
+            "updatedAt": "2026-11-09T16:32:47.624Z",
+            "isCustom": true
+          },
+          "nativeTitles": [
+            {
+              "id": "archive-home-mw9hcak1-date-title",
+              "text": "Year: 2001"
+            }
+          ],
+          "modelTitles": [
+            {
+              "id": "archive-home-mw9hcak1-date-title",
+              "text": "Year: 2001"
+            }
+          ]
+        }
+      ]
+    },
+    "body": {
+      "path": "<private-evidence>/archive-query-title-home-independent-after-compiled-body-proof.json",
+      "sha256": "6a19521cdde6df80cd21f58860e57f07e49f1c4a38dcf0706105ae38ca5dfe70",
+      "dispatches": 16,
+      "fixture": {
+        "id": 5,
+        "excerpt": "",
+        "bodyId": "home-title-body-mw9hcbc1-body",
+        "titleId": "home-title-body-mw9hcbc1-title",
+        "marker": "INDEPENDENT-POST-BODY-home-title-body-mw9hcbc1"
+      },
+      "groups": [
+        {
+          "label": "source-home",
+          "statuses": {
+            "get": 200,
+            "head": 200,
+            "model": 200,
+            "site": 200
+          },
+          "headBytes": 0,
+          "routeKind": "home",
+          "archive": null,
+          "theme": "twentytwentyfive",
+          "presentationKind": "source",
+          "classicCustomIndex": null,
+          "modelPost": {
+            "id": 5,
+            "excerpt": "",
+            "locked": false,
+            "body": {
+              "found": true,
+              "id": "home-title-body-mw9hcbc1-body",
+              "markerCount": 1,
+              "titles": []
+            }
+          },
+          "sitePost": {
+            "id": 5,
+            "excerpt": "",
+            "locked": false,
+            "body": {
+              "found": true,
+              "id": "home-title-body-mw9hcbc1-body",
+              "markerCount": 1,
+              "titles": []
+            }
+          },
+          "native": {
+            "rowOrCard": true,
+            "actualLink": "/home-title-body-mw9hcbc1-post/",
+            "title": "home-title-body-mw9hcbc1 owned post",
+            "body": {
+              "found": true,
+              "id": "home-title-body-mw9hcbc1-body",
+              "markerCount": 1,
+              "titles": []
+            }
+          },
+          "modelPresentationBody": {
+            "found": true,
+            "id": "home-title-body-mw9hcbc1-body",
+            "markerCount": 1,
+            "titles": []
+          }
+        },
+        {
+          "label": "source-date",
+          "statuses": {
+            "get": 200,
+            "head": 200,
+            "model": 200,
+            "site": 200
+          },
+          "headBytes": 0,
+          "routeKind": "archive",
+          "archive": {
+            "type": "date",
+            "year": 2001,
+            "name": "Year: 2001",
+            "permalink": "/2001/"
+          },
+          "theme": "twentytwentyfive",
+          "presentationKind": "source",
+          "classicCustomIndex": null,
+          "modelPost": {
+            "id": 5,
+            "excerpt": "",
+            "locked": false,
+            "body": {
+              "found": true,
+              "id": "home-title-body-mw9hcbc1-body",
+              "markerCount": 1,
+              "titles": [
+                {
+                  "id": "home-title-body-mw9hcbc1-title",
+                  "text": "Year: 2001"
+                }
+              ]
+            }
+          },
+          "sitePost": {
+            "id": 5,
+            "excerpt": "",
+            "locked": false,
+            "body": {
+              "found": true,
+              "id": "home-title-body-mw9hcbc1-body",
+              "markerCount": 1,
+              "titles": [
+                {
+                  "id": "home-title-body-mw9hcbc1-title",
+                  "text": "Year: 2001"
+                }
+              ]
+            }
+          },
+          "native": {
+            "rowOrCard": true,
+            "actualLink": "/home-title-body-mw9hcbc1-post/",
+            "title": "home-title-body-mw9hcbc1 owned post",
+            "body": {
+              "found": true,
+              "id": "home-title-body-mw9hcbc1-body",
+              "markerCount": 1,
+              "titles": [
+                {
+                  "id": "home-title-body-mw9hcbc1-title",
+                  "text": "Year: 2001"
+                }
+              ]
+            }
+          },
+          "modelPresentationBody": {
+            "found": true,
+            "id": "home-title-body-mw9hcbc1-body",
+            "markerCount": 1,
+            "titles": [
+              {
+                "id": "home-title-body-mw9hcbc1-title",
+                "text": "Year: 2001"
+              }
+            ]
+          }
+        },
+        {
+          "label": "classic-home",
+          "statuses": {
+            "get": 200,
+            "head": 200,
+            "model": 200,
+            "site": 200
+          },
+          "headBytes": 0,
+          "routeKind": "home",
+          "archive": null,
+          "theme": "classic",
+          "presentationKind": "classic",
+          "classicCustomIndex": null,
+          "modelPost": {
+            "id": 5,
+            "excerpt": "",
+            "locked": false,
+            "body": {
+              "found": true,
+              "id": "home-title-body-mw9hcbc1-body",
+              "markerCount": 1,
+              "titles": []
+            }
+          },
+          "sitePost": {
+            "id": 5,
+            "excerpt": "",
+            "locked": false,
+            "body": {
+              "found": true,
+              "id": "home-title-body-mw9hcbc1-body",
+              "markerCount": 1,
+              "titles": []
+            }
+          },
+          "native": {
+            "rowOrCard": true,
+            "actualLink": "/home-title-body-mw9hcbc1-post/",
+            "title": "home-title-body-mw9hcbc1 owned post",
+            "body": {
+              "found": true,
+              "id": "home-title-body-mw9hcbc1-body",
+              "markerCount": 1,
+              "titles": []
+            }
+          }
+        },
+        {
+          "label": "classic-date",
+          "statuses": {
+            "get": 200,
+            "head": 200,
+            "model": 200,
+            "site": 200
+          },
+          "headBytes": 0,
+          "routeKind": "archive",
+          "archive": {
+            "type": "date",
+            "year": 2001,
+            "name": "Year: 2001",
+            "permalink": "/2001/"
+          },
+          "theme": "classic",
+          "presentationKind": "classic",
+          "classicCustomIndex": null,
+          "modelPost": {
+            "id": 5,
+            "excerpt": "",
+            "locked": false,
+            "body": {
+              "found": true,
+              "id": "home-title-body-mw9hcbc1-body",
+              "markerCount": 1,
+              "titles": [
+                {
+                  "id": "home-title-body-mw9hcbc1-title",
+                  "text": "Year: 2001"
+                }
+              ]
+            }
+          },
+          "sitePost": {
+            "id": 5,
+            "excerpt": "",
+            "locked": false,
+            "body": {
+              "found": true,
+              "id": "home-title-body-mw9hcbc1-body",
+              "markerCount": 1,
+              "titles": [
+                {
+                  "id": "home-title-body-mw9hcbc1-title",
+                  "text": "Year: 2001"
+                }
+              ]
+            }
+          },
+          "native": {
+            "rowOrCard": true,
+            "actualLink": "/home-title-body-mw9hcbc1-post/",
+            "title": "home-title-body-mw9hcbc1 owned post",
+            "body": {
+              "found": true,
+              "id": "home-title-body-mw9hcbc1-body",
+              "markerCount": 1,
+              "titles": [
+                {
+                  "id": "home-title-body-mw9hcbc1-title",
+                  "text": "Year: 2001"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    "direct": {
+      "path": "<private-evidence>/archive-query-title-home-independent-after-compiled-direct-proof.json",
+      "sha256": "c90a5cc6b48bcac57f9bc89ab522166fe2ee03836f0e26e0102dbea2168b5ef7",
+      "dispatches": 6,
+      "pairs": [
+        {
+          "label": "home",
+          "statuses": [
+            200,
+            200
+          ],
+          "headBytes": 0,
+          "actualTemplate": {
+            "id": 217,
+            "slug": "qt-direct-mw9hcc6g",
+            "title": "Owned direct title mw9hcc6g",
+            "type": "template",
+            "version": 1
+          },
+          "titles": []
+        },
+        {
+          "label": "path-only-date",
+          "statuses": [
+            200,
+            200
+          ],
+          "headBytes": 0,
+          "actualTemplate": {
+            "id": 217,
+            "slug": "qt-direct-mw9hcc6g",
+            "title": "Owned direct title mw9hcc6g",
+            "type": "template",
+            "version": 1
+          },
+          "titles": [
+            {
+              "id": "qt-direct-mw9hcc6g-title",
+              "text": "Blog"
+            }
+          ]
+        },
+        {
+          "label": "transport-only-date",
+          "statuses": [
+            200,
+            200
+          ],
+          "headBytes": 0,
+          "actualTemplate": {
+            "id": 217,
+            "slug": "qt-direct-mw9hcc6g",
+            "title": "Owned direct title mw9hcc6g",
+            "type": "template",
+            "version": 1
+          },
+          "titles": [
+            {
+              "id": "qt-direct-mw9hcc6g-title",
+              "text": "Year: 2001"
+            }
+          ]
+        }
+      ]
+    },
+    "singular": {
+      "path": "<private-evidence>/archive-query-title-home-independent-after-compiled-singular-proof.json",
+      "sha256": "1580e298756a980b93e03f7f42d1f1b5a5dd1d2591cddc37a46a5893fd74ba87",
+      "dispatches": 23,
+      "publicGroups": [
+        {
+          "label": "post-bare",
+          "statuses": [
+            200,
+            200,
+            200
+          ],
+          "headBytes": 0,
+          "routeKind": "singular",
+          "selectedId": 6,
+          "postId": 6,
+          "nativeTitles": [],
+          "modelTitles": []
+        },
+        {
+          "label": "post-year",
+          "statuses": [
+            200,
+            200,
+            200
+          ],
+          "headBytes": 0,
+          "routeKind": "singular",
+          "selectedId": 6,
+          "postId": 6,
+          "nativeTitles": [],
+          "modelTitles": []
+        },
+        {
+          "label": "page-bare",
+          "statuses": [
+            200,
+            200,
+            200
+          ],
+          "headBytes": 0,
+          "routeKind": "singular",
+          "selectedId": 7,
+          "postId": 7,
+          "nativeTitles": [],
+          "modelTitles": []
+        },
+        {
+          "label": "page-year",
+          "statuses": [
+            200,
+            200,
+            200
+          ],
+          "headBytes": 0,
+          "routeKind": "singular",
+          "selectedId": 7,
+          "postId": 7,
+          "nativeTitles": [],
+          "modelTitles": []
+        },
+        {
+          "label": "date-archive",
+          "statuses": [
+            200,
+            200,
+            200
+          ],
+          "headBytes": 0,
+          "routeKind": "archive",
+          "nativeTitles": [
+            {
+              "id": "archive-title-mw9hccs6-date-title",
+              "text": "Year: 2001"
+            },
+            {
+              "id": "archive-title-mw9hccs6-loop-title",
+              "text": "Year: 2001"
+            },
+            {
+              "id": "archive-title-mw9hccs6-post-body-title",
+              "text": "Year: 2001"
+            }
+          ],
+          "modelTitles": [
+            {
+              "id": "archive-title-mw9hccs6-date-title",
+              "text": "Year: 2001"
+            },
+            {
+              "id": "archive-title-mw9hccs6-loop-title",
+              "text": "Year: 2001"
+            },
+            {
+              "id": "archive-title-mw9hccs6-post-body-title",
+              "text": "Year: 2001"
+            }
+          ]
+        }
+      ],
+      "directGroups": [
+        {
+          "label": "direct-bare",
+          "statuses": [
+            200,
+            200
+          ],
+          "titles": []
+        },
+        {
+          "label": "direct-year",
+          "statuses": [
+            200,
+            200
+          ],
+          "titles": []
+        }
+      ],
+      "bodyGroups": [
+        {
+          "label": "body-bare",
+          "statuses": [
+            200,
+            200
+          ],
+          "postId": 6,
+          "titles": []
+        },
+        {
+          "label": "body-year",
+          "statuses": [
+            200,
+            200
+          ],
+          "postId": 6,
+          "titles": []
+        }
+      ]
+    },
+    "postsPage": {
+      "path": "<private-evidence>/archive-query-title-home-independent-after-compiled-posts-page-proof.json",
+      "sha256": "df40ac0a04c12a630767c5ad2364758efa4c4ced331519b477a3883321c26e41",
+      "dispatches": 13,
+      "pairs": [
+        {
+          "label": "configured-pretty",
+          "statuses": [
+            200,
+            200
+          ],
+          "headBytes": 0,
+          "postId": 8,
+          "titles": [
+            {
+              "id": "query-title-posts-page-mw9hcdpi-configured-archive",
+              "text": "Blog"
+            }
+          ]
+        },
+        {
+          "label": "configured-plain",
+          "statuses": [
+            200,
+            200
+          ],
+          "headBytes": 0,
+          "postId": 8,
+          "titles": [
+            {
+              "id": "query-title-posts-page-mw9hcdpi-configured-archive",
+              "text": "Blog"
+            }
+          ]
+        },
+        {
+          "label": "ordinary-pretty",
+          "statuses": [
+            200,
+            200
+          ],
+          "headBytes": 0,
+          "postId": 9,
+          "titles": []
+        },
+        {
+          "label": "ordinary-plain",
+          "statuses": [
+            200,
+            200
+          ],
+          "headBytes": 0,
+          "postId": 9,
+          "titles": []
+        },
+        {
+          "label": "configured-standalone",
+          "statuses": [
+            200,
+            200
+          ],
+          "headBytes": 0,
+          "postId": 8,
+          "titles": []
+        }
+      ],
+      "document": {
+        "statuses": [
+          200,
+          200,
+          200
+        ],
+        "routeKind": "posts-page",
+        "selectedId": 8,
+        "postId": 8,
+        "bodyTitles": [
+          {
+            "id": "query-title-posts-page-mw9hcdpi-configured-archive",
+            "text": "Blog"
+          }
+        ],
+        "chosenTemplate": {
+          "id": 10,
+          "slug": "home",
+          "title": "Home",
+          "type": "template",
+          "version": 5,
+          "updatedAt": "2026-11-09T16:32:48.901Z",
+          "isCustom": true
+        },
+        "nativeListing": true
+      }
+    }
+  }
+}
