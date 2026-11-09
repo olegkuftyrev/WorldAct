@@ -1,0 +1,300 @@
+{
+  "code": "75e44f061f22fa19e850345c9976dbcfd9ab8196",
+  "stage": "search counter assertion original",
+  "state": {
+    "boot": {
+      "archive": null,
+      "kind": "archive",
+      "posts": [
+        {
+          "authorId": 2,
+          "id": 6,
+          "locked": false
+        }
+      ],
+      "query": {
+        "archivePage": 1,
+        "blockPages": {},
+        "category": "",
+        "contentPage": 1,
+        "date": null,
+        "search": "Alice",
+        "tag": "",
+        "values": {
+          "page": "1",
+          "search": "Alice"
+        }
+      },
+      "status": 200
+    },
+    "canonicalCount": 1,
+    "errors": [],
+    "heading": "Search results for: Alice",
+    "historyLength": 5,
+    "originalSSRNodeRetained": true,
+    "overflow": false,
+    "path": "/?s=Alice",
+    "robotsCount": 0,
+    "text": "WorldAct\nNamed Native Journal\nNamed Native Numeric Child\nNamed Native Parent\nNamed Native Static Front\nSample Page\nSearch results for: Alice\nSearch posts\nSearch\nShow all posts\nNamed Native Alice 3\n\nFebruary 3, 2001\n\nNATIVE NAMED FIRST BODY Named Native Alice 3\n\nPages: 1 2\n\n← Newer posts\n1 of 3\nOlder posts →\nWorldAct\n\nJust another WorldAct site\n\nBlog\nNamed Native Journal\nNamed Native Numeric Child\nNamed Native Parent\nNamed Native Static Front\n\nDesigned with WorldAct\n\nLog in"
+  },
+  "requests": [
+    {
+      "id": 25,
+      "method": "GET",
+      "path": "/assets/index-B3a4p61n.js",
+      "startedAt": 1794224661127,
+      "status": 304,
+      "finishedAt": 1794224661127
+    },
+    {
+      "id": 26,
+      "method": "GET",
+      "path": "/assets/index-BsgYOWhl.css",
+      "startedAt": 1794224661127,
+      "status": 304,
+      "finishedAt": 1794224661128
+    },
+    {
+      "id": 27,
+      "method": "GET",
+      "path": "/vendor/wordpress/wp-content/themes/twentytwentyfive/assets/fonts/manrope/Manrope-VariableFont_wght.woff2",
+      "startedAt": 1794224661137,
+      "status": 304,
+      "finishedAt": 1794224661137
+    },
+    {
+      "id": 28,
+      "method": "GET",
+      "path": "/api/public/document?path=%2F%3Fauthor%3D2%26author_name%3Dprefix%252FNAMED-NATIVE-ALICE-87AE9B28%252F%26query-4-page%3D1%26commentPage%3D2",
+      "startedAt": 1794224661141,
+      "status": 200,
+      "finishedAt": 1794224661168,
+      "model": {
+        "status": 200,
+        "kind": "archive",
+        "archive": {
+          "type": "author",
+          "authorId": 2,
+          "slug": "named-native-alice-87ae9b28",
+          "name": "Named Native alice",
+          "permalink": "/author/named-native-alice-87ae9b28/"
+        },
+        "query": {
+          "search": "",
+          "category": "",
+          "tag": "",
+          "author": 2,
+          "namedAuthor": {
+            "selected": {
+              "type": "author",
+              "authorId": 2,
+              "slug": "named-native-alice-87ae9b28",
+              "name": "Named Native alice",
+              "permalink": "/author/named-native-alice-87ae9b28/"
+            },
+            "numericAuthor": 2
+          },
+          "date": null,
+          "archivePage": 1,
+          "contentPage": 1,
+          "commentPage": 2,
+          "blockPages": {
+            "query-4-page": 1
+          },
+          "values": {
+            "author": "2",
+            "author_name": "prefix/NAMED-NATIVE-ALICE-87AE9B28/",
+            "query-4-page": "1",
+            "commentPage": "2",
+            "page": "1"
+          }
+        },
+        "posts": [
+          {
+            "id": 6,
+            "authorId": 2,
+            "locked": false
+          }
+        ]
+      }
+    },
+    {
+      "id": 29,
+      "method": "GET",
+      "path": "/api/public/comment-author",
+      "startedAt": 1794224661173,
+      "status": 200,
+      "finishedAt": 1794224661175
+    },
+    {
+      "id": 30,
+      "method": "GET",
+      "path": "/assets/playlists-B6HK4GV9.js",
+      "startedAt": 1794224661173,
+      "status": 304,
+      "finishedAt": 1794224661174
+    },
+    {
+      "id": 31,
+      "method": "GET",
+      "path": "/api/public/document?path=%2F%3Fauthor%3D2%26author_name%3Dprefix%252FNAMED-NATIVE-ALICE-87AE9B28%252F%26query-4-page%3D1%26commentPage%3D2%26page%3D2",
+      "startedAt": 1794224661375,
+      "status": 200,
+      "finishedAt": 1794224661403,
+      "model": {
+        "status": 200,
+        "kind": "archive",
+        "archive": {
+          "type": "author",
+          "authorId": 2,
+          "slug": "named-native-alice-87ae9b28",
+          "name": "Named Native alice",
+          "permalink": "/author/named-native-alice-87ae9b28/",
+          "page": 2
+        },
+        "query": {
+          "search": "",
+          "category": "",
+          "tag": "",
+          "author": 2,
+          "namedAuthor": {
+            "selected": {
+              "type": "author",
+              "authorId": 2,
+              "slug": "named-native-alice-87ae9b28",
+              "name": "Named Native alice",
+              "permalink": "/author/named-native-alice-87ae9b28/"
+            },
+            "numericAuthor": 2
+          },
+          "date": null,
+          "archivePage": 2,
+          "contentPage": 1,
+          "commentPage": 2,
+          "blockPages": {
+            "query-4-page": 1
+          },
+          "values": {
+            "author": "2",
+            "author_name": "prefix/NAMED-NATIVE-ALICE-87AE9B28/",
+            "query-4-page": "1",
+            "commentPage": "2",
+            "page": "2"
+          }
+        },
+        "posts": [
+          {
+            "id": 5,
+            "authorId": 2,
+            "locked": false
+          }
+        ]
+      }
+    },
+    {
+      "id": 32,
+      "method": "GET",
+      "path": "/api/public/comment-author",
+      "startedAt": 1794224661413,
+      "status": 200,
+      "finishedAt": 1794224661415
+    },
+    {
+      "id": 33,
+      "method": "GET",
+      "path": "/?s=Alice",
+      "startedAt": 1794224661575,
+      "status": 200,
+      "finishedAt": 1794224661593
+    },
+    {
+      "id": 34,
+      "method": "GET",
+      "path": "/assets/index-BsgYOWhl.css",
+      "startedAt": 1794224661608,
+      "status": 304,
+      "finishedAt": 1794224661609
+    },
+    {
+      "id": 35,
+      "method": "GET",
+      "path": "/assets/index-B3a4p61n.js",
+      "startedAt": 1794224661608,
+      "status": 304,
+      "finishedAt": 1794224661609
+    },
+    {
+      "id": 36,
+      "method": "GET",
+      "path": "/vendor/wordpress/wp-content/themes/twentytwentyfive/assets/fonts/manrope/Manrope-VariableFont_wght.woff2",
+      "startedAt": 1794224661618,
+      "status": 304,
+      "finishedAt": 1794224661618
+    },
+    {
+      "id": 37,
+      "method": "GET",
+      "path": "/api/public/document?path=%2F%3Fs%3DAlice",
+      "startedAt": 1794224661623,
+      "status": 200,
+      "finishedAt": 1794224661644,
+      "model": {
+        "status": 200,
+        "kind": "archive",
+        "archive": null,
+        "query": {
+          "search": "Alice",
+          "category": "",
+          "tag": "",
+          "date": null,
+          "archivePage": 1,
+          "contentPage": 1,
+          "blockPages": {},
+          "values": {
+            "search": "Alice",
+            "page": "1"
+          }
+        },
+        "posts": [
+          {
+            "id": 6,
+            "authorId": 2,
+            "locked": false
+          }
+        ]
+      }
+    },
+    {
+      "id": 38,
+      "method": "GET",
+      "path": "/api/public/comment-author",
+      "startedAt": 1794224661650,
+      "status": 200,
+      "finishedAt": 1794224661652
+    },
+    {
+      "id": 39,
+      "method": "GET",
+      "path": "/assets/playlists-B6HK4GV9.js",
+      "startedAt": 1794224661650,
+      "status": 304,
+      "finishedAt": 1794224661651
+    }
+  ],
+  "screenshot": "../screens/author-name-native-search-counter-original.png",
+  "form": [
+    {
+      "action": "http://127.0.0.1:3036/",
+      "inputs": [
+        {
+          "name": "search",
+          "value": "Alice"
+        },
+        {
+          "name": "",
+          "value": ""
+        }
+      ]
+    }
+  ]
+}

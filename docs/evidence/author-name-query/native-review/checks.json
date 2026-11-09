@@ -1,0 +1,162 @@
+{
+  "result": "PASS within stated native scope",
+  "code": "75e44f061f22fa19e850345c9976dbcfd9ab8196",
+  "tree": "71081d67bbc5d155c3c76cf930232b552c4f0ef6",
+  "nodeSha256": "e4521e807d51e57b619ff17018d653b144d2d2ea95a70025031a75d06c29be49",
+  "sourceChangesDuringNativeReview": false,
+  "versions": {
+    "node": "24.14.1",
+    "agentBrowser": "0.41.2",
+    "browser": "Brave153.1.95.104 / Chromium153"
+  },
+  "build": {
+    "tsc": "PASS",
+    "viteRunner": "PASS",
+    "esbuild": "PASS",
+    "matchingReadOnlyDependencyLockSha256": "233888ed8f864581a8835aab0b4c33ccd7fbc391f2a98650b63fcf8db8814892"
+  },
+  "ownGuardedChecks": {
+    "files": 4,
+    "source": {
+      "pass": 43,
+      "fail": 0,
+      "skip": 0
+    },
+    "actualCompiledApiRunner": {
+      "pass": 43,
+      "fail": 0,
+      "skip": 0
+    },
+    "pureUiTests": 21,
+    "actualSelectedApiTests": 22,
+    "compiledRunnerCaveat": "Pure UI helpers still import TypeScript source; compiled API checks use selected real bundle.",
+    "selector": [
+      "tests/public-author-name-query-ui.test.ts",
+      "tests/public-author-archive-ui.test.ts",
+      "tests/author-name-query-original.test.ts",
+      "tests/author-name-query-native-original.test.ts"
+    ]
+  },
+  "native": {
+    "themes": [
+      "classic",
+      "twentytwentyfive"
+    ],
+    "widths": [
+      1440,
+      768,
+      375
+    ],
+    "passingGroupedRows": 19,
+    "rowCounts": {
+      "matrix": 6,
+      "paths": 6,
+      "variants": 2,
+      "nojs": 1,
+      "nojs-source": 1,
+      "global-nojs": 2,
+      "private-hold": 1
+    },
+    "pairedNativeGetHeadCases": 38,
+    "passingScreenshots": 50,
+    "originalSourcePolicyScreenshots": 5,
+    "selectedScreenshots": 55,
+    "individuallyInspectedScreenshots": 55,
+    "genuineNojsPasswordCommentThemes": 2,
+    "genuineNojsGlobalSearchThemes": 2,
+    "actualPendingSqlLockLogoutScenes": 1,
+    "initialHydration": "One deliberate model revalidation; original SSR nodes retained, one action model read/history increment in focused fresh-context checks."
+  },
+  "sourcePolicy": {
+    "scope": "Default core/search only",
+    "runtimeUnchanged": true,
+    "code": "75e44f061f22fa19e850345c9976dbcfd9ab8196",
+    "sourceDecision": "../search-source-decision.md",
+    "sourceDecisionSha256": "16f4e70c844e3bd1efdfecf0a36b58d5e744c1d46c599f432f37ba97fb6b7b01",
+    "observedDefault": {
+      "action": "/",
+      "method": "get",
+      "fields": [
+        "s"
+      ],
+      "inheritsAmbientArchiveFilters": false
+    },
+    "originalExpectationReceiptsPreserved": true,
+    "classification": "Internal filtered-search expectation corrected to supplied WordPress source; no runtime or private-data disclosure finding.",
+    "localClassicArchiveForm": "Separately retains raw name/numeric intersection.",
+    "explicitAttributesQuery": "Unsupported by current renderer; future fidelity gap, out of scope and not certified here."
+  },
+  "privacyScope": "Actual authorized preview request held by own PostgreSQL transaction, logout retires current owner, old authorized HTTP200 does not enter current logged-out DOM; anonymous preview401/private public document404. Not an all-caller atomic policy certificate.",
+  "limits": [
+    "No full CMS completion, benchmark, live WordPress pixel comparison or BFCache claim.",
+    "No native legacy React PublicSite component claim; its transport is covered by source helpers and actual direct API controls.",
+    "Source home keeps literal Blog heading; Classic configured posts-page title is separately verified.",
+    "Selected screenshots are byte-identical and inspected; unrelated diagnostic screenshots are not claimed immutable.",
+    "Explicit Search attributes.query remains a separate future gap."
+  ],
+  "preservedHarnessHistory": [
+    {
+      "originalPrivateFilename": "author-name-native-matrix-original-module-error.log",
+      "sha256": "19c003c3beb0a50e3e685bd944eb2e6fe3ff699b598300318479fad9587a9830",
+      "preservedPrivately": true
+    },
+    {
+      "originalPrivateFilename": "author-name-native-doctor-after-init-command.log",
+      "sha256": "4d201271a282f218b66e7fc3e9d789f2912bbd22b2a73782f3306fcaf6f7c468",
+      "preservedPrivately": true
+    },
+    {
+      "originalPrivateFilename": "author-name-native-matrix-original-initial-read-assumption.log",
+      "sha256": "582cfdf8077bf389d89526d9f22b6045da47e767898fe8ac5726131551f14582",
+      "preservedPrivately": true
+    },
+    {
+      "originalPrivateFilename": "author-name-native-search-original-theme-fixture.log",
+      "sha256": "825ea3f8e51f6dab191ee07ee6ed6e14c494491406b88dfaf70eecffb623768b",
+      "preservedPrivately": true
+    },
+    {
+      "originalPrivateFilename": "author-name-native-paths-original-static-body-assumption.log",
+      "sha256": "9b668cd39decd19f13ff9a017de170c12661762c601948f909645951bce99bb2",
+      "preservedPrivately": true
+    },
+    {
+      "originalPrivateFilename": "author-name-native-matrix-original-classic-label.log",
+      "sha256": "a2976c76013f543aa222899b7b185a2280958433da7913ca9f1cffd6658b5883",
+      "preservedPrivately": true
+    },
+    {
+      "originalPrivateFilename": "author-name-native-matrix-original-history-length.log",
+      "sha256": "4bf7fa9458e0415c0a88c846230fed27babd56be73d34567ce5509d31a904f0b",
+      "preservedPrivately": true
+    },
+    {
+      "originalPrivateFilename": "author-name-native-nojs-original-second-comment.log",
+      "sha256": "b22ddaae25c217ee9f86ca4cbfe1705e3b2e421dcb694ad8c768607c3d9e9f33",
+      "preservedPrivately": true
+    }
+  ],
+  "dependencyPermissionIncident": "Own chmod glob followed symlink and temporarily changed dependency-owner directory0600; verified0755 restored. Exact private verification retained; start/duration unknown and no content byte audit. Root reports other completed guards used unaffected owners/timing.",
+  "cleanup": {
+    "receipt": "cleanup.json",
+    "ownedPortsFree": [
+      3035,
+      3036,
+      3037,
+      5195
+    ],
+    "databaseAbsent": true,
+    "uploadsAbsent": true,
+    "browserSessionsClosed": true,
+    "vaultDeleted": true,
+    "envRemoved": true,
+    "ownDependencyLinksRemoved": 2,
+    "sharedDependencyOwnerVerifiedMode": "0755",
+    "originalPrivateCleanupSha256": "7b0080dc66ebac97573032784d3c087bb3353a30a8f3f96a6715a32de410fa3b"
+  },
+  "rootSemanticAudit": {
+    "suppliedByRoot": true,
+    "scope": "All19 grouped rows and38 GET/HEAD pairs; separate root assertions, not counted as own tests.",
+    "privateReceiptSha256": "ba92d9a67bedbdb1e718f74417f0f2b76b5ffc0c5387f35e8b874cf6d1778cd2"
+  }
+}

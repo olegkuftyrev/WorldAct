@@ -1,0 +1,641 @@
+{
+  "code": "75e44f061f22fa19e850345c9976dbcfd9ab8196",
+  "records": [
+    {
+      "path": "proofs/author-name-native-matrix-proof.json",
+      "sha256": "aff055189312cf306e6d79f74d97ff546e3667021e1693c409a9a6ef47fd63c9",
+      "originalPrivateFilename": "author-name-native-matrix-proof.json",
+      "originalSha256": "b21b5dbe3ce41b2c3610d8acb2af48e15303dc7e6cb26010e8c032d83a12d28b",
+      "copyPolicy": "Sanitized strings and relative screenshot links; original private bytes unchanged.",
+      "classification": "passing scoped native observations"
+    },
+    {
+      "path": "proofs/author-name-native-paths-proof.json",
+      "sha256": "6dab5fb213f686743d035ae244a5cc9d6d4a7878d7f4a473b7161da451da62cf",
+      "originalPrivateFilename": "author-name-native-paths-proof.json",
+      "originalSha256": "15306e745e57d66c592f9691fd4efd15ac02ed30a5e53d59abb045012bf3b81e",
+      "copyPolicy": "Sanitized strings and relative screenshot links; original private bytes unchanged.",
+      "classification": "passing scoped native observations"
+    },
+    {
+      "path": "proofs/author-name-native-variants-proof.json",
+      "sha256": "9514f4cfeb8f80d286fac11f72905aea7788cf1d60e70807e2780540e2896c6a",
+      "originalPrivateFilename": "author-name-native-variants-proof.json",
+      "originalSha256": "dd93c31f2f99473ddcb5cce8d059b3f38661874278c444b5a1787c052fd19e36",
+      "copyPolicy": "Sanitized strings and relative screenshot links; original private bytes unchanged.",
+      "classification": "passing scoped native observations"
+    },
+    {
+      "path": "proofs/author-name-native-nojs-proof.json",
+      "sha256": "24733068aec7ace7d145771c19467c37a852b1678b6c45b2b86efc3c1ee4760c",
+      "originalPrivateFilename": "author-name-native-nojs-proof.json",
+      "originalSha256": "ece75914d038679d236c352f3320f215440f5c8be3c3bafb890a3324acd5f5ca",
+      "copyPolicy": "Sanitized strings and relative screenshot links; original private bytes unchanged.",
+      "classification": "passing scoped native observations"
+    },
+    {
+      "path": "proofs/author-name-native-nojs-source-proof.json",
+      "sha256": "05cd59df25e5a4b431e7f70fefda66d8495c9ac1183449a86c7d3f8760652dea",
+      "originalPrivateFilename": "author-name-native-nojs-source-proof.json",
+      "originalSha256": "9e0bebe9a6f54168253f9be44e630cd56852cba98ee39cb68c5c0dc1678bedb2",
+      "copyPolicy": "Sanitized strings and relative screenshot links; original private bytes unchanged.",
+      "classification": "passing scoped native observations"
+    },
+    {
+      "path": "proofs/author-name-native-global-nojs-proof.json",
+      "sha256": "b15486dd1a0da5414af7e43eaccf44c2f98274008cb4cb1c91ad4dfed8766ffd",
+      "originalPrivateFilename": "author-name-native-global-nojs-proof.json",
+      "originalSha256": "20b414145e084e6078933e61493a995d6d3db2329424e8378b9d172fa93deda4",
+      "copyPolicy": "Sanitized strings and relative screenshot links; original private bytes unchanged.",
+      "classification": "passing scoped native observations"
+    },
+    {
+      "path": "proofs/author-name-native-private-hold-proof.json",
+      "sha256": "646ae557d178a49edd1ead3f0dafb029edc67da988016cea3b9c6d094f0088e6",
+      "originalPrivateFilename": "author-name-native-private-hold-proof.json",
+      "originalSha256": "8a8e47f861b4a5a58a1643864971ec783cedc8ee9d5d41eff1b20d23dd768c7d",
+      "copyPolicy": "Sanitized strings and relative screenshot links; original private bytes unchanged.",
+      "classification": "passing scoped native observations"
+    },
+    {
+      "path": "history/author-name-native-search-counter-original-proof.json",
+      "sha256": "52bc1855fcf6afb56c867e018679a0d75b6f3d9a2977f18942e2184531c881da",
+      "originalPrivateFilename": "author-name-native-search-counter-original-proof.json",
+      "originalSha256": "52869ec5d291143d20a2a4179afc3b7dafd978010dfa3049d7fc47680cb77f92",
+      "copyPolicy": "Sanitized strings and relative screenshot links; original private bytes unchanged.",
+      "classification": "immutable original internal expectation; source-correct global Search classification applies"
+    },
+    {
+      "path": "history/author-name-native-search-original-proof.json",
+      "sha256": "de7468bf4366d8d0d03f57cf11668a752d70e1c689baa1ff7eccd2b8d571d8e9",
+      "originalPrivateFilename": "author-name-native-search-original-proof.json",
+      "originalSha256": "1e7b5a823bae136100a04a8cff3e022eb90cfb28cd391d7ca70c115d4c2629ff",
+      "copyPolicy": "Sanitized strings and relative screenshot links; original private bytes unchanged.",
+      "classification": "immutable original internal expectation; source-correct global Search classification applies"
+    },
+    {
+      "path": "history/author-name-native-search-source-original-proof.json",
+      "sha256": "b51cdcbf3b402d49366c07f0e4ff1eed23d4e67ac4f0376829b6dcf013b0ef39",
+      "originalPrivateFilename": "author-name-native-search-source-original-proof.json",
+      "originalSha256": "6a78a064ceee53977af0f619952cdb4c1a571151efd07045e61a8d8c9043b92a",
+      "copyPolicy": "Sanitized strings and relative screenshot links; original private bytes unchanged.",
+      "classification": "immutable original internal expectation; source-correct global Search classification applies"
+    },
+    {
+      "path": "screens/author-name-native-classic-category-1440.png",
+      "sha256": "8a57accc14bc6149b64d7f9c9e8e79c3f754d761ff688c45ace02839f3c9780b",
+      "originalPrivateFilename": "author-name-native-classic-category-1440.png",
+      "originalSha256": "8a57accc14bc6149b64d7f9c9e8e79c3f754d761ff688c45ace02839f3c9780b",
+      "inspected": true,
+      "copyPolicy": "Byte-identical PNG; fake owned fixture content only."
+    },
+    {
+      "path": "screens/author-name-native-classic-category-375.png",
+      "sha256": "a9047515ea42c4c743ef49882a25b6271850c38dc0a1dfb6735abe8d11634318",
+      "originalPrivateFilename": "author-name-native-classic-category-375.png",
+      "originalSha256": "a9047515ea42c4c743ef49882a25b6271850c38dc0a1dfb6735abe8d11634318",
+      "inspected": true,
+      "copyPolicy": "Byte-identical PNG; fake owned fixture content only."
+    },
+    {
+      "path": "screens/author-name-native-classic-category-768.png",
+      "sha256": "297871bc57523b7ff5da48973be21692ebd714a62d5a536ba4333814c51ce7fd",
+      "originalPrivateFilename": "author-name-native-classic-category-768.png",
+      "originalSha256": "297871bc57523b7ff5da48973be21692ebd714a62d5a536ba4333814c51ce7fd",
+      "inspected": true,
+      "copyPolicy": "Byte-identical PNG; fake owned fixture content only."
+    },
+    {
+      "path": "screens/author-name-native-classic-date-1440.png",
+      "sha256": "163e3815f8a7a55cf3fc0590b123013599f42c522870411b5f621f91fad40219",
+      "originalPrivateFilename": "author-name-native-classic-date-1440.png",
+      "originalSha256": "163e3815f8a7a55cf3fc0590b123013599f42c522870411b5f621f91fad40219",
+      "inspected": true,
+      "copyPolicy": "Byte-identical PNG; fake owned fixture content only."
+    },
+    {
+      "path": "screens/author-name-native-classic-date-375.png",
+      "sha256": "56d698a62bdbcd2a4d9f09e05b11cdd87d5d9fe6a506c90afd9581ce16b545b2",
+      "originalPrivateFilename": "author-name-native-classic-date-375.png",
+      "originalSha256": "56d698a62bdbcd2a4d9f09e05b11cdd87d5d9fe6a506c90afd9581ce16b545b2",
+      "inspected": true,
+      "copyPolicy": "Byte-identical PNG; fake owned fixture content only."
+    },
+    {
+      "path": "screens/author-name-native-classic-date-768.png",
+      "sha256": "f6ee010d1911a2b13217c2d88f436ef479900ea3fbb915dce2a6189c571167d6",
+      "originalPrivateFilename": "author-name-native-classic-date-768.png",
+      "originalSha256": "f6ee010d1911a2b13217c2d88f436ef479900ea3fbb915dce2a6189c571167d6",
+      "inspected": true,
+      "copyPolicy": "Byte-identical PNG; fake owned fixture content only."
+    },
+    {
+      "path": "screens/author-name-native-classic-duplicate-error-375.png",
+      "sha256": "ca988ce564e967c2ec24ae5b04c0f70a8eff25f1f7b8b50ce4920a9fc329286a",
+      "originalPrivateFilename": "author-name-native-classic-duplicate-error-375.png",
+      "originalSha256": "ca988ce564e967c2ec24ae5b04c0f70a8eff25f1f7b8b50ce4920a9fc329286a",
+      "inspected": true,
+      "copyPolicy": "Byte-identical PNG; fake owned fixture content only."
+    },
+    {
+      "path": "screens/author-name-native-classic-encoded-key-375.png",
+      "sha256": "905bdf1d156c8a3a5bab2fa928cbcb8632717c1e3674c4ab5b5f8d9b3c25bcdd",
+      "originalPrivateFilename": "author-name-native-classic-encoded-key-375.png",
+      "originalSha256": "905bdf1d156c8a3a5bab2fa928cbcb8632717c1e3674c4ab5b5f8d9b3c25bcdd",
+      "inspected": true,
+      "copyPolicy": "Byte-identical PNG; fake owned fixture content only."
+    },
+    {
+      "path": "screens/author-name-native-classic-global-nojs-375.png",
+      "sha256": "d6896211545e9a6f838db55b08a501311579de6ca762fa872a8f59f9555e8189",
+      "originalPrivateFilename": "author-name-native-classic-global-nojs-375.png",
+      "originalSha256": "d6896211545e9a6f838db55b08a501311579de6ca762fa872a8f59f9555e8189",
+      "inspected": true,
+      "copyPolicy": "Byte-identical PNG; fake owned fixture content only."
+    },
+    {
+      "path": "screens/author-name-native-classic-intersection-1440.png",
+      "sha256": "2e86a3801189c780dd417ddd10dd4da0cda266e4f61fedf93887ce8e1a8c9aec",
+      "originalPrivateFilename": "author-name-native-classic-intersection-1440.png",
+      "originalSha256": "2e86a3801189c780dd417ddd10dd4da0cda266e4f61fedf93887ce8e1a8c9aec",
+      "inspected": true,
+      "copyPolicy": "Byte-identical PNG; fake owned fixture content only."
+    },
+    {
+      "path": "screens/author-name-native-classic-intersection-375.png",
+      "sha256": "6f781432b5a6724070965ae946f8276937741b6762244ddf89896583c52519f5",
+      "originalPrivateFilename": "author-name-native-classic-intersection-375.png",
+      "originalSha256": "6f781432b5a6724070965ae946f8276937741b6762244ddf89896583c52519f5",
+      "inspected": true,
+      "copyPolicy": "Byte-identical PNG; fake owned fixture content only."
+    },
+    {
+      "path": "screens/author-name-native-classic-intersection-768.png",
+      "sha256": "07e04da347b7343a3e83fe6bb6ccc6a74bec0bf10c3b2cdceb854622b30bcdf5",
+      "originalPrivateFilename": "author-name-native-classic-intersection-768.png",
+      "originalSha256": "07e04da347b7343a3e83fe6bb6ccc6a74bec0bf10c3b2cdceb854622b30bcdf5",
+      "inspected": true,
+      "copyPolicy": "Byte-identical PNG; fake owned fixture content only."
+    },
+    {
+      "path": "screens/author-name-native-classic-known-1440.png",
+      "sha256": "8b60c4c8719cb632245b0a5803790b2c015635001384b1763ec36a109e47502d",
+      "originalPrivateFilename": "author-name-native-classic-known-1440.png",
+      "originalSha256": "8b60c4c8719cb632245b0a5803790b2c015635001384b1763ec36a109e47502d",
+      "inspected": true,
+      "copyPolicy": "Byte-identical PNG; fake owned fixture content only."
+    },
+    {
+      "path": "screens/author-name-native-classic-known-375.png",
+      "sha256": "47cabbe7005752a97995d44b5f47cb201ee557af3bc74c11679ae0758011c76d",
+      "originalPrivateFilename": "author-name-native-classic-known-375.png",
+      "originalSha256": "47cabbe7005752a97995d44b5f47cb201ee557af3bc74c11679ae0758011c76d",
+      "inspected": true,
+      "copyPolicy": "Byte-identical PNG; fake owned fixture content only."
+    },
+    {
+      "path": "screens/author-name-native-classic-known-768.png",
+      "sha256": "ed188bfd4f100b61f79a1d62dc8b01a4a14dc4413af4f65d4079e44011ad1b1d",
+      "originalPrivateFilename": "author-name-native-classic-known-768.png",
+      "originalSha256": "ed188bfd4f100b61f79a1d62dc8b01a4a14dc4413af4f65d4079e44011ad1b1d",
+      "inspected": true,
+      "copyPolicy": "Byte-identical PNG; fake owned fixture content only."
+    },
+    {
+      "path": "screens/author-name-native-classic-nojs-comment-375.png",
+      "sha256": "3be20701a59e2d91d1de811ffbc62fcf44d5e1c64c80127387bda251b2caa246",
+      "originalPrivateFilename": "author-name-native-classic-nojs-comment-375.png",
+      "originalSha256": "3be20701a59e2d91d1de811ffbc62fcf44d5e1c64c80127387bda251b2caa246",
+      "inspected": true,
+      "copyPolicy": "Byte-identical PNG; fake owned fixture content only."
+    },
+    {
+      "path": "screens/author-name-native-classic-nojs-unlocked-375.png",
+      "sha256": "e0a700da50aa8ba0fc489205b249986fc1afddb5567a578df28ee51753a653bb",
+      "originalPrivateFilename": "author-name-native-classic-nojs-unlocked-375.png",
+      "originalSha256": "e0a700da50aa8ba0fc489205b249986fc1afddb5567a578df28ee51753a653bb",
+      "inspected": true,
+      "copyPolicy": "Byte-identical PNG; fake owned fixture content only."
+    },
+    {
+      "path": "screens/author-name-native-classic-posts-page-1440.png",
+      "sha256": "d675070262b9566653bc542a58b81ad178add5d761c2c066a8c94dbad94080a5",
+      "originalPrivateFilename": "author-name-native-classic-posts-page-1440.png",
+      "originalSha256": "d675070262b9566653bc542a58b81ad178add5d761c2c066a8c94dbad94080a5",
+      "inspected": true,
+      "copyPolicy": "Byte-identical PNG; fake owned fixture content only."
+    },
+    {
+      "path": "screens/author-name-native-classic-posts-page-375.png",
+      "sha256": "754aca3d3548263319f4411ec31609a80730682f6ff5268f977415ee702c2661",
+      "originalPrivateFilename": "author-name-native-classic-posts-page-375.png",
+      "originalSha256": "754aca3d3548263319f4411ec31609a80730682f6ff5268f977415ee702c2661",
+      "inspected": true,
+      "copyPolicy": "Byte-identical PNG; fake owned fixture content only."
+    },
+    {
+      "path": "screens/author-name-native-classic-posts-page-768.png",
+      "sha256": "bb6b6c40bb269825ac315bc49436689c88471d024d50c6a87386df811ce3723d",
+      "originalPrivateFilename": "author-name-native-classic-posts-page-768.png",
+      "originalSha256": "bb6b6c40bb269825ac315bc49436689c88471d024d50c6a87386df811ce3723d",
+      "inspected": true,
+      "copyPolicy": "Byte-identical PNG; fake owned fixture content only."
+    },
+    {
+      "path": "screens/author-name-native-classic-protected-body-375.png",
+      "sha256": "d7b06c37971b14c116d03247467ef6a945fe5890144e3d72806aa2a0c442b017",
+      "originalPrivateFilename": "author-name-native-classic-protected-body-375.png",
+      "originalSha256": "d7b06c37971b14c116d03247467ef6a945fe5890144e3d72806aa2a0c442b017",
+      "inspected": true,
+      "copyPolicy": "Byte-identical PNG; fake owned fixture content only."
+    },
+    {
+      "path": "screens/author-name-native-classic-search-1440.png",
+      "sha256": "9040a421365a46e04eada886fea7819d84e287eb29077fa1fbb7a32b5e48de8e",
+      "originalPrivateFilename": "author-name-native-classic-search-1440.png",
+      "originalSha256": "9040a421365a46e04eada886fea7819d84e287eb29077fa1fbb7a32b5e48de8e",
+      "inspected": true,
+      "copyPolicy": "Byte-identical PNG; fake owned fixture content only."
+    },
+    {
+      "path": "screens/author-name-native-classic-search-375.png",
+      "sha256": "1eeba376924ce07564c695cb465c0466765514aee25e0c8dbe324767ed89e845",
+      "originalPrivateFilename": "author-name-native-classic-search-375.png",
+      "originalSha256": "1eeba376924ce07564c695cb465c0466765514aee25e0c8dbe324767ed89e845",
+      "inspected": true,
+      "copyPolicy": "Byte-identical PNG; fake owned fixture content only."
+    },
+    {
+      "path": "screens/author-name-native-classic-search-768.png",
+      "sha256": "a767c2a2185abd451a303061540f5543eff813865a481ef54fcc1852a31ddc66",
+      "originalPrivateFilename": "author-name-native-classic-search-768.png",
+      "originalSha256": "a767c2a2185abd451a303061540f5543eff813865a481ef54fcc1852a31ddc66",
+      "inspected": true,
+      "copyPolicy": "Byte-identical PNG; fake owned fixture content only."
+    },
+    {
+      "path": "screens/author-name-native-classic-search-after-lost-intersection.png",
+      "sha256": "9040a421365a46e04eada886fea7819d84e287eb29077fa1fbb7a32b5e48de8e",
+      "originalPrivateFilename": "author-name-native-classic-search-after-lost-intersection.png",
+      "originalSha256": "9040a421365a46e04eada886fea7819d84e287eb29077fa1fbb7a32b5e48de8e",
+      "inspected": true,
+      "copyPolicy": "Byte-identical PNG; fake owned fixture content only."
+    },
+    {
+      "path": "screens/author-name-native-classic-search-before-empty-intersection.png",
+      "sha256": "1e681d73038b5d567662271ba41fbfdeb2cad18b5be9e3f585b2475a3bb090d1",
+      "originalPrivateFilename": "author-name-native-classic-search-before-empty-intersection.png",
+      "originalSha256": "1e681d73038b5d567662271ba41fbfdeb2cad18b5be9e3f585b2475a3bb090d1",
+      "inspected": true,
+      "copyPolicy": "Byte-identical PNG; fake owned fixture content only."
+    },
+    {
+      "path": "screens/author-name-native-pending-private-after-logout-375.png",
+      "sha256": "665c689df3ab43b4289b83c0c447abd592e28d21c5628ff9e34de1441e668084",
+      "originalPrivateFilename": "author-name-native-pending-private-after-logout-375.png",
+      "originalSha256": "665c689df3ab43b4289b83c0c447abd592e28d21c5628ff9e34de1441e668084",
+      "inspected": true,
+      "copyPolicy": "Byte-identical PNG; fake owned fixture content only."
+    },
+    {
+      "path": "screens/author-name-native-pending-private-before-logout-375.png",
+      "sha256": "5cc3a1e01a1c9129f9e829e5247c6f573894b16ab9a4469696270f2a7525d904",
+      "originalPrivateFilename": "author-name-native-pending-private-before-logout-375.png",
+      "originalSha256": "5cc3a1e01a1c9129f9e829e5247c6f573894b16ab9a4469696270f2a7525d904",
+      "inspected": true,
+      "copyPolicy": "Byte-identical PNG; fake owned fixture content only."
+    },
+    {
+      "path": "screens/author-name-native-search-counter-original.png",
+      "sha256": "9040a421365a46e04eada886fea7819d84e287eb29077fa1fbb7a32b5e48de8e",
+      "originalPrivateFilename": "author-name-native-search-counter-original.png",
+      "originalSha256": "9040a421365a46e04eada886fea7819d84e287eb29077fa1fbb7a32b5e48de8e",
+      "inspected": true,
+      "copyPolicy": "Byte-identical PNG; fake owned fixture content only."
+    },
+    {
+      "path": "screens/author-name-native-twentytwentyfive-category-1440.png",
+      "sha256": "05c4c4ae1bda4d18496228ec0d6395ba709ca9c93b88888f97ee88a28da7b740",
+      "originalPrivateFilename": "author-name-native-twentytwentyfive-category-1440.png",
+      "originalSha256": "05c4c4ae1bda4d18496228ec0d6395ba709ca9c93b88888f97ee88a28da7b740",
+      "inspected": true,
+      "copyPolicy": "Byte-identical PNG; fake owned fixture content only."
+    },
+    {
+      "path": "screens/author-name-native-twentytwentyfive-category-375.png",
+      "sha256": "c051f09fe32df3f23af99c68fe504456191c9726f9fe03e76c9087cc5b7baf7a",
+      "originalPrivateFilename": "author-name-native-twentytwentyfive-category-375.png",
+      "originalSha256": "c051f09fe32df3f23af99c68fe504456191c9726f9fe03e76c9087cc5b7baf7a",
+      "inspected": true,
+      "copyPolicy": "Byte-identical PNG; fake owned fixture content only."
+    },
+    {
+      "path": "screens/author-name-native-twentytwentyfive-category-768.png",
+      "sha256": "55c9713abf0bf3996d8332b1604f3ae28b3caa0fd9bd9bdb17f41829354f0028",
+      "originalPrivateFilename": "author-name-native-twentytwentyfive-category-768.png",
+      "originalSha256": "55c9713abf0bf3996d8332b1604f3ae28b3caa0fd9bd9bdb17f41829354f0028",
+      "inspected": true,
+      "copyPolicy": "Byte-identical PNG; fake owned fixture content only."
+    },
+    {
+      "path": "screens/author-name-native-twentytwentyfive-date-1440.png",
+      "sha256": "4b70a871554bfe15b07112108d56f3a4b7c82a94f5684598981e05e7cf187921",
+      "originalPrivateFilename": "author-name-native-twentytwentyfive-date-1440.png",
+      "originalSha256": "4b70a871554bfe15b07112108d56f3a4b7c82a94f5684598981e05e7cf187921",
+      "inspected": true,
+      "copyPolicy": "Byte-identical PNG; fake owned fixture content only."
+    },
+    {
+      "path": "screens/author-name-native-twentytwentyfive-date-375.png",
+      "sha256": "481289433ca9b1e2eaca2169b324ad88f738b307b0c472e857d2c2fc73f10da8",
+      "originalPrivateFilename": "author-name-native-twentytwentyfive-date-375.png",
+      "originalSha256": "481289433ca9b1e2eaca2169b324ad88f738b307b0c472e857d2c2fc73f10da8",
+      "inspected": true,
+      "copyPolicy": "Byte-identical PNG; fake owned fixture content only."
+    },
+    {
+      "path": "screens/author-name-native-twentytwentyfive-date-768.png",
+      "sha256": "a35ec566e4313a0d219efd50cee80b55aaf73eecff1dfffd858f9c4dcd70ddf2",
+      "originalPrivateFilename": "author-name-native-twentytwentyfive-date-768.png",
+      "originalSha256": "a35ec566e4313a0d219efd50cee80b55aaf73eecff1dfffd858f9c4dcd70ddf2",
+      "inspected": true,
+      "copyPolicy": "Byte-identical PNG; fake owned fixture content only."
+    },
+    {
+      "path": "screens/author-name-native-twentytwentyfive-duplicate-error-375.png",
+      "sha256": "ca988ce564e967c2ec24ae5b04c0f70a8eff25f1f7b8b50ce4920a9fc329286a",
+      "originalPrivateFilename": "author-name-native-twentytwentyfive-duplicate-error-375.png",
+      "originalSha256": "ca988ce564e967c2ec24ae5b04c0f70a8eff25f1f7b8b50ce4920a9fc329286a",
+      "inspected": true,
+      "copyPolicy": "Byte-identical PNG; fake owned fixture content only."
+    },
+    {
+      "path": "screens/author-name-native-twentytwentyfive-encoded-key-375.png",
+      "sha256": "4609abdbbc982d40628e3a1d280c63a1f84714b32f286d597709d3a575acb0f4",
+      "originalPrivateFilename": "author-name-native-twentytwentyfive-encoded-key-375.png",
+      "originalSha256": "4609abdbbc982d40628e3a1d280c63a1f84714b32f286d597709d3a575acb0f4",
+      "inspected": true,
+      "copyPolicy": "Byte-identical PNG; fake owned fixture content only."
+    },
+    {
+      "path": "screens/author-name-native-twentytwentyfive-global-nojs-375.png",
+      "sha256": "4c1cb053c168f0927de81228e18b714f8a8c46017d7d4f19db3d2c8eeb426764",
+      "originalPrivateFilename": "author-name-native-twentytwentyfive-global-nojs-375.png",
+      "originalSha256": "4c1cb053c168f0927de81228e18b714f8a8c46017d7d4f19db3d2c8eeb426764",
+      "inspected": true,
+      "copyPolicy": "Byte-identical PNG; fake owned fixture content only."
+    },
+    {
+      "path": "screens/author-name-native-twentytwentyfive-intersection-1440.png",
+      "sha256": "227ce8d5c519384707064d8a8b314eb7bf04691c2198dde9fad8b2b09dab1b46",
+      "originalPrivateFilename": "author-name-native-twentytwentyfive-intersection-1440.png",
+      "originalSha256": "227ce8d5c519384707064d8a8b314eb7bf04691c2198dde9fad8b2b09dab1b46",
+      "inspected": true,
+      "copyPolicy": "Byte-identical PNG; fake owned fixture content only."
+    },
+    {
+      "path": "screens/author-name-native-twentytwentyfive-intersection-375.png",
+      "sha256": "798c4c779899906343dddc25056f89eb0e5d548c2a0c9322f58cb271c1738aa8",
+      "originalPrivateFilename": "author-name-native-twentytwentyfive-intersection-375.png",
+      "originalSha256": "798c4c779899906343dddc25056f89eb0e5d548c2a0c9322f58cb271c1738aa8",
+      "inspected": true,
+      "copyPolicy": "Byte-identical PNG; fake owned fixture content only."
+    },
+    {
+      "path": "screens/author-name-native-twentytwentyfive-intersection-768.png",
+      "sha256": "03d00d74dc692b71f079bacf7c68277a39a3a528230fc01f55af6ba81e8266aa",
+      "originalPrivateFilename": "author-name-native-twentytwentyfive-intersection-768.png",
+      "originalSha256": "03d00d74dc692b71f079bacf7c68277a39a3a528230fc01f55af6ba81e8266aa",
+      "inspected": true,
+      "copyPolicy": "Byte-identical PNG; fake owned fixture content only."
+    },
+    {
+      "path": "screens/author-name-native-twentytwentyfive-known-1440.png",
+      "sha256": "53f776c28b397faf73f6ead569f2f8b88fe14fa62fd501c4938bd9242b309748",
+      "originalPrivateFilename": "author-name-native-twentytwentyfive-known-1440.png",
+      "originalSha256": "53f776c28b397faf73f6ead569f2f8b88fe14fa62fd501c4938bd9242b309748",
+      "inspected": true,
+      "copyPolicy": "Byte-identical PNG; fake owned fixture content only."
+    },
+    {
+      "path": "screens/author-name-native-twentytwentyfive-known-375.png",
+      "sha256": "cba27c9b9abe3a88ab9800cc8b99600c230c24f8c7b9b538b76cd3a4978646ee",
+      "originalPrivateFilename": "author-name-native-twentytwentyfive-known-375.png",
+      "originalSha256": "cba27c9b9abe3a88ab9800cc8b99600c230c24f8c7b9b538b76cd3a4978646ee",
+      "inspected": true,
+      "copyPolicy": "Byte-identical PNG; fake owned fixture content only."
+    },
+    {
+      "path": "screens/author-name-native-twentytwentyfive-known-768.png",
+      "sha256": "b09e143bdbd43d2bd79f67e2741fef2915ddedfcb41830b3746c2c71dca5a3cb",
+      "originalPrivateFilename": "author-name-native-twentytwentyfive-known-768.png",
+      "originalSha256": "b09e143bdbd43d2bd79f67e2741fef2915ddedfcb41830b3746c2c71dca5a3cb",
+      "inspected": true,
+      "copyPolicy": "Byte-identical PNG; fake owned fixture content only."
+    },
+    {
+      "path": "screens/author-name-native-twentytwentyfive-nojs-comment-375.png",
+      "sha256": "0727b2916dc188b5151d68ccd3ffa14a25efd6a68b5d2332c582647958f1b677",
+      "originalPrivateFilename": "author-name-native-twentytwentyfive-nojs-comment-375.png",
+      "originalSha256": "0727b2916dc188b5151d68ccd3ffa14a25efd6a68b5d2332c582647958f1b677",
+      "inspected": true,
+      "copyPolicy": "Byte-identical PNG; fake owned fixture content only."
+    },
+    {
+      "path": "screens/author-name-native-twentytwentyfive-nojs-unlocked-375.png",
+      "sha256": "c25d25c40e53c6b80dad25822fc6f9ca70682b89c80574163279dfd53fac5f65",
+      "originalPrivateFilename": "author-name-native-twentytwentyfive-nojs-unlocked-375.png",
+      "originalSha256": "c25d25c40e53c6b80dad25822fc6f9ca70682b89c80574163279dfd53fac5f65",
+      "inspected": true,
+      "copyPolicy": "Byte-identical PNG; fake owned fixture content only."
+    },
+    {
+      "path": "screens/author-name-native-twentytwentyfive-posts-page-1440.png",
+      "sha256": "28bcac2b32b0bfc3fb8cd644c99e7c4733b8e40298ea14d36676d83e71b63bcc",
+      "originalPrivateFilename": "author-name-native-twentytwentyfive-posts-page-1440.png",
+      "originalSha256": "28bcac2b32b0bfc3fb8cd644c99e7c4733b8e40298ea14d36676d83e71b63bcc",
+      "inspected": true,
+      "copyPolicy": "Byte-identical PNG; fake owned fixture content only."
+    },
+    {
+      "path": "screens/author-name-native-twentytwentyfive-posts-page-375.png",
+      "sha256": "8773da9ff0af86b4a37afc1bb2ca1dea6d609627fe0e92f23537ce68a3c9e9dd",
+      "originalPrivateFilename": "author-name-native-twentytwentyfive-posts-page-375.png",
+      "originalSha256": "8773da9ff0af86b4a37afc1bb2ca1dea6d609627fe0e92f23537ce68a3c9e9dd",
+      "inspected": true,
+      "copyPolicy": "Byte-identical PNG; fake owned fixture content only."
+    },
+    {
+      "path": "screens/author-name-native-twentytwentyfive-posts-page-768.png",
+      "sha256": "bc700aa16b96c32b35320c1a39e45c75646ca4c55d76f3909598b5349b0ff555",
+      "originalPrivateFilename": "author-name-native-twentytwentyfive-posts-page-768.png",
+      "originalSha256": "bc700aa16b96c32b35320c1a39e45c75646ca4c55d76f3909598b5349b0ff555",
+      "inspected": true,
+      "copyPolicy": "Byte-identical PNG; fake owned fixture content only."
+    },
+    {
+      "path": "screens/author-name-native-twentytwentyfive-protected-body-375.png",
+      "sha256": "5958e748dcf5c6933460e3a49bf154279ddd7acb2ff16abaf5a3312ff68a25b9",
+      "originalPrivateFilename": "author-name-native-twentytwentyfive-protected-body-375.png",
+      "originalSha256": "5958e748dcf5c6933460e3a49bf154279ddd7acb2ff16abaf5a3312ff68a25b9",
+      "inspected": true,
+      "copyPolicy": "Byte-identical PNG; fake owned fixture content only."
+    },
+    {
+      "path": "screens/author-name-native-twentytwentyfive-search-1440.png",
+      "sha256": "c0ccdb99bc60dc9e21e72d6246e8492dff020403b5e601aa9fcf82e4b1a157e6",
+      "originalPrivateFilename": "author-name-native-twentytwentyfive-search-1440.png",
+      "originalSha256": "c0ccdb99bc60dc9e21e72d6246e8492dff020403b5e601aa9fcf82e4b1a157e6",
+      "inspected": true,
+      "copyPolicy": "Byte-identical PNG; fake owned fixture content only."
+    },
+    {
+      "path": "screens/author-name-native-twentytwentyfive-search-375.png",
+      "sha256": "4c1cb053c168f0927de81228e18b714f8a8c46017d7d4f19db3d2c8eeb426764",
+      "originalPrivateFilename": "author-name-native-twentytwentyfive-search-375.png",
+      "originalSha256": "4c1cb053c168f0927de81228e18b714f8a8c46017d7d4f19db3d2c8eeb426764",
+      "inspected": true,
+      "copyPolicy": "Byte-identical PNG; fake owned fixture content only."
+    },
+    {
+      "path": "screens/author-name-native-twentytwentyfive-search-768.png",
+      "sha256": "30866d1c1df33aa3269a4675e694137dff4517d758bc315957ce6a37d8229f93",
+      "originalPrivateFilename": "author-name-native-twentytwentyfive-search-768.png",
+      "originalSha256": "30866d1c1df33aa3269a4675e694137dff4517d758bc315957ce6a37d8229f93",
+      "inspected": true,
+      "copyPolicy": "Byte-identical PNG; fake owned fixture content only."
+    },
+    {
+      "path": "screens/author-name-native-twentytwentyfive-source-search-after-lost-intersection.png",
+      "sha256": "c0ccdb99bc60dc9e21e72d6246e8492dff020403b5e601aa9fcf82e4b1a157e6",
+      "originalPrivateFilename": "author-name-native-twentytwentyfive-source-search-after-lost-intersection.png",
+      "originalSha256": "c0ccdb99bc60dc9e21e72d6246e8492dff020403b5e601aa9fcf82e4b1a157e6",
+      "inspected": true,
+      "copyPolicy": "Byte-identical PNG; fake owned fixture content only."
+    },
+    {
+      "path": "screens/author-name-native-twentytwentyfive-source-search-before-empty-intersection.png",
+      "sha256": "43fd27331c23a4c3ab7efc425085931545837a50d04735ccad66acaabd797b66",
+      "originalPrivateFilename": "author-name-native-twentytwentyfive-source-search-before-empty-intersection.png",
+      "originalSha256": "43fd27331c23a4c3ab7efc425085931545837a50d04735ccad66acaabd797b66",
+      "inspected": true,
+      "copyPolicy": "Byte-identical PNG; fake owned fixture content only."
+    },
+    {
+      "path": "history/author-name-native-dependency-permission-error.json",
+      "sha256": "9233f7063127151c34fd4eb46730d6e0bc4d2ce571a958ee2f65fc5567341dba",
+      "originalPrivateFilename": "author-name-native-dependency-permission-error.json",
+      "originalSha256": "9233f7063127151c34fd4eb46730d6e0bc4d2ce571a958ee2f65fc5567341dba",
+      "copyPolicy": "Sanitized private paths/values; original private bytes unchanged."
+    },
+    {
+      "path": "history/author-name-native-dependency-permission-verification.json",
+      "sha256": "ed1d5d0488f4735f3ca5274d97f19b59231f6c832c3f520aabbc33de4a192faa",
+      "originalPrivateFilename": "author-name-native-dependency-permission-verification.json",
+      "originalSha256": "c0995b7ffa899ffd83d1850f63a90e7b442116d5ddc42ca3faa6a4347eae6b48",
+      "copyPolicy": "Sanitized private paths/values; original private bytes unchanged."
+    },
+    {
+      "path": "history/author-name-native-fixture-original-error.json",
+      "sha256": "ee09e261bf5d92c2c40ec743761fa57187b47fb9369abe180da22f3decb9436a",
+      "originalPrivateFilename": "author-name-native-fixture-original-error.json",
+      "originalSha256": "ee09e261bf5d92c2c40ec743761fa57187b47fb9369abe180da22f3decb9436a",
+      "copyPolicy": "Sanitized private paths/values; original private bytes unchanged."
+    },
+    {
+      "path": "history/author-name-native-nojs-source-original-pagination-proof.json",
+      "sha256": "2a7f0f8050de47a3e077d4599b643a5b652531984540185680cdc3b4895bc77c",
+      "originalPrivateFilename": "author-name-native-nojs-source-original-pagination-proof.json",
+      "originalSha256": "2a7f0f8050de47a3e077d4599b643a5b652531984540185680cdc3b4895bc77c",
+      "copyPolicy": "Sanitized private paths/values; original private bytes unchanged."
+    },
+    {
+      "path": "logs/typecheck.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "originalPrivateFilename": "author-name-native-typecheck.log",
+      "originalSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "copyPolicy": "Private paths/values sanitized; trailing whitespace removed only in repository copy."
+    },
+    {
+      "path": "logs/vite.log.txt",
+      "sha256": "150862e27629e75e7c724cfd59dd333242e31c0fdadbd43ade233b524bb08748",
+      "originalPrivateFilename": "author-name-native-vite.log",
+      "originalSha256": "150862e27629e75e7c724cfd59dd333242e31c0fdadbd43ade233b524bb08748",
+      "copyPolicy": "Private paths/values sanitized; trailing whitespace removed only in repository copy."
+    },
+    {
+      "path": "logs/node.log.txt",
+      "sha256": "735289ef2f5ba5ed37b497870995a85621b692250523a65f8c42c5222c8a421e",
+      "originalPrivateFilename": "author-name-native-node.log",
+      "originalSha256": "735289ef2f5ba5ed37b497870995a85621b692250523a65f8c42c5222c8a421e",
+      "copyPolicy": "Private paths/values sanitized; trailing whitespace removed only in repository copy."
+    },
+    {
+      "path": "logs/source.log.txt",
+      "sha256": "dac3a04d9896411c141fd73657c4e0b9fb35b52b062528f785cdff5c938b39fb",
+      "originalPrivateFilename": "author-name-native-source.log",
+      "originalSha256": "dac3a04d9896411c141fd73657c4e0b9fb35b52b062528f785cdff5c938b39fb",
+      "copyPolicy": "Private paths/values sanitized; trailing whitespace removed only in repository copy."
+    },
+    {
+      "path": "logs/compiled.log.txt",
+      "sha256": "7a0487f439b6c63e5d5aa1db385571f7ae1532d14b6e9cc9e34d854a4265cc5f",
+      "originalPrivateFilename": "author-name-native-compiled.log",
+      "originalSha256": "7a0487f439b6c63e5d5aa1db385571f7ae1532d14b6e9cc9e34d854a4265cc5f",
+      "copyPolicy": "Private paths/values sanitized; trailing whitespace removed only in repository copy."
+    },
+    {
+      "path": "history/ui-stage-checks.json",
+      "sha256": "c177f7ca2d96fd9038a12a260e28c26d7db5c113ebfaed14d5dc16e511ceaa2f",
+      "originalPrivateFilename": "author-name-query-ui-checks.json",
+      "originalSha256": "c177f7ca2d96fd9038a12a260e28c26d7db5c113ebfaed14d5dc16e511ceaa2f",
+      "copyPolicy": "Byte-identical safe UI-stage machine checks; original before hashes preserved."
+    }
+  ],
+  "historyHashes": [
+    {
+      "originalPrivateFilename": "author-name-native-matrix-original-module-error.log",
+      "sha256": "19c003c3beb0a50e3e685bd944eb2e6fe3ff699b598300318479fad9587a9830",
+      "preservedPrivately": true
+    },
+    {
+      "originalPrivateFilename": "author-name-native-doctor-after-init-command.log",
+      "sha256": "4d201271a282f218b66e7fc3e9d789f2912bbd22b2a73782f3306fcaf6f7c468",
+      "preservedPrivately": true
+    },
+    {
+      "originalPrivateFilename": "author-name-native-matrix-original-initial-read-assumption.log",
+      "sha256": "582cfdf8077bf389d89526d9f22b6045da47e767898fe8ac5726131551f14582",
+      "preservedPrivately": true
+    },
+    {
+      "originalPrivateFilename": "author-name-native-search-original-theme-fixture.log",
+      "sha256": "825ea3f8e51f6dab191ee07ee6ed6e14c494491406b88dfaf70eecffb623768b",
+      "preservedPrivately": true
+    },
+    {
+      "originalPrivateFilename": "author-name-native-paths-original-static-body-assumption.log",
+      "sha256": "9b668cd39decd19f13ff9a017de170c12661762c601948f909645951bce99bb2",
+      "preservedPrivately": true
+    },
+    {
+      "originalPrivateFilename": "author-name-native-matrix-original-classic-label.log",
+      "sha256": "a2976c76013f543aa222899b7b185a2280958433da7913ca9f1cffd6658b5883",
+      "preservedPrivately": true
+    },
+    {
+      "originalPrivateFilename": "author-name-native-matrix-original-history-length.log",
+      "sha256": "4bf7fa9458e0415c0a88c846230fed27babd56be73d34567ce5509d31a904f0b",
+      "preservedPrivately": true
+    },
+    {
+      "originalPrivateFilename": "author-name-native-nojs-original-second-comment.log",
+      "sha256": "b22ddaae25c217ee9f86ca4cbfe1705e3b2e421dcb694ad8c768607c3d9e9f33",
+      "preservedPrivately": true
+    }
+  ],
+  "originalPrivateBytesPreserved": true,
+  "screenshotsInspected": 55,
+  "sanitizationPolicy": "No raw credentials, cookies, session values, database URLs, private environment or CDP URLs. Fixture public IDs/names/paths and fake public body markers retained.",
+  "cleanupOriginalPrivateSha256": "7b0080dc66ebac97573032784d3c087bb3353a30a8f3f96a6715a32de410fa3b"
+}
