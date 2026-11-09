@@ -1,0 +1,251 @@
+{
+  "runtimeFreeze": "2a06562b60fc67a22694b1ca42c1f2fb9f050c15",
+  "tree": "bad600a7253ed2ac5030ec9acec4651a43c4a881",
+  "base": "bf4204aa1ade5eb604f34909846039ffb3f1e9af",
+  "nodeSha256": "cbc6c17115bcc4d2529aa296460a0c460b200ea7a11033314f99bb756aec4cb7",
+  "runtimeDelta": {
+    "files": [
+      "shared/public-routing.ts"
+    ],
+    "changedLines": "one insertion/one deletion",
+    "diffSha256": "e293a45778d155290d71ccb14d298499b36d8a6c4c1ef83232ae5174c1207fac",
+    "before": "context.date",
+    "after": "context.date && !(context.single && context.post)",
+    "originalSharedSha256": "df4d7e7267f446ca72b8b3c42468694316ae2abd376672621d96e9fb76fc29c6",
+    "candidateSharedSha256": "02670cc901959e2aa9f188306d1471f9550943261c31abfa04cc36ee53cba286"
+  },
+  "inputs": {
+    "originalPrivate": "singular-date-template-priority-original.test.ts",
+    "originalSHA256": "09245817309e6e3ed98fada2592557b9194bc1aa2e00bf38a6c959766d2b105f",
+    "originalCommit": "22397ecc825357d28528a20ea252a5843188679b",
+    "correctedPrivate": "singular-date-template-priority-corrected.test.ts",
+    "correctedSHA256": "f15f083451c0890f9ecd1c77f2a6c0826ff1ee02847e8cbd5507eb0f9757cb07",
+    "correctedCommit": "cb185dbb77b58fa22ecbf3dbc6d6c1434bfc6ddb",
+    "ownerOriginalCherry": "f9328f2",
+    "ownerCorrectedCherry": "1ab70b8",
+    "permanent": "tests/singular-date-template-priority-original.test.ts",
+    "permanentMatchesCorrectedPrivate": true,
+    "adapterScope": "Only create absent date/404 via tracked API and verify saved inventory; original setup-only stage and other bytes retained",
+    "fiveExistingFileFingerprints": [
+      {
+        "file": "tests/public-document-data.test.ts",
+        "sha256": "dee95240a579ec16327b0ca10f1497cbf2deae37dfd218113a08675cfa0454b1",
+        "gitBlob": "7b1e3aff89556bc1ea70818f703846040a273d04",
+        "bytes": 16941,
+        "lines": 164,
+        "surface": "MIXED:7unconditional top-level cases; pure shared normalization/template selector; directly imported SOURCE document/context/identity/body services; actual guarded HTTP document/site/auth/unlock/native comment APIs. Direct services stay TypeScript even in compiled API mode.",
+        "topLevel": 7,
+        "normalCount": 7,
+        "sourceImports": [
+          "shared/public-routing.ts",
+          "server/public-document-data.ts",
+          "server/public-documents.ts",
+          "server/public-read.ts",
+          "server/auth.ts"
+        ],
+        "actualHttp": true,
+        "literalTopLevelNames": [
+          "public request normalization preserves independent counters, path date authority and template priority",
+          "direct document models render all bundled themes with safe DTOs, selected bodies and exact native Reply context",
+          "front-page detail, date query, canonical body page and true404 models preserve existing route distinctions",
+          "cookie-only document context ignores Basic and contains only current session presentation identity",
+          "protected document grants fence body, excerpt, comments, footnotes, head and nested templates for accounts too",
+          "metadata helper remains body-free and subsequent immutable body read rejects private/type/slug replacements",
+          "document date aliases and scalar validation match the actual legacy site API, while date paths remain authoritative"
+        ],
+        "firstGuardImport": "import test, {after} from \"./isolated-test.js\";",
+        "fixedPortListenerOr3062": false,
+        "portNote": "Uses runner TEST_API_URL;3001 fallback only in post-templates, unreachable under mandatory isolated context. No listener creation/fixed3062 consumer."
+      },
+      {
+        "file": "tests/public-author-name-query-ui.test.ts",
+        "sha256": "024d192a23521c3236811d6bd62d4ba337a0e53f0da03fc7335ad2eef3b2b172",
+        "gitBlob": "882da84ce6781334b70cfc54f28822b5e23a75be",
+        "bytes": 12423,
+        "lines": 101,
+        "surface": "SOURCE-only pure helper/React renderToStaticMarkup/linkedom assertions. No fetch, server API, database or native browser execution in this file; compiled guard label does not compile these service imports.",
+        "topLevel": 15,
+        "normalCount": 15,
+        "sourceImports": [
+          "shared/public-routing.ts",
+          "src/publicAuthorQuery.ts",
+          "src/public/PublicDocumentView.tsx",
+          "src/plainPermalinkRouting.ts",
+          "src/publicArchiveLinks.ts"
+        ],
+        "actualHttp": false,
+        "literalTopLevelNames": [
+          "named root paging and native search retain raw name, original numeric intersection and independent counters",
+          "a known empty named author remains an archive without rendering a configured front page",
+          "safe-empty unknown name with search keeps search identity and visible filters instead of not-found",
+          "named filters keep a resolved date archive heading rather than replacing it with presentation author",
+          "named filters keep posts-page title and expose Show all even for selected-null safe empty",
+          "named filter on a taxonomy keeps taxonomy title while search retains its existing priority",
+          "decoded recognized name keys resolve before flattening, including malformed nested and duplicate keys",
+          "legacy transport preserves original decoded name and numeric intersection rather than resolved identity",
+          "malformed recognized legacy name/numeric fields and exact-empty name reach server unchanged",
+          "minimal selected-null descriptor denotes a safe-empty listing while no descriptor remains unresolved",
+          "named query does not restore a static front page; exactly-empty name retains absent behavior",
+          "numeric-only mixed headings preserve their prior priority outside named descriptors",
+          "legacy source template priority changes only for named presentation descriptors",
+          "named legacy taxonomy transport retains visible contradictory filter for server path priority",
+          "named legacy date transport retains visible year and malformed original scalar shapes"
+        ],
+        "firstGuardImport": "import test from \"./isolated-test.js\";",
+        "fixedPortListenerOr3062": false,
+        "portNote": "Uses runner TEST_API_URL;3001 fallback only in post-templates, unreachable under mandatory isolated context. No listener creation/fixed3062 consumer."
+      },
+      {
+        "file": "tests/post-templates.test.ts",
+        "sha256": "ee1e8adfc474d0b1a0717a9a84df3b5e79693532cb64e91eebb7ee44b126b76a",
+        "gitBlob": "69472b609a6e78ad5e78865e63987e16ca48c906",
+        "bytes": 3161,
+        "lines": 24,
+        "surface": "Actual guarded HTTP login/template catalog/post create-edit/bulk/REST/template-document APIs; imported db pool only for close, no direct renderer invocation.",
+        "topLevel": 1,
+        "normalCount": 1,
+        "sourceImports": [
+          "server/db.ts (pool close only)"
+        ],
+        "actualHttp": true,
+        "literalTopLevelNames": [
+          "per-post templates respect theme content types and persist through single, bulk and REST writes"
+        ],
+        "firstGuardImport": "import test from './isolated-test.js';",
+        "fixedPortListenerOr3062": false,
+        "portNote": "Uses runner TEST_API_URL;3001 fallback only in post-templates, unreachable under mandatory isolated context. No listener creation/fixed3062 consumer."
+      },
+      {
+        "file": "tests/plain-source-pagination.test.ts",
+        "sha256": "45799bfcba76f728470cd5370cd27ca960f1862508522023d7ff308a6759e21c",
+        "gitBlob": "2d7a2ff1b630dcc549568e317c27a458bd09dad5",
+        "bytes": 7013,
+        "lines": 32,
+        "surface": "Actual guarded HTTP direct-template/post/settings/comment setup and pagination assertions; SOURCE db pool only fixture settings/date/comment writes/cleanup; no imported renderer.",
+        "topLevel": 1,
+        "normalCount": 1,
+        "sourceImports": [
+          "server/db.ts (fixture SQL/cleanup)"
+        ],
+        "actualHttp": true,
+        "literalTopLevelNames": [
+          "source singular body, comments and inherited Query Loops keep independent pages and visible Plain identity through real HTTP"
+        ],
+        "firstGuardImport": "import test, { after } from \"./isolated-test.js\";",
+        "fixedPortListenerOr3062": false,
+        "portNote": "Uses runner TEST_API_URL;3001 fallback only in post-templates, unreachable under mandatory isolated context. No listener creation/fixed3062 consumer."
+      },
+      {
+        "file": "tests/front-page-availability.test.ts",
+        "sha256": "fa255c13b7bb6c98e4d805b965b727030b7db78cda9e4ccd4ed498fa9030b7e1",
+        "gitBlob": "ee0dee19500250b88ac6b4ad428baad442fb2b6a",
+        "bytes": 5660,
+        "lines": 34,
+        "surface": "MIXED:actual guarded HTTP site/resolve/post/settings/auth APIs plus directly imported SOURCE shouldResolveStaticFrontPage; db fixture/cleanup.",
+        "topLevel": 1,
+        "normalCount": 6,
+        "sourceImports": [
+          "src/plainPermalinkRouting.ts",
+          "server/db.ts (fixture SQL/cleanup)"
+        ],
+        "actualHttp": true,
+        "nestedStaticExpansion": "One t.test call inside literal[private,draft,trash] loop expands3; two further unconditional t.test calls expand2. Parent+5children=6 on normal completion.",
+        "literalTopLevelNames": [
+          "saved static-front identity survives unavailable page transitions and the adapter delegates its real404 without consuming archives"
+        ],
+        "firstGuardImport": "import test, { after } from \"./isolated-test.js\";",
+        "fixedPortListenerOr3062": false,
+        "portNote": "Uses runner TEST_API_URL;3001 fallback only in post-templates, unreachable under mandatory isolated context. No listener creation/fixed3062 consumer."
+      }
+    ],
+    "fiveNoneditableRuntimeFingerprints": [
+      {
+        "proposedChange": false,
+        "file": "server/public-document-data.ts",
+        "sha256": "af2ead3e5ea19de52a34c8bafe4618bc39d1772581f7e10dfb04c866d1904904",
+        "gitBlob": "8fce37b8c5f0449d269295028c8aa127b72ad34f",
+        "bytes": 16013,
+        "lines": 151
+      },
+      {
+        "proposedChange": false,
+        "file": "src/publicAuthorQuery.ts",
+        "sha256": "80705406e0565b6371e7ec43d331d984034cec2ecfd6022ac3cb972d622c9a11",
+        "gitBlob": "7aa21994579a7327f0f72bdfd3fb3ba889d25b00",
+        "bytes": 2563,
+        "lines": 42
+      },
+      {
+        "proposedChange": false,
+        "file": "src/screens/PublicSite.tsx",
+        "sha256": "a4ac04b10080ab80ba50a7d82940023b7f174c0d59e989441e38e5822ee611a7",
+        "gitBlob": "f4407fa5cc98debbf4b4e1d365b4f0825d9521f5",
+        "bytes": 63340,
+        "lines": 1398
+      },
+      {
+        "proposedChange": false,
+        "file": "server/public-documents.ts",
+        "sha256": "6d270634a176b09f2b90ff85cd99389c75d6a7a92bb1b4b6a079ffd1aba71001",
+        "gitBlob": "b8436825fd9fc717e310f22c9cd09147d0511582",
+        "bytes": 7026,
+        "lines": 107
+      },
+      {
+        "proposedChange": false,
+        "file": "server/public-read.ts",
+        "sha256": "35e15cb0c2d1d6800f5b47adef1546c0ec61ecf046170c70e0bd5b1ddd8eaaff",
+        "gitBlob": "537f81b732afa2975e95bb45438f0ca9d7882941",
+        "bytes": 14664,
+        "lines": 226
+      }
+    ]
+  },
+  "externalBefore": {
+    "privateCertificate": "singular-date-template-corrected-before-checks.json",
+    "privateCertificateSha256": "94eb674d1cd66e8b11013a4d958249acc51f350739a5e6be660e0d5c3f64b994",
+    "base": "5ab358d4c05b1d8fbe7ca25602dfa2385e0dd73a",
+    "nodeSha256": "b8012b887e1b2281774e7318ad70f4a9debfb4d396eaeb3cd41e8e752ae1d80c",
+    "eachMode": {
+      "pass": 1,
+      "fail": 5,
+      "tests": 6,
+      "skip": 0,
+      "cancel": 0,
+      "setupFailures": 0,
+      "failingSemanticChildren": 4,
+      "failingParent": 1,
+      "passingControlChildren": 1,
+      "groups": 11,
+      "surfaces": 33
+    },
+    "original092Stage": "Setup only0PASS1FAIL each; no policy children or dispatch; retained separately",
+    "beforeLogs": [
+      {
+        "mode": "source",
+        "logSHA256": "36ecb30bee70d1711068481c8128a695f09e8c5c63ac5ab42318dbd67ccddb7f",
+        "counts": {
+          "tests": 6,
+          "pass": 1,
+          "fail": 5,
+          "cancelled": 0,
+          "skipped": 0
+        }
+      },
+      {
+        "mode": "compiled",
+        "logSHA256": "868e43c1fd1210f92a03bccfe7533c283ee31667443bd1833dc2643a2b107a65",
+        "counts": {
+          "tests": 6,
+          "pass": 1,
+          "fail": 5,
+          "cancelled": 0,
+          "skipped": 0
+        }
+      }
+    ],
+    "beforeNodeDiffNote": "After intentionally composes released Searchbf420; six relevant runtime baselines and five existing tests equal5ab; Search rendering is independent and not used by this fixture."
+  },
+  "privateSelectorSha256": "a79c2abbd54eb38de9212a3e1880d515b188cf5a838e12a441859a1668a670a7",
+  "scope": "Original setup-only and corrected semantic before are external historical certificates, not executions by this backend stage."
+}

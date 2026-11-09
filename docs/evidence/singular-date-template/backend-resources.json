@@ -1,0 +1,60 @@
+{
+  "time": "2026-11-09T14:42:22.676Z",
+  "candidate": "2a06562b60fc67a22694b1ca42c1f2fb9f050c15",
+  "runtime": "2a06562b60fc67a22694b1ca42c1f2fb9f050c15",
+  "nodeSha256": "cbc6c17115bcc4d2529aa296460a0c460b200ea7a11033314f99bb756aec4cb7",
+  "runReports": [
+    {
+      "file": "singular-date-backend-final-compiled-run.json",
+      "sha256": "2f8528eb121ab6e76237655d70d258f71ddf2634c6d3f46d6e88dfc34e601e42",
+      "logSha256": "6b49a8fa8e50fb452c12f38d1165a69dc13508e703c19db846f8dd94899d8358"
+    },
+    {
+      "file": "singular-date-backend-final-source-run.json",
+      "sha256": "e8ea0d99a494eadfe17f23559707c863d175f4f628b78679a1aac2070ff31016",
+      "logSha256": "11209988dd834a4df7963dc9c46e0c871660931ea169ee22c2314a5439ea7bb2"
+    }
+  ],
+  "primaryPortsPhysicallyBoundAndReleased": {
+    "3046": true,
+    "3047": true,
+    "3048": true
+  },
+  "fixed3062NeverUsed": true,
+  "environment": {
+    "mode": "0600",
+    "regularNonSymlink": true,
+    "removed": true
+  },
+  "dependencyLink": {
+    "removed": true,
+    "sharedOwnerMode": "0755",
+    "sharedOwnerUnmodified": true,
+    "locksMatched": true
+  },
+  "oldOrdinaryFailedAndConditionalArtifactsRetained": [
+    {
+      "sha256": "5bedb84b87c0226f0abc83325c71c5d68cb80f90a74481b6f373f115e0fa84f0",
+      "retained": true
+    },
+    {
+      "sha256": "02b70ca10525cf16e191327419abdfbd999eba437b59b49639376c3c64258532",
+      "retained": true
+    }
+  ],
+  "noNewSourceArchiveArtifacts": true,
+  "normalFinallyUploads": {
+    "runner": "scripts/test-isolated.mjs creates disposable upload directory and removes it in finally",
+    "bothOwnedRunnersExitZero": true,
+    "independentUploadPathInventory": false,
+    "limitation": "Upload paths were not separately journaled; no global temporary-directory sweep or independent per-path absence certificate is claimed."
+  },
+  "allOriginalsCorrectedFixturesFailedStagesLogsAndBuildsRetained": true,
+  "noMainOrIndependentMutation": true,
+  "journaledDatabaseCount": 2,
+  "neverCreatedAnchorAbsent": true,
+  "remainingDatabaseCount": 0,
+  "remainingSessionCount": 0,
+  "dependencyTargetVerifiedExactKnownOwner": true,
+  "anchorAbsenceEvidence": "Both sanitized mode receipts record anchor absence after their guards."
+}

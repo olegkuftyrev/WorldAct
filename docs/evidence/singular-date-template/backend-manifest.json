@@ -1,0 +1,63 @@
+{
+  "created": "2026-11-09T14:48:37.304339+00:00",
+  "runtimeFreeze": "2a06562b60fc67a22694b1ca42c1f2fb9f050c15",
+  "nodeSha256": "cbc6c17115bcc4d2529aa296460a0c460b200ea7a11033314f99bb756aec4cb7",
+  "scope": "Docs-only evidence. Exact six-file 36 SOURCE +36 compiled API guard passes; mixed direct imports explicitly SOURCE. No full/fresh/fixed/native or release acceptance.",
+  "sanitization": "No credentials, environments, raw archives, raw logs, DB URLs or private workstation paths copied. Manifest does not self-hash.",
+  "files": [
+    {
+      "file": "backend-report.md",
+      "sha256": "f83f82ba0a5907997c1fce4045dabdff1ce75ce25906797e44bcf6606f2509e7",
+      "bytes": 5272,
+      "privateSource": "singular-date-backend-review.md",
+      "privateSourceSha256": "f83f82ba0a5907997c1fce4045dabdff1ce75ce25906797e44bcf6606f2509e7",
+      "transformation": "Exact credential-free copy",
+      "byteIdenticalToPrivateSource": true
+    },
+    {
+      "file": "backend-checks.json",
+      "sha256": "93a09e0adb03b86ee9f7e3f4c77d177a9fd5d47c29e7ac9a79db6b7afe0bf77d",
+      "bytes": 18612,
+      "privateSource": "singular-date-backend-checks.json",
+      "privateSourceSha256": "93a09e0adb03b86ee9f7e3f4c77d177a9fd5d47c29e7ac9a79db6b7afe0bf77d",
+      "transformation": "Exact credential-free copy",
+      "byteIdenticalToPrivateSource": true
+    },
+    {
+      "file": "backend-run-source.json",
+      "sha256": "6ff58818d291b1089e0db76ab4d8acd76228f0e0e016fdff371968788a611170",
+      "bytes": 1302,
+      "privateSource": "singular-date-backend-final-source-run.json",
+      "privateSourceSha256": "e8ea0d99a494eadfe17f23559707c863d175f4f628b78679a1aac2070ff31016",
+      "transformation": "Remove private log path, anchor/application/database names; retain count, provenance, raw-log hash and scope",
+      "byteIdenticalToPrivateSource": false
+    },
+    {
+      "file": "backend-run-compiled.json",
+      "sha256": "68149b057da86ac5f39520bc7cadbac9432800472117101504ebb319d1a12eba",
+      "bytes": 1308,
+      "privateSource": "singular-date-backend-final-compiled-run.json",
+      "privateSourceSha256": "2f8528eb121ab6e76237655d70d258f71ddf2634c6d3f46d6e88dfc34e601e42",
+      "transformation": "Remove private log path, anchor/application/database names; retain count, provenance, raw-log hash and scope",
+      "byteIdenticalToPrivateSource": false
+    },
+    {
+      "file": "backend-frozen-inputs.json",
+      "sha256": "bb8fc8cf5b21322a15d9c48ba33eb5949b22841b888e07d4a1bbce34a58b3fb6",
+      "bytes": 13144,
+      "privateSource": "singular-date-backend-checks.json",
+      "privateSourceSha256": "93a09e0adb03b86ee9f7e3f4c77d177a9fd5d47c29e7ac9a79db6b7afe0bf77d",
+      "transformation": "Select frozen runtime/input/adapter/external-before fields and selector hash; no assertion or fixture changes",
+      "byteIdenticalToPrivateSource": false
+    },
+    {
+      "file": "backend-resources.json",
+      "sha256": "bb774fc4614954d180a4fc23a40b6a1af600ab0e2d36adda95c66ee8e7a0ffbe",
+      "bytes": 2230,
+      "privateSource": "singular-date-backend-cleanup.json",
+      "privateSourceSha256": "d869fe1b01c0750d60185c945bb0153cb2d6aed0d959c6fc10d47fc59407575f",
+      "transformation": "Remove database/anchor/artifact/dependency paths and uid; retain absence counts, verified ownership/modes, artifact hashes and uploads limitation; anchor absence also cross-referenced to both mode receipts",
+      "byteIdenticalToPrivateSource": false
+    }
+  ]
+}
