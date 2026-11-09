@@ -1,0 +1,93 @@
+{
+  "runtimeCandidate": "f7ba335415ff2878743291361fca047c2bc56342",
+  "testOnlySuccessor": "083d1f9eb45c0a0314555ea57e4e98892d06889f",
+  "nodeBundleSha256": "da76eac89167163ecca73f16cdd26ee642a5248c1e27c08f521cb64328dd8659",
+  "status": "backend implementation and own checks complete; root release/native certificates separate",
+  "tsc": true,
+  "viteRunnerBuild": true,
+  "esbuild": true,
+  "fullPredecessor": {
+    "candidate": "bc7d6448d30bdf81e47fe81c2874317a6b7458ae",
+    "source": {
+      "selectedFiles": 180,
+      "selectedPasses": 1014,
+      "skips": 9,
+      "fixedFiles": 3,
+      "fixedPasses": 36
+    },
+    "compiledActualCI": {
+      "selectedFiles": 133,
+      "selectedPasses": 881,
+      "skips": 6,
+      "fixedFiles": 3,
+      "fixedPasses": 36
+    },
+    "failures": 0,
+    "fixedPortRerunForNarrowSuccessors": "explicitly waived by root; final release CI remains"
+  },
+  "selectedGMTSuccessor": {
+    "candidate": "425ac9682def9e223acce8cbe9f4c4ec10070a0e",
+    "files": 13,
+    "sourcePasses": 126,
+    "compiledPasses": 126,
+    "skips": 0,
+    "failures": 0
+  },
+  "finalCombined": {
+    "files": 17,
+    "sourcePasses": 105,
+    "compiledPasses": 105,
+    "skips": 0,
+    "failures": 0,
+    "freshCivilArchive": [
+      "source-export 1/1",
+      "fresh-source-restore 1/1",
+      "fresh-compiled-restore 1/1"
+    ],
+    "filesInventory": [
+      "tests/editor-publication-date.test.ts",
+      "tests/post-list-date-format.test.ts",
+      "tests/dashboard-dates.test.ts",
+      "tests/post-civil-selected-gmt.test.ts",
+      "tests/post-civil-final-fences.test.ts",
+      "tests/post-civil-dates.test.ts",
+      "tests/post-civil-fixed-draft.test.ts",
+      "tests/post-civil-schedule-intent.test.ts",
+      "tests/post-civil-independent-waits.test.ts",
+      "tests/post-civil-native-final-waits.test.ts",
+      "tests/post-civil-transactions.test.ts",
+      "tests/post-civil-boundaries.test.ts",
+      "tests/post-civil-migration.test.ts",
+      "tests/native-continuation.test.ts",
+      "tests/public-document-data.test.ts",
+      "tests/public-document-ssr.test.ts",
+      "tests/public-document-view.test.ts"
+    ]
+  },
+  "testOnlyTeardown": {
+    "file": "tests/user-nicenames-migration.test.ts",
+    "sourcePasses": 9,
+    "compiledOuterGuardPasses": 9,
+    "skips": 0,
+    "failures": 0
+  },
+  "limits": [
+    "migration history is a one-time current-zone approximation",
+    "source60second status/bulk publish-now normalization remains separate",
+    "ordinary instant ordering unchanged",
+    "historical modified/media/comment civil clocks separate",
+    "exotic PHP/Moment presentation equivalence not certified",
+    "expanded years/account import/pretty author archives/canonical redirects separate"
+  ],
+  "immutableRegressions": {
+    "tests/post-civil-independent-waits.test.ts": "e561deaf65a7e91d8d688888cfc87dbd61d8fdbfa6456606c2d2e909ecb94258",
+    "tests/post-civil-native-final-waits.test.ts": "467a1f4cc4ad738273cbed277b7832cc6f845f065683c394fee5373e0c4596ec",
+    "tests/post-civil-fixed-draft.test.ts": "8b3cb3e268734d06819c7c94e3ab003de8572b2ecb809adac1a1ef6b99b74d37",
+    "tests/post-civil-schedule-intent.test.ts": "d8ce1f3a9a7d5469a3d2c3849911947987cd99fcc7ab2c7a38494c74307c3b2b",
+    "tests/post-civil-selected-gmt.test.ts": "f1424bb62eff85b6dcf2d58f3e5880b400b78ada4615fbb4163ad1775e3a40bc",
+    "tests/post-civil-boundaries.test.ts": "4896a3ffe3c9981feb807d4b56ce5b56800be3973fcdef188a01a439440c0674",
+    "tests/post-civil-transactions.test.ts": "1f9d7849a5c1d0b33cc0367dd5f05e3999dc377cee3047879fcd807f7b5106a9",
+    "tests/post-civil-migration.test.ts": "ee14672fe29d5c0650f4f02dca6a7bb6e7417937fd4800dc6c55698e9914b54f",
+    "tests/post-civil-final-fences.test.ts": "1cd6be7accb895ab86ec736f2585de78da97fb4d4119a22adc3cd63d4a76a42b"
+  }
+}
