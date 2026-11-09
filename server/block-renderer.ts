@@ -28,6 +28,7 @@ import { hasShortcodes } from "./shortcode-parser.js";
 import { applyBlockBindings, patternOverrides, type PatternOverrides } from "./block-bindings.js";
 import { publicPaginationLocation } from "./public-pagination.js";
 import {completePublicRead,observePublicPost} from "./public-read-attempt.js";
+import {appendNamedAuthorSQL,listingFilterValues,type PublicListingContext} from "./author-query.js";
 
 export type BlockDatabase = Pick<pg.Pool, "query"> | pg.PoolClient;
 export type RenderPost = Record<string, any>;
@@ -52,6 +53,7 @@ export type RenderOptions = {
   templateSlug?: string;
   instanceKey?: string;
   query?: Record<string, unknown>;
+  listing?:PublicListingContext;
   page?: number;
   contentPage?: number;
   contentMode?: ContentMode;
@@ -389,7 +391,7 @@ async function queryPosts(
 ): Promise<QueryResult> {
   const input =
     attrs.query && typeof attrs.query === "object" ? attrs.query : {};
-  const inherited = input.inherit ? state.options.query || {} : {};
+  const inherited = input.inherit ? input.inherit===true&&state.options.listing?.namedAuthor?listingFilterValues(state.options.query || {},state.options.listing.archive):state.options.query || {} : {};
   const queryId = integer(attrs.queryId, 0, 0, 2147483647);
   const page = integer(
     state.options.query?.[`query-${queryId}-page`] ??
@@ -430,6 +432,8 @@ async function queryPosts(
   if (search && !state.options.user) where.push("p.password_hash IS NULL");
   const authorIds = ids(input.author || inherited.author);
   if (authorIds.length) add("p.author_id=ANY(?::int[])", authorIds);
+  if(input.inherit===true&&state.options.listing?.namedAuthor)appendNamedAuthorSQL(where,args,state.options.listing.namedAuthor);
+  if(input.inherit===true&&state.options.listing?.kind==="not-found")where.push("FALSE");
   const include = ids(input.include);
   if (include.length) add("p.id=ANY(?::int[])", include);
   const exclude = ids(input.exclude);
@@ -875,6 +879,7 @@ async function renderNode(
   }
   if (name === "core/query-title") {
     const query = state.options.query || {};
+    const listing=state.options.listing,named=listing?.namedAuthor;
     const dateArchive = parseDateArchiveQuery(query);
     let label = "Blog",
       prefix = "";
@@ -897,7 +902,11 @@ async function renderNode(
           ).rows[0],
       );
       label = term?.name || value;
-    } else if (query.author) {
+    } else if(named&&listing?.archive&&"type" in listing.archive&&listing.archive.type==="date"){
+      label=dateArchiveTitle(listing.archive,{showPrefix:a.showPrefix!==false});
+    } else if(named?.selected&&listing?.kind==="archive"&&listing.archive&&"type" in listing.archive&&listing.archive.type==="author"){
+      prefix="Author: ";label=named.selected.name;
+    } else if (!named&&listing?.kind!=="not-found"&&query.author) {
       prefix = "Author: ";
       const id = integer(query.author, 0, 1, 2147483647),
         person = await cached(
@@ -913,7 +922,7 @@ async function renderNode(
         );
       label = person?.name || "Posts";
     }
-    if (dateArchive && !query.search && !query.category && !query.tag && !query.author) {
+    if (dateArchive && !query.search && !query.category && !query.tag && !query.author&&!named) {
       label = dateArchiveTitle(dateArchive, { showPrefix: a.showPrefix !== false });
       prefix = "";
     }

@@ -77,9 +77,10 @@ type Crumb = { label: string; url?: string };
 async function breadcrumbs(node: Node, context: Context, state: State, attributes: (extra?: string) => string) {
   const a = node.attrs, query = state.options.query || {}, path = (state.options.requestPath || "/").split("?")[0], template = state.options.templateSlug || "";
   const post = context.post, search = String(query.search || query.s || ""), date = parseDateArchiveQuery(query) || parseDateArchivePath(path);
-  const term = await archiveTerm({ ...context, term: undefined }, state), authorId = int(query.author, 0);
+  const named=state.options.listing?.namedAuthor, namedPresentation=named&&state.options.listing?.kind==="archive"&&state.options.listing.archive&&"type" in state.options.listing.archive&&state.options.listing.archive.type==="author";
+  const term = await archiveTerm({ ...context, term: undefined }, state), authorId = int(named?(namedPresentation?named.selected?.authorId:0):query.author, 0);
   if(post && !state.options.preview)observePublicPost(state.options.canReadProtectedPost,post,false);
-  const paged = int(query.paged ?? query.page ?? state.options.page, 1), commentPage = int(query.commentPage ?? query.cpage, 1), is404 = template === "404" || query.notFound === "true";
+  const paged = int(query.paged ?? query.page ?? state.options.page, 1), commentPage = int(query.commentPage ?? query.cpage, 1), is404 = state.options.listing?.kind==="not-found" || template === "404" || query.notFound === "true";
   const archive = Boolean(search || date || term || authorId || is404), front = !archive && (path === "/" || template === "front-page") && (!post || post.id === state.settings.frontPageId || state.settings.frontPageMode === "posts");
   const postsIndex = !archive && state.settings.frontPageMode === "page" && state.settings.postsPageId && (post?.id === state.settings.postsPageId || template === "home");
   if (front && a.showOnHomePage !== true) return "";
@@ -99,8 +100,9 @@ async function breadcrumbs(node: Node, context: Context, state: State, attribute
     for (const ancestor of await termAncestors(term, state)) crumbs.push({ label: ancestor.name, url: termLink(ancestor, state) });
     crumbs.push(current(term.name, termLink(term, state)));
   } else if (authorId) {
-    const person = await cached(state, `breadcrumb-author:${authorId}`, async () => (await state.db.query("SELECT id,nicename,display_name AS name FROM users WHERE id=$1"+(parseAuthorArchivePath(state.options.requestPath || "/",state.settings)?"":" AND EXISTS(SELECT 1 FROM posts WHERE author_id=$1 AND status='publish')"), [authorId])).rows[0]);
-    if (person) crumbs.push(current(person.name, authorArchivePath(person,state.settings)));
+    if(named?.selected)crumbs.push(current(named.selected.name,named.selected.permalink));
+    else{const person = await cached(state, `breadcrumb-author:${authorId}`, async () => (await state.db.query("SELECT id,nicename,display_name AS name FROM users WHERE id=$1"+(parseAuthorArchivePath(state.options.requestPath || "/",state.settings)?"":" AND EXISTS(SELECT 1 FROM posts WHERE author_id=$1 AND status='publish')"), [authorId])).rows[0]);
+    if (person) crumbs.push(current(person.name, authorArchivePath(person,state.settings)));}
   } else if (front) {
     // The configured front page is represented by Home; source adds only Page N.
   } else if (postsIndex) {

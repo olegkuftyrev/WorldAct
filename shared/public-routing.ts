@@ -1,23 +1,34 @@
-import type { PublicArchive, PublicPost, PublicQuery, PublicTemplateRef } from "./public-document.js";
+import type { PublicArchive, PublicPost, PublicQuery, PublicTemplateRef, NamedAuthorSelection } from "./public-document.js";
 
 export class PublicQueryError extends Error {}
-const scalarKeys = /^(?:search|s|category|tag|author|year|month|monthnum|day|m|w|page|commentPage|replytocom|query-\d+-page)$/;
+const scalarKeys = /^(?:search|s|category|tag|author|author_name|year|month|monthnum|day|m|w|page|commentPage|replytocom|query-\d+-page)$/;
 const positive = (value: string, key: string) => {
   if (!/^[1-9]\d{0,9}$/.test(value) || Number(value) > 2147483647)
     throw new PublicQueryError(`Use a positive ${key} within the supported range.`);
   return Number(value);
 };
+/** Query input is parsed before flattening. Resolution belongs to the server;
+ * names and original numeric constraints never become authorization metadata. */
+export function readNamedAuthorInput(query:URLSearchParams){
+  for(const [key]of query){const base=key.split("[")[0];if(["author_name","author"].includes(base)&&(key!==base||query.getAll(key).length!==1))throw new PublicQueryError("Use a single scalar author query value.");}
+  if(!query.has("author_name"))return null;
+  const name=query.get("author_name")!;
+  if(name.length>2000||/[\u0000-\u001f\u007f\\]/.test(name))throw new PublicQueryError("Use a bounded author name without controls or backslashes.");
+  const numericAuthor=query.has("author")?positive(query.get("author")!,"author"):undefined;
+  return name===""?null:{name,...(numericAuthor?{numericAuthor}:{})};
+}
 
 /** Normalize once, before flattening: duplicated/nested recognized parameters
  * must not become a different valid request through Object.fromEntries. */
 export function normalizePublicQuery(query: URLSearchParams, options: {
-  singular: boolean; contentPage?: number; archive?: PublicArchive | null;
+  singular: boolean; contentPage?: number; archive?: PublicArchive | null; namedAuthor?:NamedAuthorSelection;
 }): PublicQuery {
   for (const [key] of query) {
     const base = key.split("[")[0];
     if (scalarKeys.test(base) && (key !== base || query.getAll(key).length !== 1))
       throw new PublicQueryError("Use a single scalar value for each public query parameter.");
   }
+  readNamedAuthorInput(query);
   const values: Record<string, string> = {};
   for (const [key, value] of query) if (scalarKeys.test(key) && value) values[key] = value;
   const search = (values.search || values.s || "").trim();
@@ -27,7 +38,7 @@ export function normalizePublicQuery(query: URLSearchParams, options: {
   const tag = archive && "taxonomy" in archive && archive.taxonomy === "tag" ? archive.slug : values.tag || "";
   if (category.length > 220 || tag.length > 220) throw new PublicQueryError("The taxonomy slug exceeds the supported length.");
   if(archive && "type" in archive && archive.type==="author"){
-    values.author=String(archive.authorId);
+    if(!options.namedAuthor)values.author=String(archive.authorId);
     if(archive.page!==undefined)values.page=String(archive.page);
   }
   const date = archive && "type" in archive && archive.type === "date" ? archive : null;
@@ -46,7 +57,8 @@ export function normalizePublicQuery(query: URLSearchParams, options: {
   if (!options.singular || query.has("page")) values.page = String(options.singular ? contentPage : page);
   else delete values.page;
   const commentPage = values.commentPage ? positive(values.commentPage, "comment page") : undefined;
-  return { search, category, tag, ...(values.author ? {author: positive(values.author,"author")} : {}), date,
+  const author=options.namedAuthor?options.namedAuthor.selected?.authorId:values.author?positive(values.author,"author"):undefined;
+  return { search, category, tag, ...(author?{author}:{}),...(options.namedAuthor?{namedAuthor:options.namedAuthor}:{}), date,
     archivePage: options.singular ? 1 : page, contentPage, ...(commentPage ? {commentPage} : {}), blockPages, values };
 }
 

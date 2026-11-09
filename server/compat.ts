@@ -1,4 +1,5 @@
 import {authorArchivePath} from "../shared/author-archive.js";
+import {resolvePublicDocumentRoute} from "./public-documents.js";
 import {readPublishedPostById} from "./public-read.js";
 import {normalizePingSource,renderedCommentContent} from "./comment-policy.js";
 import {submitPublicComment} from "./core.js";
@@ -163,7 +164,13 @@ router.get("/api/public/resolve", async (req, res) => {
     .parse(req.query.path);
   let resolved;
   try {
-    resolved = await resolvePublicPath(path);
+    const nameInput=[...new URLSearchParams(path.includes("?")?path.slice(path.indexOf("?")+1):"").keys()].some(key=>/^author_name(?:\[|$)/.test(key));
+    if(nameInput){
+      const route=await resolvePublicDocumentRoute(path,{authenticated:Boolean((req as AuthRequest).user)});
+      if(route.status===404)throw new HttpError(404,"Named author listing not found.");
+      if(route.listing?.namedAuthor){res.json({archive:route.archive || null,namedAuthor:route.listing.namedAuthor});return;}
+      if(route.selectedId&&route.selectedType)resolved={id:route.selectedId,type:route.selectedType,...(route.contentPage?{contentPage:route.contentPage}:{})};
+    }else resolved = await resolvePublicPath(path);
   } catch (error) {
     if (error instanceof URIError)
       throw new HttpError(400, "The URL path is malformed.");

@@ -4,6 +4,7 @@ import { pingbackHeader } from "./incoming-ping-policy.js";
 import { resolvePublicPath } from "./permalinks.js";
 import { readPlainPermalinkQuery } from "../shared/plain-permalink-query.js";
 import { readPublicPath, resolvePublicArchive } from "./public-path.js";
+import {applyNamedAuthorListing,namedAuthorInput,type NamedAuthorPin,type PublicListingContext} from "./author-query.js";
 
 // Keep this inventory aligned with the actual React routes in src/App.tsx.
 const frameworkPaths = new Set([
@@ -14,16 +15,29 @@ const frameworkPaths = new Set([
   "/admin/settings", "/admin/settings/connectors", "/admin/appearance", "/admin/appearance/editor",
   "/admin/appearance/menus", "/admin/appearance/fonts", "/admin/plugins", "/admin/tools", "/admin/about",
 ]);
-const archiveQuery = /^(?:search|s|category|tag|author|year|month|monthnum|day|m|w)(?:\[|$)/;
+const archiveQuery = /^(?:search|s|category|tag|author|author_name|year|month|monthnum|day|m|w)(?:\[|$)/;
 export type PublicDocumentResolution = {
   status: 200 | 404; kind: "framework" | "home" | "archive" | "singular" | "front-page" | "posts-page" | "not-found";
   selectedId?: number; selectedType?: "post" | "page"; contentPage?: number;
   archive?: Awaited<ReturnType<typeof resolvePublicArchive>>; pingback?: string;
+  listing?:PublicListingContext;
 };
 const missing = (): PublicDocumentResolution => ({status:404,kind:"not-found"});
 
 /** Choose HTTP status from public metadata, never bodies, tokens or internal HTTP. */
-export async function resolvePublicDocumentRoute(path: string): Promise<PublicDocumentResolution> {
+export async function resolvePublicDocumentRoute(path:string,options:{namedPin?:NamedAuthorPin;authenticated?:boolean}={}):Promise<PublicDocumentResolution>{
+  const resolution=await resolvePublicDocumentRouteBase(path);
+  if(resolution.kind==="framework")return resolution;
+  const query=readPublicPath(path).query;
+  const nameVisible=[...query.keys()].some(key=>/^author_name(?:\[|$)/.test(key));
+  // Safe404 surroundings must not reinterpret a retained missing path as a
+  // new root name listing. Fixed identities likewise ignore valid selectors.
+  if(resolution.status===404)return nameVisible?{...resolution,listing:{kind:"not-found",archive:resolution.archive || null}}:resolution;
+  if(!namedAuthorInput(query))return resolution;
+  if(resolution.kind==="singular"||resolution.kind==="front-page")return {...resolution,listing:{kind:resolution.kind,archive:resolution.archive || null}};
+  return applyNamedAuthorListing(path,resolution,query,await getSettings(),pool,options.namedPin,options.authenticated);
+}
+async function resolvePublicDocumentRouteBase(path: string): Promise<PublicDocumentResolution> {
   const { pathname, segments, query } = readPublicPath(path);
   // React matches framework route literals without regard to case and decodes
   // each segment. Do not turn an encoded slash into a new route boundary.

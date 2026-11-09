@@ -64,7 +64,8 @@ export async function renderThemeBlock(
     // Source comment context always wins over explicit block/post user IDs.
     // Notifications are not avatar-bearing people and must not inherit an author.
     if(c && c.type && !["comment","note"].includes(c.type))return `<div${attributes()}></div>`;
-    const id=c?int(c.userId,0):a.userId!=null?int(a.userId,0):int(p?.authorId ?? p?.author_id ?? state.options.query?.author,0);
+    const named=state.options.listing?.namedAuthor;
+    const id=c?int(c.userId,0):a.userId!=null?int(a.userId,0):int(p?.authorId ?? p?.author_id ?? (named?named.selected?.authorId:state.options.listing?.kind==="not-found"?undefined:state.options.query?.author),0);
     if(!c && !id)return "";
     const size=int(a.size,96,512);
     const account=id?await cached(state,`avatar:${id}`,async()=>(await state.db.query("SELECT id,nicename,display_name AS name,email FROM users WHERE id=$1",[id])).rows[0]):null;

@@ -15,6 +15,7 @@ import { renderPublicTemplateDocument, classicDefaultDocuments } from "./public-
 import { publicReplyParent } from "./public-reply.js";
 import { plainText, HttpError } from "./utils.js";
 import { isInstalled } from "./installation-state.js";
+import type {NamedAuthorPin} from "./author-query.js";
 
 export type PublicDocumentContext = { user?: User; canReadProtectedPost: PublicReadContext["canReadProtectedPost"]; sensitive: boolean };
 export async function publicDocumentContext(req: Pick<Request,"headers">, options: {user?: User; cookieOnly?: boolean} = {}): Promise<PublicDocumentContext> {
@@ -67,12 +68,15 @@ function publicHead(model: Pick<PublicDocumentModel,"post"|"site"|"route"|"statu
 
 /** One request, direct services, no internal HTTP or Express response adapter. */
 export function readPublicDocument(path:string,context:PublicDocumentContext):Promise<PublicDocumentModel|FrameworkDocument>{
-  const selection:{author?:Extract<PublicArchive,{type:"author"}>}={};
+  const selection:{author?:Extract<PublicArchive,{type:"author"}>;named:NamedAuthorPin}={named:{}};
   return completePublicRead(context.canReadProtectedPost,reader=>readPublicDocumentOnce(path,{...context,canReadProtectedPost:reader},selection));
 }
-async function readPublicDocumentOnce(path: string, context: PublicDocumentContext,selection:{author?:Extract<PublicArchive,{type:"author"}>}): Promise<PublicDocumentModel | FrameworkDocument> {
+async function readPublicDocumentOnce(path: string, context: PublicDocumentContext,selection:{author?:Extract<PublicArchive,{type:"author"}>;named:NamedAuthorPin}): Promise<PublicDocumentModel | FrameworkDocument> {
   if(selection.author)observePublicAuthor(context.canReadProtectedPost,selection.author);
-  let resolution=await resolvePublicDocumentRoute(path);
+  if(selection.named.value?.selected)observePublicAuthor(context.canReadProtectedPost,selection.named.value.selected);
+  let resolution=await resolvePublicDocumentRoute(path,{namedPin:selection.named,authenticated:Boolean(context.user)});
+  const namedAuthor=resolution.listing?.namedAuthor;
+  if(namedAuthor?.selected)observePublicAuthor(context.canReadProtectedPost,namedAuthor.selected);
   const selectedAuthor=resolution.archive && "type" in resolution.archive && resolution.archive.type==="author"?resolution.archive:null;
   if(selection.author && (!selectedAuthor || selectedAuthor.authorId!==selection.author.authorId || selectedAuthor.slug!==selection.author.slug))throw new HttpError(404,"The selected author archive identity retired.");
   if(selectedAuthor){selection.author ||= selectedAuthor;observePublicAuthor(context.canReadProtectedPost,selectedAuthor);}
@@ -82,7 +86,7 @@ async function readPublicDocumentOnce(path: string, context: PublicDocumentConte
   const selectedId=resolution.selectedId,selectedType=resolution.selectedType;
   const selected=selectedId!==undefined && selectedType!==undefined;
   let query:ReturnType<typeof normalizePublicQuery>;
-  try { query=normalizePublicQuery(rawQuery,{singular:selected && resolution.kind!=="posts-page",contentPage:resolution.contentPage,archive:resolution.archive as PublicArchive | null}); }
+  try { query=normalizePublicQuery(rawQuery,{singular:selected && resolution.kind!=="posts-page",contentPage:resolution.contentPage,archive:resolution.archive as PublicArchive | null,namedAuthor}); }
   catch(error){if(error instanceof PublicQueryError){
     if(resolution.status===404)query=normalizePublicQuery(new URLSearchParams(),{singular:false});
     else throw new HttpError(400,error.message);
@@ -90,7 +94,7 @@ async function readPublicDocumentOnce(path: string, context: PublicDocumentConte
   // A known404 only acquires safe page/template surroundings. Its normalized
   // default archive page must not turn an excessive pretty page into a new,
   // conflicting author lookup (or replace the already missing route).
-  const readContext:PublicReadContext={...(selectedAuthor?{authorArchive:selectedAuthor}:{}),query:{...query.values,page:query.archivePage},...(resolution.status===404?{}:{requestPath:path}),user:context.user,canReadProtectedPost:context.canReadProtectedPost};
+  const readContext:PublicReadContext={...(selectedAuthor?{authorArchive:selectedAuthor}:{}),listing:resolution.listing,query:{...query.values,page:query.archivePage},...(resolution.status===404?{}:{requestPath:path}),user:context.user,canReadProtectedPost:context.canReadProtectedPost};
   // Metadata resolution above and body acquisition below are deliberately
   // independent. No later slug lookup can substitute another published row.
   let body: Awaited<ReturnType<typeof readPublishedPostById>> | null=null;
@@ -115,16 +119,17 @@ async function readPublicDocumentOnce(path: string, context: PublicDocumentConte
     const route:PublicDocumentModel["route"]={kind:resolution.kind as PublicDocumentModel["route"]["kind"],detail:Boolean(body && (readPublicPath(path).pathname!=="/" || rawQuery.has("p") || rawQuery.has("page_id") || rawQuery.has("page"))),archive:resolution.archive as PublicArchive || site.archive || null,query,...(body?{selectedId:post!.id,selectedType:post!.type}:{})};
     const single=["singular","front-page"].includes(route.kind);
     if(single || resolution.status===404)site.posts=[];
-    const renderOptions={requestPath:path,query:query.values,post:body?.rawPost || null,page:single?1:query.archivePage,contentPage:query.contentPage,user:context.user,canReadProtectedPost:context.canReadProtectedPost};
+    const renderOptions={requestPath:path,query:query.values,listing:resolution.listing,post:body?.rawPost || null,page:single?1:query.archivePage,contentPage:query.contentPage,user:context.user,canReadProtectedPost:context.canReadProtectedPost};
     let presentation:PublicDocumentModel["presentation"];
-    const sourceDocument=selectPublicSourceTemplate(rawDesign.templates,{notFound:resolution.status===404,single,post,frontPage:route.kind==="front-page",search:Boolean(query.search),category:query.category,tag:query.tag,author:Boolean(query.author),...(site.archive && "type" in site.archive && site.archive.type==="author"?{authorSlug:site.archive.slug,authorId:site.archive.authorId}:{}),date:Boolean(query.date || site.archive && "type" in site.archive && site.archive.type==="date")});
+    const authorPresentation=namedAuthor?route.kind==="archive"&&Boolean(route.archive&&"type" in route.archive&&route.archive.type==="author"):Boolean(query.author);
+    const sourceDocument=selectPublicSourceTemplate(rawDesign.templates,{notFound:resolution.status===404,single,post,frontPage:route.kind==="front-page",search:Boolean(query.search),category:query.category,tag:query.tag,author:authorPresentation,...(site.archive && "type" in site.archive && site.archive.type==="author"?{authorSlug:site.archive.slug,authorId:site.archive.authorId}:{}),date:Boolean(query.date || site.archive && "type" in site.archive && site.archive.type==="date")});
     const document=site.settings.theme!=="classic"?sourceDocument:null;
     if(document) presentation={kind:"source",document:templateRef(document),html:await renderPublicTemplateDocument(document,renderOptions)};
     else {
       const slots:Extract<PublicDocumentModel["presentation"],{kind:"classic"}>["slots"]={};
       for(const [slot,slug,type] of [["header","header","template-part"],["footer","footer","template-part"],["single",post?.type==="page"?"page":"single","template"],["index","index","template"]] as const){
         if(slot==="single" && (!single || post?.locked) || slot==="index" && (single || resolution.status===404))continue;
-        const candidate=slot==="index" && query.author && sourceDocument?sourceDocument:(type==="template-part"?rawDesign.parts:rawDesign.templates).find(item=>item.slug===slug && item.content!==classicDefaultDocuments[slug]);
+        const candidate=slot==="index" && authorPresentation && sourceDocument?sourceDocument:(type==="template-part"?rawDesign.parts:rawDesign.templates).find(item=>item.slug===slug && item.content!==classicDefaultDocuments[slug]);
         if(candidate && (candidate.slug!==slug || candidate.content!==classicDefaultDocuments[slug]))slots[slot]={document:templateRef(candidate),html:await renderPublicTemplateDocument(candidate,renderOptions)};
       }
       presentation={kind:"classic",slots};

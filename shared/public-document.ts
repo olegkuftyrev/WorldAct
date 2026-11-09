@@ -16,8 +16,13 @@ export type PublicViewer = null | { id: number; displayName: string; role: Role;
 export type PublicArchive = { taxonomy: "category" | "tag"; slug: string; name?: string }
   | { type: "author"; name: string; authorId: number; slug: string; permalink: string; page?:number }
   | { type: "date"; year: number; month?: number; day?: number; week?: number; name: string; permalink: string };
+export type NamedAuthorSelection = {
+  selected: Omit<Extract<PublicArchive,{type:"author"}>,"page"> | null;
+  numericAuthor?: number;
+};
 export type PublicQuery = {
   search: string; category: string; tag: string; author?: number;
+  namedAuthor?: NamedAuthorSelection;
   date: Extract<PublicArchive, { type: "date" }> | null;
   archivePage: number; contentPage: number; commentPage?: number;
   blockPages: Record<string, number>;

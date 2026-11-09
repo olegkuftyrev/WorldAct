@@ -39,6 +39,8 @@ import { postPermalink, resolvePublicPath } from "./permalinks.js";
 import iconsRouter from "./icons.js";
 import { normalizeBlockRenderAttributes } from "./block-render-attributes.js";
 import { isPublicRequestPath } from "./public-pagination.js";
+import {listingRequestPath,type NamedAuthorPin} from "./author-query.js";
+import {resolvePublicDocumentRoute} from "./public-documents.js";
 
 const escapeHTML = (value: unknown) =>
   String(value ?? "").replace(
@@ -798,8 +800,10 @@ router.all(
 );
 router.get("/api/public/templates/:slug", async (req:AuthRequest, res) => {
   let selectedAuthor:{authorId:number;slug:string}|undefined;
+  const namedPin:NamedAuthorPin={};
   const output=await completePublicRead(postAccessReader(req),async reader=>{
   if(selectedAuthor)observePublicAuthor(reader,selectedAuthor);
+  if(namedPin.value?.selected)observePublicAuthor(reader,namedPin.value.selected);
   const settings = await getSettings();
   const templateSlug = z
       .string()
@@ -837,8 +841,14 @@ router.get("/api/public/templates/:slug", async (req:AuthRequest, res) => {
   const requestPath = String(req.query.requestPath || "/").slice(0, 2000);
   if (!isPublicRequestPath(requestPath))
     throw new HttpError(400, "Use a site-relative request path.");
-  const prettyAuthor=await resolvePrettyAuthorArchive(authorArchiveRequestPath(requestPath,req.query,settings),settings);
-  if(selectedAuthor && (!prettyAuthor.archive || selectedAuthor.authorId!==prettyAuthor.archive.authorId || selectedAuthor.slug!==prettyAuthor.archive.slug))throw new HttpError(404,"The selected author archive identity retired.");
+  const nameVisible=Object.keys(req.query).some(key=>/^author_name(?:\[|$)/.test(key))||/[?&]author_name(?:=|%5b|\[)/i.test(requestPath);
+  const namedPath=nameVisible?listingRequestPath(requestPath,req.query):null;
+  const namedRoute=namedPath&&!post?await resolvePublicDocumentRoute(namedPath,{namedPin,authenticated:Boolean(req.user)}):null;
+  if(namedRoute?.status===404)throw new HttpError(404,"Named author listing not found.");
+  const listing=namedRoute?.listing;
+  if(listing?.namedAuthor?.selected)observePublicAuthor(reader,listing.namedAuthor.selected);
+  const prettyAuthor=listing?.namedAuthor?{recognized:false,archive:null}:await resolvePrettyAuthorArchive(authorArchiveRequestPath(requestPath,req.query,settings),settings);
+  if(!listing?.namedAuthor&&selectedAuthor && (!prettyAuthor.archive || selectedAuthor.authorId!==prettyAuthor.archive.authorId || selectedAuthor.slug!==prettyAuthor.archive.slug))throw new HttpError(404,"The selected author archive identity retired.");
   if(prettyAuthor.archive){selectedAuthor ||= prettyAuthor.archive;observePublicAuthor(reader,prettyAuthor.archive);}
   if(prettyAuthor.recognized && !prettyAuthor.archive)throw new HttpError(404,"Author archive not found.");
   if(prettyAuthor.archive && req.query.author!==undefined && req.query.author!==String(prettyAuthor.archive.authorId))throw new HttpError(400,"The author archive identities conflict.");
@@ -871,6 +881,7 @@ router.get("/api/public/templates/:slug", async (req:AuthRequest, res) => {
       requestPath,
       templateSlug: doc.slug,
       query,
+      listing,
       // On a singular request page selects the document body, not an inherited
       // Query Loop. Its explicit query-N-page remains independently authoritative.
       page: post ? 1 : prettyAuthor.archive?.page || Number(req.query.page) || 1,
