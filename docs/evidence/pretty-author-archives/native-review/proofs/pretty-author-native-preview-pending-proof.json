@@ -1,0 +1,67 @@
+{
+  "sha": "c2c69ef388f4426d733d4ea46231c122ce2058fa",
+  "postId": 45,
+  "rows": [
+    {
+      "theme": "twentytwentyfive",
+      "width": 375,
+      "actualSqlWait": true,
+      "pendingSingleBeforeLogout": {
+        "id": 183,
+        "method": "GET",
+        "path": "/api/public/templates/single?contentPage=1&requestPath=%2Fpreview%2F45&preview=true&postId=45"
+      },
+      "finishedSingleAfterLogout": {
+        "id": 183,
+        "method": "GET",
+        "path": "/api/public/templates/single?contentPage=1&requestPath=%2Fpreview%2F45&preview=true&postId=45",
+        "status": 200
+      },
+      "departed": {
+        "hasMarker": false,
+        "login": true,
+        "url": "/login"
+      },
+      "current": {
+        "denied": true,
+        "errors": [],
+        "hasMarker": false,
+        "other": false,
+        "url": "/preview/45",
+        "actorId": 9
+      },
+      "screenshot": "../screens/pretty-author-native-preview-single-pending-twentytwentyfive.png"
+    },
+    {
+      "theme": "classic",
+      "width": 375,
+      "actualSqlWait": true,
+      "pendingSingleBeforeLogout": {
+        "id": 237,
+        "method": "GET",
+        "path": "/api/public/templates/single?contentPage=1&requestPath=%2Fpreview%2F45&preview=true&postId=45"
+      },
+      "finishedSingleAfterLogout": {
+        "id": 237,
+        "method": "GET",
+        "path": "/api/public/templates/single?contentPage=1&requestPath=%2Fpreview%2F45&preview=true&postId=45",
+        "status": 200
+      },
+      "departed": {
+        "hasMarker": false,
+        "login": true,
+        "url": "/login"
+      },
+      "current": {
+        "denied": true,
+        "errors": [],
+        "hasMarker": false,
+        "other": false,
+        "url": "/preview/45",
+        "actorId": 9
+      },
+      "screenshot": "../screens/pretty-author-native-preview-single-pending-classic.png"
+    }
+  ],
+  "ownedSqlObjectsRestored": true
+}

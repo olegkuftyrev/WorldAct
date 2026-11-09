@@ -1,0 +1,275 @@
+{
+  "sha": "87819b5a72379129e988b7be97a3e5354b62d8c5",
+  "rows": [
+    {
+      "theme": "twentytwentyfive",
+      "width": 1440,
+      "generatedLink": "/journal/author/native-pretty-login/",
+      "normalized": {
+        "author": 8,
+        "archivePage": 2,
+        "contentPage": 1,
+        "query4Page": 3,
+        "commentPage": 2,
+        "onlySelectedAuthor": true,
+        "safeArchiveFields": true
+      },
+      "before": {
+        "canonical": 1,
+        "errors": [],
+        "head": "Author: Native Public Writer",
+        "overflow": false,
+        "privateBody": false,
+        "protectedBody": false,
+        "same": true,
+        "titles": 1
+      },
+      "after": {
+        "errors": [],
+        "length": 5,
+        "push": 1,
+        "url": "/journal/author/native-pretty-login/page/2/?query-4-page=4&commentPage=2&author=8&page=2"
+      },
+      "requests": [
+        {
+          "id": 47,
+          "method": "GET",
+          "path": "/api/public/document?path=%2Fjournal%2Fauthor%2Fnative-pretty-login%2Fpage%2F2%2F%3Fquery-4-page%3D4%26commentPage%3D2%26author%3D8%26page%3D2",
+          "status": 200
+        },
+        {
+          "id": 48,
+          "method": "GET",
+          "path": "/vendor/wordpress/wp-content/themes/twentytwentyfive/assets/fonts/manrope/Manrope-VariableFont_wght.woff2",
+          "status": 304
+        }
+      ],
+      "search": null,
+      "screenshot": "../screens/pretty-author-native-archive-twentytwentyfive-1440.png"
+    },
+    {
+      "theme": "twentytwentyfive",
+      "width": 768,
+      "generatedLink": "/journal/author/native-pretty-login/",
+      "normalized": {
+        "author": 8,
+        "archivePage": 2,
+        "contentPage": 1,
+        "query4Page": 3,
+        "commentPage": 2,
+        "onlySelectedAuthor": true,
+        "safeArchiveFields": true
+      },
+      "before": {
+        "canonical": 1,
+        "errors": [],
+        "head": "Author: Native Public Writer",
+        "overflow": false,
+        "privateBody": false,
+        "protectedBody": false,
+        "same": true,
+        "titles": 1
+      },
+      "after": {
+        "errors": [],
+        "length": 5,
+        "push": 1,
+        "url": "/journal/author/native-pretty-login/page/2/?query-4-page=4&commentPage=2&author=8&page=2"
+      },
+      "requests": [
+        {
+          "id": 64,
+          "method": "GET",
+          "path": "/api/public/document?path=%2Fjournal%2Fauthor%2Fnative-pretty-login%2Fpage%2F2%2F%3Fquery-4-page%3D4%26commentPage%3D2%26author%3D8%26page%3D2",
+          "status": 200
+        },
+        {
+          "id": 65,
+          "method": "GET",
+          "path": "/vendor/wordpress/wp-content/themes/twentytwentyfive/assets/fonts/manrope/Manrope-VariableFont_wght.woff2",
+          "status": 304
+        }
+      ],
+      "search": null,
+      "screenshot": "../screens/pretty-author-native-archive-twentytwentyfive-768.png"
+    },
+    {
+      "theme": "twentytwentyfive",
+      "width": 375,
+      "generatedLink": "/journal/author/native-pretty-login/",
+      "normalized": {
+        "author": 8,
+        "archivePage": 2,
+        "contentPage": 1,
+        "query4Page": 3,
+        "commentPage": 2,
+        "onlySelectedAuthor": true,
+        "safeArchiveFields": true
+      },
+      "before": {
+        "canonical": 1,
+        "errors": [],
+        "head": "Author: Native Public Writer",
+        "overflow": false,
+        "privateBody": false,
+        "protectedBody": false,
+        "same": true,
+        "titles": 1
+      },
+      "after": {
+        "errors": [],
+        "length": 5,
+        "push": 1,
+        "url": "/journal/author/native-pretty-login/page/2/?query-4-page=4&commentPage=2&author=8&page=2"
+      },
+      "requests": [
+        {
+          "id": 81,
+          "method": "GET",
+          "path": "/api/public/document?path=%2Fjournal%2Fauthor%2Fnative-pretty-login%2Fpage%2F2%2F%3Fquery-4-page%3D4%26commentPage%3D2%26author%3D8%26page%3D2",
+          "status": 200
+        },
+        {
+          "id": 82,
+          "method": "GET",
+          "path": "/vendor/wordpress/wp-content/themes/twentytwentyfive/assets/fonts/manrope/Manrope-VariableFont_wght.woff2",
+          "status": 304
+        }
+      ],
+      "search": null,
+      "screenshot": "../screens/pretty-author-native-archive-twentytwentyfive-375.png"
+    },
+    {
+      "theme": "classic",
+      "width": 1440,
+      "generatedLink": "/journal/author/native-pretty-login/",
+      "normalized": {
+        "author": 8,
+        "archivePage": 2,
+        "contentPage": 1,
+        "query4Page": 3,
+        "commentPage": 2,
+        "onlySelectedAuthor": true,
+        "safeArchiveFields": true
+      },
+      "before": {
+        "canonical": 1,
+        "errors": [],
+        "head": "Author: Native Public Writer",
+        "overflow": false,
+        "privateBody": false,
+        "protectedBody": false,
+        "same": true,
+        "titles": 1
+      },
+      "after": {
+        "errors": [],
+        "length": 5,
+        "push": 1,
+        "url": "/journal/author/native-pretty-login/page/3/?query-4-page=3&commentPage=2"
+      },
+      "requests": [
+        {
+          "id": 97,
+          "method": "GET",
+          "path": "/api/public/document?path=%2Fjournal%2Fauthor%2Fnative-pretty-login%2Fpage%2F3%2F%3Fquery-4-page%3D3%26commentPage%3D2",
+          "status": 200
+        }
+      ],
+      "search": {
+        "errors": [],
+        "path": "/journal/author/native-pretty-login/",
+        "query": "?query-4-page=3&commentPage=2&search=Article"
+      },
+      "screenshot": "../screens/pretty-author-native-archive-classic-1440.png"
+    },
+    {
+      "theme": "classic",
+      "width": 768,
+      "generatedLink": "/journal/author/native-pretty-login/",
+      "normalized": {
+        "author": 8,
+        "archivePage": 2,
+        "contentPage": 1,
+        "query4Page": 3,
+        "commentPage": 2,
+        "onlySelectedAuthor": true,
+        "safeArchiveFields": true
+      },
+      "before": {
+        "canonical": 1,
+        "errors": [],
+        "head": "Author: Native Public Writer",
+        "overflow": false,
+        "privateBody": false,
+        "protectedBody": false,
+        "same": true,
+        "titles": 1
+      },
+      "after": {
+        "errors": [],
+        "length": 5,
+        "push": 1,
+        "url": "/journal/author/native-pretty-login/page/3/?query-4-page=3&commentPage=2"
+      },
+      "requests": [
+        {
+          "id": 118,
+          "method": "GET",
+          "path": "/api/public/document?path=%2Fjournal%2Fauthor%2Fnative-pretty-login%2Fpage%2F3%2F%3Fquery-4-page%3D3%26commentPage%3D2",
+          "status": 200
+        }
+      ],
+      "search": {
+        "errors": [],
+        "path": "/journal/author/native-pretty-login/",
+        "query": "?query-4-page=3&commentPage=2&search=Article"
+      },
+      "screenshot": "../screens/pretty-author-native-archive-classic-768.png"
+    },
+    {
+      "theme": "classic",
+      "width": 375,
+      "generatedLink": "/journal/author/native-pretty-login/",
+      "normalized": {
+        "author": 8,
+        "archivePage": 2,
+        "contentPage": 1,
+        "query4Page": 3,
+        "commentPage": 2,
+        "onlySelectedAuthor": true,
+        "safeArchiveFields": true
+      },
+      "before": {
+        "canonical": 1,
+        "errors": [],
+        "head": "Author: Native Public Writer",
+        "overflow": false,
+        "privateBody": false,
+        "protectedBody": false,
+        "same": true,
+        "titles": 1
+      },
+      "after": {
+        "errors": [],
+        "length": 5,
+        "push": 1,
+        "url": "/journal/author/native-pretty-login/page/3/?query-4-page=3&commentPage=2"
+      },
+      "requests": [
+        {
+          "id": 139,
+          "method": "GET",
+          "path": "/api/public/document?path=%2Fjournal%2Fauthor%2Fnative-pretty-login%2Fpage%2F3%2F%3Fquery-4-page%3D3%26commentPage%3D2",
+          "status": 200
+        }
+      ],
+      "search": {
+        "errors": [],
+        "path": "/journal/author/native-pretty-login/",
+        "query": "?query-4-page=3&commentPage=2&search=Article"
+      },
+      "screenshot": "../screens/pretty-author-native-archive-classic-375.png"
+    }
+  ]
+}

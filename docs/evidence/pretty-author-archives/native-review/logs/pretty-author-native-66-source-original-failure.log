@@ -1,0 +1,62 @@
+WorldAct database migrated.
+WorldAct seeded. Sign in with username admin or your administrator email.
+Running against a disposable local database and upload directory; outgoing mail uses the local outbox.
+✔ pretty author main paging replaces the suffix and preserves independent visible counters (0.874292ms)
+✔ slashless author paths and explicit visible identity retain their own URL policy (0.117375ms)
+✔ numeric aliases, Plain and ordinary archives retain query pagination (0.133833ms)
+✔ search resets only a recognized pretty author archive to its canonical base (0.089791ms)
+✔ Classic SSR uses normalized author identity with native pretty paging and search context (9.132416ms)
+✔ Classic SSR numeric alias keeps its actual author field and query page links (1.509167ms)
+ℹ tests 6
+ℹ suites 0
+ℹ pass 6
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 380.92
+▶ persisted nicenames identify pretty author archives and all current generated author URLs
+  ✔ native HTTP resolves persisted nicename under static permalink front (63.201458ms)
+  ✔ resolver DTO pins the actual persisted author identity (8.415666ms)
+  ✔ pretty page suffix remains archive paging with independent counters (37.016ms)
+  ✔ public REST users and post embeddings use the same pretty path (12.228042ms)
+  ✔ source post-author-name links use persisted archive path (15.718625ms)
+  ✔ numeric aliases and recognized unknown author404 stay bounded (54.976292ms)
+  ✔ Plain generated author links retain their numeric alias (11.1335ms)
+✔ persisted nicenames identify pretty author archives and all current generated author URLs (411.440083ms)
+ℹ tests 8
+ℹ suites 0
+ℹ pass 8
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 641.204083
+✖ public views render persisted four-theme documents in Node without DOM globals and retain native forms (215.046792ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 0
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 569.10675
+
+✖ failing tests:
+
+test at tests/public-document-view.test.ts:1:492
+✖ public views render persisted four-theme documents in Node without DOM globals and retain native forms (215.046792ms)
+  AssertionError [ERR_ASSERTION]: /api/public/document?path=%2F%3Fp%3D6%26page%3D2%26query-4-page%3D2%26commentPage%3D1%26replytocom%3D2: 400 {"error":"The author archive identity or counters conflict."}
+      at Object.ok ([owned-review-checkout]/tests/comment-approval-fixtures.ts:19:65)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async TestContext.<anonymous> ([owned-review-checkout]/tests/public-document-view.test.ts:36:19)
+      at async Test.run (node:internal/test_runner/test:1125:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:358:3) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+Test command exited 1

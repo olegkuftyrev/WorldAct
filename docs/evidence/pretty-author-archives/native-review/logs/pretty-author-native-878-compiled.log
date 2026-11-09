@@ -1,0 +1,53 @@
+WorldAct database migrated.
+WorldAct seeded. Sign in with username admin or your administrator email.
+Running against a disposable local database and upload directory; outgoing mail uses the local outbox.
+✔ pretty author main paging replaces the suffix and preserves independent visible counters (0.911125ms)
+✔ slashless author paths and explicit visible identity retain their own URL policy (0.126542ms)
+✔ numeric aliases, Plain and ordinary archives retain query pagination (0.135084ms)
+✔ search resets only a recognized pretty author archive to its canonical base (0.097458ms)
+✔ Classic SSR uses normalized author identity with native pretty paging and search context (9.626458ms)
+✔ Classic SSR numeric alias keeps its actual author field and query page links (1.64825ms)
+ℹ tests 6
+ℹ suites 0
+ℹ pass 6
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 276.168709
+▶ persisted nicenames identify pretty author archives and all current generated author URLs
+  ✔ native HTTP resolves persisted nicename under static permalink front (75.04875ms)
+  ✔ resolver DTO pins the actual persisted author identity (10.998ms)
+  ✔ pretty page suffix remains archive paging with independent counters (49.319917ms)
+  ✔ public REST users and post embeddings use the same pretty path (15.25675ms)
+  ✔ source post-author-name links use persisted archive path (17.018584ms)
+  ✔ numeric aliases and recognized unknown author404 stay bounded (61.537542ms)
+  ✔ Plain generated author links retain their numeric alias (12.406541ms)
+✔ persisted nicenames identify pretty author archives and all current generated author URLs (446.87825ms)
+ℹ tests 8
+ℹ suites 0
+ℹ pass 8
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 656.548041
+✔ public views render persisted four-theme documents in Node without DOM globals and retain native forms (949.823875ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 1
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1289.033583
+✔ source templates render protected forms and authorized previews without exposing hidden content (613.801542ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 1
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 836.242458
+Isolated regression complete: 4 test files passed.

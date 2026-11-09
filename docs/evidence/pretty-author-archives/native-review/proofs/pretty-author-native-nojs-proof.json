@@ -1,0 +1,365 @@
+{
+  "sha": "87819b5a72379129e988b7be97a3e5354b62d8c5",
+  "rows": [
+    {
+      "theme": "twentytwentyfive",
+      "width": 1440,
+      "before": {
+        "body2": true,
+        "bootstrap": true,
+        "gate": false,
+        "lifecycle": false,
+        "parent": "4",
+        "query2": true,
+        "scriptRan": false
+      },
+      "after": {
+        "body1": false,
+        "body2": true,
+        "commentPage": "2",
+        "query2": true,
+        "queryPage": "2",
+        "reply": null,
+        "scriptRan": false,
+        "scroll": 1440,
+        "text": true,
+        "url": "/journal/native-author-body/2/?query-6-page=2&commentPage=2#comment-10",
+        "visible": true,
+        "width": 1440
+      },
+      "saved": {
+        "id": 10,
+        "parent_id": 4,
+        "user_id": 1,
+        "status": "approved"
+      },
+      "requests": [
+        {
+          "id": 810,
+          "method": "POST",
+          "path": "/wp-comments-post.php",
+          "status": 303
+        },
+        {
+          "id": 811,
+          "method": "GET",
+          "path": "/journal/native-author-body/2/?query-6-page=2&commentPage=2",
+          "status": 200
+        },
+        {
+          "id": 812,
+          "method": "GET",
+          "path": "/assets/index-BsgYOWhl.css",
+          "status": 304
+        },
+        {
+          "id": 813,
+          "method": "GET",
+          "path": "/vendor/wordpress/wp-content/themes/twentytwentyfive/assets/fonts/manrope/Manrope-VariableFont_wght.woff2",
+          "status": 304
+        }
+      ],
+      "screenshot": "../screens/pretty-author-native-nojs-twentytwentyfive-1440.png"
+    },
+    {
+      "theme": "twentytwentyfive",
+      "width": 768,
+      "before": {
+        "body2": true,
+        "bootstrap": true,
+        "gate": false,
+        "lifecycle": false,
+        "parent": "4",
+        "query2": true,
+        "scriptRan": false
+      },
+      "after": {
+        "body1": false,
+        "body2": true,
+        "commentPage": "2",
+        "query2": true,
+        "queryPage": "2",
+        "reply": null,
+        "scriptRan": false,
+        "scroll": 768,
+        "text": true,
+        "url": "/journal/native-author-body/2/?query-6-page=2&commentPage=2#comment-11",
+        "visible": true,
+        "width": 768
+      },
+      "saved": {
+        "id": 11,
+        "parent_id": 4,
+        "user_id": 1,
+        "status": "approved"
+      },
+      "requests": [
+        {
+          "id": 817,
+          "method": "POST",
+          "path": "/wp-comments-post.php",
+          "status": 303
+        },
+        {
+          "id": 818,
+          "method": "GET",
+          "path": "/journal/native-author-body/2/?query-6-page=2&commentPage=2",
+          "status": 200
+        },
+        {
+          "id": 819,
+          "method": "GET",
+          "path": "/assets/index-BsgYOWhl.css",
+          "status": 304
+        },
+        {
+          "id": 820,
+          "method": "GET",
+          "path": "/vendor/wordpress/wp-content/themes/twentytwentyfive/assets/fonts/manrope/Manrope-VariableFont_wght.woff2",
+          "status": 304
+        }
+      ],
+      "screenshot": "../screens/pretty-author-native-nojs-twentytwentyfive-768.png"
+    },
+    {
+      "theme": "twentytwentyfive",
+      "width": 375,
+      "before": {
+        "body2": true,
+        "bootstrap": true,
+        "gate": false,
+        "lifecycle": false,
+        "parent": "4",
+        "query2": true,
+        "scriptRan": false
+      },
+      "after": {
+        "body1": false,
+        "body2": true,
+        "commentPage": "2",
+        "query2": true,
+        "queryPage": "2",
+        "reply": null,
+        "scriptRan": false,
+        "scroll": 375,
+        "text": true,
+        "url": "/journal/native-author-body/2/?query-6-page=2&commentPage=2#comment-12",
+        "visible": true,
+        "width": 375
+      },
+      "saved": {
+        "id": 12,
+        "parent_id": 4,
+        "user_id": 1,
+        "status": "approved"
+      },
+      "requests": [
+        {
+          "id": 824,
+          "method": "POST",
+          "path": "/wp-comments-post.php",
+          "status": 303
+        },
+        {
+          "id": 825,
+          "method": "GET",
+          "path": "/journal/native-author-body/2/?query-6-page=2&commentPage=2",
+          "status": 200
+        },
+        {
+          "id": 826,
+          "method": "GET",
+          "path": "/assets/index-BsgYOWhl.css",
+          "status": 304
+        },
+        {
+          "id": 827,
+          "method": "GET",
+          "path": "/vendor/wordpress/wp-content/themes/twentytwentyfive/assets/fonts/manrope/Manrope-VariableFont_wght.woff2",
+          "status": 304
+        }
+      ],
+      "screenshot": "../screens/pretty-author-native-nojs-twentytwentyfive-375.png"
+    },
+    {
+      "theme": "classic",
+      "width": 1440,
+      "before": {
+        "body2": true,
+        "bootstrap": true,
+        "gate": false,
+        "lifecycle": false,
+        "parent": "4",
+        "query2": true,
+        "scriptRan": false
+      },
+      "after": {
+        "body1": false,
+        "body2": true,
+        "commentPage": "2",
+        "query2": true,
+        "queryPage": "2",
+        "reply": null,
+        "scriptRan": false,
+        "scroll": 1440,
+        "text": true,
+        "url": "/journal/native-author-body/2/?query-6-page=2&commentPage=2#comment-13",
+        "visible": true,
+        "width": 1440
+      },
+      "saved": {
+        "id": 13,
+        "parent_id": 4,
+        "user_id": 1,
+        "status": "approved"
+      },
+      "requests": [
+        {
+          "id": 834,
+          "method": "POST",
+          "path": "/wp-comments-post.php",
+          "status": 303
+        },
+        {
+          "id": 835,
+          "method": "GET",
+          "path": "/journal/native-author-body/2/?query-6-page=2&commentPage=2",
+          "status": 200
+        },
+        {
+          "id": 836,
+          "method": "GET",
+          "path": "/assets/index-BsgYOWhl.css",
+          "status": 304
+        },
+        {
+          "id": 837,
+          "method": "GET",
+          "path": "/vendor/wordpress/wp-content/themes/twentytwentyfive/assets/fonts/manrope/Manrope-VariableFont_wght.woff2",
+          "status": 304
+        }
+      ],
+      "screenshot": "../screens/pretty-author-native-nojs-classic-1440.png"
+    },
+    {
+      "theme": "classic",
+      "width": 768,
+      "before": {
+        "body2": true,
+        "bootstrap": true,
+        "gate": false,
+        "lifecycle": false,
+        "parent": "4",
+        "query2": true,
+        "scriptRan": false
+      },
+      "after": {
+        "body1": false,
+        "body2": true,
+        "commentPage": "2",
+        "query2": true,
+        "queryPage": "2",
+        "reply": null,
+        "scriptRan": false,
+        "scroll": 768,
+        "text": true,
+        "url": "/journal/native-author-body/2/?query-6-page=2&commentPage=2#comment-14",
+        "visible": true,
+        "width": 768
+      },
+      "saved": {
+        "id": 14,
+        "parent_id": 4,
+        "user_id": 1,
+        "status": "approved"
+      },
+      "requests": [
+        {
+          "id": 841,
+          "method": "POST",
+          "path": "/wp-comments-post.php",
+          "status": 303
+        },
+        {
+          "id": 842,
+          "method": "GET",
+          "path": "/journal/native-author-body/2/?query-6-page=2&commentPage=2",
+          "status": 200
+        },
+        {
+          "id": 843,
+          "method": "GET",
+          "path": "/assets/index-BsgYOWhl.css",
+          "status": 304
+        },
+        {
+          "id": 844,
+          "method": "GET",
+          "path": "/vendor/wordpress/wp-content/themes/twentytwentyfive/assets/fonts/manrope/Manrope-VariableFont_wght.woff2",
+          "status": 304
+        }
+      ],
+      "screenshot": "../screens/pretty-author-native-nojs-classic-768.png"
+    },
+    {
+      "theme": "classic",
+      "width": 375,
+      "before": {
+        "body2": true,
+        "bootstrap": true,
+        "gate": false,
+        "lifecycle": false,
+        "parent": "4",
+        "query2": true,
+        "scriptRan": false
+      },
+      "after": {
+        "body1": false,
+        "body2": true,
+        "commentPage": "2",
+        "query2": true,
+        "queryPage": "2",
+        "reply": null,
+        "scriptRan": false,
+        "scroll": 375,
+        "text": true,
+        "url": "/journal/native-author-body/2/?query-6-page=2&commentPage=2#comment-15",
+        "visible": true,
+        "width": 375
+      },
+      "saved": {
+        "id": 15,
+        "parent_id": 4,
+        "user_id": 1,
+        "status": "approved"
+      },
+      "requests": [
+        {
+          "id": 848,
+          "method": "POST",
+          "path": "/wp-comments-post.php",
+          "status": 303
+        },
+        {
+          "id": 849,
+          "method": "GET",
+          "path": "/journal/native-author-body/2/?query-6-page=2&commentPage=2",
+          "status": 200
+        },
+        {
+          "id": 850,
+          "method": "GET",
+          "path": "/assets/index-BsgYOWhl.css",
+          "status": 304
+        },
+        {
+          "id": 851,
+          "method": "GET",
+          "path": "/vendor/wordpress/wp-content/themes/twentytwentyfive/assets/fonts/manrope/Manrope-VariableFont_wght.woff2",
+          "status": 304
+        }
+      ],
+      "screenshot": "../screens/pretty-author-native-nojs-classic-375.png"
+    }
+  ]
+}

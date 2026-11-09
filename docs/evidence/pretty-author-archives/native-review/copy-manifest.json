@@ -1,0 +1,497 @@
+{
+  "codeSha": "c2c69ef388f4426d733d4ea46231c122ce2058fa",
+  "proofJsonCount": 9,
+  "pngCount": 59,
+  "guardLogCount": 6,
+  "copies": [
+    {
+      "path": "proofs/pretty-author-native-66-original-failure.json",
+      "originalSha256": "2e5581ec299e85b0cebebc4a0721de4c80d8281cf7ef49a41edaa14c652e8375",
+      "sanitizedSha256": "2e5581ec299e85b0cebebc4a0721de4c80d8281cf7ef49a41edaa14c652e8375"
+    },
+    {
+      "path": "proofs/pretty-author-native-878-post-author-default-original.json",
+      "originalSha256": "14b4005f1049866343711512d1a30f12acb459e5a80951c480d0dcd2e06336d0",
+      "sanitizedSha256": "8ccbada4fe8b17396e33ffa13a60c8f5f7a8d80349bec286f0e6b17d50f4cff7"
+    },
+    {
+      "path": "proofs/pretty-author-native-archives-proof.json",
+      "originalSha256": "7c012f5b13f07e4bb8e3030a9727cfeeadb2739816472391a640a74938561eff",
+      "sanitizedSha256": "1ef1646426dbed478bb3858207af8b727c15d4681dfd1e8c6a594a88625e754d"
+    },
+    {
+      "path": "proofs/pretty-author-native-final-default-proof.json",
+      "originalSha256": "816c188854e0716c19db93d8086f618796ede9103883ca0167636ef91505c9de",
+      "sanitizedSha256": "9bb268c63ed95c4f3190def1a5514703a573846a674227a03ab925a501424c01"
+    },
+    {
+      "path": "proofs/pretty-author-native-final-preview-proof.json",
+      "originalSha256": "7ec22461e64efac5f27d1f79805c8d031b71c4e5f3d494993226abef96c5f80a",
+      "sanitizedSha256": "7e3abb7c83ca473979675cfa7d25f409c0305ada7e1acdb0a596c62f819c8f69"
+    },
+    {
+      "path": "proofs/pretty-author-native-nojs-proof.json",
+      "originalSha256": "873a712ca3e9cfe98196a66a91730903e268d2f64fc6f2a8d09193c4c536fcfa",
+      "sanitizedSha256": "04fc01dd83762398fc1a9e36201aaae23bed9bbe58c30b89dae06139cec05734"
+    },
+    {
+      "path": "proofs/pretty-author-native-password-proof.json",
+      "originalSha256": "281974e20bb173db0d5fb4f34d4f031fd8cdeb0d9c595aac6b9579312e9df031",
+      "sanitizedSha256": "743d7956610fe3045a87ebcce4d3a8b9aa5775d2f6466dbfa86b66fb35e98991"
+    },
+    {
+      "path": "proofs/pretty-author-native-preview-pending-proof.json",
+      "originalSha256": "60f09547bd26db4c376c258751a43287a8a318cb527ab1a1cfa01777c3a8ff12",
+      "sanitizedSha256": "7819ba703b9f56f2c68f14bb7df0eeff3daaa6cf0a1fc95705efe547631eee99"
+    },
+    {
+      "path": "proofs/pretty-author-native-variants-proof.json",
+      "originalSha256": "28f3aeb1966415ee1d25fa3f757fc9298bcea35efc55d54bbed1ecea0f80b987",
+      "sanitizedSha256": "c40fa1d9e584c87719d0a0eff389900cc054c7584119fbe6278d51f6eb86e1f9"
+    },
+    {
+      "path": "screens/pretty-author-native-878-post-author-default-original.png",
+      "originalSha256": "0107188120d97f75721005a7da0c47a6992fe0b914afbf89742f659cb4a8ded3",
+      "sanitizedSha256": "0107188120d97f75721005a7da0c47a6992fe0b914afbf89742f659cb4a8ded3",
+      "directlyInspected": true,
+      "pngImageChunksOnly": true
+    },
+    {
+      "path": "screens/pretty-author-native-archive-classic-1440.png",
+      "originalSha256": "5de023e7bceef500a81dd20308a8404d82ce5f7880e830883fd35e5e96940ce2",
+      "sanitizedSha256": "5de023e7bceef500a81dd20308a8404d82ce5f7880e830883fd35e5e96940ce2",
+      "directlyInspected": true,
+      "pngImageChunksOnly": true
+    },
+    {
+      "path": "screens/pretty-author-native-archive-classic-375.png",
+      "originalSha256": "d10f8877df86c98c3251afc5d3647f1f3defe20cd307264398267b3f9c1686dd",
+      "sanitizedSha256": "d10f8877df86c98c3251afc5d3647f1f3defe20cd307264398267b3f9c1686dd",
+      "directlyInspected": true,
+      "pngImageChunksOnly": true
+    },
+    {
+      "path": "screens/pretty-author-native-archive-classic-768.png",
+      "originalSha256": "385023e08fffd19a6c2f5979efabb715f844ac70e6106ea1bbe3be4c48cf3ae8",
+      "sanitizedSha256": "385023e08fffd19a6c2f5979efabb715f844ac70e6106ea1bbe3be4c48cf3ae8",
+      "directlyInspected": true,
+      "pngImageChunksOnly": true
+    },
+    {
+      "path": "screens/pretty-author-native-archive-twentytwentyfive-1440.png",
+      "originalSha256": "d3c61a53b0e21e75b95d1a9b0122f8af1f417f72393bca69ac281bfddb3ff30e",
+      "sanitizedSha256": "d3c61a53b0e21e75b95d1a9b0122f8af1f417f72393bca69ac281bfddb3ff30e",
+      "directlyInspected": true,
+      "pngImageChunksOnly": true
+    },
+    {
+      "path": "screens/pretty-author-native-archive-twentytwentyfive-375.png",
+      "originalSha256": "53fe69d48e1ad7b11ab2c0d78573bd6bf4e01f24c12a3bd68bb8669d46b6852f",
+      "sanitizedSha256": "53fe69d48e1ad7b11ab2c0d78573bd6bf4e01f24c12a3bd68bb8669d46b6852f",
+      "directlyInspected": true,
+      "pngImageChunksOnly": true
+    },
+    {
+      "path": "screens/pretty-author-native-archive-twentytwentyfive-768.png",
+      "originalSha256": "2051b1d10b7a8514dd812bfc9edbb800e9f20377957f0afb154eec057b3bd350",
+      "sanitizedSha256": "2051b1d10b7a8514dd812bfc9edbb800e9f20377957f0afb154eec057b3bd350",
+      "directlyInspected": true,
+      "pngImageChunksOnly": true
+    },
+    {
+      "path": "screens/pretty-author-native-final-default-classic-1440.png",
+      "originalSha256": "496c578faa355c649bfbceba9aebf4caebf3d426f1fb4fe547bc037fe02672e3",
+      "sanitizedSha256": "496c578faa355c649bfbceba9aebf4caebf3d426f1fb4fe547bc037fe02672e3",
+      "directlyInspected": true,
+      "pngImageChunksOnly": true
+    },
+    {
+      "path": "screens/pretty-author-native-final-default-classic-375.png",
+      "originalSha256": "dfd29057590f4f06da83798336b25997c58722e0ff95cbaa98e3d002fc03e93b",
+      "sanitizedSha256": "dfd29057590f4f06da83798336b25997c58722e0ff95cbaa98e3d002fc03e93b",
+      "directlyInspected": true,
+      "pngImageChunksOnly": true
+    },
+    {
+      "path": "screens/pretty-author-native-final-default-classic-768.png",
+      "originalSha256": "0fa3747b26008379a3f2542396dbd2191172613b404a181beea73056d35258dc",
+      "sanitizedSha256": "0fa3747b26008379a3f2542396dbd2191172613b404a181beea73056d35258dc",
+      "directlyInspected": true,
+      "pngImageChunksOnly": true
+    },
+    {
+      "path": "screens/pretty-author-native-final-default-twentytwentyfive-1440.png",
+      "originalSha256": "8d0e31a547a57a97def7fc778bed09971297cf6e7e3d9005dd6e27eb0b2b266f",
+      "sanitizedSha256": "8d0e31a547a57a97def7fc778bed09971297cf6e7e3d9005dd6e27eb0b2b266f",
+      "directlyInspected": true,
+      "pngImageChunksOnly": true
+    },
+    {
+      "path": "screens/pretty-author-native-final-default-twentytwentyfive-375.png",
+      "originalSha256": "7188305f6b5ad38ca6634b4518f06c3a9ef30beac800babf82b52db33964b088",
+      "sanitizedSha256": "7188305f6b5ad38ca6634b4518f06c3a9ef30beac800babf82b52db33964b088",
+      "directlyInspected": true,
+      "pngImageChunksOnly": true
+    },
+    {
+      "path": "screens/pretty-author-native-final-default-twentytwentyfive-768.png",
+      "originalSha256": "49a03efa148d220c65fab10061a8528ef7b8645b5bb50d2849a21ea2fa56b15d",
+      "sanitizedSha256": "49a03efa148d220c65fab10061a8528ef7b8645b5bb50d2849a21ea2fa56b15d",
+      "directlyInspected": true,
+      "pngImageChunksOnly": true
+    },
+    {
+      "path": "screens/pretty-author-native-final-preview-classic-1440.png",
+      "originalSha256": "51204e5cd022b841cd735f02ca8f3de32bd48241e9067a00edb17ae03627a146",
+      "sanitizedSha256": "51204e5cd022b841cd735f02ca8f3de32bd48241e9067a00edb17ae03627a146",
+      "directlyInspected": true,
+      "pngImageChunksOnly": true
+    },
+    {
+      "path": "screens/pretty-author-native-final-preview-classic-375.png",
+      "originalSha256": "4f5fe669768c8ababb7ca53e543bbc64f0124a4999c42940c6cf93c0620ec0c9",
+      "sanitizedSha256": "4f5fe669768c8ababb7ca53e543bbc64f0124a4999c42940c6cf93c0620ec0c9",
+      "directlyInspected": true,
+      "pngImageChunksOnly": true
+    },
+    {
+      "path": "screens/pretty-author-native-final-preview-classic-768.png",
+      "originalSha256": "ca8637ba5df006dadd62c95b68c8947efc7b5109e5610a1213afae346ac37cb5",
+      "sanitizedSha256": "ca8637ba5df006dadd62c95b68c8947efc7b5109e5610a1213afae346ac37cb5",
+      "directlyInspected": true,
+      "pngImageChunksOnly": true
+    },
+    {
+      "path": "screens/pretty-author-native-final-preview-twentytwentyfive-1440.png",
+      "originalSha256": "54caf81c096ec6675ce056bf2daf655cdb4dcbac60d0eb8eb505fe9085e68932",
+      "sanitizedSha256": "54caf81c096ec6675ce056bf2daf655cdb4dcbac60d0eb8eb505fe9085e68932",
+      "directlyInspected": true,
+      "pngImageChunksOnly": true
+    },
+    {
+      "path": "screens/pretty-author-native-final-preview-twentytwentyfive-375.png",
+      "originalSha256": "e46cc2c7efa91f6ceaef0dbf39f1aa0c19350f95dbe818f819bf38e95b17f813",
+      "sanitizedSha256": "e46cc2c7efa91f6ceaef0dbf39f1aa0c19350f95dbe818f819bf38e95b17f813",
+      "directlyInspected": true,
+      "pngImageChunksOnly": true
+    },
+    {
+      "path": "screens/pretty-author-native-final-preview-twentytwentyfive-768.png",
+      "originalSha256": "53ab5a5b71200bd5fe7da81d0b28fe19d1ce3ba6eaf9d25fa5be357dcaf6b7e6",
+      "sanitizedSha256": "53ab5a5b71200bd5fe7da81d0b28fe19d1ce3ba6eaf9d25fa5be357dcaf6b7e6",
+      "directlyInspected": true,
+      "pngImageChunksOnly": true
+    },
+    {
+      "path": "screens/pretty-author-native-nojs-classic-1440.png",
+      "originalSha256": "f2fbabddb620032fa4f7582c980cc4f5071ada7fccdd1f59c27fdfa362192c9f",
+      "sanitizedSha256": "f2fbabddb620032fa4f7582c980cc4f5071ada7fccdd1f59c27fdfa362192c9f",
+      "directlyInspected": true,
+      "pngImageChunksOnly": true
+    },
+    {
+      "path": "screens/pretty-author-native-nojs-classic-375.png",
+      "originalSha256": "441f617460e3198a0ffbe28f1c1a892a322530dfb7b749474a8dda6a2b6fdd47",
+      "sanitizedSha256": "441f617460e3198a0ffbe28f1c1a892a322530dfb7b749474a8dda6a2b6fdd47",
+      "directlyInspected": true,
+      "pngImageChunksOnly": true
+    },
+    {
+      "path": "screens/pretty-author-native-nojs-classic-768.png",
+      "originalSha256": "e0c594d546b6d52f864c68afe4f4ab2391d9005a8369c7df13b30d50fc49f026",
+      "sanitizedSha256": "e0c594d546b6d52f864c68afe4f4ab2391d9005a8369c7df13b30d50fc49f026",
+      "directlyInspected": true,
+      "pngImageChunksOnly": true
+    },
+    {
+      "path": "screens/pretty-author-native-nojs-twentytwentyfive-1440.png",
+      "originalSha256": "33f81b3474411110fe514f8e32cc012f3c3188b8f337c1208001f824aae64107",
+      "sanitizedSha256": "33f81b3474411110fe514f8e32cc012f3c3188b8f337c1208001f824aae64107",
+      "directlyInspected": true,
+      "pngImageChunksOnly": true
+    },
+    {
+      "path": "screens/pretty-author-native-nojs-twentytwentyfive-375.png",
+      "originalSha256": "716403e192b40ab6893dd5f7419fa6e8588e721724352216142026ca5e072e6d",
+      "sanitizedSha256": "716403e192b40ab6893dd5f7419fa6e8588e721724352216142026ca5e072e6d",
+      "directlyInspected": true,
+      "pngImageChunksOnly": true
+    },
+    {
+      "path": "screens/pretty-author-native-nojs-twentytwentyfive-768.png",
+      "originalSha256": "83d74796e276c668a82bcae474635faccae610e4f4f45525e609550242f31638",
+      "sanitizedSha256": "83d74796e276c668a82bcae474635faccae610e4f4f45525e609550242f31638",
+      "directlyInspected": true,
+      "pngImageChunksOnly": true
+    },
+    {
+      "path": "screens/pretty-author-native-partial-classic-1440.png",
+      "originalSha256": "5edfc4a38925a76217574d3c0df058eddba692298af6f8c693d18b57768ec87a",
+      "sanitizedSha256": "5edfc4a38925a76217574d3c0df058eddba692298af6f8c693d18b57768ec87a",
+      "directlyInspected": true,
+      "pngImageChunksOnly": true
+    },
+    {
+      "path": "screens/pretty-author-native-partial-classic-375.png",
+      "originalSha256": "c520f97402593f2554229db73c6de54fbfe3c2f41a5e8cd5401c600c7aac8001",
+      "sanitizedSha256": "c520f97402593f2554229db73c6de54fbfe3c2f41a5e8cd5401c600c7aac8001",
+      "directlyInspected": true,
+      "pngImageChunksOnly": true
+    },
+    {
+      "path": "screens/pretty-author-native-partial-classic-768.png",
+      "originalSha256": "2ae39074b8211c6bfda6dc5e850cac575ea9f86eea57d8234658cf58ed2531c0",
+      "sanitizedSha256": "2ae39074b8211c6bfda6dc5e850cac575ea9f86eea57d8234658cf58ed2531c0",
+      "directlyInspected": true,
+      "pngImageChunksOnly": true
+    },
+    {
+      "path": "screens/pretty-author-native-partial-twentytwentyfive-1440.png",
+      "originalSha256": "a53514d4605bc61602bf35c2d3061beed1cbe50f60ba829e6bc56e2570d29c41",
+      "sanitizedSha256": "a53514d4605bc61602bf35c2d3061beed1cbe50f60ba829e6bc56e2570d29c41",
+      "directlyInspected": true,
+      "pngImageChunksOnly": true
+    },
+    {
+      "path": "screens/pretty-author-native-partial-twentytwentyfive-375.png",
+      "originalSha256": "a0e97da1423d7ea558eb35cab61a20da05eebc90f0e89ded89883ca5db4708e9",
+      "sanitizedSha256": "a0e97da1423d7ea558eb35cab61a20da05eebc90f0e89ded89883ca5db4708e9",
+      "directlyInspected": true,
+      "pngImageChunksOnly": true
+    },
+    {
+      "path": "screens/pretty-author-native-partial-twentytwentyfive-768.png",
+      "originalSha256": "abb62bb035583551a59993a5369d61a21ab47984940077191f74ad547f4d1017",
+      "sanitizedSha256": "abb62bb035583551a59993a5369d61a21ab47984940077191f74ad547f4d1017",
+      "directlyInspected": true,
+      "pngImageChunksOnly": true
+    },
+    {
+      "path": "screens/pretty-author-native-password-classic-1440.png",
+      "originalSha256": "52268877e7189d2efefb18361628b63c1931f7b528a5daac44e2c995fe7a796a",
+      "sanitizedSha256": "52268877e7189d2efefb18361628b63c1931f7b528a5daac44e2c995fe7a796a",
+      "directlyInspected": true,
+      "pngImageChunksOnly": true
+    },
+    {
+      "path": "screens/pretty-author-native-password-classic-375.png",
+      "originalSha256": "b2e73c55bf4ea7fa0b9a35bf9c92210a83fcc6880d342ce576fad804e154df08",
+      "sanitizedSha256": "b2e73c55bf4ea7fa0b9a35bf9c92210a83fcc6880d342ce576fad804e154df08",
+      "directlyInspected": true,
+      "pngImageChunksOnly": true
+    },
+    {
+      "path": "screens/pretty-author-native-password-classic-768.png",
+      "originalSha256": "8a07746189671dbdde82d3db00ac019ed9e8314e3f7688fccd2d4006ae0dac31",
+      "sanitizedSha256": "8a07746189671dbdde82d3db00ac019ed9e8314e3f7688fccd2d4006ae0dac31",
+      "directlyInspected": true,
+      "pngImageChunksOnly": true
+    },
+    {
+      "path": "screens/pretty-author-native-password-twentytwentyfive-1440.png",
+      "originalSha256": "c3489652306a2099db99980383277be52c31c526a64f86ae81f7c038b4c0fa19",
+      "sanitizedSha256": "c3489652306a2099db99980383277be52c31c526a64f86ae81f7c038b4c0fa19",
+      "directlyInspected": true,
+      "pngImageChunksOnly": true
+    },
+    {
+      "path": "screens/pretty-author-native-password-twentytwentyfive-375.png",
+      "originalSha256": "4b33b9af32e8506a30b33ecf7b95eaa3ead7d068096be502754fdf12a710e10a",
+      "sanitizedSha256": "4b33b9af32e8506a30b33ecf7b95eaa3ead7d068096be502754fdf12a710e10a",
+      "directlyInspected": true,
+      "pngImageChunksOnly": true
+    },
+    {
+      "path": "screens/pretty-author-native-password-twentytwentyfive-768.png",
+      "originalSha256": "664f1c5c9f64a406ee3ff4a1f756e945bd2e0b75f77476d7c1779eb9808e3c0d",
+      "sanitizedSha256": "664f1c5c9f64a406ee3ff4a1f756e945bd2e0b75f77476d7c1779eb9808e3c0d",
+      "directlyInspected": true,
+      "pngImageChunksOnly": true
+    },
+    {
+      "path": "screens/pretty-author-native-preview-single-pending-classic.png",
+      "originalSha256": "77d7dfc9e8ad6bae5c630d970a40d378b219b6811f60dbb35363a16219371f24",
+      "sanitizedSha256": "77d7dfc9e8ad6bae5c630d970a40d378b219b6811f60dbb35363a16219371f24",
+      "directlyInspected": true,
+      "pngImageChunksOnly": true
+    },
+    {
+      "path": "screens/pretty-author-native-preview-single-pending-twentytwentyfive.png",
+      "originalSha256": "ee5739939c72b344954d1d67fbcf6c06b28f486575065ce2f31e0809c53a13af",
+      "sanitizedSha256": "ee5739939c72b344954d1d67fbcf6c06b28f486575065ce2f31e0809c53a13af",
+      "directlyInspected": true,
+      "pngImageChunksOnly": true
+    },
+    {
+      "path": "screens/pretty-author-native-quirk-classic.png",
+      "originalSha256": "e3d8cac49db5328ce1b04ca4c922bdf44e75697460d62e0fcba30b8e107b1ffc",
+      "sanitizedSha256": "e3d8cac49db5328ce1b04ca4c922bdf44e75697460d62e0fcba30b8e107b1ffc",
+      "directlyInspected": true,
+      "pngImageChunksOnly": true
+    },
+    {
+      "path": "screens/pretty-author-native-quirk-twentytwentyfive.png",
+      "originalSha256": "2a86dfd7306de882a2436e672fbd49fea270823d186e87dc39e99d7bcae699cd",
+      "sanitizedSha256": "2a86dfd7306de882a2436e672fbd49fea270823d186e87dc39e99d7bcae699cd",
+      "directlyInspected": true,
+      "pngImageChunksOnly": true
+    },
+    {
+      "path": "screens/pretty-author-native-static-classic-1440.png",
+      "originalSha256": "0481ee35790da572870910512df8d1580afbb4e87194b4260b4a472c98ba3494",
+      "sanitizedSha256": "0481ee35790da572870910512df8d1580afbb4e87194b4260b4a472c98ba3494",
+      "directlyInspected": true,
+      "pngImageChunksOnly": true
+    },
+    {
+      "path": "screens/pretty-author-native-static-classic-375.png",
+      "originalSha256": "d91d4be761cb5208f269e4de4239f8ae19b15244bb3b0996b4235d157d2935b0",
+      "sanitizedSha256": "d91d4be761cb5208f269e4de4239f8ae19b15244bb3b0996b4235d157d2935b0",
+      "directlyInspected": true,
+      "pngImageChunksOnly": true
+    },
+    {
+      "path": "screens/pretty-author-native-static-classic-768.png",
+      "originalSha256": "4e7658ab139051cca7f6b539881ba8a99325971c9548a056a432d56a331d4c15",
+      "sanitizedSha256": "4e7658ab139051cca7f6b539881ba8a99325971c9548a056a432d56a331d4c15",
+      "directlyInspected": true,
+      "pngImageChunksOnly": true
+    },
+    {
+      "path": "screens/pretty-author-native-static-twentytwentyfive-1440.png",
+      "originalSha256": "f0d1323de09f6add8eba69b39e6e6e81a4d963691d06faaf82934388a742bce4",
+      "sanitizedSha256": "f0d1323de09f6add8eba69b39e6e6e81a4d963691d06faaf82934388a742bce4",
+      "directlyInspected": true,
+      "pngImageChunksOnly": true
+    },
+    {
+      "path": "screens/pretty-author-native-static-twentytwentyfive-375.png",
+      "originalSha256": "09fff0c0b6b377e3edd094819a6d5b640c5f49dbd16c7ab50bdac0a605d0402a",
+      "sanitizedSha256": "09fff0c0b6b377e3edd094819a6d5b640c5f49dbd16c7ab50bdac0a605d0402a",
+      "directlyInspected": true,
+      "pngImageChunksOnly": true
+    },
+    {
+      "path": "screens/pretty-author-native-static-twentytwentyfive-768.png",
+      "originalSha256": "d68093f46c571443249d98d933b16bbfda6cdc2acc401bc510c74c595461067e",
+      "sanitizedSha256": "d68093f46c571443249d98d933b16bbfda6cdc2acc401bc510c74c595461067e",
+      "directlyInspected": true,
+      "pngImageChunksOnly": true
+    },
+    {
+      "path": "screens/pretty-author-native-taxonomy-classic.png",
+      "originalSha256": "0429f78ad8b5c671a312448513f7265e67e558d30fa006a0c0ba41c4933ffead",
+      "sanitizedSha256": "0429f78ad8b5c671a312448513f7265e67e558d30fa006a0c0ba41c4933ffead",
+      "directlyInspected": true,
+      "pngImageChunksOnly": true
+    },
+    {
+      "path": "screens/pretty-author-native-taxonomy-twentytwentyfive.png",
+      "originalSha256": "e40970de1a8aba1efc4dc7540fcbcc1d218b8265386c4dc35ca7a67a0748f168",
+      "sanitizedSha256": "e40970de1a8aba1efc4dc7540fcbcc1d218b8265386c4dc35ca7a67a0748f168",
+      "directlyInspected": true,
+      "pngImageChunksOnly": true
+    },
+    {
+      "path": "screens/pretty-author-native-tier-classic-archive.png",
+      "originalSha256": "2f6e9e419a307c7310433ef617289b8b0852cd20b5aeee912acf62cc8848f71d",
+      "sanitizedSha256": "2f6e9e419a307c7310433ef617289b8b0852cd20b5aeee912acf62cc8848f71d",
+      "directlyInspected": true,
+      "pngImageChunksOnly": true
+    },
+    {
+      "path": "screens/pretty-author-native-tier-classic-author-8.png",
+      "originalSha256": "df269f3cf41b9a4185b2a5727bf9673212b2189eb0a7e9863271022cb433cb1d",
+      "sanitizedSha256": "df269f3cf41b9a4185b2a5727bf9673212b2189eb0a7e9863271022cb433cb1d",
+      "directlyInspected": true,
+      "pngImageChunksOnly": true
+    },
+    {
+      "path": "screens/pretty-author-native-tier-classic-author-native-pretty-login.png",
+      "originalSha256": "e77e6e477840020258162b707b213ffca09c326a9b14e6b3461131bdd4c803ad",
+      "sanitizedSha256": "e77e6e477840020258162b707b213ffca09c326a9b14e6b3461131bdd4c803ad",
+      "directlyInspected": true,
+      "pngImageChunksOnly": true
+    },
+    {
+      "path": "screens/pretty-author-native-tier-classic-author.png",
+      "originalSha256": "f5e99b1f4340841aebccaa3b90fae274f8d520f0ed34bb5aa4334406ba9b9fba",
+      "sanitizedSha256": "f5e99b1f4340841aebccaa3b90fae274f8d520f0ed34bb5aa4334406ba9b9fba",
+      "directlyInspected": true,
+      "pngImageChunksOnly": true
+    },
+    {
+      "path": "screens/pretty-author-native-tier-classic-index.png",
+      "originalSha256": "eb35fce503a2aa2ff38f8a893c2962f422054886a6938c5efac1a83a54a821e5",
+      "sanitizedSha256": "eb35fce503a2aa2ff38f8a893c2962f422054886a6938c5efac1a83a54a821e5",
+      "directlyInspected": true,
+      "pngImageChunksOnly": true
+    },
+    {
+      "path": "screens/pretty-author-native-tier-twentytwentyfive-archive.png",
+      "originalSha256": "93e2e0c812bc1a627f68a5a2c23ed7e9e7a18381dc0b4c943d1b6d460eaa0d5b",
+      "sanitizedSha256": "93e2e0c812bc1a627f68a5a2c23ed7e9e7a18381dc0b4c943d1b6d460eaa0d5b",
+      "directlyInspected": true,
+      "pngImageChunksOnly": true
+    },
+    {
+      "path": "screens/pretty-author-native-tier-twentytwentyfive-author-8.png",
+      "originalSha256": "63d191f1d8d2fac10400681866088123280b1b641e23efc6c69c0a816f6ca4ba",
+      "sanitizedSha256": "63d191f1d8d2fac10400681866088123280b1b641e23efc6c69c0a816f6ca4ba",
+      "directlyInspected": true,
+      "pngImageChunksOnly": true
+    },
+    {
+      "path": "screens/pretty-author-native-tier-twentytwentyfive-author-native-pretty-login.png",
+      "originalSha256": "ccc341bd4c4ae4df85cf522ccb996f8d264868afd2934a8c4c93794e47a8ec65",
+      "sanitizedSha256": "ccc341bd4c4ae4df85cf522ccb996f8d264868afd2934a8c4c93794e47a8ec65",
+      "directlyInspected": true,
+      "pngImageChunksOnly": true
+    },
+    {
+      "path": "screens/pretty-author-native-tier-twentytwentyfive-author.png",
+      "originalSha256": "94c3fd8a4b56aae8cfd2e110caa8a778052e4bdc09db42cd1664bd9e730689ee",
+      "sanitizedSha256": "94c3fd8a4b56aae8cfd2e110caa8a778052e4bdc09db42cd1664bd9e730689ee",
+      "directlyInspected": true,
+      "pngImageChunksOnly": true
+    },
+    {
+      "path": "screens/pretty-author-native-tier-twentytwentyfive-index.png",
+      "originalSha256": "6f5ca4ae77009d3aac0ec24df8f48be4f7a0ece536453fd716a530faf92548b3",
+      "sanitizedSha256": "6f5ca4ae77009d3aac0ec24df8f48be4f7a0ece536453fd716a530faf92548b3",
+      "directlyInspected": true,
+      "pngImageChunksOnly": true
+    },
+    {
+      "path": "logs/pretty-author-native-66-compiled-original-failure.log",
+      "originalSha256": "e706567a4959be6b235dd979d5905f53f509ef880fdd93cb42e2e0c816613a20",
+      "sanitizedSha256": "174ae642dbe439a0d86643a51f9273e070f9766e8e460c46be143d3c7a638146"
+    },
+    {
+      "path": "logs/pretty-author-native-66-source-original-failure.log",
+      "originalSha256": "e255af7bcf4372c36bf4b01905a650ae6cd6e016ee5e1bee7a1beecbb890b6fe",
+      "sanitizedSha256": "0e1d2af9ff4fdee35f480ed6f106b2606e027d656646debad7c1ed95b033c185"
+    },
+    {
+      "path": "logs/pretty-author-native-878-compiled.log",
+      "originalSha256": "5b102ed3bb07d54731771a89b4bb29568bf748c3ce1ab38866e7ee9d35864d3c",
+      "sanitizedSha256": "5b102ed3bb07d54731771a89b4bb29568bf748c3ce1ab38866e7ee9d35864d3c"
+    },
+    {
+      "path": "logs/pretty-author-native-878-source.log",
+      "originalSha256": "3169e60135944d10ef9f91965145a280cd3b9dcf943c27435b702b0cbfaa16b6",
+      "sanitizedSha256": "3169e60135944d10ef9f91965145a280cd3b9dcf943c27435b702b0cbfaa16b6"
+    },
+    {
+      "path": "logs/pretty-author-native-c2-compiled.log",
+      "originalSha256": "c978fdcffb4935b4ee280f43699a4fbff625c6ffef3a0b3e9efa55ea051b9616",
+      "sanitizedSha256": "c978fdcffb4935b4ee280f43699a4fbff625c6ffef3a0b3e9efa55ea051b9616"
+    },
+    {
+      "path": "logs/pretty-author-native-c2-source.log",
+      "originalSha256": "ccc733af16eb934251a0d7cbceff0a0cec2503653306a2f83698cf448642b28a",
+      "sanitizedSha256": "ccc733af16eb934251a0d7cbceff0a0cec2503653306a2f83698cf448642b28a"
+    }
+  ],
+  "sanitization": "Original private bytes preserved; only screenshot/checkout paths replaced in textual copies. PNGs copied unchanged."
+}

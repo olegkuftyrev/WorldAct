@@ -1,0 +1,21 @@
+{
+  "sha": "87819b5a72379129e988b7be97a3e5354b62d8c5",
+  "method": "GET",
+  "path": "/api/public/posts/native-author-body",
+  "status": 200,
+  "fixtureAttributes": {
+    "postAuthor": {
+      "isLink": true,
+      "linkTargetOmitted": true
+    },
+    "avatar": {
+      "isLink": true,
+      "showAvatars": false
+    }
+  },
+  "actualPostAuthorMarkup": "<div class=\"wp-block-post-author\"><div class=\"wp-block-post-author__content\"><p class=\"wp-block-post-author__name\">Native Public Writer</p></div></div>",
+  "expectedSourceDefaultLinkTarget": "_self",
+  "sourceMetadataReference": "wp-includes/blocks/post-author/block.json linkTarget default _self",
+  "interpretation": "Source PHP requires nonempty linkTarget; source block metadata supplies _self when omitted. Current runtime has no author anchor when serialized block omits linkTarget. Avatar absence here is expected because showAvatars=false.",
+  "screenshot": "../screens/pretty-author-native-878-post-author-default-original.png"
+}

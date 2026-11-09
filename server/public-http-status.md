@@ -26,7 +26,12 @@ published record in the existing site-local civil-date bounds. Root date queries
 retain `month`/`monthnum`/compact aliases and reject malformed or conflicting
 values. Date paths remain authoritative over unrelated date query values.
 Body, inherited Query Loop and comment paging retain independent counters;
-body-page clamping remains the existing contract. No author directory is added.
+body-page clamping remains the existing contract. Pretty author directories use
+the configured static permalink front and persisted nicename. Existing accounts
+may have an empty first page200; unknown authors and empty/excessive pretty
+archive pages404. Numeric aliases retain their earlier empty/excessive200 policy.
+See [author archive boundaries](pretty-author-archives.md) for namespace priority,
+source query normalization and request identity validation.
 Public paths stay bounded to2,000 characters before decoding/hierarchical work.
 
 Framework routes retain their client authorization and framework bootstrap.
