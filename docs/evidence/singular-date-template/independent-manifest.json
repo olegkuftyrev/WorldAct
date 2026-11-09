@@ -1,0 +1,40 @@
+{
+  "scope": "Sanitized documentation-only copies and compact hash summary; original private artifacts preserved.",
+  "backendCertificateCommit": "2a06562b60fc67a22694b1ca42c1f2fb9f050c15",
+  "reports": [
+    {
+      "file": "independent-original-setup-review.md",
+      "privateOriginalBasename": "singular-date-template-before-original-setup-review.md",
+      "privateOriginalSHA256": "f7599ce22c3e8f146bd43c087d9ffcca8e579c4f1e45126ead45c217db7717a4",
+      "packagedSHA256": "b9cce3ae180b9e2ff0aa68d9f1833916045cce7e7e5d3d4bf19b6e90259b27cb",
+      "sanitization": "Temporary absolute log paths reduced only to basenames."
+    },
+    {
+      "file": "independent-corrected-before-review.md",
+      "privateOriginalBasename": "singular-date-template-corrected-before-review.md",
+      "privateOriginalSHA256": "30598adcc370a63d1a1484af603633fa75c44f9b9b0726b41c650e148d90c2ba",
+      "packagedSHA256": "5ecc5ba77d7f27c3da08d5cdbba2e58e719fd47ad6fd8f9539104379840a8b25",
+      "sanitization": "Temporary absolute log paths reduced only to basenames."
+    },
+    {
+      "file": "independent-review.md",
+      "privateOriginalBasename": "singular-date-template-independent-final-review.md",
+      "privateOriginalSHA256": "102a38a3117c117a635cf8a9c0a3f4a97c46d1da4281858c6af044e95dadab5e",
+      "packagedSHA256": "ac92e35b507cfe591fb01790b4cf09e5cb0e6bf064d50196faed306ce3ef4942",
+      "sanitization": "Temporary absolute log paths reduced only to basenames."
+    },
+    {
+      "file": "independent-source-audit.md",
+      "privateOriginalBasename": "singular-date-template-final-source-audit.md",
+      "privateOriginalSHA256": "750a6610fc97e1735804c7a1e4144e99b4e5296b60a5553f779f4506909b9722",
+      "packagedSHA256": "750a6610fc97e1735804c7a1e4144e99b4e5296b60a5553f779f4506909b9722",
+      "sanitization": "No content change."
+    }
+  ],
+  "otherFiles": {
+    "independent-checks.json": "1fbfc7496f9e28fd8352258d145b8aa4b93360a34dba065d69d7ad2dff31f242",
+    "independent-README.md": "8baf42cdd8f6dc4a93ea6f485f9e18c64d5ee480187b917b45209ddb68ddfcf0"
+  },
+  "sanitization": "Only temporary absolute log paths in copied reports become basenames. Summary omits resource/database identities, private paths and raw fixtures/logs/archives. No credentials included.",
+  "privateOriginalSHAHashingIsSeparateFromSanitizedCopyHashing": true
+}

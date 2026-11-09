@@ -1,0 +1,223 @@
+{
+  "scope": "Independent bounded six-file acceptance at exact2a; no whole/fresh/fixed/native/release-CI claim.",
+  "candidateCommit": "2a06562b60fc67a22694b1ca42c1f2fb9f050c15",
+  "candidateTree": "bad600a7253ed2ac5030ec9acec4651a43c4a881",
+  "candidateNodeSHA256": "cbc6c17115bcc4d2529aa296460a0c460b200ea7a11033314f99bb756aec4cb7",
+  "runtimeBase": "bf4204aa1ade5eb604f34909846039ffb3f1e9af",
+  "soleRuntimeChangeAgainstBase": "shared/public-routing.ts: date candidacy requires absence of an already selected singular post; no other branch/consumer/query/SQL change.",
+  "independentBuild": {
+    "typeScript": true,
+    "viteConfigLoaderRunner": true,
+    "directNativeEsbuild": true,
+    "logsSHA256": {
+      "typecheck": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "vite": "b476722535431a73c74d9c8856aed84c0186ccc7b5eaee556ddb4d924dc06d6f",
+      "nodebuild": "42bac82f8536870a954b4118a8fe502b9c71e7b7563064d56c4582f16b2b929d"
+    }
+  },
+  "selectorSHA256": "f2d7f9cf15be3d519b762b0c28f61a02f114c0af374e792b2c3f0dd1325ebd08",
+  "files": [
+    "tests/singular-date-template-priority-original.test.ts",
+    "tests/public-document-data.test.ts",
+    "tests/public-author-name-query-ui.test.ts",
+    "tests/post-templates.test.ts",
+    "tests/plain-source-pagination.test.ts",
+    "tests/front-page-availability.test.ts"
+  ],
+  "fileSHA256": {
+    "tests/singular-date-template-priority-original.test.ts": "f15f083451c0890f9ecd1c77f2a6c0826ff1ee02847e8cbd5507eb0f9757cb07",
+    "tests/public-document-data.test.ts": "dee95240a579ec16327b0ca10f1497cbf2deae37dfd218113a08675cfa0454b1",
+    "tests/public-author-name-query-ui.test.ts": "024d192a23521c3236811d6bd62d4ba337a0e53f0da03fc7335ad2eef3b2b172",
+    "tests/post-templates.test.ts": "ee1e8adfc474d0b1a0717a9a84df3b5e79693532cb64e91eebb7ee44b126b76a",
+    "tests/plain-source-pagination.test.ts": "45799bfcba76f728470cd5370cd27ca960f1862508522023d7ff308a6759e21c",
+    "tests/front-page-availability.test.ts": "fa255c13b7bb6c98e4d805b965b727030b7db78cda9e4ccd4ed498fa9030b7e1"
+  },
+  "sourceFileSHA256": {
+    "shared/public-routing.ts": "02670cc901959e2aa9f188306d1471f9550943261c31abfa04cc36ee53cba286",
+    "server/public-document-data.ts": "af2ead3e5ea19de52a34c8bafe4618bc39d1772581f7e10dfb04c866d1904904",
+    "src/publicAuthorQuery.ts": "80705406e0565b6371e7ec43d331d984034cec2ecfd6022ac3cb972d622c9a11",
+    "src/screens/PublicSite.tsx": "a4ac04b10080ab80ba50a7d82940023b7f174c0d59e989441e38e5822ee611a7",
+    "server/public-documents.ts": "6d270634a176b09f2b90ff85cd99389c75d6a7a92bb1b4b6a079ffd1aba71001",
+    "server/public-read.ts": "35e15cb0c2d1d6800f5b47adef1546c0ec61ecf046170c70e0bd5b1ddd8eaaff"
+  },
+  "finalRuns": [
+    {
+      "mode": "source",
+      "counts": {
+        "tests": 36,
+        "pass": 36,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0
+      },
+      "perFileCounted": [
+        6,
+        7,
+        15,
+        1,
+        1,
+        6
+      ],
+      "logSHA256": "fe65e6a8d82904b6cfd8379a890e269238cfa3fa7985e387c909318d0daa2b58",
+      "newImmutableDispatchGroups": 11,
+      "newImmutableRequestSurfaces": 33,
+      "setupFailures": 0,
+      "allGatheredBeforeAggregatePolicy": true
+    },
+    {
+      "mode": "compiled",
+      "counts": {
+        "tests": 36,
+        "pass": 36,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0
+      },
+      "perFileCounted": [
+        6,
+        7,
+        15,
+        1,
+        1,
+        6
+      ],
+      "logSHA256": "d069d0e28e0fb842990aae96405fbf90ea8a8dbb8f05241d31392b6868449f78",
+      "newImmutableDispatchGroups": 11,
+      "newImmutableRequestSurfaces": 33,
+      "setupFailures": 0,
+      "allGatheredBeforeAggregatePolicy": true
+    }
+  ],
+  "lineage": [
+    {
+      "stage": "original-setup-only",
+      "testCommit": "22397ecc825357d28528a20ea252a5843188679b",
+      "runtimeBase": "5ab358d4c05b1d8fbe7ca25602dfa2385e0dd73a",
+      "testSHA256": "09245817309e6e3ed98fada2592557b9194bc1aa2e00bf38a6c959766d2b105f",
+      "nodeSHA256": "b8012b887e1b2281774e7318ad70f4a9debfb4d396eaeb3cd41e8e752ae1d80c",
+      "eachMode": {
+        "pass": 0,
+        "fail": 1,
+        "parentOnly": true,
+        "policyChildren": 0,
+        "dispatchGroups": 0
+      },
+      "classification": "Assumed bundled date template absent; not a product regression.",
+      "logs": [
+        {
+          "mode": "source",
+          "sha256": "d9d30177386e31772eead9c6862dfe4e8b11852c4ead1fca2592b3aa9c8972bc"
+        },
+        {
+          "mode": "compiled",
+          "sha256": "8e58a33b9882f570c2dcf497871148120bc79e857025c992c83d6759e1bf792a"
+        }
+      ]
+    },
+    {
+      "stage": "reviewed-test-only-adapter",
+      "testCommit": "cb185dbb77b58fa22ecbf3dbc6d6c1434bfc6ddb",
+      "testSHA256": "f15f083451c0890f9ecd1c77f2a6c0826ff1ee02847e8cbd5507eb0f9757cb07",
+      "diffSHA256": "f5e9380343d22a7c5cf01f621f9b3e63618aeef065a8150df2c902a1927e71ad",
+      "scope": "8add2remove: create only missing date/404 controls through tracked document API, verify saved slug/reread inventory. Never overwrite existing candidates. All remaining bytes unchanged."
+    },
+    {
+      "stage": "corrected-genuine-before",
+      "runtimeBase": "5ab358d4c05b1d8fbe7ca25602dfa2385e0dd73a",
+      "nodeSHA256": "b8012b887e1b2281774e7318ad70f4a9debfb4d396eaeb3cd41e8e752ae1d80c",
+      "eachMode": {
+        "pass": 1,
+        "fail": 5,
+        "failingSemanticChildren": 4,
+        "failingParent": 1,
+        "setupFailures": 0,
+        "dispatchGroups": 11,
+        "requestSurfaces": 33
+      },
+      "classification": "Four date-context singulars keep identity/status but select date instead of custom; only template/custom-marker assertions fail. Positive archive/404 child passes.",
+      "logs": [
+        {
+          "mode": "source",
+          "sha256": "36ecb30bee70d1711068481c8128a695f09e8c5c63ac5ab42318dbd67ccddb7f"
+        },
+        {
+          "mode": "compiled",
+          "sha256": "868e43c1fd1210f92a03bccfe7533c283ee31667443bd1833dc2643a2b107a65"
+        }
+      ]
+    },
+    {
+      "stage": "unchanged-corrected-final",
+      "testSHA256": "f15f083451c0890f9ecd1c77f2a6c0826ff1ee02847e8cbd5507eb0f9757cb07",
+      "eachMode": {
+        "newFixturePass": 6,
+        "existingControlPass": 30,
+        "totalPass": 36,
+        "fail": 0,
+        "skip": 0,
+        "cancel": 0,
+        "dispatchGroups": 11,
+        "requestSurfaces": 33
+      }
+    }
+  ],
+  "sourceSemantics": {
+    "newFixture": "Actual native GET/HEAD + document API HTTP; compiled API actual in compiled mode; Linkedom parser is not native browser.",
+    "existingMixedFiles": {
+      "newFixture": "Actual anonymous native GET+HEAD and document HTTP to selected source/actual compiled API; eleven groups/33surfaces. Linkedom parsing only, no direct renderer import.",
+      "publicDocumentData": "Mixed direct SOURCE services/pure helpers and actual HTTP; directimports remain SOURCE in both guardmodes.",
+      "publicAuthorNameUI": "SOURCE-only pure helpers/React SSR assertions even in compiled API guard.",
+      "postTemplates": "Actual API HTTP; source db import closes pool only.",
+      "plainSourcePagination": "Actual API HTTP with source db fixture writes/cleanup; no imported renderer.",
+      "frontPageAvailability": "Mixed actual API HTTP and source static-front helper/fixture DB."
+    },
+    "sourceAuditPrivateSHA256": "750a6610fc97e1735804c7a1e4144e99b4e5296b60a5553f779f4506909b9722",
+    "tenExistingFilesUnchanged": true
+  },
+  "bounds": [
+    "Full HTML includes bootstrap JSON; template/custom-marker and model/body DTO evidence is not visible-body/pixel acceptance.",
+    "PlainID200 is supported WorldAct alias acquisition; no upstream canonical redirect equivalence claim.",
+    "No mismatching-pretty-year200 or SQL date-intersection change.",
+    "Raw query.date/site.archive coherence, authored Query Title and other mixed-selector source quirks remain outside scope.",
+    "No PHP/MySQL execution; supplied source is reference evidence."
+  ],
+  "cleanup": {
+    "allSixJournaledDatabasesAbsent": true,
+    "allThreeNeverCreatedAnchorsAbsent": true,
+    "allSixOwnedApplicationSessionGroupsAbsent": true,
+    "ownedPortsFree": true,
+    "ownConfigDependencyLinkRemoved": true,
+    "dependencyOwnerUID501Mode755NonsymlinkLock233Unchanged": true,
+    "beforeBranchAndOriginalsPreserved": true,
+    "trackedTreeCleanAfterGuards": true,
+    "siteArchiveCreated": false,
+    "uploads": "Normal guard-finally cleanup only; exact paths not independently journaled.",
+    "privateCleanupSHA256": "b388c7819359b79684e8323931316fd22ee7fb999f380e998c43466e8a6676a3"
+  },
+  "retainedOriginalBuild": {
+    "kind": "Private build archive, not site/DB archive",
+    "files": 411,
+    "bytes": 46479360,
+    "mode": "0600",
+    "nodeSHA256": "b8012b887e1b2281774e7318ad70f4a9debfb4d396eaeb3cd41e8e752ae1d80c",
+    "archiveSHA256": "39a5d0527c230c7ff8d3ffa76c298ec0951936292ea2e7ed079408a20c6937f5",
+    "perFileManifestSHA256": "e51bf86141e7cbaa1bfef653057574083603a7fd39a2983e25957b6bee4accb3",
+    "allStoredFilesVerified": true,
+    "retainedPrivately": true
+  },
+  "otherPreservedSetupFailure": {
+    "classification": "Initial native Mach-O esbuild launched through node; corrected launcher only before tests; not a product/fixture regression.",
+    "logSHA256": "c0e02133a217585c63b1348ac6fc6c343fd11da97c3a69a061b6db15c2f575bb"
+  },
+  "privateEvidenceSHA256": {
+    "originalSetupChecks": "22d75d9c03a4c90eee02a994926b86f3ce1a9ebe334a1315d130105ec7885b5a",
+    "originalSetupCleanup": "5c41c1f739b021c93e8f867401ab937e8a54eb1fbd7a732ee9b736e3a5669eae",
+    "correctedBeforeChecks": "94eb674d1cd66e8b11013a4d958249acc51f350739a5e6be660e0d5c3f64b994",
+    "correctedBeforeObservations": "24cda43383b8a4092cc8e01d2b84efb6bb9844138d18972820da2087d7e2c7d6",
+    "correctedBeforeCleanup": "be45727db8a737570902685a2e2a4ac9682fab521cb50b0e78ea8328d1f3ea67",
+    "finalChecks": "d9f609ec5605d327d3fa082510e510588f29f34d46878eb6e84053552bf9f7ba",
+    "finalObservations": "17119fab3a0e5a6c99c9328091db2e02ffac788dc87fa544c95f62bd32378c1a",
+    "finalCleanup": "b388c7819359b79684e8323931316fd22ee7fb999f380e998c43466e8a6676a3"
+  },
+  "notIncluded": "No credentials, private absolute paths, raw fixtures/logs/response bodies, database identities, native artifacts or build archive bytes."
+}

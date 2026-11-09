@@ -1,0 +1,9 @@
+# Singular/date template: independent evidence
+
+The historical certificate covers exact `2a06562b60fc67a22694b1ca42c1f2fb9f050c15`, Node `cbc6c171…`: independent builds and six files with **36 passes in each source/API-compiled guard**, no skips/failures. It is bounded template-priority acceptance; direct TypeScript helper/service imports remain source in both modes.
+
+Read [the final review](independent-review.md), [source audit](independent-source-audit.md), [compact checks](independent-checks.json), and [copy manifest](independent-manifest.json). Before lineage remains explicit: [original setup](independent-original-setup-review.md) stopped0/1 before public dispatch; [corrected genuine before](independent-corrected-before-review.md) measured1 pass/5 failures each, including four semantic children plus parent. The same corrected file then passes6/6, alongside30 existing controls.
+
+Matching-year pretty PAGE/POST, the supported Plain page_id acquisition alias and actual body-page2/counter variant keep their assigned custom template. Populated date/archive and retained404 controls stay intact. Native HTML includes bootstrap JSON; these reports do not certify visible browser pixels. Plain alias acquisition does not claim WordPress redirect equivalence. Date SQL/intersection, raw date flags, authored Query Title and other source quirks remain outside this package.
+
+Only temporary absolute log prefixes were reduced to basenames in report copies. Full private reports, original tests/failures and the411-file originalb801 build archive remain retained; their hashes are recorded. No credentials, private paths, raw fixtures/logs, database identities or archive bytes are published. This docs-only package does not change runtime, tests, CI or MAIN and does not claim release-CI or whole-CMS completion.
