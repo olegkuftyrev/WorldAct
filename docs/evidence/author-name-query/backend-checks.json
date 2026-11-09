@@ -1,0 +1,87 @@
+{
+  "status": "BACKEND_SHARED_AND_COMPOSITE_GATES_PASS",
+  "nativeCombinedAcceptance": "PENDING_SEPARATE_REVIEW",
+  "codeCandidate": "75e44f061f22fa19e850345c9976dbcfd9ab8196",
+  "codeTree": "71081d67bbc5d155c3c76cf930232b552c4f0ef6",
+  "nodeSha256": "e4521e807d51e57b619ff17018d653b144d2d2ea95a70025031a75d06c29be49",
+  "build": {
+    "typescript": "PASS",
+    "viteConfigLoaderRunner": "PASS",
+    "esbuild": "PASS"
+  },
+  "selectors": {
+    "sourceFiles": 217,
+    "sourceRestFiles": 214,
+    "sourceRestPass": 1253,
+    "sourceRestConditionalSkips": 12,
+    "separateFixedFiles": 3,
+    "separateFixedSourcePass": 36,
+    "sourceCompositePass": 1289,
+    "compiledCIFiles": 170,
+    "compiledRestFiles": 167,
+    "compiledRestPass": 1120,
+    "compiledRestConditionalSkips": 9,
+    "separateFixedCompiledPass": 36,
+    "compiledCompositePass": 1156,
+    "allFailures": 0,
+    "allCancellations": 0,
+    "monolithicFullSelectorClaim": false
+  },
+  "fresh": {
+    "stages": [
+      {
+        "phase": "export",
+        "mode": "source",
+        "run": "final-archive-export-source",
+        "sha256": "a0b251b7ee3edc14a3020e6ec6da17b914d9781d1760626f080b4edc70a08d33",
+        "sourceArchiveUnchanged": true
+      },
+      {
+        "phase": "restore",
+        "mode": "source",
+        "run": "final-archive-restore-source",
+        "sha256": "a0b251b7ee3edc14a3020e6ec6da17b914d9781d1760626f080b4edc70a08d33",
+        "sourceArchiveUnchanged": true
+      },
+      {
+        "phase": "restore",
+        "mode": "compiled",
+        "run": "final-archive-restore-compiled",
+        "sha256": "a0b251b7ee3edc14a3020e6ec6da17b914d9781d1760626f080b4edc70a08d33",
+        "sourceArchiveUnchanged": true
+      }
+    ],
+    "sha256": "a0b251b7ee3edc14a3020e6ec6da17b914d9781d1760626f080b4edc70a08d33",
+    "bytes": 1747976,
+    "sourceArtifactUnchangedAcrossBothRestores": true
+  },
+  "unseededInstall": {
+    "sourcePass": 7,
+    "sourceConditionalSkips": 1,
+    "compiledPass": 7,
+    "compiledConditionalSkips": 1
+  },
+  "immutablePromotedPairs": 11,
+  "ownedCleanup": {
+    "runReports": 40,
+    "journaledDatabases": 54,
+    "allAbsent": true,
+    "anchorAbsent": true,
+    "primaryPortsFree": {
+      "3046": true,
+      "3047": true,
+      "3048": true
+    },
+    "configurationRemoved": true,
+    "ownDependencyLinkRemoved": true,
+    "sharedDependencyOwnerIntact": true,
+    "successfulOwnArchivesRetainedUntilReleaseCI": 2
+  },
+  "scopeNotes": [
+    "Direct imported renderer/caller helper tests execute TypeScript in both runner modes; native/count/last-token HTTP probes target actual compiled Node APIs.",
+    "Existing first-page/numeric-only policies remain bounded; empty search uses WorldAct nonempty-trimmed rule, not source isset(s) parity.",
+    "Raw imports remap posts to destination actor and do not import accounts; no new schema, import/seed/status/order/feed policy.",
+    "Root coordinates independent/native/main release; this owner did not mutate MAIN or push."
+  ],
+  "created": "2026-11-09T11:41:29.908730+00:00"
+}
