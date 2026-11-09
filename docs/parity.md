@@ -174,7 +174,7 @@ Public `author_name` queries now use persisted nicenames, retain numeric interse
 
 ## Remaining work
 
-- Complete remaining public document parity, including further pagination404/canonical rules, further query compatibility, author feeds/numeric canonical redirects, and the remaining framework no-JavaScript workflows. Genuine BFCache restoration still needs a browser environment that admits it. The fixed 15-second policy now covers ordinary human comments and incoming pings; age/registration-aware Reply controls are also implemented.
+- Complete remaining public document parity, including further pagination404/canonical rules, further query compatibility, explicit Search-block query attributes, author feeds/numeric canonical redirects, and the remaining framework no-JavaScript workflows. Default source Search blocks intentionally perform a global site search; the [source decision](evidence/author-name-query/search-source-decision.md) distinguishes them from WorldAct's local filtered archive form. Genuine BFCache restoration still needs a browser environment that admits it. The fixed 15-second policy now covers ordinary human comments and incoming pings; age/registration-aware Reply controls are also implemented.
 - Finish exact legacy media presentation and broader source media-view adapters; extend additional variations and entity formats.
 - Complete remaining localization/accessibility/profile preferences and less-common capability combinations.
 - Implement further Node-compatible extension/package installation, updates/recovery and hooks, source-equivalent classic Customizer/widget workflows, explicit outgoing trackbacks and conditional legacy screens.
