@@ -81,6 +81,15 @@ returns 404.
 
 ## Backend and release gates
 
+The [backend report](backend-stage.md), [checks](backend-checks.json),
+[run receipts](backend-run-receipts.json) and [manifest](backend-manifest.json)
+retain the exact stages. Root read the report and final resource audit in full,
+verified all eight payload hashes and private-source correspondence, and rehashed
+all 58 private receipts/raw logs without changing their historical results.
+All 72 recorded disposable databases and their sessions are absent; owned test
+ports are free. The four ordinary archives, private configuration and dependency
+link remain retained pending exact release CI.
+
 The completed final full source gate at test-only dbdd covered 225 files with
 1315 passes and 13 conditional skips. With the separately serialized fixed-port
 suites, the source composite covers 228 files and 1351 passes, with 13 skips.
