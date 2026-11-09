@@ -1214,7 +1214,8 @@ async function renderNode(
       return `<div${attr()}>${esc(profile.bio || "")}</div>`;
     if (name === "core/post-author-name")
       return `<div${attr()}>${a.isLink && archiveURL ? `<a href="${esc(archiveURL)}"${a.linkTarget === "_blank" ? ' target="_blank" rel="noopener noreferrer"' : ""}>${personName}</a>` : personName}</div>`;
-    const linkedName=a.isLink && a.linkTarget && archiveURL?`<a href="${esc(archiveURL)}" target="${a.linkTarget==="_blank"?"_blank":"_self"}"${a.linkTarget==="_blank"?' rel="noopener noreferrer"':""}>${personName}</a>`:personName;
+    const linkTarget=typeof a.linkTarget==="string"?a.linkTarget:"_self";
+    const linkedName=a.isLink===true && linkTarget && archiveURL?`<a href="${esc(archiveURL)}" target="${linkTarget==="_blank"?"_blank":"_self"}"${linkTarget==="_blank"?' rel="noopener noreferrer"':""}>${personName}</a>`:personName;
     return `<div${attr()}>${a.byline ? `<p class="wp-block-post-author__byline">${esc(a.byline)}</p>` : ""}<div class="wp-block-post-author__content"><p class="wp-block-post-author__name">${linkedName}</p>${a.showBio ? `<p class="wp-block-post-author__bio">${esc(profile.bio || "")}</p>` : ""}</div></div>`;
   }
   return staticHTML(node, context, state);

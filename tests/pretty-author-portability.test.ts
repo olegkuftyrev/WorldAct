@@ -25,7 +25,7 @@ test("fresh imported author archives generate destination identity paths in reta
  if(source){
   await api("/api/settings","PUT",{permalinkStructure:sourceStructure,postsPerPage:1,theme:"twentytwentyfive",pingServices:[]});
   const ids:number[]=[];
-  for(const n of [1,2])ids.push((await api("/api/posts","POST",{title:"Pretty portable post "+n,status:"publish",authorId:person.id,content:'<p>PRETTY-PORTABLE-'+n+'</p><!-- wp:post-author-name {"isLink":true} /--><!-- wp:avatar {"isLink":true} /-->'})).data.post.id);
+  for(const n of [1,2])ids.push((await api("/api/posts","POST",{title:"Pretty portable post "+n,status:"publish",authorId:person.id,content:'<p>PRETTY-PORTABLE-'+n+'</p><!-- wp:post-author-name {"isLink":true} /--><!-- wp:avatar {"isLink":true} /--><!-- wp:post-author {"isLink":true} /-->'})).data.post.id);
   await api("/api/posts","POST",{title:"Pretty portable private",status:"private",authorId:person.id,content:"<p>PRETTY-PORTABLE-PRIVATE-SECRET</p>"});
   for(const theme of ["twentytwentyfive","classic"]){await api("/api/settings","PUT",{theme});for(const [slug,marker] of [["author-"+nicename,"SOURCE-NICENAME-TEMPLATE"],["author","IMPORTED-GENERAL-AUTHOR-TEMPLATE"]])await api("/api/site-editor/documents","POST",{type:"template",slug,title:slug,content:"<p>"+marker+"</p><!-- wp:query-title /--><!-- wp:query {\"query\":{\"inherit\":true}} --><!-- wp:post-template --><!-- wp:post-title /--><!-- wp:post-author-name {\"isLink\":true} /--><!-- /wp:post-template --><!-- /wp:query -->"});
   }await api("/api/settings","PUT",{theme:"twentytwentyfive"});
@@ -55,7 +55,7 @@ test("fresh imported author archives generate destination identity paths in reta
   for(const row of rows){
    const post=(await api("/api/posts/"+row.id)).data.post,response=await fetch(base+"/api/public/posts/"+post.slug),data=await response.json();
    assert.equal(response.status,200);assert.equal(data.post.authorId,person.id);const dom=new DOMParser().parseFromString(data.post.content,"text/html");
-   assert.equal(dom.querySelectorAll('a[href="'+canonical+'"]').length,2);assert.ok(!data.post.content.includes("/author/"+fixture.sourceNicename));
+   assert.equal(dom.querySelectorAll('a[href="'+canonical+'"]').length,3);assert.ok(!data.post.content.includes("/author/"+fixture.sourceNicename));
   }
   for(const theme of ["twentytwentyfive","classic"]){
    await api("/api/settings","PUT",{theme});
