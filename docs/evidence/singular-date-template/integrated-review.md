@@ -83,12 +83,17 @@ run was needed for this conditional change.
 
 ## Release and remaining scope
 
-Release still requires a fresh restore-verified backup of current MAIN, all39
-tables/every field and uploads preserved before restart, production build,
-read-only smoke and exact-head CI. No migration or reseed is part of the change.
-The new permanent regression is registered once:230 source files and183 compiled
-selector files, with the existing29 fresh phases unchanged. These inventories
-are prospective release checks rather than final remote pass counts.
+Released as `49caf8906acbe92ad2ace84818391b6e3f079d47` after a fresh
+restore-verified backup, preservation of all39 tables/every field and uploads,
+production build, restart and read-only smoke. No migration or reseed occurred.
+[Exact-head CI](https://github.com/olegkuftyrev/WorldAct/actions/runs/42640964478)
+passed both Node22 and Node24 jobs. Each actually completed230 source files
+(1363pass/13skip),183 compiled-selector files (1230pass/10skip), and the unseeded
+installation check (7pass/1skip), with no failures or cancellations. Node24 also
+completed all29 existing fresh-archive phases without failure, cancellation or
+skip. Both raw logs and parsed phase counters were independently retained and
+verified. The root integration's own dependency symlink was then removed; all
+failure evidence, original builds and verified backups remain retained.
 
 Raw date/query/archive metadata and authored Query Title eligibility remain
 separate continuations, as do broader mixed-query classification, SQL date
