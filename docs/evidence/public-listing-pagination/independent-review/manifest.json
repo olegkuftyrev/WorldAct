@@ -1,0 +1,77 @@
+{
+  "reviewedCommit": "c9cc2b13f5baba71cb88f9685c6937daa02f9310",
+  "reviewedNodeSHA256": "b8012b887e1b2281774e7318ad70f4a9debfb4d396eaeb3cd41e8e752ae1d80c",
+  "scope": "Bounded14files86source+86actualcompiled API; source direct imports. Frozen c9 observations retained unchanged; later first-line formatting adapters documented separately by root.",
+  "entries": [
+    {
+      "path": "README.md",
+      "source": "/tmp/worldact-core-CScUR8yM/public-listing-independent-final-review.md",
+      "bytes": 11531,
+      "sha256": "aee25187306da1d72643d7bf75cb0f2f9e7a7750854e6efd4f03b228ebc2a5d0",
+      "byteIdenticalOriginal": true
+    },
+    {
+      "path": "checks.json",
+      "source": "/tmp/worldact-core-CScUR8yM/public-listing-independent-final-checks.json",
+      "bytes": 9059,
+      "sha256": "b19931f71c193214f4c6b296e6310b76d7d1b7f5686bea06f0ddf206b8373005",
+      "byteIdenticalOriginal": true
+    },
+    {
+      "path": "cleanup.json",
+      "source": "/tmp/worldact-core-CScUR8yM/public-listing-independent-final-cleanup.json",
+      "bytes": 2074,
+      "sha256": "aa4f3f65b405eb9f5b7c5b6477c5e49bca77139fe63f59fd8a6b5e4edd5ab960",
+      "byteIdenticalOriginal": true
+    },
+    {
+      "path": "selector.json",
+      "source": "/tmp/worldact-core-CScUR8yM/public-listing-independent-final-selector.json",
+      "bytes": 1043,
+      "sha256": "6e3ddc80a0e68abb3ddb3f26bffa6a2197e701675793db2510e0fd3ab6fd6e55",
+      "byteIdenticalOriginal": true
+    },
+    {
+      "path": "fingerprints.json",
+      "source": "/tmp/worldact-core-CScUR8yM/public-listing-independent-final-fingerprints.json",
+      "bytes": 2926,
+      "sha256": "c6a30dc4ef0c6e88130d142c289e6090c628123216e9cb785ce3a0a33fe9f7ae",
+      "byteIdenticalOriginal": true
+    },
+    {
+      "path": "logs/typecheck.log.txt",
+      "source": "/tmp/worldact-public-listing-independent-final-typecheck.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "byteIdenticalOriginal": true
+    },
+    {
+      "path": "logs/vite.log.txt",
+      "source": "/tmp/worldact-public-listing-independent-final-vite.log",
+      "bytes": 2343,
+      "sha256": "cc149be1c2932bfdc84fd2b084e4c3f90d72db66287dc0dc10922c59dc9c2e2a",
+      "byteIdenticalOriginal": true
+    },
+    {
+      "path": "logs/nodebuild.log.txt",
+      "source": "/tmp/worldact-public-listing-independent-final-nodebuild.log",
+      "bytes": 56,
+      "sha256": "da89a8cf677c16fe0b6cf98ab7c882df3f5bfa0b47cce66e02698460d594bd5e",
+      "byteIdenticalOriginal": true
+    },
+    {
+      "path": "logs/final-source.log.txt",
+      "source": "/tmp/worldact-public-listing-independent-final-source.log",
+      "bytes": 11857,
+      "sha256": "12b4af6090d117ae15db445dde11e977e1e3954dc88a2df1a59b4a9e44819a08",
+      "byteIdenticalOriginal": true
+    },
+    {
+      "path": "logs/final-compiled.log.txt",
+      "source": "/tmp/worldact-public-listing-independent-final-compiled.log",
+      "bytes": 11850,
+      "sha256": "a8544e5787af3a408a15a992e6bd8088cbc7d5921eb12edf4cc2d0d499af76fd",
+      "byteIdenticalOriginal": true
+    }
+  ]
+}

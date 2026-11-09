@@ -1,0 +1,20 @@
+{
+  "commit": "c9cc2b13f5baba71cb88f9685c6937daa02f9310",
+  "files": [
+    "tests/public-listing-pretty-identity-original.test.ts",
+    "tests/public-listing-compat-identity-original.test.ts",
+    "tests/public-listing-independent-original.test.ts",
+    "tests/public-listing-independent-wait-original.test.ts",
+    "tests/public-listing-empty-name-original.test.ts",
+    "tests/public-listing-independent-after-boundaries-original.test.ts",
+    "tests/pretty-author-identity.test.ts",
+    "tests/pretty-author-identity-pinning.test.ts",
+    "tests/pretty-author-independent-boundaries.test.ts",
+    "tests/author-name-independent-identity.test.ts",
+    "tests/author-name-independent-count-grant.test.ts",
+    "tests/author-name-independent-semantics.test.ts",
+    "tests/public-http-status.test.ts",
+    "tests/plain-source-pagination.test.ts"
+  ],
+  "scope": "Bounded final independent affected identity/routing/privacy set, excludes fixed3 and whole/fresh suites. Supplied helper/service imports remain SOURCE in both API runner modes."
+}

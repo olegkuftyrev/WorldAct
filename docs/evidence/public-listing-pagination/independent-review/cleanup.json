@@ -1,0 +1,45 @@
+{
+  "commit": "c9cc2b13f5baba71cb88f9685c6937daa02f9310",
+  "finalGuardsExitedNormally": true,
+  "finalOwnedJournalDatabaseNamesAbsent": [
+    "worldact_test_1794228771076_64f898c0",
+    "worldact_test_1794228772237_410ebea3"
+  ],
+  "allOrdinaryStageJournalDatabaseNamesAbsent": [
+    "worldact_test_1794225956886_a437d13f",
+    "worldact_test_1794225956886_9098f21f",
+    "worldact_test_1794226108723_579756f0",
+    "worldact_test_1794226108724_56ca589c",
+    "worldact_test_1794227401336_5ab1afe3",
+    "worldact_test_1794227401336_3253ad80",
+    "worldact_test_1794227764822_2c1dba36",
+    "worldact_test_1794227764822_bfc28cb4",
+    "worldact_test_1794228294303_50622744",
+    "worldact_test_1794228295443_4d5bbff3",
+    "worldact_test_1794228380662_892968e3",
+    "worldact_test_1794228380662_0974696a",
+    "worldact_test_1794228771076_64f898c0",
+    "worldact_test_1794228772237_410ebea3"
+  ],
+  "allSixNeverCreatedAnchorsAbsent": [
+    "worldact_public_listing_independent_before_anchor",
+    "worldact_public_listing_compat_independent_before_anchor",
+    "worldact_public_listing_independent_after_anchor",
+    "worldact_public_listing_pretty_independent_before_anchor",
+    "worldact_public_listing_pretty_independent_control_anchor",
+    "worldact_public_listing_independent_final_anchor"
+  ],
+  "ports3068_3070Free": true,
+  "ownFinalMinimal600EnvRemoved": true,
+  "ownFinalReadonlyDependencyLinkRemoved": true,
+  "noUntrackedProbeCopiesCreatedInFinalCheckout": true,
+  "trackedSelectedFixturesUnchanged": true,
+  "checkoutClean": true,
+  "dependencyOwnerUnchangedMode755": true,
+  "successfulNamedAuthorArchiveRetained": {
+    "size": 1748899,
+    "sha256": "8b75dd2821dba4e595dab49020b8ad9b620e2557146e6759c65223d192682d77",
+    "awaitsExactReleaseCIGreenAndRootSpecificCleanupAuthorization": true
+  },
+  "preserved": "Every immutable original, original semantic failure and control log, independent builds, prior cleanup/review stages, nonproject TSC tooling-failure log, current named-author certificates/archive, MAIN/backups/uploads/dependency owners."
+}

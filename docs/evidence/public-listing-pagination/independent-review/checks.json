@@ -1,0 +1,180 @@
+{
+  "commit": "c9cc2b13f5baba71cb88f9685c6937daa02f9310",
+  "tree": "05d7338089c08211f1a170b7b58e0032e579e431",
+  "nodeSHA256": "b8012b887e1b2281774e7318ad70f4a9debfb4d396eaeb3cd41e8e752ae1d80c",
+  "independentBuilds": {
+    "projectTypeScript": true,
+    "viteConfigLoaderRunner": true,
+    "esbuild": true,
+    "logs": {
+      "typecheck": {
+        "path": "/tmp/worldact-public-listing-independent-final-typecheck.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "vite": {
+        "path": "/tmp/worldact-public-listing-independent-final-vite.log",
+        "sha256": "cc149be1c2932bfdc84fd2b084e4c3f90d72db66287dc0dc10922c59dc9c2e2a"
+      },
+      "nodebuild": {
+        "path": "/tmp/worldact-public-listing-independent-final-nodebuild.log",
+        "sha256": "da89a8cf677c16fe0b6cf98ab7c882df3f5bfa0b47cce66e02698460d594bd5e"
+      }
+    }
+  },
+  "selectorSHA256": "6e3ddc80a0e68abb3ddb3f26bffa6a2197e701675793db2510e0fd3ab6fd6e55",
+  "selector": [
+    "tests/public-listing-pretty-identity-original.test.ts",
+    "tests/public-listing-compat-identity-original.test.ts",
+    "tests/public-listing-independent-original.test.ts",
+    "tests/public-listing-independent-wait-original.test.ts",
+    "tests/public-listing-empty-name-original.test.ts",
+    "tests/public-listing-independent-after-boundaries-original.test.ts",
+    "tests/pretty-author-identity.test.ts",
+    "tests/pretty-author-identity-pinning.test.ts",
+    "tests/pretty-author-independent-boundaries.test.ts",
+    "tests/author-name-independent-identity.test.ts",
+    "tests/author-name-independent-count-grant.test.ts",
+    "tests/author-name-independent-semantics.test.ts",
+    "tests/public-http-status.test.ts",
+    "tests/plain-source-pagination.test.ts"
+  ],
+  "rootApprovedSelectorBeforeExecution": true,
+  "helperSHA256": "58f7a30938e7eafe9b02bdfd080963a25726af17f0e1d49606738f11798f404e",
+  "fingerprints": {
+    "expectedOriginals": {
+      "tests/public-listing-pretty-identity-original.test.ts": "3f0a383f2eed4e83332af577e40c66982aaf893fc3923a4bebc13b826747b4d8",
+      "tests/public-listing-compat-identity-original.test.ts": "1fa0ff15f6b379eb0bedc74d0102be189e3e9c9b846392eb1578422193c365cd",
+      "tests/public-listing-independent-original.test.ts": "a8ff40e31e6149d7bdb95187f05dfe5736cff52759ce7f3f4b7b1ef96c891c7b",
+      "tests/public-listing-independent-wait-original.test.ts": "5f26d94b29f5190d1c69c25243dbf0317fa28fc9d0db94cd90ce6a704895d7c5",
+      "tests/public-listing-empty-name-original.test.ts": "c06e0c59f0a0aaa9323ca18c7dec80f85a9d87080aef4b99b53674ce5c738bd6",
+      "tests/public-listing-independent-after-boundaries-original.test.ts": "9859d7c7a85d7af0aefd481afb76110ca5b5d4a428d25815be6c21fbf73a239e",
+      "tests/author-name-independent-count-grant.test.ts": "6643e7832a8272913a88bab1bac653a6cb674f25e25bd9c09139cfc65252f031",
+      "tests/author-name-independent-identity.test.ts": "4fa756c8f65279ce5de5e5aa4a8dafa64a530ed96718cc9bc79b0e1542114a21",
+      "tests/author-name-independent-semantics.test.ts": "2b8ecad7d4d54859b64a0dce25d454ebe538f1045a2ffb468d1bc2d38cd93aa1"
+    },
+    "files": {
+      "tests/public-listing-pretty-identity-original.test.ts": "3f0a383f2eed4e83332af577e40c66982aaf893fc3923a4bebc13b826747b4d8",
+      "tests/public-listing-compat-identity-original.test.ts": "1fa0ff15f6b379eb0bedc74d0102be189e3e9c9b846392eb1578422193c365cd",
+      "tests/public-listing-independent-original.test.ts": "a8ff40e31e6149d7bdb95187f05dfe5736cff52759ce7f3f4b7b1ef96c891c7b",
+      "tests/public-listing-independent-wait-original.test.ts": "5f26d94b29f5190d1c69c25243dbf0317fa28fc9d0db94cd90ce6a704895d7c5",
+      "tests/public-listing-empty-name-original.test.ts": "c06e0c59f0a0aaa9323ca18c7dec80f85a9d87080aef4b99b53674ce5c738bd6",
+      "tests/public-listing-independent-after-boundaries-original.test.ts": "9859d7c7a85d7af0aefd481afb76110ca5b5d4a428d25815be6c21fbf73a239e",
+      "tests/pretty-author-identity.test.ts": "7ea4177c256964e1c610dfa593818950dd96a6ce8bcea26235df388a748e1619",
+      "tests/pretty-author-identity-pinning.test.ts": "fe40b593bd1f5bab0f675c0ef92fd5c8ecec65ad3aaf14b95a4e8e6645da9d7f",
+      "tests/pretty-author-independent-boundaries.test.ts": "457378f1a1659e29a407b88fa3eb55da3aedb8c12f47ab50400a411f705e3aab",
+      "tests/author-name-independent-identity.test.ts": "4fa756c8f65279ce5de5e5aa4a8dafa64a530ed96718cc9bc79b0e1542114a21",
+      "tests/author-name-independent-count-grant.test.ts": "6643e7832a8272913a88bab1bac653a6cb674f25e25bd9c09139cfc65252f031",
+      "tests/author-name-independent-semantics.test.ts": "2b8ecad7d4d54859b64a0dce25d454ebe538f1045a2ffb468d1bc2d38cd93aa1",
+      "tests/public-http-status.test.ts": "88c45bdba42ff35241e75cd8ab09effbd6a6a08e3062f10fd280333153ba7634",
+      "tests/plain-source-pagination.test.ts": "45799bfcba76f728470cd5370cd27ca960f1862508522023d7ff308a6759e21c"
+    }
+  },
+  "runs": [
+    {
+      "commit": "c9cc2b13f5baba71cb88f9685c6937daa02f9310",
+      "label": "final-source",
+      "mode": "source",
+      "port": 3068,
+      "files": [
+        "tests/public-listing-pretty-identity-original.test.ts",
+        "tests/public-listing-compat-identity-original.test.ts",
+        "tests/public-listing-independent-original.test.ts",
+        "tests/public-listing-independent-wait-original.test.ts",
+        "tests/public-listing-empty-name-original.test.ts",
+        "tests/public-listing-independent-after-boundaries-original.test.ts",
+        "tests/pretty-author-identity.test.ts",
+        "tests/pretty-author-identity-pinning.test.ts",
+        "tests/pretty-author-independent-boundaries.test.ts",
+        "tests/author-name-independent-identity.test.ts",
+        "tests/author-name-independent-count-grant.test.ts",
+        "tests/author-name-independent-semantics.test.ts",
+        "tests/public-http-status.test.ts",
+        "tests/plain-source-pagination.test.ts"
+      ],
+      "exitCode": 0,
+      "complete": true,
+      "counts": {
+        "tests": 86,
+        "pass": 86,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0
+      },
+      "databases": [
+        "worldact_test_1794228771076_64f898c0"
+      ],
+      "remainingDatabases": [],
+      "log": "/tmp/worldact-public-listing-independent-final-source.log",
+      "logSHA256": "12b4af6090d117ae15db445dde11e977e1e3954dc88a2df1a59b4a9e44819a08"
+    },
+    {
+      "commit": "c9cc2b13f5baba71cb88f9685c6937daa02f9310",
+      "label": "final-compiled",
+      "mode": "compiled",
+      "port": 3069,
+      "files": [
+        "tests/public-listing-pretty-identity-original.test.ts",
+        "tests/public-listing-compat-identity-original.test.ts",
+        "tests/public-listing-independent-original.test.ts",
+        "tests/public-listing-independent-wait-original.test.ts",
+        "tests/public-listing-empty-name-original.test.ts",
+        "tests/public-listing-independent-after-boundaries-original.test.ts",
+        "tests/pretty-author-identity.test.ts",
+        "tests/pretty-author-identity-pinning.test.ts",
+        "tests/pretty-author-independent-boundaries.test.ts",
+        "tests/author-name-independent-identity.test.ts",
+        "tests/author-name-independent-count-grant.test.ts",
+        "tests/author-name-independent-semantics.test.ts",
+        "tests/public-http-status.test.ts",
+        "tests/plain-source-pagination.test.ts"
+      ],
+      "exitCode": 0,
+      "complete": true,
+      "counts": {
+        "tests": 86,
+        "pass": 86,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0
+      },
+      "databases": [
+        "worldact_test_1794228772237_410ebea3"
+      ],
+      "remainingDatabases": [],
+      "log": "/tmp/worldact-public-listing-independent-final-compiled.log",
+      "logSHA256": "a8544e5787af3a408a15a992e6bd8088cbc7d5921eb12edf4cc2d0d499af76fd"
+    }
+  ],
+  "sourceAudit": {
+    "productionChangesVersus75Only": [
+      "server/blocks.ts",
+      "server/compat.ts",
+      "server/public-documents.ts",
+      "server/public-listing-page.ts",
+      "server/public-read.ts"
+    ],
+    "sharedSourceUIStylesPackageScriptsUnchanged": true,
+    "requiredExplicitCountClient": true,
+    "firstSelectedPostAndPrettyAuthorIdentitiesRetained": true,
+    "noNewQueriesAfterFinalPostTokenStatement": true,
+    "prettyUnfilteredCountAndCurrentFirstPagePoliciesPreserved": true
+  },
+  "scope": {
+    "independentAffectedFiles": 14,
+    "sourceAPI": {
+      "pass": 86,
+      "fail": 0,
+      "skip": 0
+    },
+    "actualCompiledAPI": {
+      "pass": 86,
+      "fail": 0,
+      "skip": 0
+    },
+    "directHelperServiceImports": "SOURCE in both API modes; not compiled-service certification",
+    "ownerFreshFixture": "Full source audit only; no independent duplicate export/restore or whole selector requested",
+    "fixedPort3062": "Never used; excludes all three incoming-ping-flood files",
+    "wholeSuiteAndNativeAcceptance": "Separate owner/root/native stages; not claimed by this independent certificate"
+  },
+  "cleanup": "public-listing-independent-final-cleanup.json"
+}

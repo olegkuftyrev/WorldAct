@@ -1,0 +1,214 @@
+WorldAct database migrated.
+WorldAct seeded. Sign in with username admin or your administrator email.
+Running against a disposable local database and upload directory; outgoing mail uses the local outbox.
+▶ ordinary preflight retains the first validated pretty author for direct site and template requests
+  ✔ site keeps A through the same measured projection wait (48.491958ms)
+  ✔ site does not rebind to later public B after validated pretty A (39.538208ms)
+  ✔ template keeps A through the same measured projection wait (37.395333ms)
+  ✔ template does not rebind to later public B after validated pretty A (43.256875ms)
+✔ ordinary preflight retains the first validated pretty author for direct site and template requests (506.494458ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 5
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 734.749916
+▶ ordinary resolve preflight cannot replace its selected canonical body with a later slug owner
+  ✔ unchanged canonical body2 survives the same actual preflight wait (34.320584ms)
+  ✔ held preflight retains its first body ID after a canonical slug replacement (36.339084ms)
+✔ ordinary resolve preflight cannot replace its selected canonical body with a later slug owner (300.974083ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 3
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 540.547625
+▶ ordinary main-page status uses the full public predicate and retains Plain/body/missing identities
+  ✔ excerpt-only complete intersection has a genuine valid second main page (143.00825ms)
+  ✔ third page is missing after date/category/numeric/excerpt and anonymous-password filtering (76.781458ms)
+  ✔ anonymous protected/private-only search keeps its existing empty first page (68.817584ms)
+  ✔ anonymous protected/private-only search cannot make a second main page (68.823125ms)
+  ✔ resolved Plain configured posts-page counts its listing rather than its public page body (75.260083ms)
+  ✔ Plain configured posts-page query-N and comment counters alone do not choose main status (72.399375ms)
+  ✔ ordinary Plain body and selected static-front body page stay outside the main listing rule (135.973125ms)
+  ✔ known missing path keeps inherited main loop empty while its explicit custom public loop remains valid (37.290583ms)
+  ✔ already-known404 malformed page bounds keep the established missing-path pipeline (33.612583ms)
+✔ ordinary main-page status uses the full public predicate and retains Plain/body/missing identities (1104.25525ms)
+ℹ tests 10
+ℹ suites 0
+ℹ pass 10
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1456.873125
+✔ an ordinary main-page retry reclassifies after its rendered last row becomes private (422.880625ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 1
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 670.096292
+▶ empty visible name retains direct-site normalization and search aliases
+  ✔ explicit empty-name alias remains filtered (95.338167ms)
+  ✔ visible path-only alias remains filtered (43.109041ms)
+✔ empty visible name retains direct-site normalization and search aliases (308.795333ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 3
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 561.283541
+▶ ordinary direct site and supplied helper clients retain path, body and transaction boundaries
+  ✔ actual direct site path-only values preserve complete excerpt/date/taxonomy/numeric intersection (44.693584ms)
+  ✔ direct ordinary scalar transport cannot contradict or flatten the visible page (18.428625ms)
+  ✔ direct site skips Plain/static-front body counters but counts the configured Plain posts-page (40.034541ms)
+  ✔ supplied writable helper client counts its uncommitted rows instead of the global pool (17.082ms)
+  ✔ supplied read-only repeatable helper snapshot keeps its historical valid page after outside privatization (6.701333ms)
+✔ ordinary direct site and supplied helper clients retain path, body and transaction boundaries (474.506292ms)
+ℹ tests 6
+ℹ suites 0
+ℹ pass 6
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 735.351875
+▶ an empty pretty author cannot retire or switch identity during a later actual site projection wait
+  ✔ document response keeps one current author identity or bounded rejection after retirement (101.283416ms)
+  ✔ native response keeps one current author identity or bounded rejection after retirement (61.577875ms)
+✔ an empty pretty author cannot retire or switch identity during a later actual site projection wait (407.740542ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 3
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 756.520917
+▶ one pending author archive must retain its first resolved identity across complete-read retries
+  ✔ document response rejects retirement instead of substituting a new account on retry (94.275ms)
+  ✔ native response rejects retirement instead of substituting a new account on retry (58.536667ms)
+✔ one pending author archive must retain its first resolved identity across complete-read retries (397.53625ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 3
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 756.494584
+▶ independent author identity boundaries include direct endpoints, caller snapshots and numeric slugs
+  ✔ numeric nicename selects its actual account under a static front page (165.699875ms)
+  ✔ direct site rejects retirement without substituting a same-slug replacement (44.408958ms)
+  ✔ direct template rejects retirement without substituting a same-slug replacement (28.054417ms)
+  ✔ ordinary supplied client rejects a real non-key user row lock promptly (7.273916ms)
+  ✔ supplied read-only repeatable snapshot retains its original account after an actual lookup wait (24.765875ms)
+✔ independent author identity boundaries include direct endpoints, caller snapshots and numeric slugs (656.613333ms)
+ℹ tests 6
+ℹ suites 0
+ℹ pass 6
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 908.177333
+▶ named author identity survives later empty-list and supplied-renderer boundaries
+  ✔ actual HTTP site retires a known empty author during a later projection (65.169875ms)
+  ✔ actual HTTP template retires a known empty author during a later projection (30.00225ms)
+  ✔ supplied client document checks the server-selected empty account after actual rendering wait (54.440917ms)
+  ✔ supplied client content checks the server-selected empty account after actual rendering wait (48.1585ms)
+  ✔ supplied client readonly checks the server-selected empty account after actual rendering wait (28.440417ms)
+✔ named author identity survives later empty-list and supplied-renderer boundaries (431.64575ms)
+ℹ tests 6
+ℹ suites 0
+ℹ pass 6
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 939.400292
+▶ named counts and final author expressions retain identity and the last current password decision
+  ✔ metadata-only count rejects retirement of an empty selected account after its actual count wait (32.529125ms)
+  ✔ actual final-author expression finishes before the last unchanged password decision (115.987625ms)
+  ✔ actual final-author expression finishes before the last revoked password decision (105.563ms)
+✔ named counts and final author expressions retain identity and the last current password decision (487.40925ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 734.0555
+▶ independent named queries select actual users without replacing numeric, path or custom-loop identities
+  ✔ named-only main document selects persisted slug and actual author template (52.357792ms)
+  ✔ direct site selects the name rather than the unfiltered home list (20.547917ms)
+  ✔ metadata resolver resolves a named archive without a body/DTO extension assertion (4.121417ms)
+  ✔ actual native GET independently applies name filter to embedded main model (55.783875ms)
+  ✔ actual native HEAD independently rejects an unknown named archive (26.848208ms)
+  ✔ unknown and normalized-empty names are not absent selection (66.999041ms)
+  ✔ exactly empty author_name retains ordinary absent-name behavior (88.03425ms)
+  ✔ empty and private-only named accounts have empty safe first pages (46.454ms)
+  ✔ empty named account second page is404 in model and native HEAD (47.262792ms)
+  ✔ numeric/name mismatch intersects to empty while selecting the named presentation (51.640667ms)
+  ✔ unknown-name nonempty search is safe-empty, not a fallback to search hits (84.827958ms)
+  ✔ unknown-name empty/whitespace search does not create a safe-empty exception (91.095083ms)
+  ✔ inherited loop preserves numeric/name intersection rather than presenting numeric user's rows (11.102709ms)
+  ✔ inherited block author override cannot erase the selected named predicate (9.644ms)
+  ✔ independent custom loop retains explicit public author on safe-empty named listing (9.779042ms)
+  ✔ the same public request never emits private/password/account profile fields (82.078959ms)
+  ✔ query scalar duplicates arrays nested names and malformed values remain bounded400 (5.319333ms)
+  ✔ source final component and ASCII query aliases resolve the stored account (112.825208ms)
+  ✔ taxonomy/date paths retain archive identity while named input narrows main rows (71.784167ms)
+  ✔ pretty selected author cannot be replaced by a different nonempty name (30.468709ms)
+  ✔ fixed Plain/legacy singular and framework identities retain existing priority (116.797916ms)
+  ✔ static front does not absorb named archive; selected posts page retains its identity (105.929959ms)
+✔ independent named queries select actual users without replacing numeric, path or custom-loop identities (1489.410459ms)
+ℹ tests 23
+ℹ suites 0
+ℹ pass 23
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1843.038375
+▶ Node renders real public documents with actual identity status and preserves other HTTP handlers
+  ✔ empty ordinary first pages stay valid and empty later main pages return404 (258.208875ms)
+  ✔ HTML bootstraps remain private across anonymous, session and password contexts without changing authentication (614.979958ms)
+  ✔ all source presets, hierarchical pages, aliases, fixed IDs and clamped body pages keep public identity (2244.619042ms)
+  ✔ selected static-front body paging requires the same actual public identity (574.857875ms)
+  ✔ accepted category canonicals with more than 64 ancestors remain public within the URL bound (562.227417ms)
+  ✔ missing, unpublished, wrong-type and malformed fixed identities return 404 HTML (854.084ms)
+  ✔ taxonomy and date archives share actual existence and local dates with the API resolver (549.774334ms)
+  ✔ production headers describe singular open unprotected records, never home queries or archives (1666.8295ms)
+  ✔ framework destinations, legacy redirects, JSON APIs, feeds and files retain their real handlers (63.804459ms)
+  ✔ malformed and oversized URLs have bounded errors and database failures stay generic 500s (57.967625ms)
+✔ Node renders real public documents with actual identity status and preserves other HTTP handlers (7715.168709ms)
+✔ missing index errors are separate from document classification on the actual Node server (650.261083ms)
+ℹ tests 12
+ℹ suites 0
+ℹ pass 12
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 8764.607
+✔ source singular body, comments and inherited Query Loops keep independent pages and visible Plain identity through real HTTP (395.596291ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 1
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 774.165042
+Isolated regression complete: 14 test files passed.
