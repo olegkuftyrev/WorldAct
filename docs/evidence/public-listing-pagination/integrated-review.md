@@ -119,11 +119,30 @@ unseeded installer. Node 24 completed all 26 fresh phases. Its earlier
 the specifically authorized old successful archives/configuration were removed
 after that green certificate; all original failures and backups remain.
 
-Pagination release requires a new verified restore of current MAIN data and
+At this pre-release checkpoint, pagination required a new verified restore of current MAIN data and
 uploads, all-table/all-field preservation, production build, read-only smoke
 checks and exact final-head CI on both supported Node jobs. No migration or
 reseed belongs to this package. Ordinary successful archives and root config
 remain retained until that new CI succeeds.
+
+### Completed pagination release
+
+Release `5ab358d4c05b1d8fbe7ca25602dfa2385e0dd73a` subsequently passed
+[exact-head CI run 42625478925](https://github.com/olegkuftyrev/WorldAct/actions/runs/42625478925).
+Both Node 22/24 jobs and the overall run succeeded. Each job completed the actual
+228-file source selector with 1351 passes/13 skips and the 181-file compiled
+selector with 1218 passes/ten skips, plus installation with seven passes/one
+conditional skip. Node 24 completed all 29 fresh-archive phases without failures
+or skips; Node 22 did not run those conditional phases. These are final remote
+selector results, separate from the earlier local composite certificates.
+
+Before updating MAIN, a fresh dump was restored and all 39 tables, every existing
+field and uploads were verified against the current site. Preservation was
+recorded before restarting the application. Production build and read-only
+HTML/HEAD/model smoke checks passed. No migration or reseed ran. After exact CI
+success, only owned temporary configuration/dependency links and the two
+successful ordinary export files were removed. The original failed export,
+conditional before/after export, backups and failure evidence remain retained.
 
 Default source Search remains global. Explicit Search `attributes.query`,
 additional canonical/feed rules, `paged` aliases, genuine BFCache restoration,
