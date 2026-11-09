@@ -1057,24 +1057,25 @@ function RenderedTemplate({
   preview?: boolean;
 }) {
   const location = useLocation(), root = useRef<HTMLDivElement>(null);
-  const [content, setContent] = useState<string | null>(null),
+  const [response, setResponse] = useState<{ request: string; content: string } | null>(null),
     [error, setError] = useState("");
   const requestQuery = new URLSearchParams(location.search);
   for (const [key, value] of new URLSearchParams(query))
     requestQuery.set(key, value);
   requestQuery.set("requestPath", location.pathname + location.search);
+  if (preview) requestQuery.set("preview", "true");
   if (postId) requestQuery.set("postId", String(postId));
   if (document.type === "template-part")
     requestQuery.set("type", "template-part");
   const request = `/public/templates/${encodeURIComponent(document.slug)}?${requestQuery}`;
+  const content = response?.request === request ? response.content : null;
   useEffect(() => {
     let active = true;
     setError("");
-    setContent(null);
-    if (preview) return;
+    setResponse(null);
     api<{ content: string }>(request)
       .then((result) => {
-        if (active) setContent(result.content);
+        if (active) setResponse({ request, content: result.content });
       })
       .catch((reason) => {
         if (active) setError(errorText(reason));
@@ -1087,14 +1088,6 @@ function RenderedTemplate({
     const archive = enhanceArchives(root.current), interactive = enhanceInteractiveBlocks(root.current), navigation=enhanceNavigationOverlays(root.current), fragment=scrollToMoreFragment(root.current), playlist=enhancePlaylists(root.current);
     return () => { archive?.(); interactive(); navigation(); fragment(); playlist(); };
   }, [content, fallback, preview]);
-  if (preview)
-    return (
-      <div
-        ref={root}
-        className={className}
-        dangerouslySetInnerHTML={{ __html: fallback }}
-      />
-    );
   if (error)
     return (
       <p className="public-comment-notice" role="alert">
