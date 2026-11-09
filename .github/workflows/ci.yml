@@ -133,6 +133,7 @@ jobs:
           tests/publication-status-original.test.ts tests/publication-status-null-gmt-original.test.ts
           tests/publication-status.test.ts tests/publication-status-bulk-gap.test.ts tests/publication-status-waits.test.ts tests/publication-status-portability.test.ts
           tests/editor-publication-status.test.ts tests/editor-publication-provenance.test.ts
+          tests/editor-document-snapshot.test.ts
           tests/fresh-defaults.test.ts tests/admin-tools.test.ts
           tests/shortcodes.test.ts
       - name: Fresh browser installation on the compiled server
