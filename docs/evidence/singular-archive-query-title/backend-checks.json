@@ -1,0 +1,1037 @@
+{
+  "status": "SCOPED_SELECTED_SINGULAR_ARCHIVE_QUERY_TITLE_PASS",
+  "created": "2026-11-09T15:41:14.458503+00:00",
+  "base": "49caf8906acbe92ad2ace84818391b6e3f079d47",
+  "runtimeFreeze": "eba54f98188fe6752ad37380bd6e4cb7b18b82bc",
+  "finalTestOnlyHead": "6ef21775a022a219f312cffcdf9998c253d24b4a",
+  "tree": "7b9381576e97f98086bc451f89bacf81503671c2",
+  "nodeSHA256": "300199e4aebe00b526fee49af14904d50cacd20333b07c99c2ded6ba3ddf7070",
+  "runtimeDiff": {
+    "files": [
+      {
+        "file": "server/block-renderer.ts",
+        "sha256": "0a2c274c816530af51f6631eb3545db8a0ab6e5b0b298f8fc02585278203f4ea"
+      },
+      {
+        "file": "server/public-document-data.ts",
+        "sha256": "88d26991bb4f33a73df883fc08d9bbf91beb3a05275840d01022861cd1add25f"
+      },
+      {
+        "file": "server/blocks.ts",
+        "sha256": "9dfbf2e437530c36a6c79fc15b10794e7929eebe937712e24a3d2f5ab6d334f2"
+      },
+      {
+        "file": "server/public-read.ts",
+        "sha256": "639bed7991582774a4bf7bd21031c24809f5df66ea401a8a103b0f4ea2c4248f"
+      },
+      {
+        "file": "server/compat.ts",
+        "sha256": "2b2893b09c111b56f811095ff33e12f61c0a090821201f1efcdda43510e561a6"
+      }
+    ],
+    "added": 12,
+    "removed": 5,
+    "sha256": "02d9a4b55ed8a65c62630fdbfdc52c58fc6fb89fc31df22d2e135dd21176c447",
+    "noAdditionalSQLAwaitOrPolicyFence": true
+  },
+  "build": {
+    "status": "BUILD_ONLY_PASS_NO_ENV_DATABASE_OR_TESTS",
+    "time": "2026-11-09T15:26:53.222986+00:00",
+    "candidate": "eba54f98188fe6752ad37380bd6e4cb7b18b82bc",
+    "tree": "84c3c6f16810d9b865c7e1c8c375c4b42434cafb",
+    "nodeSHA256": "300199e4aebe00b526fee49af14904d50cacd20333b07c99c2ded6ba3ddf7070",
+    "typescript": {
+      "exitCode": 0,
+      "command": "node node_modules/typescript/bin/tsc --noEmit"
+    },
+    "vite": {
+      "exitCode": 0,
+      "command": "node node_modules/vite/bin/vite.js build --configLoader runner"
+    },
+    "esbuild": {
+      "exitCode": 0,
+      "command": "native @esbuild/darwin-arm64/bin/esbuild server/index.ts --bundle --platform=node --format=esm --packages=external --outfile=dist-server/index.js"
+    },
+    "logs": {
+      "typecheck": {
+        "privateLogBasename": "worldact-singular-archive-query-title-typecheck.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "mode": "0o600",
+        "bytes": 0
+      },
+      "vite": {
+        "privateLogBasename": "worldact-singular-archive-query-title-vite.log",
+        "sha256": "8862c8fee5a2d77d85ad2216b8821d44c6403401bab4672ae1179aabd44c15fa",
+        "mode": "0o600",
+        "bytes": 2342
+      },
+      "nodebuild": {
+        "privateLogBasename": "worldact-singular-archive-query-title-nodebuild.log",
+        "sha256": "0807025821bd9cc8ee69311ab45199a44f63d297a176082aebcf436d5e5c5080",
+        "mode": "0o600",
+        "bytes": 56
+      }
+    },
+    "frozenCorrectedTestSHA256": "fa7f74eaab2edf81507422dc96015f823ee5a1de41e2a2f4bc9d902385966724",
+    "sevenExistingFingerprintsMatch": true,
+    "noEnvironmentDatabaseServicesOrTestsCreated": true,
+    "noSourceEditsDuringBuild": true
+  },
+  "updatedTestOnlyTSC": {
+    "exitCode": 0,
+    "log": "worldact-singular-archive-query-title-final-typecheck.log",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "frozenSelector": {
+    "file": "singular-archive-query-title-independent-companion-selector.json",
+    "sha256": "929f6dcb5bb5f76999289305694e1ab216846f6f9d13b002d04f89e559a7e2b1",
+    "files": [
+      {
+        "file": "tests/singular-archive-query-title-before.test.ts",
+        "sha256": "fa7f74eaab2edf81507422dc96015f823ee5a1de41e2a2f4bc9d902385966724",
+        "expectedCount": 6,
+        "executionScope": "Actual HTTP GET/HEAD/document/template/body; public native HTML parsed without a browser; unchanged corrected fa7 fixture."
+      },
+      {
+        "file": "tests/singular-archive-query-title-posts-page.test.ts",
+        "sha256": "454a4bdce36dcf096e53fb670cde36a18220d05474505dd61a3dc492bf008820",
+        "expectedCount": 4,
+        "executionScope": "Actual HTTP only;5 GET/HEAD API pairs + public GET/HEAD/model triple =13 consumed responses; no imported renderer/service."
+      },
+      {
+        "file": "tests/blocks.test.ts",
+        "sha256": "fa0fb26d5a57b93232b4d9b481eebaa729ce5e0e76c951db6239c85152a93fd3",
+        "expectedCount": 9,
+        "executionScope": "SOURCE renderer, real supplied PostgreSQL client and HTTP block-entity REST in one file; compiled API mode does not compile renderer imports."
+      },
+      {
+        "file": "tests/date-archives.test.ts",
+        "sha256": "a79de3f453d0122ec702747614ec17409407eea47e6de859448768df30758958",
+        "expectedCount": 4,
+        "executionScope": "MIXED pure/source calendar/date SQL and SOURCE renderer plus actual HTTP public date/site/settings/resolve APIs."
+      },
+      {
+        "file": "tests/public-document-data.test.ts",
+        "sha256": "dee95240a579ec16327b0ca10f1497cbf2deae37dfd218113a08675cfa0454b1",
+        "expectedCount": 7,
+        "executionScope": "MIXED direct SOURCE document/context/identity/body/template helpers plus real HTTP and protected grant/body APIs."
+      },
+      {
+        "file": "tests/plain-source-pagination.test.ts",
+        "sha256": "45799bfcba76f728470cd5370cd27ca960f1862508522023d7ff308a6759e21c",
+        "expectedCount": 1,
+        "executionScope": "Actual HTTP template/body/comments/QueryLoop controls; SOURCE pool fixture SQL only."
+      },
+      {
+        "file": "tests/front-page-availability.test.ts",
+        "sha256": "fa255c13b7bb6c98e4d805b965b727030b7db78cda9e4ccd4ed498fa9030b7e1",
+        "expectedCount": 6,
+        "executionScope": "MIXED actual HTTP settings/site/resolve/post/unlock and imported SOURCE front-page adapter helper."
+      },
+      {
+        "file": "tests/author-name-independent-count-grant.test.ts",
+        "sha256": "6643e7832a8272913a88bab1bac653a6cb674f25e25bd9c09139cfc65252f031",
+        "expectedCount": 4,
+        "executionScope": "Actual HTTP count retirement and final-author/password fence waits; SOURCE pool fixtures/markers only."
+      },
+      {
+        "file": "tests/singular-date-template-priority-original.test.ts",
+        "sha256": "f15f083451c0890f9ecd1c77f2a6c0826ff1ee02847e8cbd5507eb0f9757cb07",
+        "expectedCount": 6,
+        "executionScope": "Actual HTTP GET/HEAD/model selected-template/body/Plain/date/404 controls only; no direct service renderer calls."
+      }
+    ],
+    "actualPerFileCountsEachMode": [
+      6,
+      4,
+      9,
+      4,
+      7,
+      1,
+      6,
+      4,
+      6
+    ],
+    "expectedCountNowMeasured": true
+  },
+  "externalBefore": {
+    "rootAudit": {
+      "file": "root-singular-archive-query-title-before-audit.json",
+      "sha256": "d0378375de25779b2a5cd4064b732ddfe9f509d2a4e26d9330cc48fedaac4100"
+    },
+    "nativeChecks": {
+      "file": "singular-archive-query-title-before-corrected-checks.json",
+      "sha256": "156459460eb84d4c4010a5ccbdcb0f937ebfd4a606f178e12a8ab2f9538003e6"
+    },
+    "original892": {
+      "sha256": "892f3ef929c6a0d80f59e7c87fefdfa719807d40d1c758cb717975f68adb6f30",
+      "classification": "FIXTURE_INVALID missing literal saved Group IDs; not a product BEFORE",
+      "source": {
+        "tests": 6,
+        "pass": 0,
+        "fail": 6,
+        "observationalReads": 23
+      },
+      "compiledExecuted": false
+    },
+    "correctedFa7": {
+      "commit": "f5aa855e88fea0aaee37ccd0fff4e82e4ddc9789",
+      "sha256": "fa7f74eaab2edf81507422dc96015f823ee5a1de41e2a2f4bc9d902385966724",
+      "adapter": "Only two literal saved-HTML container IDs aligned to already serialized anchors; assertions and other bytes unchanged",
+      "baselineRuntime": "2a06562b60fc67a22694b1ca42c1f2fb9f050c15",
+      "baselineNodeSHA256": "cbc6c17115bcc4d2529aa296460a0c460b200ea7a11033314f99bb756aec4cb7",
+      "eachMode": {
+        "tests": 6,
+        "pass": 1,
+        "fail": 5,
+        "cancelled": 0,
+        "skipped": 0,
+        "actualResponses": 23,
+        "passingArchivePositiveChildren": 1,
+        "failingSingularChildren": 4,
+        "failingParent": 1
+      },
+      "rows": [
+        {
+          "mode": "source",
+          "counts": {
+            "tests": 6,
+            "pass": 1,
+            "fail": 5,
+            "cancelled": 0,
+            "skipped": 0
+          },
+          "responses": 23,
+          "rawSHA256": "ff64246a40a7cf8f83ca0c5f5e579f163880874d40c3bb80881474e52afd57d7",
+          "proofSHA256": "015c4dbfa33ed8e9c84dbf609fe67e59bf4d5bd86c3226f85b9ccb6314e94373"
+        },
+        {
+          "mode": "compiled",
+          "counts": {
+            "tests": 6,
+            "pass": 1,
+            "fail": 5,
+            "cancelled": 0,
+            "skipped": 0
+          },
+          "responses": 23,
+          "rawSHA256": "801556e45759459eca242bc36ae6e13729f88c06f142a8297ceb87e651ed0fe9",
+          "proofSHA256": "15f10e2eca55d9172387da3505540197cc000c5d1aa6b309e6f03090115648cd"
+        }
+      ]
+    }
+  },
+  "runs": [
+    {
+      "mode": "source",
+      "port": 3046,
+      "candidate": "6ef21775a022a219f312cffcdf9998c253d24b4a",
+      "tree": "7b9381576e97f98086bc451f89bacf81503671c2",
+      "runtimeFreeze": "eba54f98188fe6752ad37380bd6e4cb7b18b82bc",
+      "nodeSha256": "300199e4aebe00b526fee49af14904d50cacd20333b07c99c2ded6ba3ddf7070",
+      "files": [
+        "tests/singular-archive-query-title-before.test.ts",
+        "tests/singular-archive-query-title-posts-page.test.ts",
+        "tests/blocks.test.ts",
+        "tests/date-archives.test.ts",
+        "tests/public-document-data.test.ts",
+        "tests/plain-source-pagination.test.ts",
+        "tests/front-page-availability.test.ts",
+        "tests/author-name-independent-count-grant.test.ts",
+        "tests/singular-date-template-priority-original.test.ts"
+      ],
+      "selectorSha256": "929f6dcb5bb5f76999289305694e1ab216846f6f9d13b002d04f89e559a7e2b1",
+      "log": "<private-log-root>/singular-archive-query-title-final-source.log",
+      "anchor": "worldact_singular_archive_title_backend_anchor",
+      "URLApplicationNamePresent": false,
+      "applicationName": "worldact_singular_archive_title_backend_source",
+      "databases": [
+        "worldact_test_1794238646858_00e84299"
+      ],
+      "observedDatabaseSessionGroups": [
+        {
+          "datname": "worldact_test_1794238646858_00e84299",
+          "pid": 750965
+        },
+        {
+          "datname": "worldact_test_1794238646858_00e84299",
+          "pid": 750973
+        },
+        {
+          "datname": "worldact_test_1794238646858_00e84299",
+          "pid": 750974
+        },
+        {
+          "datname": "worldact_test_1794238646858_00e84299",
+          "pid": 750975
+        },
+        {
+          "datname": "worldact_test_1794238646858_00e84299",
+          "pid": 750976
+        },
+        {
+          "datname": "worldact_test_1794238646858_00e84299",
+          "pid": 750977
+        },
+        {
+          "datname": "worldact_test_1794238646858_00e84299",
+          "pid": 750985
+        },
+        {
+          "datname": "worldact_test_1794238646858_00e84299",
+          "pid": 750986
+        },
+        {
+          "datname": "worldact_test_1794238646858_00e84299",
+          "pid": 750987
+        },
+        {
+          "datname": "worldact_test_1794238646858_00e84299",
+          "pid": 750988
+        },
+        {
+          "datname": "worldact_test_1794238646858_00e84299",
+          "pid": 750989
+        },
+        {
+          "datname": "worldact_test_1794238646858_00e84299",
+          "pid": 750990
+        },
+        {
+          "datname": "worldact_test_1794238646858_00e84299",
+          "pid": 750991
+        },
+        {
+          "datname": "worldact_test_1794238646858_00e84299",
+          "pid": 750992
+        },
+        {
+          "datname": "worldact_test_1794238646858_00e84299",
+          "pid": 750993
+        },
+        {
+          "datname": "worldact_test_1794238646858_00e84299",
+          "pid": 750994
+        },
+        {
+          "datname": "worldact_test_1794238646858_00e84299",
+          "pid": 750995
+        },
+        {
+          "datname": "worldact_test_1794238646858_00e84299",
+          "pid": 751003
+        },
+        {
+          "datname": "worldact_test_1794238646858_00e84299",
+          "pid": 751004
+        },
+        {
+          "datname": "worldact_test_1794238646858_00e84299",
+          "pid": 751005
+        },
+        {
+          "datname": "worldact_test_1794238646858_00e84299",
+          "pid": 751006
+        },
+        {
+          "datname": "worldact_test_1794238646858_00e84299",
+          "pid": 751007
+        },
+        {
+          "datname": "worldact_test_1794238646858_00e84299",
+          "pid": 751008
+        },
+        {
+          "datname": "worldact_test_1794238646858_00e84299",
+          "pid": 751009
+        },
+        {
+          "datname": "worldact_test_1794238646858_00e84299",
+          "pid": 751010
+        },
+        {
+          "datname": "worldact_test_1794238646858_00e84299",
+          "pid": 751011
+        },
+        {
+          "datname": "worldact_test_1794238646858_00e84299",
+          "pid": 751012
+        },
+        {
+          "datname": "worldact_test_1794238646858_00e84299",
+          "pid": 751013
+        },
+        {
+          "datname": "worldact_test_1794238646858_00e84299",
+          "pid": 751021
+        },
+        {
+          "datname": "worldact_test_1794238646858_00e84299",
+          "pid": 751022
+        },
+        {
+          "datname": "worldact_test_1794238646858_00e84299",
+          "pid": 751023
+        },
+        {
+          "datname": "worldact_test_1794238646858_00e84299",
+          "pid": 751024
+        },
+        {
+          "datname": "worldact_test_1794238646858_00e84299",
+          "pid": 751025
+        },
+        {
+          "datname": "worldact_test_1794238646858_00e84299",
+          "pid": 751034
+        },
+        {
+          "datname": "worldact_test_1794238646858_00e84299",
+          "pid": 751035
+        },
+        {
+          "datname": "worldact_test_1794238646858_00e84299",
+          "pid": 751036
+        },
+        {
+          "datname": "worldact_test_1794238646858_00e84299",
+          "pid": 751037
+        },
+        {
+          "datname": "worldact_test_1794238646858_00e84299",
+          "pid": 751038
+        },
+        {
+          "datname": "worldact_test_1794238646858_00e84299",
+          "pid": 751039
+        },
+        {
+          "datname": "worldact_test_1794238646858_00e84299",
+          "pid": 751040
+        },
+        {
+          "datname": "worldact_test_1794238646858_00e84299",
+          "pid": 751048
+        },
+        {
+          "datname": "worldact_test_1794238646858_00e84299",
+          "pid": 751049
+        },
+        {
+          "datname": "worldact_test_1794238646858_00e84299",
+          "pid": 751050
+        },
+        {
+          "datname": "worldact_test_1794238646858_00e84299",
+          "pid": 751051
+        },
+        {
+          "datname": "worldact_test_1794238646858_00e84299",
+          "pid": 751052
+        },
+        {
+          "datname": "worldact_test_1794238646858_00e84299",
+          "pid": 751053
+        },
+        {
+          "datname": "worldact_test_1794238646858_00e84299",
+          "pid": 751054
+        },
+        {
+          "datname": "worldact_test_1794238646858_00e84299",
+          "pid": 751055
+        },
+        {
+          "datname": "worldact_test_1794238646858_00e84299",
+          "pid": 751056
+        },
+        {
+          "datname": "worldact_test_1794238646858_00e84299",
+          "pid": 751057
+        },
+        {
+          "datname": "worldact_test_1794238646858_00e84299",
+          "pid": 751065
+        },
+        {
+          "datname": "worldact_test_1794238646858_00e84299",
+          "pid": 751066
+        },
+        {
+          "datname": "worldact_test_1794238646858_00e84299",
+          "pid": 751067
+        },
+        {
+          "datname": "worldact_test_1794238646858_00e84299",
+          "pid": 751068
+        },
+        {
+          "datname": "worldact_test_1794238646858_00e84299",
+          "pid": 751069
+        },
+        {
+          "datname": "worldact_test_1794238646858_00e84299",
+          "pid": 751070
+        },
+        {
+          "datname": "worldact_test_1794238646858_00e84299",
+          "pid": 751078
+        },
+        {
+          "datname": "worldact_test_1794238646858_00e84299",
+          "pid": 751079
+        },
+        {
+          "datname": "worldact_test_1794238646858_00e84299",
+          "pid": 751080
+        },
+        {
+          "datname": "worldact_test_1794238646858_00e84299",
+          "pid": 751081
+        },
+        {
+          "datname": "worldact_test_1794238646858_00e84299",
+          "pid": 751082
+        },
+        {
+          "datname": "worldact_test_1794238646858_00e84299",
+          "pid": 751083
+        },
+        {
+          "datname": "worldact_test_1794238646858_00e84299",
+          "pid": 751084
+        },
+        {
+          "datname": "worldact_test_1794238646858_00e84299",
+          "pid": 751085
+        },
+        {
+          "datname": "worldact_test_1794238646858_00e84299",
+          "pid": 751086
+        },
+        {
+          "datname": "worldact_test_1794238646858_00e84299",
+          "pid": 751087
+        },
+        {
+          "datname": "worldact_test_1794238646858_00e84299",
+          "pid": 751088
+        },
+        {
+          "datname": "worldact_test_1794238646858_00e84299",
+          "pid": 751096
+        },
+        {
+          "datname": "worldact_test_1794238646858_00e84299",
+          "pid": 751097
+        },
+        {
+          "datname": "worldact_test_1794238646858_00e84299",
+          "pid": 751098
+        },
+        {
+          "datname": "worldact_test_1794238646858_00e84299",
+          "pid": 751099
+        },
+        {
+          "datname": "worldact_test_1794238646858_00e84299",
+          "pid": 751100
+        },
+        {
+          "datname": "worldact_test_1794238646858_00e84299",
+          "pid": 751101
+        }
+      ],
+      "started": "2026-11-09T15:37:26.807Z",
+      "runnerPID": 17887,
+      "tests": 47,
+      "pass": 47,
+      "fail": 0,
+      "skipped": 0,
+      "cancelled": 0,
+      "exitCode": 0,
+      "completedFiles": 9,
+      "perFileCounts": [
+        6,
+        4,
+        9,
+        4,
+        7,
+        1,
+        6,
+        4,
+        6
+      ],
+      "logSha256": "907499e09cbf7f6c087493692d597289e9f08815b344a1a07955aac4786bdb70",
+      "finished": "2026-11-09T15:37:45.897Z",
+      "anchorAbsent": true,
+      "remainingDatabases": [],
+      "remainingSessions": [],
+      "portFree": true,
+      "proofs": [
+        {
+          "kind": "public",
+          "path": "<private-evidence-root>/singular-archive-query-title-backend-source-public-proof.json",
+          "sha256": "a055566f2930fbeadae2eff88aaa7db1f845397347672c18a1260f8486d5369b",
+          "dispatches": 23,
+          "wantedDispatches": 23,
+          "dispatchesMatch": true,
+          "mode": "600",
+          "uid": 501,
+          "regularNonSymlink": true
+        },
+        {
+          "kind": "posts-page",
+          "path": "<private-evidence-root>/singular-archive-query-title-backend-source-posts-page-proof.json",
+          "sha256": "1b47e959d592e880964b9dbd5cb48b2eca3f163d8dd31fa68c6d84608408f6bb",
+          "dispatches": 13,
+          "wantedDispatches": 13,
+          "dispatchesMatch": true,
+          "mode": "600",
+          "uid": 501,
+          "regularNonSymlink": true
+        }
+      ],
+      "counterParserAdapter": {
+        "scope": "Metadata-only correction from same immutable raw log; no test/runtime/log rewrite or rerun",
+        "originalReceipt": "singular-archive-query-title-backend-final-source-counter-parser-original.json",
+        "originalReceiptSHA256": "b886b79f1a3bf99be6ef687d624a0bdb1852251da4b767780a283e0a45627734",
+        "originalWrapper": "singular-archive-query-title-backend-run-counter-parser-original.mjs",
+        "originalWrapperSHA256": "f3fb8851e124fb655beaf626ea9d2526da310638212f10f304cb63b67fd757d9",
+        "error": "JS string escaped digit regex was reduced to literal d; summary totals0 while literal per-file counts/raw counters were correct",
+        "sameRawLogSHA256": "907499e09cbf7f6c087493692d597289e9f08815b344a1a07955aac4786bdb70",
+        "correctedWrapperSHA256": "5d99c9f0bdb8b354b5c9bfc2d8543fa582552c3edff7b14ae6f71c69c8c158ae"
+      },
+      "privateReceipt": "singular-archive-query-title-backend-final-source-run.json",
+      "privateReceiptSHA256": "72a48d61af1fee623d8058d80d32bdfd706f429cf3854eaf12b6142fc2522808"
+    },
+    {
+      "mode": "compiled",
+      "port": 3047,
+      "candidate": "6ef21775a022a219f312cffcdf9998c253d24b4a",
+      "tree": "7b9381576e97f98086bc451f89bacf81503671c2",
+      "runtimeFreeze": "eba54f98188fe6752ad37380bd6e4cb7b18b82bc",
+      "nodeSha256": "300199e4aebe00b526fee49af14904d50cacd20333b07c99c2ded6ba3ddf7070",
+      "files": [
+        "tests/singular-archive-query-title-before.test.ts",
+        "tests/singular-archive-query-title-posts-page.test.ts",
+        "tests/blocks.test.ts",
+        "tests/date-archives.test.ts",
+        "tests/public-document-data.test.ts",
+        "tests/plain-source-pagination.test.ts",
+        "tests/front-page-availability.test.ts",
+        "tests/author-name-independent-count-grant.test.ts",
+        "tests/singular-date-template-priority-original.test.ts"
+      ],
+      "selectorSha256": "929f6dcb5bb5f76999289305694e1ab216846f6f9d13b002d04f89e559a7e2b1",
+      "log": "<private-log-root>/singular-archive-query-title-final-compiled.log",
+      "anchor": "worldact_singular_archive_title_backend_anchor",
+      "URLApplicationNamePresent": false,
+      "applicationName": "worldact_singular_archive_title_backend_compiled",
+      "databases": [
+        "worldact_test_1794238740471_9397c5d5"
+      ],
+      "observedDatabaseSessionGroups": [
+        {
+          "datname": "worldact_test_1794238740471_9397c5d5",
+          "pid": 751522
+        },
+        {
+          "datname": "worldact_test_1794238740471_9397c5d5",
+          "pid": 751523
+        },
+        {
+          "datname": "worldact_test_1794238740471_9397c5d5",
+          "pid": 751531
+        },
+        {
+          "datname": "worldact_test_1794238740471_9397c5d5",
+          "pid": 751532
+        },
+        {
+          "datname": "worldact_test_1794238740471_9397c5d5",
+          "pid": 751533
+        },
+        {
+          "datname": "worldact_test_1794238740471_9397c5d5",
+          "pid": 751534
+        },
+        {
+          "datname": "worldact_test_1794238740471_9397c5d5",
+          "pid": 751535
+        },
+        {
+          "datname": "worldact_test_1794238740471_9397c5d5",
+          "pid": 751536
+        },
+        {
+          "datname": "worldact_test_1794238740471_9397c5d5",
+          "pid": 751537
+        },
+        {
+          "datname": "worldact_test_1794238740471_9397c5d5",
+          "pid": 751538
+        },
+        {
+          "datname": "worldact_test_1794238740471_9397c5d5",
+          "pid": 751539
+        },
+        {
+          "datname": "worldact_test_1794238740471_9397c5d5",
+          "pid": 751540
+        },
+        {
+          "datname": "worldact_test_1794238740471_9397c5d5",
+          "pid": 751541
+        },
+        {
+          "datname": "worldact_test_1794238740471_9397c5d5",
+          "pid": 751542
+        },
+        {
+          "datname": "worldact_test_1794238740471_9397c5d5",
+          "pid": 751543
+        },
+        {
+          "datname": "worldact_test_1794238740471_9397c5d5",
+          "pid": 751544
+        },
+        {
+          "datname": "worldact_test_1794238740471_9397c5d5",
+          "pid": 751545
+        },
+        {
+          "datname": "worldact_test_1794238740471_9397c5d5",
+          "pid": 751546
+        },
+        {
+          "datname": "worldact_test_1794238740471_9397c5d5",
+          "pid": 751547
+        },
+        {
+          "datname": "worldact_test_1794238740471_9397c5d5",
+          "pid": 751548
+        },
+        {
+          "datname": "worldact_test_1794238740471_9397c5d5",
+          "pid": 751549
+        },
+        {
+          "datname": "worldact_test_1794238740471_9397c5d5",
+          "pid": 751550
+        },
+        {
+          "datname": "worldact_test_1794238740471_9397c5d5",
+          "pid": 751558
+        },
+        {
+          "datname": "worldact_test_1794238740471_9397c5d5",
+          "pid": 751559
+        },
+        {
+          "datname": "worldact_test_1794238740471_9397c5d5",
+          "pid": 751560
+        },
+        {
+          "datname": "worldact_test_1794238740471_9397c5d5",
+          "pid": 751561
+        },
+        {
+          "datname": "worldact_test_1794238740471_9397c5d5",
+          "pid": 751562
+        },
+        {
+          "datname": "worldact_test_1794238740471_9397c5d5",
+          "pid": 751563
+        },
+        {
+          "datname": "worldact_test_1794238740471_9397c5d5",
+          "pid": 751571
+        },
+        {
+          "datname": "worldact_test_1794238740471_9397c5d5",
+          "pid": 751572
+        },
+        {
+          "datname": "worldact_test_1794238740471_9397c5d5",
+          "pid": 751573
+        },
+        {
+          "datname": "worldact_test_1794238740471_9397c5d5",
+          "pid": 751574
+        },
+        {
+          "datname": "worldact_test_1794238740471_9397c5d5",
+          "pid": 751575
+        },
+        {
+          "datname": "worldact_test_1794238740471_9397c5d5",
+          "pid": 751577
+        },
+        {
+          "datname": "worldact_test_1794238740471_9397c5d5",
+          "pid": 751578
+        },
+        {
+          "datname": "worldact_test_1794238740471_9397c5d5",
+          "pid": 751579
+        },
+        {
+          "datname": "worldact_test_1794238740471_9397c5d5",
+          "pid": 751580
+        },
+        {
+          "datname": "worldact_test_1794238740471_9397c5d5",
+          "pid": 751581
+        },
+        {
+          "datname": "worldact_test_1794238740471_9397c5d5",
+          "pid": 751582
+        },
+        {
+          "datname": "worldact_test_1794238740471_9397c5d5",
+          "pid": 751590
+        },
+        {
+          "datname": "worldact_test_1794238740471_9397c5d5",
+          "pid": 751591
+        },
+        {
+          "datname": "worldact_test_1794238740471_9397c5d5",
+          "pid": 751592
+        },
+        {
+          "datname": "worldact_test_1794238740471_9397c5d5",
+          "pid": 751593
+        },
+        {
+          "datname": "worldact_test_1794238740471_9397c5d5",
+          "pid": 751594
+        },
+        {
+          "datname": "worldact_test_1794238740471_9397c5d5",
+          "pid": 751595
+        },
+        {
+          "datname": "worldact_test_1794238740471_9397c5d5",
+          "pid": 751596
+        },
+        {
+          "datname": "worldact_test_1794238740471_9397c5d5",
+          "pid": 751597
+        },
+        {
+          "datname": "worldact_test_1794238740471_9397c5d5",
+          "pid": 751598
+        },
+        {
+          "datname": "worldact_test_1794238740471_9397c5d5",
+          "pid": 751599
+        },
+        {
+          "datname": "worldact_test_1794238740471_9397c5d5",
+          "pid": 751600
+        },
+        {
+          "datname": "worldact_test_1794238740471_9397c5d5",
+          "pid": 751608
+        },
+        {
+          "datname": "worldact_test_1794238740471_9397c5d5",
+          "pid": 751609
+        },
+        {
+          "datname": "worldact_test_1794238740471_9397c5d5",
+          "pid": 751610
+        },
+        {
+          "datname": "worldact_test_1794238740471_9397c5d5",
+          "pid": 751611
+        },
+        {
+          "datname": "worldact_test_1794238740471_9397c5d5",
+          "pid": 751612
+        },
+        {
+          "datname": "worldact_test_1794238740471_9397c5d5",
+          "pid": 751613
+        },
+        {
+          "datname": "worldact_test_1794238740471_9397c5d5",
+          "pid": 751614
+        },
+        {
+          "datname": "worldact_test_1794238740471_9397c5d5",
+          "pid": 751615
+        },
+        {
+          "datname": "worldact_test_1794238740471_9397c5d5",
+          "pid": 751616
+        },
+        {
+          "datname": "worldact_test_1794238740471_9397c5d5",
+          "pid": 751617
+        },
+        {
+          "datname": "worldact_test_1794238740471_9397c5d5",
+          "pid": 751625
+        },
+        {
+          "datname": "worldact_test_1794238740471_9397c5d5",
+          "pid": 751626
+        },
+        {
+          "datname": "worldact_test_1794238740471_9397c5d5",
+          "pid": 751627
+        },
+        {
+          "datname": "worldact_test_1794238740471_9397c5d5",
+          "pid": 751628
+        },
+        {
+          "datname": "worldact_test_1794238740471_9397c5d5",
+          "pid": 751629
+        },
+        {
+          "datname": "worldact_test_1794238740471_9397c5d5",
+          "pid": 751630
+        },
+        {
+          "datname": "worldact_test_1794238740471_9397c5d5",
+          "pid": 751631
+        },
+        {
+          "datname": "worldact_test_1794238740471_9397c5d5",
+          "pid": 751632
+        },
+        {
+          "datname": "worldact_test_1794238740471_9397c5d5",
+          "pid": 751633
+        },
+        {
+          "datname": "worldact_test_1794238740471_9397c5d5",
+          "pid": 751634
+        },
+        {
+          "datname": "worldact_test_1794238740471_9397c5d5",
+          "pid": 751635
+        },
+        {
+          "datname": "worldact_test_1794238740471_9397c5d5",
+          "pid": 751636
+        },
+        {
+          "datname": "worldact_test_1794238740471_9397c5d5",
+          "pid": 751637
+        }
+      ],
+      "started": "2026-11-09T15:39:00.426Z",
+      "runnerPID": 18212,
+      "tests": 47,
+      "pass": 47,
+      "fail": 0,
+      "skipped": 0,
+      "cancelled": 0,
+      "exitCode": 0,
+      "completedFiles": 9,
+      "perFileCounts": [
+        6,
+        4,
+        9,
+        4,
+        7,
+        1,
+        6,
+        4,
+        6
+      ],
+      "logSha256": "76f75deca422ac7a0e4afc74dd887bc81128038cc7b86ad226dd153cc9f0e4ce",
+      "finished": "2026-11-09T15:39:14.176Z",
+      "anchorAbsent": true,
+      "remainingDatabases": [],
+      "remainingSessions": [],
+      "portFree": true,
+      "proofs": [
+        {
+          "kind": "public",
+          "path": "<private-evidence-root>/singular-archive-query-title-backend-compiled-public-proof.json",
+          "sha256": "6bb8f3da67023a92befd93cab521020bba03e976b7b4a4902e6784cd29478388",
+          "dispatches": 23,
+          "wantedDispatches": 23,
+          "dispatchesMatch": true,
+          "mode": "600",
+          "uid": 501,
+          "regularNonSymlink": true
+        },
+        {
+          "kind": "posts-page",
+          "path": "<private-evidence-root>/singular-archive-query-title-backend-compiled-posts-page-proof.json",
+          "sha256": "6eaf478f992cc72b69ad004d799dc6f7d4d060702f688ed7ab16634b5b108694",
+          "dispatches": 13,
+          "wantedDispatches": 13,
+          "dispatchesMatch": true,
+          "mode": "600",
+          "uid": 501,
+          "regularNonSymlink": true
+        }
+      ],
+      "privateReceipt": "singular-archive-query-title-backend-final-compiled-run.json",
+      "privateReceiptSHA256": "c7605f9694518797ac287a6b297af7adfc944b40412204642a6a22bb2118e7bc"
+    }
+  ],
+  "final": {
+    "filesEachMode": 9,
+    "testsEachMode": 47,
+    "passEachMode": 47,
+    "failSkipCancelEachMode": 0,
+    "fa7FirstPassEachMode": 6,
+    "fa7ResponsesEachMode": 23,
+    "companion454SecondPassEachMode": 4,
+    "companionResponsesEachMode": 13,
+    "sevenUnchangedExistingPassEachMode": 37,
+    "wholeFreshFixedBrowserNativeOrReleaseClaim": false,
+    "sourceImportsRemainSourceInCompiledApiMode": true
+  },
+  "metadataParserCorrection": {
+    "scope": "Metadata-only correction from same immutable raw log; no test/runtime/log rewrite or rerun",
+    "originalReceipt": "singular-archive-query-title-backend-final-source-counter-parser-original.json",
+    "originalReceiptSHA256": "b886b79f1a3bf99be6ef687d624a0bdb1852251da4b767780a283e0a45627734",
+    "originalWrapper": "singular-archive-query-title-backend-run-counter-parser-original.mjs",
+    "originalWrapperSHA256": "f3fb8851e124fb655beaf626ea9d2526da310638212f10f304cb63b67fd757d9",
+    "error": "JS string escaped digit regex was reduced to literal d; summary totals0 while literal per-file counts/raw counters were correct",
+    "sameRawLogSHA256": "907499e09cbf7f6c087493692d597289e9f08815b344a1a07955aac4786bdb70",
+    "correctedWrapperSHA256": "5d99c9f0bdb8b354b5c9bfc2d8543fa582552c3edff7b14ae6f71c69c8c158ae"
+  },
+  "cleanup": {
+    "receipt": {
+      "file": "singular-archive-query-title-backend-cleanup.json",
+      "sha256": "89f632ed7db931c6b6a66a4170940fe71ef48674f31bcef5dcd6b40e8dfc36c0"
+    },
+    "ownedDatabases": 2,
+    "ownedDatabasesAndSessionsAbsent": true,
+    "neverCreatedAnchorAbsent": true,
+    "portsPhysicallyFree": [
+      3046,
+      3047,
+      3048
+    ],
+    "3048UnusedByGuards": true,
+    "3062NeverUsed": true,
+    "ownConfigAndReadonlyDependencyLinkRemoved": true,
+    "noArchiveCreated": true,
+    "normalFinallyUploads": {
+      "runner": "scripts/test-isolated.mjs creates disposable upload directory and removes it in finally",
+      "bothOwnedRunnersExitZero": true,
+      "independentUploadPathInventory": false,
+      "limitation": "Upload paths were not separately journaled; no global temporary-directory sweep or independent per-path absence certificate is claimed."
+    }
+  },
+  "limits": [
+    "Only explicit archive type on proven selected singular presentation; default/missing/other types unchanged",
+    "No complete global WP_Query flags or home/404/search/post-type eligibility parity",
+    "No raw date/query metadata, SQL date-intersection, canonical/status/template selection, visibility/grant changes",
+    "No extra SQL/await; compat sentinel normalized only from existing captured settings",
+    "Direct SOURCE imports and HTTP compiled execution explicitly distinguished",
+    "Original/corrected before, first metadata-parser receipt/wrapper, all raw logs/builds and old failure/conditional archives retained"
+  ]
+}

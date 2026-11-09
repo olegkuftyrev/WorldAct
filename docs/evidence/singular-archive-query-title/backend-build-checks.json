@@ -1,0 +1,43 @@
+{
+  "status": "BUILD_ONLY_PASS_NO_ENV_DATABASE_OR_TESTS",
+  "time": "2026-11-09T15:26:53.222986+00:00",
+  "candidate": "eba54f98188fe6752ad37380bd6e4cb7b18b82bc",
+  "tree": "84c3c6f16810d9b865c7e1c8c375c4b42434cafb",
+  "nodeSHA256": "300199e4aebe00b526fee49af14904d50cacd20333b07c99c2ded6ba3ddf7070",
+  "typescript": {
+    "exitCode": 0,
+    "command": "node node_modules/typescript/bin/tsc --noEmit"
+  },
+  "vite": {
+    "exitCode": 0,
+    "command": "node node_modules/vite/bin/vite.js build --configLoader runner"
+  },
+  "esbuild": {
+    "exitCode": 0,
+    "command": "native @esbuild/darwin-arm64/bin/esbuild server/index.ts --bundle --platform=node --format=esm --packages=external --outfile=dist-server/index.js"
+  },
+  "logs": {
+    "typecheck": {
+      "privateLogBasename": "worldact-singular-archive-query-title-typecheck.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o600",
+      "bytes": 0
+    },
+    "vite": {
+      "privateLogBasename": "worldact-singular-archive-query-title-vite.log",
+      "sha256": "8862c8fee5a2d77d85ad2216b8821d44c6403401bab4672ae1179aabd44c15fa",
+      "mode": "0o600",
+      "bytes": 2342
+    },
+    "nodebuild": {
+      "privateLogBasename": "worldact-singular-archive-query-title-nodebuild.log",
+      "sha256": "0807025821bd9cc8ee69311ab45199a44f63d297a176082aebcf436d5e5c5080",
+      "mode": "0o600",
+      "bytes": 56
+    }
+  },
+  "frozenCorrectedTestSHA256": "fa7f74eaab2edf81507422dc96015f823ee5a1de41e2a2f4bc9d902385966724",
+  "sevenExistingFingerprintsMatch": true,
+  "noEnvironmentDatabaseServicesOrTestsCreated": true,
+  "noSourceEditsDuringBuild": true
+}

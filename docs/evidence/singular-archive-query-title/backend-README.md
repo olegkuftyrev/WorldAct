@@ -1,0 +1,11 @@
+# Selected singular archive QueryTitle — backend evidence
+
+Runtime freeze `eba54f98188fe6752ad37380bd6e4cb7b18b82bc`; final test-only head `6ef21775a022a219f312cffcdf9998c253d24b4a`; Node SHA `300199e4aebe00b526fee49af14904d50cacd20333b07c99c2ded6ba3ddf7070`. This directory contains scoped backend evidence, with no runtime, test or workflow changes.
+
+The exact nine-file gates pass **47/47 source and47/47 actual compiled API**, zero failures/skips/cancellations. Per-file counts are `[6,4,9,4,7,1,6,4,6]`. The frozen corrected singular test consumes23 responses per mode; the separate posts-page companion consumes13. Direct TypeScript renderer/helper imports remain SOURCE even when the HTTP server is compiled. No full/fresh/fixed/browser/native or release certificate is issued here.
+
+Original892f source0/6 was fixture-invalid because saved static Group HTML omitted literal container IDs; its compiled run never occurred. The correctedfa7 before stage at historical2a/CBC has1PASS5FAIL in each mode, with a real archive positive and four singular failures plus parent. Those external historical stages remain distinct from the final backend runs. The selector payload is the unchanged construction-time fingerprint artifact; its expected counts are corroborated by the final checks, not relabeled inside that frozen artifact.
+
+The first source receipt had a metadata parser error reporting zero totals. Its original receipt and wrapper are retained privately; the corrected receipt hashes both and derives47 from the exact same immutable raw log. No runtime/test/raw-log rewrite or rerun occurred. The compiled receipt was accurate on first write. Details and all receipt/raw-log/proof hashes are in backend-checks.json. Raw HTML/bootstrap proofs, logs, credentials, configs and archives are not copied into Git.
+
+Five payload files use only known private path-prefix substitutions, with original/published hashes and each substitution in backend-manifest.json. Unchanged payloads are byte-identical to their private originals. The private evidence roots remain retained for root verification. Both owned DBs/session groups and anchor are absent; own config/link are removed and ports are free. Standard runner finally cleanup exited0, but upload paths were not separately journaled, so no independent per-upload-path absence claim is made.

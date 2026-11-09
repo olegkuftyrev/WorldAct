@@ -1,0 +1,67 @@
+{
+  "time": "2026-11-09T15:39:52.880Z",
+  "candidate": "6ef21775a022a219f312cffcdf9998c253d24b4a",
+  "runtime": "eba54f98188fe6752ad37380bd6e4cb7b18b82bc",
+  "nodeSha256": "300199e4aebe00b526fee49af14904d50cacd20333b07c99c2ded6ba3ddf7070",
+  "runReports": [
+    {
+      "file": "singular-archive-query-title-backend-final-compiled-run.json",
+      "sha256": "c7605f9694518797ac287a6b297af7adfc944b40412204642a6a22bb2118e7bc",
+      "logSha256": "76f75deca422ac7a0e4afc74dd887bc81128038cc7b86ad226dd153cc9f0e4ce"
+    },
+    {
+      "file": "singular-archive-query-title-backend-final-source-run.json",
+      "sha256": "72a48d61af1fee623d8058d80d32bdfd706f429cf3854eaf12b6142fc2522808",
+      "logSha256": "907499e09cbf7f6c087493692d597289e9f08815b344a1a07955aac4786bdb70"
+    }
+  ],
+  "journaledDatabases": [
+    "worldact_test_1794238646858_00e84299",
+    "worldact_test_1794238740471_9397c5d5"
+  ],
+  "neverCreatedAnchor": "worldact_singular_archive_title_backend_anchor",
+  "remainingDatabases": [],
+  "remainingSessions": [],
+  "primaryPortsPhysicallyBoundAndReleased": {
+    "3046": true,
+    "3047": true,
+    "3048": true
+  },
+  "fixed3062NeverUsed": true,
+  "environment": {
+    "uid": 501,
+    "mode": "0600",
+    "regularNonSymlink": true,
+    "removed": true
+  },
+  "dependencyLink": {
+    "uid": 501,
+    "exactKnownTarget": "<shared-workspace>/node_modules",
+    "removed": true,
+    "sharedOwnerNonSymlink": true,
+    "sharedOwnerMode": "0755",
+    "sharedOwnerUnmodified": true,
+    "locksMatched": true
+  },
+  "oldOrdinaryFailedAndConditionalArtifactsRetained": [
+    {
+      "archive": "<retained-private-archive-root>/worldact-public-listing-corrected-fkHEIN/site.json",
+      "sha256": "5bedb84b87c0226f0abc83325c71c5d68cb80f90a74481b6f373f115e0fa84f0",
+      "retained": true
+    },
+    {
+      "archive": "<retained-private-archive-root>/worldact-public-listing-pretty-before-smGCUv/site.json",
+      "sha256": "02b70ca10525cf16e191327419abdfbd999eba437b59b49639376c3c64258532",
+      "retained": true
+    }
+  ],
+  "noNewSourceArchiveArtifacts": true,
+  "normalFinallyUploads": {
+    "runner": "scripts/test-isolated.mjs creates disposable upload directory and removes it in finally",
+    "bothOwnedRunnersExitZero": true,
+    "independentUploadPathInventory": false,
+    "limitation": "Upload paths were not separately journaled; no global temporary-directory sweep or independent per-path absence certificate is claimed."
+  },
+  "allOriginalsCorrectedFixturesFailedStagesLogsAndBuildsRetained": true,
+  "noMainOrIndependentMutation": true
+}

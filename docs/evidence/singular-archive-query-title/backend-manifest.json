@@ -1,0 +1,94 @@
+{
+  "created": "2026-11-09T15:43:12.504505+00:00",
+  "runtimeFreeze": "eba54f98188fe6752ad37380bd6e4cb7b18b82bc",
+  "finalTestOnlyHead": "6ef21775a022a219f312cffcdf9998c253d24b4a",
+  "nodeSHA256": "300199e4aebe00b526fee49af14904d50cacd20333b07c99c2ded6ba3ddf7070",
+  "scope": "DOCS ONLY: five payloads plus README and this manifest; no runtime/tests/CI/src/MAIN changes; no broad/fresh/fixed/native/release claim",
+  "sanitization": "Only exact known private path-prefix replacements listed by original-prefix SHA256; no payload/result edits or credential/raw-bootstrap/log/archive copy. Manifest does not self-hash.",
+  "files": [
+    {
+      "file": "backend-README.md",
+      "sha256": "906b5a501bd0ea6b39958645a0ebc7c516a4e86fae1d690b28673d73cdf04d89",
+      "bytes": 2351,
+      "transformation": "New index describing the five unchanged-result payloads; no private source copy claimed"
+    },
+    {
+      "file": "backend-review.md",
+      "sha256": "3702c383e0642adb303f92f3aeb58350fc74d00224b44884f645ff81763f14c8",
+      "bytes": 6091,
+      "privateSource": "singular-archive-query-title-backend-review.md",
+      "privateSourceSHA256": "3702c383e0642adb303f92f3aeb58350fc74d00224b44884f645ff81763f14c8",
+      "byteIdenticalToPrivateSource": true,
+      "transformation": "Exact credential-free copy; no substitutions needed",
+      "pathPrefixSubstitutions": []
+    },
+    {
+      "file": "backend-checks.json",
+      "sha256": "e52761e7a85239c3cf96ac1efdf3f0c7c64205716debfe6eb28405b0f481e0a7",
+      "bytes": 34246,
+      "privateSource": "singular-archive-query-title-backend-checks.json",
+      "privateSourceSHA256": "f4c6502726550e6c24a165a0a4a9573000b4898204effed415c2fba9f0804357",
+      "byteIdenticalToPrivateSource": false,
+      "transformation": "Only the listed known private path-prefix substitutions; all other bytes and results unchanged",
+      "pathPrefixSubstitutions": [
+        {
+          "privatePrefixSHA256": "d057f342d01470ead38758e4ae8017fa925fdb077a00474cef0a6d34a48a3003",
+          "replacement": "<private-evidence-root>",
+          "occurrences": 4
+        },
+        {
+          "privatePrefixSHA256": "fc6d5734d47704b6e402a855cee04638f46d8f4e42b0a5c7bf312395df2a1532",
+          "replacement": "<private-log-root>/singular-archive-query-title-final-",
+          "occurrences": 2
+        }
+      ]
+    },
+    {
+      "file": "backend-cleanup.json",
+      "sha256": "65a7bbcc8c5c0bf2e4462c6789d3519c04224fae84c8be80b659cd78d82b1029",
+      "bytes": 2563,
+      "privateSource": "singular-archive-query-title-backend-cleanup.json",
+      "privateSourceSHA256": "89f632ed7db931c6b6a66a4170940fe71ef48674f31bcef5dcd6b40e8dfc36c0",
+      "byteIdenticalToPrivateSource": false,
+      "transformation": "Only the listed known private path-prefix substitutions; all other bytes and results unchanged",
+      "pathPrefixSubstitutions": [
+        {
+          "privatePrefixSHA256": "30c3b5ce6819c5c86dd7b89fa4672575a167d1923d0e237f9722baac8d2173a4",
+          "replacement": "<shared-workspace>",
+          "occurrences": 1
+        },
+        {
+          "privatePrefixSHA256": "2f4e926a0f1ae9093df368315432c932bdd562ba51f90701757910737f4eb39b",
+          "replacement": "<retained-private-archive-root>",
+          "occurrences": 2
+        }
+      ]
+    },
+    {
+      "file": "backend-build-checks.json",
+      "sha256": "dbb13adadcb0228865eec2fd4ea1e447ff47f41bf3af41d335a5ba21c9d5e376",
+      "bytes": 1666,
+      "privateSource": "singular-archive-query-title-build-checks.json",
+      "privateSourceSHA256": "dbb13adadcb0228865eec2fd4ea1e447ff47f41bf3af41d335a5ba21c9d5e376",
+      "byteIdenticalToPrivateSource": true,
+      "transformation": "Exact credential-free copy; no substitutions needed",
+      "pathPrefixSubstitutions": []
+    },
+    {
+      "file": "backend-selector.json",
+      "sha256": "4804db76a925dcdf15db14f913a9fd5e332d93ba824cdc201c70fef771d2fafe",
+      "bytes": 3470,
+      "privateSource": "singular-archive-query-title-independent-companion-selector.json",
+      "privateSourceSHA256": "929f6dcb5bb5f76999289305694e1ab216846f6f9d13b002d04f89e559a7e2b1",
+      "byteIdenticalToPrivateSource": false,
+      "transformation": "Only the listed known private path-prefix substitutions; all other bytes and results unchanged",
+      "pathPrefixSubstitutions": [
+        {
+          "privatePrefixSHA256": "669d63e1fc38a23bb6148346d996c7ceb838f415077b17a789c03852c9d2203e",
+          "replacement": "<independent-worktree>",
+          "occurrences": 1
+        }
+      ]
+    }
+  ]
+}
