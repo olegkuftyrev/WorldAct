@@ -17,7 +17,7 @@ test("fresh imported author archives generate destination identity paths in reta
  }
  const signed=await api("/api/auth/login","POST",{login:process.env.ADMIN_EMAIL,password:process.env.ADMIN_PASSWORD});cookie=signed.response.headers.get("set-cookie")!.split(";")[0];
  const source=stage==="export",username=source?"Pretty.Source@Author":"Pretty.Destination@Administrator";
- if(!source)await api("/api/users","POST",{username:"Pretty identity offset",email:"pretty-offset@example.test",displayName:"Offset",password:"Pretty-archive-password-123",role:"subscriber"});
+ if(!source)await api("/api/users","POST",{username:"Pretty-identity-offset",email:"pretty-offset@example.test",displayName:"Offset",password:"Pretty-archive-password-123",role:"subscriber"});
  const person=(await api("/api/users","POST",{username,email:source?"pretty-source@example.test":"pretty-destination@example.test",displayName:source?"Source archive author":"Destination archive author",password:"Pretty-archive-password-123",role:source?"author":"administrator"})).data.user;
  const nicename=(await pool.query("SELECT nicename FROM users WHERE id=$1",[person.id])).rows[0].nicename;
  assert.equal(nicename,source?"pretty-sourceauthor":"pretty-destinationadministrator");
