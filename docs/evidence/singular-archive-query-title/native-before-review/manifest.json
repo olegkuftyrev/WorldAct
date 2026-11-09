@@ -1,0 +1,109 @@
+{
+  "schema": 1,
+  "classification": "BOUNDED_FAILING_BEFORE_WITH_SEPARATE_FIXTURE_INVALID_HISTORY",
+  "baselineCandidate": "2a06562b60fc67a22694b1ca42c1f2fb9f050c15",
+  "expectedAndActualNodeSHA256": "cbc6c17115bcc4d2529aa296460a0c460b200ea7a11033314f99bb756aec4cb7",
+  "correctedTestOnlyCommit": "f5aa855e88fea0aaee37ccd0fff4e82e4ddc9789",
+  "sanitizationPolicy": "Only known private absolute roots replaced with stable placeholders; no result/failure/expectation rewriting",
+  "copiedRecords": [
+    {
+      "file": "review.md",
+      "privateSource": "<private-evidence-root>/singular-archive-query-title-before-corrected-review.md",
+      "privateSourceSHA256": "147314e062ea687099ef415ef3f2ba8ff09ca0de818e6d72f3a7ece9f97e594f",
+      "copySHA256": "1d274335d489cc5b9f99a4f923ad45fa28f9985fa59bf688fd7edaee58a8e940",
+      "bytes": 10055,
+      "pathOnlySanitization": [
+        {
+          "rule": "owned-before-worktree",
+          "occurrences": 2
+        },
+        {
+          "rule": "private-evidence-root",
+          "occurrences": 1
+        },
+        {
+          "rule": "dependency-owner-workspace",
+          "occurrences": 1
+        }
+      ],
+      "otherwiseByteIdentical": true
+    },
+    {
+      "file": "checks.json",
+      "privateSource": "<private-evidence-root>/singular-archive-query-title-before-corrected-checks.json",
+      "privateSourceSHA256": "156459460eb84d4c4010a5ccbdcb0f937ebfd4a606f178e12a8ab2f9538003e6",
+      "copySHA256": "e1437d45b5904cda0004a643b02e043548e11b96272512b3934e4943723d1c51",
+      "bytes": 35490,
+      "pathOnlySanitization": [
+        {
+          "rule": "owned-before-worktree",
+          "occurrences": 2
+        },
+        {
+          "rule": "private-evidence-root",
+          "occurrences": 10
+        },
+        {
+          "rule": "dependency-owner-workspace",
+          "occurrences": 1
+        }
+      ],
+      "otherwiseByteIdentical": true
+    },
+    {
+      "file": "original-source-invalid-observations.json",
+      "privateSource": "<private-evidence-root>/singular-archive-query-title-before-source-observations.json",
+      "privateSourceSHA256": "95f2c0b9f66f6e2714f335afbec8dd49b8271fd7f8c1dee81455a98e92f61e4b",
+      "copySHA256": "95f2c0b9f66f6e2714f335afbec8dd49b8271fd7f8c1dee81455a98e92f61e4b",
+      "bytes": 10786,
+      "pathOnlySanitization": [],
+      "otherwiseByteIdentical": true
+    },
+    {
+      "file": "corrected-test-freeze.json",
+      "privateSource": "<private-evidence-root>/singular-archive-query-title-before-corrected-freeze.json",
+      "privateSourceSHA256": "bb12ef7e29a69cc529d71b239ae807afc87a8267a0fb235cb50490a2ca54dd62",
+      "copySHA256": "a3b6e50c3c1b3ac76f8f37a59af0ac273715ed5a758b4bbd50c4e4acf40e0718",
+      "bytes": 1803,
+      "pathOnlySanitization": [
+        {
+          "rule": "private-evidence-root",
+          "occurrences": 2
+        },
+        {
+          "rule": "dependency-owner-workspace",
+          "occurrences": 1
+        }
+      ],
+      "otherwiseByteIdentical": true
+    },
+    {
+      "file": "owned-cleanup.json",
+      "privateSource": "<private-evidence-root>/singular-archive-query-title-before-owned-cleanup.json",
+      "privateSourceSHA256": "8648593ce2662b6ad1f85334443c99be116cb54d7981ef5d7f16481d72483f69",
+      "copySHA256": "83eb15ab3eb456038ebaa0ec8f2a8e626e335586dc065193f76fb5b950192076",
+      "bytes": 4589,
+      "pathOnlySanitization": [
+        {
+          "rule": "owned-before-worktree",
+          "occurrences": 3
+        },
+        {
+          "rule": "dependency-owner-workspace",
+          "occurrences": 2
+        }
+      ],
+      "otherwiseByteIdentical": true
+    }
+  ],
+  "packageREADME": {
+    "file": "README.md",
+    "sha256": "cbff9d16c549aa1e41f141dd66ec0d5b7c7263abf3ba1bb435b6329a18a0d2cb"
+  },
+  "privateOnlyRawProofsIncludedInGit": false,
+  "originalCompiledExecuted": false,
+  "original19PlanUnexecuted": true,
+  "amendedPlannedAndExecutedCorrectedReadsPerMode": 23,
+  "policyChildrenPlusParent": 6,
+  "archivesCreatedInScope": false
+}

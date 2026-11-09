@@ -1,0 +1,44 @@
+{
+  "status": "CORRECTED_FIXTURE_FROZEN_UNEXECUTED_ROOT_READ_REQUIRED",
+  "testOnlyCommit": "f5aa855e88fea0aaee37ccd0fff4e82e4ddc9789",
+  "parent": "a057812ed621e4092550e24fc7f100dc8216509e",
+  "candidateRuntime": "2a06562b60fc67a22694b1ca42c1f2fb9f050c15",
+  "expectedAndExistingNodeSHA256": "cbc6c17115bcc4d2529aa296460a0c460b200ea7a11033314f99bb756aec4cb7",
+  "correctedTest": {
+    "path": "<private-evidence-root>/singular-archive-query-title-before-corrected.test.ts",
+    "sha256": "fa7f74eaab2edf81507422dc96015f823ee5a1de41e2a2f4bc9d902385966724",
+    "bytes": 23177,
+    "mode": "0o600"
+  },
+  "actualCommitDiff": {
+    "path": "<private-evidence-root>/singular-archive-query-title-before-corrected-fixture.diff",
+    "sha256": "5d1dcc93992e7ca430781c93a25ed25578cd4736ce005b489b5b28a37957111c",
+    "bytes": 2671,
+    "mode": "0o600"
+  },
+  "onlyChanges": "Two static saved-HTML id additions matching existing Group comment anchors; no assertion/control/QueryTitle/runtime/UI changes",
+  "plannedPublicReadsPerMode": 23,
+  "plannedPolicyChildren": 5,
+  "plannedTestsIncludingParent": 6,
+  "sourceRun": false,
+  "compiledRun": false,
+  "originalStage": {
+    "testSHA256": "892f3ef929c6a0d80f59e7c87fefdfa719807d40d1c758cb717975f68adb6f30",
+    "commit": "a057812ed621e4092550e24fc7f100dc8216509e",
+    "sourceStatus": "FIXTURE_INVALID",
+    "sourceObservedTests": {
+      "total": 6,
+      "pass": 0,
+      "fail": 6,
+      "cancelled": 0,
+      "skipped": 0
+    },
+    "actualAnonymousReads": 23,
+    "allHTTP200": true,
+    "originalCompiledRun": false,
+    "proofSHA256": "934036c24cb161dbfd8250da9238d090326406e10bf5ed7add1b124741191b1d"
+  },
+  "furtherExecutionRequiresRootReview": true,
+  "ownedConfigMode": "0o600",
+  "dependencySymlink": "<dependency-owner-workspace>/node_modules"
+}

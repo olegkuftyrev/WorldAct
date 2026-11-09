@@ -1,0 +1,765 @@
+{
+  "classification": "GENUINE_BEFORE_NEEDS_REVISION explicit archive title survives genuine singular templates/bodies; separate DATEpriority acceptance unchanged",
+  "baselineCandidate": "2a06562b60fc67a22694b1ca42c1f2fb9f050c15",
+  "testOnlyHEAD": "f5aa855e88fea0aaee37ccd0fff4e82e4ddc9789",
+  "testSHA256": "fa7f74eaab2edf81507422dc96015f823ee5a1de41e2a2f4bc9d902385966724",
+  "nodeSHA256": "cbc6c17115bcc4d2529aa296460a0c460b200ea7a11033314f99bb756aec4cb7",
+  "tscPassed": true,
+  "independentViteRunnerAndDirectNativeEsbuildPassed": true,
+  "actualCompiledAPIGuard": true,
+  "modes": [
+    {
+      "mode": "corrected-source",
+      "counts": {
+        "tests": 6,
+        "pass": 1,
+        "fail": 5,
+        "cancelled": 0,
+        "skipped": 0
+      },
+      "dispatches": 23,
+      "allHTTP200": true,
+      "allHEADBodiesEmpty": true,
+      "noTransportSetupHarnessContainerErrors": true,
+      "failedAbsenceAssertions": 52,
+      "failureLabels": [
+        "post-bare native archive template anchor absent",
+        "post-bare native ALL archive wrappers absent",
+        "post-bare native archive body anchor absent",
+        "post-bare native archive body wrapper absent",
+        "post-bare model HTML archive template anchor absent",
+        "post-bare model HTML ALL archive wrappers absent",
+        "post-bare model HTML archive body anchor absent",
+        "post-bare model HTML archive body wrapper absent",
+        "post-bare selected post.content archive body anchor absent",
+        "post-bare selected post.content archive body wrapper absent",
+        "post-year native archive template anchor absent",
+        "post-year native ALL archive wrappers absent",
+        "post-year native archive body anchor absent",
+        "post-year native archive body wrapper absent",
+        "post-year model HTML archive template anchor absent",
+        "post-year model HTML ALL archive wrappers absent",
+        "post-year model HTML archive body anchor absent",
+        "post-year model HTML archive body wrapper absent",
+        "post-year selected post.content archive body anchor absent",
+        "post-year selected post.content archive body wrapper absent",
+        "page-bare native archive template anchor absent",
+        "page-bare native ALL archive wrappers absent",
+        "page-bare native archive body anchor absent",
+        "page-bare native archive body wrapper absent",
+        "page-bare model HTML archive template anchor absent",
+        "page-bare model HTML ALL archive wrappers absent",
+        "page-bare model HTML archive body anchor absent",
+        "page-bare model HTML archive body wrapper absent",
+        "page-bare selected post.content archive body anchor absent",
+        "page-bare selected post.content archive body wrapper absent",
+        "page-year native archive template anchor absent",
+        "page-year native ALL archive wrappers absent",
+        "page-year native archive body anchor absent",
+        "page-year native archive body wrapper absent",
+        "page-year model HTML archive template anchor absent",
+        "page-year model HTML ALL archive wrappers absent",
+        "page-year model HTML archive body anchor absent",
+        "page-year model HTML archive body wrapper absent",
+        "page-year selected post.content archive body anchor absent",
+        "page-year selected post.content archive body wrapper absent",
+        "direct-bare template anchor absent",
+        "direct-bare ALL archive wrappers absent",
+        "direct-bare archive body anchor absent",
+        "direct-bare archive body wrapper absent",
+        "direct-year template anchor absent",
+        "direct-year ALL archive wrappers absent",
+        "direct-year archive body anchor absent",
+        "direct-year archive body wrapper absent",
+        "body-bare archive body anchor absent",
+        "body-bare archive body wrapper absent",
+        "body-year archive body anchor absent",
+        "body-year archive body wrapper absent"
+      ],
+      "archivePositivePassed": true,
+      "publicRows": [
+        {
+          "label": "post-bare",
+          "path": "/archive-title-mw9eqz87-post/",
+          "statuses": [
+            200,
+            200,
+            200
+          ],
+          "headBytes": 0,
+          "routeKind": "singular",
+          "selectedId": 4,
+          "postId": 4,
+          "documentSlug": "archive-title-mw9eqz87-assigned",
+          "mainId": "archive-title-mw9eqz87-main",
+          "actualTitleElements": [
+            {
+              "tag": "H1",
+              "id": "archive-title-mw9eqz87-template-title",
+              "text": "Blog"
+            },
+            {
+              "tag": "H1",
+              "id": "archive-title-mw9eqz87-post-body-title",
+              "text": "Blog"
+            }
+          ],
+          "actualMainHTML": "<main id=\"archive-title-mw9eqz87-main\" class=\"wp-block-group\"><p>ASSIGNED-MARKER-archive-title-mw9eqz87</p><h1 class=\"wp-block-query-title\" id=\"archive-title-mw9eqz87-template-title\">Blog</h1><h1 class=\"wp-block-post-title\">archive-title-mw9eqz87 post</h1><div class=\"wp-block-post-content\"><section id=\"archive-title-mw9eqz87-post-body\" class=\"wp-block-group\"><p>BODY-POST-archive-title-mw9eqz87</p><h1 class=\"wp-block-query-title\" id=\"archive-title-mw9eqz87-post-body-title\">Blog</h1></section></div></main>",
+          "selectedBodyTitles": [
+            {
+              "tag": "H1",
+              "id": "archive-title-mw9eqz87-post-body-title",
+              "text": "Blog"
+            }
+          ]
+        },
+        {
+          "label": "post-year",
+          "path": "/archive-title-mw9eqz87-post/?year=2001",
+          "statuses": [
+            200,
+            200,
+            200
+          ],
+          "headBytes": 0,
+          "routeKind": "singular",
+          "selectedId": 4,
+          "postId": 4,
+          "documentSlug": "archive-title-mw9eqz87-assigned",
+          "mainId": "archive-title-mw9eqz87-main",
+          "actualTitleElements": [
+            {
+              "tag": "H1",
+              "id": "archive-title-mw9eqz87-template-title",
+              "text": "Year: 2001"
+            },
+            {
+              "tag": "H1",
+              "id": "archive-title-mw9eqz87-post-body-title",
+              "text": "Year: 2001"
+            }
+          ],
+          "actualMainHTML": "<main id=\"archive-title-mw9eqz87-main\" class=\"wp-block-group\"><p>ASSIGNED-MARKER-archive-title-mw9eqz87</p><h1 class=\"wp-block-query-title\" id=\"archive-title-mw9eqz87-template-title\">Year: 2001</h1><h1 class=\"wp-block-post-title\">archive-title-mw9eqz87 post</h1><div class=\"wp-block-post-content\"><section id=\"archive-title-mw9eqz87-post-body\" class=\"wp-block-group\"><p>BODY-POST-archive-title-mw9eqz87</p><h1 class=\"wp-block-query-title\" id=\"archive-title-mw9eqz87-post-body-title\">Year: 2001</h1></section></div></main>",
+          "selectedBodyTitles": [
+            {
+              "tag": "H1",
+              "id": "archive-title-mw9eqz87-post-body-title",
+              "text": "Year: 2001"
+            }
+          ]
+        },
+        {
+          "label": "page-bare",
+          "path": "/archive-title-mw9eqz87-page/",
+          "statuses": [
+            200,
+            200,
+            200
+          ],
+          "headBytes": 0,
+          "routeKind": "singular",
+          "selectedId": 5,
+          "postId": 5,
+          "documentSlug": "archive-title-mw9eqz87-assigned",
+          "mainId": "archive-title-mw9eqz87-main",
+          "actualTitleElements": [
+            {
+              "tag": "H1",
+              "id": "archive-title-mw9eqz87-template-title",
+              "text": "Blog"
+            },
+            {
+              "tag": "H1",
+              "id": "archive-title-mw9eqz87-page-body-title",
+              "text": "Blog"
+            }
+          ],
+          "actualMainHTML": "<main id=\"archive-title-mw9eqz87-main\" class=\"wp-block-group\"><p>ASSIGNED-MARKER-archive-title-mw9eqz87</p><h1 class=\"wp-block-query-title\" id=\"archive-title-mw9eqz87-template-title\">Blog</h1><h1 class=\"wp-block-post-title\">archive-title-mw9eqz87 page</h1><div class=\"wp-block-post-content\"><section id=\"archive-title-mw9eqz87-page-body\" class=\"wp-block-group\"><p>BODY-PAGE-archive-title-mw9eqz87</p><h1 class=\"wp-block-query-title\" id=\"archive-title-mw9eqz87-page-body-title\">Blog</h1></section></div></main>",
+          "selectedBodyTitles": [
+            {
+              "tag": "H1",
+              "id": "archive-title-mw9eqz87-page-body-title",
+              "text": "Blog"
+            }
+          ]
+        },
+        {
+          "label": "page-year",
+          "path": "/archive-title-mw9eqz87-page/?year=2001",
+          "statuses": [
+            200,
+            200,
+            200
+          ],
+          "headBytes": 0,
+          "routeKind": "singular",
+          "selectedId": 5,
+          "postId": 5,
+          "documentSlug": "archive-title-mw9eqz87-assigned",
+          "mainId": "archive-title-mw9eqz87-main",
+          "actualTitleElements": [
+            {
+              "tag": "H1",
+              "id": "archive-title-mw9eqz87-template-title",
+              "text": "Year: 2001"
+            },
+            {
+              "tag": "H1",
+              "id": "archive-title-mw9eqz87-page-body-title",
+              "text": "Year: 2001"
+            }
+          ],
+          "actualMainHTML": "<main id=\"archive-title-mw9eqz87-main\" class=\"wp-block-group\"><p>ASSIGNED-MARKER-archive-title-mw9eqz87</p><h1 class=\"wp-block-query-title\" id=\"archive-title-mw9eqz87-template-title\">Year: 2001</h1><h1 class=\"wp-block-post-title\">archive-title-mw9eqz87 page</h1><div class=\"wp-block-post-content\"><section id=\"archive-title-mw9eqz87-page-body\" class=\"wp-block-group\"><p>BODY-PAGE-archive-title-mw9eqz87</p><h1 class=\"wp-block-query-title\" id=\"archive-title-mw9eqz87-page-body-title\">Year: 2001</h1></section></div></main>",
+          "selectedBodyTitles": [
+            {
+              "tag": "H1",
+              "id": "archive-title-mw9eqz87-page-body-title",
+              "text": "Year: 2001"
+            }
+          ]
+        },
+        {
+          "label": "date-archive",
+          "path": "/?year=2001",
+          "statuses": [
+            200,
+            200,
+            200
+          ],
+          "headBytes": 0,
+          "routeKind": "archive",
+          "documentSlug": "date",
+          "mainId": "archive-title-mw9eqz87-date-main",
+          "actualTitleElements": [
+            {
+              "tag": "H1",
+              "id": "archive-title-mw9eqz87-date-title",
+              "text": "Year: 2001"
+            },
+            {
+              "tag": "H1",
+              "id": "archive-title-mw9eqz87-loop-title",
+              "text": "Year: 2001"
+            },
+            {
+              "tag": "H1",
+              "id": "archive-title-mw9eqz87-post-body-title",
+              "text": "Year: 2001"
+            }
+          ],
+          "actualMainHTML": "<main id=\"archive-title-mw9eqz87-date-main\" class=\"wp-block-group\"><p>DATE-MARKER-archive-title-mw9eqz87</p><h1 class=\"wp-block-query-title\" id=\"archive-title-mw9eqz87-date-title\">Year: 2001</h1><div class=\"wp-block-query\"><ul class=\"wp-block-post-template is-layout-flow\"><li class=\"wp-block-post post-4 type-post\"><h2 class=\"wp-block-post-title\">archive-title-mw9eqz87 post</h2><h1 class=\"wp-block-query-title\" id=\"archive-title-mw9eqz87-loop-title\">Year: 2001</h1><div class=\"wp-block-post-content\"><section id=\"archive-title-mw9eqz87-post-body\" class=\"wp-block-group\"><p>BODY-POST-archive-title-mw9eqz87</p><h1 class=\"wp-block-query-title\" id=\"archive-title-mw9eqz87-post-body-title\">Year: 2001</h1></section></div></li></ul></div></main>",
+          "selectedBodyTitles": null
+        }
+      ],
+      "pairs": [
+        {
+          "label": "direct-bare",
+          "path": "/api/public/templates/archive-title-mw9eqz87-assigned?postId=4&requestPath=%2Farchive-title-mw9eqz87-post%2F",
+          "statuses": [
+            200,
+            200
+          ],
+          "headBytes": 0,
+          "actualTitleElements": [
+            {
+              "tag": "H1",
+              "id": "archive-title-mw9eqz87-template-title",
+              "text": "Blog"
+            },
+            {
+              "tag": "H1",
+              "id": "archive-title-mw9eqz87-post-body-title",
+              "text": "Blog"
+            }
+          ],
+          "actualContentHTML": "<main id=\"archive-title-mw9eqz87-main\" class=\"wp-block-group wp-block-group\"><p>ASSIGNED-MARKER-archive-title-mw9eqz87</p><h1 class=\"wp-block-query-title\" id=\"archive-title-mw9eqz87-template-title\">Blog</h1><h1 class=\"wp-block-post-title\">archive-title-mw9eqz87 post</h1><div class=\"wp-block-post-content\"><section id=\"archive-title-mw9eqz87-post-body\" class=\"wp-block-group wp-block-group\"><p>BODY-POST-archive-title-mw9eqz87</p><h1 class=\"wp-block-query-title\" id=\"archive-title-mw9eqz87-post-body-title\">Blog</h1></section></div></main>"
+        },
+        {
+          "label": "direct-year",
+          "path": "/api/public/templates/archive-title-mw9eqz87-assigned?postId=4&requestPath=%2Farchive-title-mw9eqz87-post%2F%3Fyear%3D2001&year=2001",
+          "statuses": [
+            200,
+            200
+          ],
+          "headBytes": 0,
+          "actualTitleElements": [
+            {
+              "tag": "H1",
+              "id": "archive-title-mw9eqz87-template-title",
+              "text": "Year: 2001"
+            },
+            {
+              "tag": "H1",
+              "id": "archive-title-mw9eqz87-post-body-title",
+              "text": "Year: 2001"
+            }
+          ],
+          "actualContentHTML": "<main id=\"archive-title-mw9eqz87-main\" class=\"wp-block-group wp-block-group\"><p>ASSIGNED-MARKER-archive-title-mw9eqz87</p><h1 class=\"wp-block-query-title\" id=\"archive-title-mw9eqz87-template-title\">Year: 2001</h1><h1 class=\"wp-block-post-title\">archive-title-mw9eqz87 post</h1><div class=\"wp-block-post-content\"><section id=\"archive-title-mw9eqz87-post-body\" class=\"wp-block-group wp-block-group\"><p>BODY-POST-archive-title-mw9eqz87</p><h1 class=\"wp-block-query-title\" id=\"archive-title-mw9eqz87-post-body-title\">Year: 2001</h1></section></div></main>"
+        },
+        {
+          "label": "body-bare",
+          "path": "/api/public/posts/archive-title-mw9eqz87-post",
+          "statuses": [
+            200,
+            200
+          ],
+          "headBytes": 0,
+          "actualTitleElements": [
+            {
+              "tag": "H1",
+              "id": "archive-title-mw9eqz87-post-body-title",
+              "text": "Blog"
+            }
+          ],
+          "actualContentHTML": "<section id=\"archive-title-mw9eqz87-post-body\" class=\"wp-block-group wp-block-group\"><p>BODY-POST-archive-title-mw9eqz87</p><h1 class=\"wp-block-query-title\" id=\"archive-title-mw9eqz87-post-body-title\">Blog</h1></section>"
+        },
+        {
+          "label": "body-year",
+          "path": "/api/public/posts/archive-title-mw9eqz87-post?year=2001",
+          "statuses": [
+            200,
+            200
+          ],
+          "headBytes": 0,
+          "actualTitleElements": [
+            {
+              "tag": "H1",
+              "id": "archive-title-mw9eqz87-post-body-title",
+              "text": "Year: 2001"
+            }
+          ],
+          "actualContentHTML": "<section id=\"archive-title-mw9eqz87-post-body\" class=\"wp-block-group wp-block-group\"><p>BODY-POST-archive-title-mw9eqz87</p><h1 class=\"wp-block-query-title\" id=\"archive-title-mw9eqz87-post-body-title\">Year: 2001</h1></section>"
+        }
+      ],
+      "run": {
+        "mode": "corrected-source",
+        "app": "worldact-query-title-before-corrected-source-f5aa",
+        "startedAt": "2026-11-09T15:20:10.848Z",
+        "runner": "node scripts/test-isolated.mjs tests/singular-archive-query-title-before.test.ts",
+        "compiled": false,
+        "proof": "<private-evidence-root>/singular-archive-query-title-before-corrected-source-proof.json",
+        "log": "<private-evidence-root>/singular-archive-query-title-before-corrected-source.log",
+        "anchor": "worldact_archive_query_title_before_anchor",
+        "uploadsExactPathJournaled": false,
+        "observedDatabases": [
+          "worldact_test_1794237610891_407098d1"
+        ],
+        "exitCode": 1,
+        "signal": null,
+        "runnerPID": 16063,
+        "completedAt": "2026-11-09T15:20:14.367Z",
+        "remainingOwnedDatabases": [],
+        "remainingPhaseSessions": []
+      },
+      "artifacts": {
+        "proof": {
+          "path": "<private-evidence-root>/singular-archive-query-title-before-corrected-source-proof.json",
+          "sha256": "015c4dbfa33ed8e9c84dbf609fe67e59bf4d5bd86c3226f85b9ccb6314e94373"
+        },
+        "log": {
+          "path": "<private-evidence-root>/singular-archive-query-title-before-corrected-source.log",
+          "sha256": "ff64246a40a7cf8f83ca0c5f5e579f163880874d40c3bb80881474e52afd57d7"
+        },
+        "run": {
+          "path": "<private-evidence-root>/singular-archive-query-title-before-corrected-source-run.json",
+          "sha256": "076edcd9e6124e14041a2f13cb64755ab43156a1a9402f8169a22f9b149752a8"
+        }
+      }
+    },
+    {
+      "mode": "corrected-compiled",
+      "counts": {
+        "tests": 6,
+        "pass": 1,
+        "fail": 5,
+        "cancelled": 0,
+        "skipped": 0
+      },
+      "dispatches": 23,
+      "allHTTP200": true,
+      "allHEADBodiesEmpty": true,
+      "noTransportSetupHarnessContainerErrors": true,
+      "failedAbsenceAssertions": 52,
+      "failureLabels": [
+        "post-bare native archive template anchor absent",
+        "post-bare native ALL archive wrappers absent",
+        "post-bare native archive body anchor absent",
+        "post-bare native archive body wrapper absent",
+        "post-bare model HTML archive template anchor absent",
+        "post-bare model HTML ALL archive wrappers absent",
+        "post-bare model HTML archive body anchor absent",
+        "post-bare model HTML archive body wrapper absent",
+        "post-bare selected post.content archive body anchor absent",
+        "post-bare selected post.content archive body wrapper absent",
+        "post-year native archive template anchor absent",
+        "post-year native ALL archive wrappers absent",
+        "post-year native archive body anchor absent",
+        "post-year native archive body wrapper absent",
+        "post-year model HTML archive template anchor absent",
+        "post-year model HTML ALL archive wrappers absent",
+        "post-year model HTML archive body anchor absent",
+        "post-year model HTML archive body wrapper absent",
+        "post-year selected post.content archive body anchor absent",
+        "post-year selected post.content archive body wrapper absent",
+        "page-bare native archive template anchor absent",
+        "page-bare native ALL archive wrappers absent",
+        "page-bare native archive body anchor absent",
+        "page-bare native archive body wrapper absent",
+        "page-bare model HTML archive template anchor absent",
+        "page-bare model HTML ALL archive wrappers absent",
+        "page-bare model HTML archive body anchor absent",
+        "page-bare model HTML archive body wrapper absent",
+        "page-bare selected post.content archive body anchor absent",
+        "page-bare selected post.content archive body wrapper absent",
+        "page-year native archive template anchor absent",
+        "page-year native ALL archive wrappers absent",
+        "page-year native archive body anchor absent",
+        "page-year native archive body wrapper absent",
+        "page-year model HTML archive template anchor absent",
+        "page-year model HTML ALL archive wrappers absent",
+        "page-year model HTML archive body anchor absent",
+        "page-year model HTML archive body wrapper absent",
+        "page-year selected post.content archive body anchor absent",
+        "page-year selected post.content archive body wrapper absent",
+        "direct-bare template anchor absent",
+        "direct-bare ALL archive wrappers absent",
+        "direct-bare archive body anchor absent",
+        "direct-bare archive body wrapper absent",
+        "direct-year template anchor absent",
+        "direct-year ALL archive wrappers absent",
+        "direct-year archive body anchor absent",
+        "direct-year archive body wrapper absent",
+        "body-bare archive body anchor absent",
+        "body-bare archive body wrapper absent",
+        "body-year archive body anchor absent",
+        "body-year archive body wrapper absent"
+      ],
+      "archivePositivePassed": true,
+      "publicRows": [
+        {
+          "label": "post-bare",
+          "path": "/archive-title-mw9es7ce-post/",
+          "statuses": [
+            200,
+            200,
+            200
+          ],
+          "headBytes": 0,
+          "routeKind": "singular",
+          "selectedId": 4,
+          "postId": 4,
+          "documentSlug": "archive-title-mw9es7ce-assigned",
+          "mainId": "archive-title-mw9es7ce-main",
+          "actualTitleElements": [
+            {
+              "tag": "H1",
+              "id": "archive-title-mw9es7ce-template-title",
+              "text": "Blog"
+            },
+            {
+              "tag": "H1",
+              "id": "archive-title-mw9es7ce-post-body-title",
+              "text": "Blog"
+            }
+          ],
+          "actualMainHTML": "<main id=\"archive-title-mw9es7ce-main\" class=\"wp-block-group\"><p>ASSIGNED-MARKER-archive-title-mw9es7ce</p><h1 class=\"wp-block-query-title\" id=\"archive-title-mw9es7ce-template-title\">Blog</h1><h1 class=\"wp-block-post-title\">archive-title-mw9es7ce post</h1><div class=\"wp-block-post-content\"><section id=\"archive-title-mw9es7ce-post-body\" class=\"wp-block-group\"><p>BODY-POST-archive-title-mw9es7ce</p><h1 class=\"wp-block-query-title\" id=\"archive-title-mw9es7ce-post-body-title\">Blog</h1></section></div></main>",
+          "selectedBodyTitles": [
+            {
+              "tag": "H1",
+              "id": "archive-title-mw9es7ce-post-body-title",
+              "text": "Blog"
+            }
+          ]
+        },
+        {
+          "label": "post-year",
+          "path": "/archive-title-mw9es7ce-post/?year=2001",
+          "statuses": [
+            200,
+            200,
+            200
+          ],
+          "headBytes": 0,
+          "routeKind": "singular",
+          "selectedId": 4,
+          "postId": 4,
+          "documentSlug": "archive-title-mw9es7ce-assigned",
+          "mainId": "archive-title-mw9es7ce-main",
+          "actualTitleElements": [
+            {
+              "tag": "H1",
+              "id": "archive-title-mw9es7ce-template-title",
+              "text": "Year: 2001"
+            },
+            {
+              "tag": "H1",
+              "id": "archive-title-mw9es7ce-post-body-title",
+              "text": "Year: 2001"
+            }
+          ],
+          "actualMainHTML": "<main id=\"archive-title-mw9es7ce-main\" class=\"wp-block-group\"><p>ASSIGNED-MARKER-archive-title-mw9es7ce</p><h1 class=\"wp-block-query-title\" id=\"archive-title-mw9es7ce-template-title\">Year: 2001</h1><h1 class=\"wp-block-post-title\">archive-title-mw9es7ce post</h1><div class=\"wp-block-post-content\"><section id=\"archive-title-mw9es7ce-post-body\" class=\"wp-block-group\"><p>BODY-POST-archive-title-mw9es7ce</p><h1 class=\"wp-block-query-title\" id=\"archive-title-mw9es7ce-post-body-title\">Year: 2001</h1></section></div></main>",
+          "selectedBodyTitles": [
+            {
+              "tag": "H1",
+              "id": "archive-title-mw9es7ce-post-body-title",
+              "text": "Year: 2001"
+            }
+          ]
+        },
+        {
+          "label": "page-bare",
+          "path": "/archive-title-mw9es7ce-page/",
+          "statuses": [
+            200,
+            200,
+            200
+          ],
+          "headBytes": 0,
+          "routeKind": "singular",
+          "selectedId": 5,
+          "postId": 5,
+          "documentSlug": "archive-title-mw9es7ce-assigned",
+          "mainId": "archive-title-mw9es7ce-main",
+          "actualTitleElements": [
+            {
+              "tag": "H1",
+              "id": "archive-title-mw9es7ce-template-title",
+              "text": "Blog"
+            },
+            {
+              "tag": "H1",
+              "id": "archive-title-mw9es7ce-page-body-title",
+              "text": "Blog"
+            }
+          ],
+          "actualMainHTML": "<main id=\"archive-title-mw9es7ce-main\" class=\"wp-block-group\"><p>ASSIGNED-MARKER-archive-title-mw9es7ce</p><h1 class=\"wp-block-query-title\" id=\"archive-title-mw9es7ce-template-title\">Blog</h1><h1 class=\"wp-block-post-title\">archive-title-mw9es7ce page</h1><div class=\"wp-block-post-content\"><section id=\"archive-title-mw9es7ce-page-body\" class=\"wp-block-group\"><p>BODY-PAGE-archive-title-mw9es7ce</p><h1 class=\"wp-block-query-title\" id=\"archive-title-mw9es7ce-page-body-title\">Blog</h1></section></div></main>",
+          "selectedBodyTitles": [
+            {
+              "tag": "H1",
+              "id": "archive-title-mw9es7ce-page-body-title",
+              "text": "Blog"
+            }
+          ]
+        },
+        {
+          "label": "page-year",
+          "path": "/archive-title-mw9es7ce-page/?year=2001",
+          "statuses": [
+            200,
+            200,
+            200
+          ],
+          "headBytes": 0,
+          "routeKind": "singular",
+          "selectedId": 5,
+          "postId": 5,
+          "documentSlug": "archive-title-mw9es7ce-assigned",
+          "mainId": "archive-title-mw9es7ce-main",
+          "actualTitleElements": [
+            {
+              "tag": "H1",
+              "id": "archive-title-mw9es7ce-template-title",
+              "text": "Year: 2001"
+            },
+            {
+              "tag": "H1",
+              "id": "archive-title-mw9es7ce-page-body-title",
+              "text": "Year: 2001"
+            }
+          ],
+          "actualMainHTML": "<main id=\"archive-title-mw9es7ce-main\" class=\"wp-block-group\"><p>ASSIGNED-MARKER-archive-title-mw9es7ce</p><h1 class=\"wp-block-query-title\" id=\"archive-title-mw9es7ce-template-title\">Year: 2001</h1><h1 class=\"wp-block-post-title\">archive-title-mw9es7ce page</h1><div class=\"wp-block-post-content\"><section id=\"archive-title-mw9es7ce-page-body\" class=\"wp-block-group\"><p>BODY-PAGE-archive-title-mw9es7ce</p><h1 class=\"wp-block-query-title\" id=\"archive-title-mw9es7ce-page-body-title\">Year: 2001</h1></section></div></main>",
+          "selectedBodyTitles": [
+            {
+              "tag": "H1",
+              "id": "archive-title-mw9es7ce-page-body-title",
+              "text": "Year: 2001"
+            }
+          ]
+        },
+        {
+          "label": "date-archive",
+          "path": "/?year=2001",
+          "statuses": [
+            200,
+            200,
+            200
+          ],
+          "headBytes": 0,
+          "routeKind": "archive",
+          "documentSlug": "date",
+          "mainId": "archive-title-mw9es7ce-date-main",
+          "actualTitleElements": [
+            {
+              "tag": "H1",
+              "id": "archive-title-mw9es7ce-date-title",
+              "text": "Year: 2001"
+            },
+            {
+              "tag": "H1",
+              "id": "archive-title-mw9es7ce-loop-title",
+              "text": "Year: 2001"
+            },
+            {
+              "tag": "H1",
+              "id": "archive-title-mw9es7ce-post-body-title",
+              "text": "Year: 2001"
+            }
+          ],
+          "actualMainHTML": "<main id=\"archive-title-mw9es7ce-date-main\" class=\"wp-block-group\"><p>DATE-MARKER-archive-title-mw9es7ce</p><h1 class=\"wp-block-query-title\" id=\"archive-title-mw9es7ce-date-title\">Year: 2001</h1><div class=\"wp-block-query\"><ul class=\"wp-block-post-template is-layout-flow\"><li class=\"wp-block-post post-4 type-post\"><h2 class=\"wp-block-post-title\">archive-title-mw9es7ce post</h2><h1 class=\"wp-block-query-title\" id=\"archive-title-mw9es7ce-loop-title\">Year: 2001</h1><div class=\"wp-block-post-content\"><section id=\"archive-title-mw9es7ce-post-body\" class=\"wp-block-group\"><p>BODY-POST-archive-title-mw9es7ce</p><h1 class=\"wp-block-query-title\" id=\"archive-title-mw9es7ce-post-body-title\">Year: 2001</h1></section></div></li></ul></div></main>",
+          "selectedBodyTitles": null
+        }
+      ],
+      "pairs": [
+        {
+          "label": "direct-bare",
+          "path": "/api/public/templates/archive-title-mw9es7ce-assigned?postId=4&requestPath=%2Farchive-title-mw9es7ce-post%2F",
+          "statuses": [
+            200,
+            200
+          ],
+          "headBytes": 0,
+          "actualTitleElements": [
+            {
+              "tag": "H1",
+              "id": "archive-title-mw9es7ce-template-title",
+              "text": "Blog"
+            },
+            {
+              "tag": "H1",
+              "id": "archive-title-mw9es7ce-post-body-title",
+              "text": "Blog"
+            }
+          ],
+          "actualContentHTML": "<main id=\"archive-title-mw9es7ce-main\" class=\"wp-block-group wp-block-group\"><p>ASSIGNED-MARKER-archive-title-mw9es7ce</p><h1 class=\"wp-block-query-title\" id=\"archive-title-mw9es7ce-template-title\">Blog</h1><h1 class=\"wp-block-post-title\">archive-title-mw9es7ce post</h1><div class=\"wp-block-post-content\"><section id=\"archive-title-mw9es7ce-post-body\" class=\"wp-block-group wp-block-group\"><p>BODY-POST-archive-title-mw9es7ce</p><h1 class=\"wp-block-query-title\" id=\"archive-title-mw9es7ce-post-body-title\">Blog</h1></section></div></main>"
+        },
+        {
+          "label": "direct-year",
+          "path": "/api/public/templates/archive-title-mw9es7ce-assigned?postId=4&requestPath=%2Farchive-title-mw9es7ce-post%2F%3Fyear%3D2001&year=2001",
+          "statuses": [
+            200,
+            200
+          ],
+          "headBytes": 0,
+          "actualTitleElements": [
+            {
+              "tag": "H1",
+              "id": "archive-title-mw9es7ce-template-title",
+              "text": "Year: 2001"
+            },
+            {
+              "tag": "H1",
+              "id": "archive-title-mw9es7ce-post-body-title",
+              "text": "Year: 2001"
+            }
+          ],
+          "actualContentHTML": "<main id=\"archive-title-mw9es7ce-main\" class=\"wp-block-group wp-block-group\"><p>ASSIGNED-MARKER-archive-title-mw9es7ce</p><h1 class=\"wp-block-query-title\" id=\"archive-title-mw9es7ce-template-title\">Year: 2001</h1><h1 class=\"wp-block-post-title\">archive-title-mw9es7ce post</h1><div class=\"wp-block-post-content\"><section id=\"archive-title-mw9es7ce-post-body\" class=\"wp-block-group wp-block-group\"><p>BODY-POST-archive-title-mw9es7ce</p><h1 class=\"wp-block-query-title\" id=\"archive-title-mw9es7ce-post-body-title\">Year: 2001</h1></section></div></main>"
+        },
+        {
+          "label": "body-bare",
+          "path": "/api/public/posts/archive-title-mw9es7ce-post",
+          "statuses": [
+            200,
+            200
+          ],
+          "headBytes": 0,
+          "actualTitleElements": [
+            {
+              "tag": "H1",
+              "id": "archive-title-mw9es7ce-post-body-title",
+              "text": "Blog"
+            }
+          ],
+          "actualContentHTML": "<section id=\"archive-title-mw9es7ce-post-body\" class=\"wp-block-group wp-block-group\"><p>BODY-POST-archive-title-mw9es7ce</p><h1 class=\"wp-block-query-title\" id=\"archive-title-mw9es7ce-post-body-title\">Blog</h1></section>"
+        },
+        {
+          "label": "body-year",
+          "path": "/api/public/posts/archive-title-mw9es7ce-post?year=2001",
+          "statuses": [
+            200,
+            200
+          ],
+          "headBytes": 0,
+          "actualTitleElements": [
+            {
+              "tag": "H1",
+              "id": "archive-title-mw9es7ce-post-body-title",
+              "text": "Year: 2001"
+            }
+          ],
+          "actualContentHTML": "<section id=\"archive-title-mw9es7ce-post-body\" class=\"wp-block-group wp-block-group\"><p>BODY-POST-archive-title-mw9es7ce</p><h1 class=\"wp-block-query-title\" id=\"archive-title-mw9es7ce-post-body-title\">Year: 2001</h1></section>"
+        }
+      ],
+      "run": {
+        "mode": "corrected-compiled",
+        "app": "worldact-query-title-before-corrected-compiled-f5aa",
+        "startedAt": "2026-11-09T15:21:08.641Z",
+        "runner": "node scripts/test-isolated.mjs tests/singular-archive-query-title-before.test.ts",
+        "compiled": true,
+        "proof": "<private-evidence-root>/singular-archive-query-title-before-corrected-compiled-proof.json",
+        "log": "<private-evidence-root>/singular-archive-query-title-before-corrected-compiled.log",
+        "anchor": "worldact_archive_query_title_before_anchor",
+        "uploadsExactPathJournaled": false,
+        "observedDatabases": [
+          "worldact_test_1794237668682_8029e7f2"
+        ],
+        "exitCode": 1,
+        "signal": null,
+        "runnerPID": 16144,
+        "completedAt": "2026-11-09T15:21:11.533Z",
+        "remainingOwnedDatabases": [],
+        "remainingPhaseSessions": []
+      },
+      "artifacts": {
+        "proof": {
+          "path": "<private-evidence-root>/singular-archive-query-title-before-corrected-compiled-proof.json",
+          "sha256": "15f10e2eca55d9172387da3505540197cc000c5d1aa6b309e6f03090115648cd"
+        },
+        "log": {
+          "path": "<private-evidence-root>/singular-archive-query-title-before-corrected-compiled.log",
+          "sha256": "801556e45759459eca242bc36ae6e13729f88c06f142a8297ceb87e651ed0fe9"
+        },
+        "run": {
+          "path": "<private-evidence-root>/singular-archive-query-title-before-corrected-compiled-run.json",
+          "sha256": "0b7ea52350c4f0a77486e81b89973e2e0e96726318720b039415b07896c22669"
+        }
+      }
+    }
+  ],
+  "originalFixtureInvalid": {
+    "testSHA256": "892f3ef929c6a0d80f59e7c87fefdfa719807d40d1c758cb717975f68adb6f30",
+    "sourceCounts": {
+      "tests": 6,
+      "pass": 0,
+      "fail": 6,
+      "cancelled": 0,
+      "skipped": 0
+    },
+    "observationalHTTPReads": 23,
+    "allHTTP200": true,
+    "compiledExecuted": false,
+    "proofSHA256": "934036c24cb161dbfd8250da9238d090326406e10bf5ed7add1b124741191b1d",
+    "logSHA256": "1410ba3e2c131ca0463987b55f0ea0016f05a4d5313c707706889516043c0bdf"
+  },
+  "retainedOwnership": {
+    "physicalWorktree": "<owned-before-worktree>",
+    "envPath": "<owned-before-worktree>/.env",
+    "envMode": "600",
+    "dependencyLinkTarget": "<dependency-owner-workspace>/node_modules",
+    "realDependencyOwnerUID": 501,
+    "realDependencyOwnerMode": "755",
+    "ownBuildsRetained": true,
+    "port5195Free": true,
+    "activeAPI": false,
+    "uploadsExactPathsJournaled": false,
+    "uploadCleanupClaim": "Normal runner finally removal; exact upload paths were not journaled, so no independent per-path absence claim",
+    "archiveCreated": false
+  },
+  "scopeLimits": [
+    "No runtime/UI/CSS/shared change",
+    "No original compiled fixture-invalid run",
+    "No browser/screenshots/full/fresh/fixed guards",
+    "No missing/other QueryTitle type or global date SQL/flag parity claim",
+    "No MAIN content/config/data/tab actions",
+    "Retain own config/link/build pending ROOT review"
+  ]
+}
