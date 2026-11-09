@@ -1,0 +1,78 @@
+{
+  "created": "2026-11-09T13:22:51.742145+00:00",
+  "runtimeFreeze": "c9cc2b13f5baba71cb88f9685c6937daa02f9310",
+  "testOnlyCandidate": "dbdd893461d2ec4fda0855400afe412783084496",
+  "nodeSha256": "b8012b887e1b2281774e7318ad70f4a9debfb4d396eaeb3cd41e8e752ae1d80c",
+  "sanitization": "No raw site archive, credential, private environment, raw log or private original probe copied. All public evidence has byte/hash correspondence below; per-run receipt hashes are in backend-run-receipts.json. The manifest does not self-hash.",
+  "files": [
+    {
+      "file": "backend-stage.md",
+      "sha256": "d7cb958066385df531b2a057f6387221d7c4faefb705e3da2eee25c0d74f2949",
+      "bytes": 10255,
+      "transformation": "exact copy of credential-free backend report",
+      "privateSource": "public-listing-pagination-backend-review.md",
+      "privateSourceSha256": "d7cb958066385df531b2a057f6387221d7c4faefb705e3da2eee25c0d74f2949",
+      "byteIdenticalToPrivateSource": true
+    },
+    {
+      "file": "backend-checks.json",
+      "sha256": "7c20c886991436073c1a33f492f40c7e8b05c14cf21af565cdc5e173204051f4",
+      "bytes": 15821,
+      "transformation": "exact JSON copy, contains no private resource names",
+      "privateSource": "public-listing-pagination-backend-checks.json",
+      "privateSourceSha256": "7c20c886991436073c1a33f492f40c7e8b05c14cf21af565cdc5e173204051f4",
+      "byteIdenticalToPrivateSource": true
+    },
+    {
+      "file": "backend-selectors.json",
+      "sha256": "ce41cc98e4ab2af99aff568106044c3b27471c835548659053acad99223e2826",
+      "bytes": 34972,
+      "transformation": "exact copy of frozen test inventory",
+      "privateSource": "public-listing-pagination-final-selectors.json",
+      "privateSourceSha256": "ce41cc98e4ab2af99aff568106044c3b27471c835548659053acad99223e2826",
+      "byteIdenticalToPrivateSource": true
+    },
+    {
+      "file": "backend-frozen-inputs.json",
+      "sha256": "7efd49693a4d3806012189fab65670f5c774dc2588fe188d16ba89db40ba708e",
+      "bytes": 6609,
+      "transformation": "JSON private safe paths replaced by private:basename; all hashes/mapping/body equivalence retained",
+      "privateSource": "public-listing-pagination-frozen-inputs.json",
+      "privateSourceSha256": "91d81a43fef3023a975c146f12927b0341c5093acd263ed1b8689c232b46203d",
+      "byteIdenticalToPrivateSource": false
+    },
+    {
+      "file": "backend-import-adapters.json",
+      "sha256": "1d4cc108eb67822d742c2157f12f93a3f776f49426553811b4eb70161751c6fa",
+      "bytes": 3674,
+      "transformation": "JSON private safe paths replaced by private:basename; all hashes and first-line bodies retained",
+      "privateSource": "public-listing-pagination-first-import-adapters.json",
+      "privateSourceSha256": "5cfab00fe3d4e5c87b78b5bdaabb723e7726cfe70236e8c12d45c5abb9f48b14",
+      "byteIdenticalToPrivateSource": false
+    },
+    {
+      "file": "backend-callsite-inventory.md",
+      "sha256": "c94fd4fd41fae48be52e907ad15c72a8dd017a2474dcd5157f4788698feb3bf7",
+      "bytes": 7541,
+      "transformation": "exact copy of credential-free callsite inventory",
+      "privateSource": "public-listing-pagination-callsite-inventory.md",
+      "privateSourceSha256": "c94fd4fd41fae48be52e907ad15c72a8dd017a2474dcd5157f4788698feb3bf7",
+      "byteIdenticalToPrivateSource": true
+    },
+    {
+      "file": "backend-resources.json",
+      "sha256": "81f6986671ea4390a24752c777226bf8cfd4e02d1b5d0e04ad5dbd5c63215eb5",
+      "bytes": 2575,
+      "transformation": "private database/anchor names, artifact paths and uid omitted; counts, modes and hashes retained",
+      "privateSource": "public-listing-pagination-backend-cleanup.json",
+      "privateSourceSha256": "1b0498283bbe7818b08efca10422cdf199a64165b32f77ba20e22da424810d04",
+      "byteIdenticalToPrivateSource": false
+    },
+    {
+      "file": "backend-run-receipts.json",
+      "sha256": "5ff7b0e3908ca3f46987d64e7713416ceb93631ca91603e7e1c9ec91430406fa",
+      "bytes": 65908,
+      "transformation": "each selected receipt carries its exact privateReceiptSha256 and raw logSha256; private database/anchor/application labels, port and log path omitted"
+    }
+  ]
+}

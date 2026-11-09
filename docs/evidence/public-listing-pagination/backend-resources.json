@@ -1,0 +1,80 @@
+{
+  "created": "2026-11-09T13:20:26.987Z",
+  "candidate": "dbdd893461d2ec4fda0855400afe412783084496",
+  "nodeSha256": "b8012b887e1b2281774e7318ad70f4a9debfb4d396eaeb3cd41e8e752ae1d80c",
+  "runReports": 58,
+  "journaledDatabaseCount": 72,
+  "remainingDatabaseCount": 0,
+  "remainingSessionCount": 0,
+  "neverCreatedAnchorCount": 2,
+  "remainingAnchorCount": 0,
+  "primaryPortsPhysicallyBoundAndReleased": {
+    "3046": true,
+    "3047": true,
+    "3048": true
+  },
+  "fixed3062": {
+    "state": "previously explicitly released",
+    "receipt": "public-listing-pagination-fixed3062-release.json",
+    "notReacquired": true
+  },
+  "environment": {
+    "regularFile": true,
+    "mode": "0600",
+    "retained": true,
+    "reason": "Root explicitly requested retain owned environment until ordinary exact release CI green."
+  },
+  "dependencyLink": {
+    "retained": true,
+    "exactKnownTarget": true,
+    "sharedOwnerMode": "0755",
+    "lockSha256": "233888ed8f864581a8835aab0b4c33ccd7fbc391f2a98650b63fcf8db8814892",
+    "lockMatchesOwner": true,
+    "ownerNotModified": true,
+    "reason": "Root explicitly requested retain owned dependency link until ordinary exact release CI green."
+  },
+  "archives": [
+    {
+      "privateReport": "final-fresh-archive.json",
+      "sha256": "57dcbb2eef30488cb3407448f2565a8c0d32e435ea4eaca14d0c4a48cfaee1e5",
+      "bytes": 1749736,
+      "fileMode": "0600",
+      "directoryMode": "0700",
+      "regularNonSymlink": true,
+      "singleFile": true,
+      "retained": true
+    },
+    {
+      "privateReport": "remapped-fresh-archive.json",
+      "sha256": "68944e6d0f04273e783f8102de1083732f4bcf0bd3f85921f7a8ef315bd5136c",
+      "bytes": 1749736,
+      "fileMode": "0600",
+      "directoryMode": "0700",
+      "regularNonSymlink": true,
+      "singleFile": true,
+      "retained": true
+    },
+    {
+      "privateReport": "corrected-fresh-archive.json",
+      "sha256": "5bedb84b87c0226f0abc83325c71c5d68cb80f90a74481b6f373f115e0fa84f0",
+      "bytes": 1749736,
+      "fileMode": "0600",
+      "directoryMode": "0700",
+      "regularNonSymlink": true,
+      "singleFile": true,
+      "retained": true
+    },
+    {
+      "privateReport": "pretty-conditional-before-archive.json",
+      "sha256": "02b70ca10525cf16e191327419abdfbd999eba437b59b49639376c3c64258532",
+      "bytes": 1748656,
+      "fileMode": "0600",
+      "directoryMode": "0700",
+      "regularNonSymlink": true,
+      "singleFile": true,
+      "retained": true
+    }
+  ],
+  "allPrivateOriginalsAndFailureLogsRetained": true,
+  "noMainOrIndependentResourceMutation": true
+}

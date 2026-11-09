@@ -1,0 +1,126 @@
+{
+  "candidate": "c9cc2b13f5baba71cb88f9685c6937daa02f9310",
+  "tree": "05d7338089c08211f1a170b7b58e0032e579e431",
+  "nodeSha256": "b8012b887e1b2281774e7318ad70f4a9debfb4d396eaeb3cd41e8e752ae1d80c",
+  "immutablePairs": [
+    {
+      "permanent": "tests/public-listing-pagination-original.test.ts",
+      "safeOriginal": "private:public-listing-pagination-dispatch-corrected.test.ts",
+      "sha256": "6bf99b37fdcdcc3e2546b839907326d05ad840b62ad07df3d639b4c942510088",
+      "byteIdentical": true
+    },
+    {
+      "permanent": "tests/public-listing-empty-name-original.test.ts",
+      "safeOriginal": "private:public-listing-empty-name-original.test.ts",
+      "sha256": "c06e0c59f0a0aaa9323ca18c7dec80f85a9d87080aef4b99b53674ce5c738bd6",
+      "byteIdentical": true
+    },
+    {
+      "permanent": "tests/public-listing-preserved-page-original.test.ts",
+      "safeOriginal": "private:public-listing-preserved-page-original.test.ts",
+      "sha256": "4d1d89343061cbee0914b6b5d0aac446a4c83f11129b830a344f1d069c1d23b5",
+      "byteIdentical": true
+    },
+    {
+      "permanent": "tests/public-listing-direct-empty-page-original.test.ts",
+      "safeOriginal": "private:public-listing-direct-empty-page-original.test.ts",
+      "sha256": "ed03576fb32043305d354338a408143449ed21e61991d0088e8204217d8cac72",
+      "byteIdentical": true
+    },
+    {
+      "permanent": "tests/public-listing-compat-identity-original.test.ts",
+      "safeOriginal": "private:public-listing-compat-identity-original.test.ts",
+      "sha256": "92a9742e96ff213498a877314f79d353a790221bc16101843312f1d1e37ef11c",
+      "byteIdentical": false,
+      "originalSha256": "1fa0ff15f6b379eb0bedc74d0102be189e3e9c9b846392eb1578422193c365cd",
+      "adapter": "first-line whitespace only for strict existing isolation style",
+      "afterFirstNewlineByteIdentical": true,
+      "remainderSha256": "6998a4b660d910242227bb764cea8c7f21a658d8f81966388b5ef7b7c9845763"
+    },
+    {
+      "permanent": "tests/public-listing-independent-original.test.ts",
+      "safeOriginal": "private:public-listing-independent-original.test.ts",
+      "sha256": "0ea4aaad701f7e8fc6e396765358c3292bc70bec1c4a583dc12d0d3bc6657aee",
+      "byteIdentical": false,
+      "originalSha256": "a8ff40e31e6149d7bdb95187f05dfe5736cff52759ce7f3f4b7b1ef96c891c7b",
+      "adapter": "first-line whitespace only for strict existing isolation style",
+      "afterFirstNewlineByteIdentical": true,
+      "remainderSha256": "7f38e0ace0039967e17c6fbf08d8031dd409bef9829bd3fca44d743d14b3bc6a"
+    },
+    {
+      "permanent": "tests/public-listing-independent-wait-original.test.ts",
+      "safeOriginal": "private:public-listing-independent-wait-original.test.ts",
+      "sha256": "354ae414ecc138fdffc1241d1aca292a6704cf5bc2e976b2a296a1b4577ab90b",
+      "byteIdentical": false,
+      "originalSha256": "5f26d94b29f5190d1c69c25243dbf0317fa28fc9d0db94cd90ce6a704895d7c5",
+      "adapter": "first-line whitespace only for strict existing isolation style",
+      "afterFirstNewlineByteIdentical": true,
+      "remainderSha256": "d967afd1199f4febc2cc80330c16f3e9831bd02c52f33be625a3d84b306f47ec"
+    },
+    {
+      "permanent": "tests/public-listing-independent-after-boundaries-original.test.ts",
+      "safeOriginal": "private:public-listing-independent-after-boundaries-original.test.ts",
+      "sha256": "e5d89464b6252f61f3f15a4b96d536ae9ef34e404be09b01cd705247e9c9de31",
+      "byteIdentical": false,
+      "originalSha256": "9859d7c7a85d7af0aefd481afb76110ca5b5d4a428d25815be6c21fbf73a239e",
+      "adapter": "first-line whitespace only for strict existing isolation style",
+      "afterFirstNewlineByteIdentical": true,
+      "remainderSha256": "2d9900227b924057e2fc5bc8d6e809f195eb55bd0363812e49ce3d3ef94f18ac"
+    },
+    {
+      "permanent": "tests/public-listing-pretty-identity-original.test.ts",
+      "safeOriginal": "private:public-listing-pretty-identity-original.test.ts",
+      "sha256": "cfda6d5e5d9df18cf0cd5a0527068199c6d3aa74ea8e9887327c689213034c20",
+      "byteIdentical": false,
+      "originalSha256": "3f0a383f2eed4e83332af577e40c66982aaf893fc3923a4bebc13b826747b4d8",
+      "adapter": "first-line whitespace only for strict existing isolation style",
+      "afterFirstNewlineByteIdentical": true,
+      "remainderSha256": "79401bbc1ffaa8b909bd7e59f43847882fd63a8d282b2edef91ac7199a577cd6"
+    },
+    {
+      "permanent": "tests/public-listing-template-boundaries.test.ts",
+      "sha256": "47979120838bcd7207f0286868b82dfe05e816d2070a127b91d6b87f46087721",
+      "scope": "new supplementary regression; setup corrections separately retained"
+    },
+    {
+      "permanent": "tests/public-listing-pagination-portability.test.ts",
+      "sha256": "c5ca96ea2ef264e69a18adf04db81395990808675bb5d4307b590241d20596b9",
+      "scope": "new supplementary regression; setup corrections separately retained"
+    }
+  ],
+  "oldStatusOriginal": {
+    "safe": "private:public-listing-pagination-public-http-status-original.test.ts",
+    "sha256": "1797efa354fff57dc69e1019573b093523a8755820bcd993a5fb8be3f517b5de",
+    "acceptedExpectationOnlyCommit": "e8cc75081bc3171ce5ad214f0cc4e27f6eb4ef07"
+  },
+  "firstBeforeOriginal": {
+    "safe": "private:public-listing-pagination-original.test.ts",
+    "sha256": "56b5ca7fae405462264ab7b5f87b4e5cebba08709fb224160d4ca91af1b54ab8",
+    "firstFreeze": "9544bdbd7058abba865c0cb46dce94a1eca17146",
+    "retainedNotRewritten": true
+  },
+  "noSrcCssSharedEdits": true,
+  "noDDL": true,
+  "noMainMutation": true,
+  "dependencyOwnerReadOnly": true,
+  "runtimeFreeze": "c9cc2b13f5baba71cb88f9685c6937daa02f9310",
+  "testOnlySuccessor": "0ffb9aa747baec7d2c5d309a0a4ea82c1f1ed423",
+  "prettyPredecessorOriginal": {
+    "path": "private:public-listing-pagination-pretty-archives-predecessor.test.ts",
+    "sha256": "0ac6008da38d821e47168c6b079dec9c8805eec3d447ce6b19e91cc5c2072874",
+    "delta": "only obsolete numeric empty author page999 expectation200\u2192404"
+  },
+  "finalTestOnlySuccessor": "dbdd893461d2ec4fda0855400afe412783084496",
+  "conditionalPrettyAdapter": {
+    "commit": "9c38136168e7dfeda848e3864e414099c2fd430e",
+    "originalSafe": "private:public-listing-pagination-pretty-portability-predecessor.test.ts",
+    "originalSha256": "c1e40220ca246a3d51fe6e311dd317e642825ae783024951ce000ab57f977089",
+    "delta": "only excessive Plain numeric-author conditional200\u2192404; same02b70sourcearchive restoredsource+compiled"
+  },
+  "originalMappingSummary": {
+    "byteIdentical": 4,
+    "firstLineWhitespaceOnly": 5,
+    "privateOriginalsRetained": 9
+  },
+  "finalTestOnlyTree": "2f3aa5e2604a9cd18b318d2eb0b9fdfc4c2eb110"
+}

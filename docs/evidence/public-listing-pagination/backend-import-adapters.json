@@ -1,0 +1,63 @@
+{
+  "reason": "strict existing test-isolation first-line literal spacing; semantic first guard import already correct",
+  "originalPromotedFreeze": "c9cc2b13f5baba71cb88f9685c6937daa02f9310",
+  "assertionsSetupCodeAfterFirstNewlineUnchanged": true,
+  "strictHarnessUnchanged": true,
+  "adapters": [
+    {
+      "file": "tests/public-listing-compat-identity-original.test.ts",
+      "originalSafe": "private:public-listing-compat-identity-original.test.ts",
+      "originalSha256": "1fa0ff15f6b379eb0bedc74d0102be189e3e9c9b846392eb1578422193c365cd",
+      "adapterSha256": "92a9742e96ff213498a877314f79d353a790221bc16101843312f1d1e37ef11c",
+      "firstLineOnly": true,
+      "afterFirstNewlineByteIdentical": true,
+      "remainderSha256": "6998a4b660d910242227bb764cea8c7f21a658d8f81966388b5ef7b7c9845763",
+      "originalFirstLine": "import test,{after}from\"./isolated-test.js\";",
+      "adapterFirstLine": "import test,{after} from \"./isolated-test.js\";"
+    },
+    {
+      "file": "tests/public-listing-independent-original.test.ts",
+      "originalSafe": "private:public-listing-independent-original.test.ts",
+      "originalSha256": "a8ff40e31e6149d7bdb95187f05dfe5736cff52759ce7f3f4b7b1ef96c891c7b",
+      "adapterSha256": "0ea4aaad701f7e8fc6e396765358c3292bc70bec1c4a583dc12d0d3bc6657aee",
+      "firstLineOnly": true,
+      "afterFirstNewlineByteIdentical": true,
+      "remainderSha256": "7f38e0ace0039967e17c6fbf08d8031dd409bef9829bd3fca44d743d14b3bc6a",
+      "originalFirstLine": "import test,{after}from\"./isolated-test.js\";",
+      "adapterFirstLine": "import test,{after} from \"./isolated-test.js\";"
+    },
+    {
+      "file": "tests/public-listing-independent-wait-original.test.ts",
+      "originalSafe": "private:public-listing-independent-wait-original.test.ts",
+      "originalSha256": "5f26d94b29f5190d1c69c25243dbf0317fa28fc9d0db94cd90ce6a704895d7c5",
+      "adapterSha256": "354ae414ecc138fdffc1241d1aca292a6704cf5bc2e976b2a296a1b4577ab90b",
+      "firstLineOnly": true,
+      "afterFirstNewlineByteIdentical": true,
+      "remainderSha256": "d967afd1199f4febc2cc80330c16f3e9831bd02c52f33be625a3d84b306f47ec",
+      "originalFirstLine": "import test,{after}from\"./isolated-test.js\";",
+      "adapterFirstLine": "import test,{after} from \"./isolated-test.js\";"
+    },
+    {
+      "file": "tests/public-listing-independent-after-boundaries-original.test.ts",
+      "originalSafe": "private:public-listing-independent-after-boundaries-original.test.ts",
+      "originalSha256": "9859d7c7a85d7af0aefd481afb76110ca5b5d4a428d25815be6c21fbf73a239e",
+      "adapterSha256": "e5d89464b6252f61f3f15a4b96d536ae9ef34e404be09b01cd705247e9c9de31",
+      "firstLineOnly": true,
+      "afterFirstNewlineByteIdentical": true,
+      "remainderSha256": "2d9900227b924057e2fc5bc8d6e809f195eb55bd0363812e49ce3d3ef94f18ac",
+      "originalFirstLine": "import test,{after}from\"./isolated-test.js\";",
+      "adapterFirstLine": "import test,{after} from \"./isolated-test.js\";"
+    },
+    {
+      "file": "tests/public-listing-pretty-identity-original.test.ts",
+      "originalSafe": "private:public-listing-pretty-identity-original.test.ts",
+      "originalSha256": "3f0a383f2eed4e83332af577e40c66982aaf893fc3923a4bebc13b826747b4d8",
+      "adapterSha256": "cfda6d5e5d9df18cf0cd5a0527068199c6d3aa74ea8e9887327c689213034c20",
+      "firstLineOnly": true,
+      "afterFirstNewlineByteIdentical": true,
+      "remainderSha256": "79401bbc1ffaa8b909bd7e59f43847882fd63a8d282b2edef91ac7199a577cd6",
+      "originalFirstLine": "import test,{after}from\"./isolated-test.js\";",
+      "adapterFirstLine": "import test,{after} from \"./isolated-test.js\";"
+    }
+  ]
+}
