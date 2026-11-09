@@ -37,7 +37,7 @@ export function PublicDocumentView({model,state=initialPublicInteraction(model),
  const detail=model.route.detail,notFound=model.status===404,missingPost=false,preview=false,loading=false;
  const isPostsPage=model.route.kind==="posts-page",displaySingle=["singular","front-page"].includes(model.route.kind),displayedPost=post;
  const requestLocation=new URL(model.requestPath,"https://worldact.invalid"),params=requestLocation.searchParams;
- const {search:searchTerm,category:categoryFilter,tag:tagFilter,author:authorFilter,date:dateArchive}=model.route.query;
+ const {search:searchTerm,category:categoryFilter,tag:tagFilter,author:authorFilter,date:dateArchive,namedAuthor}=model.route.query;
  const archive=model.route.archive,hasDateFilter=Boolean(dateArchive),pagination=model.site.pagination;
  const replyReturn=model.controls.commentReturnPath;
  const passwordReturn=commentReturnPath(model.requestPath,model.route.query.values,Number(model.route.query.values.replytocom)).split("#")[0];
@@ -378,12 +378,12 @@ export function PublicDocumentView({model,state=initialPublicInteraction(model),
                       ? `Category: ${archive?.name || categoryFilter}`
                       : tagFilter
                         ? `Tag: ${archive?.name || tagFilter}`
-                        : authorFilter
+                        : authorFilter && !hasDateFilter && !isPostsPage
                           ? `Author: ${archive?.name || "Posts"}`
                           : hasDateFilter
                             ? site.data?.archive?.name || dateArchive?.name || "Archives"
                           : isPostsPage
-                            ? post?.title || "Blog"
+                            ? post?.title || site.data.postsPage?.title || "Blog"
                             : "Blog"}
                 </h1>
                 <form
@@ -407,7 +407,7 @@ export function PublicDocumentView({model,state=initialPublicInteraction(model),
                   {(searchTerm ||
                     categoryFilter ||
                     tagFilter ||
-                    authorFilter || hasDateFilter) && <a onClick={actions.navigate} href="/">Show all posts</a>}
+                    authorFilter || namedAuthor || hasDateFilter) && <a onClick={actions.navigate} href="/">Show all posts</a>}
                 </form>
                 <div className="public-posts">
                   {posts.map((item) => (
