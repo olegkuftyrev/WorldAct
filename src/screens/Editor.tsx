@@ -316,9 +316,6 @@ export default function Editor({ type }: { type: "post" | "page" }) {
   const base = `/admin/${type === "post" ? "posts" : "pages"}`;
   const [doc, setDoc] = useState<DocumentState>(emptyDocument);
   const [postId, setPostId] = useState<number | null>(id ? Number(id) : null);
-  const lease = usePostEditLease(postId, user?.id);
-  const leaseReady = useRef(lease.ready);
-  leaseReady.current = lease.ready;
   const [version, setVersion] = useState(0);
   const [permalink, setPermalink] = useState("");
   const [resetKey, setResetKey] = useState(0);
@@ -327,6 +324,12 @@ export default function Editor({ type }: { type: "post" | "page" }) {
     [dirty, setDirty] = useState(false);
   const [loadFailure, setLoadFailure] = useState<{ target: string; message: string } | null>(null);
   const loadError = loadFailure?.target === targetKey ? loadFailure.message : "";
+  // Load the publication before acquiring its editing row lock. The permalink
+  // read intentionally rejects a concurrent publication lock rather than
+  // returning a stale identity; our own initial lease must not race that read.
+  const lease = usePostEditLease(!loading && !loadError ? postId : null, user?.id);
+  const leaseReady = useRef(lease.ready);
+  leaseReady.current = lease.ready;
   const [error, setError] = useState(""),
     [notice, setNotice] = useState(""),
     [conflict, setConflict] = useState(false);
