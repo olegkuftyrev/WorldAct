@@ -10,8 +10,7 @@ import { commentReturnPath, commentLoginHref } from "../../shared/comment-links"
 import { readPlainPermalinkQuery } from "../../shared/plain-permalink-query";
 import { shouldResolveStaticFrontPage } from "../plainPermalinkRouting";
 import { publicArchivePageLocation, publicArchiveSearchPath } from "../publicArchiveLinks";
-import { selectPublicSourceTemplate } from "../../shared/public-routing";
-import {hasNamedAuthorParameter,shouldResolveNamedAuthorQuery,legacyPublicAuthorQuery,isNamedAuthorListing} from "../publicAuthorQuery";
+import {hasNamedAuthorParameter,shouldResolveNamedAuthorQuery,legacyPublicAuthorQuery,isNamedAuthorListing,selectLegacyPublicSourceTemplate,legacyPublicListingQuery} from "../publicAuthorQuery";
 import type { PublicResolvedListing } from "../publicAuthorQuery";
 import type { NamedAuthorSelection,PublicArchive } from "../../shared/public-document";
 import { scrollToMoreFragment } from "../contentFragments";
@@ -130,13 +129,14 @@ export default function PublicSite({
   for (const [key, value] of new URLSearchParams(blockQuery))
     publicQuery.set(key, value);
   for (const [key, value] of dateQuery) publicQuery.set(key, value);
-  const templateQuery=new URLSearchParams(publicQuery);
+  const listingQuery=legacyPublicListingQuery(params,publicQuery);
+  const templateQuery=new URLSearchParams(listingQuery);
   if(detail){
     templateQuery.delete("page");
     if(params.has("page"))templateQuery.set("page",String(bodyPagination.page));
     templateQuery.set("contentPage",String(bodyPagination.page));
   }
-  const siteQuery = new URLSearchParams(publicQuery);
+  const siteQuery = new URLSearchParams(listingQuery);
   if (routeAuthor || hasNamedAuthorParameter(params)) siteQuery.set("requestPath", requestLocation.pathname + requestLocation.search);
   const design = useResource<PublicDesign>("/public/design");
   const site = useResource<{
@@ -502,15 +502,17 @@ export default function PublicSite({
       dangerouslySetInnerHTML={{ __html: item.content }}
     />
   );
-  const sourceTemplate = selectSourceTemplate(design.data?.templates, {
+  const sourceTemplate = selectLegacyPublicSourceTemplate(design.data?.templates, {
     notFound: notFound || missingPost,
     single: displaySingle,
-    post: displayedPost,
+    post: displayedPost || null,
     frontPage: isFrontPage || (!detail && !hasArchiveFilter && settings?.frontPageMode !== "page"),
     search: Boolean(searchTerm),
     category: categoryFilter || undefined,
     tag: tagFilter || undefined,
-    author: !displaySingle && !isPostsPage && !hasDateFilter && Boolean(authorFilter),
+    author: Boolean(authorFilter),
+    postsPage: isPostsPage,
+    namedAuthor,
     authorSlug: authorArchive?.slug,
     authorId: authorArchive?.authorId,
     date: hasDateFilter,
@@ -869,12 +871,12 @@ export default function PublicSite({
                       ? `Category: ${archive?.name || categoryFilter}`
                       : tagFilter
                         ? `Tag: ${archive?.name || tagFilter}`
-                        : authorFilter && !hasDateFilter && !isPostsPage
+                        : authorFilter && (!namedAuthor || !hasDateFilter && !isPostsPage)
                           ? `Author: ${authorArchive?.name || "Posts"}`
                           : hasDateFilter
                             ? site.data?.archive?.name || dateArchive?.name || "Archives"
                           : isPostsPage
-                            ? post?.title || site.data?.postsPage?.title || "Blog"
+                            ? post?.title || (namedAuthor ? site.data?.postsPage?.title : undefined) || "Blog"
                             : "Blog"}
                 </h1>
                 <form
@@ -1108,13 +1110,6 @@ function RenderedTemplate({
   );
 }
 
-function selectSourceTemplate(documents: SiteTemplate[] | undefined, context: {
-  notFound: boolean; single: boolean; post: Post | null | undefined;
-  frontPage: boolean; search: boolean;
-  category?: string; tag?: string; author: boolean; authorSlug?: string; authorId?: number; date: boolean;
-}) {
-  return selectPublicSourceTemplate(documents || [], {...context, post:context.post || null});
-}
 function enhanceEmbeds(root: ParentNode) {
   for (const wrapper of root.querySelectorAll<HTMLElement>(".wp-block-embed__wrapper")) {
     if (wrapper.querySelector("iframe")) continue;
