@@ -1,0 +1,10 @@
+{
+  "classification": "HARNESS expected empty-name attribute spelling; final sanitizer omits empty name attribute; native input name remains empty",
+  "originalProof": "partial9.json",
+  "proofSHA256": "cde59b97afabfc39d0332bb986b5b93319777431ea55db7fa47b2ed269d5541c",
+  "completedRows": 9,
+  "originalError": "partial9-harness-error.json",
+  "sourceRuntimeUnchanged": true,
+  "adapter": "Record nameAttribute separately and logical HTMLInputElement name via e.name",
+  "originalBrowserModuleSHA256": "750c2b2650f459f781175697b4f02369ac2e6377c88581c2346d90cb0a7863fb"
+}

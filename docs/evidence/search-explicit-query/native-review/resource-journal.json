@@ -1,0 +1,12 @@
+{
+  "candidate": "9928f5dfc7fbd4af3c0a639ddb2c2f9312d061d2",
+  "databaseName": "worldact_search_native_2ef29451bb6ec2d0",
+  "uploadsPath": "/tmp/worldact-search-native-uploads-2ef29451bb6ec2d0",
+  "derivation": "Exact suffix from retained cleanup removed-fixture-path journal; same literal prefixes used by setup/cleanup code; no deleted secret owner config recreated",
+  "readOnlyVerification": {
+    "databaseExists": false,
+    "uploadsExists": false
+  },
+  "cleanupSHA256": "d4a4b173d9a1b5badf1aa419454faf8f614ed0bad98f0bd66c544755c836e71b",
+  "noConnectionStringOrCredentialsIncluded": true
+}

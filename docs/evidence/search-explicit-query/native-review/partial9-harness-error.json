@@ -1,0 +1,8 @@
+{
+  "candidate": "9928f5dfc7fbd4af3c0a639ddb2c2f9312d061d2",
+  "name": "AssertionError",
+  "message": "Expected values to be strictly deep-equal:\n+ actual - expected\n\n  [\n    's',\n+   null,\n-   '',\n    'blank',\n    '_charset_'\n  ]\n",
+  "stack": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n+ actual - expected\n\n  [\n    's',\n+   null,\n-   '',\n    'blank',\n    '_charset_'\n  ]\n\n    at file://[private-review]/explicit-search-native-harness/final48.mjs:11:351",
+  "receipt": null,
+  "completedRows": 9
+}

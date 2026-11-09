@@ -1,0 +1,28 @@
+{
+  "classification": "NEEDS_REVISION: actual delegated form named-method errors; native GET still succeeds",
+  "candidate": "5a819ef4a68b3dcd8f9c2ea0e033d690f34d029a",
+  "tree": "c8a4c593b57ee628d7e8eda9507ff31a78bb1294",
+  "nodeSha256": "af2177df906780e5c6f65554a1181d606cd337789d3cfa9d9bb8d87ffaf5fc33",
+  "flushedProofSHA256": "aac1aa475b678843fd9ac859bb265d9ed0c2037fe57d38a471cd70ae79010c7c",
+  "firstUnflushedProofPreserved": true,
+  "firstUnflushedErrorCountsNotAcceptance": true,
+  "nativeRows": 3,
+  "actualDocumentGET200": 3,
+  "actualTypeErrors": 3,
+  "screenshotsIndividuallyViewed": [
+    "screenshots/explicit-search-native-flushed-closest-classic-1440.png",
+    "screenshots/explicit-search-native-flushed-matches-classic-1440.png",
+    "screenshots/explicit-search-native-flushed-getattribute-classic-1440.png"
+  ],
+  "setup": {
+    "uniqueDBSeedCount": 1,
+    "actualSavedContentBoundary": "post.rawContent; post.content is separately sanitized visible HTML",
+    "servicesOwned": [
+      3035,
+      3036,
+      3037
+    ],
+    "noMainChanges": true
+  },
+  "repair": "No runtime/UI source change yet; root decision pending"
+}

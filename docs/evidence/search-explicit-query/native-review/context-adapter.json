@@ -1,0 +1,30 @@
+{
+  "candidate": "9928f5dfc7fbd4af3c0a639ddb2c2f9312d061d2",
+  "classification": "Existing numeric-only Source date template priority selected surrounding Year template, so fixture anchor absent; not explicit-query regression",
+  "completedV2Rows": 24,
+  "rows": [
+    {
+      "label": "bare",
+      "status": 200,
+      "path": "/explicit-search-native-default-2ef29451bb6ec2d0/",
+      "bodySha256": "8a2a4b0b81b2c81ac47c179326674a3dc8d3133f923b68c0a422ebdfd6d61a44",
+      "routeKind": "singular",
+      "selectedPostId": 5,
+      "heading": "Explicit Search Native Default global",
+      "formIds": [
+        "explicit-search-native-default"
+      ]
+    },
+    {
+      "label": "original-year-context",
+      "status": 200,
+      "path": "/explicit-search-native-default-2ef29451bb6ec2d0/?year=1999&page=1&query-7-page=2&ambient_marker=not-explicit",
+      "bodySha256": "653283fab17cf57771c531506dc01573d8406a56443c6f48ed5d665ecf0624d6",
+      "routeKind": "singular",
+      "selectedPostId": 5,
+      "heading": "Year: 1999",
+      "formIds": []
+    }
+  ],
+  "adapter": "Omit ambient year to keep the existing saved Source template; preserve page1/query7/unknown marker; no saved content change"
+}

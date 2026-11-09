@@ -1,0 +1,198 @@
+{
+  "candidate": "9928f5dfc7fbd4af3c0a639ddb2c2f9312d061d2",
+  "notAdditionalSubmissions": true,
+  "rows": [
+    {
+      "candidate": "9928f5dfc7fbd4af3c0a639ddb2c2f9312d061d2",
+      "theme": "classic",
+      "scripts": false,
+      "width": 375,
+      "control": "ordinary",
+      "part": "form",
+      "path": "/explicit-search-native-ordinary-2ef29451bb6ec2d0/",
+      "classification": "Read-only supplementary scroll framing; no form submission or fixture change",
+      "framing": {
+        "bottom": 565.03125,
+        "height": 84.671875,
+        "scriptLifecycle": false,
+        "scrollY": 519,
+        "text": "Ordinary explicit Search input\nOrdinary explicit Search button",
+        "top": 480.359375,
+        "viewport": 1000
+      },
+      "actualGETs": [
+        {
+          "id": 943,
+          "method": "GET",
+          "path": "/explicit-search-native-ordinary-2ef29451bb6ec2d0/",
+          "destination": "document",
+          "startedAt": 1794233754070,
+          "status": 200,
+          "finishedAt": 1794233754126
+        }
+      ],
+      "actualPOSTs": 0,
+      "screenshot": "screenshots/explicit-search-native-supplement-classic-nojs-375-ordinary-form.png"
+    },
+    {
+      "candidate": "9928f5dfc7fbd4af3c0a639ddb2c2f9312d061d2",
+      "theme": "classic",
+      "scripts": false,
+      "width": 375,
+      "control": "reserved",
+      "part": "form",
+      "path": "/explicit-search-native-reserved-2ef29451bb6ec2d0/",
+      "classification": "Read-only supplementary scroll framing; no form submission or fixture change",
+      "framing": {
+        "bottom": 565.03125,
+        "height": 84.671875,
+        "scriptLifecycle": false,
+        "scrollY": 519,
+        "text": "Reserved names Search input\nReserved names Search button",
+        "top": 480.359375,
+        "viewport": 1000
+      },
+      "actualGETs": [
+        {
+          "id": 947,
+          "method": "GET",
+          "path": "/explicit-search-native-reserved-2ef29451bb6ec2d0/",
+          "destination": "document",
+          "startedAt": 1794233754286,
+          "status": 200,
+          "finishedAt": 1794233754319
+        }
+      ],
+      "actualPOSTs": 0,
+      "screenshot": "screenshots/explicit-search-native-supplement-classic-nojs-375-reserved-form.png"
+    },
+    {
+      "candidate": "9928f5dfc7fbd4af3c0a639ddb2c2f9312d061d2",
+      "theme": "classic",
+      "scripts": false,
+      "width": 375,
+      "control": "entities",
+      "part": "form",
+      "path": "/explicit-search-native-entities-2ef29451bb6ec2d0/",
+      "classification": "Read-only supplementary scroll framing; no form submission or fixture change",
+      "framing": {
+        "bottom": 579.953125,
+        "height": 114.59375,
+        "scriptLifecycle": false,
+        "scrollY": 534,
+        "text": "Entities and JSON values Search input\nEntities and JSON values Search button",
+        "top": 465.359375,
+        "viewport": 1000
+      },
+      "actualGETs": [
+        {
+          "id": 950,
+          "method": "GET",
+          "path": "/explicit-search-native-entities-2ef29451bb6ec2d0/",
+          "destination": "document",
+          "startedAt": 1794233754465,
+          "status": 200,
+          "finishedAt": 1794233754503
+        }
+      ],
+      "actualPOSTs": 0,
+      "screenshot": "screenshots/explicit-search-native-supplement-classic-nojs-375-entities-form.png"
+    },
+    {
+      "candidate": "9928f5dfc7fbd4af3c0a639ddb2c2f9312d061d2",
+      "theme": "classic",
+      "scripts": false,
+      "width": 375,
+      "control": "no-button",
+      "part": "form",
+      "path": "/explicit-search-native-no-button-2ef29451bb6ec2d0/",
+      "classification": "Read-only supplementary scroll framing; no form submission or fixture change",
+      "framing": {
+        "bottom": 557.890625,
+        "height": 69.921875,
+        "scriptLifecycle": false,
+        "scrollY": 463,
+        "text": "No button Search input",
+        "top": 487.96875,
+        "viewport": 1000
+      },
+      "actualGETs": [
+        {
+          "id": 953,
+          "method": "GET",
+          "path": "/explicit-search-native-no-button-2ef29451bb6ec2d0/",
+          "destination": "document",
+          "startedAt": 1794233754633,
+          "status": 200,
+          "finishedAt": 1794233754671
+        }
+      ],
+      "actualPOSTs": 0,
+      "screenshot": "screenshots/explicit-search-native-supplement-classic-nojs-375-no-button-form.png"
+    },
+    {
+      "candidate": "9928f5dfc7fbd4af3c0a639ddb2c2f9312d061d2",
+      "theme": "classic",
+      "scripts": false,
+      "width": 375,
+      "control": "ordinary",
+      "part": "result",
+      "path": "/?s=ExplicitSearchNativeNeedle&category=explicit-search-native-2ef29451bb6ec2d0&case_marker=explicit-own",
+      "classification": "Read-only supplementary scroll framing; no form submission or fixture change",
+      "framing": {
+        "bottom": 619.90625,
+        "height": 194.15625,
+        "scriptLifecycle": false,
+        "scrollY": 722,
+        "text": "ExplicitSearchNativeNeedle Result\n\nFebruary 3, 2001\n\nEXPLICIT SEARCH OWNED PUBLIC RESULT",
+        "top": 425.75,
+        "viewport": 1000
+      },
+      "actualGETs": [
+        {
+          "id": 956,
+          "method": "GET",
+          "path": "/?s=ExplicitSearchNativeNeedle&category=explicit-search-native-2ef29451bb6ec2d0&case_marker=explicit-own",
+          "destination": "document",
+          "startedAt": 1794233754766,
+          "status": 200,
+          "finishedAt": 1794233754789
+        }
+      ],
+      "actualPOSTs": 0,
+      "screenshot": "screenshots/explicit-search-native-supplement-classic-nojs-375-ordinary-result.png"
+    },
+    {
+      "candidate": "9928f5dfc7fbd4af3c0a639ddb2c2f9312d061d2",
+      "theme": "classic",
+      "scripts": true,
+      "width": 375,
+      "control": "ordinary",
+      "part": "form",
+      "path": "/explicit-search-native-ordinary-2ef29451bb6ec2d0/",
+      "classification": "Read-only supplementary scroll framing; no form submission or fixture change",
+      "framing": {
+        "bottom": 565.03125,
+        "height": 84.671875,
+        "scriptLifecycle": true,
+        "scrollY": 519,
+        "text": "Ordinary explicit Search input\nOrdinary explicit Search button",
+        "top": 480.359375,
+        "viewport": 1000
+      },
+      "actualGETs": [
+        {
+          "id": 959,
+          "method": "GET",
+          "path": "/explicit-search-native-ordinary-2ef29451bb6ec2d0/",
+          "destination": "document",
+          "startedAt": 1794233755923,
+          "status": 200,
+          "finishedAt": 1794233755962
+        }
+      ],
+      "actualPOSTs": 0,
+      "screenshot": "screenshots/explicit-search-native-supplement-classic-js-375-ordinary-form.png"
+    }
+  ]
+}

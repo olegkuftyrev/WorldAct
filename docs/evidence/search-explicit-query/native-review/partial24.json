@@ -1,0 +1,2469 @@
+{
+  "candidate": "9928f5dfc7fbd4af3c0a639ddb2c2f9312d061d2",
+  "tree": "2bad521ca336ac309e735fee7975dc033bdf5153",
+  "nodeSha256": "af2177df906780e5c6f65554a1181d606cd337789d3cfa9d9bb8d87ffaf5fc33",
+  "clientAsset": "/assets/index-xwURwyyl.js",
+  "selectorCount": 48,
+  "rows": [
+    {
+      "theme": "classic",
+      "width": 1440,
+      "scripts": true,
+      "control": "default",
+      "action": "Enter",
+      "form": {
+        "actionAttribute": "/",
+        "canonicalCount": 1,
+        "errors": [],
+        "fields": [
+          {
+            "attributeValue": null,
+            "name": "s",
+            "nameAttribute": "s",
+            "required": true,
+            "type": "search",
+            "validityMissing": true,
+            "value": ""
+          }
+        ],
+        "methodAttribute": "get",
+        "originalFormRetained": true,
+        "overflow": false,
+        "path": "/explicit-search-native-default-2ef29451bb6ec2d0/?year=1999&page=1&query-7-page=2&ambient_marker=not-explicit",
+        "properties": {
+          "action": "string",
+          "closest": "function",
+          "formaction": "undefined",
+          "getAttribute": "function",
+          "matches": "function",
+          "method": "string",
+          "submit": "function"
+        },
+        "robotsCount": 0,
+        "scripts": true
+      },
+      "actualDocuments": [
+        {
+          "id": 217,
+          "method": "GET",
+          "path": "/?s=ExplicitSearchNativeNeedle",
+          "destination": "document",
+          "startedAt": 1794233294273,
+          "status": 200,
+          "finishedAt": 1794233294296
+        }
+      ],
+      "ownedCDPDocumentWire": [
+        {
+          "method": "GET",
+          "path": "/?s=ExplicitSearchNativeNeedle",
+          "status": 200
+        }
+      ],
+      "pageErrors": [],
+      "expectedEntries": [
+        [
+          "s",
+          "ExplicitSearchNativeNeedle"
+        ]
+      ],
+      "result": {
+        "applicationLifecycle": true,
+        "canonicalCount": 1,
+        "overflow": false,
+        "path": "/?s=ExplicitSearchNativeNeedle",
+        "robotsCount": 0,
+        "text": "WorldAct\nExplicit Search Native Closest name\nExplicit Search Native Default global\nExplicit Search Native Different duplicate s\nExplicit Search Native Empty and charset\nExplicit Search Native Entities and JSON values\nExplicit Search Native Equal duplicate s\nExplicit Search Native GetAttribute name\nExplicit Search Native Matches name\nExplicit Search Native No button\nExplicit Search Native Ordinary explicit\nExplicit Search Native Reserved names\nSample Page\nSearch results for: ExplicitSearchNativeNeedle\nSearch posts\nSearch\nShow all posts\nExplicitSearchNativeNeedle Result\n\nFebruary 3, 2001\n\nEXPLICIT SEARCH OWNED PUBLIC RESULT\n\nWorldAct\n\nJust another WorldAct site\n\nBlog\nExplicit Search Native Closest name\nExplicit Search Native Default global\nExplicit Search Native Different duplicate s\nExplicit Search Native Empty and charset\n\nDesigned with WorldAct\n\nLog in"
+      },
+      "initialModelReadCount": 1,
+      "resultModelReadCount": 1,
+      "actualNewClientAsset": true,
+      "screenshots": []
+    },
+    {
+      "theme": "classic",
+      "width": 1440,
+      "scripts": true,
+      "control": "ordinary",
+      "action": "button",
+      "form": {
+        "actionAttribute": "/",
+        "canonicalCount": 1,
+        "errors": [],
+        "fields": [
+          {
+            "attributeValue": null,
+            "name": "s",
+            "nameAttribute": "s",
+            "required": true,
+            "type": "search",
+            "validityMissing": true,
+            "value": ""
+          },
+          {
+            "attributeValue": "explicit-search-native-2ef29451bb6ec2d0",
+            "name": "category",
+            "nameAttribute": "category",
+            "required": false,
+            "type": "hidden",
+            "validityMissing": false,
+            "value": "explicit-search-native-2ef29451bb6ec2d0"
+          },
+          {
+            "attributeValue": "explicit-own",
+            "name": "case_marker",
+            "nameAttribute": "case_marker",
+            "required": false,
+            "type": "hidden",
+            "validityMissing": false,
+            "value": "explicit-own"
+          }
+        ],
+        "methodAttribute": "get",
+        "originalFormRetained": true,
+        "overflow": false,
+        "path": "/explicit-search-native-ordinary-2ef29451bb6ec2d0/",
+        "properties": {
+          "action": "string",
+          "closest": "function",
+          "formaction": "undefined",
+          "getAttribute": "function",
+          "matches": "function",
+          "method": "string",
+          "submit": "function"
+        },
+        "robotsCount": 0,
+        "scripts": true
+      },
+      "requiredControl": {
+        "realEmptyButtonClick": true,
+        "noDocumentRequest": true,
+        "visibleValueMissing": true
+      },
+      "actualDocuments": [
+        {
+          "id": 231,
+          "method": "GET",
+          "path": "/?s=ExplicitSearchNativeNeedle&category=explicit-search-native-2ef29451bb6ec2d0&case_marker=explicit-own",
+          "destination": "document",
+          "startedAt": 1794233294742,
+          "status": 200,
+          "finishedAt": 1794233294760
+        }
+      ],
+      "ownedCDPDocumentWire": [
+        {
+          "method": "GET",
+          "path": "/?s=ExplicitSearchNativeNeedle&category=explicit-search-native-2ef29451bb6ec2d0&case_marker=explicit-own",
+          "status": 200
+        }
+      ],
+      "pageErrors": [],
+      "expectedEntries": [
+        [
+          "s",
+          "ExplicitSearchNativeNeedle"
+        ],
+        [
+          "category",
+          "explicit-search-native-2ef29451bb6ec2d0"
+        ],
+        [
+          "case_marker",
+          "explicit-own"
+        ]
+      ],
+      "result": {
+        "applicationLifecycle": true,
+        "canonicalCount": 1,
+        "overflow": false,
+        "path": "/?s=ExplicitSearchNativeNeedle&category=explicit-search-native-2ef29451bb6ec2d0&case_marker=explicit-own",
+        "robotsCount": 0,
+        "text": "WorldAct\nExplicit Search Native Closest name\nExplicit Search Native Default global\nExplicit Search Native Different duplicate s\nExplicit Search Native Empty and charset\nExplicit Search Native Entities and JSON values\nExplicit Search Native Equal duplicate s\nExplicit Search Native GetAttribute name\nExplicit Search Native Matches name\nExplicit Search Native No button\nExplicit Search Native Ordinary explicit\nExplicit Search Native Reserved names\nSample Page\nSearch results for: ExplicitSearchNativeNeedle\nSearch posts\nSearch\nShow all posts\nExplicitSearchNativeNeedle Result\n\nFebruary 3, 2001\n\nEXPLICIT SEARCH OWNED PUBLIC RESULT\n\nWorldAct\n\nJust another WorldAct site\n\nBlog\nExplicit Search Native Closest name\nExplicit Search Native Default global\nExplicit Search Native Different duplicate s\nExplicit Search Native Empty and charset\n\nDesigned with WorldAct\n\nLog in"
+      },
+      "initialModelReadCount": 1,
+      "resultModelReadCount": 1,
+      "actualNewClientAsset": true,
+      "screenshots": [
+        "screenshots/explicit-search-native-final-v2-classic-js-1440-ordinary-form.png",
+        "screenshots/explicit-search-native-final-v2-classic-js-1440-ordinary-result.png"
+      ]
+    },
+    {
+      "theme": "classic",
+      "width": 1440,
+      "scripts": true,
+      "control": "reserved",
+      "action": "button",
+      "form": {
+        "actionAttribute": "/",
+        "canonicalCount": 1,
+        "errors": [],
+        "fields": [
+          {
+            "attributeValue": null,
+            "name": "s",
+            "nameAttribute": "s",
+            "required": true,
+            "type": "search",
+            "validityMissing": true,
+            "value": ""
+          },
+          {
+            "attributeValue": "/not-an-action",
+            "name": "action",
+            "nameAttribute": "action",
+            "required": false,
+            "type": "hidden",
+            "validityMissing": false,
+            "value": "/not-an-action"
+          },
+          {
+            "attributeValue": "post",
+            "name": "method",
+            "nameAttribute": "method",
+            "required": false,
+            "type": "hidden",
+            "validityMissing": false,
+            "value": "post"
+          },
+          {
+            "attributeValue": "literal-submit-data",
+            "name": "submit",
+            "nameAttribute": "submit",
+            "required": false,
+            "type": "hidden",
+            "validityMissing": false,
+            "value": "literal-submit-data"
+          },
+          {
+            "attributeValue": "/not-a-formaction",
+            "name": "formaction",
+            "nameAttribute": "formaction",
+            "required": false,
+            "type": "hidden",
+            "validityMissing": false,
+            "value": "/not-a-formaction"
+          }
+        ],
+        "methodAttribute": "get",
+        "originalFormRetained": true,
+        "overflow": false,
+        "path": "/explicit-search-native-reserved-2ef29451bb6ec2d0/",
+        "properties": {
+          "action": "object",
+          "closest": "function",
+          "formaction": "object",
+          "getAttribute": "function",
+          "matches": "function",
+          "method": "object",
+          "submit": "object"
+        },
+        "robotsCount": 0,
+        "scripts": true
+      },
+      "actualDocuments": [
+        {
+          "id": 245,
+          "method": "GET",
+          "path": "/?s=ExplicitSearchNativeNeedle&action=%2Fnot-an-action&method=post&submit=literal-submit-data&formaction=%2Fnot-a-formaction",
+          "destination": "document",
+          "startedAt": 1794233295238,
+          "status": 200,
+          "finishedAt": 1794233295259
+        }
+      ],
+      "ownedCDPDocumentWire": [
+        {
+          "method": "GET",
+          "path": "/?s=ExplicitSearchNativeNeedle&action=%2Fnot-an-action&method=post&submit=literal-submit-data&formaction=%2Fnot-a-formaction",
+          "status": 200
+        }
+      ],
+      "pageErrors": [],
+      "expectedEntries": [
+        [
+          "s",
+          "ExplicitSearchNativeNeedle"
+        ],
+        [
+          "action",
+          "/not-an-action"
+        ],
+        [
+          "method",
+          "post"
+        ],
+        [
+          "submit",
+          "literal-submit-data"
+        ],
+        [
+          "formaction",
+          "/not-a-formaction"
+        ]
+      ],
+      "result": {
+        "applicationLifecycle": true,
+        "canonicalCount": 1,
+        "overflow": false,
+        "path": "/?s=ExplicitSearchNativeNeedle&action=%2Fnot-an-action&method=post&submit=literal-submit-data&formaction=%2Fnot-a-formaction",
+        "robotsCount": 0,
+        "text": "WorldAct\nExplicit Search Native Closest name\nExplicit Search Native Default global\nExplicit Search Native Different duplicate s\nExplicit Search Native Empty and charset\nExplicit Search Native Entities and JSON values\nExplicit Search Native Equal duplicate s\nExplicit Search Native GetAttribute name\nExplicit Search Native Matches name\nExplicit Search Native No button\nExplicit Search Native Ordinary explicit\nExplicit Search Native Reserved names\nSample Page\nSearch results for: ExplicitSearchNativeNeedle\nSearch posts\nSearch\nShow all posts\nExplicitSearchNativeNeedle Result\n\nFebruary 3, 2001\n\nEXPLICIT SEARCH OWNED PUBLIC RESULT\n\nWorldAct\n\nJust another WorldAct site\n\nBlog\nExplicit Search Native Closest name\nExplicit Search Native Default global\nExplicit Search Native Different duplicate s\nExplicit Search Native Empty and charset\n\nDesigned with WorldAct\n\nLog in"
+      },
+      "initialModelReadCount": 1,
+      "resultModelReadCount": 1,
+      "actualNewClientAsset": true,
+      "screenshots": [
+        "screenshots/explicit-search-native-final-v2-classic-js-1440-reserved-form.png"
+      ]
+    },
+    {
+      "theme": "classic",
+      "width": 1440,
+      "scripts": true,
+      "control": "closest",
+      "action": "button",
+      "form": {
+        "actionAttribute": "/",
+        "canonicalCount": 1,
+        "errors": [],
+        "fields": [
+          {
+            "attributeValue": null,
+            "name": "s",
+            "nameAttribute": "s",
+            "required": true,
+            "type": "search",
+            "validityMissing": true,
+            "value": ""
+          },
+          {
+            "attributeValue": "literal-closest-data",
+            "name": "closest",
+            "nameAttribute": "closest",
+            "required": false,
+            "type": "hidden",
+            "validityMissing": false,
+            "value": "literal-closest-data"
+          }
+        ],
+        "methodAttribute": "get",
+        "originalFormRetained": true,
+        "overflow": false,
+        "path": "/explicit-search-native-closest-2ef29451bb6ec2d0/",
+        "properties": {
+          "action": "string",
+          "closest": "object",
+          "formaction": "undefined",
+          "getAttribute": "function",
+          "matches": "function",
+          "method": "string",
+          "submit": "function"
+        },
+        "robotsCount": 0,
+        "scripts": true
+      },
+      "actualDocuments": [
+        {
+          "id": 259,
+          "method": "GET",
+          "path": "/?s=ExplicitSearchNativeNeedle&closest=literal-closest-data",
+          "destination": "document",
+          "startedAt": 1794233295624,
+          "status": 200,
+          "finishedAt": 1794233295644
+        }
+      ],
+      "ownedCDPDocumentWire": [
+        {
+          "method": "GET",
+          "path": "/?s=ExplicitSearchNativeNeedle&closest=literal-closest-data",
+          "status": 200
+        }
+      ],
+      "pageErrors": [],
+      "expectedEntries": [
+        [
+          "s",
+          "ExplicitSearchNativeNeedle"
+        ],
+        [
+          "closest",
+          "literal-closest-data"
+        ]
+      ],
+      "result": {
+        "applicationLifecycle": true,
+        "canonicalCount": 1,
+        "overflow": false,
+        "path": "/?s=ExplicitSearchNativeNeedle&closest=literal-closest-data",
+        "robotsCount": 0,
+        "text": "WorldAct\nExplicit Search Native Closest name\nExplicit Search Native Default global\nExplicit Search Native Different duplicate s\nExplicit Search Native Empty and charset\nExplicit Search Native Entities and JSON values\nExplicit Search Native Equal duplicate s\nExplicit Search Native GetAttribute name\nExplicit Search Native Matches name\nExplicit Search Native No button\nExplicit Search Native Ordinary explicit\nExplicit Search Native Reserved names\nSample Page\nSearch results for: ExplicitSearchNativeNeedle\nSearch posts\nSearch\nShow all posts\nExplicitSearchNativeNeedle Result\n\nFebruary 3, 2001\n\nEXPLICIT SEARCH OWNED PUBLIC RESULT\n\nWorldAct\n\nJust another WorldAct site\n\nBlog\nExplicit Search Native Closest name\nExplicit Search Native Default global\nExplicit Search Native Different duplicate s\nExplicit Search Native Empty and charset\n\nDesigned with WorldAct\n\nLog in"
+      },
+      "initialModelReadCount": 1,
+      "resultModelReadCount": 1,
+      "actualNewClientAsset": true,
+      "screenshots": []
+    },
+    {
+      "theme": "classic",
+      "width": 1440,
+      "scripts": true,
+      "control": "matches",
+      "action": "button",
+      "form": {
+        "actionAttribute": "/",
+        "canonicalCount": 1,
+        "errors": [],
+        "fields": [
+          {
+            "attributeValue": null,
+            "name": "s",
+            "nameAttribute": "s",
+            "required": true,
+            "type": "search",
+            "validityMissing": true,
+            "value": ""
+          },
+          {
+            "attributeValue": "literal-matches-data",
+            "name": "matches",
+            "nameAttribute": "matches",
+            "required": false,
+            "type": "hidden",
+            "validityMissing": false,
+            "value": "literal-matches-data"
+          }
+        ],
+        "methodAttribute": "get",
+        "originalFormRetained": true,
+        "overflow": false,
+        "path": "/explicit-search-native-matches-2ef29451bb6ec2d0/",
+        "properties": {
+          "action": "string",
+          "closest": "function",
+          "formaction": "undefined",
+          "getAttribute": "function",
+          "matches": "object",
+          "method": "string",
+          "submit": "function"
+        },
+        "robotsCount": 0,
+        "scripts": true
+      },
+      "actualDocuments": [
+        {
+          "id": 273,
+          "method": "GET",
+          "path": "/?s=ExplicitSearchNativeNeedle&matches=literal-matches-data",
+          "destination": "document",
+          "startedAt": 1794233296008,
+          "status": 200,
+          "finishedAt": 1794233296026
+        }
+      ],
+      "ownedCDPDocumentWire": [
+        {
+          "method": "GET",
+          "path": "/?s=ExplicitSearchNativeNeedle&matches=literal-matches-data",
+          "status": 200
+        }
+      ],
+      "pageErrors": [],
+      "expectedEntries": [
+        [
+          "s",
+          "ExplicitSearchNativeNeedle"
+        ],
+        [
+          "matches",
+          "literal-matches-data"
+        ]
+      ],
+      "result": {
+        "applicationLifecycle": true,
+        "canonicalCount": 1,
+        "overflow": false,
+        "path": "/?s=ExplicitSearchNativeNeedle&matches=literal-matches-data",
+        "robotsCount": 0,
+        "text": "WorldAct\nExplicit Search Native Closest name\nExplicit Search Native Default global\nExplicit Search Native Different duplicate s\nExplicit Search Native Empty and charset\nExplicit Search Native Entities and JSON values\nExplicit Search Native Equal duplicate s\nExplicit Search Native GetAttribute name\nExplicit Search Native Matches name\nExplicit Search Native No button\nExplicit Search Native Ordinary explicit\nExplicit Search Native Reserved names\nSample Page\nSearch results for: ExplicitSearchNativeNeedle\nSearch posts\nSearch\nShow all posts\nExplicitSearchNativeNeedle Result\n\nFebruary 3, 2001\n\nEXPLICIT SEARCH OWNED PUBLIC RESULT\n\nWorldAct\n\nJust another WorldAct site\n\nBlog\nExplicit Search Native Closest name\nExplicit Search Native Default global\nExplicit Search Native Different duplicate s\nExplicit Search Native Empty and charset\n\nDesigned with WorldAct\n\nLog in"
+      },
+      "initialModelReadCount": 1,
+      "resultModelReadCount": 1,
+      "actualNewClientAsset": true,
+      "screenshots": []
+    },
+    {
+      "theme": "classic",
+      "width": 1440,
+      "scripts": true,
+      "control": "getattribute",
+      "action": "button",
+      "form": {
+        "actionAttribute": "/",
+        "canonicalCount": 1,
+        "errors": [],
+        "fields": [
+          {
+            "attributeValue": null,
+            "name": "s",
+            "nameAttribute": "s",
+            "required": true,
+            "type": "search",
+            "validityMissing": true,
+            "value": ""
+          },
+          {
+            "attributeValue": "literal-getattribute-data",
+            "name": "getAttribute",
+            "nameAttribute": "getAttribute",
+            "required": false,
+            "type": "hidden",
+            "validityMissing": false,
+            "value": "literal-getattribute-data"
+          }
+        ],
+        "methodAttribute": "get",
+        "originalFormRetained": true,
+        "overflow": false,
+        "path": "/explicit-search-native-getattribute-2ef29451bb6ec2d0/",
+        "properties": {
+          "action": "string",
+          "closest": "function",
+          "formaction": "undefined",
+          "getAttribute": "object",
+          "matches": "function",
+          "method": "string",
+          "submit": "function"
+        },
+        "robotsCount": 0,
+        "scripts": true
+      },
+      "actualDocuments": [
+        {
+          "id": 287,
+          "method": "GET",
+          "path": "/?s=ExplicitSearchNativeNeedle&getAttribute=literal-getattribute-data",
+          "destination": "document",
+          "startedAt": 1794233296390,
+          "status": 200,
+          "finishedAt": 1794233296410
+        }
+      ],
+      "ownedCDPDocumentWire": [
+        {
+          "method": "GET",
+          "path": "/?s=ExplicitSearchNativeNeedle&getAttribute=literal-getattribute-data",
+          "status": 200
+        }
+      ],
+      "pageErrors": [],
+      "expectedEntries": [
+        [
+          "s",
+          "ExplicitSearchNativeNeedle"
+        ],
+        [
+          "getAttribute",
+          "literal-getattribute-data"
+        ]
+      ],
+      "result": {
+        "applicationLifecycle": true,
+        "canonicalCount": 1,
+        "overflow": false,
+        "path": "/?s=ExplicitSearchNativeNeedle&getAttribute=literal-getattribute-data",
+        "robotsCount": 0,
+        "text": "WorldAct\nExplicit Search Native Closest name\nExplicit Search Native Default global\nExplicit Search Native Different duplicate s\nExplicit Search Native Empty and charset\nExplicit Search Native Entities and JSON values\nExplicit Search Native Equal duplicate s\nExplicit Search Native GetAttribute name\nExplicit Search Native Matches name\nExplicit Search Native No button\nExplicit Search Native Ordinary explicit\nExplicit Search Native Reserved names\nSample Page\nSearch results for: ExplicitSearchNativeNeedle\nSearch posts\nSearch\nShow all posts\nExplicitSearchNativeNeedle Result\n\nFebruary 3, 2001\n\nEXPLICIT SEARCH OWNED PUBLIC RESULT\n\nWorldAct\n\nJust another WorldAct site\n\nBlog\nExplicit Search Native Closest name\nExplicit Search Native Default global\nExplicit Search Native Different duplicate s\nExplicit Search Native Empty and charset\n\nDesigned with WorldAct\n\nLog in"
+      },
+      "initialModelReadCount": 1,
+      "resultModelReadCount": 1,
+      "actualNewClientAsset": true,
+      "screenshots": []
+    },
+    {
+      "theme": "classic",
+      "width": 1440,
+      "scripts": true,
+      "control": "duplicate-different",
+      "action": "button",
+      "form": {
+        "actionAttribute": "/",
+        "canonicalCount": 1,
+        "errors": [],
+        "fields": [
+          {
+            "attributeValue": null,
+            "name": "s",
+            "nameAttribute": "s",
+            "required": true,
+            "type": "search",
+            "validityMissing": true,
+            "value": ""
+          },
+          {
+            "attributeValue": "HiddenDifferentNeedle",
+            "name": "s",
+            "nameAttribute": "s",
+            "required": false,
+            "type": "hidden",
+            "validityMissing": false,
+            "value": "HiddenDifferentNeedle"
+          }
+        ],
+        "methodAttribute": "get",
+        "originalFormRetained": true,
+        "overflow": false,
+        "path": "/explicit-search-native-duplicate-different-2ef29451bb6ec2d0/",
+        "properties": {
+          "action": "string",
+          "closest": "function",
+          "formaction": "undefined",
+          "getAttribute": "function",
+          "matches": "function",
+          "method": "string",
+          "submit": "function"
+        },
+        "robotsCount": 0,
+        "scripts": true
+      },
+      "actualDocuments": [
+        {
+          "id": 301,
+          "method": "GET",
+          "path": "/?s=ExplicitSearchNativeNeedle&s=HiddenDifferentNeedle",
+          "destination": "document",
+          "startedAt": 1794233296774,
+          "status": 400,
+          "finishedAt": 1794233296777
+        }
+      ],
+      "ownedCDPDocumentWire": [
+        {
+          "method": "GET",
+          "path": "/?s=ExplicitSearchNativeNeedle&s=HiddenDifferentNeedle",
+          "status": 400
+        }
+      ],
+      "pageErrors": [],
+      "expectedEntries": [
+        [
+          "s",
+          "ExplicitSearchNativeNeedle"
+        ],
+        [
+          "s",
+          "HiddenDifferentNeedle"
+        ]
+      ],
+      "result": {
+        "applicationLifecycle": false,
+        "canonicalCount": 0,
+        "overflow": false,
+        "path": "/?s=ExplicitSearchNativeNeedle&s=HiddenDifferentNeedle",
+        "robotsCount": 0,
+        "text": "{\"error\":\"Use a single scalar value for each public query parameter.\"}"
+      },
+      "initialModelReadCount": 1,
+      "resultModelReadCount": 0,
+      "actualNewClientAsset": true,
+      "screenshots": []
+    },
+    {
+      "theme": "classic",
+      "width": 1440,
+      "scripts": true,
+      "control": "duplicate-equal",
+      "action": "Enter",
+      "form": {
+        "actionAttribute": "/",
+        "canonicalCount": 1,
+        "errors": [],
+        "fields": [
+          {
+            "attributeValue": null,
+            "name": "s",
+            "nameAttribute": "s",
+            "required": true,
+            "type": "search",
+            "validityMissing": true,
+            "value": ""
+          },
+          {
+            "attributeValue": "ExplicitSearchNativeNeedle",
+            "name": "s",
+            "nameAttribute": "s",
+            "required": false,
+            "type": "hidden",
+            "validityMissing": false,
+            "value": "ExplicitSearchNativeNeedle"
+          }
+        ],
+        "methodAttribute": "get",
+        "originalFormRetained": true,
+        "overflow": false,
+        "path": "/explicit-search-native-duplicate-equal-2ef29451bb6ec2d0/",
+        "properties": {
+          "action": "string",
+          "closest": "function",
+          "formaction": "undefined",
+          "getAttribute": "function",
+          "matches": "function",
+          "method": "string",
+          "submit": "function"
+        },
+        "robotsCount": 0,
+        "scripts": true
+      },
+      "actualDocuments": [
+        {
+          "id": 309,
+          "method": "GET",
+          "path": "/?s=ExplicitSearchNativeNeedle&s=ExplicitSearchNativeNeedle",
+          "destination": "document",
+          "startedAt": 1794233297142,
+          "status": 400,
+          "finishedAt": 1794233297145
+        }
+      ],
+      "ownedCDPDocumentWire": [
+        {
+          "method": "GET",
+          "path": "/?s=ExplicitSearchNativeNeedle&s=ExplicitSearchNativeNeedle",
+          "status": 400
+        }
+      ],
+      "pageErrors": [],
+      "expectedEntries": [
+        [
+          "s",
+          "ExplicitSearchNativeNeedle"
+        ],
+        [
+          "s",
+          "ExplicitSearchNativeNeedle"
+        ]
+      ],
+      "result": {
+        "applicationLifecycle": false,
+        "canonicalCount": 0,
+        "overflow": false,
+        "path": "/?s=ExplicitSearchNativeNeedle&s=ExplicitSearchNativeNeedle",
+        "robotsCount": 0,
+        "text": "{\"error\":\"Use a single scalar value for each public query parameter.\"}"
+      },
+      "initialModelReadCount": 1,
+      "resultModelReadCount": 0,
+      "actualNewClientAsset": true,
+      "screenshots": []
+    },
+    {
+      "theme": "classic",
+      "width": 1440,
+      "scripts": true,
+      "control": "entities",
+      "action": "button",
+      "form": {
+        "actionAttribute": "/",
+        "canonicalCount": 1,
+        "errors": [],
+        "fields": [
+          {
+            "attributeValue": null,
+            "name": "s",
+            "nameAttribute": "s",
+            "required": true,
+            "type": "search",
+            "validityMissing": true,
+            "value": ""
+          },
+          {
+            "attributeValue": "&apos;|\u00a9|A|J|&#65;|&#x000D800;|&#X000;",
+            "name": "entity",
+            "nameAttribute": "entity",
+            "required": false,
+            "type": "hidden",
+            "validityMissing": false,
+            "value": "&apos;|\u00a9|A|J|&#65;|&#x000D800;|&#X000;"
+          },
+          {
+            "attributeValue": "1",
+            "name": "yes",
+            "nameAttribute": "yes",
+            "required": false,
+            "type": "hidden",
+            "validityMissing": false,
+            "value": "1"
+          },
+          {
+            "attributeValue": null,
+            "name": "no",
+            "nameAttribute": "no",
+            "required": false,
+            "type": "hidden",
+            "validityMissing": false,
+            "value": ""
+          },
+          {
+            "attributeValue": null,
+            "name": "nil",
+            "nameAttribute": "nil",
+            "required": false,
+            "type": "hidden",
+            "validityMissing": false,
+            "value": ""
+          },
+          {
+            "attributeValue": "Array",
+            "name": "array",
+            "nameAttribute": "array",
+            "required": false,
+            "type": "hidden",
+            "validityMissing": false,
+            "value": "Array"
+          },
+          {
+            "attributeValue": "Array",
+            "name": "object",
+            "nameAttribute": "object",
+            "required": false,
+            "type": "hidden",
+            "validityMissing": false,
+            "value": "Array"
+          },
+          {
+            "attributeValue": "1.25",
+            "name": "decimal",
+            "nameAttribute": "decimal",
+            "required": false,
+            "type": "hidden",
+            "validityMissing": false,
+            "value": "1.25"
+          }
+        ],
+        "methodAttribute": "get",
+        "originalFormRetained": true,
+        "overflow": false,
+        "path": "/explicit-search-native-entities-2ef29451bb6ec2d0/",
+        "properties": {
+          "action": "string",
+          "closest": "function",
+          "formaction": "undefined",
+          "getAttribute": "function",
+          "matches": "function",
+          "method": "string",
+          "submit": "function"
+        },
+        "robotsCount": 0,
+        "scripts": true
+      },
+      "actualDocuments": [
+        {
+          "id": 317,
+          "method": "GET",
+          "path": "/?s=ExplicitSearchNativeNeedle&entity=%26apos%3B%7C%C2%A9%7CA%7CJ%7C%26%2365%3B%7C%26%23x000D800%3B%7C%26%23X000%3B&yes=1&no=&nil=&array=Array&object=Array&decimal=1.25",
+          "destination": "document",
+          "startedAt": 1794233297523,
+          "status": 200,
+          "finishedAt": 1794233297541
+        }
+      ],
+      "ownedCDPDocumentWire": [
+        {
+          "method": "GET",
+          "path": "/?s=ExplicitSearchNativeNeedle&entity=%26apos%3B%7C%C2%A9%7CA%7CJ%7C%26%2365%3B%7C%26%23x000D800%3B%7C%26%23X000%3B&yes=1&no=&nil=&array=Array&object=Array&decimal=1.25",
+          "status": 200
+        }
+      ],
+      "pageErrors": [],
+      "expectedEntries": [
+        [
+          "s",
+          "ExplicitSearchNativeNeedle"
+        ],
+        [
+          "entity",
+          "&apos;|\u00a9|A|J|&#65;|&#x000D800;|&#X000;"
+        ],
+        [
+          "yes",
+          "1"
+        ],
+        [
+          "no",
+          ""
+        ],
+        [
+          "nil",
+          ""
+        ],
+        [
+          "array",
+          "Array"
+        ],
+        [
+          "object",
+          "Array"
+        ],
+        [
+          "decimal",
+          "1.25"
+        ]
+      ],
+      "result": {
+        "applicationLifecycle": true,
+        "canonicalCount": 1,
+        "overflow": false,
+        "path": "/?s=ExplicitSearchNativeNeedle&entity=%26apos%3B%7C%C2%A9%7CA%7CJ%7C%26%2365%3B%7C%26%23x000D800%3B%7C%26%23X000%3B&yes=1&no=&nil=&array=Array&object=Array&decimal=1.25",
+        "robotsCount": 0,
+        "text": "WorldAct\nExplicit Search Native Closest name\nExplicit Search Native Default global\nExplicit Search Native Different duplicate s\nExplicit Search Native Empty and charset\nExplicit Search Native Entities and JSON values\nExplicit Search Native Equal duplicate s\nExplicit Search Native GetAttribute name\nExplicit Search Native Matches name\nExplicit Search Native No button\nExplicit Search Native Ordinary explicit\nExplicit Search Native Reserved names\nSample Page\nSearch results for: ExplicitSearchNativeNeedle\nSearch posts\nSearch\nShow all posts\nExplicitSearchNativeNeedle Result\n\nFebruary 3, 2001\n\nEXPLICIT SEARCH OWNED PUBLIC RESULT\n\nWorldAct\n\nJust another WorldAct site\n\nBlog\nExplicit Search Native Closest name\nExplicit Search Native Default global\nExplicit Search Native Different duplicate s\nExplicit Search Native Empty and charset\n\nDesigned with WorldAct\n\nLog in"
+      },
+      "initialModelReadCount": 1,
+      "resultModelReadCount": 1,
+      "actualNewClientAsset": true,
+      "screenshots": []
+    },
+    {
+      "theme": "classic",
+      "width": 1440,
+      "scripts": true,
+      "control": "empty",
+      "action": "button",
+      "form": {
+        "actionAttribute": "/",
+        "canonicalCount": 1,
+        "errors": [],
+        "fields": [
+          {
+            "attributeValue": null,
+            "name": "s",
+            "nameAttribute": "s",
+            "required": true,
+            "type": "search",
+            "validityMissing": true,
+            "value": ""
+          },
+          {
+            "attributeValue": "empty-name-not-submitted",
+            "name": "",
+            "nameAttribute": null,
+            "required": false,
+            "type": "hidden",
+            "validityMissing": false,
+            "value": "empty-name-not-submitted"
+          },
+          {
+            "attributeValue": null,
+            "name": "blank",
+            "nameAttribute": "blank",
+            "required": false,
+            "type": "hidden",
+            "validityMissing": false,
+            "value": ""
+          },
+          {
+            "attributeValue": "not-an-encoding",
+            "name": "_charset_",
+            "nameAttribute": "_charset_",
+            "required": false,
+            "type": "hidden",
+            "validityMissing": false,
+            "value": "not-an-encoding"
+          }
+        ],
+        "methodAttribute": "get",
+        "originalFormRetained": true,
+        "overflow": false,
+        "path": "/explicit-search-native-empty-2ef29451bb6ec2d0/",
+        "properties": {
+          "action": "string",
+          "closest": "function",
+          "formaction": "undefined",
+          "getAttribute": "function",
+          "matches": "function",
+          "method": "string",
+          "submit": "function"
+        },
+        "robotsCount": 0,
+        "scripts": true
+      },
+      "actualDocuments": [
+        {
+          "id": 331,
+          "method": "GET",
+          "path": "/?s=ExplicitSearchNativeNeedle&blank=&_charset_=UTF-8",
+          "destination": "document",
+          "startedAt": 1794233297907,
+          "status": 200,
+          "finishedAt": 1794233297923
+        }
+      ],
+      "ownedCDPDocumentWire": [
+        {
+          "method": "GET",
+          "path": "/?s=ExplicitSearchNativeNeedle&blank=&_charset_=UTF-8",
+          "status": 200
+        }
+      ],
+      "pageErrors": [],
+      "expectedEntries": [
+        [
+          "s",
+          "ExplicitSearchNativeNeedle"
+        ],
+        [
+          "blank",
+          ""
+        ],
+        [
+          "_charset_",
+          "UTF-8"
+        ]
+      ],
+      "result": {
+        "applicationLifecycle": true,
+        "canonicalCount": 1,
+        "overflow": false,
+        "path": "/?s=ExplicitSearchNativeNeedle&blank=&_charset_=UTF-8",
+        "robotsCount": 0,
+        "text": "WorldAct\nExplicit Search Native Closest name\nExplicit Search Native Default global\nExplicit Search Native Different duplicate s\nExplicit Search Native Empty and charset\nExplicit Search Native Entities and JSON values\nExplicit Search Native Equal duplicate s\nExplicit Search Native GetAttribute name\nExplicit Search Native Matches name\nExplicit Search Native No button\nExplicit Search Native Ordinary explicit\nExplicit Search Native Reserved names\nSample Page\nSearch results for: ExplicitSearchNativeNeedle\nSearch posts\nSearch\nShow all posts\nExplicitSearchNativeNeedle Result\n\nFebruary 3, 2001\n\nEXPLICIT SEARCH OWNED PUBLIC RESULT\n\nWorldAct\n\nJust another WorldAct site\n\nBlog\nExplicit Search Native Closest name\nExplicit Search Native Default global\nExplicit Search Native Different duplicate s\nExplicit Search Native Empty and charset\n\nDesigned with WorldAct\n\nLog in"
+      },
+      "initialModelReadCount": 1,
+      "resultModelReadCount": 1,
+      "actualNewClientAsset": true,
+      "screenshots": []
+    },
+    {
+      "theme": "classic",
+      "width": 1440,
+      "scripts": true,
+      "control": "no-button",
+      "action": "Enter",
+      "form": {
+        "actionAttribute": "/",
+        "canonicalCount": 1,
+        "errors": [],
+        "fields": [
+          {
+            "attributeValue": null,
+            "name": "s",
+            "nameAttribute": "s",
+            "required": true,
+            "type": "search",
+            "validityMissing": true,
+            "value": ""
+          },
+          {
+            "attributeValue": "no-button-own",
+            "name": "case_marker",
+            "nameAttribute": "case_marker",
+            "required": false,
+            "type": "hidden",
+            "validityMissing": false,
+            "value": "no-button-own"
+          }
+        ],
+        "methodAttribute": "get",
+        "originalFormRetained": true,
+        "overflow": false,
+        "path": "/explicit-search-native-no-button-2ef29451bb6ec2d0/",
+        "properties": {
+          "action": "string",
+          "closest": "function",
+          "formaction": "undefined",
+          "getAttribute": "function",
+          "matches": "function",
+          "method": "string",
+          "submit": "function"
+        },
+        "robotsCount": 0,
+        "scripts": true
+      },
+      "actualDocuments": [
+        {
+          "id": 345,
+          "method": "GET",
+          "path": "/?s=ExplicitSearchNativeNeedle&case_marker=no-button-own",
+          "destination": "document",
+          "startedAt": 1794233298275,
+          "status": 200,
+          "finishedAt": 1794233298292
+        }
+      ],
+      "ownedCDPDocumentWire": [
+        {
+          "method": "GET",
+          "path": "/?s=ExplicitSearchNativeNeedle&case_marker=no-button-own",
+          "status": 200
+        }
+      ],
+      "pageErrors": [],
+      "expectedEntries": [
+        [
+          "s",
+          "ExplicitSearchNativeNeedle"
+        ],
+        [
+          "case_marker",
+          "no-button-own"
+        ]
+      ],
+      "result": {
+        "applicationLifecycle": true,
+        "canonicalCount": 1,
+        "overflow": false,
+        "path": "/?s=ExplicitSearchNativeNeedle&case_marker=no-button-own",
+        "robotsCount": 0,
+        "text": "WorldAct\nExplicit Search Native Closest name\nExplicit Search Native Default global\nExplicit Search Native Different duplicate s\nExplicit Search Native Empty and charset\nExplicit Search Native Entities and JSON values\nExplicit Search Native Equal duplicate s\nExplicit Search Native GetAttribute name\nExplicit Search Native Matches name\nExplicit Search Native No button\nExplicit Search Native Ordinary explicit\nExplicit Search Native Reserved names\nSample Page\nSearch results for: ExplicitSearchNativeNeedle\nSearch posts\nSearch\nShow all posts\nExplicitSearchNativeNeedle Result\n\nFebruary 3, 2001\n\nEXPLICIT SEARCH OWNED PUBLIC RESULT\n\nWorldAct\n\nJust another WorldAct site\n\nBlog\nExplicit Search Native Closest name\nExplicit Search Native Default global\nExplicit Search Native Different duplicate s\nExplicit Search Native Empty and charset\n\nDesigned with WorldAct\n\nLog in"
+      },
+      "initialModelReadCount": 1,
+      "resultModelReadCount": 1,
+      "actualNewClientAsset": true,
+      "screenshots": []
+    },
+    {
+      "theme": "classic",
+      "width": 375,
+      "scripts": false,
+      "control": "default",
+      "action": "button",
+      "form": {
+        "actionAttribute": "/",
+        "canonicalCount": 1,
+        "errors": [],
+        "fields": [
+          {
+            "attributeValue": null,
+            "name": "s",
+            "nameAttribute": "s",
+            "required": true,
+            "type": "search",
+            "validityMissing": true,
+            "value": ""
+          }
+        ],
+        "methodAttribute": "get",
+        "originalFormRetained": false,
+        "overflow": false,
+        "path": "/explicit-search-native-default-2ef29451bb6ec2d0/?year=1999&page=1&query-7-page=2&ambient_marker=not-explicit",
+        "properties": {
+          "action": "string",
+          "closest": "function",
+          "formaction": "undefined",
+          "getAttribute": "function",
+          "matches": "function",
+          "method": "string",
+          "submit": "function"
+        },
+        "robotsCount": 0,
+        "scripts": false
+      },
+      "actualDocuments": [
+        {
+          "id": 356,
+          "method": "GET",
+          "path": "/?s=ExplicitSearchNativeNeedle",
+          "destination": "document",
+          "startedAt": 1794233299517,
+          "status": 200,
+          "finishedAt": 1794233299535
+        }
+      ],
+      "ownedCDPDocumentWire": [
+        {
+          "method": "GET",
+          "path": "/?s=ExplicitSearchNativeNeedle",
+          "status": 200
+        }
+      ],
+      "pageErrors": [],
+      "expectedEntries": [
+        [
+          "s",
+          "ExplicitSearchNativeNeedle"
+        ]
+      ],
+      "result": {
+        "applicationLifecycle": false,
+        "canonicalCount": 1,
+        "overflow": false,
+        "path": "/?s=ExplicitSearchNativeNeedle",
+        "robotsCount": 0,
+        "text": "WorldAct\nExplicit Search Native Closest name\nExplicit Search Native Default global\nExplicit Search Native Different duplicate s\nExplicit Search Native Empty and charset\nExplicit Search Native Entities and JSON values\nExplicit Search Native Equal duplicate s\nExplicit Search Native GetAttribute name\nExplicit Search Native Matches name\nExplicit Search Native No button\nExplicit Search Native Ordinary explicit\nExplicit Search Native Reserved names\nSample Page\nSearch results for: ExplicitSearchNativeNeedle\nSearch posts\nSearch\nShow all posts\nExplicitSearchNativeNeedle Result\n\nFebruary 3, 2001\n\nEXPLICIT SEARCH OWNED PUBLIC RESULT\n\nWorldAct\n\nJust another WorldAct site\n\nBlog\nExplicit Search Native Closest name\nExplicit Search Native Default global\nExplicit Search Native Different duplicate s\nExplicit Search Native Empty and charset\n\nDesigned with WorldAct\n\nLog in"
+      },
+      "initialModelReadCount": 0,
+      "resultModelReadCount": 0,
+      "actualNewClientAsset": true,
+      "screenshots": []
+    },
+    {
+      "theme": "classic",
+      "width": 375,
+      "scripts": false,
+      "control": "ordinary",
+      "action": "button",
+      "form": {
+        "actionAttribute": "/",
+        "canonicalCount": 1,
+        "errors": [],
+        "fields": [
+          {
+            "attributeValue": null,
+            "name": "s",
+            "nameAttribute": "s",
+            "required": true,
+            "type": "search",
+            "validityMissing": true,
+            "value": ""
+          },
+          {
+            "attributeValue": "explicit-search-native-2ef29451bb6ec2d0",
+            "name": "category",
+            "nameAttribute": "category",
+            "required": false,
+            "type": "hidden",
+            "validityMissing": false,
+            "value": "explicit-search-native-2ef29451bb6ec2d0"
+          },
+          {
+            "attributeValue": "explicit-own",
+            "name": "case_marker",
+            "nameAttribute": "case_marker",
+            "required": false,
+            "type": "hidden",
+            "validityMissing": false,
+            "value": "explicit-own"
+          }
+        ],
+        "methodAttribute": "get",
+        "originalFormRetained": false,
+        "overflow": false,
+        "path": "/explicit-search-native-ordinary-2ef29451bb6ec2d0/",
+        "properties": {
+          "action": "string",
+          "closest": "function",
+          "formaction": "undefined",
+          "getAttribute": "function",
+          "matches": "function",
+          "method": "string",
+          "submit": "function"
+        },
+        "robotsCount": 0,
+        "scripts": false
+      },
+      "requiredControl": {
+        "realEmptyButtonClick": true,
+        "noDocumentRequest": true,
+        "visibleValueMissing": true
+      },
+      "actualDocuments": [
+        {
+          "id": 362,
+          "method": "GET",
+          "path": "/?s=ExplicitSearchNativeNeedle&category=explicit-search-native-2ef29451bb6ec2d0&case_marker=explicit-own",
+          "destination": "document",
+          "startedAt": 1794233299870,
+          "status": 200,
+          "finishedAt": 1794233299888
+        }
+      ],
+      "ownedCDPDocumentWire": [
+        {
+          "method": "GET",
+          "path": "/?s=ExplicitSearchNativeNeedle&category=explicit-search-native-2ef29451bb6ec2d0&case_marker=explicit-own",
+          "status": 200
+        }
+      ],
+      "pageErrors": [],
+      "expectedEntries": [
+        [
+          "s",
+          "ExplicitSearchNativeNeedle"
+        ],
+        [
+          "category",
+          "explicit-search-native-2ef29451bb6ec2d0"
+        ],
+        [
+          "case_marker",
+          "explicit-own"
+        ]
+      ],
+      "result": {
+        "applicationLifecycle": false,
+        "canonicalCount": 1,
+        "overflow": false,
+        "path": "/?s=ExplicitSearchNativeNeedle&category=explicit-search-native-2ef29451bb6ec2d0&case_marker=explicit-own",
+        "robotsCount": 0,
+        "text": "WorldAct\nExplicit Search Native Closest name\nExplicit Search Native Default global\nExplicit Search Native Different duplicate s\nExplicit Search Native Empty and charset\nExplicit Search Native Entities and JSON values\nExplicit Search Native Equal duplicate s\nExplicit Search Native GetAttribute name\nExplicit Search Native Matches name\nExplicit Search Native No button\nExplicit Search Native Ordinary explicit\nExplicit Search Native Reserved names\nSample Page\nSearch results for: ExplicitSearchNativeNeedle\nSearch posts\nSearch\nShow all posts\nExplicitSearchNativeNeedle Result\n\nFebruary 3, 2001\n\nEXPLICIT SEARCH OWNED PUBLIC RESULT\n\nWorldAct\n\nJust another WorldAct site\n\nBlog\nExplicit Search Native Closest name\nExplicit Search Native Default global\nExplicit Search Native Different duplicate s\nExplicit Search Native Empty and charset\n\nDesigned with WorldAct\n\nLog in"
+      },
+      "initialModelReadCount": 0,
+      "resultModelReadCount": 0,
+      "actualNewClientAsset": true,
+      "screenshots": [
+        "screenshots/explicit-search-native-final-v2-classic-nojs-375-ordinary-form.png",
+        "screenshots/explicit-search-native-final-v2-classic-nojs-375-ordinary-result.png"
+      ]
+    },
+    {
+      "theme": "classic",
+      "width": 375,
+      "scripts": false,
+      "control": "reserved",
+      "action": "button",
+      "form": {
+        "actionAttribute": "/",
+        "canonicalCount": 1,
+        "errors": [],
+        "fields": [
+          {
+            "attributeValue": null,
+            "name": "s",
+            "nameAttribute": "s",
+            "required": true,
+            "type": "search",
+            "validityMissing": true,
+            "value": ""
+          },
+          {
+            "attributeValue": "/not-an-action",
+            "name": "action",
+            "nameAttribute": "action",
+            "required": false,
+            "type": "hidden",
+            "validityMissing": false,
+            "value": "/not-an-action"
+          },
+          {
+            "attributeValue": "post",
+            "name": "method",
+            "nameAttribute": "method",
+            "required": false,
+            "type": "hidden",
+            "validityMissing": false,
+            "value": "post"
+          },
+          {
+            "attributeValue": "literal-submit-data",
+            "name": "submit",
+            "nameAttribute": "submit",
+            "required": false,
+            "type": "hidden",
+            "validityMissing": false,
+            "value": "literal-submit-data"
+          },
+          {
+            "attributeValue": "/not-a-formaction",
+            "name": "formaction",
+            "nameAttribute": "formaction",
+            "required": false,
+            "type": "hidden",
+            "validityMissing": false,
+            "value": "/not-a-formaction"
+          }
+        ],
+        "methodAttribute": "get",
+        "originalFormRetained": false,
+        "overflow": false,
+        "path": "/explicit-search-native-reserved-2ef29451bb6ec2d0/",
+        "properties": {
+          "action": "object",
+          "closest": "function",
+          "formaction": "object",
+          "getAttribute": "function",
+          "matches": "function",
+          "method": "object",
+          "submit": "object"
+        },
+        "robotsCount": 0,
+        "scripts": false
+      },
+      "actualDocuments": [
+        {
+          "id": 368,
+          "method": "GET",
+          "path": "/?s=ExplicitSearchNativeNeedle&action=%2Fnot-an-action&method=post&submit=literal-submit-data&formaction=%2Fnot-a-formaction",
+          "destination": "document",
+          "startedAt": 1794233300238,
+          "status": 200,
+          "finishedAt": 1794233300261
+        }
+      ],
+      "ownedCDPDocumentWire": [
+        {
+          "method": "GET",
+          "path": "/?s=ExplicitSearchNativeNeedle&action=%2Fnot-an-action&method=post&submit=literal-submit-data&formaction=%2Fnot-a-formaction",
+          "status": 200
+        }
+      ],
+      "pageErrors": [],
+      "expectedEntries": [
+        [
+          "s",
+          "ExplicitSearchNativeNeedle"
+        ],
+        [
+          "action",
+          "/not-an-action"
+        ],
+        [
+          "method",
+          "post"
+        ],
+        [
+          "submit",
+          "literal-submit-data"
+        ],
+        [
+          "formaction",
+          "/not-a-formaction"
+        ]
+      ],
+      "result": {
+        "applicationLifecycle": false,
+        "canonicalCount": 1,
+        "overflow": false,
+        "path": "/?s=ExplicitSearchNativeNeedle&action=%2Fnot-an-action&method=post&submit=literal-submit-data&formaction=%2Fnot-a-formaction",
+        "robotsCount": 0,
+        "text": "WorldAct\nExplicit Search Native Closest name\nExplicit Search Native Default global\nExplicit Search Native Different duplicate s\nExplicit Search Native Empty and charset\nExplicit Search Native Entities and JSON values\nExplicit Search Native Equal duplicate s\nExplicit Search Native GetAttribute name\nExplicit Search Native Matches name\nExplicit Search Native No button\nExplicit Search Native Ordinary explicit\nExplicit Search Native Reserved names\nSample Page\nSearch results for: ExplicitSearchNativeNeedle\nSearch posts\nSearch\nShow all posts\nExplicitSearchNativeNeedle Result\n\nFebruary 3, 2001\n\nEXPLICIT SEARCH OWNED PUBLIC RESULT\n\nWorldAct\n\nJust another WorldAct site\n\nBlog\nExplicit Search Native Closest name\nExplicit Search Native Default global\nExplicit Search Native Different duplicate s\nExplicit Search Native Empty and charset\n\nDesigned with WorldAct\n\nLog in"
+      },
+      "initialModelReadCount": 0,
+      "resultModelReadCount": 0,
+      "actualNewClientAsset": true,
+      "screenshots": [
+        "screenshots/explicit-search-native-final-v2-classic-nojs-375-reserved-form.png"
+      ]
+    },
+    {
+      "theme": "classic",
+      "width": 375,
+      "scripts": false,
+      "control": "closest",
+      "action": "Enter",
+      "form": {
+        "actionAttribute": "/",
+        "canonicalCount": 1,
+        "errors": [],
+        "fields": [
+          {
+            "attributeValue": null,
+            "name": "s",
+            "nameAttribute": "s",
+            "required": true,
+            "type": "search",
+            "validityMissing": true,
+            "value": ""
+          },
+          {
+            "attributeValue": "literal-closest-data",
+            "name": "closest",
+            "nameAttribute": "closest",
+            "required": false,
+            "type": "hidden",
+            "validityMissing": false,
+            "value": "literal-closest-data"
+          }
+        ],
+        "methodAttribute": "get",
+        "originalFormRetained": false,
+        "overflow": false,
+        "path": "/explicit-search-native-closest-2ef29451bb6ec2d0/",
+        "properties": {
+          "action": "string",
+          "closest": "object",
+          "formaction": "undefined",
+          "getAttribute": "function",
+          "matches": "function",
+          "method": "string",
+          "submit": "function"
+        },
+        "robotsCount": 0,
+        "scripts": false
+      },
+      "actualDocuments": [
+        {
+          "id": 374,
+          "method": "GET",
+          "path": "/?s=ExplicitSearchNativeNeedle&closest=literal-closest-data",
+          "destination": "document",
+          "startedAt": 1794233300485,
+          "status": 200,
+          "finishedAt": 1794233300505
+        }
+      ],
+      "ownedCDPDocumentWire": [
+        {
+          "method": "GET",
+          "path": "/?s=ExplicitSearchNativeNeedle&closest=literal-closest-data",
+          "status": 200
+        }
+      ],
+      "pageErrors": [],
+      "expectedEntries": [
+        [
+          "s",
+          "ExplicitSearchNativeNeedle"
+        ],
+        [
+          "closest",
+          "literal-closest-data"
+        ]
+      ],
+      "result": {
+        "applicationLifecycle": false,
+        "canonicalCount": 1,
+        "overflow": false,
+        "path": "/?s=ExplicitSearchNativeNeedle&closest=literal-closest-data",
+        "robotsCount": 0,
+        "text": "WorldAct\nExplicit Search Native Closest name\nExplicit Search Native Default global\nExplicit Search Native Different duplicate s\nExplicit Search Native Empty and charset\nExplicit Search Native Entities and JSON values\nExplicit Search Native Equal duplicate s\nExplicit Search Native GetAttribute name\nExplicit Search Native Matches name\nExplicit Search Native No button\nExplicit Search Native Ordinary explicit\nExplicit Search Native Reserved names\nSample Page\nSearch results for: ExplicitSearchNativeNeedle\nSearch posts\nSearch\nShow all posts\nExplicitSearchNativeNeedle Result\n\nFebruary 3, 2001\n\nEXPLICIT SEARCH OWNED PUBLIC RESULT\n\nWorldAct\n\nJust another WorldAct site\n\nBlog\nExplicit Search Native Closest name\nExplicit Search Native Default global\nExplicit Search Native Different duplicate s\nExplicit Search Native Empty and charset\n\nDesigned with WorldAct\n\nLog in"
+      },
+      "initialModelReadCount": 0,
+      "resultModelReadCount": 0,
+      "actualNewClientAsset": true,
+      "screenshots": []
+    },
+    {
+      "theme": "classic",
+      "width": 375,
+      "scripts": false,
+      "control": "matches",
+      "action": "Enter",
+      "form": {
+        "actionAttribute": "/",
+        "canonicalCount": 1,
+        "errors": [],
+        "fields": [
+          {
+            "attributeValue": null,
+            "name": "s",
+            "nameAttribute": "s",
+            "required": true,
+            "type": "search",
+            "validityMissing": true,
+            "value": ""
+          },
+          {
+            "attributeValue": "literal-matches-data",
+            "name": "matches",
+            "nameAttribute": "matches",
+            "required": false,
+            "type": "hidden",
+            "validityMissing": false,
+            "value": "literal-matches-data"
+          }
+        ],
+        "methodAttribute": "get",
+        "originalFormRetained": false,
+        "overflow": false,
+        "path": "/explicit-search-native-matches-2ef29451bb6ec2d0/",
+        "properties": {
+          "action": "string",
+          "closest": "function",
+          "formaction": "undefined",
+          "getAttribute": "function",
+          "matches": "object",
+          "method": "string",
+          "submit": "function"
+        },
+        "robotsCount": 0,
+        "scripts": false
+      },
+      "actualDocuments": [
+        {
+          "id": 380,
+          "method": "GET",
+          "path": "/?s=ExplicitSearchNativeNeedle&matches=literal-matches-data",
+          "destination": "document",
+          "startedAt": 1794233300751,
+          "status": 200,
+          "finishedAt": 1794233300766
+        }
+      ],
+      "ownedCDPDocumentWire": [
+        {
+          "method": "GET",
+          "path": "/?s=ExplicitSearchNativeNeedle&matches=literal-matches-data",
+          "status": 200
+        }
+      ],
+      "pageErrors": [],
+      "expectedEntries": [
+        [
+          "s",
+          "ExplicitSearchNativeNeedle"
+        ],
+        [
+          "matches",
+          "literal-matches-data"
+        ]
+      ],
+      "result": {
+        "applicationLifecycle": false,
+        "canonicalCount": 1,
+        "overflow": false,
+        "path": "/?s=ExplicitSearchNativeNeedle&matches=literal-matches-data",
+        "robotsCount": 0,
+        "text": "WorldAct\nExplicit Search Native Closest name\nExplicit Search Native Default global\nExplicit Search Native Different duplicate s\nExplicit Search Native Empty and charset\nExplicit Search Native Entities and JSON values\nExplicit Search Native Equal duplicate s\nExplicit Search Native GetAttribute name\nExplicit Search Native Matches name\nExplicit Search Native No button\nExplicit Search Native Ordinary explicit\nExplicit Search Native Reserved names\nSample Page\nSearch results for: ExplicitSearchNativeNeedle\nSearch posts\nSearch\nShow all posts\nExplicitSearchNativeNeedle Result\n\nFebruary 3, 2001\n\nEXPLICIT SEARCH OWNED PUBLIC RESULT\n\nWorldAct\n\nJust another WorldAct site\n\nBlog\nExplicit Search Native Closest name\nExplicit Search Native Default global\nExplicit Search Native Different duplicate s\nExplicit Search Native Empty and charset\n\nDesigned with WorldAct\n\nLog in"
+      },
+      "initialModelReadCount": 0,
+      "resultModelReadCount": 0,
+      "actualNewClientAsset": true,
+      "screenshots": []
+    },
+    {
+      "theme": "classic",
+      "width": 375,
+      "scripts": false,
+      "control": "getattribute",
+      "action": "Enter",
+      "form": {
+        "actionAttribute": "/",
+        "canonicalCount": 1,
+        "errors": [],
+        "fields": [
+          {
+            "attributeValue": null,
+            "name": "s",
+            "nameAttribute": "s",
+            "required": true,
+            "type": "search",
+            "validityMissing": true,
+            "value": ""
+          },
+          {
+            "attributeValue": "literal-getattribute-data",
+            "name": "getAttribute",
+            "nameAttribute": "getAttribute",
+            "required": false,
+            "type": "hidden",
+            "validityMissing": false,
+            "value": "literal-getattribute-data"
+          }
+        ],
+        "methodAttribute": "get",
+        "originalFormRetained": false,
+        "overflow": false,
+        "path": "/explicit-search-native-getattribute-2ef29451bb6ec2d0/",
+        "properties": {
+          "action": "string",
+          "closest": "function",
+          "formaction": "undefined",
+          "getAttribute": "object",
+          "matches": "function",
+          "method": "string",
+          "submit": "function"
+        },
+        "robotsCount": 0,
+        "scripts": false
+      },
+      "actualDocuments": [
+        {
+          "id": 386,
+          "method": "GET",
+          "path": "/?s=ExplicitSearchNativeNeedle&getAttribute=literal-getattribute-data",
+          "destination": "document",
+          "startedAt": 1794233301018,
+          "status": 200,
+          "finishedAt": 1794233301036
+        }
+      ],
+      "ownedCDPDocumentWire": [
+        {
+          "method": "GET",
+          "path": "/?s=ExplicitSearchNativeNeedle&getAttribute=literal-getattribute-data",
+          "status": 200
+        }
+      ],
+      "pageErrors": [],
+      "expectedEntries": [
+        [
+          "s",
+          "ExplicitSearchNativeNeedle"
+        ],
+        [
+          "getAttribute",
+          "literal-getattribute-data"
+        ]
+      ],
+      "result": {
+        "applicationLifecycle": false,
+        "canonicalCount": 1,
+        "overflow": false,
+        "path": "/?s=ExplicitSearchNativeNeedle&getAttribute=literal-getattribute-data",
+        "robotsCount": 0,
+        "text": "WorldAct\nExplicit Search Native Closest name\nExplicit Search Native Default global\nExplicit Search Native Different duplicate s\nExplicit Search Native Empty and charset\nExplicit Search Native Entities and JSON values\nExplicit Search Native Equal duplicate s\nExplicit Search Native GetAttribute name\nExplicit Search Native Matches name\nExplicit Search Native No button\nExplicit Search Native Ordinary explicit\nExplicit Search Native Reserved names\nSample Page\nSearch results for: ExplicitSearchNativeNeedle\nSearch posts\nSearch\nShow all posts\nExplicitSearchNativeNeedle Result\n\nFebruary 3, 2001\n\nEXPLICIT SEARCH OWNED PUBLIC RESULT\n\nWorldAct\n\nJust another WorldAct site\n\nBlog\nExplicit Search Native Closest name\nExplicit Search Native Default global\nExplicit Search Native Different duplicate s\nExplicit Search Native Empty and charset\n\nDesigned with WorldAct\n\nLog in"
+      },
+      "initialModelReadCount": 0,
+      "resultModelReadCount": 0,
+      "actualNewClientAsset": true,
+      "screenshots": []
+    },
+    {
+      "theme": "classic",
+      "width": 375,
+      "scripts": false,
+      "control": "duplicate-different",
+      "action": "button",
+      "form": {
+        "actionAttribute": "/",
+        "canonicalCount": 1,
+        "errors": [],
+        "fields": [
+          {
+            "attributeValue": null,
+            "name": "s",
+            "nameAttribute": "s",
+            "required": true,
+            "type": "search",
+            "validityMissing": true,
+            "value": ""
+          },
+          {
+            "attributeValue": "HiddenDifferentNeedle",
+            "name": "s",
+            "nameAttribute": "s",
+            "required": false,
+            "type": "hidden",
+            "validityMissing": false,
+            "value": "HiddenDifferentNeedle"
+          }
+        ],
+        "methodAttribute": "get",
+        "originalFormRetained": false,
+        "overflow": false,
+        "path": "/explicit-search-native-duplicate-different-2ef29451bb6ec2d0/",
+        "properties": {
+          "action": "string",
+          "closest": "function",
+          "formaction": "undefined",
+          "getAttribute": "function",
+          "matches": "function",
+          "method": "string",
+          "submit": "function"
+        },
+        "robotsCount": 0,
+        "scripts": false
+      },
+      "actualDocuments": [
+        {
+          "id": 392,
+          "method": "GET",
+          "path": "/?s=ExplicitSearchNativeNeedle&s=HiddenDifferentNeedle",
+          "destination": "document",
+          "startedAt": 1794233301283,
+          "status": 400,
+          "finishedAt": 1794233301287
+        }
+      ],
+      "ownedCDPDocumentWire": [
+        {
+          "method": "GET",
+          "path": "/?s=ExplicitSearchNativeNeedle&s=HiddenDifferentNeedle",
+          "status": 400
+        }
+      ],
+      "pageErrors": [],
+      "expectedEntries": [
+        [
+          "s",
+          "ExplicitSearchNativeNeedle"
+        ],
+        [
+          "s",
+          "HiddenDifferentNeedle"
+        ]
+      ],
+      "result": {
+        "applicationLifecycle": false,
+        "canonicalCount": 0,
+        "overflow": false,
+        "path": "/?s=ExplicitSearchNativeNeedle&s=HiddenDifferentNeedle",
+        "robotsCount": 0,
+        "text": "{\"error\":\"Use a single scalar value for each public query parameter.\"}"
+      },
+      "initialModelReadCount": 0,
+      "resultModelReadCount": 0,
+      "actualNewClientAsset": true,
+      "screenshots": [
+        "screenshots/explicit-search-native-final-v2-classic-nojs-375-duplicate-different-result.png"
+      ]
+    },
+    {
+      "theme": "classic",
+      "width": 375,
+      "scripts": false,
+      "control": "duplicate-equal",
+      "action": "Enter",
+      "form": {
+        "actionAttribute": "/",
+        "canonicalCount": 1,
+        "errors": [],
+        "fields": [
+          {
+            "attributeValue": null,
+            "name": "s",
+            "nameAttribute": "s",
+            "required": true,
+            "type": "search",
+            "validityMissing": true,
+            "value": ""
+          },
+          {
+            "attributeValue": "ExplicitSearchNativeNeedle",
+            "name": "s",
+            "nameAttribute": "s",
+            "required": false,
+            "type": "hidden",
+            "validityMissing": false,
+            "value": "ExplicitSearchNativeNeedle"
+          }
+        ],
+        "methodAttribute": "get",
+        "originalFormRetained": false,
+        "overflow": false,
+        "path": "/explicit-search-native-duplicate-equal-2ef29451bb6ec2d0/",
+        "properties": {
+          "action": "string",
+          "closest": "function",
+          "formaction": "undefined",
+          "getAttribute": "function",
+          "matches": "function",
+          "method": "string",
+          "submit": "function"
+        },
+        "robotsCount": 0,
+        "scripts": false
+      },
+      "actualDocuments": [
+        {
+          "id": 396,
+          "method": "GET",
+          "path": "/?s=ExplicitSearchNativeNeedle&s=ExplicitSearchNativeNeedle",
+          "destination": "document",
+          "startedAt": 1794233301584,
+          "status": 400,
+          "finishedAt": 1794233301587
+        }
+      ],
+      "ownedCDPDocumentWire": [
+        {
+          "method": "GET",
+          "path": "/?s=ExplicitSearchNativeNeedle&s=ExplicitSearchNativeNeedle",
+          "status": 400
+        }
+      ],
+      "pageErrors": [],
+      "expectedEntries": [
+        [
+          "s",
+          "ExplicitSearchNativeNeedle"
+        ],
+        [
+          "s",
+          "ExplicitSearchNativeNeedle"
+        ]
+      ],
+      "result": {
+        "applicationLifecycle": false,
+        "canonicalCount": 0,
+        "overflow": false,
+        "path": "/?s=ExplicitSearchNativeNeedle&s=ExplicitSearchNativeNeedle",
+        "robotsCount": 0,
+        "text": "{\"error\":\"Use a single scalar value for each public query parameter.\"}"
+      },
+      "initialModelReadCount": 0,
+      "resultModelReadCount": 0,
+      "actualNewClientAsset": true,
+      "screenshots": []
+    },
+    {
+      "theme": "classic",
+      "width": 375,
+      "scripts": false,
+      "control": "entities",
+      "action": "button",
+      "form": {
+        "actionAttribute": "/",
+        "canonicalCount": 1,
+        "errors": [],
+        "fields": [
+          {
+            "attributeValue": null,
+            "name": "s",
+            "nameAttribute": "s",
+            "required": true,
+            "type": "search",
+            "validityMissing": true,
+            "value": ""
+          },
+          {
+            "attributeValue": "&apos;|\u00a9|A|J|&#65;|&#x000D800;|&#X000;",
+            "name": "entity",
+            "nameAttribute": "entity",
+            "required": false,
+            "type": "hidden",
+            "validityMissing": false,
+            "value": "&apos;|\u00a9|A|J|&#65;|&#x000D800;|&#X000;"
+          },
+          {
+            "attributeValue": "1",
+            "name": "yes",
+            "nameAttribute": "yes",
+            "required": false,
+            "type": "hidden",
+            "validityMissing": false,
+            "value": "1"
+          },
+          {
+            "attributeValue": null,
+            "name": "no",
+            "nameAttribute": "no",
+            "required": false,
+            "type": "hidden",
+            "validityMissing": false,
+            "value": ""
+          },
+          {
+            "attributeValue": null,
+            "name": "nil",
+            "nameAttribute": "nil",
+            "required": false,
+            "type": "hidden",
+            "validityMissing": false,
+            "value": ""
+          },
+          {
+            "attributeValue": "Array",
+            "name": "array",
+            "nameAttribute": "array",
+            "required": false,
+            "type": "hidden",
+            "validityMissing": false,
+            "value": "Array"
+          },
+          {
+            "attributeValue": "Array",
+            "name": "object",
+            "nameAttribute": "object",
+            "required": false,
+            "type": "hidden",
+            "validityMissing": false,
+            "value": "Array"
+          },
+          {
+            "attributeValue": "1.25",
+            "name": "decimal",
+            "nameAttribute": "decimal",
+            "required": false,
+            "type": "hidden",
+            "validityMissing": false,
+            "value": "1.25"
+          }
+        ],
+        "methodAttribute": "get",
+        "originalFormRetained": false,
+        "overflow": false,
+        "path": "/explicit-search-native-entities-2ef29451bb6ec2d0/",
+        "properties": {
+          "action": "string",
+          "closest": "function",
+          "formaction": "undefined",
+          "getAttribute": "function",
+          "matches": "function",
+          "method": "string",
+          "submit": "function"
+        },
+        "robotsCount": 0,
+        "scripts": false
+      },
+      "actualDocuments": [
+        {
+          "id": 400,
+          "method": "GET",
+          "path": "/?s=ExplicitSearchNativeNeedle&entity=%26apos%3B%7C%C2%A9%7CA%7CJ%7C%26%2365%3B%7C%26%23x000D800%3B%7C%26%23X000%3B&yes=1&no=&nil=&array=Array&object=Array&decimal=1.25",
+          "destination": "document",
+          "startedAt": 1794233301818,
+          "status": 200,
+          "finishedAt": 1794233301833
+        }
+      ],
+      "ownedCDPDocumentWire": [
+        {
+          "method": "GET",
+          "path": "/?s=ExplicitSearchNativeNeedle&entity=%26apos%3B%7C%C2%A9%7CA%7CJ%7C%26%2365%3B%7C%26%23x000D800%3B%7C%26%23X000%3B&yes=1&no=&nil=&array=Array&object=Array&decimal=1.25",
+          "status": 200
+        }
+      ],
+      "pageErrors": [],
+      "expectedEntries": [
+        [
+          "s",
+          "ExplicitSearchNativeNeedle"
+        ],
+        [
+          "entity",
+          "&apos;|\u00a9|A|J|&#65;|&#x000D800;|&#X000;"
+        ],
+        [
+          "yes",
+          "1"
+        ],
+        [
+          "no",
+          ""
+        ],
+        [
+          "nil",
+          ""
+        ],
+        [
+          "array",
+          "Array"
+        ],
+        [
+          "object",
+          "Array"
+        ],
+        [
+          "decimal",
+          "1.25"
+        ]
+      ],
+      "result": {
+        "applicationLifecycle": false,
+        "canonicalCount": 1,
+        "overflow": false,
+        "path": "/?s=ExplicitSearchNativeNeedle&entity=%26apos%3B%7C%C2%A9%7CA%7CJ%7C%26%2365%3B%7C%26%23x000D800%3B%7C%26%23X000%3B&yes=1&no=&nil=&array=Array&object=Array&decimal=1.25",
+        "robotsCount": 0,
+        "text": "WorldAct\nExplicit Search Native Closest name\nExplicit Search Native Default global\nExplicit Search Native Different duplicate s\nExplicit Search Native Empty and charset\nExplicit Search Native Entities and JSON values\nExplicit Search Native Equal duplicate s\nExplicit Search Native GetAttribute name\nExplicit Search Native Matches name\nExplicit Search Native No button\nExplicit Search Native Ordinary explicit\nExplicit Search Native Reserved names\nSample Page\nSearch results for: ExplicitSearchNativeNeedle\nSearch posts\nSearch\nShow all posts\nExplicitSearchNativeNeedle Result\n\nFebruary 3, 2001\n\nEXPLICIT SEARCH OWNED PUBLIC RESULT\n\nWorldAct\n\nJust another WorldAct site\n\nBlog\nExplicit Search Native Closest name\nExplicit Search Native Default global\nExplicit Search Native Different duplicate s\nExplicit Search Native Empty and charset\n\nDesigned with WorldAct\n\nLog in"
+      },
+      "initialModelReadCount": 0,
+      "resultModelReadCount": 0,
+      "actualNewClientAsset": true,
+      "screenshots": [
+        "screenshots/explicit-search-native-final-v2-classic-nojs-375-entities-form.png"
+      ]
+    },
+    {
+      "theme": "classic",
+      "width": 375,
+      "scripts": false,
+      "control": "empty",
+      "action": "button",
+      "form": {
+        "actionAttribute": "/",
+        "canonicalCount": 1,
+        "errors": [],
+        "fields": [
+          {
+            "attributeValue": null,
+            "name": "s",
+            "nameAttribute": "s",
+            "required": true,
+            "type": "search",
+            "validityMissing": true,
+            "value": ""
+          },
+          {
+            "attributeValue": "empty-name-not-submitted",
+            "name": "",
+            "nameAttribute": null,
+            "required": false,
+            "type": "hidden",
+            "validityMissing": false,
+            "value": "empty-name-not-submitted"
+          },
+          {
+            "attributeValue": null,
+            "name": "blank",
+            "nameAttribute": "blank",
+            "required": false,
+            "type": "hidden",
+            "validityMissing": false,
+            "value": ""
+          },
+          {
+            "attributeValue": "not-an-encoding",
+            "name": "_charset_",
+            "nameAttribute": "_charset_",
+            "required": false,
+            "type": "hidden",
+            "validityMissing": false,
+            "value": "not-an-encoding"
+          }
+        ],
+        "methodAttribute": "get",
+        "originalFormRetained": false,
+        "overflow": false,
+        "path": "/explicit-search-native-empty-2ef29451bb6ec2d0/",
+        "properties": {
+          "action": "string",
+          "closest": "function",
+          "formaction": "undefined",
+          "getAttribute": "function",
+          "matches": "function",
+          "method": "string",
+          "submit": "function"
+        },
+        "robotsCount": 0,
+        "scripts": false
+      },
+      "actualDocuments": [
+        {
+          "id": 406,
+          "method": "GET",
+          "path": "/?s=ExplicitSearchNativeNeedle&blank=&_charset_=UTF-8",
+          "destination": "document",
+          "startedAt": 1794233302085,
+          "status": 200,
+          "finishedAt": 1794233302104
+        }
+      ],
+      "ownedCDPDocumentWire": [
+        {
+          "method": "GET",
+          "path": "/?s=ExplicitSearchNativeNeedle&blank=&_charset_=UTF-8",
+          "status": 200
+        }
+      ],
+      "pageErrors": [],
+      "expectedEntries": [
+        [
+          "s",
+          "ExplicitSearchNativeNeedle"
+        ],
+        [
+          "blank",
+          ""
+        ],
+        [
+          "_charset_",
+          "UTF-8"
+        ]
+      ],
+      "result": {
+        "applicationLifecycle": false,
+        "canonicalCount": 1,
+        "overflow": false,
+        "path": "/?s=ExplicitSearchNativeNeedle&blank=&_charset_=UTF-8",
+        "robotsCount": 0,
+        "text": "WorldAct\nExplicit Search Native Closest name\nExplicit Search Native Default global\nExplicit Search Native Different duplicate s\nExplicit Search Native Empty and charset\nExplicit Search Native Entities and JSON values\nExplicit Search Native Equal duplicate s\nExplicit Search Native GetAttribute name\nExplicit Search Native Matches name\nExplicit Search Native No button\nExplicit Search Native Ordinary explicit\nExplicit Search Native Reserved names\nSample Page\nSearch results for: ExplicitSearchNativeNeedle\nSearch posts\nSearch\nShow all posts\nExplicitSearchNativeNeedle Result\n\nFebruary 3, 2001\n\nEXPLICIT SEARCH OWNED PUBLIC RESULT\n\nWorldAct\n\nJust another WorldAct site\n\nBlog\nExplicit Search Native Closest name\nExplicit Search Native Default global\nExplicit Search Native Different duplicate s\nExplicit Search Native Empty and charset\n\nDesigned with WorldAct\n\nLog in"
+      },
+      "initialModelReadCount": 0,
+      "resultModelReadCount": 0,
+      "actualNewClientAsset": true,
+      "screenshots": []
+    },
+    {
+      "theme": "classic",
+      "width": 375,
+      "scripts": false,
+      "control": "no-button",
+      "action": "Enter",
+      "form": {
+        "actionAttribute": "/",
+        "canonicalCount": 1,
+        "errors": [],
+        "fields": [
+          {
+            "attributeValue": null,
+            "name": "s",
+            "nameAttribute": "s",
+            "required": true,
+            "type": "search",
+            "validityMissing": true,
+            "value": ""
+          },
+          {
+            "attributeValue": "no-button-own",
+            "name": "case_marker",
+            "nameAttribute": "case_marker",
+            "required": false,
+            "type": "hidden",
+            "validityMissing": false,
+            "value": "no-button-own"
+          }
+        ],
+        "methodAttribute": "get",
+        "originalFormRetained": false,
+        "overflow": false,
+        "path": "/explicit-search-native-no-button-2ef29451bb6ec2d0/",
+        "properties": {
+          "action": "string",
+          "closest": "function",
+          "formaction": "undefined",
+          "getAttribute": "function",
+          "matches": "function",
+          "method": "string",
+          "submit": "function"
+        },
+        "robotsCount": 0,
+        "scripts": false
+      },
+      "actualDocuments": [
+        {
+          "id": 412,
+          "method": "GET",
+          "path": "/?s=ExplicitSearchNativeNeedle&case_marker=no-button-own",
+          "destination": "document",
+          "startedAt": 1794233302368,
+          "status": 200,
+          "finishedAt": 1794233302388
+        }
+      ],
+      "ownedCDPDocumentWire": [
+        {
+          "method": "GET",
+          "path": "/?s=ExplicitSearchNativeNeedle&case_marker=no-button-own",
+          "status": 200
+        }
+      ],
+      "pageErrors": [],
+      "expectedEntries": [
+        [
+          "s",
+          "ExplicitSearchNativeNeedle"
+        ],
+        [
+          "case_marker",
+          "no-button-own"
+        ]
+      ],
+      "result": {
+        "applicationLifecycle": false,
+        "canonicalCount": 1,
+        "overflow": false,
+        "path": "/?s=ExplicitSearchNativeNeedle&case_marker=no-button-own",
+        "robotsCount": 0,
+        "text": "WorldAct\nExplicit Search Native Closest name\nExplicit Search Native Default global\nExplicit Search Native Different duplicate s\nExplicit Search Native Empty and charset\nExplicit Search Native Entities and JSON values\nExplicit Search Native Equal duplicate s\nExplicit Search Native GetAttribute name\nExplicit Search Native Matches name\nExplicit Search Native No button\nExplicit Search Native Ordinary explicit\nExplicit Search Native Reserved names\nSample Page\nSearch results for: ExplicitSearchNativeNeedle\nSearch posts\nSearch\nShow all posts\nExplicitSearchNativeNeedle Result\n\nFebruary 3, 2001\n\nEXPLICIT SEARCH OWNED PUBLIC RESULT\n\nWorldAct\n\nJust another WorldAct site\n\nBlog\nExplicit Search Native Closest name\nExplicit Search Native Default global\nExplicit Search Native Different duplicate s\nExplicit Search Native Empty and charset\n\nDesigned with WorldAct\n\nLog in"
+      },
+      "initialModelReadCount": 0,
+      "resultModelReadCount": 0,
+      "actualNewClientAsset": true,
+      "screenshots": [
+        "screenshots/explicit-search-native-final-v2-classic-nojs-375-no-button-form.png"
+      ]
+    },
+    {
+      "theme": "classic",
+      "width": 375,
+      "scripts": true,
+      "control": "ordinary",
+      "action": "Enter",
+      "layoutSmoke": true,
+      "form": {
+        "actionAttribute": "/",
+        "canonicalCount": 1,
+        "errors": [],
+        "fields": [
+          {
+            "attributeValue": null,
+            "name": "s",
+            "nameAttribute": "s",
+            "required": true,
+            "type": "search",
+            "validityMissing": true,
+            "value": ""
+          },
+          {
+            "attributeValue": "explicit-search-native-2ef29451bb6ec2d0",
+            "name": "category",
+            "nameAttribute": "category",
+            "required": false,
+            "type": "hidden",
+            "validityMissing": false,
+            "value": "explicit-search-native-2ef29451bb6ec2d0"
+          },
+          {
+            "attributeValue": "explicit-own",
+            "name": "case_marker",
+            "nameAttribute": "case_marker",
+            "required": false,
+            "type": "hidden",
+            "validityMissing": false,
+            "value": "explicit-own"
+          }
+        ],
+        "methodAttribute": "get",
+        "originalFormRetained": true,
+        "overflow": false,
+        "path": "/explicit-search-native-ordinary-2ef29451bb6ec2d0/",
+        "properties": {
+          "action": "string",
+          "closest": "function",
+          "formaction": "undefined",
+          "getAttribute": "function",
+          "matches": "function",
+          "method": "string",
+          "submit": "function"
+        },
+        "robotsCount": 0,
+        "scripts": true
+      },
+      "requiredControl": {
+        "realEmptyButtonClick": true,
+        "noDocumentRequest": true,
+        "visibleValueMissing": true
+      },
+      "actualDocuments": [
+        {
+          "id": 423,
+          "method": "GET",
+          "path": "/?s=ExplicitSearchNativeNeedle&category=explicit-search-native-2ef29451bb6ec2d0&case_marker=explicit-own",
+          "destination": "document",
+          "startedAt": 1794233303702,
+          "status": 200,
+          "finishedAt": 1794233303719
+        }
+      ],
+      "ownedCDPDocumentWire": [
+        {
+          "method": "GET",
+          "path": "/?s=ExplicitSearchNativeNeedle&category=explicit-search-native-2ef29451bb6ec2d0&case_marker=explicit-own",
+          "status": 200
+        }
+      ],
+      "pageErrors": [],
+      "expectedEntries": [
+        [
+          "s",
+          "ExplicitSearchNativeNeedle"
+        ],
+        [
+          "category",
+          "explicit-search-native-2ef29451bb6ec2d0"
+        ],
+        [
+          "case_marker",
+          "explicit-own"
+        ]
+      ],
+      "result": {
+        "applicationLifecycle": true,
+        "canonicalCount": 1,
+        "overflow": false,
+        "path": "/?s=ExplicitSearchNativeNeedle&category=explicit-search-native-2ef29451bb6ec2d0&case_marker=explicit-own",
+        "robotsCount": 0,
+        "text": "WorldAct\nExplicit Search Native Closest name\nExplicit Search Native Default global\nExplicit Search Native Different duplicate s\nExplicit Search Native Empty and charset\nExplicit Search Native Entities and JSON values\nExplicit Search Native Equal duplicate s\nExplicit Search Native GetAttribute name\nExplicit Search Native Matches name\nExplicit Search Native No button\nExplicit Search Native Ordinary explicit\nExplicit Search Native Reserved names\nSample Page\nSearch results for: ExplicitSearchNativeNeedle\nSearch posts\nSearch\nShow all posts\nExplicitSearchNativeNeedle Result\n\nFebruary 3, 2001\n\nEXPLICIT SEARCH OWNED PUBLIC RESULT\n\nWorldAct\n\nJust another WorldAct site\n\nBlog\nExplicit Search Native Closest name\nExplicit Search Native Default global\nExplicit Search Native Different duplicate s\nExplicit Search Native Empty and charset\n\nDesigned with WorldAct\n\nLog in"
+      },
+      "initialModelReadCount": 1,
+      "resultModelReadCount": 1,
+      "actualNewClientAsset": true,
+      "screenshots": [
+        "screenshots/explicit-search-native-final-v2-classic-js-375-ordinary-form.png",
+        "screenshots/explicit-search-native-final-v2-classic-js-375-ordinary-result.png"
+      ]
+    },
+    {
+      "theme": "classic",
+      "width": 768,
+      "scripts": true,
+      "control": "ordinary",
+      "action": "Enter",
+      "layoutSmoke": true,
+      "form": {
+        "actionAttribute": "/",
+        "canonicalCount": 1,
+        "errors": [],
+        "fields": [
+          {
+            "attributeValue": null,
+            "name": "s",
+            "nameAttribute": "s",
+            "required": true,
+            "type": "search",
+            "validityMissing": true,
+            "value": ""
+          },
+          {
+            "attributeValue": "explicit-search-native-2ef29451bb6ec2d0",
+            "name": "category",
+            "nameAttribute": "category",
+            "required": false,
+            "type": "hidden",
+            "validityMissing": false,
+            "value": "explicit-search-native-2ef29451bb6ec2d0"
+          },
+          {
+            "attributeValue": "explicit-own",
+            "name": "case_marker",
+            "nameAttribute": "case_marker",
+            "required": false,
+            "type": "hidden",
+            "validityMissing": false,
+            "value": "explicit-own"
+          }
+        ],
+        "methodAttribute": "get",
+        "originalFormRetained": true,
+        "overflow": false,
+        "path": "/explicit-search-native-ordinary-2ef29451bb6ec2d0/",
+        "properties": {
+          "action": "string",
+          "closest": "function",
+          "formaction": "undefined",
+          "getAttribute": "function",
+          "matches": "function",
+          "method": "string",
+          "submit": "function"
+        },
+        "robotsCount": 0,
+        "scripts": true
+      },
+      "requiredControl": {
+        "realEmptyButtonClick": true,
+        "noDocumentRequest": true,
+        "visibleValueMissing": true
+      },
+      "actualDocuments": [
+        {
+          "id": 437,
+          "method": "GET",
+          "path": "/?s=ExplicitSearchNativeNeedle&category=explicit-search-native-2ef29451bb6ec2d0&case_marker=explicit-own",
+          "destination": "document",
+          "startedAt": 1794233304216,
+          "status": 200,
+          "finishedAt": 1794233304235
+        }
+      ],
+      "ownedCDPDocumentWire": [
+        {
+          "method": "GET",
+          "path": "/?s=ExplicitSearchNativeNeedle&category=explicit-search-native-2ef29451bb6ec2d0&case_marker=explicit-own",
+          "status": 200
+        }
+      ],
+      "pageErrors": [],
+      "expectedEntries": [
+        [
+          "s",
+          "ExplicitSearchNativeNeedle"
+        ],
+        [
+          "category",
+          "explicit-search-native-2ef29451bb6ec2d0"
+        ],
+        [
+          "case_marker",
+          "explicit-own"
+        ]
+      ],
+      "result": {
+        "applicationLifecycle": true,
+        "canonicalCount": 1,
+        "overflow": false,
+        "path": "/?s=ExplicitSearchNativeNeedle&category=explicit-search-native-2ef29451bb6ec2d0&case_marker=explicit-own",
+        "robotsCount": 0,
+        "text": "WorldAct\nExplicit Search Native Closest name\nExplicit Search Native Default global\nExplicit Search Native Different duplicate s\nExplicit Search Native Empty and charset\nExplicit Search Native Entities and JSON values\nExplicit Search Native Equal duplicate s\nExplicit Search Native GetAttribute name\nExplicit Search Native Matches name\nExplicit Search Native No button\nExplicit Search Native Ordinary explicit\nExplicit Search Native Reserved names\nSample Page\nSearch results for: ExplicitSearchNativeNeedle\nSearch posts\nSearch\nShow all posts\nExplicitSearchNativeNeedle Result\n\nFebruary 3, 2001\n\nEXPLICIT SEARCH OWNED PUBLIC RESULT\n\nWorldAct\n\nJust another WorldAct site\n\nBlog\nExplicit Search Native Closest name\nExplicit Search Native Default global\nExplicit Search Native Different duplicate s\nExplicit Search Native Empty and charset\n\nDesigned with WorldAct\n\nLog in"
+      },
+      "initialModelReadCount": 1,
+      "resultModelReadCount": 1,
+      "actualNewClientAsset": true,
+      "screenshots": [
+        "screenshots/explicit-search-native-final-v2-classic-js-768-ordinary-form.png",
+        "screenshots/explicit-search-native-final-v2-classic-js-768-ordinary-result.png"
+      ]
+    }
+  ]
+}

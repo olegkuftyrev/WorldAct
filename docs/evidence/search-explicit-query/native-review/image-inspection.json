@@ -1,0 +1,453 @@
+{
+  "candidate": "9928f5dfc7fbd4af3c0a639ddb2c2f9312d061d2",
+  "individuallyOpenedFinalPNGs": 35,
+  "individuallyOpenedBeforePNGs": 3,
+  "individuallyOpenedTotal": 38,
+  "totalPreservedPNGPaths": 57,
+  "otherPathsAreRehashedByteIdenticalAliases": true,
+  "inspected": [
+    {
+      "path": "screenshots/explicit-search-native-final-v3-classic-js-1440-ordinary-form.png",
+      "sha256": "e8dc7296d4a7f31fd4d0275ee2933fff0e2486804303de17a1a749f72f7ab9e7"
+    },
+    {
+      "path": "screenshots/explicit-search-native-final-v3-classic-js-1440-ordinary-result.png",
+      "sha256": "10dcd411f70eebc72113f376a9c3b07da6d2f95ee5aee1426a2e3f96bf7a1467"
+    },
+    {
+      "path": "screenshots/explicit-search-native-final-v3-classic-js-1440-reserved-form.png",
+      "sha256": "2d6e5b75745ee6431009a6f81f5597914903fed5879bf4d7b2bc7b1d0ae44dd3"
+    },
+    {
+      "path": "screenshots/explicit-search-native-final-v3-classic-js-375-ordinary-form.png",
+      "sha256": "8015fea7ba7fa8ce9f4777f7a58bacdfaf68564bdb3f9f8813bf7fa49de91100"
+    },
+    {
+      "path": "screenshots/explicit-search-native-final-v3-classic-js-375-ordinary-result.png",
+      "sha256": "875d5600151ffe043e854e173a549be31760f9588557ab8dce0c4449422f2dbe"
+    },
+    {
+      "path": "screenshots/explicit-search-native-final-v3-classic-js-768-ordinary-form.png",
+      "sha256": "a7c9dd48d66065fc8e2465964994b39d396d762a6b5e01e69bcd9a5e85ae15d6"
+    },
+    {
+      "path": "screenshots/explicit-search-native-final-v3-classic-js-768-ordinary-result.png",
+      "sha256": "0163908ca398f4b06dad2732af0bd8b50981cda6b0bd68e479b259adf4800ec2"
+    },
+    {
+      "path": "screenshots/explicit-search-native-final-v3-classic-nojs-375-duplicate-different-result.png",
+      "sha256": "94c37973c08eb4e576ded8feb8169c88fac7eb273d58f1b9ac1e8c8ec445e0ca"
+    },
+    {
+      "path": "screenshots/explicit-search-native-final-v3-classic-nojs-375-entities-form.png",
+      "sha256": "c49c25b1ce44669b1ba13039d5e726a8b42a1c829497d580f5939d452acff23c"
+    },
+    {
+      "path": "screenshots/explicit-search-native-final-v3-classic-nojs-375-no-button-form.png",
+      "sha256": "40346a694750d95d2513c1d063bbb5e313e30eaa8623bc78e10d44af1a65607c"
+    },
+    {
+      "path": "screenshots/explicit-search-native-final-v3-classic-nojs-375-ordinary-form.png",
+      "sha256": "8015fea7ba7fa8ce9f4777f7a58bacdfaf68564bdb3f9f8813bf7fa49de91100"
+    },
+    {
+      "path": "screenshots/explicit-search-native-final-v3-classic-nojs-375-ordinary-result.png",
+      "sha256": "875d5600151ffe043e854e173a549be31760f9588557ab8dce0c4449422f2dbe"
+    },
+    {
+      "path": "screenshots/explicit-search-native-final-v3-classic-nojs-375-reserved-form.png",
+      "sha256": "473e65c70c6c722c33976b9b646dc2d9d87d2f9f4e693467637e1f31cdbb7809"
+    },
+    {
+      "path": "screenshots/explicit-search-native-final-v3-twentytwentyfive-js-1440-ordinary-form.png",
+      "sha256": "e2c0b1738dd357ad2259fabdf3e6e9d5c5a009bc34911c2ad19ff8d9d0b90456"
+    },
+    {
+      "path": "screenshots/explicit-search-native-final-v3-twentytwentyfive-js-1440-ordinary-result.png",
+      "sha256": "b7bfd63bca08c47ab2d67167287402c7973ea0648f702fb79ea4e3c4e83e6e6d"
+    },
+    {
+      "path": "screenshots/explicit-search-native-final-v3-twentytwentyfive-js-1440-reserved-form.png",
+      "sha256": "86ed9fa48e88e1a658e89f105ef38d728674cc4bb70a3b302d1c190336e401c1"
+    },
+    {
+      "path": "screenshots/explicit-search-native-final-v3-twentytwentyfive-js-375-ordinary-form.png",
+      "sha256": "ac8056bff839f717e6127ff3b88131e7514670d92eede96c931c10b2972f865a"
+    },
+    {
+      "path": "screenshots/explicit-search-native-final-v3-twentytwentyfive-js-375-ordinary-result.png",
+      "sha256": "01834ab511b1c2021c512f350c3edcf2d82664d0efeaad6a707ad19176a818c6"
+    },
+    {
+      "path": "screenshots/explicit-search-native-final-v3-twentytwentyfive-js-768-ordinary-form.png",
+      "sha256": "9c4ed7f031aa9f93dbf546d0fd9407e4d4056116eb804a049d31dc191f9667be"
+    },
+    {
+      "path": "screenshots/explicit-search-native-final-v3-twentytwentyfive-js-768-ordinary-result.png",
+      "sha256": "4ed30021465b9f72f70ea54b7e1e8b7bf4bba22088c58961ef19a0800601ff37"
+    },
+    {
+      "path": "screenshots/explicit-search-native-final-v3-twentytwentyfive-nojs-375-duplicate-different-result.png",
+      "sha256": "94c37973c08eb4e576ded8feb8169c88fac7eb273d58f1b9ac1e8c8ec445e0ca"
+    },
+    {
+      "path": "screenshots/explicit-search-native-final-v3-twentytwentyfive-nojs-375-entities-form.png",
+      "sha256": "697aad07d9fa61066558b01fbbce5ca3d5408cd9e78431763328fd6f2e2eb1dd"
+    },
+    {
+      "path": "screenshots/explicit-search-native-final-v3-twentytwentyfive-nojs-375-no-button-form.png",
+      "sha256": "35e4a0a8135230955b3cb8dcd0029e5544a1587c314ceccb6438b18d9ed628b0"
+    },
+    {
+      "path": "screenshots/explicit-search-native-final-v3-twentytwentyfive-nojs-375-ordinary-form.png",
+      "sha256": "ac8056bff839f717e6127ff3b88131e7514670d92eede96c931c10b2972f865a"
+    },
+    {
+      "path": "screenshots/explicit-search-native-final-v3-twentytwentyfive-nojs-375-ordinary-result.png",
+      "sha256": "01834ab511b1c2021c512f350c3edcf2d82664d0efeaad6a707ad19176a818c6"
+    },
+    {
+      "path": "screenshots/explicit-search-native-final-v3-twentytwentyfive-nojs-375-reserved-form.png",
+      "sha256": "ce337340716ddc77609c776508dbdf47d4bf2c60b0ad20eec322661b6425a659"
+    },
+    {
+      "path": "screenshots/explicit-search-native-delegation-classic-comment-saved-1440.png",
+      "sha256": "b1ed961e2ad704dcbb7267864389dccde44b0ac6acbb64d1c07e1a770387d785"
+    },
+    {
+      "path": "screenshots/explicit-search-native-delegation-source-password-locked-375.png",
+      "sha256": "800a15f7f22f39c240bd37b0405fefa68e744db8402ea424b8e9ff8ad66068b6"
+    },
+    {
+      "path": "screenshots/explicit-search-native-delegation-source-password-unlocked-375.png",
+      "sha256": "7b7fa0d2cf3106e31e817c62d65ea170663c964d7fc39312e0daf6f47c0c9a38"
+    },
+    {
+      "path": "screenshots/explicit-search-native-supplement-classic-js-375-ordinary-form.png",
+      "sha256": "ccd4612ffe4efc735fa3afaf1b215e058e297fc14f9e196903924b48a9dac0da"
+    },
+    {
+      "path": "screenshots/explicit-search-native-supplement-classic-nojs-375-entities-form.png",
+      "sha256": "711e9020709b9bb796f556ad4bd78086466c822fea59459744c2bf619b88b745"
+    },
+    {
+      "path": "screenshots/explicit-search-native-supplement-classic-nojs-375-no-button-form.png",
+      "sha256": "b50cdf62c8e4210c6a884db22463b92698730ee415a8bc488ea3c79ba2cf383f"
+    },
+    {
+      "path": "screenshots/explicit-search-native-supplement-classic-nojs-375-ordinary-form.png",
+      "sha256": "ccd4612ffe4efc735fa3afaf1b215e058e297fc14f9e196903924b48a9dac0da"
+    },
+    {
+      "path": "screenshots/explicit-search-native-supplement-classic-nojs-375-ordinary-result.png",
+      "sha256": "4696948a3f1cb14eb7d3a8325ba1d5e56d333a1b2409b774d867443463c7cbbd"
+    },
+    {
+      "path": "screenshots/explicit-search-native-supplement-classic-nojs-375-reserved-form.png",
+      "sha256": "de4f623ab77d7cec120cc69eb24e974ec1f52f831121312fbc4032bc3fe7e41a"
+    },
+    {
+      "path": "screenshots/explicit-search-native-flushed-closest-classic-1440.png",
+      "sha256": "25dcaa02d34a0cef877f2757476c3eb41f3439f6b6c111116db5ff1ef247452e"
+    },
+    {
+      "path": "screenshots/explicit-search-native-flushed-getattribute-classic-1440.png",
+      "sha256": "440fa79f72b5964d8798e0008f9934821819119b65209abb5712e6f366b8f725"
+    },
+    {
+      "path": "screenshots/explicit-search-native-flushed-matches-classic-1440.png",
+      "sha256": "8d71c970f2817058c0ba3ea490833b79ad773c56d7b63709c519c96ee9ebba1b"
+    }
+  ],
+  "allPreserved": [
+    {
+      "path": "screenshots/explicit-search-native-delegation-classic-comment-saved-1440.png",
+      "sha256": "b1ed961e2ad704dcbb7267864389dccde44b0ac6acbb64d1c07e1a770387d785",
+      "individuallyOpened": true
+    },
+    {
+      "path": "screenshots/explicit-search-native-delegation-source-password-locked-375.png",
+      "sha256": "800a15f7f22f39c240bd37b0405fefa68e744db8402ea424b8e9ff8ad66068b6",
+      "individuallyOpened": true
+    },
+    {
+      "path": "screenshots/explicit-search-native-delegation-source-password-unlocked-375.png",
+      "sha256": "7b7fa0d2cf3106e31e817c62d65ea170663c964d7fc39312e0daf6f47c0c9a38",
+      "individuallyOpened": true
+    },
+    {
+      "path": "screenshots/explicit-search-native-final-classic-js-1440-ordinary-form.png",
+      "sha256": "e8dc7296d4a7f31fd4d0275ee2933fff0e2486804303de17a1a749f72f7ab9e7",
+      "individuallyOpened": false
+    },
+    {
+      "path": "screenshots/explicit-search-native-final-classic-js-1440-ordinary-result.png",
+      "sha256": "10dcd411f70eebc72113f376a9c3b07da6d2f95ee5aee1426a2e3f96bf7a1467",
+      "individuallyOpened": false
+    },
+    {
+      "path": "screenshots/explicit-search-native-final-classic-js-1440-reserved-form.png",
+      "sha256": "2d6e5b75745ee6431009a6f81f5597914903fed5879bf4d7b2bc7b1d0ae44dd3",
+      "individuallyOpened": false
+    },
+    {
+      "path": "screenshots/explicit-search-native-final-v2-classic-js-1440-ordinary-form.png",
+      "sha256": "e8dc7296d4a7f31fd4d0275ee2933fff0e2486804303de17a1a749f72f7ab9e7",
+      "individuallyOpened": false
+    },
+    {
+      "path": "screenshots/explicit-search-native-final-v2-classic-js-1440-ordinary-result.png",
+      "sha256": "10dcd411f70eebc72113f376a9c3b07da6d2f95ee5aee1426a2e3f96bf7a1467",
+      "individuallyOpened": false
+    },
+    {
+      "path": "screenshots/explicit-search-native-final-v2-classic-js-1440-reserved-form.png",
+      "sha256": "2d6e5b75745ee6431009a6f81f5597914903fed5879bf4d7b2bc7b1d0ae44dd3",
+      "individuallyOpened": false
+    },
+    {
+      "path": "screenshots/explicit-search-native-final-v2-classic-js-375-ordinary-form.png",
+      "sha256": "8015fea7ba7fa8ce9f4777f7a58bacdfaf68564bdb3f9f8813bf7fa49de91100",
+      "individuallyOpened": false
+    },
+    {
+      "path": "screenshots/explicit-search-native-final-v2-classic-js-375-ordinary-result.png",
+      "sha256": "875d5600151ffe043e854e173a549be31760f9588557ab8dce0c4449422f2dbe",
+      "individuallyOpened": false
+    },
+    {
+      "path": "screenshots/explicit-search-native-final-v2-classic-js-768-ordinary-form.png",
+      "sha256": "a7c9dd48d66065fc8e2465964994b39d396d762a6b5e01e69bcd9a5e85ae15d6",
+      "individuallyOpened": false
+    },
+    {
+      "path": "screenshots/explicit-search-native-final-v2-classic-js-768-ordinary-result.png",
+      "sha256": "0163908ca398f4b06dad2732af0bd8b50981cda6b0bd68e479b259adf4800ec2",
+      "individuallyOpened": false
+    },
+    {
+      "path": "screenshots/explicit-search-native-final-v2-classic-nojs-375-duplicate-different-result.png",
+      "sha256": "94c37973c08eb4e576ded8feb8169c88fac7eb273d58f1b9ac1e8c8ec445e0ca",
+      "individuallyOpened": false
+    },
+    {
+      "path": "screenshots/explicit-search-native-final-v2-classic-nojs-375-entities-form.png",
+      "sha256": "c49c25b1ce44669b1ba13039d5e726a8b42a1c829497d580f5939d452acff23c",
+      "individuallyOpened": false
+    },
+    {
+      "path": "screenshots/explicit-search-native-final-v2-classic-nojs-375-no-button-form.png",
+      "sha256": "40346a694750d95d2513c1d063bbb5e313e30eaa8623bc78e10d44af1a65607c",
+      "individuallyOpened": false
+    },
+    {
+      "path": "screenshots/explicit-search-native-final-v2-classic-nojs-375-ordinary-form.png",
+      "sha256": "8015fea7ba7fa8ce9f4777f7a58bacdfaf68564bdb3f9f8813bf7fa49de91100",
+      "individuallyOpened": false
+    },
+    {
+      "path": "screenshots/explicit-search-native-final-v2-classic-nojs-375-ordinary-result.png",
+      "sha256": "875d5600151ffe043e854e173a549be31760f9588557ab8dce0c4449422f2dbe",
+      "individuallyOpened": false
+    },
+    {
+      "path": "screenshots/explicit-search-native-final-v2-classic-nojs-375-reserved-form.png",
+      "sha256": "473e65c70c6c722c33976b9b646dc2d9d87d2f9f4e693467637e1f31cdbb7809",
+      "individuallyOpened": false
+    },
+    {
+      "path": "screenshots/explicit-search-native-final-v3-classic-js-1440-ordinary-form.png",
+      "sha256": "e8dc7296d4a7f31fd4d0275ee2933fff0e2486804303de17a1a749f72f7ab9e7",
+      "individuallyOpened": true
+    },
+    {
+      "path": "screenshots/explicit-search-native-final-v3-classic-js-1440-ordinary-result.png",
+      "sha256": "10dcd411f70eebc72113f376a9c3b07da6d2f95ee5aee1426a2e3f96bf7a1467",
+      "individuallyOpened": true
+    },
+    {
+      "path": "screenshots/explicit-search-native-final-v3-classic-js-1440-reserved-form.png",
+      "sha256": "2d6e5b75745ee6431009a6f81f5597914903fed5879bf4d7b2bc7b1d0ae44dd3",
+      "individuallyOpened": true
+    },
+    {
+      "path": "screenshots/explicit-search-native-final-v3-classic-js-375-ordinary-form.png",
+      "sha256": "8015fea7ba7fa8ce9f4777f7a58bacdfaf68564bdb3f9f8813bf7fa49de91100",
+      "individuallyOpened": true
+    },
+    {
+      "path": "screenshots/explicit-search-native-final-v3-classic-js-375-ordinary-result.png",
+      "sha256": "875d5600151ffe043e854e173a549be31760f9588557ab8dce0c4449422f2dbe",
+      "individuallyOpened": true
+    },
+    {
+      "path": "screenshots/explicit-search-native-final-v3-classic-js-768-ordinary-form.png",
+      "sha256": "a7c9dd48d66065fc8e2465964994b39d396d762a6b5e01e69bcd9a5e85ae15d6",
+      "individuallyOpened": true
+    },
+    {
+      "path": "screenshots/explicit-search-native-final-v3-classic-js-768-ordinary-result.png",
+      "sha256": "0163908ca398f4b06dad2732af0bd8b50981cda6b0bd68e479b259adf4800ec2",
+      "individuallyOpened": true
+    },
+    {
+      "path": "screenshots/explicit-search-native-final-v3-classic-nojs-375-duplicate-different-result.png",
+      "sha256": "94c37973c08eb4e576ded8feb8169c88fac7eb273d58f1b9ac1e8c8ec445e0ca",
+      "individuallyOpened": true
+    },
+    {
+      "path": "screenshots/explicit-search-native-final-v3-classic-nojs-375-entities-form.png",
+      "sha256": "c49c25b1ce44669b1ba13039d5e726a8b42a1c829497d580f5939d452acff23c",
+      "individuallyOpened": true
+    },
+    {
+      "path": "screenshots/explicit-search-native-final-v3-classic-nojs-375-no-button-form.png",
+      "sha256": "40346a694750d95d2513c1d063bbb5e313e30eaa8623bc78e10d44af1a65607c",
+      "individuallyOpened": true
+    },
+    {
+      "path": "screenshots/explicit-search-native-final-v3-classic-nojs-375-ordinary-form.png",
+      "sha256": "8015fea7ba7fa8ce9f4777f7a58bacdfaf68564bdb3f9f8813bf7fa49de91100",
+      "individuallyOpened": true
+    },
+    {
+      "path": "screenshots/explicit-search-native-final-v3-classic-nojs-375-ordinary-result.png",
+      "sha256": "875d5600151ffe043e854e173a549be31760f9588557ab8dce0c4449422f2dbe",
+      "individuallyOpened": true
+    },
+    {
+      "path": "screenshots/explicit-search-native-final-v3-classic-nojs-375-reserved-form.png",
+      "sha256": "473e65c70c6c722c33976b9b646dc2d9d87d2f9f4e693467637e1f31cdbb7809",
+      "individuallyOpened": true
+    },
+    {
+      "path": "screenshots/explicit-search-native-final-v3-twentytwentyfive-js-1440-ordinary-form.png",
+      "sha256": "e2c0b1738dd357ad2259fabdf3e6e9d5c5a009bc34911c2ad19ff8d9d0b90456",
+      "individuallyOpened": true
+    },
+    {
+      "path": "screenshots/explicit-search-native-final-v3-twentytwentyfive-js-1440-ordinary-result.png",
+      "sha256": "b7bfd63bca08c47ab2d67167287402c7973ea0648f702fb79ea4e3c4e83e6e6d",
+      "individuallyOpened": true
+    },
+    {
+      "path": "screenshots/explicit-search-native-final-v3-twentytwentyfive-js-1440-reserved-form.png",
+      "sha256": "86ed9fa48e88e1a658e89f105ef38d728674cc4bb70a3b302d1c190336e401c1",
+      "individuallyOpened": true
+    },
+    {
+      "path": "screenshots/explicit-search-native-final-v3-twentytwentyfive-js-375-ordinary-form.png",
+      "sha256": "ac8056bff839f717e6127ff3b88131e7514670d92eede96c931c10b2972f865a",
+      "individuallyOpened": true
+    },
+    {
+      "path": "screenshots/explicit-search-native-final-v3-twentytwentyfive-js-375-ordinary-result.png",
+      "sha256": "01834ab511b1c2021c512f350c3edcf2d82664d0efeaad6a707ad19176a818c6",
+      "individuallyOpened": true
+    },
+    {
+      "path": "screenshots/explicit-search-native-final-v3-twentytwentyfive-js-768-ordinary-form.png",
+      "sha256": "9c4ed7f031aa9f93dbf546d0fd9407e4d4056116eb804a049d31dc191f9667be",
+      "individuallyOpened": true
+    },
+    {
+      "path": "screenshots/explicit-search-native-final-v3-twentytwentyfive-js-768-ordinary-result.png",
+      "sha256": "4ed30021465b9f72f70ea54b7e1e8b7bf4bba22088c58961ef19a0800601ff37",
+      "individuallyOpened": true
+    },
+    {
+      "path": "screenshots/explicit-search-native-final-v3-twentytwentyfive-nojs-375-duplicate-different-result.png",
+      "sha256": "94c37973c08eb4e576ded8feb8169c88fac7eb273d58f1b9ac1e8c8ec445e0ca",
+      "individuallyOpened": true
+    },
+    {
+      "path": "screenshots/explicit-search-native-final-v3-twentytwentyfive-nojs-375-entities-form.png",
+      "sha256": "697aad07d9fa61066558b01fbbce5ca3d5408cd9e78431763328fd6f2e2eb1dd",
+      "individuallyOpened": true
+    },
+    {
+      "path": "screenshots/explicit-search-native-final-v3-twentytwentyfive-nojs-375-no-button-form.png",
+      "sha256": "35e4a0a8135230955b3cb8dcd0029e5544a1587c314ceccb6438b18d9ed628b0",
+      "individuallyOpened": true
+    },
+    {
+      "path": "screenshots/explicit-search-native-final-v3-twentytwentyfive-nojs-375-ordinary-form.png",
+      "sha256": "ac8056bff839f717e6127ff3b88131e7514670d92eede96c931c10b2972f865a",
+      "individuallyOpened": true
+    },
+    {
+      "path": "screenshots/explicit-search-native-final-v3-twentytwentyfive-nojs-375-ordinary-result.png",
+      "sha256": "01834ab511b1c2021c512f350c3edcf2d82664d0efeaad6a707ad19176a818c6",
+      "individuallyOpened": true
+    },
+    {
+      "path": "screenshots/explicit-search-native-final-v3-twentytwentyfive-nojs-375-reserved-form.png",
+      "sha256": "ce337340716ddc77609c776508dbdf47d4bf2c60b0ad20eec322661b6425a659",
+      "individuallyOpened": true
+    },
+    {
+      "path": "screenshots/explicit-search-native-flushed-closest-classic-1440.png",
+      "sha256": "25dcaa02d34a0cef877f2757476c3eb41f3439f6b6c111116db5ff1ef247452e",
+      "individuallyOpened": true
+    },
+    {
+      "path": "screenshots/explicit-search-native-flushed-getattribute-classic-1440.png",
+      "sha256": "440fa79f72b5964d8798e0008f9934821819119b65209abb5712e6f366b8f725",
+      "individuallyOpened": true
+    },
+    {
+      "path": "screenshots/explicit-search-native-flushed-matches-classic-1440.png",
+      "sha256": "8d71c970f2817058c0ba3ea490833b79ad773c56d7b63709c519c96ee9ebba1b",
+      "individuallyOpened": true
+    },
+    {
+      "path": "screenshots/explicit-search-native-original-closest-classic-1440.png",
+      "sha256": "25dcaa02d34a0cef877f2757476c3eb41f3439f6b6c111116db5ff1ef247452e",
+      "individuallyOpened": false
+    },
+    {
+      "path": "screenshots/explicit-search-native-original-getattribute-classic-1440.png",
+      "sha256": "440fa79f72b5964d8798e0008f9934821819119b65209abb5712e6f366b8f725",
+      "individuallyOpened": false
+    },
+    {
+      "path": "screenshots/explicit-search-native-original-matches-classic-1440.png",
+      "sha256": "8d71c970f2817058c0ba3ea490833b79ad773c56d7b63709c519c96ee9ebba1b",
+      "individuallyOpened": false
+    },
+    {
+      "path": "screenshots/explicit-search-native-supplement-classic-js-375-ordinary-form.png",
+      "sha256": "ccd4612ffe4efc735fa3afaf1b215e058e297fc14f9e196903924b48a9dac0da",
+      "individuallyOpened": true
+    },
+    {
+      "path": "screenshots/explicit-search-native-supplement-classic-nojs-375-entities-form.png",
+      "sha256": "711e9020709b9bb796f556ad4bd78086466c822fea59459744c2bf619b88b745",
+      "individuallyOpened": true
+    },
+    {
+      "path": "screenshots/explicit-search-native-supplement-classic-nojs-375-no-button-form.png",
+      "sha256": "b50cdf62c8e4210c6a884db22463b92698730ee415a8bc488ea3c79ba2cf383f",
+      "individuallyOpened": true
+    },
+    {
+      "path": "screenshots/explicit-search-native-supplement-classic-nojs-375-ordinary-form.png",
+      "sha256": "ccd4612ffe4efc735fa3afaf1b215e058e297fc14f9e196903924b48a9dac0da",
+      "individuallyOpened": true
+    },
+    {
+      "path": "screenshots/explicit-search-native-supplement-classic-nojs-375-ordinary-result.png",
+      "sha256": "4696948a3f1cb14eb7d3a8325ba1d5e56d333a1b2409b774d867443463c7cbbd",
+      "individuallyOpened": true
+    },
+    {
+      "path": "screenshots/explicit-search-native-supplement-classic-nojs-375-reserved-form.png",
+      "sha256": "de4f623ab77d7cec120cc69eb24e974ec1f52f831121312fbc4032bc3fe7e41a",
+      "individuallyOpened": true
+    }
+  ],
+  "visualLimits": [
+    "Original Classic375 initial viewport screenshots mainly frame long fixture navigation and headings; supplemental scroll captures separately show controls/result.",
+    "No horizontal overflow in the48 measured rows; no pixel-fidelity claim."
+  ]
+}

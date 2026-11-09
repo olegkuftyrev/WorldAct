@@ -1,0 +1,659 @@
+{
+  "scope": "Evidence-only native Search review; original private receipts unchanged",
+  "code": "9928f5dfc7fbd4af3c0a639ddb2c2f9312d061d2",
+  "base": "5a819ef4a68b3dcd8f9c2ea0e033d690f34d029a",
+  "nodeSha256": "af2177df906780e5c6f65554a1181d606cd337789d3cfa9d9bb8d87ffaf5fc33",
+  "nativeSelectorRows": 48,
+  "delegationSmokes": 2,
+  "finalPNGIndividuallyOpened": 35,
+  "beforePNGIndividuallyOpened": 3,
+  "preservedPNGPaths": 57,
+  "noRawCredentialsCookieSessionPasswordTokenDBURL": true,
+  "excluded": "All environment/ownership/secret fixture files, seed/API logs, raw original context HTML/bootstrap, executable compiled assets and private setup scripts",
+  "files": [
+    {
+      "path": "final48.json",
+      "sha256": "54f59ea73609dc0a47121fc15994d1d008c554828a2393eab260374c494c0421",
+      "privateOriginal": "explicit-search-native-final48-v3-proof.json",
+      "privateOriginalSHA256": "bf02570b228b25742ed9210659e65bc5fce6b3312358d7c5d9c5e5daa560bea4",
+      "sanitization": "Relative evidence paths; opaque CDP request/frame identifiers omitted; browser session names reduced to count where present; original bytes retained privately"
+    },
+    {
+      "path": "delegation-smokes.json",
+      "sha256": "3f1c33fde85b3678a28a7a72ce3cbbb31d872d8269118885666f660fb5858405",
+      "privateOriginal": "explicit-search-native-delegation-smokes-proof.json",
+      "privateOriginalSHA256": "23db7d848bdee5b49014404b48fca66539564e8473f7c77f09587390d5641b7f",
+      "sanitization": "Relative evidence paths; opaque CDP request/frame identifiers omitted; browser session names reduced to count where present; original bytes retained privately"
+    },
+    {
+      "path": "focused-captures.json",
+      "sha256": "1e12141c0fba71b5b740e00a65fc3a9f710fd24f19da99fc3c1d463597f57a2a",
+      "privateOriginal": "explicit-search-native-focused-captures-proof.json",
+      "privateOriginalSHA256": "28b74f27160b646b1da4ac0ee730923ef9eba5b34beb84a829393d4db4071e29",
+      "sanitization": "Relative evidence paths; opaque CDP request/frame identifiers omitted; browser session names reduced to count where present; original bytes retained privately"
+    },
+    {
+      "path": "before-unflushed.json",
+      "sha256": "48d38ad9940b34250c959cb163933fcfc112b1ca99ea65b7c1272eda937e3279",
+      "privateOriginal": "explicit-search-native-shadows-original-proof.json",
+      "privateOriginalSHA256": "92621654ac673311e93fbcf2c61571e6b6fa85e8abe60a57190315f4f7dc6d33",
+      "sanitization": "Relative evidence paths; opaque CDP request/frame identifiers omitted; browser session names reduced to count where present; original bytes retained privately"
+    },
+    {
+      "path": "before-flushed.json",
+      "sha256": "6776a688d05abfa869fe1fd47274e6d2ae23fe12070d74d0c870dd3c3dc6c634",
+      "privateOriginal": "explicit-search-native-shadows-flushed-proof.json",
+      "privateOriginalSHA256": "aac1aa475b678843fd9ac859bb265d9ed0c2037fe57d38a471cd70ae79010c7c",
+      "sanitization": "Relative evidence paths; opaque CDP request/frame identifiers omitted; browser session names reduced to count where present; original bytes retained privately"
+    },
+    {
+      "path": "before-summary.json",
+      "sha256": "e5db579b70b68372ffe8adbe3f41f90dbfac49586a92c1bcd6e4dc793283641a",
+      "privateOriginal": "explicit-search-native-before-stage.json",
+      "privateOriginalSHA256": "faad6e3499c761502ee1351e90acea4905186b2ca65d6c32528613c78dc10f51",
+      "sanitization": "Relative evidence paths; opaque CDP request/frame identifiers omitted; browser session names reduced to count where present; original bytes retained privately"
+    },
+    {
+      "path": "partial9.json",
+      "sha256": "ceb8891fa888182300d6648e5cec656628c0fee382d013c6cd12c523d6b15dbb",
+      "privateOriginal": "explicit-search-native-final48-proof.json",
+      "privateOriginalSHA256": "cde59b97afabfc39d0332bb986b5b93319777431ea55db7fa47b2ed269d5541c",
+      "sanitization": "Relative evidence paths; opaque CDP request/frame identifiers omitted; browser session names reduced to count where present; original bytes retained privately"
+    },
+    {
+      "path": "partial9-harness-error.json",
+      "sha256": "134e0483ecee7fdff2fdbec17a1ea11a7ef719dd54bf4b9d472b8c1bb3604e7b",
+      "privateOriginal": "explicit-search-native-final48-original-error.json",
+      "privateOriginalSHA256": "75112baf64a6e17b86143c42a058078a0bb801e1792ceea2153a79026be0e145",
+      "sanitization": "Relative evidence paths; opaque CDP request/frame identifiers omitted; browser session names reduced to count where present; original bytes retained privately"
+    },
+    {
+      "path": "partial24.json",
+      "sha256": "0952d90663f7f41dc100b47b9c00041c90455bd0658f6c86a0a457d78942a52a",
+      "privateOriginal": "explicit-search-native-final48-v2-proof.json",
+      "privateOriginalSHA256": "eb6b77dbe840ba79cc85b66c3826722dcde3a991d8d32eabc67ac1b3fc951b7a",
+      "sanitization": "Relative evidence paths; opaque CDP request/frame identifiers omitted; browser session names reduced to count where present; original bytes retained privately"
+    },
+    {
+      "path": "partial24-harness-error.json",
+      "sha256": "663b729affcd1face1a678bd227fdaca64629db596d72df583c422937f106d80",
+      "privateOriginal": "explicit-search-native-final48-v2-original-error.json",
+      "privateOriginalSHA256": "676f61ce819fae54ac29c0435bfc181d8130c5d84f6977139b6954c4b62f59f8",
+      "sanitization": "Relative evidence paths; opaque CDP request/frame identifiers omitted; browser session names reduced to count where present; original bytes retained privately"
+    },
+    {
+      "path": "empty-name-adapter.json",
+      "sha256": "18c4aea7f6610e7c0100e189e4f19af7677e891de1da885dba6c5017c753f0dd",
+      "privateOriginal": "explicit-search-native-empty-name-harness-adapter.json",
+      "privateOriginalSHA256": "5e83b712197bdbd40a5a487474bd8e7d2cf9883d964d7ee72a253ae0ff532492",
+      "sanitization": "Relative evidence paths; opaque CDP request/frame identifiers omitted; browser session names reduced to count where present; original bytes retained privately"
+    },
+    {
+      "path": "context-adapter.json",
+      "sha256": "66fe03ead0ff11096e8a21ae4d009394fe7463b19ffb072ec09ad209eb16b9a5",
+      "privateOriginal": "explicit-search-native-context-harness-adapter.json",
+      "privateOriginalSHA256": "53ea0a290c0a18fefaffc7a440fe72de1019f5cac9ea84b9508482a49620b345",
+      "sanitization": "Relative evidence paths; opaque CDP request/frame identifiers omitted; browser session names reduced to count where present; original bytes retained privately"
+    },
+    {
+      "path": "image-inspection.json",
+      "sha256": "861be4f4977102e935001d59c320c4be9dce02b24cfaec72afbef8655e3b69d2",
+      "privateOriginal": "explicit-search-native-image-inspection.json",
+      "privateOriginalSHA256": "eb93b472d2d9c854f36c209efcc5cfd39ee56bb7efca37f7ee6467e713f988f3",
+      "sanitization": "Relative evidence paths; opaque CDP request/frame identifiers omitted; browser session names reduced to count where present; original bytes retained privately"
+    },
+    {
+      "path": "cleanup.json",
+      "sha256": "dac93938f4de432b358dba624c5f966a2f2ceacf7fc6e4633f48d53061042559",
+      "privateOriginal": "explicit-search-native-cleanup.json",
+      "privateOriginalSHA256": "d4a4b173d9a1b5badf1aa419454faf8f614ed0bad98f0bd66c544755c836e71b",
+      "sanitization": "Relative evidence paths; opaque CDP request/frame identifiers omitted; browser session names reduced to count where present; original bytes retained privately"
+    },
+    {
+      "path": "resource-journal.json",
+      "sha256": "39305b961560f1a62b8c58dfd5004aad8f8a4b4dc098043f6eafd53a7acfec12",
+      "privateOriginal": "explicit-search-native-resource-journal.json",
+      "privateOriginalSHA256": "39305b961560f1a62b8c58dfd5004aad8f8a4b4dc098043f6eafd53a7acfec12",
+      "sanitization": "Relative evidence paths; opaque CDP request/frame identifiers omitted; browser session names reduced to count where present; original bytes retained privately"
+    },
+    {
+      "path": "saved-inputs.json",
+      "sha256": "5e4430967f49847334c6911ea1ef3cf6d262b6bce9f9824a95c4dab56f29152b",
+      "privateOriginal": "explicit-search-native-saved-inputs.json",
+      "privateOriginalSHA256": "702c80b36b7526535153c107f6d780d8d55bfeb145db872da55bd80c7d3bfeb6",
+      "sanitization": "Relative evidence paths; opaque CDP request/frame identifiers omitted; browser session names reduced to count where present; original bytes retained privately"
+    },
+    {
+      "path": "selector.json",
+      "sha256": "ec331987a213f4f76a26e5186d974c629fdf2a470719deb5c2c6e9aafaa8457c",
+      "privateOriginal": "explicit-search-native-harness/selector.json",
+      "privateOriginalSHA256": "ec331987a213f4f76a26e5186d974c629fdf2a470719deb5c2c6e9aafaa8457c",
+      "sanitization": "Relative evidence paths; opaque CDP request/frame identifiers omitted; browser session names reduced to count where present; original bytes retained privately"
+    },
+    {
+      "path": "before-build-hashes.json",
+      "sha256": "da50ff5dfe911b41dfb40773f78bac3b1fa37ad79237ab959dee0981ac7f0639",
+      "privateOriginal": "explicit-search-native-5a-build/manifest.json",
+      "privateOriginalSHA256": "6ff00e981fde9429874315247c239dd163a10709bd9aa621f99b289bb182d544",
+      "sanitization": "Relative evidence paths; opaque CDP request/frame identifiers omitted; browser session names reduced to count where present; original bytes retained privately"
+    },
+    {
+      "path": "review.md",
+      "sha256": "2409e5aa34e49e636a6fb2a5891675ea63bed319a4faaa5b36cfde39058e6bb9",
+      "privateOriginal": "explicit-search-native-review.md",
+      "privateOriginalSHA256": "2409e5aa34e49e636a6fb2a5891675ea63bed319a4faaa5b36cfde39058e6bb9",
+      "sanitization": "Byte-identical safe report/checks"
+    },
+    {
+      "path": "checks.json",
+      "sha256": "054dba7b4f84e544f69b92a3a68de4037c15252232f9a09aada8f0146dabee03",
+      "privateOriginal": "explicit-search-native-review-checks.json",
+      "privateOriginalSHA256": "054dba7b4f84e544f69b92a3a68de4037c15252232f9a09aada8f0146dabee03",
+      "sanitization": "Byte-identical safe report/checks"
+    },
+    {
+      "path": "empty-name-adapter.diff",
+      "sha256": "b26a3548f872ff35156819f08f41dd3f362101e0c205be134811a33052aba370",
+      "privateOriginal": "explicit-search-native-empty-name-adapter.diff",
+      "privateOriginalSHA256": "b26a3548f872ff35156819f08f41dd3f362101e0c205be134811a33052aba370",
+      "sanitization": "Private measurement adapter diff; no credentials or runtime changes"
+    },
+    {
+      "path": "context-adapter.diff",
+      "sha256": "6a5b10725b25a8f647789b6e17a1fd3ed07cd7271b648936be9af9d9837c778a",
+      "privateOriginal": "explicit-search-native-context-adapter.diff",
+      "privateOriginalSHA256": "6a5b10725b25a8f647789b6e17a1fd3ed07cd7271b648936be9af9d9837c778a",
+      "sanitization": "Private measurement adapter diff; no credentials or runtime changes"
+    },
+    {
+      "path": "logs/shadows-original.log",
+      "sha256": "c7c1a70c490a2f509c8b4dd91f61d802dfbd4360f948d468861bfa0d03c104c4",
+      "privateOriginal": "explicit-search-native-shadows-original.log",
+      "privateOriginalSHA256": "c7c1a70c490a2f509c8b4dd91f61d802dfbd4360f948d468861bfa0d03c104c4",
+      "sanitization": "Private harness paths normalized only; seed/auth/API logs excluded"
+    },
+    {
+      "path": "logs/shadows-flushed.log",
+      "sha256": "b8dcce49a293e56f2a7d488da7ac87c17e092e4064b5b25951db3a6fbb69e014",
+      "privateOriginal": "explicit-search-native-shadows-flushed.log",
+      "privateOriginalSHA256": "b8dcce49a293e56f2a7d488da7ac87c17e092e4064b5b25951db3a6fbb69e014",
+      "sanitization": "Private harness paths normalized only; seed/auth/API logs excluded"
+    },
+    {
+      "path": "logs/final48.log",
+      "sha256": "70273c882a6f5fc368e99e237d25a862cad951b64359ecd8cb7e6960135a3970",
+      "privateOriginal": "explicit-search-native-final48.log",
+      "privateOriginalSHA256": "1a24cf1d12c1e4019228a03d3e5082afb05089ea09139ca6cd9907033de0d696",
+      "sanitization": "Private harness paths normalized only; seed/auth/API logs excluded"
+    },
+    {
+      "path": "logs/final48-v2.log",
+      "sha256": "4f84bac3055e8a1ffabbd21581d879dc18b1a0181d6a5e1e58d23dcae72a553e",
+      "privateOriginal": "explicit-search-native-final48-v2.log",
+      "privateOriginalSHA256": "26992898c4dd1e06f7d3248155a57fa64ef1c4bd98d7ce0a35f2b5b767d8959f",
+      "sanitization": "Private harness paths normalized only; seed/auth/API logs excluded"
+    },
+    {
+      "path": "logs/final48-v3.log",
+      "sha256": "8856bcfaa9c9a05fbd0b527fd6572a3895672d069b0835497fd3ff07eab3d264",
+      "privateOriginal": "explicit-search-native-final48-v3.log",
+      "privateOriginalSHA256": "8856bcfaa9c9a05fbd0b527fd6572a3895672d069b0835497fd3ff07eab3d264",
+      "sanitization": "Private harness paths normalized only; seed/auth/API logs excluded"
+    },
+    {
+      "path": "logs/delegation-smokes.log",
+      "sha256": "961822f310281bf6d677ac2bf7a06496ca39b1f6245e47ad5895d69afb3020ce",
+      "privateOriginal": "explicit-search-native-delegation-smokes.log",
+      "privateOriginalSHA256": "961822f310281bf6d677ac2bf7a06496ca39b1f6245e47ad5895d69afb3020ce",
+      "sanitization": "Private harness paths normalized only; seed/auth/API logs excluded"
+    },
+    {
+      "path": "logs/focused-captures.log",
+      "sha256": "6bdf99743c86162c4588426e1e853d4adbbee839fb4d5512a836e451f08d7c30",
+      "privateOriginal": "explicit-search-native-focused-captures.log",
+      "privateOriginalSHA256": "6bdf99743c86162c4588426e1e853d4adbbee839fb4d5512a836e451f08d7c30",
+      "sanitization": "Private harness paths normalized only; seed/auth/API logs excluded"
+    },
+    {
+      "path": "logs/typecheck.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "privateOriginal": "explicit-search-native-typecheck.log",
+      "privateOriginalSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sanitization": "Private harness paths normalized only; seed/auth/API logs excluded"
+    },
+    {
+      "path": "logs/vite.log",
+      "sha256": "19bbdbc20b93318b53e84c9339ec4c2489bd895eb8d176aa4c7e34cb7beb7a09",
+      "privateOriginal": "explicit-search-native-vite.log",
+      "privateOriginalSHA256": "19bbdbc20b93318b53e84c9339ec4c2489bd895eb8d176aa4c7e34cb7beb7a09",
+      "sanitization": "Private harness paths normalized only; seed/auth/API logs excluded"
+    },
+    {
+      "path": "logs/node.log",
+      "sha256": "da89a8cf677c16fe0b6cf98ab7c882df3f5bfa0b47cce66e02698460d594bd5e",
+      "privateOriginal": "explicit-search-native-node.log",
+      "privateOriginalSHA256": "da89a8cf677c16fe0b6cf98ab7c882df3f5bfa0b47cce66e02698460d594bd5e",
+      "sanitization": "Private harness paths normalized only; seed/auth/API logs excluded"
+    },
+    {
+      "path": "logs/9928-typecheck.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "privateOriginal": "explicit-search-native-9928-typecheck.log",
+      "privateOriginalSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sanitization": "Private harness paths normalized only; seed/auth/API logs excluded"
+    },
+    {
+      "path": "logs/9928-vite.log",
+      "sha256": "d3e2e9ef921549df8d658d64dfd84b990f4d19faa7a44add2fbb1879428bb7a1",
+      "privateOriginal": "explicit-search-native-9928-vite.log",
+      "privateOriginalSHA256": "d3e2e9ef921549df8d658d64dfd84b990f4d19faa7a44add2fbb1879428bb7a1",
+      "sanitization": "Private harness paths normalized only; seed/auth/API logs excluded"
+    },
+    {
+      "path": "logs/9928-node.log",
+      "sha256": "3a0145b6bc373f67fb66264642d47475d73d3e6981abe2eb2abab8a06a05f274",
+      "privateOriginal": "explicit-search-native-9928-node.log",
+      "privateOriginalSHA256": "3a0145b6bc373f67fb66264642d47475d73d3e6981abe2eb2abab8a06a05f274",
+      "sanitization": "Private harness paths normalized only; seed/auth/API logs excluded"
+    },
+    {
+      "path": "screenshots/explicit-search-native-delegation-classic-comment-saved-1440.png",
+      "sha256": "b1ed961e2ad704dcbb7267864389dccde44b0ac6acbb64d1c07e1a770387d785",
+      "privateOriginal": "explicit-search-native-delegation-classic-comment-saved-1440.png",
+      "privateOriginalSHA256": "b1ed961e2ad704dcbb7267864389dccde44b0ac6acbb64d1c07e1a770387d785",
+      "sanitization": "Byte-identical PNG;35 final +3 before opened individually;19 other copies verified identical to opened bytes"
+    },
+    {
+      "path": "screenshots/explicit-search-native-delegation-source-password-locked-375.png",
+      "sha256": "800a15f7f22f39c240bd37b0405fefa68e744db8402ea424b8e9ff8ad66068b6",
+      "privateOriginal": "explicit-search-native-delegation-source-password-locked-375.png",
+      "privateOriginalSHA256": "800a15f7f22f39c240bd37b0405fefa68e744db8402ea424b8e9ff8ad66068b6",
+      "sanitization": "Byte-identical PNG;35 final +3 before opened individually;19 other copies verified identical to opened bytes"
+    },
+    {
+      "path": "screenshots/explicit-search-native-delegation-source-password-unlocked-375.png",
+      "sha256": "7b7fa0d2cf3106e31e817c62d65ea170663c964d7fc39312e0daf6f47c0c9a38",
+      "privateOriginal": "explicit-search-native-delegation-source-password-unlocked-375.png",
+      "privateOriginalSHA256": "7b7fa0d2cf3106e31e817c62d65ea170663c964d7fc39312e0daf6f47c0c9a38",
+      "sanitization": "Byte-identical PNG;35 final +3 before opened individually;19 other copies verified identical to opened bytes"
+    },
+    {
+      "path": "screenshots/explicit-search-native-final-classic-js-1440-ordinary-form.png",
+      "sha256": "e8dc7296d4a7f31fd4d0275ee2933fff0e2486804303de17a1a749f72f7ab9e7",
+      "privateOriginal": "explicit-search-native-final-classic-js-1440-ordinary-form.png",
+      "privateOriginalSHA256": "e8dc7296d4a7f31fd4d0275ee2933fff0e2486804303de17a1a749f72f7ab9e7",
+      "sanitization": "Byte-identical PNG;35 final +3 before opened individually;19 other copies verified identical to opened bytes"
+    },
+    {
+      "path": "screenshots/explicit-search-native-final-classic-js-1440-ordinary-result.png",
+      "sha256": "10dcd411f70eebc72113f376a9c3b07da6d2f95ee5aee1426a2e3f96bf7a1467",
+      "privateOriginal": "explicit-search-native-final-classic-js-1440-ordinary-result.png",
+      "privateOriginalSHA256": "10dcd411f70eebc72113f376a9c3b07da6d2f95ee5aee1426a2e3f96bf7a1467",
+      "sanitization": "Byte-identical PNG;35 final +3 before opened individually;19 other copies verified identical to opened bytes"
+    },
+    {
+      "path": "screenshots/explicit-search-native-final-classic-js-1440-reserved-form.png",
+      "sha256": "2d6e5b75745ee6431009a6f81f5597914903fed5879bf4d7b2bc7b1d0ae44dd3",
+      "privateOriginal": "explicit-search-native-final-classic-js-1440-reserved-form.png",
+      "privateOriginalSHA256": "2d6e5b75745ee6431009a6f81f5597914903fed5879bf4d7b2bc7b1d0ae44dd3",
+      "sanitization": "Byte-identical PNG;35 final +3 before opened individually;19 other copies verified identical to opened bytes"
+    },
+    {
+      "path": "screenshots/explicit-search-native-final-v2-classic-js-1440-ordinary-form.png",
+      "sha256": "e8dc7296d4a7f31fd4d0275ee2933fff0e2486804303de17a1a749f72f7ab9e7",
+      "privateOriginal": "explicit-search-native-final-v2-classic-js-1440-ordinary-form.png",
+      "privateOriginalSHA256": "e8dc7296d4a7f31fd4d0275ee2933fff0e2486804303de17a1a749f72f7ab9e7",
+      "sanitization": "Byte-identical PNG;35 final +3 before opened individually;19 other copies verified identical to opened bytes"
+    },
+    {
+      "path": "screenshots/explicit-search-native-final-v2-classic-js-1440-ordinary-result.png",
+      "sha256": "10dcd411f70eebc72113f376a9c3b07da6d2f95ee5aee1426a2e3f96bf7a1467",
+      "privateOriginal": "explicit-search-native-final-v2-classic-js-1440-ordinary-result.png",
+      "privateOriginalSHA256": "10dcd411f70eebc72113f376a9c3b07da6d2f95ee5aee1426a2e3f96bf7a1467",
+      "sanitization": "Byte-identical PNG;35 final +3 before opened individually;19 other copies verified identical to opened bytes"
+    },
+    {
+      "path": "screenshots/explicit-search-native-final-v2-classic-js-1440-reserved-form.png",
+      "sha256": "2d6e5b75745ee6431009a6f81f5597914903fed5879bf4d7b2bc7b1d0ae44dd3",
+      "privateOriginal": "explicit-search-native-final-v2-classic-js-1440-reserved-form.png",
+      "privateOriginalSHA256": "2d6e5b75745ee6431009a6f81f5597914903fed5879bf4d7b2bc7b1d0ae44dd3",
+      "sanitization": "Byte-identical PNG;35 final +3 before opened individually;19 other copies verified identical to opened bytes"
+    },
+    {
+      "path": "screenshots/explicit-search-native-final-v2-classic-js-375-ordinary-form.png",
+      "sha256": "8015fea7ba7fa8ce9f4777f7a58bacdfaf68564bdb3f9f8813bf7fa49de91100",
+      "privateOriginal": "explicit-search-native-final-v2-classic-js-375-ordinary-form.png",
+      "privateOriginalSHA256": "8015fea7ba7fa8ce9f4777f7a58bacdfaf68564bdb3f9f8813bf7fa49de91100",
+      "sanitization": "Byte-identical PNG;35 final +3 before opened individually;19 other copies verified identical to opened bytes"
+    },
+    {
+      "path": "screenshots/explicit-search-native-final-v2-classic-js-375-ordinary-result.png",
+      "sha256": "875d5600151ffe043e854e173a549be31760f9588557ab8dce0c4449422f2dbe",
+      "privateOriginal": "explicit-search-native-final-v2-classic-js-375-ordinary-result.png",
+      "privateOriginalSHA256": "875d5600151ffe043e854e173a549be31760f9588557ab8dce0c4449422f2dbe",
+      "sanitization": "Byte-identical PNG;35 final +3 before opened individually;19 other copies verified identical to opened bytes"
+    },
+    {
+      "path": "screenshots/explicit-search-native-final-v2-classic-js-768-ordinary-form.png",
+      "sha256": "a7c9dd48d66065fc8e2465964994b39d396d762a6b5e01e69bcd9a5e85ae15d6",
+      "privateOriginal": "explicit-search-native-final-v2-classic-js-768-ordinary-form.png",
+      "privateOriginalSHA256": "a7c9dd48d66065fc8e2465964994b39d396d762a6b5e01e69bcd9a5e85ae15d6",
+      "sanitization": "Byte-identical PNG;35 final +3 before opened individually;19 other copies verified identical to opened bytes"
+    },
+    {
+      "path": "screenshots/explicit-search-native-final-v2-classic-js-768-ordinary-result.png",
+      "sha256": "0163908ca398f4b06dad2732af0bd8b50981cda6b0bd68e479b259adf4800ec2",
+      "privateOriginal": "explicit-search-native-final-v2-classic-js-768-ordinary-result.png",
+      "privateOriginalSHA256": "0163908ca398f4b06dad2732af0bd8b50981cda6b0bd68e479b259adf4800ec2",
+      "sanitization": "Byte-identical PNG;35 final +3 before opened individually;19 other copies verified identical to opened bytes"
+    },
+    {
+      "path": "screenshots/explicit-search-native-final-v2-classic-nojs-375-duplicate-different-result.png",
+      "sha256": "94c37973c08eb4e576ded8feb8169c88fac7eb273d58f1b9ac1e8c8ec445e0ca",
+      "privateOriginal": "explicit-search-native-final-v2-classic-nojs-375-duplicate-different-result.png",
+      "privateOriginalSHA256": "94c37973c08eb4e576ded8feb8169c88fac7eb273d58f1b9ac1e8c8ec445e0ca",
+      "sanitization": "Byte-identical PNG;35 final +3 before opened individually;19 other copies verified identical to opened bytes"
+    },
+    {
+      "path": "screenshots/explicit-search-native-final-v2-classic-nojs-375-entities-form.png",
+      "sha256": "c49c25b1ce44669b1ba13039d5e726a8b42a1c829497d580f5939d452acff23c",
+      "privateOriginal": "explicit-search-native-final-v2-classic-nojs-375-entities-form.png",
+      "privateOriginalSHA256": "c49c25b1ce44669b1ba13039d5e726a8b42a1c829497d580f5939d452acff23c",
+      "sanitization": "Byte-identical PNG;35 final +3 before opened individually;19 other copies verified identical to opened bytes"
+    },
+    {
+      "path": "screenshots/explicit-search-native-final-v2-classic-nojs-375-no-button-form.png",
+      "sha256": "40346a694750d95d2513c1d063bbb5e313e30eaa8623bc78e10d44af1a65607c",
+      "privateOriginal": "explicit-search-native-final-v2-classic-nojs-375-no-button-form.png",
+      "privateOriginalSHA256": "40346a694750d95d2513c1d063bbb5e313e30eaa8623bc78e10d44af1a65607c",
+      "sanitization": "Byte-identical PNG;35 final +3 before opened individually;19 other copies verified identical to opened bytes"
+    },
+    {
+      "path": "screenshots/explicit-search-native-final-v2-classic-nojs-375-ordinary-form.png",
+      "sha256": "8015fea7ba7fa8ce9f4777f7a58bacdfaf68564bdb3f9f8813bf7fa49de91100",
+      "privateOriginal": "explicit-search-native-final-v2-classic-nojs-375-ordinary-form.png",
+      "privateOriginalSHA256": "8015fea7ba7fa8ce9f4777f7a58bacdfaf68564bdb3f9f8813bf7fa49de91100",
+      "sanitization": "Byte-identical PNG;35 final +3 before opened individually;19 other copies verified identical to opened bytes"
+    },
+    {
+      "path": "screenshots/explicit-search-native-final-v2-classic-nojs-375-ordinary-result.png",
+      "sha256": "875d5600151ffe043e854e173a549be31760f9588557ab8dce0c4449422f2dbe",
+      "privateOriginal": "explicit-search-native-final-v2-classic-nojs-375-ordinary-result.png",
+      "privateOriginalSHA256": "875d5600151ffe043e854e173a549be31760f9588557ab8dce0c4449422f2dbe",
+      "sanitization": "Byte-identical PNG;35 final +3 before opened individually;19 other copies verified identical to opened bytes"
+    },
+    {
+      "path": "screenshots/explicit-search-native-final-v2-classic-nojs-375-reserved-form.png",
+      "sha256": "473e65c70c6c722c33976b9b646dc2d9d87d2f9f4e693467637e1f31cdbb7809",
+      "privateOriginal": "explicit-search-native-final-v2-classic-nojs-375-reserved-form.png",
+      "privateOriginalSHA256": "473e65c70c6c722c33976b9b646dc2d9d87d2f9f4e693467637e1f31cdbb7809",
+      "sanitization": "Byte-identical PNG;35 final +3 before opened individually;19 other copies verified identical to opened bytes"
+    },
+    {
+      "path": "screenshots/explicit-search-native-final-v3-classic-js-1440-ordinary-form.png",
+      "sha256": "e8dc7296d4a7f31fd4d0275ee2933fff0e2486804303de17a1a749f72f7ab9e7",
+      "privateOriginal": "explicit-search-native-final-v3-classic-js-1440-ordinary-form.png",
+      "privateOriginalSHA256": "e8dc7296d4a7f31fd4d0275ee2933fff0e2486804303de17a1a749f72f7ab9e7",
+      "sanitization": "Byte-identical PNG;35 final +3 before opened individually;19 other copies verified identical to opened bytes"
+    },
+    {
+      "path": "screenshots/explicit-search-native-final-v3-classic-js-1440-ordinary-result.png",
+      "sha256": "10dcd411f70eebc72113f376a9c3b07da6d2f95ee5aee1426a2e3f96bf7a1467",
+      "privateOriginal": "explicit-search-native-final-v3-classic-js-1440-ordinary-result.png",
+      "privateOriginalSHA256": "10dcd411f70eebc72113f376a9c3b07da6d2f95ee5aee1426a2e3f96bf7a1467",
+      "sanitization": "Byte-identical PNG;35 final +3 before opened individually;19 other copies verified identical to opened bytes"
+    },
+    {
+      "path": "screenshots/explicit-search-native-final-v3-classic-js-1440-reserved-form.png",
+      "sha256": "2d6e5b75745ee6431009a6f81f5597914903fed5879bf4d7b2bc7b1d0ae44dd3",
+      "privateOriginal": "explicit-search-native-final-v3-classic-js-1440-reserved-form.png",
+      "privateOriginalSHA256": "2d6e5b75745ee6431009a6f81f5597914903fed5879bf4d7b2bc7b1d0ae44dd3",
+      "sanitization": "Byte-identical PNG;35 final +3 before opened individually;19 other copies verified identical to opened bytes"
+    },
+    {
+      "path": "screenshots/explicit-search-native-final-v3-classic-js-375-ordinary-form.png",
+      "sha256": "8015fea7ba7fa8ce9f4777f7a58bacdfaf68564bdb3f9f8813bf7fa49de91100",
+      "privateOriginal": "explicit-search-native-final-v3-classic-js-375-ordinary-form.png",
+      "privateOriginalSHA256": "8015fea7ba7fa8ce9f4777f7a58bacdfaf68564bdb3f9f8813bf7fa49de91100",
+      "sanitization": "Byte-identical PNG;35 final +3 before opened individually;19 other copies verified identical to opened bytes"
+    },
+    {
+      "path": "screenshots/explicit-search-native-final-v3-classic-js-375-ordinary-result.png",
+      "sha256": "875d5600151ffe043e854e173a549be31760f9588557ab8dce0c4449422f2dbe",
+      "privateOriginal": "explicit-search-native-final-v3-classic-js-375-ordinary-result.png",
+      "privateOriginalSHA256": "875d5600151ffe043e854e173a549be31760f9588557ab8dce0c4449422f2dbe",
+      "sanitization": "Byte-identical PNG;35 final +3 before opened individually;19 other copies verified identical to opened bytes"
+    },
+    {
+      "path": "screenshots/explicit-search-native-final-v3-classic-js-768-ordinary-form.png",
+      "sha256": "a7c9dd48d66065fc8e2465964994b39d396d762a6b5e01e69bcd9a5e85ae15d6",
+      "privateOriginal": "explicit-search-native-final-v3-classic-js-768-ordinary-form.png",
+      "privateOriginalSHA256": "a7c9dd48d66065fc8e2465964994b39d396d762a6b5e01e69bcd9a5e85ae15d6",
+      "sanitization": "Byte-identical PNG;35 final +3 before opened individually;19 other copies verified identical to opened bytes"
+    },
+    {
+      "path": "screenshots/explicit-search-native-final-v3-classic-js-768-ordinary-result.png",
+      "sha256": "0163908ca398f4b06dad2732af0bd8b50981cda6b0bd68e479b259adf4800ec2",
+      "privateOriginal": "explicit-search-native-final-v3-classic-js-768-ordinary-result.png",
+      "privateOriginalSHA256": "0163908ca398f4b06dad2732af0bd8b50981cda6b0bd68e479b259adf4800ec2",
+      "sanitization": "Byte-identical PNG;35 final +3 before opened individually;19 other copies verified identical to opened bytes"
+    },
+    {
+      "path": "screenshots/explicit-search-native-final-v3-classic-nojs-375-duplicate-different-result.png",
+      "sha256": "94c37973c08eb4e576ded8feb8169c88fac7eb273d58f1b9ac1e8c8ec445e0ca",
+      "privateOriginal": "explicit-search-native-final-v3-classic-nojs-375-duplicate-different-result.png",
+      "privateOriginalSHA256": "94c37973c08eb4e576ded8feb8169c88fac7eb273d58f1b9ac1e8c8ec445e0ca",
+      "sanitization": "Byte-identical PNG;35 final +3 before opened individually;19 other copies verified identical to opened bytes"
+    },
+    {
+      "path": "screenshots/explicit-search-native-final-v3-classic-nojs-375-entities-form.png",
+      "sha256": "c49c25b1ce44669b1ba13039d5e726a8b42a1c829497d580f5939d452acff23c",
+      "privateOriginal": "explicit-search-native-final-v3-classic-nojs-375-entities-form.png",
+      "privateOriginalSHA256": "c49c25b1ce44669b1ba13039d5e726a8b42a1c829497d580f5939d452acff23c",
+      "sanitization": "Byte-identical PNG;35 final +3 before opened individually;19 other copies verified identical to opened bytes"
+    },
+    {
+      "path": "screenshots/explicit-search-native-final-v3-classic-nojs-375-no-button-form.png",
+      "sha256": "40346a694750d95d2513c1d063bbb5e313e30eaa8623bc78e10d44af1a65607c",
+      "privateOriginal": "explicit-search-native-final-v3-classic-nojs-375-no-button-form.png",
+      "privateOriginalSHA256": "40346a694750d95d2513c1d063bbb5e313e30eaa8623bc78e10d44af1a65607c",
+      "sanitization": "Byte-identical PNG;35 final +3 before opened individually;19 other copies verified identical to opened bytes"
+    },
+    {
+      "path": "screenshots/explicit-search-native-final-v3-classic-nojs-375-ordinary-form.png",
+      "sha256": "8015fea7ba7fa8ce9f4777f7a58bacdfaf68564bdb3f9f8813bf7fa49de91100",
+      "privateOriginal": "explicit-search-native-final-v3-classic-nojs-375-ordinary-form.png",
+      "privateOriginalSHA256": "8015fea7ba7fa8ce9f4777f7a58bacdfaf68564bdb3f9f8813bf7fa49de91100",
+      "sanitization": "Byte-identical PNG;35 final +3 before opened individually;19 other copies verified identical to opened bytes"
+    },
+    {
+      "path": "screenshots/explicit-search-native-final-v3-classic-nojs-375-ordinary-result.png",
+      "sha256": "875d5600151ffe043e854e173a549be31760f9588557ab8dce0c4449422f2dbe",
+      "privateOriginal": "explicit-search-native-final-v3-classic-nojs-375-ordinary-result.png",
+      "privateOriginalSHA256": "875d5600151ffe043e854e173a549be31760f9588557ab8dce0c4449422f2dbe",
+      "sanitization": "Byte-identical PNG;35 final +3 before opened individually;19 other copies verified identical to opened bytes"
+    },
+    {
+      "path": "screenshots/explicit-search-native-final-v3-classic-nojs-375-reserved-form.png",
+      "sha256": "473e65c70c6c722c33976b9b646dc2d9d87d2f9f4e693467637e1f31cdbb7809",
+      "privateOriginal": "explicit-search-native-final-v3-classic-nojs-375-reserved-form.png",
+      "privateOriginalSHA256": "473e65c70c6c722c33976b9b646dc2d9d87d2f9f4e693467637e1f31cdbb7809",
+      "sanitization": "Byte-identical PNG;35 final +3 before opened individually;19 other copies verified identical to opened bytes"
+    },
+    {
+      "path": "screenshots/explicit-search-native-final-v3-twentytwentyfive-js-1440-ordinary-form.png",
+      "sha256": "e2c0b1738dd357ad2259fabdf3e6e9d5c5a009bc34911c2ad19ff8d9d0b90456",
+      "privateOriginal": "explicit-search-native-final-v3-twentytwentyfive-js-1440-ordinary-form.png",
+      "privateOriginalSHA256": "e2c0b1738dd357ad2259fabdf3e6e9d5c5a009bc34911c2ad19ff8d9d0b90456",
+      "sanitization": "Byte-identical PNG;35 final +3 before opened individually;19 other copies verified identical to opened bytes"
+    },
+    {
+      "path": "screenshots/explicit-search-native-final-v3-twentytwentyfive-js-1440-ordinary-result.png",
+      "sha256": "b7bfd63bca08c47ab2d67167287402c7973ea0648f702fb79ea4e3c4e83e6e6d",
+      "privateOriginal": "explicit-search-native-final-v3-twentytwentyfive-js-1440-ordinary-result.png",
+      "privateOriginalSHA256": "b7bfd63bca08c47ab2d67167287402c7973ea0648f702fb79ea4e3c4e83e6e6d",
+      "sanitization": "Byte-identical PNG;35 final +3 before opened individually;19 other copies verified identical to opened bytes"
+    },
+    {
+      "path": "screenshots/explicit-search-native-final-v3-twentytwentyfive-js-1440-reserved-form.png",
+      "sha256": "86ed9fa48e88e1a658e89f105ef38d728674cc4bb70a3b302d1c190336e401c1",
+      "privateOriginal": "explicit-search-native-final-v3-twentytwentyfive-js-1440-reserved-form.png",
+      "privateOriginalSHA256": "86ed9fa48e88e1a658e89f105ef38d728674cc4bb70a3b302d1c190336e401c1",
+      "sanitization": "Byte-identical PNG;35 final +3 before opened individually;19 other copies verified identical to opened bytes"
+    },
+    {
+      "path": "screenshots/explicit-search-native-final-v3-twentytwentyfive-js-375-ordinary-form.png",
+      "sha256": "ac8056bff839f717e6127ff3b88131e7514670d92eede96c931c10b2972f865a",
+      "privateOriginal": "explicit-search-native-final-v3-twentytwentyfive-js-375-ordinary-form.png",
+      "privateOriginalSHA256": "ac8056bff839f717e6127ff3b88131e7514670d92eede96c931c10b2972f865a",
+      "sanitization": "Byte-identical PNG;35 final +3 before opened individually;19 other copies verified identical to opened bytes"
+    },
+    {
+      "path": "screenshots/explicit-search-native-final-v3-twentytwentyfive-js-375-ordinary-result.png",
+      "sha256": "01834ab511b1c2021c512f350c3edcf2d82664d0efeaad6a707ad19176a818c6",
+      "privateOriginal": "explicit-search-native-final-v3-twentytwentyfive-js-375-ordinary-result.png",
+      "privateOriginalSHA256": "01834ab511b1c2021c512f350c3edcf2d82664d0efeaad6a707ad19176a818c6",
+      "sanitization": "Byte-identical PNG;35 final +3 before opened individually;19 other copies verified identical to opened bytes"
+    },
+    {
+      "path": "screenshots/explicit-search-native-final-v3-twentytwentyfive-js-768-ordinary-form.png",
+      "sha256": "9c4ed7f031aa9f93dbf546d0fd9407e4d4056116eb804a049d31dc191f9667be",
+      "privateOriginal": "explicit-search-native-final-v3-twentytwentyfive-js-768-ordinary-form.png",
+      "privateOriginalSHA256": "9c4ed7f031aa9f93dbf546d0fd9407e4d4056116eb804a049d31dc191f9667be",
+      "sanitization": "Byte-identical PNG;35 final +3 before opened individually;19 other copies verified identical to opened bytes"
+    },
+    {
+      "path": "screenshots/explicit-search-native-final-v3-twentytwentyfive-js-768-ordinary-result.png",
+      "sha256": "4ed30021465b9f72f70ea54b7e1e8b7bf4bba22088c58961ef19a0800601ff37",
+      "privateOriginal": "explicit-search-native-final-v3-twentytwentyfive-js-768-ordinary-result.png",
+      "privateOriginalSHA256": "4ed30021465b9f72f70ea54b7e1e8b7bf4bba22088c58961ef19a0800601ff37",
+      "sanitization": "Byte-identical PNG;35 final +3 before opened individually;19 other copies verified identical to opened bytes"
+    },
+    {
+      "path": "screenshots/explicit-search-native-final-v3-twentytwentyfive-nojs-375-duplicate-different-result.png",
+      "sha256": "94c37973c08eb4e576ded8feb8169c88fac7eb273d58f1b9ac1e8c8ec445e0ca",
+      "privateOriginal": "explicit-search-native-final-v3-twentytwentyfive-nojs-375-duplicate-different-result.png",
+      "privateOriginalSHA256": "94c37973c08eb4e576ded8feb8169c88fac7eb273d58f1b9ac1e8c8ec445e0ca",
+      "sanitization": "Byte-identical PNG;35 final +3 before opened individually;19 other copies verified identical to opened bytes"
+    },
+    {
+      "path": "screenshots/explicit-search-native-final-v3-twentytwentyfive-nojs-375-entities-form.png",
+      "sha256": "697aad07d9fa61066558b01fbbce5ca3d5408cd9e78431763328fd6f2e2eb1dd",
+      "privateOriginal": "explicit-search-native-final-v3-twentytwentyfive-nojs-375-entities-form.png",
+      "privateOriginalSHA256": "697aad07d9fa61066558b01fbbce5ca3d5408cd9e78431763328fd6f2e2eb1dd",
+      "sanitization": "Byte-identical PNG;35 final +3 before opened individually;19 other copies verified identical to opened bytes"
+    },
+    {
+      "path": "screenshots/explicit-search-native-final-v3-twentytwentyfive-nojs-375-no-button-form.png",
+      "sha256": "35e4a0a8135230955b3cb8dcd0029e5544a1587c314ceccb6438b18d9ed628b0",
+      "privateOriginal": "explicit-search-native-final-v3-twentytwentyfive-nojs-375-no-button-form.png",
+      "privateOriginalSHA256": "35e4a0a8135230955b3cb8dcd0029e5544a1587c314ceccb6438b18d9ed628b0",
+      "sanitization": "Byte-identical PNG;35 final +3 before opened individually;19 other copies verified identical to opened bytes"
+    },
+    {
+      "path": "screenshots/explicit-search-native-final-v3-twentytwentyfive-nojs-375-ordinary-form.png",
+      "sha256": "ac8056bff839f717e6127ff3b88131e7514670d92eede96c931c10b2972f865a",
+      "privateOriginal": "explicit-search-native-final-v3-twentytwentyfive-nojs-375-ordinary-form.png",
+      "privateOriginalSHA256": "ac8056bff839f717e6127ff3b88131e7514670d92eede96c931c10b2972f865a",
+      "sanitization": "Byte-identical PNG;35 final +3 before opened individually;19 other copies verified identical to opened bytes"
+    },
+    {
+      "path": "screenshots/explicit-search-native-final-v3-twentytwentyfive-nojs-375-ordinary-result.png",
+      "sha256": "01834ab511b1c2021c512f350c3edcf2d82664d0efeaad6a707ad19176a818c6",
+      "privateOriginal": "explicit-search-native-final-v3-twentytwentyfive-nojs-375-ordinary-result.png",
+      "privateOriginalSHA256": "01834ab511b1c2021c512f350c3edcf2d82664d0efeaad6a707ad19176a818c6",
+      "sanitization": "Byte-identical PNG;35 final +3 before opened individually;19 other copies verified identical to opened bytes"
+    },
+    {
+      "path": "screenshots/explicit-search-native-final-v3-twentytwentyfive-nojs-375-reserved-form.png",
+      "sha256": "ce337340716ddc77609c776508dbdf47d4bf2c60b0ad20eec322661b6425a659",
+      "privateOriginal": "explicit-search-native-final-v3-twentytwentyfive-nojs-375-reserved-form.png",
+      "privateOriginalSHA256": "ce337340716ddc77609c776508dbdf47d4bf2c60b0ad20eec322661b6425a659",
+      "sanitization": "Byte-identical PNG;35 final +3 before opened individually;19 other copies verified identical to opened bytes"
+    },
+    {
+      "path": "screenshots/explicit-search-native-flushed-closest-classic-1440.png",
+      "sha256": "25dcaa02d34a0cef877f2757476c3eb41f3439f6b6c111116db5ff1ef247452e",
+      "privateOriginal": "explicit-search-native-flushed-closest-classic-1440.png",
+      "privateOriginalSHA256": "25dcaa02d34a0cef877f2757476c3eb41f3439f6b6c111116db5ff1ef247452e",
+      "sanitization": "Byte-identical PNG;35 final +3 before opened individually;19 other copies verified identical to opened bytes"
+    },
+    {
+      "path": "screenshots/explicit-search-native-flushed-getattribute-classic-1440.png",
+      "sha256": "440fa79f72b5964d8798e0008f9934821819119b65209abb5712e6f366b8f725",
+      "privateOriginal": "explicit-search-native-flushed-getattribute-classic-1440.png",
+      "privateOriginalSHA256": "440fa79f72b5964d8798e0008f9934821819119b65209abb5712e6f366b8f725",
+      "sanitization": "Byte-identical PNG;35 final +3 before opened individually;19 other copies verified identical to opened bytes"
+    },
+    {
+      "path": "screenshots/explicit-search-native-flushed-matches-classic-1440.png",
+      "sha256": "8d71c970f2817058c0ba3ea490833b79ad773c56d7b63709c519c96ee9ebba1b",
+      "privateOriginal": "explicit-search-native-flushed-matches-classic-1440.png",
+      "privateOriginalSHA256": "8d71c970f2817058c0ba3ea490833b79ad773c56d7b63709c519c96ee9ebba1b",
+      "sanitization": "Byte-identical PNG;35 final +3 before opened individually;19 other copies verified identical to opened bytes"
+    },
+    {
+      "path": "screenshots/explicit-search-native-original-closest-classic-1440.png",
+      "sha256": "25dcaa02d34a0cef877f2757476c3eb41f3439f6b6c111116db5ff1ef247452e",
+      "privateOriginal": "explicit-search-native-original-closest-classic-1440.png",
+      "privateOriginalSHA256": "25dcaa02d34a0cef877f2757476c3eb41f3439f6b6c111116db5ff1ef247452e",
+      "sanitization": "Byte-identical PNG;35 final +3 before opened individually;19 other copies verified identical to opened bytes"
+    },
+    {
+      "path": "screenshots/explicit-search-native-original-getattribute-classic-1440.png",
+      "sha256": "440fa79f72b5964d8798e0008f9934821819119b65209abb5712e6f366b8f725",
+      "privateOriginal": "explicit-search-native-original-getattribute-classic-1440.png",
+      "privateOriginalSHA256": "440fa79f72b5964d8798e0008f9934821819119b65209abb5712e6f366b8f725",
+      "sanitization": "Byte-identical PNG;35 final +3 before opened individually;19 other copies verified identical to opened bytes"
+    },
+    {
+      "path": "screenshots/explicit-search-native-original-matches-classic-1440.png",
+      "sha256": "8d71c970f2817058c0ba3ea490833b79ad773c56d7b63709c519c96ee9ebba1b",
+      "privateOriginal": "explicit-search-native-original-matches-classic-1440.png",
+      "privateOriginalSHA256": "8d71c970f2817058c0ba3ea490833b79ad773c56d7b63709c519c96ee9ebba1b",
+      "sanitization": "Byte-identical PNG;35 final +3 before opened individually;19 other copies verified identical to opened bytes"
+    },
+    {
+      "path": "screenshots/explicit-search-native-supplement-classic-js-375-ordinary-form.png",
+      "sha256": "ccd4612ffe4efc735fa3afaf1b215e058e297fc14f9e196903924b48a9dac0da",
+      "privateOriginal": "explicit-search-native-supplement-classic-js-375-ordinary-form.png",
+      "privateOriginalSHA256": "ccd4612ffe4efc735fa3afaf1b215e058e297fc14f9e196903924b48a9dac0da",
+      "sanitization": "Byte-identical PNG;35 final +3 before opened individually;19 other copies verified identical to opened bytes"
+    },
+    {
+      "path": "screenshots/explicit-search-native-supplement-classic-nojs-375-entities-form.png",
+      "sha256": "711e9020709b9bb796f556ad4bd78086466c822fea59459744c2bf619b88b745",
+      "privateOriginal": "explicit-search-native-supplement-classic-nojs-375-entities-form.png",
+      "privateOriginalSHA256": "711e9020709b9bb796f556ad4bd78086466c822fea59459744c2bf619b88b745",
+      "sanitization": "Byte-identical PNG;35 final +3 before opened individually;19 other copies verified identical to opened bytes"
+    },
+    {
+      "path": "screenshots/explicit-search-native-supplement-classic-nojs-375-no-button-form.png",
+      "sha256": "b50cdf62c8e4210c6a884db22463b92698730ee415a8bc488ea3c79ba2cf383f",
+      "privateOriginal": "explicit-search-native-supplement-classic-nojs-375-no-button-form.png",
+      "privateOriginalSHA256": "b50cdf62c8e4210c6a884db22463b92698730ee415a8bc488ea3c79ba2cf383f",
+      "sanitization": "Byte-identical PNG;35 final +3 before opened individually;19 other copies verified identical to opened bytes"
+    },
+    {
+      "path": "screenshots/explicit-search-native-supplement-classic-nojs-375-ordinary-form.png",
+      "sha256": "ccd4612ffe4efc735fa3afaf1b215e058e297fc14f9e196903924b48a9dac0da",
+      "privateOriginal": "explicit-search-native-supplement-classic-nojs-375-ordinary-form.png",
+      "privateOriginalSHA256": "ccd4612ffe4efc735fa3afaf1b215e058e297fc14f9e196903924b48a9dac0da",
+      "sanitization": "Byte-identical PNG;35 final +3 before opened individually;19 other copies verified identical to opened bytes"
+    },
+    {
+      "path": "screenshots/explicit-search-native-supplement-classic-nojs-375-ordinary-result.png",
+      "sha256": "4696948a3f1cb14eb7d3a8325ba1d5e56d333a1b2409b774d867443463c7cbbd",
+      "privateOriginal": "explicit-search-native-supplement-classic-nojs-375-ordinary-result.png",
+      "privateOriginalSHA256": "4696948a3f1cb14eb7d3a8325ba1d5e56d333a1b2409b774d867443463c7cbbd",
+      "sanitization": "Byte-identical PNG;35 final +3 before opened individually;19 other copies verified identical to opened bytes"
+    },
+    {
+      "path": "screenshots/explicit-search-native-supplement-classic-nojs-375-reserved-form.png",
+      "sha256": "de4f623ab77d7cec120cc69eb24e974ec1f52f831121312fbc4032bc3fe7e41a",
+      "privateOriginal": "explicit-search-native-supplement-classic-nojs-375-reserved-form.png",
+      "privateOriginalSHA256": "de4f623ab77d7cec120cc69eb24e974ec1f52f831121312fbc4032bc3fe7e41a",
+      "sanitization": "Byte-identical PNG;35 final +3 before opened individually;19 other copies verified identical to opened bytes"
+    }
+  ]
+}

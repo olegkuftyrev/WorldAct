@@ -1,0 +1,226 @@
+{
+  "candidateCreated": "5a819ef4a68b3dcd8f9c2ea0e033d690f34d029a",
+  "runtimeFinal": "9928f5dfc7fbd4af3c0a639ddb2c2f9312d061d2",
+  "sourceTemplate": {
+    "id": 215,
+    "slug": "explicit-search-native-2ef29451bb6ec2d0",
+    "content": "<main class=\"wp-block-group\"></main>"
+  },
+  "category": {
+    "id": 2,
+    "slug": "explicit-search-native-2ef29451bb6ec2d0"
+  },
+  "result": {
+    "id": 4,
+    "title": "ExplicitSearchNativeNeedle Result",
+    "permalink": "/explicit-search-native-result-2ef29451bb6ec2d0/"
+  },
+  "cases": {
+    "default": {
+      "spec": {
+        "id": "default",
+        "title": "Default global",
+        "label": "Default global Search input",
+        "buttonText": "Default global Search button",
+        "anchor": "explicit-search-native-default",
+        "expectedStatus": 200
+      },
+      "savedId": 5,
+      "permalink": "/explicit-search-native-default-2ef29451bb6ec2d0/",
+      "savedRawContent": "<!-- wp:paragraph --><p>EXPLICIT SEARCH NATIVE default</p><!-- /wp:paragraph --><!-- wp:search {\"anchor\":\"explicit-search-native-default\",\"label\":\"Default global Search input\",\"buttonText\":\"Default global Search button\"} /-->",
+      "savedBlocks": []
+    },
+    "ordinary": {
+      "spec": {
+        "id": "ordinary",
+        "title": "Ordinary explicit",
+        "query": {
+          "category": "explicit-search-native-2ef29451bb6ec2d0",
+          "case_marker": "explicit-own"
+        },
+        "requiredControl": true,
+        "label": "Ordinary explicit Search input",
+        "buttonText": "Ordinary explicit Search button",
+        "anchor": "explicit-search-native-ordinary",
+        "expectedStatus": 200
+      },
+      "savedId": 6,
+      "permalink": "/explicit-search-native-ordinary-2ef29451bb6ec2d0/",
+      "savedRawContent": "<!-- wp:paragraph --><p>EXPLICIT SEARCH NATIVE ordinary</p><!-- /wp:paragraph --><!-- wp:search {\"anchor\":\"explicit-search-native-ordinary\",\"label\":\"Ordinary explicit Search input\",\"buttonText\":\"Ordinary explicit Search button\",\"query\":{\"category\":\"explicit-search-native-2ef29451bb6ec2d0\",\"case_marker\":\"explicit-own\"}} /-->",
+      "savedBlocks": []
+    },
+    "reserved": {
+      "spec": {
+        "id": "reserved",
+        "title": "Reserved names",
+        "query": {
+          "action": "/not-an-action",
+          "method": "post",
+          "submit": "literal-submit-data",
+          "formaction": "/not-a-formaction"
+        },
+        "label": "Reserved names Search input",
+        "buttonText": "Reserved names Search button",
+        "anchor": "explicit-search-native-reserved",
+        "expectedStatus": 200
+      },
+      "savedId": 7,
+      "permalink": "/explicit-search-native-reserved-2ef29451bb6ec2d0/",
+      "savedRawContent": "<!-- wp:paragraph --><p>EXPLICIT SEARCH NATIVE reserved</p><!-- /wp:paragraph --><!-- wp:search {\"anchor\":\"explicit-search-native-reserved\",\"label\":\"Reserved names Search input\",\"buttonText\":\"Reserved names Search button\",\"query\":{\"action\":\"/not-an-action\",\"method\":\"post\",\"submit\":\"literal-submit-data\",\"formaction\":\"/not-a-formaction\"}} /-->",
+      "savedBlocks": []
+    },
+    "closest": {
+      "spec": {
+        "id": "closest",
+        "title": "Closest name",
+        "query": {
+          "closest": "literal-closest-data"
+        },
+        "shadowControl": true,
+        "label": "Closest name Search input",
+        "buttonText": "Closest name Search button",
+        "anchor": "explicit-search-native-closest",
+        "expectedStatus": 200
+      },
+      "savedId": 8,
+      "permalink": "/explicit-search-native-closest-2ef29451bb6ec2d0/",
+      "savedRawContent": "<!-- wp:paragraph --><p>EXPLICIT SEARCH NATIVE closest</p><!-- /wp:paragraph --><!-- wp:search {\"anchor\":\"explicit-search-native-closest\",\"label\":\"Closest name Search input\",\"buttonText\":\"Closest name Search button\",\"query\":{\"closest\":\"literal-closest-data\"}} /-->",
+      "savedBlocks": []
+    },
+    "matches": {
+      "spec": {
+        "id": "matches",
+        "title": "Matches name",
+        "query": {
+          "matches": "literal-matches-data"
+        },
+        "shadowControl": true,
+        "label": "Matches name Search input",
+        "buttonText": "Matches name Search button",
+        "anchor": "explicit-search-native-matches",
+        "expectedStatus": 200
+      },
+      "savedId": 9,
+      "permalink": "/explicit-search-native-matches-2ef29451bb6ec2d0/",
+      "savedRawContent": "<!-- wp:paragraph --><p>EXPLICIT SEARCH NATIVE matches</p><!-- /wp:paragraph --><!-- wp:search {\"anchor\":\"explicit-search-native-matches\",\"label\":\"Matches name Search input\",\"buttonText\":\"Matches name Search button\",\"query\":{\"matches\":\"literal-matches-data\"}} /-->",
+      "savedBlocks": []
+    },
+    "getattribute": {
+      "spec": {
+        "id": "getattribute",
+        "title": "GetAttribute name",
+        "query": {
+          "getAttribute": "literal-getattribute-data"
+        },
+        "shadowControl": true,
+        "label": "GetAttribute name Search input",
+        "buttonText": "GetAttribute name Search button",
+        "anchor": "explicit-search-native-getattribute",
+        "expectedStatus": 200
+      },
+      "savedId": 10,
+      "permalink": "/explicit-search-native-getattribute-2ef29451bb6ec2d0/",
+      "savedRawContent": "<!-- wp:paragraph --><p>EXPLICIT SEARCH NATIVE getattribute</p><!-- /wp:paragraph --><!-- wp:search {\"anchor\":\"explicit-search-native-getattribute\",\"label\":\"GetAttribute name Search input\",\"buttonText\":\"GetAttribute name Search button\",\"query\":{\"getAttribute\":\"literal-getattribute-data\"}} /-->",
+      "savedBlocks": []
+    },
+    "duplicate-different": {
+      "spec": {
+        "id": "duplicate-different",
+        "title": "Different duplicate s",
+        "query": {
+          "s": "HiddenDifferentNeedle"
+        },
+        "expectedStatus": 400,
+        "label": "Different duplicate s Search input",
+        "buttonText": "Different duplicate s Search button",
+        "anchor": "explicit-search-native-duplicate-different"
+      },
+      "savedId": 11,
+      "permalink": "/explicit-search-native-duplicate-different-2ef29451bb6ec2d0/",
+      "savedRawContent": "<!-- wp:paragraph --><p>EXPLICIT SEARCH NATIVE duplicate-different</p><!-- /wp:paragraph --><!-- wp:search {\"anchor\":\"explicit-search-native-duplicate-different\",\"label\":\"Different duplicate s Search input\",\"buttonText\":\"Different duplicate s Search button\",\"query\":{\"s\":\"HiddenDifferentNeedle\"}} /-->",
+      "savedBlocks": []
+    },
+    "duplicate-equal": {
+      "spec": {
+        "id": "duplicate-equal",
+        "title": "Equal duplicate s",
+        "query": {
+          "s": "ExplicitSearchNativeNeedle"
+        },
+        "expectedStatus": 400,
+        "label": "Equal duplicate s Search input",
+        "buttonText": "Equal duplicate s Search button",
+        "anchor": "explicit-search-native-duplicate-equal"
+      },
+      "savedId": 12,
+      "permalink": "/explicit-search-native-duplicate-equal-2ef29451bb6ec2d0/",
+      "savedRawContent": "<!-- wp:paragraph --><p>EXPLICIT SEARCH NATIVE duplicate-equal</p><!-- /wp:paragraph --><!-- wp:search {\"anchor\":\"explicit-search-native-duplicate-equal\",\"label\":\"Equal duplicate s Search input\",\"buttonText\":\"Equal duplicate s Search button\",\"query\":{\"s\":\"ExplicitSearchNativeNeedle\"}} /-->",
+      "savedBlocks": []
+    },
+    "entities": {
+      "spec": {
+        "id": "entities",
+        "title": "Entities and JSON values",
+        "query": {
+          "entity": "&apos;|&copy;|&#00065;|&#X0004a;|&amp;#65;|&#X000D800;|&#X000;",
+          "yes": true,
+          "no": false,
+          "nil": null,
+          "array": [
+            1,
+            "x"
+          ],
+          "object": {
+            "x": 1
+          },
+          "decimal": 1.25
+        },
+        "label": "Entities and JSON values Search input",
+        "buttonText": "Entities and JSON values Search button",
+        "anchor": "explicit-search-native-entities",
+        "expectedStatus": 200
+      },
+      "savedId": 13,
+      "permalink": "/explicit-search-native-entities-2ef29451bb6ec2d0/",
+      "savedRawContent": "<!-- wp:paragraph --><p>EXPLICIT SEARCH NATIVE entities</p><!-- /wp:paragraph --><!-- wp:search {\"anchor\":\"explicit-search-native-entities\",\"label\":\"Entities and JSON values Search input\",\"buttonText\":\"Entities and JSON values Search button\",\"query\":{\"entity\":\"\\u0026apos;|\\u0026copy;|\\u0026#00065;|\\u0026#X0004a;|\\u0026amp;#65;|\\u0026#X000D800;|\\u0026#X000;\",\"yes\":true,\"no\":false,\"nil\":null,\"array\":[1,\"x\"],\"object\":{\"x\":1},\"decimal\":1.25}} /-->",
+      "savedBlocks": []
+    },
+    "empty": {
+      "spec": {
+        "id": "empty",
+        "title": "Empty and charset",
+        "query": {
+          "": "empty-name-not-submitted",
+          "blank": "",
+          "_charset_": "not-an-encoding"
+        },
+        "label": "Empty and charset Search input",
+        "buttonText": "Empty and charset Search button",
+        "anchor": "explicit-search-native-empty",
+        "expectedStatus": 200
+      },
+      "savedId": 14,
+      "permalink": "/explicit-search-native-empty-2ef29451bb6ec2d0/",
+      "savedRawContent": "<!-- wp:paragraph --><p>EXPLICIT SEARCH NATIVE empty</p><!-- /wp:paragraph --><!-- wp:search {\"anchor\":\"explicit-search-native-empty\",\"label\":\"Empty and charset Search input\",\"buttonText\":\"Empty and charset Search button\",\"query\":{\"\":\"empty-name-not-submitted\",\"blank\":\"\",\"_charset_\":\"not-an-encoding\"}} /-->",
+      "savedBlocks": []
+    },
+    "no-button": {
+      "spec": {
+        "id": "no-button",
+        "title": "No button",
+        "query": {
+          "case_marker": "no-button-own"
+        },
+        "buttonPosition": "no-button",
+        "label": "No button Search input",
+        "buttonText": "No button Search button",
+        "anchor": "explicit-search-native-no-button",
+        "expectedStatus": 200
+      },
+      "savedId": 15,
+      "permalink": "/explicit-search-native-no-button-2ef29451bb6ec2d0/",
+      "savedRawContent": "<!-- wp:paragraph --><p>EXPLICIT SEARCH NATIVE no-button</p><!-- /wp:paragraph --><!-- wp:search {\"anchor\":\"explicit-search-native-no-button\",\"label\":\"No button Search input\",\"buttonText\":\"No button Search button\",\"query\":{\"case_marker\":\"no-button-own\"},\"buttonPosition\":\"no-button\"} /-->",
+      "savedBlocks": []
+    }
+  }
+}

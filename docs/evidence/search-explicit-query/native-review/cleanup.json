@@ -1,0 +1,74 @@
+{
+  "candidate": "9928f5dfc7fbd4af3c0a639ddb2c2f9312d061d2",
+  "nodeSha256": "af2177df906780e5c6f65554a1181d606cd337789d3cfa9d9bb8d87ffaf5fc33",
+  "seedCount": 1,
+  "ownedPorts": [
+    3035,
+    3036,
+    3037
+  ],
+  "guardPortUnused": 5195,
+  "stopped": [
+    {
+      "pid": 7926,
+      "cwd": "/private/tmp/worldact-search-explicit-native-review",
+      "port": 3035
+    },
+    {
+      "pid": 7028,
+      "cwd": "/private/tmp/worldact-search-explicit-native-review",
+      "port": 3036
+    }
+  ],
+  "closedSessionCount": 5,
+  "removed": [
+    {
+      "path": "/tmp/worldact-search-explicit-native-review/.env",
+      "sha256": "cbd0388c79651e3f891335dffba201afa9a7bf1edfe3c69b3083002f7f5fe448",
+      "mode": "600"
+    },
+    {
+      "path": "[private-review]/explicit-search-native-2ef29451bb6ec2d0-fixture-private.json",
+      "sha256": "2c07e7de7dba4123cd60548e193d4afe094e40a205e8e5c1120a7964ad19477c",
+      "mode": "600"
+    },
+    {
+      "path": "[private-review]/explicit-search-native-smokes-private.json",
+      "sha256": "117acc6f3d0eb87e4f07e816a2234a15dc092ef481ba78966e5b640b46cc5b6e",
+      "mode": "600"
+    },
+    {
+      "path": "[private-review]/explicit-search-native-owned-private.json",
+      "sha256": "fc9b755e9f15c11b1e0a4ff97830dc3542ee0a8354c52c41b9726ffc59fb90c7",
+      "mode": "600"
+    },
+    {
+      "path": "[private-review]/explicit-search-native-proxy-owner.json",
+      "sha256": "890f3a59d87c43f45db07bf2ed39e3960fe4bb3d819216fcd16fffdcbeca8eda",
+      "mode": "600"
+    },
+    {
+      "path": "/tmp/worldact-search-explicit-native-review/node_modules",
+      "kind": "owned-symlink-only"
+    },
+    {
+      "path": "[private-review]/explicit-search-native-harness/node_modules",
+      "kind": "owned-symlink-only"
+    }
+  ],
+  "sqlHooksCreated": false,
+  "vaultCreated": false,
+  "dependencyOwner": {
+    "path": "/tmp/worldact-public-ssr-independent/node_modules",
+    "realpath": "/private/tmp/worldact-public-ssr-independent/node_modules",
+    "uid": 501,
+    "modeBefore": "0755",
+    "modeAfter": "0755",
+    "unchanged": true
+  },
+  "ownedDatabaseAbsent": true,
+  "uploadsAbsent": true,
+  "allOwnPortsFree": true,
+  "noMainMutation": true,
+  "preserved": "all immutable original/final proof/log/PNG bytes, saved sanitized inputs, checkouts and original5a build24+hash manifest"
+}

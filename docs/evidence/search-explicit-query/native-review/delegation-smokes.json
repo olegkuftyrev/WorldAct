@@ -1,0 +1,56 @@
+{
+  "candidate": "9928f5dfc7fbd4af3c0a639ddb2c2f9312d061d2",
+  "nodeSha256": "af2177df906780e5c6f65554a1181d606cd337789d3cfa9d9bb8d87ffaf5fc33",
+  "rows": [
+    {
+      "scene": "Source actual delegated password",
+      "theme": "twentytwentyfive",
+      "width": 375,
+      "postId": 16,
+      "actualIslandForm": true,
+      "actualUnlockPosts": [
+        {
+          "id": 932,
+          "method": "POST",
+          "path": "/api/public/posts/explicit-search-native-password-2ef29451bb6ec2d0/unlock",
+          "destination": "empty",
+          "startedAt": 1794233510284,
+          "status": 200,
+          "finishedAt": 1794233510339
+        }
+      ],
+      "bodyInitiallyAbsent": true,
+      "bodyVisibleAfterUnlock": true,
+      "pageErrors": [],
+      "screenshots": [
+        "screenshots/explicit-search-native-delegation-source-password-locked-375.png",
+        "screenshots/explicit-search-native-delegation-source-password-unlocked-375.png"
+      ]
+    },
+    {
+      "scene": "Classic actual delegated opaque-body comment",
+      "theme": "classic",
+      "width": 1440,
+      "postId": 17,
+      "actualIslandForm": true,
+      "actualCommentPosts": [
+        {
+          "id": 942,
+          "method": "POST",
+          "path": "/api/public/comments",
+          "destination": "empty",
+          "startedAt": 1794233510770,
+          "status": 201,
+          "finishedAt": 1794233510785
+        }
+      ],
+      "savedCommentId": 2,
+      "savedCommentStatus": "pending",
+      "feedbackVisible": true,
+      "pageErrors": [],
+      "screenshots": [
+        "screenshots/explicit-search-native-delegation-classic-comment-saved-1440.png"
+      ]
+    }
+  ]
+}

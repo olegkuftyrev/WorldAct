@@ -1,0 +1,44 @@
+1 classic JS 1440 default PASS 200
+2 classic JS 1440 ordinary PASS 200
+3 classic JS 1440 reserved PASS 200
+4 classic JS 1440 closest PASS 200
+5 classic JS 1440 matches PASS 200
+6 classic JS 1440 getattribute PASS 200
+7 classic JS 1440 duplicate-different PASS 400
+8 classic JS 1440 duplicate-equal PASS 400
+9 classic JS 1440 entities PASS 200
+10 classic JS 1440 empty PASS 200
+11 classic JS 1440 no-button PASS 200
+12 classic NoJS 375 default PASS 200
+13 classic NoJS 375 ordinary PASS 200
+14 classic NoJS 375 reserved PASS 200
+15 classic NoJS 375 closest PASS 200
+16 classic NoJS 375 matches PASS 200
+17 classic NoJS 375 getattribute PASS 200
+18 classic NoJS 375 duplicate-different PASS 400
+19 classic NoJS 375 duplicate-equal PASS 400
+20 classic NoJS 375 entities PASS 200
+21 classic NoJS 375 empty PASS 200
+22 classic NoJS 375 no-button PASS 200
+23 classic JS 375 ordinary PASS 200
+24 classic JS 768 ordinary PASS 200
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
++ actual - expected
+
++ true
+- undefined
+
+    at file://[private-review]/explicit-search-native-harness/final48-v2.mjs:10:61 {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: true,
+  expected: undefined,
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.14.1

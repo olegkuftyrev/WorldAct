@@ -1,0 +1,30 @@
+{
+  "candidate": "5a819ef4a68b3dcd8f9c2ea0e033d690f34d029a",
+  "scope": "original index/allassets/Node; no environment or credentials",
+  "hashes": {
+    "dist/index.html": "20a15ee421b178a6d8442b7e92b599e80a6013eb2126e441772ec4c3989ede80",
+    "dist-server/index.js": "af2177df906780e5c6f65554a1181d606cd337789d3cfa9d9bb8d87ffaf5fc33",
+    "dist/assets/playlists-B6HK4GV9.js": "d033361b9fbcbf5c9944a273709e20ca62ce31fad76537d27030bbab89848c07",
+    "dist/assets/Editor-lCK1tJMm.css": "82957dba0b20170ca2cd058497ac8ee1f3dd343883fe018b8134f891b9bb2d0b",
+    "dist/assets/index-BsgYOWhl.css": "6bfb03f7cbde7ad5dd6538a5381bfaedcc3d16fafb7ed44dadeac4c27b67da86",
+    "dist/assets/index-B3a4p61n.js": "6989dbaa5dcd4c06dd8b38ce33c7e73e3f13f74722bae9c255e59d0b22b5a774",
+    "dist/assets/FontLibrary-Dx8s-Ycj.js": "874248347c9e048a798f60882f5d60e701cb56930bf7816997b6b17a2ee176e3",
+    "dist/assets/App-DkJv8b7V.js": "38d9eb24aa74c4c1982f1346d27350087e59182944e6cb3f558bee67ca23a752",
+    "dist/assets/Editor-NCdafmg1.js": "53ffde319cca20d0c077823a4e5174631e230feb68ef49654ced85ed4443db38",
+    "dist/assets/build-module-BYEHzhqn.js": "61b040d9a638835f2c430d2ef52183a869f723a06fd1d0954258063324ff15ca",
+    "dist/assets/index-CJ2eZnSo.js": "f705cf3190446ff01725cfb510783d4cb4937392fa3e642bc1ae2a8b09ad4465",
+    "dist/assets/spinner-2x-BHB_yEIe.gif": "3e9fd050059a29fbab9bff42df8fd81207702d8feed30256d375d61cba089045",
+    "dist/assets/GutenbergEditor-BndIUFWj.css": "18951685bfa8c378b792365d0b491efdff180e0291bf53c9010d4fc8376e080c",
+    "dist/assets/App-CMvjQ72B.css": "4f086203f06ca1d19f9da40768a3c7ff9d550c64fa21b1b21782d5672b0f15e9",
+    "dist/assets/w-logo-gray-B7XwgU4a.png": "da9b9ce641489f87bc08fc580178e1dc24e24fda9a5bf609d0ddb37743153dcb",
+    "dist/assets/vips-worker-BDiG1gpO.js": "f2c1c29159c35e3b29b9cfef56d5866b58f6238706ef9cdbcc2b21a72ef12851",
+    "dist/assets/dashicons-C_H8lenD.eot": "c04a6545ea1a3860f6c8eb4b9eed8191d857dbf2716b812c816cae8e40bbea7a",
+    "dist/assets/video-conversion-worker-Qc8rjsbE.js": "babc7726a5324c23c09f8e4b7b87ef2c4fa46837fd66b8f67a41434745352865",
+    "dist/assets/style-CS8aS1cO.js": "b0215161e791f35a9233df51fd25c4003a72a6095bcc9ef53229aa4fe1bb6433",
+    "dist/assets/main-thread-5s6zm5H0.js": "eaa4ff6f7a56a7d23ff338eff7adfb3472cfb5eafcd69e48a1d0acb35304480e",
+    "dist/assets/GutenbergEditor-DE3OTdVV.js": "51feefa0f6eeac4f8da7647d39a23f72bdad497555224dd59e46ad591f96b0e0",
+    "dist/assets/FontLibrary-hVcb_0Sq.css": "bf9be26962fd5b58d30e034b4f36b3b4c5e759a907e8509e1447f479edb69212",
+    "dist/assets/dashicons-jd8VE3dP.ttf": "cacd900a2587c234c53e9d0108fc51ff6c61420c4f89a1731014b673a7b9a1a8",
+    "dist/assets/style-D8oqX3h3.css": "82fd78a0d6baecdea74a6a9c14d0e5e13c5254f59c82cf2524c043e91ad7d5ce"
+  }
+}

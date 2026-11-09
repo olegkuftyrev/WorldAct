@@ -1,0 +1,360 @@
+{
+  "state": "PREPARED_NOT_EXECUTED",
+  "rootApprovedCount": 48,
+  "candidateHintOnly": "cabaf / Node af2177: awaiting full hash, reviewed green gates and explicit activation",
+  "sourceStageForAudit": "5ab358d4c05b1d8fbe7ca25602dfa2385e0dd73a",
+  "submissionCount": 48,
+  "rows": [
+    {
+      "theme": "classic",
+      "width": 1440,
+      "scripts": true,
+      "control": "default",
+      "action": "Enter"
+    },
+    {
+      "theme": "classic",
+      "width": 1440,
+      "scripts": true,
+      "control": "ordinary",
+      "action": "button"
+    },
+    {
+      "theme": "classic",
+      "width": 1440,
+      "scripts": true,
+      "control": "reserved",
+      "action": "button"
+    },
+    {
+      "theme": "classic",
+      "width": 1440,
+      "scripts": true,
+      "control": "closest",
+      "action": "button"
+    },
+    {
+      "theme": "classic",
+      "width": 1440,
+      "scripts": true,
+      "control": "matches",
+      "action": "button"
+    },
+    {
+      "theme": "classic",
+      "width": 1440,
+      "scripts": true,
+      "control": "getattribute",
+      "action": "button"
+    },
+    {
+      "theme": "classic",
+      "width": 1440,
+      "scripts": true,
+      "control": "duplicate-different",
+      "action": "button"
+    },
+    {
+      "theme": "classic",
+      "width": 1440,
+      "scripts": true,
+      "control": "duplicate-equal",
+      "action": "Enter"
+    },
+    {
+      "theme": "classic",
+      "width": 1440,
+      "scripts": true,
+      "control": "entities",
+      "action": "button"
+    },
+    {
+      "theme": "classic",
+      "width": 1440,
+      "scripts": true,
+      "control": "empty",
+      "action": "button"
+    },
+    {
+      "theme": "classic",
+      "width": 1440,
+      "scripts": true,
+      "control": "no-button",
+      "action": "Enter"
+    },
+    {
+      "theme": "classic",
+      "width": 375,
+      "scripts": false,
+      "control": "default",
+      "action": "button"
+    },
+    {
+      "theme": "classic",
+      "width": 375,
+      "scripts": false,
+      "control": "ordinary",
+      "action": "button"
+    },
+    {
+      "theme": "classic",
+      "width": 375,
+      "scripts": false,
+      "control": "reserved",
+      "action": "button"
+    },
+    {
+      "theme": "classic",
+      "width": 375,
+      "scripts": false,
+      "control": "closest",
+      "action": "Enter"
+    },
+    {
+      "theme": "classic",
+      "width": 375,
+      "scripts": false,
+      "control": "matches",
+      "action": "Enter"
+    },
+    {
+      "theme": "classic",
+      "width": 375,
+      "scripts": false,
+      "control": "getattribute",
+      "action": "Enter"
+    },
+    {
+      "theme": "classic",
+      "width": 375,
+      "scripts": false,
+      "control": "duplicate-different",
+      "action": "button"
+    },
+    {
+      "theme": "classic",
+      "width": 375,
+      "scripts": false,
+      "control": "duplicate-equal",
+      "action": "Enter"
+    },
+    {
+      "theme": "classic",
+      "width": 375,
+      "scripts": false,
+      "control": "entities",
+      "action": "button"
+    },
+    {
+      "theme": "classic",
+      "width": 375,
+      "scripts": false,
+      "control": "empty",
+      "action": "button"
+    },
+    {
+      "theme": "classic",
+      "width": 375,
+      "scripts": false,
+      "control": "no-button",
+      "action": "Enter"
+    },
+    {
+      "theme": "classic",
+      "width": 375,
+      "scripts": true,
+      "control": "ordinary",
+      "action": "Enter",
+      "layoutSmoke": true
+    },
+    {
+      "theme": "classic",
+      "width": 768,
+      "scripts": true,
+      "control": "ordinary",
+      "action": "Enter",
+      "layoutSmoke": true
+    },
+    {
+      "theme": "twentytwentyfive",
+      "width": 1440,
+      "scripts": true,
+      "control": "default",
+      "action": "Enter"
+    },
+    {
+      "theme": "twentytwentyfive",
+      "width": 1440,
+      "scripts": true,
+      "control": "ordinary",
+      "action": "button"
+    },
+    {
+      "theme": "twentytwentyfive",
+      "width": 1440,
+      "scripts": true,
+      "control": "reserved",
+      "action": "button"
+    },
+    {
+      "theme": "twentytwentyfive",
+      "width": 1440,
+      "scripts": true,
+      "control": "closest",
+      "action": "button"
+    },
+    {
+      "theme": "twentytwentyfive",
+      "width": 1440,
+      "scripts": true,
+      "control": "matches",
+      "action": "button"
+    },
+    {
+      "theme": "twentytwentyfive",
+      "width": 1440,
+      "scripts": true,
+      "control": "getattribute",
+      "action": "button"
+    },
+    {
+      "theme": "twentytwentyfive",
+      "width": 1440,
+      "scripts": true,
+      "control": "duplicate-different",
+      "action": "button"
+    },
+    {
+      "theme": "twentytwentyfive",
+      "width": 1440,
+      "scripts": true,
+      "control": "duplicate-equal",
+      "action": "Enter"
+    },
+    {
+      "theme": "twentytwentyfive",
+      "width": 1440,
+      "scripts": true,
+      "control": "entities",
+      "action": "button"
+    },
+    {
+      "theme": "twentytwentyfive",
+      "width": 1440,
+      "scripts": true,
+      "control": "empty",
+      "action": "button"
+    },
+    {
+      "theme": "twentytwentyfive",
+      "width": 1440,
+      "scripts": true,
+      "control": "no-button",
+      "action": "Enter"
+    },
+    {
+      "theme": "twentytwentyfive",
+      "width": 375,
+      "scripts": false,
+      "control": "default",
+      "action": "button"
+    },
+    {
+      "theme": "twentytwentyfive",
+      "width": 375,
+      "scripts": false,
+      "control": "ordinary",
+      "action": "button"
+    },
+    {
+      "theme": "twentytwentyfive",
+      "width": 375,
+      "scripts": false,
+      "control": "reserved",
+      "action": "button"
+    },
+    {
+      "theme": "twentytwentyfive",
+      "width": 375,
+      "scripts": false,
+      "control": "closest",
+      "action": "Enter"
+    },
+    {
+      "theme": "twentytwentyfive",
+      "width": 375,
+      "scripts": false,
+      "control": "matches",
+      "action": "Enter"
+    },
+    {
+      "theme": "twentytwentyfive",
+      "width": 375,
+      "scripts": false,
+      "control": "getattribute",
+      "action": "Enter"
+    },
+    {
+      "theme": "twentytwentyfive",
+      "width": 375,
+      "scripts": false,
+      "control": "duplicate-different",
+      "action": "button"
+    },
+    {
+      "theme": "twentytwentyfive",
+      "width": 375,
+      "scripts": false,
+      "control": "duplicate-equal",
+      "action": "Enter"
+    },
+    {
+      "theme": "twentytwentyfive",
+      "width": 375,
+      "scripts": false,
+      "control": "entities",
+      "action": "button"
+    },
+    {
+      "theme": "twentytwentyfive",
+      "width": 375,
+      "scripts": false,
+      "control": "empty",
+      "action": "button"
+    },
+    {
+      "theme": "twentytwentyfive",
+      "width": 375,
+      "scripts": false,
+      "control": "no-button",
+      "action": "Enter"
+    },
+    {
+      "theme": "twentytwentyfive",
+      "width": 375,
+      "scripts": true,
+      "control": "ordinary",
+      "action": "Enter",
+      "layoutSmoke": true
+    },
+    {
+      "theme": "twentytwentyfive",
+      "width": 768,
+      "scripts": true,
+      "control": "ordinary",
+      "action": "Enter",
+      "layoutSmoke": true
+    }
+  ],
+  "screenshots": "Selected critical initial/result forms at1440/375, 768 ordinary layout; all resulting PNGs individually inspected later",
+  "requirements": [
+    "actual saved server-rendered controls",
+    "real button or Enter only",
+    "pre-navigation owned-target script disable for NoJS",
+    "safe prototype attribute reads",
+    "actual page errors plus independent document wire capture",
+    "duplicate s equal/different preserves400",
+    "defaultglobal no ambient fields",
+    "no product/native claim from static preparation"
+  ]
+}

@@ -1,0 +1,136 @@
+{
+  "verdict": "SCOPED_PASS",
+  "code": "9928f5dfc7fbd4af3c0a639ddb2c2f9312d061d2",
+  "tree": "2bad521ca336ac309e735fee7975dc033bdf5153",
+  "base": "5a819ef4a68b3dcd8f9c2ea0e033d690f34d029a",
+  "baseTree": "c8a4c593b57ee628d7e8eda9507ff31a78bb1294",
+  "nodeSha256": "af2177df906780e5c6f65554a1181d606cd337789d3cfa9d9bb8d87ffaf5fc33",
+  "originalClientAsset": "/assets/index-B3a4p61n.js",
+  "finalClientAsset": "/assets/index-xwURwyyl.js",
+  "builds": {
+    "baseTSC": true,
+    "baseViteRunner": true,
+    "baseEsbuild": true,
+    "repairTSC": true,
+    "repairViteRunner": true,
+    "repairEsbuild": true,
+    "unchangedNode": true,
+    "hostNode": "v24.14.1",
+    "agentBrowser": "0.41.2",
+    "lockSha256": "233888ed8f864581a8835aab0b4c33ccd7fbc391f2a98650b63fcf8db8814892",
+    "readOnlyDependencyOwnerVerified0755": true
+  },
+  "native": {
+    "selectorRows": 48,
+    "javascriptRows": 26,
+    "genuinePreNavigationNoJSRows": 22,
+    "realButtonSubmissions": 28,
+    "realEnterSubmissions": 20,
+    "actualDocumentGET200": 40,
+    "actualDocumentGET400": 8,
+    "requiredEmptyRealButtonNoNavigationControls": 8,
+    "pageErrors": 0,
+    "horizontalOverflowRows": 0,
+    "savedControlsPerTheme": 11,
+    "themes": [
+      "classic",
+      "twentytwentyfive"
+    ],
+    "widthScope": {
+      "JS1440": "all11 pertheme",
+      "NoJS375": "all11 pertheme",
+      "JS375and768": "ordinary explicit form/Enter pertheme"
+    },
+    "oneActualDocumentGETPerSubmission": true,
+    "allFinalAssetMatches": true,
+    "allJSInitialFormNodesRetained": true,
+    "oneJSModelValidationPer200SearchResult": true,
+    "noJSModelRequestsZero": true,
+    "threeSeparateMethodNamesStillShadowAsObject": true,
+    "emptyNameAttributeAndLogicalValueDistinguished": true,
+    "emptyNameOmittedFromWire": true,
+    "charsetWireUTF8": true,
+    "defaultSearchNoAmbientInputs": true,
+    "duplicateEqualAndDifferentSReject400": true,
+    "entityDOMAndWireAssertions": true,
+    "noSyntheticSubmissionOrResponse": true
+  },
+  "delegation": {
+    "smokes": 2,
+    "sourcePasswordActualUnlock200": 1,
+    "classicOpaqueBodyActualComment201": 1,
+    "savedCommentId": 2,
+    "savedCommentStatus": "pending",
+    "savedPostIds": [
+      16,
+      17
+    ],
+    "pageErrors": 0,
+    "noFloodRetryOrBypass": true
+  },
+  "images": {
+    "finalIndividuallyOpened": 35,
+    "beforeIndividuallyOpened": 3,
+    "totalIndividuallyOpened": 38,
+    "preservedPNGPaths": 57,
+    "remaining19AreRehashedByteIdenticalAliases": true,
+    "focusedCaptures": 6,
+    "focusedCapturesAreReadOnlyGETAndScrollNoSubmissions": true
+  },
+  "history": {
+    "baseActualMethodErrors": 3,
+    "baseNativeGETStillSucceeds": true,
+    "firstUnflushedErrorCountsNotAccepted": true,
+    "partial9HarnessEmptyNameRepresentation": true,
+    "partial24HarnessSourceContextTemplatePriority": true,
+    "sourceContextOnlyStartingURLOmitsYear": true,
+    "allOriginalProofsPreserved": true
+  },
+  "cleanup": {
+    "seedCount": 1,
+    "ownedServicesStopped": true,
+    "portsFree": [
+      3035,
+      3036,
+      3037,
+      5195
+    ],
+    "ownedDatabaseAbsent": true,
+    "ownedUploadsAbsent": true,
+    "privateConfigAndSecretFixturesRemoved": true,
+    "ownDependencyLinksRemovedOnly": true,
+    "dependencyOwnerStill0755": true,
+    "ownedBrowsersClosed": true,
+    "vaultCreated": false,
+    "SQLHooksCreated": false,
+    "noMAINMutation": true,
+    "exactResourceJournal": "explicit-search-native-resource-journal.json"
+  },
+  "privateOriginalHashes": {
+    "explicit-search-native-final48-v3-proof.json": "bf02570b228b25742ed9210659e65bc5fce6b3312358d7c5d9c5e5daa560bea4",
+    "explicit-search-native-delegation-smokes-proof.json": "23db7d848bdee5b49014404b48fca66539564e8473f7c77f09587390d5641b7f",
+    "explicit-search-native-focused-captures-proof.json": "28b74f27160b646b1da4ac0ee730923ef9eba5b34beb84a829393d4db4071e29",
+    "explicit-search-native-shadows-original-proof.json": "92621654ac673311e93fbcf2c61571e6b6fa85e8abe60a57190315f4f7dc6d33",
+    "explicit-search-native-shadows-flushed-proof.json": "aac1aa475b678843fd9ac859bb265d9ed0c2037fe57d38a471cd70ae79010c7c",
+    "explicit-search-native-final48-proof.json": "cde59b97afabfc39d0332bb986b5b93319777431ea55db7fa47b2ed269d5541c",
+    "explicit-search-native-final48-v2-proof.json": "eb6b77dbe840ba79cc85b66c3826722dcde3a991d8d32eabc67ac1b3fc951b7a",
+    "explicit-search-native-cleanup.json": "d4a4b173d9a1b5badf1aa419454faf8f614ed0bad98f0bd66c544755c836e71b",
+    "explicit-search-native-resource-journal.json": "39305b961560f1a62b8c58dfd5004aad8f8a4b4dc098043f6eafd53a7acfec12",
+    "explicit-search-native-image-inspection.json": "eb93b472d2d9c854f36c209efcc5cfd39ee56bb7efca37f7ee6467e713f988f3",
+    "explicit-search-native-saved-inputs.json": "702c80b36b7526535153c107f6d780d8d55bfeb145db872da55bd80c7d3bfeb6",
+    "explicit-search-native-context-adapter.diff": "6a5b10725b25a8f647789b6e17a1fd3ed07cd7271b648936be9af9d9837c778a",
+    "explicit-search-native-context-harness-adapter.json": "53ea0a290c0a18fefaffc7a440fe72de1019f5cac9ea84b9508482a49620b345",
+    "explicit-search-native-empty-name-adapter.diff": "b26a3548f872ff35156819f08f41dd3f362101e0c205be134811a33052aba370",
+    "explicit-search-native-empty-name-harness-adapter.json": "5e83b712197bdbd40a5a487474bd8e7d2cf9883d964d7ee72a253ae0ff532492",
+    "explicit-search-native-harness/selector.json": "ec331987a213f4f76a26e5186d974c629fdf2a470719deb5c2c6e9aafaa8457c",
+    "explicit-search-native-5a-build/manifest.json": "6ff00e981fde9429874315247c239dd163a10709bd9aa621f99b289bb182d544"
+  },
+  "limits": [
+    "This is the bounded explicit Search/native-delegation scope, not all WordPress or whole CMS completion.",
+    "No PHP/MySQL execution, arbitrary PHP float/byte/key-order parity, pixel matching, cross-browser/BFCache or new held-private race certification.",
+    "No new broad/portability/compiled API suite repeated by this native owner; independent build and actual browser/HTTP captures are the evidence.",
+    "Source numeric-only date/template priority with ambient year was not changed or certified; original contextual receipts preserved.",
+    "Existing local filtered archive search is separate from source defaultglobal Search; no ambient filter inheritance promised.",
+    "Classic mobile initial-viewport images frame long fixture menu; separately labeled read-only scroll supplements show controls/body."
+  ]
+}

@@ -1,0 +1,8 @@
+{
+  "candidate": "9928f5dfc7fbd4af3c0a639ddb2c2f9312d061d2",
+  "name": "AssertionError",
+  "message": "Expected values to be strictly equal:\n+ actual - expected\n\n+ true\n- undefined\n",
+  "stack": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n+ actual - expected\n\n+ true\n- undefined\n\n    at file://[private-review]/explicit-search-native-harness/final48-v2.mjs:10:61",
+  "receipt": null,
+  "completedRows": 24
+}

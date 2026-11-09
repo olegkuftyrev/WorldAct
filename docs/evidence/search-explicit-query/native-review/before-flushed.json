@@ -1,0 +1,195 @@
+{
+  "candidate": "5a819ef4a68b3dcd8f9c2ea0e033d690f34d029a",
+  "nodeSha256": "af2177df906780e5c6f65554a1181d606cd337789d3cfa9d9bb8d87ffaf5fc33",
+  "rows": [
+    {
+      "theme": "classic",
+      "width": 1440,
+      "scripts": true,
+      "control": "closest",
+      "form": {
+        "actionAttribute": "/",
+        "canonicalCount": 1,
+        "errors": [],
+        "fields": [
+          {
+            "attributeValue": null,
+            "name": "s",
+            "required": true,
+            "type": "search",
+            "validityMissing": true,
+            "value": ""
+          },
+          {
+            "attributeValue": "literal-closest-data",
+            "name": "closest",
+            "required": false,
+            "type": "hidden",
+            "validityMissing": false,
+            "value": "literal-closest-data"
+          }
+        ],
+        "methodAttribute": "get",
+        "originalFormRetained": true,
+        "overflow": false,
+        "path": "/explicit-search-native-closest-2ef29451bb6ec2d0/",
+        "properties": {
+          "action": "string",
+          "closest": "object",
+          "formaction": "undefined",
+          "getAttribute": "function",
+          "matches": "function",
+          "method": "string",
+          "submit": "function"
+        },
+        "robotsCount": 0,
+        "scripts": true
+      },
+      "actualDocuments": [
+        {
+          "id": 52,
+          "method": "GET",
+          "path": "/?s=ExplicitSearchNativeNeedle&closest=literal-closest-data",
+          "destination": "document",
+          "startedAt": 1794232867847,
+          "status": 200,
+          "finishedAt": 1794232867871
+        }
+      ],
+      "pageErrors": [
+        {
+          "text": "Uncaught",
+          "description": "TypeError: p0.closest is not a function\n    at HTMLDivElement.b1 (http://127.0.0.1:3036/assets/index-B3a4p61n.js:16:841068)"
+        }
+      ],
+      "finalPath": "/?s=ExplicitSearchNativeNeedle&closest=literal-closest-data",
+      "screenshot": "screenshots/explicit-search-native-flushed-closest-classic-1440.png"
+    },
+    {
+      "theme": "classic",
+      "width": 1440,
+      "scripts": true,
+      "control": "matches",
+      "form": {
+        "actionAttribute": "/",
+        "canonicalCount": 1,
+        "errors": [],
+        "fields": [
+          {
+            "attributeValue": null,
+            "name": "s",
+            "required": true,
+            "type": "search",
+            "validityMissing": true,
+            "value": ""
+          },
+          {
+            "attributeValue": "literal-matches-data",
+            "name": "matches",
+            "required": false,
+            "type": "hidden",
+            "validityMissing": false,
+            "value": "literal-matches-data"
+          }
+        ],
+        "methodAttribute": "get",
+        "originalFormRetained": true,
+        "overflow": false,
+        "path": "/explicit-search-native-matches-2ef29451bb6ec2d0/",
+        "properties": {
+          "action": "string",
+          "closest": "function",
+          "formaction": "undefined",
+          "getAttribute": "function",
+          "matches": "object",
+          "method": "string",
+          "submit": "function"
+        },
+        "robotsCount": 0,
+        "scripts": true
+      },
+      "actualDocuments": [
+        {
+          "id": 66,
+          "method": "GET",
+          "path": "/?s=ExplicitSearchNativeNeedle&matches=literal-matches-data",
+          "destination": "document",
+          "startedAt": 1794232868279,
+          "status": 200,
+          "finishedAt": 1794232868298
+        }
+      ],
+      "pageErrors": [
+        {
+          "text": "Uncaught",
+          "description": "TypeError: p0.matches is not a function\n    at HTMLDivElement.b1 (http://127.0.0.1:3036/assets/index-B3a4p61n.js:16:841114)"
+        }
+      ],
+      "finalPath": "/?s=ExplicitSearchNativeNeedle&matches=literal-matches-data",
+      "screenshot": "screenshots/explicit-search-native-flushed-matches-classic-1440.png"
+    },
+    {
+      "theme": "classic",
+      "width": 1440,
+      "scripts": true,
+      "control": "getattribute",
+      "form": {
+        "actionAttribute": "/",
+        "canonicalCount": 1,
+        "errors": [],
+        "fields": [
+          {
+            "attributeValue": null,
+            "name": "s",
+            "required": true,
+            "type": "search",
+            "validityMissing": true,
+            "value": ""
+          },
+          {
+            "attributeValue": "literal-getattribute-data",
+            "name": "getAttribute",
+            "required": false,
+            "type": "hidden",
+            "validityMissing": false,
+            "value": "literal-getattribute-data"
+          }
+        ],
+        "methodAttribute": "get",
+        "originalFormRetained": true,
+        "overflow": false,
+        "path": "/explicit-search-native-getattribute-2ef29451bb6ec2d0/",
+        "properties": {
+          "action": "string",
+          "closest": "function",
+          "formaction": "undefined",
+          "getAttribute": "object",
+          "matches": "function",
+          "method": "string",
+          "submit": "function"
+        },
+        "robotsCount": 0,
+        "scripts": true
+      },
+      "actualDocuments": [
+        {
+          "id": 80,
+          "method": "GET",
+          "path": "/?s=ExplicitSearchNativeNeedle&getAttribute=literal-getattribute-data",
+          "destination": "document",
+          "startedAt": 1794232868695,
+          "status": 200,
+          "finishedAt": 1794232868718
+        }
+      ],
+      "pageErrors": [
+        {
+          "text": "Uncaught",
+          "description": "TypeError: p0.getAttribute is not a function\n    at HTMLDivElement.b1 (http://127.0.0.1:3036/assets/index-B3a4p61n.js:16:841325)"
+        }
+      ],
+      "finalPath": "/?s=ExplicitSearchNativeNeedle&getAttribute=literal-getattribute-data",
+      "screenshot": "screenshots/explicit-search-native-flushed-getattribute-classic-1440.png"
+    }
+  ]
+}
