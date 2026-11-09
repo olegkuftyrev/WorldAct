@@ -1,4 +1,4 @@
-import {resolvePrettyAuthorArchive} from "./author-archives.js";
+import {resolvePrettyAuthorArchive,authorArchiveRequestPath} from "./author-archives.js";
 import {authorArchivePath} from "../shared/author-archive.js";
 import {renderPublicTemplateDocument} from "./public-presentation.js";
 import {completePublicRead,observePublicAuthor} from "./public-read-attempt.js";
@@ -837,7 +837,7 @@ router.get("/api/public/templates/:slug", async (req:AuthRequest, res) => {
   const requestPath = String(req.query.requestPath || "/").slice(0, 2000);
   if (!isPublicRequestPath(requestPath))
     throw new HttpError(400, "Use a site-relative request path.");
-  const prettyAuthor=await resolvePrettyAuthorArchive(requestPath,settings);
+  const prettyAuthor=await resolvePrettyAuthorArchive(authorArchiveRequestPath(requestPath,req.query),settings);
   if(selectedAuthor && (!prettyAuthor.archive || selectedAuthor.authorId!==prettyAuthor.archive.authorId || selectedAuthor.slug!==prettyAuthor.archive.slug))throw new HttpError(404,"The selected author archive identity retired.");
   if(prettyAuthor.archive){selectedAuthor ||= prettyAuthor.archive;observePublicAuthor(reader,prettyAuthor.archive);}
   if(prettyAuthor.recognized && !prettyAuthor.archive)throw new HttpError(404,"Author archive not found.");
@@ -873,7 +873,7 @@ router.get("/api/public/templates/:slug", async (req:AuthRequest, res) => {
       query,
       // On a singular request page selects the document body, not an inherited
       // Query Loop. Its explicit query-N-page remains independently authoritative.
-      page: post ? 1 : Number(req.query.page) || 1,
+      page: post ? 1 : prettyAuthor.archive?.page || Number(req.query.page) || 1,
       contentPage,
       placeholderBindings: false,
       user: (req as AuthRequest).user,

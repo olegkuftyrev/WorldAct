@@ -5,6 +5,18 @@ export {authorArchivePath} from "../shared/author-archive.js";
 type Settings=Awaited<ReturnType<typeof getSettings>>;
 type Database=Pick<typeof pool,"query">;
 export type AuthorArchive={type:"author";name:string;authorId:number;slug:string;permalink:string;page?:number};
+/** Metadata-bearing legacy APIs pass their visible path and filters separately.
+ * Merge only author identity/archive paging, rejecting contradictory inputs. */
+export function authorArchiveRequestPath(path:string,values:Record<string,unknown>):string{
+ const separator=path.indexOf("?"),pathname=separator<0?path:path.slice(0,separator),query=new URLSearchParams(separator<0?"":path.slice(separator+1));
+ for(const key of Object.keys(values))if(/^(?:author|page)\[/.test(key))throw new HttpError(400,"Use a single author archive identity and page.");
+ for(const key of ["author","page"]){const value=values[key];if(value===undefined)continue;
+  if(typeof value!=="string" && typeof value!=="number")throw new HttpError(400,"Use a single author archive identity and page.");
+  const text=String(value);if(query.has(key)&&(query.getAll(key).length!==1 || query.get(key)!==text))throw new HttpError(400,"The author archive identity or counters conflict.");
+  if(!query.has(key))query.set(key,text);
+ }
+ return pathname+(query.size?"?"+query:"");
+}
 export async function resolvePrettyAuthorArchive(path:string,settings?:Settings,db:Database=pool):Promise<{recognized:boolean;archive:AuthorArchive|null;taxonomyPriority?:boolean}>{
  if(path.length>2000)throw new HttpError(414,"The URL exceeds the supported length.");
  if(!path.startsWith("/")||path.startsWith("//")||/[\u0000-\u001f\u007f#\\]/.test(path))throw new HttpError(400,"Use a site-relative path.");

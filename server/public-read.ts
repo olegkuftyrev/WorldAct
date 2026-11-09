@@ -1,4 +1,4 @@
-import {authorArchivePath,resolvePrettyAuthorArchive,type AuthorArchive} from "./author-archives.js";
+import {authorArchivePath,authorArchiveRequestPath,resolvePrettyAuthorArchive,type AuthorArchive} from "./author-archives.js";
 import { z } from "zod";
 import { pool, getSettings, postFields, type User } from "./db.js";
 import { withPermalink } from "./permalinks.js";
@@ -89,7 +89,7 @@ export function readPublicSite(context:PublicReadContext){
 async function readPublicSiteOnce(context: PublicReadContext,selection:{author?:AuthorArchive}) {
   const selectedAuthor=context.authorArchive || selection.author;
   if(selectedAuthor)observePublicAuthor(context.canReadProtectedPost,selectedAuthor);
-  const pretty=context.requestPath?await resolvePrettyAuthorArchive(context.requestPath):null;
+  const pretty=context.requestPath?await resolvePrettyAuthorArchive(authorArchiveRequestPath(context.requestPath,context.query)):null;
   if(pretty?.recognized && !pretty.archive)throw new HttpError(404,"Author archive not found.");
   if(selectedAuthor && (!pretty?.archive || pretty.archive.authorId!==selectedAuthor.authorId || pretty.archive.slug!==selectedAuthor.slug))throw new HttpError(404,"The author archive identity changed.");
   if(pretty?.archive){selection.author ||= pretty.archive;observePublicAuthor(context.canReadProtectedPost,pretty.archive);}
