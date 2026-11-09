@@ -105,12 +105,17 @@ verified backups remain retained.
 
 ## Release and remaining scope
 
-Release requires a fresh restore-verified backup of current MAIN, preservation
-of all39 tables/every field and uploads, production build, restart, read-only
-smoke and exact-head remote CI. No migration or reseed is required. Both new
-regressions appear once in the compiled selector: prospective232 source files
-and185 compiled-selector files; the existing29 fresh phases are unchanged.
-These inventories are not final remote pass counts.
+Released as `0f7dd2f3d55a72a3b2b498a152a10332ef066c68` after a fresh
+restore-verified backup, preservation of all39 tables/every field and uploads,
+production build, restart and read-only smoke. No migration or reseed occurred.
+[Exact-head CI](https://github.com/olegkuftyrev/WorldAct/actions/runs/42648565722)
+passed both Node22 and Node24 jobs. Each actually completed232 source files
+(1373pass/13skip),185 compiled-selector files (1240pass/10skip), and the unseeded
+installation check (7pass/1skip), without failures or cancellations. Node24
+completed all29 existing fresh-archive phases without failure, cancellation or
+skip. Both raw logs and parsed phase counters were retained and independently
+verified. Only the root integration's own dependency symlink was then removed;
+failure evidence, original builds and verified backups remain retained.
 
 This fix concerns explicit archive type on selected singular presentations.
 Home/search/404 eligibility, omitted/other types, post-type labels, complete
