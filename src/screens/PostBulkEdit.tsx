@@ -155,9 +155,9 @@ export default function PostBulkEdit({
     }
     if (
       changes.status === "future" &&
-      (!timezone || !publicationInstant(postDate, timezone) || Date.parse(publicationInstant(postDate, timezone)!) <= Date.now())
+      (!timezone || !publicationInstant(postDate, timezone))
     ) {
-      setError("Choose a future publication date and time.");
+      setError("Choose a valid publication date and time.");
       return;
     }
     setBusy(true);

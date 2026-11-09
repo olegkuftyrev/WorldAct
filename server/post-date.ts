@@ -20,6 +20,11 @@ export function resolvePostDate(input:Record<string,any>,existing:Record<string,
  const reset=input.postDate===null || (status==="future"?input.scheduledAt===null:input.publishedAt===null) || input.restDate===null || input.restDateGmt===null;
  const current=()=>({postDate:civilFromInstant(now,timezone),postDateGmt:floating?null:now.toISOString()});
  if(reset)return current();
+ // Nonfloating saved rows have a chosen civil date even when an imported GMT
+ // is null. Keep that civil for the save-time publication policy to fix in its
+ // late zone; a floating draft's unchanged date still refreshes from now.
+ const keepUnfixedCivil=["publish","future"].includes(status) && ["publish","future","private"].includes(existing?.status);
+ const unchanged=()=>old!.postDateGmt===null&&!floating&&!keepUnfixedCivil?current():old!;
  // REST resolution is deferred until after actor/hierarchy/post waits and uses
  // this one settings snapshot. A nonempty local input wins over GMT.
  let civil=input.postDate,restFraction=0;
@@ -32,18 +37,18 @@ export function resolvePostDate(input:Record<string,any>,existing:Record<string,
     civil=local.length===16?local+":00":local.slice(0,19);
   }
   else {const raw=local || input.restDateGmt;instant=/(?:Z|[+-]\d{2}:?\d{2})$/i.test(raw)?raw:raw+"Z";}
-  if(old && (civil===old.postDate || instant && old.postDateGmt && new Date(instant).valueOf()===new Date(old.postDateGmt).valueOf()))return old.postDateGmt===null&&!floating?current():old;
+  if(old && (civil===old.postDate || instant && old.postDateGmt && new Date(instant).valueOf()===new Date(old.postDateGmt).valueOf()))return unchanged();
  }
  if(civil!==undefined){
   if(!parsePostCivil(civil))throw new HttpError(400,"Use a real publication civil date in YYYY-MM-DDTHH:mm:ss format (years 0001–9999).");
-  if(old && civil===old.postDate)return old.postDateGmt===null&&!floating?current():old;
+  if(old && civil===old.postDate)return unchanged();
   let gmt:string;try{gmt=postCivilInstant(civil,timezone);}catch(error){throw new HttpError(400,(error as Error).message);}
   if(civilFromInstant(gmt,timezone)!==civil)throw new HttpError(400,"This local time does not exist in the selected timezone. Choose another time.");
   if(restFraction)gmt=new Date(new Date(gmt).valueOf()+restFraction).toISOString();
   return publicationPair(civil,gmt);
  }
  if(instant!==undefined && instant!==null){
-  if(old && (new Date(instant).valueOf()===new Date(existing?.[status==="future"?"scheduledAt":"publishedAt"]).valueOf() || old.postDateGmt && new Date(instant).valueOf()===new Date(old.postDateGmt).valueOf()))return old.postDateGmt===null&&!floating?current():old;
+  if(old && (new Date(instant).valueOf()===new Date(existing?.[status==="future"?"scheduledAt":"publishedAt"]).valueOf() || old.postDateGmt && new Date(instant).valueOf()===new Date(old.postDateGmt).valueOf()))return unchanged();
   if(typeof instant!=="string" || !/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d{1,6})?(?:Z|[+-]\d{2}:?\d{2})$/i.test(instant))throw new HttpError(400,"The publication instant requires an explicit UTC offset.");
   const parsed=moment.parseZone(instant,moment.ISO_8601,true),date=parsed.toDate();if(!parsed.isValid() || !/^\d{4}-/.test(parsed.toISOString()) || date.getUTCFullYear()<1)throw new HttpError(400,"The publication date is invalid.");
   return publicationPair(civilFromInstant(date,timezone),date);

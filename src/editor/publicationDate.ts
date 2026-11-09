@@ -1,4 +1,5 @@
 import { civilFromInstant, parsePostCivil, postCivilInstant } from "../../shared/post-civil-date";
+import { publicationStatusAt } from "../../shared/publication-status";
 
 /** datetime-local can omit zero seconds. Keep the API's canonical civil grammar. */
 export function publicationDateInput(value: string): string {
@@ -26,14 +27,35 @@ export function publicationInstant(civil: string, timezone: string): string | nu
 
 /** An unchanged fixed draft may have a chosen GMT but no legacy scheduledAt.
  * A floating draft has no chosen instant, even if a legacy due value remains.
- * Only a local edit asks the current site zone to select a new instant. */
+ * A saved nonfloating row without GMT resolves its stored civil in the current
+ * site zone. Provenance comes from the saved DTO, never an edited status. */
 export function publicationActionInstant(value: {
   postDate: string;
   postDateGmt: string | null;
   postDateIntent?: string | null;
+  savedStatus?: string;
 }, timezone?: string): string | null {
-  if (value.postDateIntent === undefined)
-    return value.postDateGmt && Number.isFinite(Date.parse(value.postDateGmt)) ? value.postDateGmt : null;
+  if (value.postDateIntent === undefined) {
+    if (value.postDateGmt !== null)
+      return Number.isFinite(Date.parse(value.postDateGmt)) ? value.postDateGmt : null;
+    return timezone && ["publish", "future", "private"].includes(value.savedStatus || "")
+      ? publicationInstant(value.postDate, timezone)
+      : null;
+  }
   if (value.postDateIntent === null || !timezone) return null;
   return publicationInstant(value.postDate, timezone);
+}
+
+/** Hints share the server's minute boundary. A valid chosen date can still be
+ * submitted after that window passes; only the response decides saved status. */
+export function publicationAction(
+  value: Parameters<typeof publicationActionInstant>[0],
+  timezone: string | undefined,
+  now: Date,
+): { status: "publish" | "future"; canSubmitSchedule: boolean } {
+  const instant = publicationActionInstant(value, timezone);
+  return {
+    status: publicationStatusAt("publish", instant ?? now, now),
+    canSubmitSchedule: instant !== null,
+  };
 }
