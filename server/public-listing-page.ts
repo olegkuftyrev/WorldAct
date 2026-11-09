@@ -25,12 +25,12 @@ export function missingPublicListing(base:PublicDocumentResolution):PublicDocume
 export async function applyOrdinaryListingPage(base:PublicDocumentResolution,query:URLSearchParams,
   settings:Awaited<ReturnType<typeof getSettings>>,db:Pick<typeof pool,"query">,authenticated=false):Promise<PublicDocumentResolution>{
   if(base.status===404)return missingPublicListing(base);
-  if(base.listing?.namedAuthor||!["home","archive","posts-page"].includes(base.kind))return base;
+  if(base.listing?.namedAuthor||base.archive&&"type" in base.archive&&base.archive.type==="author"||!["home","archive","posts-page"].includes(base.kind))return base;
   const normalized=normalizeListingQuery(query,{singular:false,archive:base.archive});
-  if(normalized.archivePage===1)return base;
+  const listing:PublicListingContext={kind:base.kind as PublicListingContext["kind"],archive:base.archive || null};
+  if(normalized.archivePage===1)return {...base,listing};
   const predicate=publicListingWhere(normalized.values,settings,undefined,authenticated);
   const count=Number((await db.query(`SELECT count(*)::int AS n FROM posts p WHERE ${predicate.where.join(" AND ")}`,predicate.args)).rows[0].n);
   if((normalized.archivePage-1)*settings.postsPerPage>=count)return missingPublicListing(base);
-  const listing:PublicListingContext={kind:base.kind as PublicListingContext["kind"],archive:base.archive || null};
   return {...base,listing};
 }

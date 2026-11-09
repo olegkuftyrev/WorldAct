@@ -847,7 +847,8 @@ router.get("/api/public/templates/:slug", async (req:AuthRequest, res) => {
   const listingPath=nameVisible||!post&&!preview&&ordinaryListingPageRequested(req.query,requestPath)?listingRequestPath(requestPath,req.query):null;
   const listingRoute=listingPath&&!post?await resolvePublicDocumentRoute(listingPath,{namedPin,authenticated:Boolean(req.user)}):null;
   if(listingRoute?.status===404)throw new HttpError(404,"Public listing page not found.");
-  const listing=listingRoute?.listing;
+  let listing=listingRoute?.listing;
+  if(!nameVisible&&listingRoute&&!["home","archive","posts-page"].includes(listingRoute.kind))listing=undefined;
   if(listing?.namedAuthor?.selected)observePublicAuthor(reader,listing.namedAuthor.selected);
   const prettyAuthor=listing?.namedAuthor?{recognized:false,archive:null}:await resolvePrettyAuthorArchive(authorArchiveRequestPath(requestPath,req.query,settings),settings);
   if(!listing?.namedAuthor&&selectedAuthor && (!prettyAuthor.archive || selectedAuthor.authorId!==prettyAuthor.archive.authorId || selectedAuthor.slug!==prettyAuthor.archive.slug))throw new HttpError(404,"The selected author archive identity retired.");
@@ -862,7 +863,8 @@ router.get("/api/public/templates/:slug", async (req:AuthRequest, res) => {
     const resolved = await resolvePublicPath(requestPath);
     if (resolved?.id === post.id && resolved.contentPage) contentPage = resolved.contentPage;
   }
-  const normalizedListing=listingPath&&(nameVisible||listing)?normalizeListingQuery(readPublicPath(listingPath).query,{singular:Boolean(post),archive:listingRoute?.archive,namedAuthor:listing?.namedAuthor}):null;
+  let normalizedListing=listingPath&&(nameVisible||listing)?normalizeListingQuery(readPublicPath(listingPath).query,{singular:Boolean(post),archive:listingRoute?.archive,namedAuthor:listing?.namedAuthor}):null;
+  if(!nameVisible&&normalizedListing?.archivePage===1){listing=undefined;normalizedListing=null;}
   const query: Record<string, unknown> = normalizedListing?{...normalizedListing.values}:{};
   if(!normalizedListing)for (const [key, value] of Object.entries(req.query))
     if (

@@ -104,7 +104,11 @@ async function readPublicSiteOnce(context: PublicReadContext,selection:{author?:
     listing=resolved.listing;
     if(listing||nameVisible){
       const query=normalizeListingQuery(readPublicPath(path).query,{singular:["singular","front-page"].includes(resolved.kind),archive:resolved.archive,namedAuthor:listing?.namedAuthor});
-      context={...context,query:{...query.values,page:query.archivePage}};
+      // Direct ordinary first pages keep their prior raw transport policy
+      // (including explicit empty-page400). Internal documents already carry
+      // their trusted listing and never enter this route-lookup branch.
+      if(nameVisible||query.archivePage>1)context={...context,query:{...query.values,page:query.archivePage}};
+      else listing=undefined;
     }
   }
   const named=listing?.namedAuthor;
