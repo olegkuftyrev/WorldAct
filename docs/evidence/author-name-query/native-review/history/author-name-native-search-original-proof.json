@@ -1,0 +1,217 @@
+{
+  "code": "75e44f061f22fa19e850345c9976dbcfd9ab8196",
+  "tree": "71081d67bbc5d155c3c76cf930232b552c4f0ef6",
+  "nodeSha256": "e4521e807d51e57b619ff17018d653b144d2d2ea95a70025031a75d06c29be49",
+  "rows": [
+    {
+      "theme": "classic",
+      "width": 1440,
+      "scene": "actual-search-block-loses-numeric-name-intersection-original-failure",
+      "before": {
+        "boot": {
+          "archive": {
+            "authorId": 2,
+            "name": "Named Native alice",
+            "permalink": "/author/named-native-alice-87ae9b28/",
+            "slug": "named-native-alice-87ae9b28",
+            "type": "author"
+          },
+          "kind": "archive",
+          "posts": [],
+          "query": {
+            "archivePage": 1,
+            "author": 2,
+            "blockPages": {
+              "query-4-page": 1
+            },
+            "category": "",
+            "commentPage": 2,
+            "contentPage": 1,
+            "date": null,
+            "namedAuthor": {
+              "numericAuthor": 3,
+              "selected": {
+                "authorId": 2,
+                "name": "Named Native alice",
+                "permalink": "/author/named-native-alice-87ae9b28/",
+                "slug": "named-native-alice-87ae9b28",
+                "type": "author"
+              }
+            },
+            "search": "",
+            "tag": "",
+            "values": {
+              "author": "3",
+              "author_name": "named-native-alice-87ae9b28",
+              "commentPage": "2",
+              "page": "1",
+              "query-4-page": "1"
+            }
+          },
+          "status": 200
+        },
+        "canonicalCount": 1,
+        "errors": [],
+        "heading": "Author: Named Native alice",
+        "historyLength": 6,
+        "originalSSRNodeRetained": true,
+        "overflow": false,
+        "path": "/?author=3&author_name=named-native-alice-87ae9b28&query-4-page=1&commentPage=2",
+        "robotsCount": 0,
+        "text": "WorldAct\nNamed Native Journal\nNamed Native Numeric Child\nNamed Native Parent\nNamed Native Static Front\nSample Page\n\nNAMED NATIVE AUTHOR TEMPLATE\n\nAuthor: Named Native alice\nSearch\nSearch\nWorldAct\n\nJust another WorldAct site\n\nBlog\nNamed Native Journal\nNamed Native Numeric Child\nNamed Native Parent\nNamed Native Static Front\n\nDesigned with WorldAct\n\nLog in"
+      },
+      "originalForm": [
+        {
+          "action": "/",
+          "inputs": [
+            {
+              "name": "s",
+              "value": ""
+            },
+            {
+              "name": "",
+              "value": ""
+            }
+          ],
+          "method": "get"
+        }
+      ],
+      "after": {
+        "boot": {
+          "archive": null,
+          "kind": "archive",
+          "posts": [
+            {
+              "authorId": 2,
+              "id": 6,
+              "locked": false
+            }
+          ],
+          "query": {
+            "archivePage": 1,
+            "blockPages": {},
+            "category": "",
+            "contentPage": 1,
+            "date": null,
+            "search": "Alice",
+            "tag": "",
+            "values": {
+              "page": "1",
+              "search": "Alice"
+            }
+          },
+          "status": 200
+        },
+        "canonicalCount": 1,
+        "errors": [],
+        "heading": "Search results for: Alice",
+        "historyLength": 7,
+        "originalSSRNodeRetained": true,
+        "overflow": false,
+        "path": "/?s=Alice",
+        "robotsCount": 0,
+        "text": "WorldAct\nNamed Native Journal\nNamed Native Numeric Child\nNamed Native Parent\nNamed Native Static Front\nSample Page\nSearch results for: Alice\nSearch posts\nSearch\nShow all posts\nNamed Native Alice 3\n\nFebruary 3, 2001\n\nNATIVE NAMED FIRST BODY Named Native Alice 3\n\nPages: 1 2\n\n← Newer posts\n1 of 3\nOlder posts →\nWorldAct\n\nJust another WorldAct site\n\nBlog\nNamed Native Journal\nNamed Native Numeric Child\nNamed Native Parent\nNamed Native Static Front\n\nDesigned with WorldAct\n\nLog in"
+      },
+      "numericOriginal": 3,
+      "namedOriginal": 2,
+      "unrelatedNamedPostReleased": true,
+      "requests": [
+        {
+          "id": 44,
+          "method": "GET",
+          "path": "/api/public/document?path=%2F%3Fauthor%3D3%26author_name%3Dnamed-native-alice-87ae9b28%26query-4-page%3D1%26commentPage%3D2",
+          "startedAt": 1794224752839,
+          "status": 200,
+          "finishedAt": 1794224752863,
+          "model": {
+            "status": 200,
+            "kind": "archive",
+            "archive": {
+              "type": "author",
+              "authorId": 2,
+              "slug": "named-native-alice-87ae9b28",
+              "name": "Named Native alice",
+              "permalink": "/author/named-native-alice-87ae9b28/"
+            },
+            "query": {
+              "search": "",
+              "category": "",
+              "tag": "",
+              "author": 2,
+              "namedAuthor": {
+                "selected": {
+                  "type": "author",
+                  "authorId": 2,
+                  "slug": "named-native-alice-87ae9b28",
+                  "name": "Named Native alice",
+                  "permalink": "/author/named-native-alice-87ae9b28/"
+                },
+                "numericAuthor": 3
+              },
+              "date": null,
+              "archivePage": 1,
+              "contentPage": 1,
+              "commentPage": 2,
+              "blockPages": {
+                "query-4-page": 1
+              },
+              "values": {
+                "author": "3",
+                "author_name": "named-native-alice-87ae9b28",
+                "query-4-page": "1",
+                "commentPage": "2",
+                "page": "1"
+              }
+            },
+            "posts": []
+          }
+        },
+        {
+          "id": 47,
+          "method": "GET",
+          "path": "/?s=Alice",
+          "startedAt": 1794224753056,
+          "status": 200,
+          "finishedAt": 1794224753076
+        },
+        {
+          "id": 51,
+          "method": "GET",
+          "path": "/api/public/document?path=%2F%3Fs%3DAlice",
+          "startedAt": 1794224753103,
+          "status": 200,
+          "finishedAt": 1794224753122,
+          "model": {
+            "status": 200,
+            "kind": "archive",
+            "archive": null,
+            "query": {
+              "search": "Alice",
+              "category": "",
+              "tag": "",
+              "date": null,
+              "archivePage": 1,
+              "contentPage": 1,
+              "blockPages": {},
+              "values": {
+                "search": "Alice",
+                "page": "1"
+              }
+            },
+            "posts": [
+              {
+                "id": 6,
+                "authorId": 2,
+                "locked": false
+              }
+            ]
+          }
+        }
+      ],
+      "screenshots": [
+        "../screens/author-name-native-classic-search-before-empty-intersection.png",
+        "../screens/author-name-native-classic-search-after-lost-intersection.png"
+      ]
+    }
+  ]
+}

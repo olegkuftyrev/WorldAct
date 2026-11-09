@@ -1,0 +1,16 @@
+{
+  "scope": "Append-only verification after original permission receipt",
+  "exactConfiguredTargetPath": "[shared-dependency-owner]",
+  "realTargetPath": "[shared-dependency-owner]",
+  "uid": 501,
+  "currentMode": "0o755",
+  "targetIsSymlink": false,
+  "realParentIsSymlink": false,
+  "observedRepairTimeUTC": "2026-11-09T11:42:45.327266+00:00",
+  "verificationTimeUTC": "2026-11-09T11:44:20.946323+00:00",
+  "chmodStartTime": "unknown; not logged",
+  "duration": "unknown; not logged",
+  "contentByteAuditPerformed": false,
+  "observedOperation": "one directory chmod0600 followed by verified0755 restoration; no recursive/content operations",
+  "futureChmodPolicy": "lstat regular files only; never symlinks"
+}

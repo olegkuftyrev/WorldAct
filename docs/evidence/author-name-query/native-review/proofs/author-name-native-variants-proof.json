@@ -1,0 +1,1101 @@
+{
+  "code": "75e44f061f22fa19e850345c9976dbcfd9ab8196",
+  "tree": "71081d67bbc5d155c3c76cf930232b552c4f0ef6",
+  "nodeSha256": "e4521e807d51e57b619ff17018d653b144d2d2ea95a70025031a75d06c29be49",
+  "rows": [
+    {
+      "theme": "classic",
+      "scene": "native-GET-HEAD-alias-scalar-privacy-fixed-route-controls",
+      "observations": [
+        {
+          "label": "upper-dot",
+          "path": "/?author_name=NAMED.NATIVE.ALICE.87AE9B28",
+          "get": 200,
+          "head": 200,
+          "headBodyEmpty": true,
+          "kind": "archive",
+          "archive": {
+            "type": "author",
+            "authorId": 2,
+            "slug": "named-native-alice-87ae9b28",
+            "name": "Named Native alice",
+            "permalink": "/author/named-native-alice-87ae9b28/"
+          },
+          "namedAuthor": {
+            "selected": {
+              "type": "author",
+              "authorId": 2,
+              "slug": "named-native-alice-87ae9b28",
+              "name": "Named Native alice",
+              "permalink": "/author/named-native-alice-87ae9b28/"
+            }
+          },
+          "values": {
+            "author_name": "NAMED.NATIVE.ALICE.87AE9B28",
+            "page": "1"
+          },
+          "contentPage": 1,
+          "posts": [
+            {
+              "id": 6,
+              "authorId": 2
+            }
+          ],
+          "noPrivateProtectedBody": true,
+          "bodySecond": false,
+          "bodyFirst": false
+        },
+        {
+          "label": "slash-final",
+          "path": "/?author_name=prefix%2Fnamed-native-alice-87ae9b28%2F",
+          "get": 200,
+          "head": 200,
+          "headBodyEmpty": true,
+          "kind": "archive",
+          "archive": {
+            "type": "author",
+            "authorId": 2,
+            "slug": "named-native-alice-87ae9b28",
+            "name": "Named Native alice",
+            "permalink": "/author/named-native-alice-87ae9b28/"
+          },
+          "namedAuthor": {
+            "selected": {
+              "type": "author",
+              "authorId": 2,
+              "slug": "named-native-alice-87ae9b28",
+              "name": "Named Native alice",
+              "permalink": "/author/named-native-alice-87ae9b28/"
+            }
+          },
+          "values": {
+            "author_name": "prefix/named-native-alice-87ae9b28/",
+            "page": "1"
+          },
+          "contentPage": 1,
+          "posts": [
+            {
+              "id": 6,
+              "authorId": 2
+            }
+          ],
+          "noPrivateProtectedBody": true,
+          "bodySecond": false,
+          "bodyFirst": false
+        },
+        {
+          "label": "literal-zero-last",
+          "path": "/?author_name=named-native-alice-87ae9b28%2F0",
+          "get": 200,
+          "head": 200,
+          "headBodyEmpty": true,
+          "kind": "archive",
+          "archive": {
+            "type": "author",
+            "authorId": 2,
+            "slug": "named-native-alice-87ae9b28",
+            "name": "Named Native alice",
+            "permalink": "/author/named-native-alice-87ae9b28/"
+          },
+          "namedAuthor": {
+            "selected": {
+              "type": "author",
+              "authorId": 2,
+              "slug": "named-native-alice-87ae9b28",
+              "name": "Named Native alice",
+              "permalink": "/author/named-native-alice-87ae9b28/"
+            }
+          },
+          "values": {
+            "author_name": "named-native-alice-87ae9b28/0",
+            "page": "1"
+          },
+          "contentPage": 1,
+          "posts": [
+            {
+              "id": 6,
+              "authorId": 2
+            }
+          ],
+          "noPrivateProtectedBody": true,
+          "bodySecond": false,
+          "bodyFirst": false
+        },
+        {
+          "label": "literal-zero-prior",
+          "path": "/?author_name=named-native-alice-87ae9b28%2F0%2F",
+          "get": 404,
+          "head": 404,
+          "headBodyEmpty": true,
+          "kind": "not-found",
+          "archive": null,
+          "namedAuthor": {
+            "selected": null
+          },
+          "values": {
+            "author_name": "named-native-alice-87ae9b28/0/",
+            "page": "1"
+          },
+          "contentPage": 1,
+          "posts": [],
+          "noPrivateProtectedBody": true,
+          "bodySecond": false,
+          "bodyFirst": false
+        },
+        {
+          "label": "double-trailing",
+          "path": "/?author_name=named-native-alice-87ae9b28%2F%2F",
+          "get": 404,
+          "head": 404,
+          "headBodyEmpty": true,
+          "kind": "not-found",
+          "archive": null,
+          "namedAuthor": {
+            "selected": null
+          },
+          "values": {
+            "author_name": "named-native-alice-87ae9b28//",
+            "page": "1"
+          },
+          "contentPage": 1,
+          "posts": [],
+          "noPrivateProtectedBody": true,
+          "bodySecond": false,
+          "bodyFirst": false
+        },
+        {
+          "label": "exact-empty",
+          "path": "/?author_name=",
+          "get": 200,
+          "head": 200,
+          "headBodyEmpty": true,
+          "kind": "front-page",
+          "archive": null,
+          "values": {},
+          "postId": 10,
+          "locked": false,
+          "contentPage": 1,
+          "posts": [],
+          "noPrivateProtectedBody": true,
+          "bodySecond": false,
+          "bodyFirst": true
+        },
+        {
+          "label": "whitespace-unknown",
+          "path": "/?author_name=+",
+          "get": 404,
+          "head": 404,
+          "headBodyEmpty": true,
+          "kind": "not-found",
+          "archive": null,
+          "namedAuthor": {
+            "selected": null
+          },
+          "values": {
+            "author_name": " ",
+            "page": "1"
+          },
+          "contentPage": 1,
+          "posts": [],
+          "noPrivateProtectedBody": true,
+          "bodySecond": false,
+          "bodyFirst": false
+        },
+        {
+          "label": "encoded-key",
+          "path": "/?%61uthor_name=named-native-alice-87ae9b28",
+          "get": 200,
+          "head": 200,
+          "headBodyEmpty": true,
+          "kind": "archive",
+          "archive": {
+            "type": "author",
+            "authorId": 2,
+            "slug": "named-native-alice-87ae9b28",
+            "name": "Named Native alice",
+            "permalink": "/author/named-native-alice-87ae9b28/"
+          },
+          "namedAuthor": {
+            "selected": {
+              "type": "author",
+              "authorId": 2,
+              "slug": "named-native-alice-87ae9b28",
+              "name": "Named Native alice",
+              "permalink": "/author/named-native-alice-87ae9b28/"
+            }
+          },
+          "values": {
+            "author_name": "named-native-alice-87ae9b28",
+            "page": "1"
+          },
+          "contentPage": 1,
+          "posts": [
+            {
+              "id": 6,
+              "authorId": 2
+            }
+          ],
+          "noPrivateProtectedBody": true,
+          "bodySecond": false,
+          "bodyFirst": false
+        },
+        {
+          "label": "encoded-duplicate",
+          "path": "/?author_name=named-native-alice-87ae9b28&%61uthor_name=named-native-alice-87ae9b28",
+          "get": 400,
+          "head": 400,
+          "headBodyEmpty": true,
+          "noPrivateProtectedBody": true,
+          "bodySecond": false,
+          "bodyFirst": false
+        },
+        {
+          "label": "encoded-nested",
+          "path": "/?author_name%5B%5D=named-native-alice-87ae9b28",
+          "get": 400,
+          "head": 400,
+          "headBodyEmpty": true,
+          "noPrivateProtectedBody": true,
+          "bodySecond": false,
+          "bodyFirst": false
+        },
+        {
+          "label": "invalid-escape",
+          "path": "/?author_name=%ZZ",
+          "get": 400,
+          "head": 400,
+          "headBodyEmpty": true,
+          "noPrivateProtectedBody": true,
+          "bodySecond": false,
+          "bodyFirst": false
+        },
+        {
+          "label": "private-only",
+          "path": "/?author_name=named-native-hidden-87ae9b28",
+          "get": 200,
+          "head": 200,
+          "headBodyEmpty": true,
+          "kind": "archive",
+          "archive": {
+            "type": "author",
+            "authorId": 5,
+            "slug": "named-native-hidden-87ae9b28",
+            "name": "Named Native hidden",
+            "permalink": "/author/named-native-hidden-87ae9b28/"
+          },
+          "namedAuthor": {
+            "selected": {
+              "type": "author",
+              "authorId": 5,
+              "slug": "named-native-hidden-87ae9b28",
+              "name": "Named Native hidden",
+              "permalink": "/author/named-native-hidden-87ae9b28/"
+            }
+          },
+          "values": {
+            "author_name": "named-native-hidden-87ae9b28",
+            "page": "1"
+          },
+          "contentPage": 1,
+          "posts": [],
+          "noPrivateProtectedBody": true,
+          "bodySecond": false,
+          "bodyFirst": false
+        },
+        {
+          "label": "excessive",
+          "path": "/?author_name=named-native-alice-87ae9b28&page=999",
+          "get": 404,
+          "head": 404,
+          "headBodyEmpty": true,
+          "kind": "not-found",
+          "archive": {
+            "type": "author",
+            "authorId": 2,
+            "slug": "named-native-alice-87ae9b28",
+            "name": "Named Native alice",
+            "permalink": "/author/named-native-alice-87ae9b28/"
+          },
+          "namedAuthor": {
+            "selected": {
+              "type": "author",
+              "authorId": 2,
+              "slug": "named-native-alice-87ae9b28",
+              "name": "Named Native alice",
+              "permalink": "/author/named-native-alice-87ae9b28/"
+            }
+          },
+          "values": {
+            "author_name": "named-native-alice-87ae9b28",
+            "page": "999"
+          },
+          "contentPage": 1,
+          "posts": [],
+          "noPrivateProtectedBody": true,
+          "bodySecond": false,
+          "bodyFirst": false
+        },
+        {
+          "label": "reserved-unknown",
+          "path": "/author/no-native-such-person/?author_name=named-native-alice-87ae9b28",
+          "get": 404,
+          "head": 404,
+          "headBodyEmpty": true,
+          "kind": "not-found",
+          "archive": null,
+          "values": {
+            "author_name": "named-native-alice-87ae9b28",
+            "page": "1"
+          },
+          "contentPage": 1,
+          "posts": [],
+          "noPrivateProtectedBody": true,
+          "bodySecond": false,
+          "bodyFirst": false
+        },
+        {
+          "label": "pretty-conflict",
+          "path": "/author/named-native-alice-87ae9b28/?author_name=named-native-bob-87ae9b28",
+          "get": 400,
+          "head": 400,
+          "headBodyEmpty": true,
+          "noPrivateProtectedBody": true,
+          "bodySecond": false,
+          "bodyFirst": false
+        },
+        {
+          "label": "unknown-matched-taxonomy",
+          "path": "/category/named-native-news-87ae9b28/?author_name=no-native-such-person",
+          "get": 200,
+          "head": 200,
+          "headBodyEmpty": true,
+          "kind": "archive",
+          "archive": {
+            "id": 2,
+            "taxonomy": "category",
+            "slug": "named-native-news-87ae9b28",
+            "name": "Named Native News"
+          },
+          "namedAuthor": {
+            "selected": null
+          },
+          "values": {
+            "author_name": "no-native-such-person",
+            "category": "named-native-news-87ae9b28",
+            "page": "1"
+          },
+          "contentPage": 1,
+          "posts": [],
+          "noPrivateProtectedBody": true,
+          "bodySecond": false,
+          "bodyFirst": false
+        },
+        {
+          "label": "plain-fixed",
+          "path": "/?p=4&page=2&author_name=named-native-bob-87ae9b28&query-4-page=2&commentPage=1",
+          "get": 200,
+          "head": 200,
+          "headBodyEmpty": true,
+          "kind": "singular",
+          "archive": null,
+          "values": {
+            "page": "2",
+            "author_name": "named-native-bob-87ae9b28",
+            "query-4-page": "2",
+            "commentPage": "1"
+          },
+          "postId": 4,
+          "locked": false,
+          "contentPage": 2,
+          "posts": [],
+          "noPrivateProtectedBody": true,
+          "bodySecond": true,
+          "bodyFirst": false
+        },
+        {
+          "label": "numeric-child",
+          "path": "/named-native-parent/23/?page=2&author_name=named-native-bob-87ae9b28&query-4-page=2&commentPage=1",
+          "get": 200,
+          "head": 200,
+          "headBodyEmpty": true,
+          "kind": "singular",
+          "archive": null,
+          "values": {
+            "page": "2",
+            "author_name": "named-native-bob-87ae9b28",
+            "query-4-page": "2",
+            "commentPage": "1"
+          },
+          "postId": 13,
+          "locked": false,
+          "contentPage": 2,
+          "posts": [],
+          "noPrivateProtectedBody": true,
+          "bodySecond": true,
+          "bodyFirst": false
+        },
+        {
+          "label": "protected-body",
+          "path": "/named-native-locked-alice/?page=2&author_name=named-native-bob-87ae9b28&query-4-page=2&commentPage=1",
+          "get": 200,
+          "head": 200,
+          "headBodyEmpty": true,
+          "kind": "singular",
+          "archive": null,
+          "values": {
+            "page": "2",
+            "author_name": "named-native-bob-87ae9b28",
+            "query-4-page": "2",
+            "commentPage": "1"
+          },
+          "postId": 8,
+          "locked": true,
+          "contentPage": 2,
+          "posts": [],
+          "noPrivateProtectedBody": true,
+          "bodySecond": false,
+          "bodyFirst": false
+        }
+      ],
+      "browserEncoded": {
+        "boot": {
+          "archive": {
+            "authorId": 2,
+            "name": "Named Native alice",
+            "permalink": "/author/named-native-alice-87ae9b28/",
+            "slug": "named-native-alice-87ae9b28",
+            "type": "author"
+          },
+          "kind": "archive",
+          "posts": [
+            {
+              "authorId": 2,
+              "id": 6,
+              "locked": false
+            }
+          ],
+          "query": {
+            "archivePage": 1,
+            "author": 2,
+            "blockPages": {},
+            "category": "",
+            "contentPage": 1,
+            "date": null,
+            "namedAuthor": {
+              "selected": {
+                "authorId": 2,
+                "name": "Named Native alice",
+                "permalink": "/author/named-native-alice-87ae9b28/",
+                "slug": "named-native-alice-87ae9b28",
+                "type": "author"
+              }
+            },
+            "search": "",
+            "tag": "",
+            "values": {
+              "author_name": "named-native-alice-87ae9b28",
+              "page": "1"
+            }
+          },
+          "status": 200
+        },
+        "canonicalCount": 1,
+        "errors": [],
+        "heading": "Author: Named Native alice",
+        "historyLength": 36,
+        "originalSSRNodeRetained": true,
+        "overflow": false,
+        "path": "/?%61uthor_name=named-native-alice-87ae9b28",
+        "robotsCount": 0,
+        "text": "WorldAct\nNamed Native Journal\nNamed Native Numeric Child\nNamed Native Parent\nNamed Native Static Front\nSample Page\n\nNAMED NATIVE AUTHOR TEMPLATE\n\nAuthor: Named Native alice\nSearch\nSearch\nNamed Native Alice 3\n\nNATIVE NAMED FIRST BODY Named Native Alice 3\n\nPages: 1 2\n\n1 2 3 4\nNext Page\n← Newer posts\n1 of 4\nOlder posts →\nWorldAct\n\nJust another WorldAct site\n\nBlog\nNamed Native Journal\nNamed Native Numeric Child\nNamed Native Parent\nNamed Native Static Front\n\nDesigned with WorldAct\n\nLog in"
+      },
+      "browserProtected": {
+        "boot": {
+          "archive": null,
+          "kind": "singular",
+          "postId": 8,
+          "posts": [],
+          "query": {
+            "archivePage": 1,
+            "blockPages": {},
+            "category": "",
+            "contentPage": 2,
+            "date": null,
+            "search": "",
+            "tag": "",
+            "values": {
+              "author_name": "named-native-bob-87ae9b28",
+              "page": "2"
+            }
+          },
+          "status": 200
+        },
+        "canonicalCount": 1,
+        "errors": [],
+        "heading": "Named Native Locked Alice",
+        "historyLength": 37,
+        "originalSSRNodeRetained": true,
+        "overflow": false,
+        "path": "/named-native-locked-alice/?page=2&author_name=named-native-bob-87ae9b28",
+        "robotsCount": 0,
+        "text": "WorldAct\nNamed Native Journal\nNamed Native Numeric Child\nNamed Native Parent\nNamed Native Static Front\nSample Page\nNamed Native Locked Alice\n\nFebruary 3, 2000by Named Native alice\n\nThis content is password protected. To view it please enter your password below:\n\nPassword\nEnter\nWorldAct\n\nJust another WorldAct site\n\nBlog\nNamed Native Journal\nNamed Native Numeric Child\nNamed Native Parent\nNamed Native Static Front\n\nDesigned with WorldAct\n\nLog in"
+      },
+      "browserDuplicate": {
+        "text": "{\"error\":\"Use a single scalar author query value.\"}",
+        "expectedStatus": 400
+      },
+      "screenshots": [
+        "../screens/author-name-native-classic-encoded-key-375.png",
+        "../screens/author-name-native-classic-protected-body-375.png",
+        "../screens/author-name-native-classic-duplicate-error-375.png"
+      ]
+    },
+    {
+      "theme": "twentytwentyfive",
+      "scene": "native-GET-HEAD-alias-scalar-privacy-fixed-route-controls",
+      "observations": [
+        {
+          "label": "upper-dot",
+          "path": "/?author_name=NAMED.NATIVE.ALICE.87AE9B28",
+          "get": 200,
+          "head": 200,
+          "headBodyEmpty": true,
+          "kind": "archive",
+          "archive": {
+            "type": "author",
+            "authorId": 2,
+            "slug": "named-native-alice-87ae9b28",
+            "name": "Named Native alice",
+            "permalink": "/author/named-native-alice-87ae9b28/"
+          },
+          "namedAuthor": {
+            "selected": {
+              "type": "author",
+              "authorId": 2,
+              "slug": "named-native-alice-87ae9b28",
+              "name": "Named Native alice",
+              "permalink": "/author/named-native-alice-87ae9b28/"
+            }
+          },
+          "values": {
+            "author_name": "NAMED.NATIVE.ALICE.87AE9B28",
+            "page": "1"
+          },
+          "contentPage": 1,
+          "posts": [
+            {
+              "id": 6,
+              "authorId": 2
+            }
+          ],
+          "noPrivateProtectedBody": true,
+          "bodySecond": false,
+          "bodyFirst": false
+        },
+        {
+          "label": "slash-final",
+          "path": "/?author_name=prefix%2Fnamed-native-alice-87ae9b28%2F",
+          "get": 200,
+          "head": 200,
+          "headBodyEmpty": true,
+          "kind": "archive",
+          "archive": {
+            "type": "author",
+            "authorId": 2,
+            "slug": "named-native-alice-87ae9b28",
+            "name": "Named Native alice",
+            "permalink": "/author/named-native-alice-87ae9b28/"
+          },
+          "namedAuthor": {
+            "selected": {
+              "type": "author",
+              "authorId": 2,
+              "slug": "named-native-alice-87ae9b28",
+              "name": "Named Native alice",
+              "permalink": "/author/named-native-alice-87ae9b28/"
+            }
+          },
+          "values": {
+            "author_name": "prefix/named-native-alice-87ae9b28/",
+            "page": "1"
+          },
+          "contentPage": 1,
+          "posts": [
+            {
+              "id": 6,
+              "authorId": 2
+            }
+          ],
+          "noPrivateProtectedBody": true,
+          "bodySecond": false,
+          "bodyFirst": false
+        },
+        {
+          "label": "literal-zero-last",
+          "path": "/?author_name=named-native-alice-87ae9b28%2F0",
+          "get": 200,
+          "head": 200,
+          "headBodyEmpty": true,
+          "kind": "archive",
+          "archive": {
+            "type": "author",
+            "authorId": 2,
+            "slug": "named-native-alice-87ae9b28",
+            "name": "Named Native alice",
+            "permalink": "/author/named-native-alice-87ae9b28/"
+          },
+          "namedAuthor": {
+            "selected": {
+              "type": "author",
+              "authorId": 2,
+              "slug": "named-native-alice-87ae9b28",
+              "name": "Named Native alice",
+              "permalink": "/author/named-native-alice-87ae9b28/"
+            }
+          },
+          "values": {
+            "author_name": "named-native-alice-87ae9b28/0",
+            "page": "1"
+          },
+          "contentPage": 1,
+          "posts": [
+            {
+              "id": 6,
+              "authorId": 2
+            }
+          ],
+          "noPrivateProtectedBody": true,
+          "bodySecond": false,
+          "bodyFirst": false
+        },
+        {
+          "label": "literal-zero-prior",
+          "path": "/?author_name=named-native-alice-87ae9b28%2F0%2F",
+          "get": 404,
+          "head": 404,
+          "headBodyEmpty": true,
+          "kind": "not-found",
+          "archive": null,
+          "namedAuthor": {
+            "selected": null
+          },
+          "values": {
+            "author_name": "named-native-alice-87ae9b28/0/",
+            "page": "1"
+          },
+          "contentPage": 1,
+          "posts": [],
+          "noPrivateProtectedBody": true,
+          "bodySecond": false,
+          "bodyFirst": false
+        },
+        {
+          "label": "double-trailing",
+          "path": "/?author_name=named-native-alice-87ae9b28%2F%2F",
+          "get": 404,
+          "head": 404,
+          "headBodyEmpty": true,
+          "kind": "not-found",
+          "archive": null,
+          "namedAuthor": {
+            "selected": null
+          },
+          "values": {
+            "author_name": "named-native-alice-87ae9b28//",
+            "page": "1"
+          },
+          "contentPage": 1,
+          "posts": [],
+          "noPrivateProtectedBody": true,
+          "bodySecond": false,
+          "bodyFirst": false
+        },
+        {
+          "label": "exact-empty",
+          "path": "/?author_name=",
+          "get": 200,
+          "head": 200,
+          "headBodyEmpty": true,
+          "kind": "front-page",
+          "archive": null,
+          "values": {},
+          "postId": 10,
+          "locked": false,
+          "contentPage": 1,
+          "posts": [],
+          "noPrivateProtectedBody": true,
+          "bodySecond": false,
+          "bodyFirst": true
+        },
+        {
+          "label": "whitespace-unknown",
+          "path": "/?author_name=+",
+          "get": 404,
+          "head": 404,
+          "headBodyEmpty": true,
+          "kind": "not-found",
+          "archive": null,
+          "namedAuthor": {
+            "selected": null
+          },
+          "values": {
+            "author_name": " ",
+            "page": "1"
+          },
+          "contentPage": 1,
+          "posts": [],
+          "noPrivateProtectedBody": true,
+          "bodySecond": false,
+          "bodyFirst": false
+        },
+        {
+          "label": "encoded-key",
+          "path": "/?%61uthor_name=named-native-alice-87ae9b28",
+          "get": 200,
+          "head": 200,
+          "headBodyEmpty": true,
+          "kind": "archive",
+          "archive": {
+            "type": "author",
+            "authorId": 2,
+            "slug": "named-native-alice-87ae9b28",
+            "name": "Named Native alice",
+            "permalink": "/author/named-native-alice-87ae9b28/"
+          },
+          "namedAuthor": {
+            "selected": {
+              "type": "author",
+              "authorId": 2,
+              "slug": "named-native-alice-87ae9b28",
+              "name": "Named Native alice",
+              "permalink": "/author/named-native-alice-87ae9b28/"
+            }
+          },
+          "values": {
+            "author_name": "named-native-alice-87ae9b28",
+            "page": "1"
+          },
+          "contentPage": 1,
+          "posts": [
+            {
+              "id": 6,
+              "authorId": 2
+            }
+          ],
+          "noPrivateProtectedBody": true,
+          "bodySecond": false,
+          "bodyFirst": false
+        },
+        {
+          "label": "encoded-duplicate",
+          "path": "/?author_name=named-native-alice-87ae9b28&%61uthor_name=named-native-alice-87ae9b28",
+          "get": 400,
+          "head": 400,
+          "headBodyEmpty": true,
+          "noPrivateProtectedBody": true,
+          "bodySecond": false,
+          "bodyFirst": false
+        },
+        {
+          "label": "encoded-nested",
+          "path": "/?author_name%5B%5D=named-native-alice-87ae9b28",
+          "get": 400,
+          "head": 400,
+          "headBodyEmpty": true,
+          "noPrivateProtectedBody": true,
+          "bodySecond": false,
+          "bodyFirst": false
+        },
+        {
+          "label": "invalid-escape",
+          "path": "/?author_name=%ZZ",
+          "get": 400,
+          "head": 400,
+          "headBodyEmpty": true,
+          "noPrivateProtectedBody": true,
+          "bodySecond": false,
+          "bodyFirst": false
+        },
+        {
+          "label": "private-only",
+          "path": "/?author_name=named-native-hidden-87ae9b28",
+          "get": 200,
+          "head": 200,
+          "headBodyEmpty": true,
+          "kind": "archive",
+          "archive": {
+            "type": "author",
+            "authorId": 5,
+            "slug": "named-native-hidden-87ae9b28",
+            "name": "Named Native hidden",
+            "permalink": "/author/named-native-hidden-87ae9b28/"
+          },
+          "namedAuthor": {
+            "selected": {
+              "type": "author",
+              "authorId": 5,
+              "slug": "named-native-hidden-87ae9b28",
+              "name": "Named Native hidden",
+              "permalink": "/author/named-native-hidden-87ae9b28/"
+            }
+          },
+          "values": {
+            "author_name": "named-native-hidden-87ae9b28",
+            "page": "1"
+          },
+          "contentPage": 1,
+          "posts": [],
+          "noPrivateProtectedBody": true,
+          "bodySecond": false,
+          "bodyFirst": false
+        },
+        {
+          "label": "excessive",
+          "path": "/?author_name=named-native-alice-87ae9b28&page=999",
+          "get": 404,
+          "head": 404,
+          "headBodyEmpty": true,
+          "kind": "not-found",
+          "archive": {
+            "type": "author",
+            "authorId": 2,
+            "slug": "named-native-alice-87ae9b28",
+            "name": "Named Native alice",
+            "permalink": "/author/named-native-alice-87ae9b28/"
+          },
+          "namedAuthor": {
+            "selected": {
+              "type": "author",
+              "authorId": 2,
+              "slug": "named-native-alice-87ae9b28",
+              "name": "Named Native alice",
+              "permalink": "/author/named-native-alice-87ae9b28/"
+            }
+          },
+          "values": {
+            "author_name": "named-native-alice-87ae9b28",
+            "page": "999"
+          },
+          "contentPage": 1,
+          "posts": [],
+          "noPrivateProtectedBody": true,
+          "bodySecond": false,
+          "bodyFirst": false
+        },
+        {
+          "label": "reserved-unknown",
+          "path": "/author/no-native-such-person/?author_name=named-native-alice-87ae9b28",
+          "get": 404,
+          "head": 404,
+          "headBodyEmpty": true,
+          "kind": "not-found",
+          "archive": null,
+          "values": {
+            "author_name": "named-native-alice-87ae9b28",
+            "page": "1"
+          },
+          "contentPage": 1,
+          "posts": [],
+          "noPrivateProtectedBody": true,
+          "bodySecond": false,
+          "bodyFirst": false
+        },
+        {
+          "label": "pretty-conflict",
+          "path": "/author/named-native-alice-87ae9b28/?author_name=named-native-bob-87ae9b28",
+          "get": 400,
+          "head": 400,
+          "headBodyEmpty": true,
+          "noPrivateProtectedBody": true,
+          "bodySecond": false,
+          "bodyFirst": false
+        },
+        {
+          "label": "unknown-matched-taxonomy",
+          "path": "/category/named-native-news-87ae9b28/?author_name=no-native-such-person",
+          "get": 200,
+          "head": 200,
+          "headBodyEmpty": true,
+          "kind": "archive",
+          "archive": {
+            "id": 2,
+            "taxonomy": "category",
+            "slug": "named-native-news-87ae9b28",
+            "name": "Named Native News"
+          },
+          "namedAuthor": {
+            "selected": null
+          },
+          "values": {
+            "author_name": "no-native-such-person",
+            "category": "named-native-news-87ae9b28",
+            "page": "1"
+          },
+          "contentPage": 1,
+          "posts": [],
+          "noPrivateProtectedBody": true,
+          "bodySecond": false,
+          "bodyFirst": false
+        },
+        {
+          "label": "plain-fixed",
+          "path": "/?p=4&page=2&author_name=named-native-bob-87ae9b28&query-4-page=2&commentPage=1",
+          "get": 200,
+          "head": 200,
+          "headBodyEmpty": true,
+          "kind": "singular",
+          "archive": null,
+          "values": {
+            "page": "2",
+            "author_name": "named-native-bob-87ae9b28",
+            "query-4-page": "2",
+            "commentPage": "1"
+          },
+          "postId": 4,
+          "locked": false,
+          "contentPage": 2,
+          "posts": [],
+          "noPrivateProtectedBody": true,
+          "bodySecond": true,
+          "bodyFirst": false
+        },
+        {
+          "label": "numeric-child",
+          "path": "/named-native-parent/23/?page=2&author_name=named-native-bob-87ae9b28&query-4-page=2&commentPage=1",
+          "get": 200,
+          "head": 200,
+          "headBodyEmpty": true,
+          "kind": "singular",
+          "archive": null,
+          "values": {
+            "page": "2",
+            "author_name": "named-native-bob-87ae9b28",
+            "query-4-page": "2",
+            "commentPage": "1"
+          },
+          "postId": 13,
+          "locked": false,
+          "contentPage": 2,
+          "posts": [],
+          "noPrivateProtectedBody": true,
+          "bodySecond": true,
+          "bodyFirst": false
+        },
+        {
+          "label": "protected-body",
+          "path": "/named-native-locked-alice/?page=2&author_name=named-native-bob-87ae9b28&query-4-page=2&commentPage=1",
+          "get": 200,
+          "head": 200,
+          "headBodyEmpty": true,
+          "kind": "singular",
+          "archive": null,
+          "values": {
+            "page": "2",
+            "author_name": "named-native-bob-87ae9b28",
+            "query-4-page": "2",
+            "commentPage": "1"
+          },
+          "postId": 8,
+          "locked": true,
+          "contentPage": 2,
+          "posts": [],
+          "noPrivateProtectedBody": true,
+          "bodySecond": false,
+          "bodyFirst": false
+        }
+      ],
+      "browserEncoded": {
+        "boot": {
+          "archive": {
+            "authorId": 2,
+            "name": "Named Native alice",
+            "permalink": "/author/named-native-alice-87ae9b28/",
+            "slug": "named-native-alice-87ae9b28",
+            "type": "author"
+          },
+          "kind": "archive",
+          "posts": [
+            {
+              "authorId": 2,
+              "id": 6,
+              "locked": false
+            }
+          ],
+          "query": {
+            "archivePage": 1,
+            "author": 2,
+            "blockPages": {},
+            "category": "",
+            "contentPage": 1,
+            "date": null,
+            "namedAuthor": {
+              "selected": {
+                "authorId": 2,
+                "name": "Named Native alice",
+                "permalink": "/author/named-native-alice-87ae9b28/",
+                "slug": "named-native-alice-87ae9b28",
+                "type": "author"
+              }
+            },
+            "search": "",
+            "tag": "",
+            "values": {
+              "author_name": "named-native-alice-87ae9b28",
+              "page": "1"
+            }
+          },
+          "status": 200
+        },
+        "canonicalCount": 1,
+        "errors": [],
+        "heading": "Author: Named Native alice",
+        "historyLength": 39,
+        "originalSSRNodeRetained": true,
+        "overflow": false,
+        "path": "/?%61uthor_name=named-native-alice-87ae9b28",
+        "robotsCount": 0,
+        "text": "NAMED NATIVE AUTHOR TEMPLATE\n\nAuthor: Named Native alice\nSearch\nSearch\nNamed Native Alice 3\n\nNATIVE NAMED FIRST BODY Named Native Alice 3\n\nPages: 1 2\n\n1 2 3 4\nNext Page"
+      },
+      "browserProtected": {
+        "boot": {
+          "archive": null,
+          "kind": "singular",
+          "postId": 8,
+          "posts": [],
+          "query": {
+            "archivePage": 1,
+            "blockPages": {},
+            "category": "",
+            "contentPage": 2,
+            "date": null,
+            "search": "",
+            "tag": "",
+            "values": {
+              "author_name": "named-native-bob-87ae9b28",
+              "page": "2"
+            }
+          },
+          "status": 200
+        },
+        "canonicalCount": 1,
+        "errors": [],
+        "heading": "Protected: Named Native Locked Alice",
+        "historyLength": 40,
+        "originalSSRNodeRetained": true,
+        "overflow": false,
+        "path": "/named-native-locked-alice/?page=2&author_name=named-native-bob-87ae9b28",
+        "robotsCount": 0,
+        "text": "WorldAct\n\nProtected: Named Native Locked Alice\n\nWritten by\n\nNamed Native alice\n\nin\n\nUncategorized\n\nThis content is password protected. To view it please enter your password below:\n\nPassword: Enter\n\nNext PostNamed Native Alice 1 →\nMORE POSTS\nHello world!\nNovember 9, 2026\nNamed Native Bob\nFebruary 3, 2001\nNamed Native Alice 3\nFebruary 3, 2001\nNamed Native Alice 2\nFebruary 2, 2001\nWorldAct\n\nJust another WorldAct site\n\nBlog\nAbout\nFAQs\nAuthors\nEvents\nShop\nPatterns\nThemes\n\nTwenty Twenty-Five\n\nDesigned with WordPress"
+      },
+      "browserDuplicate": {
+        "text": "{\"error\":\"Use a single scalar author query value.\"}",
+        "expectedStatus": 400
+      },
+      "screenshots": [
+        "../screens/author-name-native-twentytwentyfive-encoded-key-375.png",
+        "../screens/author-name-native-twentytwentyfive-protected-body-375.png",
+        "../screens/author-name-native-twentytwentyfive-duplicate-error-375.png"
+      ]
+    }
+  ]
+}

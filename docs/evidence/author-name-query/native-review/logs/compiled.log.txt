@@ -1,0 +1,85 @@
+WorldAct database migrated.
+WorldAct seeded. Sign in with username admin or your administrator email.
+Running against a disposable local database and upload directory; outgoing mail uses the local outbox.
+✔ named root paging and native search retain raw name, original numeric intersection and independent counters (10.798416ms)
+✔ a known empty named author remains an archive without rendering a configured front page (1.617041ms)
+✔ safe-empty unknown name with search keeps search identity and visible filters instead of not-found (1.143833ms)
+✔ named filters keep a resolved date archive heading rather than replacing it with presentation author (1.178208ms)
+✔ named filters keep posts-page title and expose Show all even for selected-null safe empty (2.078708ms)
+✔ named filter on a taxonomy keeps taxonomy title while search retains its existing priority (2.113125ms)
+✔ decoded recognized name keys resolve before flattening, including malformed nested and duplicate keys (0.280958ms)
+✔ legacy transport preserves original decoded name and numeric intersection rather than resolved identity (0.166542ms)
+✔ malformed recognized legacy name/numeric fields and exact-empty name reach server unchanged (0.5405ms)
+✔ minimal selected-null descriptor denotes a safe-empty listing while no descriptor remains unresolved (0.12625ms)
+✔ named query does not restore a static front page; exactly-empty name retains absent behavior (0.204291ms)
+✔ numeric-only mixed headings preserve their prior priority outside named descriptors (2.335833ms)
+✔ legacy source template priority changes only for named presentation descriptors (0.234417ms)
+✔ named legacy taxonomy transport retains visible contradictory filter for server path priority (0.091584ms)
+✔ named legacy date transport retains visible year and malformed original scalar shapes (0.0645ms)
+ℹ tests 15
+ℹ suites 0
+ℹ pass 15
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 324.207292
+✔ pretty author main paging replaces the suffix and preserves independent visible counters (3.008292ms)
+✔ slashless author paths and explicit visible identity retain their own URL policy (0.15925ms)
+✔ numeric aliases, Plain and ordinary archives retain query pagination (0.15375ms)
+✔ search resets only a recognized pretty author archive to its canonical base (0.106625ms)
+✔ Classic SSR uses normalized author identity with native pretty paging and search context (10.143791ms)
+✔ Classic SSR numeric alias keeps its actual author field and query page links (1.924375ms)
+ℹ tests 6
+ℹ suites 0
+ℹ pass 6
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 283.279459
+▶ public named author queries retain source intersections, listing identity and independent custom loops
+  ✔ root name selects the real persisted author archive and only that author's public rows (54.153375ms)
+  ✔ direct site applies the named filter instead of returning the home list (21.989708ms)
+  ✔ resolver and actual native GET/HEAD agree on the named archive (92.840375ms)
+  ✔ existing empty and private-only accounts have empty first page and paged404 (119.564458ms)
+  ✔ unknown nonempty names never become home and empty strings keep absent-name behavior (91.216584ms)
+  ✔ numeric and named constraints intersect while metadata selects the named user (58.423833ms)
+  ✔ unknown name keeps a no-match predicate for search and actually matched taxonomy exceptions (114.720917ms)
+  ✔ direct inherited template intersects name and original numeric constraint (10.952959ms)
+  ✔ source final component and ASCII aliases resolve while a second trailing slash is unknown (155.542166ms)
+  ✔ recognized duplicate nested array control and backslash named inputs fail400 (7.44275ms)
+  ✔ taxonomy and date path identity remains selected while name adds its author filter (107.602083ms)
+  ✔ pretty selected author rejects a contradictory or unknown named query (36.519542ms)
+  ✔ static root name is an archive and selected posts-page keeps identity with the added filter (116.846458ms)
+  ✔ fixed Plain and legacy singulars ignore valid name selector and retain body counters (140.431083ms)
+  ✔ non-inherited custom Query Loop retains its explicit author despite a named no-match listing (15.467625ms)
+✔ public named author queries retain source intersections, listing identity and independent custom loops (1631.139958ms)
+ℹ tests 16
+ℹ suites 0
+ℹ pass 16
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1972.230167
+{"nativeNamedQuery":"/?author_name=native-named-1794224279089","get":200,"head":200,"kind":"archive","posts":[{"id":12,"authorId":6}]}
+▶ actual named-query native GET and HEAD retain identity and no-match predicates
+  ✔ native known-name GET/HEAD select author archive rather than the home document (82.563917ms)
+{"nativeNamedQuery":"/?author_name=native-named-1794224279089-absent","get":404,"head":404,"kind":"not-found","posts":[]}
+  ✔ native unknown-name GET and HEAD are both404 (46.24325ms)
+{"nativeNamedQuery":"/?author_name=native-named-1794224279089-absent&search=NATIVE-NAMED-visible","get":200,"head":200,"kind":"archive","posts":[]}
+  ✔ actual native safe-empty search does not release unrelated main-list posts (48.305292ms)
+{"nativeNamedQuery":"/?author=6&author_name=admin","get":200,"head":200,"kind":"archive","posts":[]}
+  ✔ actual native numeric-name intersection is empty rather than silently keeping only numeric (42.097208ms)
+  ✔ direct site membership fails semantically if name is discarded (16.509834ms)
+✔ actual named-query native GET and HEAD retain identity and no-match predicates (444.841ms)
+ℹ tests 6
+ℹ suites 0
+ℹ pass 6
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 772.942209
+Isolated regression complete: 4 test files passed.

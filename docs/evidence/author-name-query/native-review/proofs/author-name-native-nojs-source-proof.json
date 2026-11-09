@@ -1,0 +1,75 @@
+{
+  "code": "75e44f061f22fa19e850345c9976dbcfd9ab8196",
+  "tree": "71081d67bbc5d155c3c76cf930232b552c4f0ef6",
+  "nodeSha256": "e4521e807d51e57b619ff17018d653b144d2d2ea95a70025031a75d06c29be49",
+  "rows": [
+    {
+      "theme": "twentytwentyfive",
+      "width": 375,
+      "scene": "genuine-script-disabled-password-and-comment-native303",
+      "ownedTargetOnly": true,
+      "scriptExecutionDisabledConfirmed": true,
+      "applicationLifecycleAbsent": true,
+      "modelAPIReads": 0,
+      "passwordPOST303": true,
+      "commentPOST303": true,
+      "secondProtectedBodyVisible": true,
+      "firstProtectedBodyAbsent": true,
+      "savedCommentVisible": true,
+      "finalQuery": {
+        "author_name": "named-native-bob-87ae9b28",
+        "commentPage": "1",
+        "page": "2",
+        "query-4-page": "2"
+      },
+      "requests": [
+        {
+          "id": 391,
+          "method": "GET",
+          "path": "/named-native-source-locked-alice/?page=2&author_name=named-native-bob-87ae9b28&query-4-page=2&commentPage=1",
+          "startedAt": 1794225401270,
+          "status": 200,
+          "finishedAt": 1794225401331
+        },
+        {
+          "id": 395,
+          "method": "POST",
+          "path": "/post-password",
+          "startedAt": 1794225401480,
+          "status": 303,
+          "location": "/named-native-source-locked-alice/?page=2&author_name=named-native-bob-87ae9b28&query-4-page=2&commentPage=1",
+          "finishedAt": 1794225401529
+        },
+        {
+          "id": 396,
+          "method": "GET",
+          "path": "/named-native-source-locked-alice/?page=2&author_name=named-native-bob-87ae9b28&query-4-page=2&commentPage=1",
+          "startedAt": 1794225401531,
+          "status": 200,
+          "finishedAt": 1794225401582
+        },
+        {
+          "id": 399,
+          "method": "POST",
+          "path": "/wp-comments-post.php",
+          "startedAt": 1794225401747,
+          "status": 303,
+          "location": "/named-native-source-locked-alice/?page=2&author_name=named-native-bob-87ae9b28&query-4-page=2&commentPage=1#comment-3",
+          "finishedAt": 1794225401769
+        },
+        {
+          "id": 400,
+          "method": "GET",
+          "path": "/named-native-source-locked-alice/?page=2&author_name=named-native-bob-87ae9b28&query-4-page=2&commentPage=1",
+          "startedAt": 1794225401771,
+          "status": 200,
+          "finishedAt": 1794225401817
+        }
+      ],
+      "screenshots": [
+        "../screens/author-name-native-twentytwentyfive-nojs-unlocked-375.png",
+        "../screens/author-name-native-twentytwentyfive-nojs-comment-375.png"
+      ]
+    }
+  ]
+}

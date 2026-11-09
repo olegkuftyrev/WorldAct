@@ -1,0 +1,19 @@
+{
+  "scope": "Default core/search only",
+  "runtimeUnchanged": true,
+  "code": "75e44f061f22fa19e850345c9976dbcfd9ab8196",
+  "sourceDecision": "../search-source-decision.md",
+  "sourceDecisionSha256": "16f4e70c844e3bd1efdfecf0a36b58d5e744c1d46c599f432f37ba97fb6b7b01",
+  "observedDefault": {
+    "action": "/",
+    "method": "get",
+    "fields": [
+      "s"
+    ],
+    "inheritsAmbientArchiveFilters": false
+  },
+  "originalExpectationReceiptsPreserved": true,
+  "classification": "Internal filtered-search expectation corrected to supplied WordPress source; no runtime or private-data disclosure finding.",
+  "localClassicArchiveForm": "Separately retains raw name/numeric intersection.",
+  "explicitAttributesQuery": "Unsupported by current renderer; future fidelity gap, out of scope and not certified here."
+}
