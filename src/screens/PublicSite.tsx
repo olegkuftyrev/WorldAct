@@ -11,7 +11,9 @@ import { readPlainPermalinkQuery } from "../../shared/plain-permalink-query";
 import { shouldResolveStaticFrontPage } from "../plainPermalinkRouting";
 import { publicArchivePageLocation, publicArchiveSearchPath } from "../publicArchiveLinks";
 import { selectPublicSourceTemplate } from "../../shared/public-routing";
-import type { PublicArchive } from "../../shared/public-document";
+import {hasNamedAuthorParameter,shouldResolveNamedAuthorQuery,legacyPublicAuthorQuery,isNamedAuthorListing} from "../publicAuthorQuery";
+import type { PublicResolvedListing } from "../publicAuthorQuery";
+import type { NamedAuthorSelection,PublicArchive } from "../../shared/public-document";
 import { scrollToMoreFragment } from "../contentFragments";
 import {enhancePlaylists} from "../playlists";
 import "@wordpress/block-library/build-style/style.css";
@@ -66,6 +68,8 @@ export default function PublicSite({
   notFound = false,
   contentPage,
   resolvedPostId,
+  namedAuthor,
+  listingKind,
 }: {
   detail?: boolean;
   page?: boolean;
@@ -75,6 +79,8 @@ export default function PublicSite({
   notFound?: boolean;
   contentPage?: number;
   resolvedPostId?: number;
+  namedAuthor?: NamedAuthorSelection;
+  listingKind?: "posts-page";
 }) {
   const { slug: routeSlug, id: previewId } = useParams(),
     { user, setUser } = useContext(Session);
@@ -89,7 +95,7 @@ export default function PublicSite({
     archive && "taxonomy" in archive && archive.taxonomy === "tag" ? archive.slug : params.get("tag");
   const dateArchive = archive && "type" in archive && archive.type === "date" ? archive : null;
   const routeAuthor = archive && "type" in archive && archive.type === "author" ? archive : null;
-  const authorFilter = routeAuthor?.authorId || params.get("author");
+  const authorFilter = namedAuthor ? namedAuthor.selected?.authorId : routeAuthor?.authorId || params.get("author");
   const dateQuery = new URLSearchParams();
   for (const key of ["year", "monthnum", "day", "m", "w"])
     if (params.get(key)) dateQuery.set(key, params.get(key)!);
@@ -118,9 +124,9 @@ export default function PublicSite({
     ["search", searchTerm],
     ["category", categoryFilter],
     ["tag", tagFilter],
-    ["author", authorFilter ? String(authorFilter) : null],
   ])
     if (value) publicQuery.set(key!, value);
+  for (const [key,value] of legacyPublicAuthorQuery(params,archive)) publicQuery.append(key,value);
   for (const [key, value] of new URLSearchParams(blockQuery))
     publicQuery.set(key, value);
   for (const [key, value] of dateQuery) publicQuery.set(key, value);
@@ -131,7 +137,7 @@ export default function PublicSite({
     templateQuery.set("contentPage",String(bodyPagination.page));
   }
   const siteQuery = new URLSearchParams(publicQuery);
-  if (routeAuthor) siteQuery.set("requestPath", requestLocation.pathname + requestLocation.search);
+  if (routeAuthor || hasNamedAuthorParameter(params)) siteQuery.set("requestPath", requestLocation.pathname + requestLocation.search);
   const design = useResource<PublicDesign>("/public/design");
   const site = useResource<{
     settings: Partial<Settings>;
@@ -240,12 +246,13 @@ export default function PublicSite({
     categoryFilter ||
     tagFilter ||
     authorFilter ||
+    namedAuthor ||
     hasDateFilter ||
     params.get("page"),
   );
   const frontPage = !detail && !notFound && !hasArchiveFilter ? site.data?.frontPage : null;
   const isFrontPage = Boolean(frontPage || (detail && post && settings?.frontPageMode === "page" && post.id === site.data?.frontPage?.id));
-  const isPostsPage = detail && settings?.frontPageMode === "page" && post?.id === site.data?.postsPage?.id;
+  const isPostsPage = listingKind === "posts-page" || detail && settings?.frontPageMode === "page" && post?.id === site.data?.postsPage?.id;
   const displaySingle = (detail && !isPostsPage) || Boolean(frontPage);
   const displayedPost = frontPage || post;
   const primaryMenu = design.data?.menus.find(
@@ -503,7 +510,7 @@ export default function PublicSite({
     search: Boolean(searchTerm),
     category: categoryFilter || undefined,
     tag: tagFilter || undefined,
-    author: Boolean(authorFilter),
+    author: !displaySingle && !isPostsPage && !hasDateFilter && Boolean(authorFilter),
     authorSlug: authorArchive?.slug,
     authorId: authorArchive?.authorId,
     date: hasDateFilter,
@@ -862,12 +869,12 @@ export default function PublicSite({
                       ? `Category: ${archive?.name || categoryFilter}`
                       : tagFilter
                         ? `Tag: ${archive?.name || tagFilter}`
-                        : authorFilter
+                        : authorFilter && !hasDateFilter && !isPostsPage
                           ? `Author: ${authorArchive?.name || "Posts"}`
                           : hasDateFilter
                             ? site.data?.archive?.name || dateArchive?.name || "Archives"
                           : isPostsPage
-                            ? post?.title || "Blog"
+                            ? post?.title || site.data?.postsPage?.title || "Blog"
                             : "Blog"}
                 </h1>
                 <form
@@ -898,7 +905,7 @@ export default function PublicSite({
                   {(searchTerm ||
                     categoryFilter ||
                     tagFilter ||
-                    authorFilter || hasDateFilter) && <Link to="/">Show all posts</Link>}
+                    authorFilter || namedAuthor || hasDateFilter) && <Link to="/">Show all posts</Link>}
                 </form>
                 <div className="public-posts">
                   {posts.map((item) => (
@@ -1347,12 +1354,11 @@ function Navigation({
 
 export function PermalinkResolver() {
   const location = useLocation();
-  const resource = useResource<{
+  const resource = useResource<PublicResolvedListing & {
     post?: Post;
-    archive?: PublicArchive;
     contentPage?: number;
   }>(`/public/resolve?path=${encodeURIComponent(location.pathname + location.search)}`);
-  if (resource.error === "This page could not be found." || resource.error === "Page not found." || resource.error === "Post not found.") return <PublicSite notFound />;
+  if (resource.error === "This page could not be found." || resource.error === "Page not found." || resource.error === "Post not found." || resource.error === "Named author listing not found.") return <PublicSite notFound />;
   if (resource.loading || resource.error)
     return (
       <div className="public-site">
@@ -1366,8 +1372,6 @@ export function PermalinkResolver() {
         </main>
       </div>
     );
-  if (resource.data?.archive)
-    return <PublicSite archive={resource.data.archive} />;
   if (resource.data?.post)
     return (
       <PublicSite
@@ -1378,13 +1382,17 @@ export function PermalinkResolver() {
         resolvedPostId={resource.data.post.id}
       />
     );
+  if (isNamedAuthorListing(resource.data))
+    return <PublicSite archive={resource.data?.archive || undefined} namedAuthor={resource.data!.namedAuthor} listingKind={resource.data?.kind} />;
+  if (resource.data?.archive)
+    return <PublicSite archive={resource.data.archive} />;
   return <PublicSite notFound />;
 }
 
 export function PublicRoot() {
   const location = useLocation();
   const identity = readPlainPermalinkQuery(new URLSearchParams(location.search));
-  return identity.kind === "none" ? <PublicSite /> : <PermalinkResolver />;
+  return identity.kind === "none" && !shouldResolveNamedAuthorQuery(new URLSearchParams(location.search)) ? <PublicSite /> : <PermalinkResolver />;
 }
 
 type CommentPagination = {
