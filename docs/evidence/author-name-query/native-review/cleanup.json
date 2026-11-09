@@ -1,0 +1,57 @@
+{
+  "scope": "Only disposable named-author native review resources",
+  "code": "75e44f061f22fa19e850345c9976dbcfd9ab8196",
+  "startedAtUTC": "2026-11-09T12:13:27.731Z",
+  "seedCount": 1,
+  "originalPrivateEvidencePreserved": true,
+  "mainTouched": false,
+  "foreignResourcesTouchedByCleanup": false,
+  "browserLoggedOutAndSessionNull": true,
+  "ownedVaultProfilesDeleted": 1,
+  "allOwnedBrowserSessionsClosed": true,
+  "ownedBrowserSessionCount": 5,
+  "serviceOwnership": [
+    {
+      "pid": 84735,
+      "physicalCwdVerified": true,
+      "expectedCommandVerified": true,
+      "ports": [
+        3035
+      ]
+    },
+    {
+      "pid": 86158,
+      "physicalCwdVerified": true,
+      "expectedCommandVerified": true,
+      "ports": [
+        3036,
+        3037
+      ]
+    }
+  ],
+  "ownedPortsFree": [
+    3035,
+    3036,
+    3037,
+    5195
+  ],
+  "noOwnedTransactionRemains": true,
+  "ownedUniqueDatabaseAbsent": true,
+  "ownedUploadsAbsent": true,
+  "dependencyOwnerVerification": {
+    "configuredTarget": "[shared-dependency-owner]",
+    "realTarget": "[shared-dependency-owner]",
+    "uid": 501,
+    "mode": "0755",
+    "targetIsSymlink": false,
+    "contentByteAuditPerformed": false,
+    "priorPermissionIncidentAcknowledged": true
+  },
+  "ownDependencyLinksRemoved": 2,
+  "ownCheckoutEnvAbsent": true,
+  "noSqlViewsFunctionsOrRuntimeHooksCreated": true,
+  "otherOwnersArchivesPreserved": true,
+  "originalCheckoutsAndBuildsRetained": true,
+  "ownedPrivateConfigAndFixtureFilesRemoved": true,
+  "completedAtUTC": "2026-11-09T12:13:28.620Z"
+}

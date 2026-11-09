@@ -1,0 +1,9 @@
+{
+  "kind": "review-harness permission error",
+  "cause": "chmod600 glob followed ownnode_modules symlink to dependency directory",
+  "observedModeBeforeRepair": "0600",
+  "restoredDirectoryMode": "0755",
+  "timeUTC": "2026-11-09T11:42:45.327266+00:00",
+  "dependencyContentEdited": false,
+  "runtimeFinding": false
+}

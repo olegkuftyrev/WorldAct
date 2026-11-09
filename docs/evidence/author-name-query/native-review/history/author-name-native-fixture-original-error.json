@@ -1,0 +1,7 @@
+{
+  "kind": "harness-only unsupported settings key before fixture creation",
+  "observedStatus": 400,
+  "observedError": "Request: Unrecognized key: \"commentWhitelist\"",
+  "beforeFixtureWrites": true,
+  "runtimeFinding": false
+}

@@ -1,0 +1,1999 @@
+{
+  "code": "75e44f061f22fa19e850345c9976dbcfd9ab8196",
+  "tree": "71081d67bbc5d155c3c76cf930232b552c4f0ef6",
+  "nodeSha256": "e4521e807d51e57b619ff17018d653b144d2d2ea95a70025031a75d06c29be49",
+  "rows": [
+    {
+      "theme": "classic",
+      "width": 1440,
+      "scene": "native-root-paging-source-correct-global-coreSearch-history-hydration-empty-intersection",
+      "globalCoreSearchSourceCorrect": true,
+      "classicLocalFormPreservesFilters": true,
+      "rawName": "prefix/NAMED-NATIVE-ALICE-87AE9B28/",
+      "initial": {
+        "boot": {
+          "archive": {
+            "authorId": 2,
+            "name": "Named Native alice",
+            "permalink": "/author/named-native-alice-87ae9b28/",
+            "slug": "named-native-alice-87ae9b28",
+            "type": "author"
+          },
+          "kind": "archive",
+          "posts": [
+            {
+              "authorId": 2,
+              "id": 6,
+              "locked": false
+            }
+          ],
+          "query": {
+            "archivePage": 1,
+            "author": 2,
+            "blockPages": {
+              "query-4-page": 1
+            },
+            "category": "",
+            "commentPage": 2,
+            "contentPage": 1,
+            "date": null,
+            "namedAuthor": {
+              "numericAuthor": 2,
+              "selected": {
+                "authorId": 2,
+                "name": "Named Native alice",
+                "permalink": "/author/named-native-alice-87ae9b28/",
+                "slug": "named-native-alice-87ae9b28",
+                "type": "author"
+              }
+            },
+            "search": "",
+            "tag": "",
+            "values": {
+              "author": "2",
+              "author_name": "prefix/NAMED-NATIVE-ALICE-87AE9B28/",
+              "commentPage": "2",
+              "page": "1",
+              "query-4-page": "1"
+            }
+          },
+          "status": 200
+        },
+        "canonicalCount": 1,
+        "errors": [],
+        "heading": "Author: Named Native alice",
+        "historyLength": 2,
+        "originalSSRNodeRetained": true,
+        "overflow": false,
+        "path": "/?author=2&author_name=prefix%2FNAMED-NATIVE-ALICE-87AE9B28%2F&query-4-page=1&commentPage=2",
+        "robotsCount": 0,
+        "text": "WorldAct\nNamed Native Journal\nNamed Native Numeric Child\nNamed Native Parent\nNamed Native Static Front\nSample Page\n\nNAMED NATIVE AUTHOR TEMPLATE\n\nAuthor: Named Native alice\nSearch\nSearch\nNamed Native Alice 3\n\nNATIVE NAMED FIRST BODY Named Native Alice 3\n\nPages: 1 2\n\n1 2 3 … 5\nNext Page\n← Newer posts\n1 of 5\nOlder posts →\nWorldAct\n\nJust another WorldAct site\n\nBlog\nNamed Native Journal\nNamed Native Numeric Child\nNamed Native Parent\nNamed Native Static Front\n\nDesigned with WorldAct\n\nLog in"
+      },
+      "paged": {
+        "path": "/?author=2&author_name=prefix%2FNAMED-NATIVE-ALICE-87AE9B28%2F&query-4-page=1&commentPage=2&page=2",
+        "historyLength": 3,
+        "modelReads": [
+          {
+            "id": 504,
+            "method": "GET",
+            "path": "/api/public/document?path=%2F%3Fauthor%3D2%26author_name%3Dprefix%252FNAMED-NATIVE-ALICE-87AE9B28%252F%26query-4-page%3D1%26commentPage%3D2%26page%3D2",
+            "startedAt": 1794225552067,
+            "status": 200,
+            "finishedAt": 1794225552091,
+            "model": {
+              "status": 200,
+              "kind": "archive",
+              "archive": {
+                "type": "author",
+                "authorId": 2,
+                "slug": "named-native-alice-87ae9b28",
+                "name": "Named Native alice",
+                "permalink": "/author/named-native-alice-87ae9b28/",
+                "page": 2
+              },
+              "query": {
+                "search": "",
+                "category": "",
+                "tag": "",
+                "author": 2,
+                "namedAuthor": {
+                  "selected": {
+                    "type": "author",
+                    "authorId": 2,
+                    "slug": "named-native-alice-87ae9b28",
+                    "name": "Named Native alice",
+                    "permalink": "/author/named-native-alice-87ae9b28/"
+                  },
+                  "numericAuthor": 2
+                },
+                "date": null,
+                "archivePage": 2,
+                "contentPage": 1,
+                "commentPage": 2,
+                "blockPages": {
+                  "query-4-page": 1
+                },
+                "values": {
+                  "author": "2",
+                  "author_name": "prefix/NAMED-NATIVE-ALICE-87AE9B28/",
+                  "query-4-page": "1",
+                  "commentPage": "2",
+                  "page": "2"
+                }
+              },
+              "posts": [
+                {
+                  "id": 5,
+                  "authorId": 2,
+                  "locked": false
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "searched": {
+        "path": "/?s=Alice",
+        "historyLength": 4,
+        "modelReads": [
+          {
+            "id": 510,
+            "method": "GET",
+            "path": "/api/public/document?path=%2F%3Fs%3DAlice",
+            "startedAt": 1794225552297,
+            "status": 200,
+            "finishedAt": 1794225552314,
+            "model": {
+              "status": 200,
+              "kind": "archive",
+              "archive": null,
+              "query": {
+                "search": "Alice",
+                "category": "",
+                "tag": "",
+                "date": null,
+                "archivePage": 1,
+                "contentPage": 1,
+                "blockPages": {},
+                "values": {
+                  "search": "Alice",
+                  "page": "1"
+                }
+              },
+              "posts": [
+                {
+                  "id": 6,
+                  "authorId": 2,
+                  "locked": false
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "reloaded": {
+        "boot": {
+          "archive": {
+            "authorId": 2,
+            "name": "Named Native alice",
+            "page": 2,
+            "permalink": "/author/named-native-alice-87ae9b28/",
+            "slug": "named-native-alice-87ae9b28",
+            "type": "author"
+          },
+          "kind": "archive",
+          "posts": [
+            {
+              "authorId": 2,
+              "id": 5,
+              "locked": false
+            }
+          ],
+          "query": {
+            "archivePage": 2,
+            "author": 2,
+            "blockPages": {
+              "query-4-page": 1
+            },
+            "category": "",
+            "commentPage": 2,
+            "contentPage": 1,
+            "date": null,
+            "namedAuthor": {
+              "numericAuthor": 2,
+              "selected": {
+                "authorId": 2,
+                "name": "Named Native alice",
+                "permalink": "/author/named-native-alice-87ae9b28/",
+                "slug": "named-native-alice-87ae9b28",
+                "type": "author"
+              }
+            },
+            "search": "",
+            "tag": "",
+            "values": {
+              "author": "2",
+              "author_name": "prefix/NAMED-NATIVE-ALICE-87AE9B28/",
+              "commentPage": "2",
+              "page": "2",
+              "query-4-page": "1"
+            }
+          },
+          "status": 200
+        },
+        "canonicalCount": 1,
+        "errors": [],
+        "heading": "Author: Named Native alice",
+        "historyLength": 4,
+        "originalSSRNodeRetained": true,
+        "overflow": false,
+        "path": "/?author=2&author_name=prefix%2FNAMED-NATIVE-ALICE-87AE9B28%2F&query-4-page=1&commentPage=2&page=2",
+        "robotsCount": 0,
+        "text": "WorldAct\nNamed Native Journal\nNamed Native Numeric Child\nNamed Native Parent\nNamed Native Static Front\nSample Page\n\nNAMED NATIVE AUTHOR TEMPLATE\n\nAuthor: Named Native alice\nSearch\nSearch\nNamed Native Alice 3\n\nNATIVE NAMED FIRST BODY Named Native Alice 3\n\nPages: 1 2\n\n1 2 3 … 5\nNext Page\n← Newer posts\n2 of 5\nOlder posts →\nWorldAct\n\nJust another WorldAct site\n\nBlog\nNamed Native Journal\nNamed Native Numeric Child\nNamed Native Parent\nNamed Native Static Front\n\nDesigned with WorldAct\n\nLog in"
+      },
+      "empty": {
+        "boot": {
+          "archive": {
+            "authorId": 4,
+            "name": "Named Native empty",
+            "permalink": "/author/named-native-empty-87ae9b28/",
+            "slug": "named-native-empty-87ae9b28",
+            "type": "author"
+          },
+          "kind": "archive",
+          "posts": [],
+          "query": {
+            "archivePage": 1,
+            "author": 4,
+            "blockPages": {},
+            "category": "",
+            "contentPage": 1,
+            "date": null,
+            "namedAuthor": {
+              "selected": {
+                "authorId": 4,
+                "name": "Named Native empty",
+                "permalink": "/author/named-native-empty-87ae9b28/",
+                "slug": "named-native-empty-87ae9b28",
+                "type": "author"
+              }
+            },
+            "search": "",
+            "tag": "",
+            "values": {
+              "author_name": "named-native-empty-87ae9b28",
+              "page": "1"
+            }
+          },
+          "status": 200
+        },
+        "canonicalCount": 1,
+        "errors": [],
+        "heading": "Author: Named Native empty",
+        "historyLength": 4,
+        "originalSSRNodeRetained": true,
+        "overflow": false,
+        "path": "/?author_name=named-native-empty-87ae9b28",
+        "robotsCount": 0,
+        "text": "WorldAct\nNamed Native Journal\nNamed Native Numeric Child\nNamed Native Parent\nNamed Native Static Front\nSample Page\nAuthor: Named Native empty\nSearch posts\nSearch\nShow all posts\n\nNo posts yet. Check back soon.\n\nWorldAct\n\nJust another WorldAct site\n\nBlog\nNamed Native Journal\nNamed Native Numeric Child\nNamed Native Parent\nNamed Native Static Front\n\nDesigned with WorldAct\n\nLog in"
+      },
+      "intersection": {
+        "boot": {
+          "archive": {
+            "authorId": 3,
+            "name": "Named Native bob",
+            "permalink": "/author/named-native-bob-87ae9b28/",
+            "slug": "named-native-bob-87ae9b28",
+            "type": "author"
+          },
+          "kind": "archive",
+          "posts": [],
+          "query": {
+            "archivePage": 1,
+            "author": 3,
+            "blockPages": {},
+            "category": "",
+            "contentPage": 1,
+            "date": null,
+            "namedAuthor": {
+              "numericAuthor": 2,
+              "selected": {
+                "authorId": 3,
+                "name": "Named Native bob",
+                "permalink": "/author/named-native-bob-87ae9b28/",
+                "slug": "named-native-bob-87ae9b28",
+                "type": "author"
+              }
+            },
+            "search": "",
+            "tag": "",
+            "values": {
+              "author": "2",
+              "author_name": "named-native-bob-87ae9b28",
+              "page": "1"
+            }
+          },
+          "status": 200
+        },
+        "canonicalCount": 1,
+        "errors": [],
+        "heading": "Author: Named Native bob",
+        "historyLength": 5,
+        "originalSSRNodeRetained": true,
+        "overflow": false,
+        "path": "/?author=2&author_name=named-native-bob-87ae9b28",
+        "robotsCount": 0,
+        "text": "WorldAct\nNamed Native Journal\nNamed Native Numeric Child\nNamed Native Parent\nNamed Native Static Front\nSample Page\nAuthor: Named Native bob\nSearch posts\nSearch\nShow all posts\n\nNo posts yet. Check back soon.\n\nWorldAct\n\nJust another WorldAct site\n\nBlog\nNamed Native Journal\nNamed Native Numeric Child\nNamed Native Parent\nNamed Native Static Front\n\nDesigned with WorldAct\n\nLog in"
+      },
+      "intersectionSearch": {
+        "path": "/?author=2&author_name=named-native-bob-87ae9b28&search=Bob",
+        "heading": "Search results for: Bob",
+        "noUnrelatedBobBody": true
+      },
+      "screenshots": [
+        "../screens/author-name-native-classic-known-1440.png",
+        "../screens/author-name-native-classic-search-1440.png",
+        "../screens/author-name-native-classic-intersection-1440.png"
+      ]
+    },
+    {
+      "theme": "classic",
+      "width": 768,
+      "scene": "native-root-paging-source-correct-global-coreSearch-history-hydration-empty-intersection",
+      "globalCoreSearchSourceCorrect": true,
+      "classicLocalFormPreservesFilters": true,
+      "rawName": "prefix/NAMED-NATIVE-ALICE-87AE9B28/",
+      "initial": {
+        "boot": {
+          "archive": {
+            "authorId": 2,
+            "name": "Named Native alice",
+            "permalink": "/author/named-native-alice-87ae9b28/",
+            "slug": "named-native-alice-87ae9b28",
+            "type": "author"
+          },
+          "kind": "archive",
+          "posts": [
+            {
+              "authorId": 2,
+              "id": 6,
+              "locked": false
+            }
+          ],
+          "query": {
+            "archivePage": 1,
+            "author": 2,
+            "blockPages": {
+              "query-4-page": 1
+            },
+            "category": "",
+            "commentPage": 2,
+            "contentPage": 1,
+            "date": null,
+            "namedAuthor": {
+              "numericAuthor": 2,
+              "selected": {
+                "authorId": 2,
+                "name": "Named Native alice",
+                "permalink": "/author/named-native-alice-87ae9b28/",
+                "slug": "named-native-alice-87ae9b28",
+                "type": "author"
+              }
+            },
+            "search": "",
+            "tag": "",
+            "values": {
+              "author": "2",
+              "author_name": "prefix/NAMED-NATIVE-ALICE-87AE9B28/",
+              "commentPage": "2",
+              "page": "1",
+              "query-4-page": "1"
+            }
+          },
+          "status": 200
+        },
+        "canonicalCount": 1,
+        "errors": [],
+        "heading": "Author: Named Native alice",
+        "historyLength": 2,
+        "originalSSRNodeRetained": true,
+        "overflow": false,
+        "path": "/?author=2&author_name=prefix%2FNAMED-NATIVE-ALICE-87AE9B28%2F&query-4-page=1&commentPage=2",
+        "robotsCount": 0,
+        "text": "WorldAct\nNamed Native Journal\nNamed Native Numeric Child\nNamed Native Parent\nNamed Native Static Front\nSample Page\n\nNAMED NATIVE AUTHOR TEMPLATE\n\nAuthor: Named Native alice\nSearch\nSearch\nNamed Native Alice 3\n\nNATIVE NAMED FIRST BODY Named Native Alice 3\n\nPages: 1 2\n\n1 2 3 … 5\nNext Page\n← Newer posts\n1 of 5\nOlder posts →\nWorldAct\n\nJust another WorldAct site\n\nBlog\nNamed Native Journal\nNamed Native Numeric Child\nNamed Native Parent\nNamed Native Static Front\n\nDesigned with WorldAct\n\nLog in"
+      },
+      "paged": {
+        "path": "/?author=2&author_name=prefix%2FNAMED-NATIVE-ALICE-87AE9B28%2F&query-4-page=1&commentPage=2&page=2",
+        "historyLength": 3,
+        "modelReads": [
+          {
+            "id": 548,
+            "method": "GET",
+            "path": "/api/public/document?path=%2F%3Fauthor%3D2%26author_name%3Dprefix%252FNAMED-NATIVE-ALICE-87AE9B28%252F%26query-4-page%3D1%26commentPage%3D2%26page%3D2",
+            "startedAt": 1794225554917,
+            "status": 200,
+            "finishedAt": 1794225554943,
+            "model": {
+              "status": 200,
+              "kind": "archive",
+              "archive": {
+                "type": "author",
+                "authorId": 2,
+                "slug": "named-native-alice-87ae9b28",
+                "name": "Named Native alice",
+                "permalink": "/author/named-native-alice-87ae9b28/",
+                "page": 2
+              },
+              "query": {
+                "search": "",
+                "category": "",
+                "tag": "",
+                "author": 2,
+                "namedAuthor": {
+                  "selected": {
+                    "type": "author",
+                    "authorId": 2,
+                    "slug": "named-native-alice-87ae9b28",
+                    "name": "Named Native alice",
+                    "permalink": "/author/named-native-alice-87ae9b28/"
+                  },
+                  "numericAuthor": 2
+                },
+                "date": null,
+                "archivePage": 2,
+                "contentPage": 1,
+                "commentPage": 2,
+                "blockPages": {
+                  "query-4-page": 1
+                },
+                "values": {
+                  "author": "2",
+                  "author_name": "prefix/NAMED-NATIVE-ALICE-87AE9B28/",
+                  "query-4-page": "1",
+                  "commentPage": "2",
+                  "page": "2"
+                }
+              },
+              "posts": [
+                {
+                  "id": 5,
+                  "authorId": 2,
+                  "locked": false
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "searched": {
+        "path": "/?s=Alice",
+        "historyLength": 4,
+        "modelReads": [
+          {
+            "id": 553,
+            "method": "GET",
+            "path": "/api/public/document?path=%2F%3Fs%3DAlice",
+            "startedAt": 1794225555157,
+            "status": 200,
+            "finishedAt": 1794225555172,
+            "model": {
+              "status": 200,
+              "kind": "archive",
+              "archive": null,
+              "query": {
+                "search": "Alice",
+                "category": "",
+                "tag": "",
+                "date": null,
+                "archivePage": 1,
+                "contentPage": 1,
+                "blockPages": {},
+                "values": {
+                  "search": "Alice",
+                  "page": "1"
+                }
+              },
+              "posts": [
+                {
+                  "id": 6,
+                  "authorId": 2,
+                  "locked": false
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "reloaded": {
+        "boot": {
+          "archive": {
+            "authorId": 2,
+            "name": "Named Native alice",
+            "page": 2,
+            "permalink": "/author/named-native-alice-87ae9b28/",
+            "slug": "named-native-alice-87ae9b28",
+            "type": "author"
+          },
+          "kind": "archive",
+          "posts": [
+            {
+              "authorId": 2,
+              "id": 5,
+              "locked": false
+            }
+          ],
+          "query": {
+            "archivePage": 2,
+            "author": 2,
+            "blockPages": {
+              "query-4-page": 1
+            },
+            "category": "",
+            "commentPage": 2,
+            "contentPage": 1,
+            "date": null,
+            "namedAuthor": {
+              "numericAuthor": 2,
+              "selected": {
+                "authorId": 2,
+                "name": "Named Native alice",
+                "permalink": "/author/named-native-alice-87ae9b28/",
+                "slug": "named-native-alice-87ae9b28",
+                "type": "author"
+              }
+            },
+            "search": "",
+            "tag": "",
+            "values": {
+              "author": "2",
+              "author_name": "prefix/NAMED-NATIVE-ALICE-87AE9B28/",
+              "commentPage": "2",
+              "page": "2",
+              "query-4-page": "1"
+            }
+          },
+          "status": 200
+        },
+        "canonicalCount": 1,
+        "errors": [],
+        "heading": "Author: Named Native alice",
+        "historyLength": 4,
+        "originalSSRNodeRetained": true,
+        "overflow": false,
+        "path": "/?author=2&author_name=prefix%2FNAMED-NATIVE-ALICE-87AE9B28%2F&query-4-page=1&commentPage=2&page=2",
+        "robotsCount": 0,
+        "text": "WorldAct\nNamed Native Journal\nNamed Native Numeric Child\nNamed Native Parent\nNamed Native Static Front\nSample Page\n\nNAMED NATIVE AUTHOR TEMPLATE\n\nAuthor: Named Native alice\nSearch\nSearch\nNamed Native Alice 3\n\nNATIVE NAMED FIRST BODY Named Native Alice 3\n\nPages: 1 2\n\n1 2 3 … 5\nNext Page\n← Newer posts\n2 of 5\nOlder posts →\nWorldAct\n\nJust another WorldAct site\n\nBlog\nNamed Native Journal\nNamed Native Numeric Child\nNamed Native Parent\nNamed Native Static Front\n\nDesigned with WorldAct\n\nLog in"
+      },
+      "empty": {
+        "boot": {
+          "archive": {
+            "authorId": 4,
+            "name": "Named Native empty",
+            "permalink": "/author/named-native-empty-87ae9b28/",
+            "slug": "named-native-empty-87ae9b28",
+            "type": "author"
+          },
+          "kind": "archive",
+          "posts": [],
+          "query": {
+            "archivePage": 1,
+            "author": 4,
+            "blockPages": {},
+            "category": "",
+            "contentPage": 1,
+            "date": null,
+            "namedAuthor": {
+              "selected": {
+                "authorId": 4,
+                "name": "Named Native empty",
+                "permalink": "/author/named-native-empty-87ae9b28/",
+                "slug": "named-native-empty-87ae9b28",
+                "type": "author"
+              }
+            },
+            "search": "",
+            "tag": "",
+            "values": {
+              "author_name": "named-native-empty-87ae9b28",
+              "page": "1"
+            }
+          },
+          "status": 200
+        },
+        "canonicalCount": 1,
+        "errors": [],
+        "heading": "Author: Named Native empty",
+        "historyLength": 4,
+        "originalSSRNodeRetained": true,
+        "overflow": false,
+        "path": "/?author_name=named-native-empty-87ae9b28",
+        "robotsCount": 0,
+        "text": "WorldAct\nNamed Native Journal\nNamed Native Numeric Child\nNamed Native Parent\nNamed Native Static Front\nSample Page\nAuthor: Named Native empty\nSearch posts\nSearch\nShow all posts\n\nNo posts yet. Check back soon.\n\nWorldAct\n\nJust another WorldAct site\n\nBlog\nNamed Native Journal\nNamed Native Numeric Child\nNamed Native Parent\nNamed Native Static Front\n\nDesigned with WorldAct\n\nLog in"
+      },
+      "intersection": {
+        "boot": {
+          "archive": {
+            "authorId": 3,
+            "name": "Named Native bob",
+            "permalink": "/author/named-native-bob-87ae9b28/",
+            "slug": "named-native-bob-87ae9b28",
+            "type": "author"
+          },
+          "kind": "archive",
+          "posts": [],
+          "query": {
+            "archivePage": 1,
+            "author": 3,
+            "blockPages": {},
+            "category": "",
+            "contentPage": 1,
+            "date": null,
+            "namedAuthor": {
+              "numericAuthor": 2,
+              "selected": {
+                "authorId": 3,
+                "name": "Named Native bob",
+                "permalink": "/author/named-native-bob-87ae9b28/",
+                "slug": "named-native-bob-87ae9b28",
+                "type": "author"
+              }
+            },
+            "search": "",
+            "tag": "",
+            "values": {
+              "author": "2",
+              "author_name": "named-native-bob-87ae9b28",
+              "page": "1"
+            }
+          },
+          "status": 200
+        },
+        "canonicalCount": 1,
+        "errors": [],
+        "heading": "Author: Named Native bob",
+        "historyLength": 5,
+        "originalSSRNodeRetained": true,
+        "overflow": false,
+        "path": "/?author=2&author_name=named-native-bob-87ae9b28",
+        "robotsCount": 0,
+        "text": "WorldAct\nNamed Native Journal\nNamed Native Numeric Child\nNamed Native Parent\nNamed Native Static Front\nSample Page\nAuthor: Named Native bob\nSearch posts\nSearch\nShow all posts\n\nNo posts yet. Check back soon.\n\nWorldAct\n\nJust another WorldAct site\n\nBlog\nNamed Native Journal\nNamed Native Numeric Child\nNamed Native Parent\nNamed Native Static Front\n\nDesigned with WorldAct\n\nLog in"
+      },
+      "intersectionSearch": {
+        "path": "/?author=2&author_name=named-native-bob-87ae9b28&search=Bob",
+        "heading": "Search results for: Bob",
+        "noUnrelatedBobBody": true
+      },
+      "screenshots": [
+        "../screens/author-name-native-classic-known-768.png",
+        "../screens/author-name-native-classic-search-768.png",
+        "../screens/author-name-native-classic-intersection-768.png"
+      ]
+    },
+    {
+      "theme": "classic",
+      "width": 375,
+      "scene": "native-root-paging-source-correct-global-coreSearch-history-hydration-empty-intersection",
+      "globalCoreSearchSourceCorrect": true,
+      "classicLocalFormPreservesFilters": true,
+      "rawName": "prefix/NAMED-NATIVE-ALICE-87AE9B28/",
+      "initial": {
+        "boot": {
+          "archive": {
+            "authorId": 2,
+            "name": "Named Native alice",
+            "permalink": "/author/named-native-alice-87ae9b28/",
+            "slug": "named-native-alice-87ae9b28",
+            "type": "author"
+          },
+          "kind": "archive",
+          "posts": [
+            {
+              "authorId": 2,
+              "id": 6,
+              "locked": false
+            }
+          ],
+          "query": {
+            "archivePage": 1,
+            "author": 2,
+            "blockPages": {
+              "query-4-page": 1
+            },
+            "category": "",
+            "commentPage": 2,
+            "contentPage": 1,
+            "date": null,
+            "namedAuthor": {
+              "numericAuthor": 2,
+              "selected": {
+                "authorId": 2,
+                "name": "Named Native alice",
+                "permalink": "/author/named-native-alice-87ae9b28/",
+                "slug": "named-native-alice-87ae9b28",
+                "type": "author"
+              }
+            },
+            "search": "",
+            "tag": "",
+            "values": {
+              "author": "2",
+              "author_name": "prefix/NAMED-NATIVE-ALICE-87AE9B28/",
+              "commentPage": "2",
+              "page": "1",
+              "query-4-page": "1"
+            }
+          },
+          "status": 200
+        },
+        "canonicalCount": 1,
+        "errors": [],
+        "heading": "Author: Named Native alice",
+        "historyLength": 2,
+        "originalSSRNodeRetained": true,
+        "overflow": false,
+        "path": "/?author=2&author_name=prefix%2FNAMED-NATIVE-ALICE-87AE9B28%2F&query-4-page=1&commentPage=2",
+        "robotsCount": 0,
+        "text": "WorldAct\nNamed Native Journal\nNamed Native Numeric Child\nNamed Native Parent\nNamed Native Static Front\nSample Page\n\nNAMED NATIVE AUTHOR TEMPLATE\n\nAuthor: Named Native alice\nSearch\nSearch\nNamed Native Alice 3\n\nNATIVE NAMED FIRST BODY Named Native Alice 3\n\nPages: 1 2\n\n1 2 3 … 5\nNext Page\n← Newer posts\n1 of 5\nOlder posts →\nWorldAct\n\nJust another WorldAct site\n\nBlog\nNamed Native Journal\nNamed Native Numeric Child\nNamed Native Parent\nNamed Native Static Front\n\nDesigned with WorldAct\n\nLog in"
+      },
+      "paged": {
+        "path": "/?author=2&author_name=prefix%2FNAMED-NATIVE-ALICE-87AE9B28%2F&query-4-page=1&commentPage=2&page=2",
+        "historyLength": 3,
+        "modelReads": [
+          {
+            "id": 592,
+            "method": "GET",
+            "path": "/api/public/document?path=%2F%3Fauthor%3D2%26author_name%3Dprefix%252FNAMED-NATIVE-ALICE-87AE9B28%252F%26query-4-page%3D1%26commentPage%3D2%26page%3D2",
+            "startedAt": 1794225557755,
+            "status": 200,
+            "finishedAt": 1794225557777,
+            "model": {
+              "status": 200,
+              "kind": "archive",
+              "archive": {
+                "type": "author",
+                "authorId": 2,
+                "slug": "named-native-alice-87ae9b28",
+                "name": "Named Native alice",
+                "permalink": "/author/named-native-alice-87ae9b28/",
+                "page": 2
+              },
+              "query": {
+                "search": "",
+                "category": "",
+                "tag": "",
+                "author": 2,
+                "namedAuthor": {
+                  "selected": {
+                    "type": "author",
+                    "authorId": 2,
+                    "slug": "named-native-alice-87ae9b28",
+                    "name": "Named Native alice",
+                    "permalink": "/author/named-native-alice-87ae9b28/"
+                  },
+                  "numericAuthor": 2
+                },
+                "date": null,
+                "archivePage": 2,
+                "contentPage": 1,
+                "commentPage": 2,
+                "blockPages": {
+                  "query-4-page": 1
+                },
+                "values": {
+                  "author": "2",
+                  "author_name": "prefix/NAMED-NATIVE-ALICE-87AE9B28/",
+                  "query-4-page": "1",
+                  "commentPage": "2",
+                  "page": "2"
+                }
+              },
+              "posts": [
+                {
+                  "id": 5,
+                  "authorId": 2,
+                  "locked": false
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "searched": {
+        "path": "/?s=Alice",
+        "historyLength": 4,
+        "modelReads": [
+          {
+            "id": 597,
+            "method": "GET",
+            "path": "/api/public/document?path=%2F%3Fs%3DAlice",
+            "startedAt": 1794225557976,
+            "status": 200,
+            "finishedAt": 1794225557989,
+            "model": {
+              "status": 200,
+              "kind": "archive",
+              "archive": null,
+              "query": {
+                "search": "Alice",
+                "category": "",
+                "tag": "",
+                "date": null,
+                "archivePage": 1,
+                "contentPage": 1,
+                "blockPages": {},
+                "values": {
+                  "search": "Alice",
+                  "page": "1"
+                }
+              },
+              "posts": [
+                {
+                  "id": 6,
+                  "authorId": 2,
+                  "locked": false
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "reloaded": {
+        "boot": {
+          "archive": {
+            "authorId": 2,
+            "name": "Named Native alice",
+            "page": 2,
+            "permalink": "/author/named-native-alice-87ae9b28/",
+            "slug": "named-native-alice-87ae9b28",
+            "type": "author"
+          },
+          "kind": "archive",
+          "posts": [
+            {
+              "authorId": 2,
+              "id": 5,
+              "locked": false
+            }
+          ],
+          "query": {
+            "archivePage": 2,
+            "author": 2,
+            "blockPages": {
+              "query-4-page": 1
+            },
+            "category": "",
+            "commentPage": 2,
+            "contentPage": 1,
+            "date": null,
+            "namedAuthor": {
+              "numericAuthor": 2,
+              "selected": {
+                "authorId": 2,
+                "name": "Named Native alice",
+                "permalink": "/author/named-native-alice-87ae9b28/",
+                "slug": "named-native-alice-87ae9b28",
+                "type": "author"
+              }
+            },
+            "search": "",
+            "tag": "",
+            "values": {
+              "author": "2",
+              "author_name": "prefix/NAMED-NATIVE-ALICE-87AE9B28/",
+              "commentPage": "2",
+              "page": "2",
+              "query-4-page": "1"
+            }
+          },
+          "status": 200
+        },
+        "canonicalCount": 1,
+        "errors": [],
+        "heading": "Author: Named Native alice",
+        "historyLength": 4,
+        "originalSSRNodeRetained": true,
+        "overflow": false,
+        "path": "/?author=2&author_name=prefix%2FNAMED-NATIVE-ALICE-87AE9B28%2F&query-4-page=1&commentPage=2&page=2",
+        "robotsCount": 0,
+        "text": "WorldAct\nNamed Native Journal\nNamed Native Numeric Child\nNamed Native Parent\nNamed Native Static Front\nSample Page\n\nNAMED NATIVE AUTHOR TEMPLATE\n\nAuthor: Named Native alice\nSearch\nSearch\nNamed Native Alice 3\n\nNATIVE NAMED FIRST BODY Named Native Alice 3\n\nPages: 1 2\n\n1 2 3 … 5\nNext Page\n← Newer posts\n2 of 5\nOlder posts →\nWorldAct\n\nJust another WorldAct site\n\nBlog\nNamed Native Journal\nNamed Native Numeric Child\nNamed Native Parent\nNamed Native Static Front\n\nDesigned with WorldAct\n\nLog in"
+      },
+      "empty": {
+        "boot": {
+          "archive": {
+            "authorId": 4,
+            "name": "Named Native empty",
+            "permalink": "/author/named-native-empty-87ae9b28/",
+            "slug": "named-native-empty-87ae9b28",
+            "type": "author"
+          },
+          "kind": "archive",
+          "posts": [],
+          "query": {
+            "archivePage": 1,
+            "author": 4,
+            "blockPages": {},
+            "category": "",
+            "contentPage": 1,
+            "date": null,
+            "namedAuthor": {
+              "selected": {
+                "authorId": 4,
+                "name": "Named Native empty",
+                "permalink": "/author/named-native-empty-87ae9b28/",
+                "slug": "named-native-empty-87ae9b28",
+                "type": "author"
+              }
+            },
+            "search": "",
+            "tag": "",
+            "values": {
+              "author_name": "named-native-empty-87ae9b28",
+              "page": "1"
+            }
+          },
+          "status": 200
+        },
+        "canonicalCount": 1,
+        "errors": [],
+        "heading": "Author: Named Native empty",
+        "historyLength": 4,
+        "originalSSRNodeRetained": true,
+        "overflow": false,
+        "path": "/?author_name=named-native-empty-87ae9b28",
+        "robotsCount": 0,
+        "text": "WorldAct\nNamed Native Journal\nNamed Native Numeric Child\nNamed Native Parent\nNamed Native Static Front\nSample Page\nAuthor: Named Native empty\nSearch posts\nSearch\nShow all posts\n\nNo posts yet. Check back soon.\n\nWorldAct\n\nJust another WorldAct site\n\nBlog\nNamed Native Journal\nNamed Native Numeric Child\nNamed Native Parent\nNamed Native Static Front\n\nDesigned with WorldAct\n\nLog in"
+      },
+      "intersection": {
+        "boot": {
+          "archive": {
+            "authorId": 3,
+            "name": "Named Native bob",
+            "permalink": "/author/named-native-bob-87ae9b28/",
+            "slug": "named-native-bob-87ae9b28",
+            "type": "author"
+          },
+          "kind": "archive",
+          "posts": [],
+          "query": {
+            "archivePage": 1,
+            "author": 3,
+            "blockPages": {},
+            "category": "",
+            "contentPage": 1,
+            "date": null,
+            "namedAuthor": {
+              "numericAuthor": 2,
+              "selected": {
+                "authorId": 3,
+                "name": "Named Native bob",
+                "permalink": "/author/named-native-bob-87ae9b28/",
+                "slug": "named-native-bob-87ae9b28",
+                "type": "author"
+              }
+            },
+            "search": "",
+            "tag": "",
+            "values": {
+              "author": "2",
+              "author_name": "named-native-bob-87ae9b28",
+              "page": "1"
+            }
+          },
+          "status": 200
+        },
+        "canonicalCount": 1,
+        "errors": [],
+        "heading": "Author: Named Native bob",
+        "historyLength": 5,
+        "originalSSRNodeRetained": true,
+        "overflow": false,
+        "path": "/?author=2&author_name=named-native-bob-87ae9b28",
+        "robotsCount": 0,
+        "text": "WorldAct\nNamed Native Journal\nNamed Native Numeric Child\nNamed Native Parent\nNamed Native Static Front\nSample Page\nAuthor: Named Native bob\nSearch posts\nSearch\nShow all posts\n\nNo posts yet. Check back soon.\n\nWorldAct\n\nJust another WorldAct site\n\nBlog\nNamed Native Journal\nNamed Native Numeric Child\nNamed Native Parent\nNamed Native Static Front\n\nDesigned with WorldAct\n\nLog in"
+      },
+      "intersectionSearch": {
+        "path": "/?author=2&author_name=named-native-bob-87ae9b28&search=Bob",
+        "heading": "Search results for: Bob",
+        "noUnrelatedBobBody": true
+      },
+      "screenshots": [
+        "../screens/author-name-native-classic-known-375.png",
+        "../screens/author-name-native-classic-search-375.png",
+        "../screens/author-name-native-classic-intersection-375.png"
+      ]
+    },
+    {
+      "theme": "twentytwentyfive",
+      "width": 1440,
+      "scene": "native-root-paging-source-correct-global-coreSearch-history-hydration-empty-intersection",
+      "globalCoreSearchSourceCorrect": true,
+      "classicLocalFormPreservesFilters": false,
+      "rawName": "prefix/NAMED-NATIVE-ALICE-87AE9B28/",
+      "initial": {
+        "boot": {
+          "archive": {
+            "authorId": 2,
+            "name": "Named Native alice",
+            "permalink": "/author/named-native-alice-87ae9b28/",
+            "slug": "named-native-alice-87ae9b28",
+            "type": "author"
+          },
+          "kind": "archive",
+          "posts": [
+            {
+              "authorId": 2,
+              "id": 6,
+              "locked": false
+            }
+          ],
+          "query": {
+            "archivePage": 1,
+            "author": 2,
+            "blockPages": {
+              "query-4-page": 1
+            },
+            "category": "",
+            "commentPage": 2,
+            "contentPage": 1,
+            "date": null,
+            "namedAuthor": {
+              "numericAuthor": 2,
+              "selected": {
+                "authorId": 2,
+                "name": "Named Native alice",
+                "permalink": "/author/named-native-alice-87ae9b28/",
+                "slug": "named-native-alice-87ae9b28",
+                "type": "author"
+              }
+            },
+            "search": "",
+            "tag": "",
+            "values": {
+              "author": "2",
+              "author_name": "prefix/NAMED-NATIVE-ALICE-87AE9B28/",
+              "commentPage": "2",
+              "page": "1",
+              "query-4-page": "1"
+            }
+          },
+          "status": 200
+        },
+        "canonicalCount": 1,
+        "errors": [],
+        "heading": "Author: Named Native alice",
+        "historyLength": 2,
+        "originalSSRNodeRetained": true,
+        "overflow": false,
+        "path": "/?author=2&author_name=prefix%2FNAMED-NATIVE-ALICE-87AE9B28%2F&query-4-page=1&commentPage=2",
+        "robotsCount": 0,
+        "text": "NAMED NATIVE AUTHOR TEMPLATE\n\nAuthor: Named Native alice\nSearch\nSearch\nNamed Native Alice 3\n\nNATIVE NAMED FIRST BODY Named Native Alice 3\n\nPages: 1 2\n\n1 2 3 … 5\nNext Page"
+      },
+      "paged": {
+        "path": "/?author=2&author_name=prefix%2FNAMED-NATIVE-ALICE-87AE9B28%2F&query-4-page=2&commentPage=2&page=1",
+        "historyLength": 3,
+        "modelReads": [
+          {
+            "id": 636,
+            "method": "GET",
+            "path": "/api/public/document?path=%2F%3Fauthor%3D2%26author_name%3Dprefix%252FNAMED-NATIVE-ALICE-87AE9B28%252F%26query-4-page%3D2%26commentPage%3D2%26page%3D1",
+            "startedAt": 1794225560601,
+            "status": 200,
+            "finishedAt": 1794225560624,
+            "model": {
+              "status": 200,
+              "kind": "archive",
+              "archive": {
+                "type": "author",
+                "authorId": 2,
+                "slug": "named-native-alice-87ae9b28",
+                "name": "Named Native alice",
+                "permalink": "/author/named-native-alice-87ae9b28/"
+              },
+              "query": {
+                "search": "",
+                "category": "",
+                "tag": "",
+                "author": 2,
+                "namedAuthor": {
+                  "selected": {
+                    "type": "author",
+                    "authorId": 2,
+                    "slug": "named-native-alice-87ae9b28",
+                    "name": "Named Native alice",
+                    "permalink": "/author/named-native-alice-87ae9b28/"
+                  },
+                  "numericAuthor": 2
+                },
+                "date": null,
+                "archivePage": 1,
+                "contentPage": 1,
+                "commentPage": 2,
+                "blockPages": {
+                  "query-4-page": 2
+                },
+                "values": {
+                  "author": "2",
+                  "author_name": "prefix/NAMED-NATIVE-ALICE-87AE9B28/",
+                  "query-4-page": "2",
+                  "commentPage": "2",
+                  "page": "1"
+                }
+              },
+              "posts": [
+                {
+                  "id": 6,
+                  "authorId": 2,
+                  "locked": false
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "searched": {
+        "path": "/?s=Alice",
+        "historyLength": 4,
+        "modelReads": [
+          {
+            "id": 642,
+            "method": "GET",
+            "path": "/api/public/document?path=%2F%3Fs%3DAlice",
+            "startedAt": 1794225560843,
+            "status": 200,
+            "finishedAt": 1794225560872,
+            "model": {
+              "status": 200,
+              "kind": "archive",
+              "archive": null,
+              "query": {
+                "search": "Alice",
+                "category": "",
+                "tag": "",
+                "date": null,
+                "archivePage": 1,
+                "contentPage": 1,
+                "blockPages": {},
+                "values": {
+                  "search": "Alice",
+                  "page": "1"
+                }
+              },
+              "posts": [
+                {
+                  "id": 6,
+                  "authorId": 2,
+                  "locked": false
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "reloaded": {
+        "boot": {
+          "archive": {
+            "authorId": 2,
+            "name": "Named Native alice",
+            "permalink": "/author/named-native-alice-87ae9b28/",
+            "slug": "named-native-alice-87ae9b28",
+            "type": "author"
+          },
+          "kind": "archive",
+          "posts": [
+            {
+              "authorId": 2,
+              "id": 6,
+              "locked": false
+            }
+          ],
+          "query": {
+            "archivePage": 1,
+            "author": 2,
+            "blockPages": {
+              "query-4-page": 2
+            },
+            "category": "",
+            "commentPage": 2,
+            "contentPage": 1,
+            "date": null,
+            "namedAuthor": {
+              "numericAuthor": 2,
+              "selected": {
+                "authorId": 2,
+                "name": "Named Native alice",
+                "permalink": "/author/named-native-alice-87ae9b28/",
+                "slug": "named-native-alice-87ae9b28",
+                "type": "author"
+              }
+            },
+            "search": "",
+            "tag": "",
+            "values": {
+              "author": "2",
+              "author_name": "prefix/NAMED-NATIVE-ALICE-87AE9B28/",
+              "commentPage": "2",
+              "page": "1",
+              "query-4-page": "2"
+            }
+          },
+          "status": 200
+        },
+        "canonicalCount": 1,
+        "errors": [],
+        "heading": "Author: Named Native alice",
+        "historyLength": 4,
+        "originalSSRNodeRetained": true,
+        "overflow": false,
+        "path": "/?author=2&author_name=prefix%2FNAMED-NATIVE-ALICE-87AE9B28%2F&query-4-page=2&commentPage=2&page=1",
+        "robotsCount": 0,
+        "text": "NAMED NATIVE AUTHOR TEMPLATE\n\nAuthor: Named Native alice\nSearch\nSearch\nNamed Native Alice 2\n\nNATIVE NAMED FIRST BODY Named Native Alice 2\n\nPages: 1 2\n\nPrevious Page\n1 2 3 4 5\nNext Page"
+      },
+      "empty": {
+        "boot": {
+          "archive": {
+            "authorId": 4,
+            "name": "Named Native empty",
+            "permalink": "/author/named-native-empty-87ae9b28/",
+            "slug": "named-native-empty-87ae9b28",
+            "type": "author"
+          },
+          "kind": "archive",
+          "posts": [],
+          "query": {
+            "archivePage": 1,
+            "author": 4,
+            "blockPages": {},
+            "category": "",
+            "contentPage": 1,
+            "date": null,
+            "namedAuthor": {
+              "selected": {
+                "authorId": 4,
+                "name": "Named Native empty",
+                "permalink": "/author/named-native-empty-87ae9b28/",
+                "slug": "named-native-empty-87ae9b28",
+                "type": "author"
+              }
+            },
+            "search": "",
+            "tag": "",
+            "values": {
+              "author_name": "named-native-empty-87ae9b28",
+              "page": "1"
+            }
+          },
+          "status": 200
+        },
+        "canonicalCount": 1,
+        "errors": [],
+        "heading": "Author: Named Native empty",
+        "historyLength": 4,
+        "originalSSRNodeRetained": true,
+        "overflow": false,
+        "path": "/?author_name=named-native-empty-87ae9b28",
+        "robotsCount": 0,
+        "text": "WorldAct\n\nNamed Native Journal\nNamed Native Parent\nNamed Native Static Front\nSample Page\nAuthor: Named Native empty\n\nSorry, but nothing was found. Please try a search with different keywords.\n\nWorldAct\n\nJust another WorldAct site\n\nBlog\nAbout\nFAQs\nAuthors\nEvents\nShop\nPatterns\nThemes\n\nTwenty Twenty-Five\n\nDesigned with WordPress"
+      },
+      "intersection": {
+        "boot": {
+          "archive": {
+            "authorId": 3,
+            "name": "Named Native bob",
+            "permalink": "/author/named-native-bob-87ae9b28/",
+            "slug": "named-native-bob-87ae9b28",
+            "type": "author"
+          },
+          "kind": "archive",
+          "posts": [],
+          "query": {
+            "archivePage": 1,
+            "author": 3,
+            "blockPages": {},
+            "category": "",
+            "contentPage": 1,
+            "date": null,
+            "namedAuthor": {
+              "numericAuthor": 2,
+              "selected": {
+                "authorId": 3,
+                "name": "Named Native bob",
+                "permalink": "/author/named-native-bob-87ae9b28/",
+                "slug": "named-native-bob-87ae9b28",
+                "type": "author"
+              }
+            },
+            "search": "",
+            "tag": "",
+            "values": {
+              "author": "2",
+              "author_name": "named-native-bob-87ae9b28",
+              "page": "1"
+            }
+          },
+          "status": 200
+        },
+        "canonicalCount": 1,
+        "errors": [],
+        "heading": "Author: Named Native bob",
+        "historyLength": 5,
+        "originalSSRNodeRetained": true,
+        "overflow": false,
+        "path": "/?author=2&author_name=named-native-bob-87ae9b28",
+        "robotsCount": 0,
+        "text": "WorldAct\n\nNamed Native Journal\nNamed Native Parent\nNamed Native Static Front\nSample Page\nAuthor: Named Native bob\n\nSorry, but nothing was found. Please try a search with different keywords.\n\nWorldAct\n\nJust another WorldAct site\n\nBlog\nAbout\nFAQs\nAuthors\nEvents\nShop\nPatterns\nThemes\n\nTwenty Twenty-Five\n\nDesigned with WordPress"
+      },
+      "intersectionSearch": {
+        "path": "/?author=2&author_name=named-native-bob-87ae9b28",
+        "heading": "Author: Named Native bob",
+        "noUnrelatedBobBody": true
+      },
+      "screenshots": [
+        "../screens/author-name-native-twentytwentyfive-known-1440.png",
+        "../screens/author-name-native-twentytwentyfive-search-1440.png",
+        "../screens/author-name-native-twentytwentyfive-intersection-1440.png"
+      ]
+    },
+    {
+      "theme": "twentytwentyfive",
+      "width": 768,
+      "scene": "native-root-paging-source-correct-global-coreSearch-history-hydration-empty-intersection",
+      "globalCoreSearchSourceCorrect": true,
+      "classicLocalFormPreservesFilters": false,
+      "rawName": "prefix/NAMED-NATIVE-ALICE-87AE9B28/",
+      "initial": {
+        "boot": {
+          "archive": {
+            "authorId": 2,
+            "name": "Named Native alice",
+            "permalink": "/author/named-native-alice-87ae9b28/",
+            "slug": "named-native-alice-87ae9b28",
+            "type": "author"
+          },
+          "kind": "archive",
+          "posts": [
+            {
+              "authorId": 2,
+              "id": 6,
+              "locked": false
+            }
+          ],
+          "query": {
+            "archivePage": 1,
+            "author": 2,
+            "blockPages": {
+              "query-4-page": 1
+            },
+            "category": "",
+            "commentPage": 2,
+            "contentPage": 1,
+            "date": null,
+            "namedAuthor": {
+              "numericAuthor": 2,
+              "selected": {
+                "authorId": 2,
+                "name": "Named Native alice",
+                "permalink": "/author/named-native-alice-87ae9b28/",
+                "slug": "named-native-alice-87ae9b28",
+                "type": "author"
+              }
+            },
+            "search": "",
+            "tag": "",
+            "values": {
+              "author": "2",
+              "author_name": "prefix/NAMED-NATIVE-ALICE-87AE9B28/",
+              "commentPage": "2",
+              "page": "1",
+              "query-4-page": "1"
+            }
+          },
+          "status": 200
+        },
+        "canonicalCount": 1,
+        "errors": [],
+        "heading": "Author: Named Native alice",
+        "historyLength": 2,
+        "originalSSRNodeRetained": true,
+        "overflow": false,
+        "path": "/?author=2&author_name=prefix%2FNAMED-NATIVE-ALICE-87AE9B28%2F&query-4-page=1&commentPage=2",
+        "robotsCount": 0,
+        "text": "NAMED NATIVE AUTHOR TEMPLATE\n\nAuthor: Named Native alice\nSearch\nSearch\nNamed Native Alice 3\n\nNATIVE NAMED FIRST BODY Named Native Alice 3\n\nPages: 1 2\n\n1 2 3 … 5\nNext Page"
+      },
+      "paged": {
+        "path": "/?author=2&author_name=prefix%2FNAMED-NATIVE-ALICE-87AE9B28%2F&query-4-page=2&commentPage=2&page=1",
+        "historyLength": 3,
+        "modelReads": [
+          {
+            "id": 679,
+            "method": "GET",
+            "path": "/api/public/document?path=%2F%3Fauthor%3D2%26author_name%3Dprefix%252FNAMED-NATIVE-ALICE-87AE9B28%252F%26query-4-page%3D2%26commentPage%3D2%26page%3D1",
+            "startedAt": 1794225563317,
+            "status": 200,
+            "finishedAt": 1794225563340,
+            "model": {
+              "status": 200,
+              "kind": "archive",
+              "archive": {
+                "type": "author",
+                "authorId": 2,
+                "slug": "named-native-alice-87ae9b28",
+                "name": "Named Native alice",
+                "permalink": "/author/named-native-alice-87ae9b28/"
+              },
+              "query": {
+                "search": "",
+                "category": "",
+                "tag": "",
+                "author": 2,
+                "namedAuthor": {
+                  "selected": {
+                    "type": "author",
+                    "authorId": 2,
+                    "slug": "named-native-alice-87ae9b28",
+                    "name": "Named Native alice",
+                    "permalink": "/author/named-native-alice-87ae9b28/"
+                  },
+                  "numericAuthor": 2
+                },
+                "date": null,
+                "archivePage": 1,
+                "contentPage": 1,
+                "commentPage": 2,
+                "blockPages": {
+                  "query-4-page": 2
+                },
+                "values": {
+                  "author": "2",
+                  "author_name": "prefix/NAMED-NATIVE-ALICE-87AE9B28/",
+                  "query-4-page": "2",
+                  "commentPage": "2",
+                  "page": "1"
+                }
+              },
+              "posts": [
+                {
+                  "id": 6,
+                  "authorId": 2,
+                  "locked": false
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "searched": {
+        "path": "/?s=Alice",
+        "historyLength": 4,
+        "modelReads": [
+          {
+            "id": 686,
+            "method": "GET",
+            "path": "/api/public/document?path=%2F%3Fs%3DAlice",
+            "startedAt": 1794225563565,
+            "status": 200,
+            "finishedAt": 1794225563595,
+            "model": {
+              "status": 200,
+              "kind": "archive",
+              "archive": null,
+              "query": {
+                "search": "Alice",
+                "category": "",
+                "tag": "",
+                "date": null,
+                "archivePage": 1,
+                "contentPage": 1,
+                "blockPages": {},
+                "values": {
+                  "search": "Alice",
+                  "page": "1"
+                }
+              },
+              "posts": [
+                {
+                  "id": 6,
+                  "authorId": 2,
+                  "locked": false
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "reloaded": {
+        "boot": {
+          "archive": {
+            "authorId": 2,
+            "name": "Named Native alice",
+            "permalink": "/author/named-native-alice-87ae9b28/",
+            "slug": "named-native-alice-87ae9b28",
+            "type": "author"
+          },
+          "kind": "archive",
+          "posts": [
+            {
+              "authorId": 2,
+              "id": 6,
+              "locked": false
+            }
+          ],
+          "query": {
+            "archivePage": 1,
+            "author": 2,
+            "blockPages": {
+              "query-4-page": 2
+            },
+            "category": "",
+            "commentPage": 2,
+            "contentPage": 1,
+            "date": null,
+            "namedAuthor": {
+              "numericAuthor": 2,
+              "selected": {
+                "authorId": 2,
+                "name": "Named Native alice",
+                "permalink": "/author/named-native-alice-87ae9b28/",
+                "slug": "named-native-alice-87ae9b28",
+                "type": "author"
+              }
+            },
+            "search": "",
+            "tag": "",
+            "values": {
+              "author": "2",
+              "author_name": "prefix/NAMED-NATIVE-ALICE-87AE9B28/",
+              "commentPage": "2",
+              "page": "1",
+              "query-4-page": "2"
+            }
+          },
+          "status": 200
+        },
+        "canonicalCount": 1,
+        "errors": [],
+        "heading": "Author: Named Native alice",
+        "historyLength": 4,
+        "originalSSRNodeRetained": true,
+        "overflow": false,
+        "path": "/?author=2&author_name=prefix%2FNAMED-NATIVE-ALICE-87AE9B28%2F&query-4-page=2&commentPage=2&page=1",
+        "robotsCount": 0,
+        "text": "NAMED NATIVE AUTHOR TEMPLATE\n\nAuthor: Named Native alice\nSearch\nSearch\nNamed Native Alice 2\n\nNATIVE NAMED FIRST BODY Named Native Alice 2\n\nPages: 1 2\n\nPrevious Page\n1 2 3 4 5\nNext Page"
+      },
+      "empty": {
+        "boot": {
+          "archive": {
+            "authorId": 4,
+            "name": "Named Native empty",
+            "permalink": "/author/named-native-empty-87ae9b28/",
+            "slug": "named-native-empty-87ae9b28",
+            "type": "author"
+          },
+          "kind": "archive",
+          "posts": [],
+          "query": {
+            "archivePage": 1,
+            "author": 4,
+            "blockPages": {},
+            "category": "",
+            "contentPage": 1,
+            "date": null,
+            "namedAuthor": {
+              "selected": {
+                "authorId": 4,
+                "name": "Named Native empty",
+                "permalink": "/author/named-native-empty-87ae9b28/",
+                "slug": "named-native-empty-87ae9b28",
+                "type": "author"
+              }
+            },
+            "search": "",
+            "tag": "",
+            "values": {
+              "author_name": "named-native-empty-87ae9b28",
+              "page": "1"
+            }
+          },
+          "status": 200
+        },
+        "canonicalCount": 1,
+        "errors": [],
+        "heading": "Author: Named Native empty",
+        "historyLength": 4,
+        "originalSSRNodeRetained": true,
+        "overflow": false,
+        "path": "/?author_name=named-native-empty-87ae9b28",
+        "robotsCount": 0,
+        "text": "WorldAct\n\nNamed Native Journal\nNamed Native Parent\nNamed Native Static Front\nSample Page\nAuthor: Named Native empty\n\nSorry, but nothing was found. Please try a search with different keywords.\n\nWorldAct\n\nJust another WorldAct site\n\nBlog\nAbout\nFAQs\nAuthors\nEvents\nShop\nPatterns\nThemes\n\nTwenty Twenty-Five\n\nDesigned with WordPress"
+      },
+      "intersection": {
+        "boot": {
+          "archive": {
+            "authorId": 3,
+            "name": "Named Native bob",
+            "permalink": "/author/named-native-bob-87ae9b28/",
+            "slug": "named-native-bob-87ae9b28",
+            "type": "author"
+          },
+          "kind": "archive",
+          "posts": [],
+          "query": {
+            "archivePage": 1,
+            "author": 3,
+            "blockPages": {},
+            "category": "",
+            "contentPage": 1,
+            "date": null,
+            "namedAuthor": {
+              "numericAuthor": 2,
+              "selected": {
+                "authorId": 3,
+                "name": "Named Native bob",
+                "permalink": "/author/named-native-bob-87ae9b28/",
+                "slug": "named-native-bob-87ae9b28",
+                "type": "author"
+              }
+            },
+            "search": "",
+            "tag": "",
+            "values": {
+              "author": "2",
+              "author_name": "named-native-bob-87ae9b28",
+              "page": "1"
+            }
+          },
+          "status": 200
+        },
+        "canonicalCount": 1,
+        "errors": [],
+        "heading": "Author: Named Native bob",
+        "historyLength": 5,
+        "originalSSRNodeRetained": true,
+        "overflow": false,
+        "path": "/?author=2&author_name=named-native-bob-87ae9b28",
+        "robotsCount": 0,
+        "text": "WorldAct\n\nNamed Native Journal\nNamed Native Parent\nNamed Native Static Front\nSample Page\nAuthor: Named Native bob\n\nSorry, but nothing was found. Please try a search with different keywords.\n\nWorldAct\n\nJust another WorldAct site\n\nBlog\nAbout\nFAQs\nAuthors\nEvents\nShop\nPatterns\nThemes\n\nTwenty Twenty-Five\n\nDesigned with WordPress"
+      },
+      "intersectionSearch": {
+        "path": "/?author=2&author_name=named-native-bob-87ae9b28",
+        "heading": "Author: Named Native bob",
+        "noUnrelatedBobBody": true
+      },
+      "screenshots": [
+        "../screens/author-name-native-twentytwentyfive-known-768.png",
+        "../screens/author-name-native-twentytwentyfive-search-768.png",
+        "../screens/author-name-native-twentytwentyfive-intersection-768.png"
+      ]
+    },
+    {
+      "theme": "twentytwentyfive",
+      "width": 375,
+      "scene": "native-root-paging-source-correct-global-coreSearch-history-hydration-empty-intersection",
+      "globalCoreSearchSourceCorrect": true,
+      "classicLocalFormPreservesFilters": false,
+      "rawName": "prefix/NAMED-NATIVE-ALICE-87AE9B28/",
+      "initial": {
+        "boot": {
+          "archive": {
+            "authorId": 2,
+            "name": "Named Native alice",
+            "permalink": "/author/named-native-alice-87ae9b28/",
+            "slug": "named-native-alice-87ae9b28",
+            "type": "author"
+          },
+          "kind": "archive",
+          "posts": [
+            {
+              "authorId": 2,
+              "id": 6,
+              "locked": false
+            }
+          ],
+          "query": {
+            "archivePage": 1,
+            "author": 2,
+            "blockPages": {
+              "query-4-page": 1
+            },
+            "category": "",
+            "commentPage": 2,
+            "contentPage": 1,
+            "date": null,
+            "namedAuthor": {
+              "numericAuthor": 2,
+              "selected": {
+                "authorId": 2,
+                "name": "Named Native alice",
+                "permalink": "/author/named-native-alice-87ae9b28/",
+                "slug": "named-native-alice-87ae9b28",
+                "type": "author"
+              }
+            },
+            "search": "",
+            "tag": "",
+            "values": {
+              "author": "2",
+              "author_name": "prefix/NAMED-NATIVE-ALICE-87AE9B28/",
+              "commentPage": "2",
+              "page": "1",
+              "query-4-page": "1"
+            }
+          },
+          "status": 200
+        },
+        "canonicalCount": 1,
+        "errors": [],
+        "heading": "Author: Named Native alice",
+        "historyLength": 2,
+        "originalSSRNodeRetained": true,
+        "overflow": false,
+        "path": "/?author=2&author_name=prefix%2FNAMED-NATIVE-ALICE-87AE9B28%2F&query-4-page=1&commentPage=2",
+        "robotsCount": 0,
+        "text": "NAMED NATIVE AUTHOR TEMPLATE\n\nAuthor: Named Native alice\nSearch\nSearch\nNamed Native Alice 3\n\nNATIVE NAMED FIRST BODY Named Native Alice 3\n\nPages: 1 2\n\n1 2 3 … 5\nNext Page"
+      },
+      "paged": {
+        "path": "/?author=2&author_name=prefix%2FNAMED-NATIVE-ALICE-87AE9B28%2F&query-4-page=2&commentPage=2&page=1",
+        "historyLength": 3,
+        "modelReads": [
+          {
+            "id": 722,
+            "method": "GET",
+            "path": "/api/public/document?path=%2F%3Fauthor%3D2%26author_name%3Dprefix%252FNAMED-NATIVE-ALICE-87AE9B28%252F%26query-4-page%3D2%26commentPage%3D2%26page%3D1",
+            "startedAt": 1794225566151,
+            "status": 200,
+            "finishedAt": 1794225566174,
+            "model": {
+              "status": 200,
+              "kind": "archive",
+              "archive": {
+                "type": "author",
+                "authorId": 2,
+                "slug": "named-native-alice-87ae9b28",
+                "name": "Named Native alice",
+                "permalink": "/author/named-native-alice-87ae9b28/"
+              },
+              "query": {
+                "search": "",
+                "category": "",
+                "tag": "",
+                "author": 2,
+                "namedAuthor": {
+                  "selected": {
+                    "type": "author",
+                    "authorId": 2,
+                    "slug": "named-native-alice-87ae9b28",
+                    "name": "Named Native alice",
+                    "permalink": "/author/named-native-alice-87ae9b28/"
+                  },
+                  "numericAuthor": 2
+                },
+                "date": null,
+                "archivePage": 1,
+                "contentPage": 1,
+                "commentPage": 2,
+                "blockPages": {
+                  "query-4-page": 2
+                },
+                "values": {
+                  "author": "2",
+                  "author_name": "prefix/NAMED-NATIVE-ALICE-87AE9B28/",
+                  "query-4-page": "2",
+                  "commentPage": "2",
+                  "page": "1"
+                }
+              },
+              "posts": [
+                {
+                  "id": 6,
+                  "authorId": 2,
+                  "locked": false
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "searched": {
+        "path": "/?s=Alice",
+        "historyLength": 4,
+        "modelReads": [
+          {
+            "id": 729,
+            "method": "GET",
+            "path": "/api/public/document?path=%2F%3Fs%3DAlice",
+            "startedAt": 1794225566404,
+            "status": 200,
+            "finishedAt": 1794225566435,
+            "model": {
+              "status": 200,
+              "kind": "archive",
+              "archive": null,
+              "query": {
+                "search": "Alice",
+                "category": "",
+                "tag": "",
+                "date": null,
+                "archivePage": 1,
+                "contentPage": 1,
+                "blockPages": {},
+                "values": {
+                  "search": "Alice",
+                  "page": "1"
+                }
+              },
+              "posts": [
+                {
+                  "id": 6,
+                  "authorId": 2,
+                  "locked": false
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "reloaded": {
+        "boot": {
+          "archive": {
+            "authorId": 2,
+            "name": "Named Native alice",
+            "permalink": "/author/named-native-alice-87ae9b28/",
+            "slug": "named-native-alice-87ae9b28",
+            "type": "author"
+          },
+          "kind": "archive",
+          "posts": [
+            {
+              "authorId": 2,
+              "id": 6,
+              "locked": false
+            }
+          ],
+          "query": {
+            "archivePage": 1,
+            "author": 2,
+            "blockPages": {
+              "query-4-page": 2
+            },
+            "category": "",
+            "commentPage": 2,
+            "contentPage": 1,
+            "date": null,
+            "namedAuthor": {
+              "numericAuthor": 2,
+              "selected": {
+                "authorId": 2,
+                "name": "Named Native alice",
+                "permalink": "/author/named-native-alice-87ae9b28/",
+                "slug": "named-native-alice-87ae9b28",
+                "type": "author"
+              }
+            },
+            "search": "",
+            "tag": "",
+            "values": {
+              "author": "2",
+              "author_name": "prefix/NAMED-NATIVE-ALICE-87AE9B28/",
+              "commentPage": "2",
+              "page": "1",
+              "query-4-page": "2"
+            }
+          },
+          "status": 200
+        },
+        "canonicalCount": 1,
+        "errors": [],
+        "heading": "Author: Named Native alice",
+        "historyLength": 4,
+        "originalSSRNodeRetained": true,
+        "overflow": false,
+        "path": "/?author=2&author_name=prefix%2FNAMED-NATIVE-ALICE-87AE9B28%2F&query-4-page=2&commentPage=2&page=1",
+        "robotsCount": 0,
+        "text": "NAMED NATIVE AUTHOR TEMPLATE\n\nAuthor: Named Native alice\nSearch\nSearch\nNamed Native Alice 2\n\nNATIVE NAMED FIRST BODY Named Native Alice 2\n\nPages: 1 2\n\nPrevious Page\n1 2 3 4 5\nNext Page"
+      },
+      "empty": {
+        "boot": {
+          "archive": {
+            "authorId": 4,
+            "name": "Named Native empty",
+            "permalink": "/author/named-native-empty-87ae9b28/",
+            "slug": "named-native-empty-87ae9b28",
+            "type": "author"
+          },
+          "kind": "archive",
+          "posts": [],
+          "query": {
+            "archivePage": 1,
+            "author": 4,
+            "blockPages": {},
+            "category": "",
+            "contentPage": 1,
+            "date": null,
+            "namedAuthor": {
+              "selected": {
+                "authorId": 4,
+                "name": "Named Native empty",
+                "permalink": "/author/named-native-empty-87ae9b28/",
+                "slug": "named-native-empty-87ae9b28",
+                "type": "author"
+              }
+            },
+            "search": "",
+            "tag": "",
+            "values": {
+              "author_name": "named-native-empty-87ae9b28",
+              "page": "1"
+            }
+          },
+          "status": 200
+        },
+        "canonicalCount": 1,
+        "errors": [],
+        "heading": "Author: Named Native empty",
+        "historyLength": 4,
+        "originalSSRNodeRetained": true,
+        "overflow": false,
+        "path": "/?author_name=named-native-empty-87ae9b28",
+        "robotsCount": 0,
+        "text": "WorldAct\n\nAuthor: Named Native empty\n\nSorry, but nothing was found. Please try a search with different keywords.\n\nWorldAct\n\nJust another WorldAct site\n\nBlog\nAbout\nFAQs\nAuthors\nEvents\nShop\nPatterns\nThemes\n\nTwenty Twenty-Five\n\nDesigned with WordPress"
+      },
+      "intersection": {
+        "boot": {
+          "archive": {
+            "authorId": 3,
+            "name": "Named Native bob",
+            "permalink": "/author/named-native-bob-87ae9b28/",
+            "slug": "named-native-bob-87ae9b28",
+            "type": "author"
+          },
+          "kind": "archive",
+          "posts": [],
+          "query": {
+            "archivePage": 1,
+            "author": 3,
+            "blockPages": {},
+            "category": "",
+            "contentPage": 1,
+            "date": null,
+            "namedAuthor": {
+              "numericAuthor": 2,
+              "selected": {
+                "authorId": 3,
+                "name": "Named Native bob",
+                "permalink": "/author/named-native-bob-87ae9b28/",
+                "slug": "named-native-bob-87ae9b28",
+                "type": "author"
+              }
+            },
+            "search": "",
+            "tag": "",
+            "values": {
+              "author": "2",
+              "author_name": "named-native-bob-87ae9b28",
+              "page": "1"
+            }
+          },
+          "status": 200
+        },
+        "canonicalCount": 1,
+        "errors": [],
+        "heading": "Author: Named Native bob",
+        "historyLength": 5,
+        "originalSSRNodeRetained": true,
+        "overflow": false,
+        "path": "/?author=2&author_name=named-native-bob-87ae9b28",
+        "robotsCount": 0,
+        "text": "WorldAct\n\nAuthor: Named Native bob\n\nSorry, but nothing was found. Please try a search with different keywords.\n\nWorldAct\n\nJust another WorldAct site\n\nBlog\nAbout\nFAQs\nAuthors\nEvents\nShop\nPatterns\nThemes\n\nTwenty Twenty-Five\n\nDesigned with WordPress"
+      },
+      "intersectionSearch": {
+        "path": "/?author=2&author_name=named-native-bob-87ae9b28",
+        "heading": "Author: Named Native bob",
+        "noUnrelatedBobBody": true
+      },
+      "screenshots": [
+        "../screens/author-name-native-twentytwentyfive-known-375.png",
+        "../screens/author-name-native-twentytwentyfive-search-375.png",
+        "../screens/author-name-native-twentytwentyfive-intersection-375.png"
+      ]
+    }
+  ]
+}

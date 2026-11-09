@@ -1,0 +1,106 @@
+{
+  "scope": "client implementation/preparation only, no native acceptance",
+  "result": "PASS final scoped UI guards; initial787 retains NEEDS_REVISION label",
+  "mainBase": "31931d10e2f059c4e397e6ee7439d4ca4419be63",
+  "backendFirstContract": "0894987a827bcbbef4e54775348c23914f84654d",
+  "ownMergeBase": "556bc6cfe00bf5560d3c36db1f0516ac9a166aac",
+  "initialUI": "7879251ae4fc3bae8570704d7118f5302670f51b",
+  "initialUILimits": "Superseded: altered numeric-only priority and retained synthesized path transport; not final accepted",
+  "requiredUISuccessor": "751a3e00d87104dcd67ee5cf60686c8d43cdccb9",
+  "ownTree": "c00c82b97303dba125b098703b42f4d52ddbf2a8",
+  "ownNodeSha256": "e26621d5362968bb973ae726bcae2df3c484888f440162706683ae0aa36a27d4",
+  "build": {
+    "tscPass": true,
+    "viteConfigLoaderRunnerPass": true,
+    "esbuildPass": true
+  },
+  "finalGuard": {
+    "files": 5,
+    "sourceTests": 30,
+    "sourcePass": 30,
+    "actualCompiledAPIRunnerTests": 30,
+    "actualCompiledAPIRunnerPass": 30,
+    "fail": 0,
+    "skipped": 0,
+    "pureSourceImportedFiles": 3,
+    "pureSourceImportedTests": 23,
+    "publicDocumentViewUsesSourceRenderWithActualSelectedAPIModel": true,
+    "frontAvailabilityActualAPIFile": true
+  },
+  "selector": [
+    "tests/public-author-name-query-ui.test.ts",
+    "tests/public-author-archive-ui.test.ts",
+    "tests/public-document-view.test.ts",
+    "tests/plain-permalink-routing.test.ts",
+    "tests/front-page-availability.test.ts"
+  ],
+  "beforePresentation": {
+    "sourceTests": 5,
+    "pass": 3,
+    "fail": 2,
+    "actualHTTPClaim": false,
+    "testSha256": "9315ddfce0753c05777947805cf0005feb0c357374aed8a90a8322800c633eeb",
+    "failure": "Named filters replace date/posts-page title in Classic view",
+    "fragmentHarnessOriginalSeparatelyRetained": true
+  },
+  "beforeTransport": {
+    "stage": "787 plus numeric-scope bound and behavior-preserving query extraction; before transport correction",
+    "sourceTests": 15,
+    "pass": 13,
+    "fail": 2,
+    "actualHTTPClaim": false,
+    "files": [
+      {
+        "file": "src__publicAuthorQuery.ts",
+        "sha256": "c0d1559791354ad5416b83f925b7c4329ee3f30e28302998ef4b22fb4c8d31c4"
+      },
+      {
+        "file": "src__screens__PublicSite.tsx",
+        "sha256": "a4ac04b10080ab80ba50a7d82940023b7f174c0d59e989441e38e5822ee611a7"
+      },
+      {
+        "file": "src__public__PublicDocumentView.tsx",
+        "sha256": "24b43ca35bd584e2d534872d501df7bf2f0c69506eb0c36b07a70e8ea9db6485"
+      },
+      {
+        "file": "tests__public-author-name-query-ui.test.ts",
+        "sha256": "024d192a23521c3236811d6bd62d4ba337a0e53f0da03fc7335ad2eef3b2b172"
+      }
+    ],
+    "sourceLogSha256": "abdcd6da808973abe2cc169194ff80b32e84f5b4a3cd0575be4888cfd6cea6d4"
+  },
+  "behaviors": [
+    "Decoded recognized name keys discover encoded scalars, duplicates and nesting",
+    "Exactly one empty name absent, whitespace nonempty unknown",
+    "Original numeric/name/intersection and malformedscalarshapes preserved",
+    "Named listing query clones visible params; server controls path tax/date priority",
+    "Selected-null descriptor remains safe-empty listing; approvedposts-pagekind uses existingpageDTO",
+    "Only named descriptor changes heading/template priority; numeric-onlypriorbehavior preserved",
+    "Root query paging/search remain queryform with independentquery/comment counters",
+    "PublicDocumentController,preview233,publicArchiveLinks andCSS untouched"
+  ],
+  "limitations": [
+    "No browser or persistentfixture before combinedruntimefreeze",
+    "No client-side identity resolution or server context authority",
+    "Source/helper render assertions remain source imports under compiled runner",
+    "Backend after089 mutablefollowups not composed/tested here",
+    "No fullCMS/WordPresspixel/release/benchmark claim"
+  ],
+  "logsSha256": {
+    "before-source": "c7880d7bceb97059ba24d0d618d19a15c184d95c8a2a51763c0b3bab56bb727e",
+    "original-fragment-harness": "7289f51af390987b862ebf07d115e8c4e41dcc3b8285e74219389d9f07eabab0",
+    "source": "e1604c94e87ce5e66174104050395012da4140727c70245c95eb8c8e368dc122",
+    "compiled": "49f70aff0432170de13bca3179c3ea0edf050dc1cb90a1cd2ce841bf8e8b9436",
+    "affected-source": "720803ecce68a36f6cde1c33b0064a7bf3679e41c137871ef73978cc4c857495",
+    "affected-compiled": "583ab30db45f3b4d45ef4c457dba9b9b21ad98e533b6f26479ef83b292dd7ccb",
+    "path-transport-before-source": "abdcd6da808973abe2cc169194ff80b32e84f5b4a3cd0575be4888cfd6cea6d4",
+    "successor-source": "35dae2d7d7dd3fff17477c3fd2961bc0caebfbaa955bf4bc53121edc893bba1c",
+    "successor-compiled": "07141a1b7c67572f4044115398e4c041738c8837f060014c299df56ec66b584c",
+    "successor-typecheck": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "successor-vite": "386e51a3f3333006190c538463f94ea037c74a87c75737c1c542abcf8c95c3b0",
+    "successor-node": "c714cf9bce455fc45f1cc37c62592e48e0a81781617633a45fb3abf29d4a92ce"
+  },
+  "cleanupSha256": "6662fc37810b0893b9d3493f9cb9ae730f227ee2a6e9ecdf02bcf82c1762c165",
+  "immutableOriginalBytesPreserved": true,
+  "readOnlyDependencyLockSha256": "233888ed8f864581a8835aab0b4c33ccd7fbc391f2a98650b63fcf8db8814892"
+}
