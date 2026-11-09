@@ -120,8 +120,14 @@ test("singular/date template priority preserves chosen bodies without changing d
     restore = Object.fromEntries(["theme", "timezone", "frontPageMode", "permalinkStructure"].map(key => [key, original[key]]));
     await setup("/api/settings", "PUT", { theme: "twentytwentyfive", timezone: "UTC", frontPageMode: "posts", permalinkStructure: "/%postname%/" });
     const design = await setup("/api/site-editor");
-    assert.ok(design.templates.some((document: any) => document.slug === "date"), "SETUP available date template");
-    assert.ok(design.templates.some((document: any) => document.slug === "404"), "SETUP available404 template");
+    for (const slug of ["date", "404"]) if (!design.templates.some((document: any) => document.slug === slug)) {
+      const created = await setup("/api/site-editor/documents", "POST", { type: "template", slug, title: stamp + " " + slug,
+        content: "<p>OWNED-FALLBACK-" + slug.toUpperCase() + "-" + stamp + "</p>" }, 201);
+      assert.equal(created.document.slug, slug, "SETUP actual saved fallback slug");
+    }
+    const inventory = await setup("/api/site-editor");
+    assert.ok(inventory.templates.some((document: any) => document.slug === "date"), "SETUP available date template");
+    assert.ok(inventory.templates.some((document: any) => document.slug === "404"), "SETUP available404 template");
     for (const [slug, marker] of [[pageTemplate, pageMarker], [postTemplate, postMarker]])
       await setup("/api/site-editor/documents", "POST", { type: "template", slug, title: slug,
         content: '<!-- wp:group {"tagName":"main"} --><main class="wp-block-group"><p>' + marker + '</p><!-- wp:post-title {"level":1} /--><!-- wp:post-content /--></main><!-- /wp:group -->' }, 201);
