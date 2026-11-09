@@ -102,8 +102,8 @@ async function readPublicSiteOnce(context: PublicReadContext,selection:{author?:
     const path=listingRequestPath(context.requestPath,context.query),resolved=await resolvePublicDocumentRoute(path,{namedPin:selection.named,authenticated:Boolean(context.user)});
     if(resolved.status===404)throw new HttpError(404,"Public listing page not found.");
     listing=resolved.listing;
-    if(listing){
-      const query=normalizeListingQuery(readPublicPath(path).query,{singular:["singular","front-page"].includes(resolved.kind),archive:resolved.archive,namedAuthor:listing.namedAuthor});
+    if(listing||nameVisible){
+      const query=normalizeListingQuery(readPublicPath(path).query,{singular:["singular","front-page"].includes(resolved.kind),archive:resolved.archive,namedAuthor:listing?.namedAuthor});
       context={...context,query:{...query.values,page:query.archivePage}};
     }
   }
