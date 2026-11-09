@@ -11,7 +11,7 @@ import { avatarURL } from "./avatars.js";
 import { appendPostDateArchiveSQL, dateArchiveDTO, parseDateArchiveQuery } from "./date-archives.js";
 import { HttpError } from "./utils.js";
 import {completePublicRead,observePublicPost,observePublicAuthor,settledPublicReads} from "./public-read-attempt.js";
-import {listingRequestPath,listingFilterValues,publicListingWhere,normalizeListingQuery,type PublicListingContext,type NamedAuthorPin} from "./author-query.js";
+import {listingRequestPath,hasNamedAuthorQuery,listingFilterValues,publicListingWhere,normalizeListingQuery,type PublicListingContext,type NamedAuthorPin} from "./author-query.js";
 import {readPublicPath} from "./public-path.js";
 import {resolvePublicDocumentRoute} from "./public-documents.js";
 
@@ -96,7 +96,7 @@ async function readPublicSiteOnce(context: PublicReadContext,selection:{author?:
   if(selection.named.value?.selected)observePublicAuthor(context.canReadProtectedPost,selection.named.value.selected);
   const settings=await getSettings();
   let listing=context.listing;
-  const nameVisible=Object.keys(context.query).some(key=>/^author_name(?:\[|$)/.test(key)) || Boolean(context.requestPath&&/[?&]author_name(?:=|%5b|\[)/i.test(context.requestPath));
+  const nameVisible=hasNamedAuthorQuery(context.query,context.requestPath);
   if(!listing&&nameVisible){
     const path=listingRequestPath(context.requestPath,context.query),resolved=await resolvePublicDocumentRoute(path,{namedPin:selection.named,authenticated:Boolean(context.user)});
     if(resolved.status===404)throw new HttpError(404,"Named author listing not found.");

@@ -40,7 +40,7 @@ import { postPermalink, resolvePublicPath } from "./permalinks.js";
 import iconsRouter from "./icons.js";
 import { normalizeBlockRenderAttributes } from "./block-render-attributes.js";
 import { isPublicRequestPath } from "./public-pagination.js";
-import {listingRequestPath,normalizeListingQuery,type NamedAuthorPin} from "./author-query.js";
+import {listingRequestPath,hasNamedAuthorQuery,normalizeListingQuery,type NamedAuthorPin} from "./author-query.js";
 import {resolvePublicDocumentRoute} from "./public-documents.js";
 
 const escapeHTML = (value: unknown) =>
@@ -842,7 +842,7 @@ router.get("/api/public/templates/:slug", async (req:AuthRequest, res) => {
   const requestPath = String(req.query.requestPath || "/").slice(0, 2000);
   if (!isPublicRequestPath(requestPath))
     throw new HttpError(400, "Use a site-relative request path.");
-  const nameVisible=Object.keys(req.query).some(key=>/^author_name(?:\[|$)/.test(key))||/[?&]author_name(?:=|%5b|\[)/i.test(requestPath);
+  const nameVisible=hasNamedAuthorQuery(req.query,requestPath);
   const namedPath=nameVisible?listingRequestPath(requestPath,req.query):null;
   const namedRoute=namedPath&&!post?await resolvePublicDocumentRoute(namedPath,{namedPin,authenticated:Boolean(req.user)}):null;
   if(namedRoute?.status===404)throw new HttpError(404,"Named author listing not found.");

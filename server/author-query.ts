@@ -1,4 +1,5 @@
 import {pool,getSettings} from "./db.js";
+import {readPublicPath} from "./public-path.js";
 import {HttpError} from "./utils.js";
 import {normalizeAuthorArchiveSlug,authorArchivePath} from "../shared/author-archive.js";
 import {readNamedAuthorInput,normalizePublicQuery,PublicQueryError} from "../shared/public-routing.js";
@@ -11,6 +12,10 @@ type Settings=Awaited<ReturnType<typeof getSettings>>;
 type Resolution={status:200|404;kind:PublicRoute["kind"]|"framework";archive?:PublicArchive|null;selectedId?:number;listing?:PublicListingContext};
 export function normalizeListingQuery(query:URLSearchParams,options:Parameters<typeof normalizePublicQuery>[1]){try{return normalizePublicQuery(query,options);}catch(error){if(error instanceof PublicQueryError)throw new HttpError(400,error.message);throw error;}}
 export function namedAuthorInput(query:URLSearchParams){try{return readNamedAuthorInput(query);}catch(error){if(error instanceof PublicQueryError)throw new HttpError(400,error.message);throw error;}}
+/** Inspect decoded keys from the same validated path parser as documents. */
+export function hasNamedAuthorQuery(values:Record<string,unknown>,path?:string){
+  return Object.keys(values).some(key=>/^author_name(?:\[|$)/.test(key)) || Boolean(path&&[...readPublicPath(path).query.keys()].some(key=>/^author_name(?:\[|$)/.test(key)));
+}
 /** Express objects are validated before flattening; visible path values and
  * explicit transport values must agree, including the original numeric filter. */
 export function listingRequestPath(path:string|undefined,values:Record<string,unknown>):string{

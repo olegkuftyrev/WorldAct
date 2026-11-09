@@ -168,7 +168,7 @@ router.get("/api/public/resolve", async (req, res) => {
     if(nameInput){
       const route=await resolvePublicDocumentRoute(path,{authenticated:Boolean((req as AuthRequest).user)});
       if(route.status===404)throw new HttpError(404,"Named author listing not found.");
-      if(route.listing?.namedAuthor){res.json({archive:route.archive || null,namedAuthor:route.listing.namedAuthor});return;}
+      if(route.listing?.namedAuthor){res.json({archive:route.archive || null,namedAuthor:route.listing.namedAuthor,...(route.kind==="posts-page"?{kind:"posts-page"}: {})});return;}
       if(route.selectedId&&route.selectedType)resolved={id:route.selectedId,type:route.selectedType,...(route.contentPage?{contentPage:route.contentPage}:{})};
     }else resolved = await resolvePublicPath(path);
   } catch (error) {
