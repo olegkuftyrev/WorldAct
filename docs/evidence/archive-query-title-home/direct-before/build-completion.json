@@ -1,0 +1,34 @@
+{
+  "stage": "DIRECT_NATIVE_BUILD_COMPLETION",
+  "startedAtUtc": "2026-11-09T16:26:10.189Z",
+  "finishedAtUtc": "2026-11-09T16:26:10.231Z",
+  "command": [
+    "<owned-direct-before-worktree>/node_modules/@esbuild/darwin-arm64/bin/esbuild",
+    "server/index.ts",
+    "--bundle",
+    "--platform=node",
+    "--format=esm",
+    "--packages=external",
+    "--outfile=dist-server/index.js"
+  ],
+  "exitCode": 0,
+  "signal": null,
+  "error": null,
+  "executableSha256": "3e030ee2aa86ad3c33e5e95ae0e53bb03de40e0da35c9b1180a67de4a497cae5",
+  "actualNodeSha256": "300199e4aebe00b526fee49af14904d50cacd20333b07c99c2ded6ba3ddf7070",
+  "expectedNodeSha256": "300199e4aebe00b526fee49af14904d50cacd20333b07c99c2ded6ba3ddf7070",
+  "priorTscAndVitePassed": true,
+  "originalHarnessFailurePreserved": {
+    "log": "<private-evidence-root>/archive-query-title-home-direct-before-build.log",
+    "sha256": "71f15f7e6f4a627e231dc8f7487c4a7f7a2dc015e58c4ef48c81c62d41017d8d",
+    "receipt": "<private-evidence-root>/archive-query-title-home-direct-before-build.json",
+    "receiptSha256": "68de1d36fa9de667040ccd846fe80092d65e3c15eb4d60d57f3eb68dd299ecdd"
+  },
+  "testSha256": "bf0eea47871d083b23217643b9b3dbb93851349f8801b957143c327ee077cba8",
+  "log": {
+    "path": "<private-evidence-root>/archive-query-title-home-direct-before-build-completion.log",
+    "sha256": "79e8ea87185a6840540f5931fde203a97f136b05b1a8506c9454ceb96fcb59c1"
+  },
+  "runtimeOrFixtureChanges": false,
+  "testsRun": false
+}

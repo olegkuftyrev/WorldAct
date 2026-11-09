@@ -1,0 +1,318 @@
+{
+  "stage": "DIRECT_TEMPLATE_CORRECTED_REPORTING_AUDIT_ONLY_NO_TEST_RERUN",
+  "recordedAtUtc": "2026-11-09T16:27:51.243Z",
+  "baseline": "0f7dd2f3d55a72a3b2b498a152a10332ef066c68",
+  "testOnlyCommit": "6a23b7e3aad1e8738848ab0b0fcec36c6b76256a",
+  "testSha256": "bf0eea47871d083b23217643b9b3dbb93851349f8801b957143c327ee077cba8",
+  "actualNodeSha256": "300199e4aebe00b526fee49af14904d50cacd20333b07c99c2ded6ba3ddf7070",
+  "phases": [
+    {
+      "mode": "source",
+      "counts": {
+        "tests": 4,
+        "pass": 2,
+        "fail": 2,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "runnerExitCode": 1,
+      "rawReceiptCounts": {
+        "tests": null,
+        "pass": null,
+        "fail": null,
+        "cancelled": null,
+        "skipped": null
+      },
+      "countCorrection": "Read-only extraction of actual Node24 default spec reporter ℹ summary; original receipt used TAP-only parser and remains unchanged with null counts.",
+      "dispatches": 6,
+      "rows": [
+        {
+          "label": "home",
+          "path": "/api/public/templates/qt-direct-mw9h3xyp?requestPath=%2F",
+          "getStatus": 200,
+          "headStatus": 200,
+          "headBodyEmpty": true,
+          "errors": [
+            null,
+            null
+          ],
+          "document": {
+            "id": 215,
+            "slug": "qt-direct-mw9h3xyp",
+            "title": "Owned direct title mw9h3xyp",
+            "type": "template",
+            "version": 1
+          },
+          "identityMatches": true,
+          "mainCount": 1,
+          "markerCount": 1,
+          "titleAnchorCount": 1,
+          "wrapperCount": 1,
+          "titleTag": "H1",
+          "titleClass": "wp-block-query-title",
+          "titleText": "Blog",
+          "actualContentFragment": "<main id=\"qt-direct-mw9h3xyp-main\" class=\"wp-block-group wp-block-group\"><p>DIRECT-MARKER-mw9h3xyp</p><h1 class=\"wp-block-query-title\" id=\"qt-direct-mw9h3xyp-title\">Blog</h1></main>"
+        },
+        {
+          "label": "path-only-date",
+          "path": "/api/public/templates/qt-direct-mw9h3xyp?requestPath=%2F%3Fyear%3D2001",
+          "getStatus": 200,
+          "headStatus": 200,
+          "headBodyEmpty": true,
+          "errors": [
+            null,
+            null
+          ],
+          "document": {
+            "id": 215,
+            "slug": "qt-direct-mw9h3xyp",
+            "title": "Owned direct title mw9h3xyp",
+            "type": "template",
+            "version": 1
+          },
+          "identityMatches": true,
+          "mainCount": 1,
+          "markerCount": 1,
+          "titleAnchorCount": 1,
+          "wrapperCount": 1,
+          "titleTag": "H1",
+          "titleClass": "wp-block-query-title",
+          "titleText": "Blog",
+          "actualContentFragment": "<main id=\"qt-direct-mw9h3xyp-main\" class=\"wp-block-group wp-block-group\"><p>DIRECT-MARKER-mw9h3xyp</p><h1 class=\"wp-block-query-title\" id=\"qt-direct-mw9h3xyp-title\">Blog</h1></main>"
+        },
+        {
+          "label": "transport-only-date",
+          "path": "/api/public/templates/qt-direct-mw9h3xyp?requestPath=%2F&year=2001",
+          "getStatus": 200,
+          "headStatus": 200,
+          "headBodyEmpty": true,
+          "errors": [
+            null,
+            null
+          ],
+          "document": {
+            "id": 215,
+            "slug": "qt-direct-mw9h3xyp",
+            "title": "Owned direct title mw9h3xyp",
+            "type": "template",
+            "version": 1
+          },
+          "identityMatches": true,
+          "mainCount": 1,
+          "markerCount": 1,
+          "titleAnchorCount": 1,
+          "wrapperCount": 1,
+          "titleTag": "H1",
+          "titleClass": "wp-block-query-title",
+          "titleText": "Year: 2001",
+          "actualContentFragment": "<main id=\"qt-direct-mw9h3xyp-main\" class=\"wp-block-group wp-block-group\"><p>DIRECT-MARKER-mw9h3xyp</p><h1 class=\"wp-block-query-title\" id=\"qt-direct-mw9h3xyp-title\">Year: 2001</h1></main>"
+        }
+      ],
+      "fixtureCleanup": {
+        "documentIds": [
+          215
+        ],
+        "settingsRestoreAttempted": true,
+        "failures": []
+      },
+      "gatherCompleteBeforePolicy": true,
+      "observedDatabases": [
+        "worldact_test_1794241574941_3b9ae717"
+      ],
+      "appGroups": [
+        "worldact-archive-title-home-direct-before-source-6a23"
+      ],
+      "files": {
+        "proof": {
+          "path": "<private-evidence-root>/archive-query-title-home-direct-before-source-proof.json",
+          "sha256": "f24b43a7c0df14166d03cc06b46a752d2c37cf0995e46caea65c7206e5ae5cb8"
+        },
+        "log": {
+          "path": "<private-evidence-root>/archive-query-title-home-direct-before-source.log",
+          "sha256": "e00fd183cbf9a9f2abfbffab066e83614d050d3449153495543d6c19e1fa6a96"
+        },
+        "run": {
+          "path": "<private-evidence-root>/archive-query-title-home-direct-before-source-run.json",
+          "sha256": "3ddce6ea25bf8c90af694bfff552426f6bf6075b7dda9ae0f0984e08a9ef0842"
+        }
+      }
+    },
+    {
+      "mode": "compiled",
+      "counts": {
+        "tests": 4,
+        "pass": 2,
+        "fail": 2,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "runnerExitCode": 1,
+      "rawReceiptCounts": {
+        "tests": null,
+        "pass": null,
+        "fail": null,
+        "cancelled": null,
+        "skipped": null
+      },
+      "countCorrection": "Read-only extraction of actual Node24 default spec reporter ℹ summary; original receipt used TAP-only parser and remains unchanged with null counts.",
+      "dispatches": 6,
+      "rows": [
+        {
+          "label": "home",
+          "path": "/api/public/templates/qt-direct-mw9h4ndj?requestPath=%2F",
+          "getStatus": 200,
+          "headStatus": 200,
+          "headBodyEmpty": true,
+          "errors": [
+            null,
+            null
+          ],
+          "document": {
+            "id": 215,
+            "slug": "qt-direct-mw9h4ndj",
+            "title": "Owned direct title mw9h4ndj",
+            "type": "template",
+            "version": 1
+          },
+          "identityMatches": true,
+          "mainCount": 1,
+          "markerCount": 1,
+          "titleAnchorCount": 1,
+          "wrapperCount": 1,
+          "titleTag": "H1",
+          "titleClass": "wp-block-query-title",
+          "titleText": "Blog",
+          "actualContentFragment": "<main id=\"qt-direct-mw9h4ndj-main\" class=\"wp-block-group wp-block-group\"><p>DIRECT-MARKER-mw9h4ndj</p><h1 class=\"wp-block-query-title\" id=\"qt-direct-mw9h4ndj-title\">Blog</h1></main>"
+        },
+        {
+          "label": "path-only-date",
+          "path": "/api/public/templates/qt-direct-mw9h4ndj?requestPath=%2F%3Fyear%3D2001",
+          "getStatus": 200,
+          "headStatus": 200,
+          "headBodyEmpty": true,
+          "errors": [
+            null,
+            null
+          ],
+          "document": {
+            "id": 215,
+            "slug": "qt-direct-mw9h4ndj",
+            "title": "Owned direct title mw9h4ndj",
+            "type": "template",
+            "version": 1
+          },
+          "identityMatches": true,
+          "mainCount": 1,
+          "markerCount": 1,
+          "titleAnchorCount": 1,
+          "wrapperCount": 1,
+          "titleTag": "H1",
+          "titleClass": "wp-block-query-title",
+          "titleText": "Blog",
+          "actualContentFragment": "<main id=\"qt-direct-mw9h4ndj-main\" class=\"wp-block-group wp-block-group\"><p>DIRECT-MARKER-mw9h4ndj</p><h1 class=\"wp-block-query-title\" id=\"qt-direct-mw9h4ndj-title\">Blog</h1></main>"
+        },
+        {
+          "label": "transport-only-date",
+          "path": "/api/public/templates/qt-direct-mw9h4ndj?requestPath=%2F&year=2001",
+          "getStatus": 200,
+          "headStatus": 200,
+          "headBodyEmpty": true,
+          "errors": [
+            null,
+            null
+          ],
+          "document": {
+            "id": 215,
+            "slug": "qt-direct-mw9h4ndj",
+            "title": "Owned direct title mw9h4ndj",
+            "type": "template",
+            "version": 1
+          },
+          "identityMatches": true,
+          "mainCount": 1,
+          "markerCount": 1,
+          "titleAnchorCount": 1,
+          "wrapperCount": 1,
+          "titleTag": "H1",
+          "titleClass": "wp-block-query-title",
+          "titleText": "Year: 2001",
+          "actualContentFragment": "<main id=\"qt-direct-mw9h4ndj-main\" class=\"wp-block-group wp-block-group\"><p>DIRECT-MARKER-mw9h4ndj</p><h1 class=\"wp-block-query-title\" id=\"qt-direct-mw9h4ndj-title\">Year: 2001</h1></main>"
+        }
+      ],
+      "fixtureCleanup": {
+        "documentIds": [
+          215
+        ],
+        "settingsRestoreAttempted": true,
+        "failures": []
+      },
+      "gatherCompleteBeforePolicy": true,
+      "observedDatabases": [
+        "worldact_test_1794241608619_367da24f"
+      ],
+      "appGroups": [
+        "worldact-archive-title-home-direct-before-compiled-6a23"
+      ],
+      "files": {
+        "proof": {
+          "path": "<private-evidence-root>/archive-query-title-home-direct-before-compiled-proof.json",
+          "sha256": "862e1a8f7db0dcd284b6291135e34ce002738721b632f8a1ffde0a3755decf25"
+        },
+        "log": {
+          "path": "<private-evidence-root>/archive-query-title-home-direct-before-compiled.log",
+          "sha256": "03105a0a3b60eb4eff02ae510d291db02eb8c0aa8f3b8e87fb67dcc397a53e31"
+        },
+        "run": {
+          "path": "<private-evidence-root>/archive-query-title-home-direct-before-compiled-run.json",
+          "sha256": "c5a5d694acaa8d4ef845f3af050098e160b41102fa0ce97799d46e6dceed0b3b"
+        }
+      }
+    }
+  ],
+  "cleanup": {
+    "databaseNames": [
+      "worldact_archive_title_home_direct_before_anchor",
+      "worldact_test_1794241574941_3b9ae717",
+      "worldact_test_1794241608619_367da24f"
+    ],
+    "databaseRows": [],
+    "phaseAppGroups": [
+      "worldact-archive-title-home-direct-before-source-6a23",
+      "worldact-archive-title-home-direct-before-compiled-6a23"
+    ],
+    "phaseAppGroupRows": [],
+    "port5195Free": true,
+    "config": {
+      "path": "<owned-direct-before-worktree>/.env",
+      "mode": "0600",
+      "uid": 501,
+      "constructedBytesUnchanged": true,
+      "state": "retained pending root review"
+    },
+    "readonlyDependencyLink": {
+      "path": "<owned-direct-before-worktree>/node_modules",
+      "target": "<dependency-owner-workspace>/node_modules",
+      "realpath": "<dependency-owner-workspace>/node_modules",
+      "ownerUid": 501,
+      "ownerMode": "0755",
+      "state": "retained pending root review"
+    },
+    "builds": {
+      "dist": "<owned-direct-before-worktree>/dist",
+      "distServer": "<owned-direct-before-worktree>/dist-server",
+      "state": "retained baseline300199"
+    },
+    "uploads": "Exact runner-generated paths were not journaled; only standard runner finally cleanup was observed. No independent per-path absence claim.",
+    "archives": "No archive created."
+  },
+  "worktreeClean": true,
+  "runtimeOrFixtureOrAssertionChanges": false,
+  "notes": [
+    "Initial native build invocation used Node in error; original build log/receipt remain unchanged. Direct native invocation separately succeeded with exact300199 before any guard.",
+    "Original run receipts contain null counts from TAP-only summary parsing; actual logs use ℹ spec reporter. This append-only audit records actual counts without changing originals.",
+    "Two modes each gathered all six anonymous responses before policy checks; only home anchor/wrapper absence failed.",
+    "No browser/UI/full/fresh/fixed/3062 scope; separate from af82 outer six,14dc body sixteen,fa7 singular and454 fixtures."
+  ]
+}

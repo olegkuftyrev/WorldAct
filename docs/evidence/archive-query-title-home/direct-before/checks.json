@@ -1,0 +1,270 @@
+{
+  "stage": "GENUINE_DIRECT_TEMPLATE_HOME_BEFORE_BOTH_MODES",
+  "recordedAtUtc": "2026-11-09T16:28:59.884174+00:00",
+  "baselineReleasedCommit": "0f7dd2f3d55a72a3b2b498a152a10332ef066c68",
+  "testOnlyCommit": "6a23b7e3aad1e8738848ab0b0fcec36c6b76256a",
+  "worktree": "<owned-direct-before-worktree>",
+  "physicalWorktree": "<owned-direct-before-worktree>",
+  "test": {
+    "path": "<owned-direct-before-worktree>/tests/archive-query-title-home-direct-original.test.ts",
+    "sha256": "bf0eea47871d083b23217643b9b3dbb93851349f8801b957143c327ee077cba8",
+    "firstImport": "./isolated-test.js",
+    "lines": 134,
+    "privateOriginalByteIdentical": true
+  },
+  "sourceCompiledRuntime": {
+    "expectedAndActualNodeSha256": "300199e4aebe00b526fee49af14904d50cacd20333b07c99c2ded6ba3ddf7070",
+    "runtimeChangedFromBaseline": false,
+    "fixtureOrAssertionsChangedAfterFreeze": false,
+    "onlyChangedTrackedFileFromBaseline": "tests/archive-query-title-home-direct-original.test.ts"
+  },
+  "build": {
+    "tsc": "PASS",
+    "viteConfigLoaderRunner": "PASS",
+    "initialEsbuild": "HARNESS_INVOCATION_ERROR: native executable was incorrectly passed to Node; preserved original log and receipt",
+    "directNativeEsbuildCompletion": "PASS exact300199; occurred before either test guard",
+    "allBaselineOutputsRetained": true,
+    "manifest": {
+      "path": "<private-evidence-root>/archive-query-title-home-direct-before-baseline-build-manifest.json",
+      "sha256": "07d32380c6ec2bd588078b610c2fd44275ab9eaaea5327f96b54a0d1c06d1d20",
+      "bytes": 85835,
+      "mode": "0600"
+    }
+  },
+  "modes": [
+    {
+      "mode": "source",
+      "command": [
+        "node",
+        "scripts/test-isolated.mjs",
+        "tests/archive-query-title-home-direct-original.test.ts"
+      ],
+      "actualApi": "server/index.ts via --import tsx",
+      "guardPort": 5195,
+      "runnerExitCode": 1,
+      "counts": {
+        "tests": 4,
+        "pass": 2,
+        "fail": 2,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "anonymousResponses": 6,
+      "allGetHeadStatus": 200,
+      "allHeadBodiesEmpty": true,
+      "dateControlsPass": true,
+      "genuineFailedPolicy": "Only unfiltered home explicit archive anchor and wrapper remain (Blog); child plus parent fail",
+      "setupTransportContainerFailures": false,
+      "allResponsesGatheredBeforePolicy": true,
+      "apiCleanup": {
+        "documentIds": [
+          215
+        ],
+        "settingsRestoreAttempted": true,
+        "failures": []
+      },
+      "files": {
+        "proof": {
+          "path": "<private-evidence-root>/archive-query-title-home-direct-before-source-proof.json",
+          "sha256": "f24b43a7c0df14166d03cc06b46a752d2c37cf0995e46caea65c7206e5ae5cb8"
+        },
+        "log": {
+          "path": "<private-evidence-root>/archive-query-title-home-direct-before-source.log",
+          "sha256": "e00fd183cbf9a9f2abfbffab066e83614d050d3449153495543d6c19e1fa6a96"
+        },
+        "run": {
+          "path": "<private-evidence-root>/archive-query-title-home-direct-before-source-run.json",
+          "sha256": "3ddce6ea25bf8c90af694bfff552426f6bf6075b7dda9ae0f0984e08a9ef0842"
+        }
+      }
+    },
+    {
+      "mode": "compiled",
+      "command": [
+        "node",
+        "scripts/test-isolated.mjs",
+        "tests/archive-query-title-home-direct-original.test.ts"
+      ],
+      "actualApi": "dist-server/index.js via ISOLATED_TEST_COMPILED=true",
+      "guardPort": 5195,
+      "runnerExitCode": 1,
+      "counts": {
+        "tests": 4,
+        "pass": 2,
+        "fail": 2,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "anonymousResponses": 6,
+      "allGetHeadStatus": 200,
+      "allHeadBodiesEmpty": true,
+      "dateControlsPass": true,
+      "genuineFailedPolicy": "Only unfiltered home explicit archive anchor and wrapper remain (Blog); child plus parent fail",
+      "setupTransportContainerFailures": false,
+      "allResponsesGatheredBeforePolicy": true,
+      "apiCleanup": {
+        "documentIds": [
+          215
+        ],
+        "settingsRestoreAttempted": true,
+        "failures": []
+      },
+      "files": {
+        "proof": {
+          "path": "<private-evidence-root>/archive-query-title-home-direct-before-compiled-proof.json",
+          "sha256": "862e1a8f7db0dcd284b6291135e34ce002738721b632f8a1ffde0a3755decf25"
+        },
+        "log": {
+          "path": "<private-evidence-root>/archive-query-title-home-direct-before-compiled.log",
+          "sha256": "03105a0a3b60eb4eff02ae510d291db02eb8c0aa8f3b8e87fb67dcc397a53e31"
+        },
+        "run": {
+          "path": "<private-evidence-root>/archive-query-title-home-direct-before-compiled-run.json",
+          "sha256": "c5a5d694acaa8d4ef845f3af050098e160b41102fa0ce97799d46e6dceed0b3b"
+        }
+      }
+    }
+  ],
+  "countsReceiptLimitation": "Original source/compiled run receipts have null count fields because the private wrapper expected TAP # summary. Raw Node24 default reporter \u2139 counts are actual4/2/2 each; append-only dom-counts-audit records these without rewriting original files.",
+  "cleanup": {
+    "databaseNames": [
+      "worldact_archive_title_home_direct_before_anchor",
+      "worldact_test_1794241574941_3b9ae717",
+      "worldact_test_1794241608619_367da24f"
+    ],
+    "databaseRows": [],
+    "phaseAppGroups": [
+      "worldact-archive-title-home-direct-before-source-6a23",
+      "worldact-archive-title-home-direct-before-compiled-6a23"
+    ],
+    "phaseAppGroupRows": [],
+    "port5195Free": true,
+    "config": {
+      "path": "<owned-direct-before-worktree>/.env",
+      "mode": "0600",
+      "uid": 501,
+      "constructedBytesUnchanged": true,
+      "state": "retained pending root review"
+    },
+    "readonlyDependencyLink": {
+      "path": "<owned-direct-before-worktree>/node_modules",
+      "target": "<dependency-owner-workspace>/node_modules",
+      "realpath": "<dependency-owner-workspace>/node_modules",
+      "ownerUid": 501,
+      "ownerMode": "0755",
+      "state": "retained pending root review"
+    },
+    "builds": {
+      "dist": "<owned-direct-before-worktree>/dist",
+      "distServer": "<owned-direct-before-worktree>/dist-server",
+      "state": "retained baseline300199"
+    },
+    "uploads": "Exact runner-generated paths were not journaled; only standard runner finally cleanup was observed. No independent per-path absence claim.",
+    "archives": "No archive created."
+  },
+  "preconditions": "Each guard gated exact config/link/owner UID5010755/lock233/test/Node300199, fresh proof/log/receipt, free5195, never-created anchor and phase PG group absence. Failed preconditions throw before spawning.",
+  "inputs": [
+    {
+      "path": "<private-evidence-root>/archive-query-title-home-direct-before-original.test.ts",
+      "sha256": "bf0eea47871d083b23217643b9b3dbb93851349f8801b957143c327ee077cba8",
+      "bytes": 10710
+    },
+    {
+      "path": "<private-evidence-root>/archive-query-title-home-direct-before-full.diff",
+      "sha256": "aedc7bda81cf2b76e90e6a6e99078fc8dc17194203c041bfe50e47c4f119b4f9",
+      "bytes": 11106
+    },
+    {
+      "path": "<private-evidence-root>/archive-query-title-home-direct-before-selector.json",
+      "sha256": "9e059bcd0ca0ed1ed3c9eb15baef3d97a2fc0bea0a62ccf5b6c10854b33ec38d",
+      "bytes": 5679
+    },
+    {
+      "path": "<private-evidence-root>/archive-query-title-home-direct-before-construction-freeze.json",
+      "sha256": "3bf2fb22707e3e4215b6e7c025d81a9b6dced7022fc3ad9ff071f0a752bc20ff",
+      "bytes": 2471
+    },
+    {
+      "path": "<private-evidence-root>/archive-query-title-home-direct-before-ownership.json",
+      "sha256": "c12705eb75fb1f27f87bee8db6fca836b9dad74843d505dbac4de057b2a85416",
+      "bytes": 1545
+    },
+    {
+      "path": "<private-evidence-root>/archive-query-title-home-direct-before-execution.mjs",
+      "sha256": "fec51fd5bca5afb1923889085e8b5b85d0c7feb0a8f42f5b8c963e31f1486b3a",
+      "bytes": 9404
+    },
+    {
+      "path": "<private-evidence-root>/archive-query-title-home-direct-before-build.log",
+      "sha256": "71f15f7e6f4a627e231dc8f7487c4a7f7a2dc015e58c4ef48c81c62d41017d8d",
+      "bytes": 3025
+    },
+    {
+      "path": "<private-evidence-root>/archive-query-title-home-direct-before-build.json",
+      "sha256": "68de1d36fa9de667040ccd846fe80092d65e3c15eb4d60d57f3eb68dd299ecdd",
+      "bytes": 1649
+    },
+    {
+      "path": "<private-evidence-root>/archive-query-title-home-direct-before-build-completion.log",
+      "sha256": "79e8ea87185a6840540f5931fde203a97f136b05b1a8506c9454ceb96fcb59c1",
+      "bytes": 56
+    },
+    {
+      "path": "<private-evidence-root>/archive-query-title-home-direct-before-build-completion.json",
+      "sha256": "f01264265e78bca0c1ce2bd44d6b659db6c65fa3f26ee03b5050326f0e94d51d",
+      "bytes": 1513
+    },
+    {
+      "path": "<private-evidence-root>/archive-query-title-home-direct-before-source.log",
+      "sha256": "e00fd183cbf9a9f2abfbffab066e83614d050d3449153495543d6c19e1fa6a96",
+      "bytes": 4030
+    },
+    {
+      "path": "<private-evidence-root>/archive-query-title-home-direct-before-source-proof.json",
+      "sha256": "f24b43a7c0df14166d03cc06b46a752d2c37cf0995e46caea65c7206e5ae5cb8",
+      "bytes": 3614
+    },
+    {
+      "path": "<private-evidence-root>/archive-query-title-home-direct-before-source-run.json",
+      "sha256": "3ddce6ea25bf8c90af694bfff552426f6bf6075b7dda9ae0f0984e08a9ef0842",
+      "bytes": 3837
+    },
+    {
+      "path": "<private-evidence-root>/archive-query-title-home-direct-before-compiled.log",
+      "sha256": "03105a0a3b60eb4eff02ae510d291db02eb8c0aa8f3b8e87fb67dcc397a53e31",
+      "bytes": 4031
+    },
+    {
+      "path": "<private-evidence-root>/archive-query-title-home-direct-before-compiled-proof.json",
+      "sha256": "862e1a8f7db0dcd284b6291135e34ce002738721b632f8a1ffde0a3755decf25",
+      "bytes": 3614
+    },
+    {
+      "path": "<private-evidence-root>/archive-query-title-home-direct-before-compiled-run.json",
+      "sha256": "c5a5d694acaa8d4ef845f3af050098e160b41102fa0ce97799d46e6dceed0b3b",
+      "bytes": 3870
+    },
+    {
+      "path": "<private-evidence-root>/archive-query-title-home-direct-before-dom-counts-audit.json",
+      "sha256": "d9944fd3a88d273d96face2b0384794288d3402973b3494a7186b4ab7e6bf101",
+      "bytes": 11927
+    },
+    {
+      "path": "<private-evidence-root>/archive-query-title-home-direct-before-baseline-build-manifest.json",
+      "sha256": "07d32380c6ec2bd588078b610c2fd44275ab9eaaea5327f96b54a0d1c06d1d20",
+      "bytes": 85835
+    }
+  ],
+  "limits": [
+    "Direct-template only; six anonymous reads per mode, three children plus parent.",
+    "No browser/native UI/full/fresh/fixed/3062.",
+    "No posts, postId, body, loops, route flags, SQL selector changes, or other QueryTitle types.",
+    "Path-only year Blog and transport-only Year: 2001 deliberately preserved, no transport repair claim.",
+    "Separate from af82 outer6,14dc body16,fa7 singular and454; none altered by this stage.",
+    "Exact generated uploads paths not journaled: normal runner finally cleanup only.",
+    "Own env and readonly dependency link intentionally retained pending root review; baseline builds retained; no archive created.",
+    "No runtime/UI/shared/CI/MAIN changes."
+  ]
+}

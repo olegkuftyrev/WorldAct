@@ -1,0 +1,135 @@
+{
+  "schema": 1,
+  "classification": "GENUINE_FAILING_DIRECT_TEMPLATE_HOME_BEFORE_WITH_SEPARATE_HARNESS_HISTORY",
+  "baselineReleasedCommit": "0f7dd2f3d55a72a3b2b498a152a10332ef066c68",
+  "testOnlyCommit": "6a23b7e3aad1e8738848ab0b0fcec36c6b76256a",
+  "testSHA256": "bf0eea47871d083b23217643b9b3dbb93851349f8801b957143c327ee077cba8",
+  "expectedAndActualNodeSHA256": "300199e4aebe00b526fee49af14904d50cacd20333b07c99c2ded6ba3ddf7070",
+  "sourceAndCompiledEach": {
+    "anonymousResponses": 6,
+    "policyChildren": 3,
+    "parent": 1,
+    "countedTests": 4,
+    "pass": 2,
+    "fail": 2,
+    "cancelled": 0,
+    "skipped": 0
+  },
+  "sanitizationPolicy": "Only known private absolute roots replaced with stable placeholders; no result/failure/expectation/fixture rewriting.",
+  "copiedRecords": [
+    {
+      "file": "review.md",
+      "privateSource": "<private-evidence-root>/archive-query-title-home-direct-before-review.md",
+      "privateSourceSHA256": "def0274f71dfbb86a89547730d3c7fb6128efcab7be108f47a96d5f84441b108",
+      "copySHA256": "def0274f71dfbb86a89547730d3c7fb6128efcab7be108f47a96d5f84441b108",
+      "bytes": 6476,
+      "pathOnlySanitization": [],
+      "otherwiseByteIdentical": true
+    },
+    {
+      "file": "checks.json",
+      "privateSource": "<private-evidence-root>/archive-query-title-home-direct-before-checks.json",
+      "privateSourceSHA256": "198316bf058f75fb383c3e240d535a1635888b13eb576618ffe84c3ca72cf370",
+      "copySHA256": "0d5edf07c44625f0cafba819fc1cefd3b54b5da0e94019aece40a691979c8928",
+      "bytes": 11291,
+      "pathOnlySanitization": [
+        {
+          "rule": "owned-direct-before-worktree",
+          "occurrences": 7
+        },
+        {
+          "rule": "private-evidence-root",
+          "occurrences": 25
+        },
+        {
+          "rule": "dependency-owner-workspace",
+          "occurrences": 2
+        }
+      ],
+      "otherwiseByteIdentical": true
+    },
+    {
+      "file": "dom-counts-audit.json",
+      "privateSource": "<private-evidence-root>/archive-query-title-home-direct-before-dom-counts-audit.json",
+      "privateSourceSHA256": "d9944fd3a88d273d96face2b0384794288d3402973b3494a7186b4ab7e6bf101",
+      "copySHA256": "28cf701bd8419920ef7ba6cd6d4a83737a1e0c575ebd5c8b422db180db60bd42",
+      "bytes": 11777,
+      "pathOnlySanitization": [
+        {
+          "rule": "owned-direct-before-worktree",
+          "occurrences": 4
+        },
+        {
+          "rule": "private-evidence-root",
+          "occurrences": 6
+        },
+        {
+          "rule": "dependency-owner-workspace",
+          "occurrences": 2
+        }
+      ],
+      "otherwiseByteIdentical": true
+    },
+    {
+      "file": "owned-cleanup.json",
+      "privateSource": "<private-evidence-root>/archive-query-title-home-direct-before-owned-cleanup.json",
+      "privateSourceSHA256": "807d9067770e3b06ab99b91f2015b5ae182677da5146ab98053b01a51217e88e",
+      "copySHA256": "e51c66dd2a8cbe60c7c4d6555fac98b89c7682704d243f1ad06b741a186c7b24",
+      "bytes": 2488,
+      "pathOnlySanitization": [
+        {
+          "rule": "owned-direct-before-worktree",
+          "occurrences": 2
+        },
+        {
+          "rule": "private-evidence-root",
+          "occurrences": 1
+        },
+        {
+          "rule": "dependency-owner-workspace",
+          "occurrences": 4
+        }
+      ],
+      "otherwiseByteIdentical": true
+    },
+    {
+      "file": "build-completion.json",
+      "privateSource": "<private-evidence-root>/archive-query-title-home-direct-before-build-completion.json",
+      "privateSourceSHA256": "f01264265e78bca0c1ce2bd44d6b659db6c65fa3f26ee03b5050326f0e94d51d",
+      "copySHA256": "2f1893f7ee3b46be596be0ea7cf3feda4fd351af6c875050faf2e3de03789ae4",
+      "bytes": 1479,
+      "pathOnlySanitization": [
+        {
+          "rule": "owned-direct-before-worktree",
+          "occurrences": 1
+        },
+        {
+          "rule": "private-evidence-root",
+          "occurrences": 3
+        }
+      ],
+      "otherwiseByteIdentical": true
+    }
+  ],
+  "packageREADME": {
+    "file": "README.md",
+    "sha256": "2c981f2e1774835bf84cb847caaaa113ad0f0d7c5de76d66bd80f2181e557d1b"
+  },
+  "chronology": [
+    "Immutable original test constructed and root-reviewed with no resources.",
+    "Initial native/Node invocation error preserved; direct native completion exact300199 before guards.",
+    "Source then actual compiled guarded file each genuine2pass2fail/4, with six reads before assertions.",
+    "Original TAP-only wrapper count fields remain null; append-only spec reporter count and DOM audit records actual summaries.",
+    "Historical retained config/link records preserved; later authorized exact two-path cleanup completes ownership stage."
+  ],
+  "privateOnlyRawProofsLogsConfigAuthBootstrapIncludedInGit": false,
+  "runtimeOrTestOrAssertionAdapter": false,
+  "buildFilesRetained": 411,
+  "archivesCreated": false,
+  "separateExistingScopes": [
+    "af82 outer6",
+    "14dc body16",
+    "fa7 singular",
+    "454 fixtures"
+  ]
+}

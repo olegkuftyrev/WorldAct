@@ -1,0 +1,53 @@
+{
+  "stage": "FINAL_AUTHORIZED_OWNED_SETUP_CLEANUP",
+  "startedAtUtc": "2026-11-09T16:30:43.402304+00:00",
+  "finishedAtUtc": "2026-11-09T16:30:43.438549+00:00",
+  "baselineReleasedCommit": "0f7dd2f3d55a72a3b2b498a152a10332ef066c68",
+  "testOnlyCommit": "6a23b7e3aad1e8738848ab0b0fcec36c6b76256a",
+  "removedOnly": [
+    {
+      "path": "<owned-direct-before-worktree>/.env",
+      "type": "regular file",
+      "uid": 501,
+      "mode": "0600",
+      "exactConstructedSha256": "ee08369ab537f52e615ad70a166e1c5047b4325678788f6895aee75e1896fba6",
+      "identityVerifiedBeforeUnlink": true,
+      "absentAfter": true
+    },
+    {
+      "path": "<owned-direct-before-worktree>/node_modules",
+      "type": "symlink",
+      "uid": 501,
+      "exactTarget": "<dependency-owner-workspace>/node_modules",
+      "realTarget": "<dependency-owner-workspace>/node_modules",
+      "identityVerifiedBeforeUnlink": true,
+      "absentAfter": true
+    }
+  ],
+  "dependencyOwner": {
+    "path": "<dependency-owner-workspace>/node_modules",
+    "realpath": "<dependency-owner-workspace>/node_modules",
+    "uid": 501,
+    "mode": "0755",
+    "nonsymlink": true,
+    "preserved": true,
+    "matchingPackageLockSha256": "233888ed8f864581a8835aab0b4c33ccd7fbc391f2a98650b63fcf8db8814892"
+  },
+  "port5195": {
+    "noListenerBefore": true,
+    "noServicesStartedOrStoppedDuringCleanup": true
+  },
+  "disposableDatabaseAndSessionStatus": "Prior final DOM audit and independent root SQL accepted both exact disposable DBs, never-created anchor and both phase app groups absent. No new SQL/resource work during this final two-path cleanup.",
+  "retained": {
+    "buildManifest": "<private-evidence-root>/archive-query-title-home-direct-before-baseline-build-manifest.json",
+    "buildManifestSha256": "07d32380c6ec2bd588078b610c2fd44275ab9eaaea5327f96b54a0d1c06d1d20",
+    "buildFileCount": 411,
+    "allBuildHashesVerifiedBeforeAndAfter": true,
+    "actualNodeSha256": "300199e4aebe00b526fee49af14904d50cacd20333b07c99c2ded6ba3ddf7070",
+    "testSha256": "bf0eea47871d083b23217643b9b3dbb93851349f8801b957143c327ee077cba8",
+    "privateOriginalsRawProofsLogsRunReceiptsAndInitialErrorHistory": "unchanged"
+  },
+  "uploads": "Exact runner-generated paths were not journaled; standard runner finally cleanup only, no independent per-path absence claim.",
+  "archive": "No archive created.",
+  "mutations": "Exactly two authorized unlink operations. No chmod, runtime/UI/test/CI/MAIN/database/browser mutation."
+}

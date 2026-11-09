@@ -1,0 +1,20 @@
+# Archive QueryTitle home — direct-template BEFORE
+
+This package preserves a **genuine failing BEFORE**, not an AFTER or release certificate. Baseline is released `0f7dd2f3d55a72a3b2b498a152a10332ef066c68`, actual independently built Node SHA256 `300199e4aebe00b526fee49af14904d50cacd20333b07c99c2ded6ba3ddf7070`. The unchanged guarded test is commit `6a23b7e3aad1e8738848ab0b0fcec36c6b76256a`, source SHA `bf0eea47871d083b23217643b9b3dbb93851349f8801b957143c327ee077cba8`.
+
+Source and actual compiled API each consumed six anonymous GET/HEAD responses before three policy children plus parent: **4 tests, 2 pass, 2 fail, 0 cancelled/skipped**. Unfiltered home incorrectly retains one explicit archive QueryTitle anchor and wrapper with text `Blog`, failing that child and its parent. Both date exclusions pass with their exact original labels: path-only `requestPath=/?year=2001` retains `Blog`; scalar transport `year=2001` with `requestPath=/` retains `Year: 2001`. This preserves the existing first-page transport distinction without asserting WordPress date-label parity or repairing it.
+
+One new saved TT25 template has an unrelated unique slug, literal Group main ID matching its comment anchor, independent marker and explicit archive QueryTitle. Actual saved ID/slug/type, HTTP200, empty HEAD bodies, unique main/marker and exact title DOM class/count/text are checked. No post, selected postId, body or loop fixture is involved. This six-response direct-template control remains separate from af82 outer6,14dc body16,fa7 singular and454 fixtures.
+
+Read [review.md](review.md), [checks.json](checks.json) and [dom-counts-audit.json](dom-counts-audit.json). The DOM audit contains only the small actual fixture fragments and public identity; whole raw proofs, logs, bootstrap documents, authentication/configuration bytes and credentials remain private, referenced by hashes.
+
+Two harness events remain distinct from the feature failure:
+
+1. TSC and Vite runner passed. The initial private build wrapper mistakenly passed the native esbuild executable to Node, yielding a SyntaxError before server output or any test/DB/API fixture. Original log/receipt/harness remain unchanged. [build-completion.json](build-completion.json) records the separately successful **direct native executable** invocation, producing exact300199 before either guard. No runtime, test, fixture or assertion adapter followed from this invocation correction.
+2. Original source/compiled run receipts retain null count fields because the private wrapper expected TAP `#` summaries while actual Node24 default logs emit `ℹ` summaries. The later append-only DOM/count audit records actual4/2/2 summaries without rewriting raw receipts, changing expectations or rerunning tests.
+
+The review/checks/DOM audit are historical snapshots written while own config/link/build were retained for root review. Later [owned-cleanup.json](owned-cleanup.json) records removal of ONLY the exact verified own0600 `.env` and readonly dependency symlink, after real owner UID501/mode0755 and lock233 checks. All411 baseline build files were rehashed before and after cleanup and remain preserved with original test/evidence/error history. The two exact disposable DBs, never-created anchor and two phase app groups were absent;5195 had no listener. Exact runner-generated upload paths were not journaled, so standard runner-finally cleanup is the limit. No archive was created.
+
+[manifest.json](manifest.json) records private-source and copied SHA256 correspondence for all five payloads, plus per-rule replacement counts. Sanitization replaces ONLY known private absolute worktree/evidence/dependency workspace roots with stable placeholders. Every failure, measured result, fixture value, count and original proof hash is otherwise unchanged. `<private-evidence-root>` describes originals outside Git; the private mapping ledger retains exact original roots.
+
+No browser, UI, runtime, shared, test, CI, MAIN, full/fresh/fixed/3062 or broader QueryTitle behavior change belongs to this documentation commit.
