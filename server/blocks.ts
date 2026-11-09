@@ -848,6 +848,11 @@ router.get("/api/public/templates/:slug", async (req:AuthRequest, res) => {
   const listingRoute=listingPath&&!post?await resolvePublicDocumentRoute(listingPath,{namedPin,authenticated:Boolean(req.user)}):null;
   if(listingRoute?.status===404)throw new HttpError(404,"Public listing page not found.");
   let listing=listingRoute?.listing;
+  const routeAuthor=listingRoute?.archive&&"type" in listingRoute.archive&&listingRoute.archive.type==="author"?listingRoute.archive:null;
+  if(routeAuthor&&!listing?.namedAuthor){
+    if(selectedAuthor&&(selectedAuthor.authorId!==routeAuthor.authorId||selectedAuthor.slug!==routeAuthor.slug))throw new HttpError(404,"The selected author archive identity retired.");
+    selectedAuthor ||= routeAuthor;observePublicAuthor(reader,routeAuthor);
+  }
   if(!nameVisible&&listingRoute&&!["home","archive","posts-page"].includes(listingRoute.kind))listing=undefined;
   if(listing?.namedAuthor?.selected)observePublicAuthor(reader,listing.namedAuthor.selected);
   const prettyAuthor=listing?.namedAuthor?{recognized:false,archive:null}:await resolvePrettyAuthorArchive(authorArchiveRequestPath(requestPath,req.query,settings),settings);
