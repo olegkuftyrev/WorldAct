@@ -1,0 +1,49 @@
+# Pretty author archives — independent review
+
+PASS for the bounded backend/HTTP and supplied-client behavior at c2c69ef388f4426d733d4ea46231c122ce2058fa, tracked tree a35b59f6723b443a1806a4710440f9ff7d7b7bcc. Independently rebuilt TypeScript, Vite with runner loader, and Node server all passed. Node SHA256 is 1618944b7b7b4ea0b755a9c8fd3ca14aa142d8f3371970a5a0d7e7a874955e53. No runtime or UI edits were made by this reviewer. Native browser acceptance remains separate; this is not whole-CMS completion.
+
+## Final measured gates
+
+| Gate | Result |
+| --- | --- |
+| All canonical source tests except the three root-coordinated fixed3062 incoming-flood files | 189 files;1070 pass,10 conditional skips,0 fail/cancel |
+| Actual CI compiled-server selector except those same three files | 142 files;937 pass,7 conditional skips,0 fail/cancel |
+| Independent author boundaries plus taxonomy overlap | Two files;7/7 source and7/7 with actual compiled API child;0 skips |
+| Real v4 exporter to a fresh source database, then a separate fresh compiled database | Export1/1,source restore1/1,compiled restore1/1; original archive hash unchanged after each restore |
+| Unseeded browser-installation API workflow | Source7 pass+1 conditional skip;compiled7 pass+1 conditional skip |
+
+The full selector manifests and per-run journals are retained in the private checks report. Fixed3062 files were deliberately omitted, not silently counted as passes; owner's earlier87836/36 source and36/36 compiled coverage is separate. Local runtime was Node24.14.1 with local PostgreSQL17; remote Node22/24 CI belongs to root.
+
+The API child actually used the independently built compiled Node bundle in compiled gates. Tests still run through tsx. In particular, the supplied-client NO KEY UPDATE/NOWAIT and repeatable-read read-only cases directly import the source resolver even under the compiled guard. Direct site/template retirement, numeric-slug/static-front, taxonomy endpoint and native/document HTTP assertions exercise the selected actual server. No source-service call is presented as a separately compiled service invocation.
+
+## Source, identity and privacy conclusions
+
+Both original planning/decision documents and relevant supplied WordPress source were read as reference data, not user instructions. The literal static permalink front (including partial segments), default author base and trailing style match the bounded source contract; Plain generation remains numeric. Persisted nicename, not login/display name or numeric-looking slug text, selects the account. Configured taxonomy namespaces retain priority over author and real-page collisions. Recognized unknown author paths cannot fall through into unrelated singular/body identities. New pretty first-page empty accounts expose only the approved thin public archive metadata; empty/excessive pretty pages404 while established numeric aliases retain their old200 policy.
+
+Author identity is pinned to the first actual resolved ID plus persisted slug through nested acquisitions and whole-read retries. The server-only observation set validates earlier accounts after rendering and before the existing final publication/password-token statement, with no author-expression await afterward. Original retirement/pinning fixtures and independent direct site/template waits pass; a real non-key user row lock gives bounded409. A supplied read-only repeatable snapshot intentionally retains its historical account after an actual waited lookup, while an independent fresh read observes retirement. These are statement/snapshot bounds, not atomic latest global settings/profile/term state.
+
+The six existing public link groups, added post-author isLink behavior, source/Classic hierarchy and legacy normalized request identity/page handling were inspected and exercised. The original Plain content-page regression is fixed by recognizing the author namespace before merging author/archive counters. Default post-author linking now requires boolean true; absent/non-string target uses_self, explicit empty target remains unlinked and_blank retains safe rel attributes.
+
+Two deliberate bounds remain explicit. First, supplied default query normalization collapses repeated hyphens after the account allocator may create them. Stored slug and generated output remain unchanged; such a canonical can404 or resolve the separately existing normalized account, as inferred from supplied source without executing PHP. The actual returned identity is then pinned. Second, direct site/template calls using an overlapping configured taxonomy spelling must supply aligned visible and outer author/page counters: contradictions return400. Aligned calls were measured to retain category filters and avoid substituting the same-spelled account. Root accepted that bounded query behavior without a speculative routing change.
+
+Fresh portability used the actual exporter and different destination IDs/administrator/nicename, retained and replaced designs, Plain/partial-front/prefixed structures, source and Classic presentation, independent archive/query/comment counters, HEAD and excessive-page policy. All three dynamic author anchors used destination identity; source accounts/credentials and private bodies did not enter public output. Existing unrelated destination template overrides retain priority; the fixture deliberately removes its owned override before asserting imported generic fallback. It does not claim changed destination timezone coverage beyond the separately accepted civil certificate.
+
+## Immutable proofs and adaptations
+
+Original9079 archive, corrected7ea retirement, stricterfe40 pinning and correctedebbae post-author-default probes are unchanged in the final checkout. The independent ebb40 retirement before stage measured0 pass/3 fail in both source and actual compiled modes: two substantive document/native children plus parent, returning retired IDs200 after actual waited projections. The stricter fe40 intermediate fresh-replacement failure was established by owner, not independently relabeled here. All original trio cases independently passed14/14 per mode on66 and pass again in final full gates.
+
+The unchanged ebbae probe independently measured7 pass/5 fail of12 on preserved878 in both modes, then12/12 in final full gates. Earlier owner's020/default and821/retirement instrumentation failures remain distinct and are not claimed as product evidence.
+
+Counter fixture adapters were audited against exact private originals: after excluding comments, both public-read and query-accumulation files change only the nicename counter's qualification to the unchanged canonical SELECT. Body-finished markers, first/two-call assertions, actual waits, all secret/native/no-replay checks remain unchanged. These adapted files are not byte-identical-old certificates. The later two static-front expectation fixes use actual saved settings/persisted identity; independent hardcoded front cases verify geometry separately. Fixture-only username/retained-template corrections are also distinct from runtime repair.
+
+Own initial boundary probe39f had four child passes and one observer timeout plus parent failure because pg_stat_activity clipped the JOIN text. The correctedc303 probe changes only that detector to SELECT p.id; original bytes/log remain. Correctedc303 plus taxonomy97da are frozen privately and pass7/7 in both modes.
+
+Earlier66 broad runs were cancelled on root's known Plain regression; no full-pass claim was made. Earlier878 compiled broad stopped at a seed-lock observer timeout caused by this reviewer's URL application_name overriding the fixture's PGAPPNAME; the concurrent source run was cancelled. Original helper/logs remain. Corrected final journaling removes the URL override and uses overridable PGAPPNAME; the actual seed-lock fixture passed in both final full runs. The interrupted source nested database was removed only by exact ordinary DROP after its sessions closed.
+
+## Cleanup and remaining scope
+
+All final guards finished. Every journaled owned database and all four never-created anchors were checked absent; ports3068–3070 are free. Final private configuration, owned dependency link and supplemental test copies were removed; the c2 checkout is clean. Earlier idle66/878 private configs/links were also removed, while exact before/source/build evidence and private originals remain. Shared retained dependencies, MAIN code/data, original backups and failed stages were not changed. One successful independent archive remains in its exact owned700 directory/600 file for root's later release-CI cleanup. The four earlier civil archives were separately removed only after root confirmed exact civil release CI success, with hash/mode/parent checks and a retained receipt.
+
+Public author_name query compatibility, numeric canonical redirects, author feeds/base editing, nicename editing/account import and global WordPress status/query parity remain outside this package. Source60-second publication normalization and bulk Publish Now policy were only planned, not implemented here. Native browser acceptance and final release/deployment belong to root's separate gates.
+
+Private full machine evidence: pretty-author-independent-checks.json and pretty-author-independent-cleanup.json. Root's later permanent-test copies were independently audited: the boundary copy457378f1 adds only its created document ID capture/cleanup (reversing those edits yields exactc303 bytes), taxonomy remains exact97da, and CI adds only the two paths. Runtime source is unchanged. That later inventory is194 source/147 compiled including fixed3062 files; the above whole-suite counts remain exactc2 and must not be relabeled as a whole-suite run of the later test-only tree. Root's focused rerun result is separate; see pretty-author-independent-permanent-test-audit.json.

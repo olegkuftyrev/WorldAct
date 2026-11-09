@@ -53,6 +53,8 @@ Every JavaScript-enabled public root waits behind an early compositor/inert gate
 
 Native comment/password303 returns validate the current public immutable post/type and reconstruct only recognized local context. Approved comments select the actual chronological saved-comment page; password returns retain positive Reply intent for fresh validation. Separate body and Query Loop counters survive. Independent browser review exercised real pagehide/Back/Forward, but this browser refused BFCache admission and reported persisted:false, so genuine BFCache restoration remains unverified.
 
+Pretty author directories resolve persisted account nicenames under the configured static permalink front, including partial fronts and slashless structures. Source and Classic use author-nicename, author-ID, author, archive and index template priority. One pending document/site/template acquisition retains its first actual author ID and slug across retries; accumulated server-only author observations are checked before the existing final post/publication/password-token statement. Ordinary non-author content-page counters remain independent. See [author archive scope and source quirks](../server/pretty-author-archives.md).
+
 ## Editor and content representations
 
 The post editor is loaded through `React.lazy`. It uses the official `@wordpress/block-editor`, `@wordpress/blocks`, `@wordpress/block-library`, components, data, hooks, and format packages. A `BlockEditorProvider` owns an iframe `BlockCanvas`; official insertion, transforms, nested blocks, list view, inspector, toolbar and rich-text formats supply editing behavior. WorldAct provides persistence, history controls/iframe keyboard undo, media selection/uploads, link suggestions and attachment entities.
