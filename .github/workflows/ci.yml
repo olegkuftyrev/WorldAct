@@ -130,6 +130,9 @@ jobs:
           tests/dashboard.test.ts tests/dashboard-dates.test.ts
           tests/post-list-dates.test.ts tests/post-civil-dates.test.ts tests/post-civil-selected-gmt.test.ts tests/post-civil-final-fences.test.ts tests/post-civil-independent-waits.test.ts tests/post-civil-native-final-waits.test.ts tests/post-civil-transactions.test.ts tests/post-civil-boundaries.test.ts tests/post-civil-fixed-draft.test.ts tests/post-civil-schedule-intent.test.ts tests/post-civil-migration.test.ts tests/post-civil-portability.test.ts
           tests/post-list-date-format.test.ts tests/editor-publication-date.test.ts tests/classic-comment-tree.test.ts
+          tests/publication-status-original.test.ts tests/publication-status-null-gmt-original.test.ts
+          tests/publication-status.test.ts tests/publication-status-bulk-gap.test.ts tests/publication-status-waits.test.ts tests/publication-status-portability.test.ts
+          tests/editor-publication-status.test.ts tests/editor-publication-provenance.test.ts
           tests/fresh-defaults.test.ts tests/admin-tools.test.ts
           tests/shortcodes.test.ts
       - name: Fresh browser installation on the compiled server
@@ -215,6 +218,25 @@ jobs:
           PRETTY_AUTHOR_ARCHIVE_STAGE: restore
           PRETTY_AUTHOR_ARCHIVE_PATH: ${{ runner.temp }}/worldact-pretty-authors.json
         run: node scripts/test-isolated.mjs tests/pretty-author-portability.test.ts
+      - name: Export publication-status archive
+        if: matrix.node == 24
+        env:
+          PUBLICATION_ARCHIVE_STAGE: export
+          PUBLICATION_ARCHIVE_PATH: ${{ runner.temp }}/worldact-publication-status.json
+        run: node scripts/test-isolated.mjs tests/publication-status-portability.test.ts
+      - name: Restore publication-status archive to a fresh source database
+        if: matrix.node == 24
+        env:
+          PUBLICATION_ARCHIVE_STAGE: restore
+          PUBLICATION_ARCHIVE_PATH: ${{ runner.temp }}/worldact-publication-status.json
+        run: node scripts/test-isolated.mjs tests/publication-status-portability.test.ts
+      - name: Restore publication-status archive on a fresh compiled server
+        if: matrix.node == 24
+        env:
+          ISOLATED_TEST_COMPILED: "true"
+          PUBLICATION_ARCHIVE_STAGE: restore
+          PUBLICATION_ARCHIVE_PATH: ${{ runner.temp }}/worldact-publication-status.json
+        run: node scripts/test-isolated.mjs tests/publication-status-portability.test.ts
       - name: Export image format archive
         if: matrix.node == 24
         env:
