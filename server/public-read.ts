@@ -19,6 +19,7 @@ import {ordinaryListingPageRequested} from "./public-listing-page.js";
 export type PublicReadContext = {
   query: Record<string, unknown>; requestPath?: string; user?: User;authorArchive?:AuthorArchive;
   listing?:PublicListingContext;
+  selectedSingular?: RenderOptions["selectedSingular"];
   canReadProtectedPost: NonNullable<RenderOptions["canReadProtectedPost"]>;
 };
 function decoratePost(post: any) {
@@ -39,6 +40,9 @@ async function publicPostOnce(post: any, locked = false, options: RenderOptions 
     ...safe
   } = decoratePost(post);
   const db=options.db || pool,settings=await getSettings(db),linked = await withPermalink(safe,settings,db);
+  const selectedSingular = options.selectedSingular === "resolved-path"
+    ? !(post.type === "page" && settings.frontPageMode === "page" && post.id === settings.postsPageId)
+    : options.selectedSingular;
   // Author structures add an asynchronous metadata read after body selection.
   // Recheck current public identity and password access after that wait, before
   // returning or rendering any selected body. Preview keeps its editor policy.
@@ -56,7 +60,7 @@ async function publicPostOnce(post: any, locked = false, options: RenderOptions 
     locked,
     footnotes: locked ? [] : safe.footnotes ?? [],
     ...(!locked ? { contentPagination: contentPagination(post, linked.permalink, options.contentPage || 1, options.preview,settings.permalinkStructure) } : {}),
-    content: locked ? "" : await renderPublicContent({ ...post, locked }, { requestPath: linked.permalink, ...options }),
+    content: locked ? "" : await renderPublicContent({ ...post, locked }, { requestPath: linked.permalink, ...options, selectedSingular }),
     excerpt: locked ? "" : safe.excerpt,
   };
   return locked ? result : enhancePublicPost(result);
@@ -221,6 +225,6 @@ async function readPublishedPostByIdOnce(id: number, type: "post" | "page", cont
   if(!row) throw new HttpError(404,"Post not found.");
   const {_passwordHash,...post}=row;
   const locked=Boolean(_passwordHash) && !(await context.canReadProtectedPost(id,pool));
-  const visible=await publicPost(post,locked,{query:context.query,user:context.user,requestPath:context.requestPath,contentPage:parseContentPage(context.query.page),canReadProtectedPost:context.canReadProtectedPost});
+  const visible=await publicPost(post,locked,{query:context.query,user:context.user,requestPath:context.requestPath,contentPage:parseContentPage(context.query.page),canReadProtectedPost:context.canReadProtectedPost,selectedSingular:context.selectedSingular ?? true});
   return {post:visible,...(await commentResponse(id,context,visible.locked)),rawPost:{...post,hasPassword:visible.hasPassword,locked:visible.locked,...(visible.locked?{content:"",rawContent:"",raw_content:"",blocks:[],excerpt:"",footnotes:[]}: {})}};
 }

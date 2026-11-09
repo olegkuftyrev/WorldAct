@@ -888,6 +888,7 @@ router.get("/api/public/templates/:slug", async (req:AuthRequest, res) => {
     },
     content: await renderPublicTemplateDocument(doc, {
       post,
+      selectedSingular: Boolean(post),
       requestPath,
       templateSlug: doc.slug,
       query,

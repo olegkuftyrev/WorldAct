@@ -98,7 +98,7 @@ async function readPublicDocumentOnce(path: string, context: PublicDocumentConte
   // Metadata resolution above and body acquisition below are deliberately
   // independent. No later slug lookup can substitute another published row.
   let body: Awaited<ReturnType<typeof readPublishedPostById>> | null=null;
-  if(selected)try { body=await readPublishedPostById(resolution.selectedId!,resolution.selectedType!,{...readContext,query:{...query.values,page:query.contentPage}}); }
+  if(selected)try { body=await readPublishedPostById(resolution.selectedId!,resolution.selectedType!,{...readContext,selectedSingular:["singular","front-page"].includes(resolution.kind),query:{...query.values,page:query.contentPage}}); }
   catch(error){if(!(error instanceof HttpError) || error.status!==404)throw error;resolution={status:404,kind:"not-found"};}
   let rawSite:Awaited<ReturnType<typeof readPublicSite>>,rawDesign:Awaited<ReturnType<typeof readDesign>>;
   try{[rawSite,rawDesign]=await Promise.all([readPublicSite(readContext),readDesign()]);}
@@ -119,7 +119,7 @@ async function readPublicDocumentOnce(path: string, context: PublicDocumentConte
     const route:PublicDocumentModel["route"]={kind:resolution.kind as PublicDocumentModel["route"]["kind"],detail:Boolean(body && (readPublicPath(path).pathname!=="/" || rawQuery.has("p") || rawQuery.has("page_id") || rawQuery.has("page"))),archive:resolution.archive as PublicArchive || site.archive || null,query,...(body?{selectedId:post!.id,selectedType:post!.type}:{})};
     const single=["singular","front-page"].includes(route.kind);
     if(single || resolution.status===404)site.posts=[];
-    const renderOptions={requestPath:path,query:query.values,listing:resolution.listing,post:body?.rawPost || null,page:single?1:query.archivePage,contentPage:query.contentPage,user:context.user,canReadProtectedPost:context.canReadProtectedPost};
+    const renderOptions={requestPath:path,query:query.values,listing:resolution.listing,post:body?.rawPost || null,selectedSingular:Boolean(body && single),page:single?1:query.archivePage,contentPage:query.contentPage,user:context.user,canReadProtectedPost:context.canReadProtectedPost};
     let presentation:PublicDocumentModel["presentation"];
     const authorPresentation=namedAuthor?route.kind==="archive"&&Boolean(route.archive&&"type" in route.archive&&route.archive.type==="author"):Boolean(query.author);
     const sourceDocument=selectPublicSourceTemplate(rawDesign.templates,{notFound:resolution.status===404,single,post,frontPage:route.kind==="front-page",search:Boolean(query.search),category:query.category,tag:query.tag,author:authorPresentation,...(site.archive && "type" in site.archive && site.archive.type==="author"?{authorSlug:site.archive.slug,authorId:site.archive.authorId}:{}),date:Boolean(query.date || site.archive && "type" in site.archive && site.archive.type==="date")});

@@ -54,6 +54,7 @@ export type RenderOptions = {
   instanceKey?: string;
   query?: Record<string, unknown>;
   listing?:PublicListingContext;
+  selectedSingular?: boolean | "resolved-path";
   page?: number;
   contentPage?: number;
   contentMode?: ContentMode;
@@ -878,6 +879,7 @@ async function renderNode(
     return `<div${attr()}>${parts.join(" ")}</div>`;
   }
   if (name === "core/query-title") {
+    if (a.type === "archive" && state.options.selectedSingular === true) return "";
     const query = state.options.query || {};
     const listing=state.options.listing,named=listing?.namedAuthor;
     const dateArchive = parseDateArchiveQuery(query);
