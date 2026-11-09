@@ -29,7 +29,7 @@ test("serialized post-author applies the registered source link defaults without
    const created=(await api("/api/posts","POST",{title:"Post author defaults "+Date.now()+"-"+index,status:"publish",content:"<!-- wp:post-author "+JSON.stringify(entry.attributes)+" /-->"})).data.post;posts.push(created.id);
    const result=await api("/api/public/posts/"+created.slug,"GET",undefined,"");
    const document=new DOMParser().parseFromString(result.data.post.content,"text/html"),name=document.querySelector(".wp-block-post-author__name")!,link=name.querySelector("a");assert.ok(name);assert.equal(name.textContent,signed.data.user.displayName);
-   if(entry.target===null)assert.equal(link,null);
+   if(entry.target===null)assert.equal(Boolean(link),false);
    else{assert.ok(link);assert.equal(link.getAttribute("href"),expected);assert.equal(link.getAttribute("target"),entry.target);if(entry.target==="_blank"){assert.match(link.getAttribute("rel") || "",/noopener/);assert.match(link.getAttribute("rel") || "",/noreferrer/);}}
   });
  }finally{if(posts.length)await pool.query("DELETE FROM posts WHERE id=ANY($1::int[])",[posts]);await pool.query("UPDATE settings SET data=$1 WHERE id=1",[initial]);}
