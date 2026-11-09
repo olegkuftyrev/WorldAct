@@ -38,11 +38,15 @@ test("fresh imported author archives generate destination identity paths in reta
  const switched=await api("/api/auth/login","POST",{login:username,password:"Pretty-archive-password-123"});cookie=switched.response.headers.get("set-cookie")!.split(";")[0];
  assert.notEqual(person.id,fixture.sourceAuthorId);
  for(let i=0;i<5;i++)await api("/api/posts","POST",{title:"Destination post ID offset "+i,status:"draft"});
- for(const theme of ["twentytwentyfive","classic"]){await api("/api/settings","PUT",{theme});await api("/api/site-editor/documents","POST",{type:"template",slug:"author-"+nicename,title:"Destination author template",content:"<p>DESTINATION-NICENAME-TEMPLATE</p><!-- wp:query-title /-->"});}
+ const destinationDocuments:number[]=[];
+ for(const theme of ["twentytwentyfive","classic"]){await api("/api/settings","PUT",{theme});destinationDocuments.push((await api("/api/site-editor/documents","POST",{type:"template",slug:"author-"+nicename,title:"Destination author template",content:"<p>DESTINATION-NICENAME-TEMPLATE</p><!-- wp:query-title /-->"})).data.document.id);}
  for(const [structure,replaceDesign] of [["",false],["/destination-%postname%",false],[sourceStructure,true]] as const){
   await api("/api/settings","PUT",{permalinkStructure:structure,postsPerPage:1});
   const restored=(await api("/api/tools/import","POST",{...fixture.archive,replaceDesign})).data,settings=(await api("/api/settings")).data.settings;
   assert.equal(restored.restoredDesign,replaceDesign);assert.equal(settings.permalinkStructure,structure);
+  // Replacing design retains unrelated destination documents. Remove the more
+  // specific destination overrides deliberately to exercise imported fallback.
+  if(replaceDesign)await pool.query("DELETE FROM site_documents WHERE id=ANY($1::int[])",[destinationDocuments]);
   assert.equal((await pool.query("SELECT count(*)::int AS n FROM users WHERE username='Pretty.Source@Author'")).rows[0].n,0);
   const rows=(await pool.query("SELECT id,author_id FROM posts WHERE id=ANY($1::int[]) AND title LIKE 'Pretty portable post %'",[restored.postIds])).rows;
   assert.equal(rows.length,2);for(const row of rows){assert.equal(row.author_id,person.id);assert.ok(!fixture.sourcePostIds.includes(row.id));}
@@ -59,7 +63,7 @@ test("fresh imported author archives generate destination identity paths in reta
    const response=await fetch(base+target);assert.equal(response.status,200);const html=await response.text(),dom=new DOMParser().parseFromString(html,"text/html"),model=JSON.parse(dom.querySelector("#worldact-public-document")!.textContent!);
    assert.equal(model.route.query.author,person.id);assert.equal(model.site.archive.slug,nicename);assert.equal(model.site.archive.permalink,canonical);assert.equal(model.route.query.archivePage,2);assert.equal(model.route.query.blockPages["query-6-page"],3);assert.equal(model.route.query.commentPage,4);
    assert.ok(model.site.posts.length>0);assert.ok(model.site.posts.every((post:any)=>post.authorId===person.id));assert.doesNotMatch(html,/PRETTY-PORTABLE-PRIVATE-SECRET|pretty-source@example.test|Pretty-archive-password-123/);
-   const marker=replaceDesign?"IMPORTED-GENERAL-AUTHOR-TEMPLATE":"DESTINATION-NICENAME-TEMPLATE";assert.ok(dom.querySelector("#root")!.textContent!.includes(marker));assert.ok(!dom.querySelector("#root")!.textContent!.includes("SOURCE-NICENAME-TEMPLATE"));
+   const marker=replaceDesign?"IMPORTED-GENERAL-AUTHOR-TEMPLATE":"DESTINATION-NICENAME-TEMPLATE";assert.ok(dom.querySelector("#root")!.textContent!.includes(marker),JSON.stringify({structure,replaceDesign,theme,marker,selected:model.presentation.kind==="source"?model.presentation.document.slug:model.presentation.slots.index?.document.slug}));assert.ok(!dom.querySelector("#root")!.textContent!.includes("SOURCE-NICENAME-TEMPLATE"));
    const head=await fetch(base+target,{method:"HEAD"});assert.equal(head.status,200);assert.equal(await head.text(),"");
   }
   const excessive=canonical.includes("?")?canonical+"&page=999":canonical.replace(/\/$/,"")+"/page/999"+(canonical.endsWith("/")?"/":"");

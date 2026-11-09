@@ -2,7 +2,7 @@ import test,{after} from "./isolated-test.js";
 import assert from "node:assert/strict";
 import {pool,getSettings} from "../server/db.js";
 import {authorArchivePath,authorArchivePagePath,parseAuthorArchivePath,normalizeAuthorArchiveSlug} from "../shared/author-archive.js";
-import {resolvePrettyAuthorArchive} from "../server/author-archives.js";
+import {resolvePrettyAuthorArchive,authorArchiveRequestPath} from "../server/author-archives.js";
 import {renderSiteDocument} from "../server/block-renderer.js";
 import {sourceTemplateCandidates} from "../shared/public-routing.js";
 after(()=>pool.end());
@@ -14,6 +14,7 @@ test("source author fronts, ASCII query normalization, trailing style, counters 
  for(const [input,want] of [["ALICE","alice"],["Alice.Name","alice-name"],[" Alice  Name ","alice-name"],["a@b_c","ab_c"],["---a---b---","a-b"],["éclair",null],["a/b",null],["a\\b",null],["%41lice",null]])assert.equal(normalizeAuthorArchiveSlug(input as string),want);
  assert.equal(parseAuthorArchivePath("/author/%41LICE/",{permalinkStructure:"/%postname%/"})!.slug,"alice");assert.equal(parseAuthorArchivePath("/author/a%2fb/",{permalinkStructure:"/%postname%/"})!.invalid,true);
  assert.equal(parseAuthorArchivePath("/author/alice/page/1/",{permalinkStructure:"/%postname%/"})!.paged,true);
+ for(const structure of ["","/%postname%/","/journal/%postname%/"])assert.equal(authorArchiveRequestPath("/?p=6&page=2&query-4-page=2&commentPage=1",{page:1},{permalinkStructure:structure}),"/?p=6&page=2&query-4-page=2&commentPage=1");
  assert.deepEqual(sourceTemplateCandidates({notFound:false,single:false,post:null,frontPage:false,search:false,author:true,authorSlug:"alice-name",authorId:7,date:false}),["author-alice-name","author-7","author","archive","index"]);
 });
 test("actual author archives preserve safe identity, source collisions, pagination and caller snapshots",async t=>{

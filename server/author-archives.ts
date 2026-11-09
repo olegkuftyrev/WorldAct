@@ -7,7 +7,11 @@ type Database=Pick<typeof pool,"query">;
 export type AuthorArchive={type:"author";name:string;authorId:number;slug:string;permalink:string;page?:number};
 /** Metadata-bearing legacy APIs pass their visible path and filters separately.
  * Merge only author identity/archive paging, rejecting contradictory inputs. */
-export function authorArchiveRequestPath(path:string,values:Record<string,unknown>):string{
+export function authorArchiveRequestPath(path:string,values:Record<string,unknown>,settings:Pick<Settings,"permalinkStructure">):string{
+ // Other routes have independent content/archive counters. In particular a
+ // Plain singular page must not be compared with its surrounding archivepage1.
+ try{if(!parseAuthorArchivePath(path,settings))return path;}
+ catch(error){throw new HttpError(400,(error as Error).message);}
  const separator=path.indexOf("?"),pathname=separator<0?path:path.slice(0,separator),query=new URLSearchParams(separator<0?"":path.slice(separator+1));
  for(const key of Object.keys(values))if(/^(?:author|page)\[/.test(key))throw new HttpError(400,"Use a single author archive identity and page.");
  for(const key of ["author","page"]){const value=values[key];if(value===undefined)continue;
