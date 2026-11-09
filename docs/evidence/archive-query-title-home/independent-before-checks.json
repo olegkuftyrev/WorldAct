@@ -1,0 +1,285 @@
+{
+  "status": "GENUINE_UNCHANGED_BEFORE_GAP_BOTH_API_MODES",
+  "commit": "84eaf86e6c0460eacb57c4e75bd43eef439e30cb",
+  "tree": "dca2102747331ad59087bfc7062f443d4b3bd3b7",
+  "baselineReleasedCommit": "0f7dd2f3d55a72a3b2b498a152a10332ef066c68",
+  "baselineRuntime": "eba54f98188fe6752ad37380bd6e4cb7b18b82bc",
+  "nodeSHA256": "300199e4aebe00b526fee49af14904d50cacd20333b07c99c2ded6ba3ddf7070",
+  "immutableTestSHA256": "14dc9e1cc335174df1b4f826ddf57699e97d0add3daffacfb80639c9adf0264b",
+  "newFixtureSetupMismatches": 0,
+  "newFixtureTransportErrors": 0,
+  "testOrSourceAdaptation": false,
+  "noFallThroughPreconditions": true,
+  "modes": {
+    "source": {
+      "counts": {
+        "tests": 4,
+        "pass": 1,
+        "fail": 3,
+        "cancelled": 0,
+        "skipped": 0
+      },
+      "exitCode": 1,
+      "runnerSuccessCompletionMarker": false,
+      "expectedBeforeFailure": true,
+      "genuineFailingChildren": [
+        "Source home omission",
+        "Classic home omission"
+      ],
+      "positiveChild": "Date-body archive titles retained across Source/Classic",
+      "parentCountedAsFailure": true,
+      "semanticFailureLabels": [
+        "source-home model POST content owned title anchor count",
+        "source-home model POST content body archive wrapper count",
+        "source-home actual site API POST content owned title anchor count",
+        "source-home actual site API POST content body archive wrapper count",
+        "source-home native Source island owned loop body owned title anchor count",
+        "source-home native Source island owned loop body body archive wrapper count",
+        "source-home model presentation fragment owned loop body owned title anchor count",
+        "source-home model presentation fragment owned loop body body archive wrapper count",
+        "classic-home model POST content owned title anchor count",
+        "classic-home model POST content body archive wrapper count",
+        "classic-home actual site API POST content owned title anchor count",
+        "classic-home actual site API POST content body archive wrapper count",
+        "classic-home native Classic owned body owned title anchor count",
+        "classic-home native Classic owned body body archive wrapper count"
+      ],
+      "semanticFailureCheckCount": 14,
+      "rawLog": "<private-log>/worldact-public-listing-independent-home-body-before-source.log",
+      "rawSHA256": "cf163823aa76b025ea46766b94871b4f2b65ec33da6ff6217df1fd8b0085e651",
+      "proof": "<private-evidence>/archive-query-title-home-body-before-source-proof.json",
+      "proofSHA256": "e7f56b77095f9bfa0fbde047f8a47835db47646dd5d47a078d3b52c6847b734c",
+      "dispatches": 16,
+      "groupStatuses": {
+        "source-home": {
+          "get": 200,
+          "head": 200,
+          "model": 200,
+          "site": 200
+        },
+        "source-date": {
+          "get": 200,
+          "head": 200,
+          "model": 200,
+          "site": 200
+        },
+        "classic-home": {
+          "get": 200,
+          "head": 200,
+          "model": 200,
+          "site": 200
+        },
+        "classic-date": {
+          "get": 200,
+          "head": 200,
+          "model": 200,
+          "site": 200
+        }
+      },
+      "apiFixtureCleanup": [
+        {
+          "postIds": [
+            4
+          ],
+          "documentIds": [
+            215
+          ],
+          "restoredTT25Ids": [
+            10
+          ],
+          "originalSettingsRestoreAttempted": true,
+          "failures": []
+        }
+      ],
+      "databases": [
+        "worldact_test_1794240513636_5afdab7b"
+      ],
+      "remainingDatabases": []
+    },
+    "compiled": {
+      "counts": {
+        "tests": 4,
+        "pass": 1,
+        "fail": 3,
+        "cancelled": 0,
+        "skipped": 0
+      },
+      "exitCode": 1,
+      "runnerSuccessCompletionMarker": false,
+      "expectedBeforeFailure": true,
+      "genuineFailingChildren": [
+        "Source home omission",
+        "Classic home omission"
+      ],
+      "positiveChild": "Date-body archive titles retained across Source/Classic",
+      "parentCountedAsFailure": true,
+      "semanticFailureLabels": [
+        "source-home model POST content owned title anchor count",
+        "source-home model POST content body archive wrapper count",
+        "source-home actual site API POST content owned title anchor count",
+        "source-home actual site API POST content body archive wrapper count",
+        "source-home native Source island owned loop body owned title anchor count",
+        "source-home native Source island owned loop body body archive wrapper count",
+        "source-home model presentation fragment owned loop body owned title anchor count",
+        "source-home model presentation fragment owned loop body body archive wrapper count",
+        "classic-home model POST content owned title anchor count",
+        "classic-home model POST content body archive wrapper count",
+        "classic-home actual site API POST content owned title anchor count",
+        "classic-home actual site API POST content body archive wrapper count",
+        "classic-home native Classic owned body owned title anchor count",
+        "classic-home native Classic owned body body archive wrapper count"
+      ],
+      "semanticFailureCheckCount": 14,
+      "rawLog": "<private-log>/worldact-public-listing-independent-home-body-before-compiled.log",
+      "rawSHA256": "7af3641ed60c0897651c5c2f8f127bf41d6299baca485f3ecd37e26539c45995",
+      "proof": "<private-evidence>/archive-query-title-home-body-before-compiled-proof.json",
+      "proofSHA256": "ae35efdf5dac52bef5532b7c94b24f333245e07aa666bdccb6845c789a69e048",
+      "dispatches": 16,
+      "groupStatuses": {
+        "source-home": {
+          "get": 200,
+          "head": 200,
+          "model": 200,
+          "site": 200
+        },
+        "source-date": {
+          "get": 200,
+          "head": 200,
+          "model": 200,
+          "site": 200
+        },
+        "classic-home": {
+          "get": 200,
+          "head": 200,
+          "model": 200,
+          "site": 200
+        },
+        "classic-date": {
+          "get": 200,
+          "head": 200,
+          "model": 200,
+          "site": 200
+        }
+      },
+      "apiFixtureCleanup": [
+        {
+          "postIds": [
+            4
+          ],
+          "documentIds": [
+            215
+          ],
+          "restoredTT25Ids": [
+            10
+          ],
+          "originalSettingsRestoreAttempted": true,
+          "failures": []
+        }
+      ],
+      "databases": [
+        "worldact_test_1794240555054_a8f7b2f3"
+      ],
+      "remainingDatabases": []
+    }
+  },
+  "artifacts": [
+    {
+      "path": "<private-evidence>/archive-query-title-home-independent-body-before-plan.md",
+      "sha256": "bf6ae98f62f5f5301903c06f390e0a64e2afdd15d78ac9c2537e998836ad730a",
+      "bytes": 7504,
+      "mode": "0o600"
+    },
+    {
+      "path": "<private-evidence>/archive-query-title-home-body-original.test.ts",
+      "sha256": "14dc9e1cc335174df1b4f826ddf57699e97d0add3daffacfb80639c9adf0264b",
+      "bytes": 19955,
+      "mode": "0o600"
+    },
+    {
+      "path": "<private-evidence>/archive-query-title-home-body-construction.diff",
+      "sha256": "842a3294955cb2d2c4a7fb86977c70725c887db28f192f83340e204ff3db980c",
+      "bytes": 20756,
+      "mode": "0o600"
+    },
+    {
+      "path": "<private-evidence>/archive-query-title-home-body-before-selector.json",
+      "sha256": "58101364d8523eeda8fc33b32719ca750e051f304846445f7c965044475190d8",
+      "bytes": 982,
+      "mode": "0o600"
+    },
+    {
+      "path": "<private-evidence>/archive-query-title-home-body-construction.json",
+      "sha256": "fff5474bd5effa1b966b309bb43b5e0b1aa60aea73c899f476f7ed53c24e30b9",
+      "bytes": 3725,
+      "mode": "0o600"
+    },
+    {
+      "path": "<private-evidence>/archive-query-title-home-body-before-preflight.json",
+      "sha256": "ca8a7d4449896e7054d5b5e663befe9c13315d6e1ea5128f765b9bfd602765a1",
+      "bytes": 1104,
+      "mode": "0o600"
+    },
+    {
+      "path": "<private-evidence>/archive-query-title-home-body-before-build.json",
+      "sha256": "bba29f79d20e5504aeef646062b57182e22c03de403fcefaa98c2f1e0234ac15",
+      "bytes": 1097,
+      "mode": "0o600"
+    },
+    {
+      "path": "<private-evidence>/archive-query-title-home-body-before-build.log",
+      "sha256": "9acfe6a0272e33b2fa73f85274d7217cab1cf2a609386ff514a4edfdf9ff11c1",
+      "bytes": 2398,
+      "mode": "0o600"
+    },
+    {
+      "path": "<private-evidence>/archive-query-title-home-body-before-fingerprints-start.json",
+      "sha256": "3636d28cfe83376d216cfcb944a8015cdd9cd4eb0ec821b0ec7260dee6e94cca",
+      "bytes": 98129,
+      "mode": "0o600"
+    },
+    {
+      "path": "<private-evidence>/archive-query-title-home-body-before-fingerprints-end.json",
+      "sha256": "aec9e9d32e981e4cc55fbccc3d6978acff408325e0a5f41f3a80ae96fec641fa",
+      "bytes": 98110,
+      "mode": "0o600"
+    },
+    {
+      "path": "<private-evidence>/archive-query-title-home-body-before-observations.json",
+      "sha256": "0fea5597fcbf3404478bc71bba6aafc6c09076014e4f457f5fca5d62e224ccce",
+      "bytes": 20725,
+      "mode": "0o600"
+    },
+    {
+      "path": "<private-evidence>/archive-query-title-home-body-before-cleanup.json",
+      "sha256": "1a97416d01c20dddc6ddfcf724c53557956cb60ea2a9ef76ceb2bc9fdebef1ab",
+      "bytes": 2238,
+      "mode": "0o600"
+    },
+    {
+      "path": "<private-evidence>/public-listing-independent-home-body-before-source-run.json",
+      "sha256": "e7064aa3cc0b2f16a1e1440cc1ee287217e1713f147e96ec974e3339407db5c3",
+      "bytes": 524,
+      "mode": "0o600"
+    },
+    {
+      "path": "<private-evidence>/archive-query-title-home-body-before-source-proof.json",
+      "sha256": "e7f56b77095f9bfa0fbde047f8a47835db47646dd5d47a078d3b52c6847b734c",
+      "bytes": 421892,
+      "mode": "0o600"
+    },
+    {
+      "path": "<private-evidence>/public-listing-independent-home-body-before-compiled-run.json",
+      "sha256": "6c796cd8b066095612c28ac0440b583e96350be14e0167f9e3a7361e83a8c713",
+      "bytes": 530,
+      "mode": "0o600"
+    },
+    {
+      "path": "<private-evidence>/archive-query-title-home-body-before-compiled-proof.json",
+      "sha256": "ae35efdf5dac52bef5532b7c94b24f333245e07aa666bdccb6845c789a69e048",
+      "bytes": 421892,
+      "mode": "0o600"
+    }
+  ],
+  "resources": "Both own DBs/anchor/app sessions absent; ownports no listeners. Config/read-only link/411-file300199 build retained under explicit root instruction.",
+  "scope": "Actual HTTP APIs in both modes; actual HTML DOM parsing without browser/pixel claim. No direct source renderer/service imports."
+}

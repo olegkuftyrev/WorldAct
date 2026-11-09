@@ -1,0 +1,716 @@
+{
+  "source": {
+    "path": "<private-evidence>/archive-query-title-home-body-before-source-proof.json",
+    "sha256": "e7f56b77095f9bfa0fbde047f8a47835db47646dd5d47a078d3b52c6847b734c",
+    "dispatches": 16,
+    "fixture": {
+      "id": 4,
+      "title": "home-title-body-mw9gh729 owned post",
+      "slug": "home-title-body-mw9gh729-post",
+      "permalink": "/home-title-body-mw9gh729-post/",
+      "excerpt": "",
+      "bodyId": "home-title-body-mw9gh729-body",
+      "titleId": "home-title-body-mw9gh729-title",
+      "marker": "INDEPENDENT-POST-BODY-home-title-body-mw9gh729",
+      "homeMain": "home-title-body-mw9gh729-home-main",
+      "dateMain": "home-title-body-mw9gh729-date-main",
+      "homeMarker": "SOURCE-HOME-home-title-body-mw9gh729",
+      "dateMarker": "SOURCE-DATE-home-title-body-mw9gh729",
+      "homeDocumentId": 10,
+      "dateDocumentId": 215
+    },
+    "groups": [
+      {
+        "label": "source-home",
+        "statuses": {
+          "get": 200,
+          "head": 200,
+          "model": 200,
+          "site": 200
+        },
+        "headBytes": 0,
+        "routeKind": "home",
+        "archive": null,
+        "theme": "twentytwentyfive",
+        "presentationKind": "source",
+        "selectedTemplate": {
+          "id": 10,
+          "slug": "home",
+          "title": "Home",
+          "type": "template",
+          "version": 2,
+          "updatedAt": "2026-11-09T16:08:36.776Z",
+          "isCustom": true
+        },
+        "classicCustomIndex": null,
+        "modelPost": {
+          "id": 4,
+          "excerpt": "",
+          "locked": false,
+          "content": {
+            "found": true,
+            "id": "home-title-body-mw9gh729-body",
+            "markerCount": 1,
+            "titleAnchors": [
+              {
+                "id": "home-title-body-mw9gh729-title",
+                "text": "Blog",
+                "class": "wp-block-query-title"
+              }
+            ],
+            "wrapperCount": 1
+          }
+        },
+        "siteApiPost": {
+          "id": 4,
+          "excerpt": "",
+          "locked": false,
+          "content": {
+            "found": true,
+            "id": "home-title-body-mw9gh729-body",
+            "markerCount": 1,
+            "titleAnchors": [
+              {
+                "id": "home-title-body-mw9gh729-title",
+                "text": "Blog",
+                "class": "wp-block-query-title"
+              }
+            ],
+            "wrapperCount": 1
+          }
+        },
+        "native": {
+          "realSourceIslandOrClassicListing": true,
+          "ownedRowOrCard": true,
+          "actualPostLink": "/home-title-body-mw9gh729-post/",
+          "actualPostTitle": "home-title-body-mw9gh729 owned post",
+          "body": {
+            "found": true,
+            "id": "home-title-body-mw9gh729-body",
+            "markerCount": 1,
+            "titleAnchors": [
+              {
+                "id": "home-title-body-mw9gh729-title",
+                "text": "Blog",
+                "class": "wp-block-query-title"
+              }
+            ],
+            "wrapperCount": 1
+          }
+        },
+        "modelPresentationBody": {
+          "found": true,
+          "id": "home-title-body-mw9gh729-body",
+          "markerCount": 1,
+          "titleAnchors": [
+            {
+              "id": "home-title-body-mw9gh729-title",
+              "text": "Blog",
+              "class": "wp-block-query-title"
+            }
+          ],
+          "wrapperCount": 1
+        }
+      },
+      {
+        "label": "source-date",
+        "statuses": {
+          "get": 200,
+          "head": 200,
+          "model": 200,
+          "site": 200
+        },
+        "headBytes": 0,
+        "routeKind": "archive",
+        "archive": {
+          "type": "date",
+          "year": 2001,
+          "name": "Year: 2001",
+          "permalink": "/2001/"
+        },
+        "theme": "twentytwentyfive",
+        "presentationKind": "source",
+        "selectedTemplate": {
+          "id": 215,
+          "slug": "date",
+          "title": "home-title-body-mw9gh729 date",
+          "type": "template",
+          "version": 1,
+          "updatedAt": "2026-11-09T16:08:36.821Z",
+          "isCustom": true
+        },
+        "classicCustomIndex": null,
+        "modelPost": {
+          "id": 4,
+          "excerpt": "",
+          "locked": false,
+          "content": {
+            "found": true,
+            "id": "home-title-body-mw9gh729-body",
+            "markerCount": 1,
+            "titleAnchors": [
+              {
+                "id": "home-title-body-mw9gh729-title",
+                "text": "Year: 2001",
+                "class": "wp-block-query-title"
+              }
+            ],
+            "wrapperCount": 1
+          }
+        },
+        "siteApiPost": {
+          "id": 4,
+          "excerpt": "",
+          "locked": false,
+          "content": {
+            "found": true,
+            "id": "home-title-body-mw9gh729-body",
+            "markerCount": 1,
+            "titleAnchors": [
+              {
+                "id": "home-title-body-mw9gh729-title",
+                "text": "Year: 2001",
+                "class": "wp-block-query-title"
+              }
+            ],
+            "wrapperCount": 1
+          }
+        },
+        "native": {
+          "realSourceIslandOrClassicListing": true,
+          "ownedRowOrCard": true,
+          "actualPostLink": "/home-title-body-mw9gh729-post/",
+          "actualPostTitle": "home-title-body-mw9gh729 owned post",
+          "body": {
+            "found": true,
+            "id": "home-title-body-mw9gh729-body",
+            "markerCount": 1,
+            "titleAnchors": [
+              {
+                "id": "home-title-body-mw9gh729-title",
+                "text": "Year: 2001",
+                "class": "wp-block-query-title"
+              }
+            ],
+            "wrapperCount": 1
+          }
+        },
+        "modelPresentationBody": {
+          "found": true,
+          "id": "home-title-body-mw9gh729-body",
+          "markerCount": 1,
+          "titleAnchors": [
+            {
+              "id": "home-title-body-mw9gh729-title",
+              "text": "Year: 2001",
+              "class": "wp-block-query-title"
+            }
+          ],
+          "wrapperCount": 1
+        }
+      },
+      {
+        "label": "classic-home",
+        "statuses": {
+          "get": 200,
+          "head": 200,
+          "model": 200,
+          "site": 200
+        },
+        "headBytes": 0,
+        "routeKind": "home",
+        "archive": null,
+        "theme": "classic",
+        "presentationKind": "classic",
+        "classicCustomIndex": null,
+        "modelPost": {
+          "id": 4,
+          "excerpt": "",
+          "locked": false,
+          "content": {
+            "found": true,
+            "id": "home-title-body-mw9gh729-body",
+            "markerCount": 1,
+            "titleAnchors": [
+              {
+                "id": "home-title-body-mw9gh729-title",
+                "text": "Blog",
+                "class": "wp-block-query-title"
+              }
+            ],
+            "wrapperCount": 1
+          }
+        },
+        "siteApiPost": {
+          "id": 4,
+          "excerpt": "",
+          "locked": false,
+          "content": {
+            "found": true,
+            "id": "home-title-body-mw9gh729-body",
+            "markerCount": 1,
+            "titleAnchors": [
+              {
+                "id": "home-title-body-mw9gh729-title",
+                "text": "Blog",
+                "class": "wp-block-query-title"
+              }
+            ],
+            "wrapperCount": 1
+          }
+        },
+        "native": {
+          "realSourceIslandOrClassicListing": true,
+          "ownedRowOrCard": true,
+          "actualPostLink": "/home-title-body-mw9gh729-post/",
+          "actualPostTitle": "home-title-body-mw9gh729 owned post",
+          "body": {
+            "found": true,
+            "id": "home-title-body-mw9gh729-body",
+            "markerCount": 1,
+            "titleAnchors": [
+              {
+                "id": "home-title-body-mw9gh729-title",
+                "text": "Blog",
+                "class": "wp-block-query-title"
+              }
+            ],
+            "wrapperCount": 1
+          }
+        }
+      },
+      {
+        "label": "classic-date",
+        "statuses": {
+          "get": 200,
+          "head": 200,
+          "model": 200,
+          "site": 200
+        },
+        "headBytes": 0,
+        "routeKind": "archive",
+        "archive": {
+          "type": "date",
+          "year": 2001,
+          "name": "Year: 2001",
+          "permalink": "/2001/"
+        },
+        "theme": "classic",
+        "presentationKind": "classic",
+        "classicCustomIndex": null,
+        "modelPost": {
+          "id": 4,
+          "excerpt": "",
+          "locked": false,
+          "content": {
+            "found": true,
+            "id": "home-title-body-mw9gh729-body",
+            "markerCount": 1,
+            "titleAnchors": [
+              {
+                "id": "home-title-body-mw9gh729-title",
+                "text": "Year: 2001",
+                "class": "wp-block-query-title"
+              }
+            ],
+            "wrapperCount": 1
+          }
+        },
+        "siteApiPost": {
+          "id": 4,
+          "excerpt": "",
+          "locked": false,
+          "content": {
+            "found": true,
+            "id": "home-title-body-mw9gh729-body",
+            "markerCount": 1,
+            "titleAnchors": [
+              {
+                "id": "home-title-body-mw9gh729-title",
+                "text": "Year: 2001",
+                "class": "wp-block-query-title"
+              }
+            ],
+            "wrapperCount": 1
+          }
+        },
+        "native": {
+          "realSourceIslandOrClassicListing": true,
+          "ownedRowOrCard": true,
+          "actualPostLink": "/home-title-body-mw9gh729-post/",
+          "actualPostTitle": "home-title-body-mw9gh729 owned post",
+          "body": {
+            "found": true,
+            "id": "home-title-body-mw9gh729-body",
+            "markerCount": 1,
+            "titleAnchors": [
+              {
+                "id": "home-title-body-mw9gh729-title",
+                "text": "Year: 2001",
+                "class": "wp-block-query-title"
+              }
+            ],
+            "wrapperCount": 1
+          }
+        }
+      }
+    ]
+  },
+  "compiled": {
+    "path": "<private-evidence>/archive-query-title-home-body-before-compiled-proof.json",
+    "sha256": "ae35efdf5dac52bef5532b7c94b24f333245e07aa666bdccb6845c789a69e048",
+    "dispatches": 16,
+    "fixture": {
+      "id": 4,
+      "title": "home-title-body-mw9gi2es owned post",
+      "slug": "home-title-body-mw9gi2es-post",
+      "permalink": "/home-title-body-mw9gi2es-post/",
+      "excerpt": "",
+      "bodyId": "home-title-body-mw9gi2es-body",
+      "titleId": "home-title-body-mw9gi2es-title",
+      "marker": "INDEPENDENT-POST-BODY-home-title-body-mw9gi2es",
+      "homeMain": "home-title-body-mw9gi2es-home-main",
+      "dateMain": "home-title-body-mw9gi2es-date-main",
+      "homeMarker": "SOURCE-HOME-home-title-body-mw9gi2es",
+      "dateMarker": "SOURCE-DATE-home-title-body-mw9gi2es",
+      "homeDocumentId": 10,
+      "dateDocumentId": 215
+    },
+    "groups": [
+      {
+        "label": "source-home",
+        "statuses": {
+          "get": 200,
+          "head": 200,
+          "model": 200,
+          "site": 200
+        },
+        "headBytes": 0,
+        "routeKind": "home",
+        "archive": null,
+        "theme": "twentytwentyfive",
+        "presentationKind": "source",
+        "selectedTemplate": {
+          "id": 10,
+          "slug": "home",
+          "title": "Home",
+          "type": "template",
+          "version": 2,
+          "updatedAt": "2026-11-09T16:09:17.389Z",
+          "isCustom": true
+        },
+        "classicCustomIndex": null,
+        "modelPost": {
+          "id": 4,
+          "excerpt": "",
+          "locked": false,
+          "content": {
+            "found": true,
+            "id": "home-title-body-mw9gi2es-body",
+            "markerCount": 1,
+            "titleAnchors": [
+              {
+                "id": "home-title-body-mw9gi2es-title",
+                "text": "Blog",
+                "class": "wp-block-query-title"
+              }
+            ],
+            "wrapperCount": 1
+          }
+        },
+        "siteApiPost": {
+          "id": 4,
+          "excerpt": "",
+          "locked": false,
+          "content": {
+            "found": true,
+            "id": "home-title-body-mw9gi2es-body",
+            "markerCount": 1,
+            "titleAnchors": [
+              {
+                "id": "home-title-body-mw9gi2es-title",
+                "text": "Blog",
+                "class": "wp-block-query-title"
+              }
+            ],
+            "wrapperCount": 1
+          }
+        },
+        "native": {
+          "realSourceIslandOrClassicListing": true,
+          "ownedRowOrCard": true,
+          "actualPostLink": "/home-title-body-mw9gi2es-post/",
+          "actualPostTitle": "home-title-body-mw9gi2es owned post",
+          "body": {
+            "found": true,
+            "id": "home-title-body-mw9gi2es-body",
+            "markerCount": 1,
+            "titleAnchors": [
+              {
+                "id": "home-title-body-mw9gi2es-title",
+                "text": "Blog",
+                "class": "wp-block-query-title"
+              }
+            ],
+            "wrapperCount": 1
+          }
+        },
+        "modelPresentationBody": {
+          "found": true,
+          "id": "home-title-body-mw9gi2es-body",
+          "markerCount": 1,
+          "titleAnchors": [
+            {
+              "id": "home-title-body-mw9gi2es-title",
+              "text": "Blog",
+              "class": "wp-block-query-title"
+            }
+          ],
+          "wrapperCount": 1
+        }
+      },
+      {
+        "label": "source-date",
+        "statuses": {
+          "get": 200,
+          "head": 200,
+          "model": 200,
+          "site": 200
+        },
+        "headBytes": 0,
+        "routeKind": "archive",
+        "archive": {
+          "type": "date",
+          "year": 2001,
+          "name": "Year: 2001",
+          "permalink": "/2001/"
+        },
+        "theme": "twentytwentyfive",
+        "presentationKind": "source",
+        "selectedTemplate": {
+          "id": 215,
+          "slug": "date",
+          "title": "home-title-body-mw9gi2es date",
+          "type": "template",
+          "version": 1,
+          "updatedAt": "2026-11-09T16:09:17.434Z",
+          "isCustom": true
+        },
+        "classicCustomIndex": null,
+        "modelPost": {
+          "id": 4,
+          "excerpt": "",
+          "locked": false,
+          "content": {
+            "found": true,
+            "id": "home-title-body-mw9gi2es-body",
+            "markerCount": 1,
+            "titleAnchors": [
+              {
+                "id": "home-title-body-mw9gi2es-title",
+                "text": "Year: 2001",
+                "class": "wp-block-query-title"
+              }
+            ],
+            "wrapperCount": 1
+          }
+        },
+        "siteApiPost": {
+          "id": 4,
+          "excerpt": "",
+          "locked": false,
+          "content": {
+            "found": true,
+            "id": "home-title-body-mw9gi2es-body",
+            "markerCount": 1,
+            "titleAnchors": [
+              {
+                "id": "home-title-body-mw9gi2es-title",
+                "text": "Year: 2001",
+                "class": "wp-block-query-title"
+              }
+            ],
+            "wrapperCount": 1
+          }
+        },
+        "native": {
+          "realSourceIslandOrClassicListing": true,
+          "ownedRowOrCard": true,
+          "actualPostLink": "/home-title-body-mw9gi2es-post/",
+          "actualPostTitle": "home-title-body-mw9gi2es owned post",
+          "body": {
+            "found": true,
+            "id": "home-title-body-mw9gi2es-body",
+            "markerCount": 1,
+            "titleAnchors": [
+              {
+                "id": "home-title-body-mw9gi2es-title",
+                "text": "Year: 2001",
+                "class": "wp-block-query-title"
+              }
+            ],
+            "wrapperCount": 1
+          }
+        },
+        "modelPresentationBody": {
+          "found": true,
+          "id": "home-title-body-mw9gi2es-body",
+          "markerCount": 1,
+          "titleAnchors": [
+            {
+              "id": "home-title-body-mw9gi2es-title",
+              "text": "Year: 2001",
+              "class": "wp-block-query-title"
+            }
+          ],
+          "wrapperCount": 1
+        }
+      },
+      {
+        "label": "classic-home",
+        "statuses": {
+          "get": 200,
+          "head": 200,
+          "model": 200,
+          "site": 200
+        },
+        "headBytes": 0,
+        "routeKind": "home",
+        "archive": null,
+        "theme": "classic",
+        "presentationKind": "classic",
+        "classicCustomIndex": null,
+        "modelPost": {
+          "id": 4,
+          "excerpt": "",
+          "locked": false,
+          "content": {
+            "found": true,
+            "id": "home-title-body-mw9gi2es-body",
+            "markerCount": 1,
+            "titleAnchors": [
+              {
+                "id": "home-title-body-mw9gi2es-title",
+                "text": "Blog",
+                "class": "wp-block-query-title"
+              }
+            ],
+            "wrapperCount": 1
+          }
+        },
+        "siteApiPost": {
+          "id": 4,
+          "excerpt": "",
+          "locked": false,
+          "content": {
+            "found": true,
+            "id": "home-title-body-mw9gi2es-body",
+            "markerCount": 1,
+            "titleAnchors": [
+              {
+                "id": "home-title-body-mw9gi2es-title",
+                "text": "Blog",
+                "class": "wp-block-query-title"
+              }
+            ],
+            "wrapperCount": 1
+          }
+        },
+        "native": {
+          "realSourceIslandOrClassicListing": true,
+          "ownedRowOrCard": true,
+          "actualPostLink": "/home-title-body-mw9gi2es-post/",
+          "actualPostTitle": "home-title-body-mw9gi2es owned post",
+          "body": {
+            "found": true,
+            "id": "home-title-body-mw9gi2es-body",
+            "markerCount": 1,
+            "titleAnchors": [
+              {
+                "id": "home-title-body-mw9gi2es-title",
+                "text": "Blog",
+                "class": "wp-block-query-title"
+              }
+            ],
+            "wrapperCount": 1
+          }
+        }
+      },
+      {
+        "label": "classic-date",
+        "statuses": {
+          "get": 200,
+          "head": 200,
+          "model": 200,
+          "site": 200
+        },
+        "headBytes": 0,
+        "routeKind": "archive",
+        "archive": {
+          "type": "date",
+          "year": 2001,
+          "name": "Year: 2001",
+          "permalink": "/2001/"
+        },
+        "theme": "classic",
+        "presentationKind": "classic",
+        "classicCustomIndex": null,
+        "modelPost": {
+          "id": 4,
+          "excerpt": "",
+          "locked": false,
+          "content": {
+            "found": true,
+            "id": "home-title-body-mw9gi2es-body",
+            "markerCount": 1,
+            "titleAnchors": [
+              {
+                "id": "home-title-body-mw9gi2es-title",
+                "text": "Year: 2001",
+                "class": "wp-block-query-title"
+              }
+            ],
+            "wrapperCount": 1
+          }
+        },
+        "siteApiPost": {
+          "id": 4,
+          "excerpt": "",
+          "locked": false,
+          "content": {
+            "found": true,
+            "id": "home-title-body-mw9gi2es-body",
+            "markerCount": 1,
+            "titleAnchors": [
+              {
+                "id": "home-title-body-mw9gi2es-title",
+                "text": "Year: 2001",
+                "class": "wp-block-query-title"
+              }
+            ],
+            "wrapperCount": 1
+          }
+        },
+        "native": {
+          "realSourceIslandOrClassicListing": true,
+          "ownedRowOrCard": true,
+          "actualPostLink": "/home-title-body-mw9gi2es-post/",
+          "actualPostTitle": "home-title-body-mw9gi2es owned post",
+          "body": {
+            "found": true,
+            "id": "home-title-body-mw9gi2es-body",
+            "markerCount": 1,
+            "titleAnchors": [
+              {
+                "id": "home-title-body-mw9gi2es-title",
+                "text": "Year: 2001",
+                "class": "wp-block-query-title"
+              }
+            ],
+            "wrapperCount": 1
+          }
+        }
+      }
+    ]
+  }
+}

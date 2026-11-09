@@ -1,0 +1,71 @@
+{
+  "status": "AUTHORIZED_OWN_BEFORE_CONFIG_AND_LINK_REMOVED",
+  "head": "84eaf86e6c0460eacb57c4e75bd43eef439e30cb",
+  "config": {
+    "path": "<physical-before-checkout>/.env",
+    "uid": 501,
+    "mode": 384,
+    "sha256": "b2d8ecee373a74d8a62a42cf9789dd1d5f4c564e497f31f1b8487bdebe06427d",
+    "removed": true
+  },
+  "dependencyLink": {
+    "path": "<physical-before-checkout>/node_modules",
+    "uid": 501,
+    "target": "<verified-dependency-owner>/node_modules",
+    "removed": true
+  },
+  "dependencyOwner": {
+    "uid": 501,
+    "mode": 493,
+    "symlink": false,
+    "lockSHA256": "233888ed8f864581a8835aab0b4c33ccd7fbc391f2a98650b63fcf8db8814892"
+  },
+  "ports": [
+    {
+      "port": 3068,
+      "exitCode": 1,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "port": 3069,
+      "exitCode": 1,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "port": 3070,
+      "exitCode": 1,
+      "stdout": "",
+      "stderr": ""
+    }
+  ],
+  "historicalGuardCleanup": {
+    "receipt": "archive-query-title-home-body-before-cleanup.json",
+    "sha256": "1a97416d01c20dddc6ddfcf724c53557956cb60ea2a9ef76ceb2bc9fdebef1ab",
+    "databases": [
+      "worldact_test_1794240513636_5afdab7b",
+      "worldact_test_1794240555054_a8f7b2f3"
+    ],
+    "neverCreatedAnchor": "worldact_archive_title_home_body_before_anchor",
+    "remainingDatabaseRows": [],
+    "journalApplications": [
+      "worldact_listing_independent_home-body-before-source",
+      "worldact_listing_independent_home-body-before-compiled"
+    ],
+    "remainingSessionRows": [],
+    "scope": "Historical normal-runner SQL/port closure, subsequently independently verified by root. No new SQL session was opened for this unlink-only step."
+  },
+  "preserved": {
+    "fixtureSHA256": "14dc9e1cc335174df1b4f826ddf57699e97d0add3daffacfb80639c9adf0264b",
+    "nodeSHA256": "300199e4aebe00b526fee49af14904d50cacd20333b07c99c2ded6ba3ddf7070",
+    "sourceFingerprintCount": 353,
+    "testFingerprintCount": 10,
+    "buildFingerprintCount": 411,
+    "beforeReportSHA256": "e3a7bedcdf7cf035d133159c9832a4a317a82cef894264eced02bcb567458eed",
+    "historicalCleanupUnchanged": true,
+    "allBeforeBuildsAndOriginalsRetained": true
+  },
+  "noRerunOrRuntimeTestUiCiMainChanges": true,
+  "noArchiveCreated": true
+}
