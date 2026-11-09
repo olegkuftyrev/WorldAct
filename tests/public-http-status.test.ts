@@ -70,12 +70,13 @@ test("Node renders real public documents with actual identity status and preserv
     const signed = await api("/api/auth/login", "POST", { login: process.env.ADMIN_EMAIL, password: process.env.ADMIN_PASSWORD });
     cookie = signed.response.headers.get("set-cookie")!.split(";")[0];
     await api("/api/settings", "PUT", { frontPageMode: "posts", frontPageId: null, postsPageId: null, timezone: "America/Los_Angeles", pingServices: [], closeCommentsDays: 0 });
-    await t.test("empty home and ordinary root searches, filters and independent pagination stay valid", async () => {
+    await t.test("empty ordinary first pages stay valid and empty later main pages return404", async () => {
       const published = (await pool.query("SELECT id FROM posts WHERE status='publish'")).rows.map(row => row.id);
       try {
         await pool.query("UPDATE posts SET status='draft' WHERE id=ANY($1::int[])", [published]);
         assert.equal((await pool.query("SELECT count(*)::int AS n FROM posts WHERE status='publish'")).rows[0].n, 0);
-        for (const route of ["/", "/?search=absent", "/?s=absent&page=999", "/?category=absent&tag=absent", "/?author=2147483647", "/?year=1901&monthnum=2&page=999", "/?page=999&query-3-page=6&commentPage=4"]) await html(route);
+        for (const route of ["/", "/?search=absent", "/?category=absent&tag=absent", "/?author=2147483647"]) await html(route);
+        for (const route of ["/?s=absent&page=999", "/?year=1901&monthnum=2&page=999", "/?page=999&query-3-page=6&commentPage=4"]) await html(route, 404);
       } finally { await pool.query("UPDATE posts SET status='publish' WHERE id=ANY($1::int[])", [published]); }
     });
     const story = await post({ pingStatus: "open", publishedAt: "2024-03-01T07:30:00Z" });
@@ -128,7 +129,8 @@ test("Node renders real public documents with actual identity status and preserv
       await html("/?page_id=" + locked.id); const metadata = await resolved("/?page_id=" + locked.id);
       assert.equal(metadata.post.locked, true); assert.doesNotMatch(JSON.stringify(metadata), /HTTP-PRIVATE-BODY|HTTP-status-private-password/);
       await api("/api/settings", "PUT", { frontPageMode: "page", frontPageId: parent.id, postsPageId: child.id });
-      for (const route of ["/", "/?page=2&query-3-page=7", "/page/2/", "/?s=absent", "/?year=1901&page=999"]) await html(route);
+      for (const route of ["/", "/?page=2&query-3-page=7", "/page/2/", "/?s=absent"]) await html(route);
+      await html("/?year=1901&page=999", 404);
       await api("/api/settings", "PUT", { frontPageId: locked.id }); await html("/");
       await api("/api/settings", "PUT", { frontPageMode: "posts", frontPageId: null, postsPageId: null });
     });
@@ -139,16 +141,16 @@ test("Node renders real public documents with actual identity status and preserv
         for (const status of ["private", "draft", "future"]) {
           await pool.query("UPDATE posts SET status=$1 WHERE id=$2", [status, parent.id]);
           for (const route of ["/", "/?page=2", "/?page=2&query-3-page=4&commentPage=2", "/page/2/"]) await html(route, 404);
-          await html("/?search=absent&page=2");
+          await html("/?search=absent&page=2", 404);
         }
         await pool.query("UPDATE settings SET data=jsonb_set(data,'{frontPageId}','2147483647'::jsonb) WHERE id=1");
         for (const route of ["/", "/?page=2", "/page/2/"]) await html(route, 404);
-        await html("/?category=absent&page=2");
+        await html("/?category=absent&page=2", 404);
       } finally {
         await pool.query("UPDATE posts SET status='publish' WHERE id=$1", [parent.id]);
         await api("/api/settings", "PUT", { frontPageMode: "posts", frontPageId: null, postsPageId: null });
       }
-      await html("/?page=999&query-3-page=4&commentPage=2");
+      await html("/?page=999&query-3-page=4&commentPage=2", 404);
     });
     await t.test("accepted category canonicals with more than 64 ancestors remain public within the URL bound", async () => {
       await api("/api/settings", "PUT", { permalinkStructure: "/%category%/%postname%/" });
@@ -182,7 +184,7 @@ test("Node renders real public documents with actual identity status and preserv
         const term = (await api("/api/terms", "POST", { taxonomy, name: stamp + " " + taxonomy })).data.term; terms.push(term.id);
         const route = "/" + (taxonomy === "category" ? "topics" : "labels") + "/" + term.slug + "/";
         await html(route); assert.equal((await resolved(route)).archive.id, term.id);
-        await html(route + "?page=999&query-8-page=4");
+        await html(route + "?page=999&query-8-page=4", 404);
         await html(route + "missing/", 404); await resolved(route + "missing/", 404);
         await html(route + "?p=bad", 404); await resolved(route + "?p=bad", 404);
       }
