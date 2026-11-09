@@ -1,0 +1,24 @@
+{
+  "codeSha": "c2c69ef388f4426d733d4ea46231c122ce2058fa",
+  "nodeSha256": "1618944b7b7b4ea0b755a9c8fd3ca14aa142d8f3371970a5a0d7e7a874955e53",
+  "ownBrowserNativeLogoutAndAnonymousSession": true,
+  "ownFinalTwoVaultEntriesAbsent": true,
+  "ownNewAndPreviousBrowserSocketsAbsent": true,
+  "postAutosavesBaseTableRestored": true,
+  "noOwnedHoldObjectsOrAdvisoryWaits": true,
+  "ownRecordedApiAndProxyStopped": true,
+  "ownPortsFree": [
+    3035,
+    3036,
+    3037,
+    5195
+  ],
+  "uniquePersistentDatabaseAbsent": true,
+  "uniqueUploadsRemoved": true,
+  "ownEnvRemoved": true,
+  "ownThreeDependencySymlinksRemoved": true,
+  "readOnlyDependencyOwnerPreserved": true,
+  "mainDataConfigAndBrowserAccessAfterResumption": false,
+  "secretConfigAndFixtureRemoved": true,
+  "prior45NativeImagesAndOriginalFailuresPreserved": true
+}

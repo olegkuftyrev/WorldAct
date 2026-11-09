@@ -1,0 +1,29 @@
+{
+  "sha": "66ad49f0e7f64153fde9d058fb131900c2397cc5",
+  "tree": "08c346f3dc96fc6fc69ae26257d92a2b852066e9",
+  "nodeSha256": "776c46e29a8e301db8db36efea5e3a99f79672ec84ce0bd937e09b6321da3548",
+  "result": "NEEDS_REVISION",
+  "trigger": "ordinary Plain singular body2 with independent query/comment context",
+  "method": "GET",
+  "pathShape": "/api/public/document?path=/?p=POST_ID&page=2&query-4-page=2&commentPage=1&replytocom=COMMENT_ID",
+  "expected": 200,
+  "actualStatus": 400,
+  "actualError": "The author archive identity or counters conflict.",
+  "source": {
+    "priorFilesPass": 2,
+    "priorCasesPass": 14,
+    "publicViewCasesPass": 0,
+    "publicViewCasesFail": 1
+  },
+  "actualCompiled": {
+    "publicViewCasesPass": 0,
+    "publicViewCasesFail": 1
+  },
+  "logs": {
+    "pretty-author-native-66-source-original-failure.log": "e255af7bcf4372c36bf4b01905a650ae6cd6e016ee5e1bee7a1beecbb890b6fe",
+    "pretty-author-native-66-compiled-original-failure.log": "e706567a4959be6b235dd979d5905f53f509ef880fdd93cb42e2e0c816613a20"
+  },
+  "persistentNativeDatabaseCreated": false,
+  "browserCreated": false,
+  "backendOwnerInformed": true
+}

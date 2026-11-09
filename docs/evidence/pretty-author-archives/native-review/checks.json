@@ -1,0 +1,127 @@
+{
+  "verdict": "PASS bounded pretty-author UI/native scope; separate backend/release and whole-project acceptance",
+  "finalCode": "c2c69ef388f4426d733d4ea46231c122ce2058fa",
+  "finalTree": "a35b59f6723b443a1806a4710440f9ff7d7b7bcc",
+  "finalNodeSha256": "1618944b7b7b4ea0b755a9c8fd3ca14aa142d8f3371970a5a0d7e7a874955e53",
+  "uiCommits": [
+    "ae46999d500566416bcc1986e17d8eb68fcd1110",
+    "37dc95d08cd70c41d6eb707f8f865cf5f9d73803"
+  ],
+  "acceptedPreviewCode": "23355068f8207675d387a7ee2abbda8030978534",
+  "build": {
+    "tsc": true,
+    "viteConfigLoaderRunner": true,
+    "esbuild": true,
+    "frontendSourceUnchangedAfter878": true,
+    "serverDeltaAfter878": "post-author strict isLink/default target only; no new await",
+    "noCssSourceChanges": true
+  },
+  "guards": [
+    {
+      "code": "66ad49f0e7f64153fde9d058fb131900c2397cc5",
+      "result": "NEEDS_REVISION",
+      "sourcePartial": {
+        "files": 3,
+        "pass": 14,
+        "fail": 1
+      },
+      "actualCompiledSelectedPublicView": {
+        "files": 1,
+        "pass": 0,
+        "fail": 1
+      },
+      "failure": "Plain singular body2 incorrectly rejected400 by author counter merge"
+    },
+    {
+      "code": "87819b5a72379129e988b7be97a3e5354b62d8c5",
+      "files": 4,
+      "source": {
+        "tests": 16,
+        "pass": 16,
+        "fail": 0,
+        "skip": 0
+      },
+      "compiledApiRunner": {
+        "tests": 16,
+        "pass": 16,
+        "fail": 0,
+        "skip": 0
+      }
+    },
+    {
+      "code": "c2c69ef388f4426d733d4ea46231c122ce2058fa",
+      "files": 5,
+      "source": {
+        "tests": 28,
+        "pass": 28,
+        "fail": 0,
+        "skip": 0
+      },
+      "compiledApiRunner": {
+        "tests": 28,
+        "pass": 28,
+        "fail": 0,
+        "skip": 0
+      },
+      "selector": [
+        "post-author-link-defaults",
+        "public-author-archive-ui",
+        "pretty-author-archives-original",
+        "public-document-view",
+        "template-access"
+      ]
+    }
+  ],
+  "guardModeLimit": "The six public-author-archive-ui assertions import source helper/view in either runner mode. The remaining HTTP checks use the selected source/actual compiled API; native public HTML uses the matching compiled Node bundle.",
+  "native878": {
+    "code": "87819b5a72379129e988b7be97a3e5354b62d8c5",
+    "nodeSha256": "df06754d831ba00df85ab502373122643c21ca46ecfac5191d8d89e860ee7ffd",
+    "mainArchiveRows": 6,
+    "multiStepAliasPlainPartialSlashlessStaticRows": 6,
+    "templateHierarchyRows": 10,
+    "getHeadStatusCases": 24,
+    "additionalNamespaceNumericChildQuirkGroups": 6,
+    "genuineScriptDisabledComment303Rows": 6,
+    "genuineScriptDisabledPassword303Rows": 6,
+    "inspectedPassingPngs": 44,
+    "originalDefaultFailurePng": 1
+  },
+  "nativeFinalC2": {
+    "themes": [
+      "twentytwentyfive",
+      "classic"
+    ],
+    "widths": [
+      1440,
+      768,
+      375
+    ],
+    "originalDefaultReversalRows": 6,
+    "privateLatestAutosavePreviewRows": 6,
+    "denialHttpCases": 12,
+    "privateNoStoreNoindexEndpointChecks": 4,
+    "measuredActualPendingSingleTemplateLogoutDifferentActorRows": 2,
+    "inspectedPngs": 14,
+    "noNewRuntimeUiEdits": true
+  },
+  "evidence": {
+    "completedAndOriginalFailureProofs": 9,
+    "directlyInspectedCopiedPngs": 59,
+    "sanitizedGuardLogs": 6,
+    "originalPrivateReceipts": 76,
+    "originalManifestSha256": "11200dc4fb2fa649a47432d3ac01a3a4121f0b50eeebf2df7f04b32871b83b2a",
+    "sourceOriginalsUnchanged": true,
+    "secretValueScanBeforeConfigRemovalMatches": 0
+  },
+  "cleanupComplete": true,
+  "limits": [
+    "Not a whole WordPress/project completion certificate",
+    "No live source pixel-parity claim or BFCache certificate",
+    "No all-public-callers/backend adversarial/migration certificate",
+    "Numeric aliases intentionally retain existing empty/excessive200 policy; pretty empty/excessive paged404",
+    "Source double-hyphen normalization quirk intentionally preserved",
+    "Owned synthetic templates/fixtures; no PHP/MySQL/external delivery/benchmark",
+    "No main data/config/browser access after resumption; no rollback of user edits",
+    "Remaining generated-link REST/media/privacy backend coverage is separately certified by backend reviewers, not newly claimed as independent native media tests here"
+  ]
+}

@@ -1,0 +1,231 @@
+{
+  "sha": "c2c69ef388f4426d733d4ea46231c122ce2058fa",
+  "rows": [
+    {
+      "theme": "twentytwentyfive",
+      "width": 1440,
+      "postId": 45,
+      "postDate": "2001-12-31T23:59:37",
+      "observation": {
+        "chosen": true,
+        "errors": [],
+        "latest": true,
+        "old": false,
+        "overflow": false,
+        "titles": 1
+      },
+      "screenshot": "../screens/pretty-author-native-final-preview-twentytwentyfive-1440.png"
+    },
+    {
+      "theme": "twentytwentyfive",
+      "width": 768,
+      "postId": 45,
+      "postDate": "2001-12-31T23:59:37",
+      "observation": {
+        "chosen": true,
+        "errors": [],
+        "latest": true,
+        "old": false,
+        "overflow": false,
+        "titles": 1
+      },
+      "screenshot": "../screens/pretty-author-native-final-preview-twentytwentyfive-768.png"
+    },
+    {
+      "theme": "twentytwentyfive",
+      "width": 375,
+      "postId": 45,
+      "postDate": "2001-12-31T23:59:37",
+      "observation": {
+        "chosen": true,
+        "errors": [],
+        "latest": true,
+        "old": false,
+        "overflow": false,
+        "titles": 1
+      },
+      "screenshot": "../screens/pretty-author-native-final-preview-twentytwentyfive-375.png"
+    },
+    {
+      "theme": "classic",
+      "width": 1440,
+      "postId": 45,
+      "postDate": "2001-12-31T23:59:37",
+      "observation": {
+        "chosen": true,
+        "errors": [],
+        "latest": true,
+        "old": false,
+        "overflow": false,
+        "titles": 1
+      },
+      "screenshot": "../screens/pretty-author-native-final-preview-classic-1440.png"
+    },
+    {
+      "theme": "classic",
+      "width": 768,
+      "postId": 45,
+      "postDate": "2001-12-31T23:59:37",
+      "observation": {
+        "chosen": true,
+        "errors": [],
+        "latest": true,
+        "old": false,
+        "overflow": false,
+        "titles": 1
+      },
+      "screenshot": "../screens/pretty-author-native-final-preview-classic-768.png"
+    },
+    {
+      "theme": "classic",
+      "width": 375,
+      "postId": 45,
+      "postDate": "2001-12-31T23:59:37",
+      "observation": {
+        "chosen": true,
+        "errors": [],
+        "latest": true,
+        "old": false,
+        "overflow": false,
+        "titles": 1
+      },
+      "screenshot": "../screens/pretty-author-native-final-preview-classic-375.png"
+    }
+  ],
+  "denials": [
+    {
+      "theme": "twentytwentyfive",
+      "label": "anonymous post preview",
+      "method": "GET",
+      "path": "/api/posts/45/preview",
+      "status": 401,
+      "privateMarkersAbsent": true
+    },
+    {
+      "theme": "twentytwentyfive",
+      "label": "anonymous template preview",
+      "method": "GET",
+      "path": "/api/public/templates/single?preview=true&postId=45",
+      "status": 401,
+      "privateMarkersAbsent": true
+    },
+    {
+      "theme": "twentytwentyfive",
+      "label": "other author post preview",
+      "method": "GET",
+      "path": "/api/posts/45/preview",
+      "status": 403,
+      "privateMarkersAbsent": true
+    },
+    {
+      "theme": "twentytwentyfive",
+      "label": "other author template preview",
+      "method": "GET",
+      "path": "/api/public/templates/single?preview=true&postId=45",
+      "status": 403,
+      "privateMarkersAbsent": true
+    },
+    {
+      "theme": "twentytwentyfive",
+      "label": "ordinary draft template",
+      "method": "GET",
+      "path": "/api/public/templates/single?postId=45",
+      "status": 404,
+      "privateMarkersAbsent": true
+    },
+    {
+      "theme": "twentytwentyfive",
+      "label": "ordinary draft canonical",
+      "method": "GET",
+      "path": "/journal/pretty-preview-saved-draft/",
+      "status": 404,
+      "privateMarkersAbsent": true
+    },
+    {
+      "theme": "classic",
+      "label": "anonymous post preview",
+      "method": "GET",
+      "path": "/api/posts/45/preview",
+      "status": 401,
+      "privateMarkersAbsent": true
+    },
+    {
+      "theme": "classic",
+      "label": "anonymous template preview",
+      "method": "GET",
+      "path": "/api/public/templates/single?preview=true&postId=45",
+      "status": 401,
+      "privateMarkersAbsent": true
+    },
+    {
+      "theme": "classic",
+      "label": "other author post preview",
+      "method": "GET",
+      "path": "/api/posts/45/preview",
+      "status": 403,
+      "privateMarkersAbsent": true
+    },
+    {
+      "theme": "classic",
+      "label": "other author template preview",
+      "method": "GET",
+      "path": "/api/public/templates/single?preview=true&postId=45",
+      "status": 403,
+      "privateMarkersAbsent": true
+    },
+    {
+      "theme": "classic",
+      "label": "ordinary draft template",
+      "method": "GET",
+      "path": "/api/public/templates/single?postId=45",
+      "status": 404,
+      "privateMarkersAbsent": true
+    },
+    {
+      "theme": "classic",
+      "label": "ordinary draft canonical",
+      "method": "GET",
+      "path": "/journal/pretty-preview-saved-draft/",
+      "status": 404,
+      "privateMarkersAbsent": true
+    }
+  ],
+  "cache": [
+    {
+      "theme": "twentytwentyfive",
+      "method": "GET",
+      "path": "/api/posts/45/preview",
+      "status": 200,
+      "currentAutosave": true,
+      "privateNoStore": true,
+      "noindex": true
+    },
+    {
+      "theme": "twentytwentyfive",
+      "method": "GET",
+      "path": "/api/public/templates/single?preview=true&postId=45",
+      "status": 200,
+      "currentAutosave": true,
+      "privateNoStore": true,
+      "noindex": true
+    },
+    {
+      "theme": "classic",
+      "method": "GET",
+      "path": "/api/posts/45/preview",
+      "status": 200,
+      "currentAutosave": true,
+      "privateNoStore": true,
+      "noindex": true
+    },
+    {
+      "theme": "classic",
+      "method": "GET",
+      "path": "/api/public/templates/single?preview=true&postId=45",
+      "status": 200,
+      "currentAutosave": true,
+      "privateNoStore": true,
+      "noindex": true
+    }
+  ]
+}

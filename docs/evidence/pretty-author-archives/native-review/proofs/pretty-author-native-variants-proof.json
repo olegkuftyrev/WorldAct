@@ -1,0 +1,543 @@
+{
+  "sha": "87819b5a72379129e988b7be97a3e5354b62d8c5",
+  "rows": [
+    {
+      "theme": "twentytwentyfive",
+      "width": 1440,
+      "numericAlias": {
+        "path": "/?author=8&page=2&query-4-page=2&commentPage=2",
+        "actualAuthor": 8,
+        "archivePage": 2
+      },
+      "plain": {
+        "generated": "/?author=8",
+        "observation": {
+          "errors": [],
+          "heading": "Author: Native Public Writer",
+          "overflow": false,
+          "privateBody": false,
+          "protectedBody": false
+        }
+      },
+      "partial": {
+        "generated": "/blog-author/native-pretty-login",
+        "observation": {
+          "errors": [],
+          "heading": "Author: Native Public Writer",
+          "overflow": false,
+          "privateBody": false,
+          "protectedBody": false
+        },
+        "screenshot": "../screens/pretty-author-native-partial-twentytwentyfive-1440.png"
+      },
+      "staticFront": {
+        "resolvedRoot": true,
+        "archiveUnaffected": true,
+        "observation": {
+          "errors": [],
+          "heading": "Author: Native Public Writer",
+          "overflow": false,
+          "privateBody": false,
+          "protectedBody": false
+        }
+      },
+      "screenshot": "../screens/pretty-author-native-static-twentytwentyfive-1440.png"
+    },
+    {
+      "theme": "twentytwentyfive",
+      "width": 768,
+      "numericAlias": {
+        "path": "/?author=8&page=2&query-4-page=2&commentPage=2",
+        "actualAuthor": 8,
+        "archivePage": 2
+      },
+      "plain": {
+        "generated": "/?author=8",
+        "observation": {
+          "errors": [],
+          "heading": "Author: Native Public Writer",
+          "overflow": false,
+          "privateBody": false,
+          "protectedBody": false
+        }
+      },
+      "partial": {
+        "generated": "/blog-author/native-pretty-login",
+        "observation": {
+          "errors": [],
+          "heading": "Author: Native Public Writer",
+          "overflow": false,
+          "privateBody": false,
+          "protectedBody": false
+        },
+        "screenshot": "../screens/pretty-author-native-partial-twentytwentyfive-768.png"
+      },
+      "staticFront": {
+        "resolvedRoot": true,
+        "archiveUnaffected": true,
+        "observation": {
+          "errors": [],
+          "heading": "Author: Native Public Writer",
+          "overflow": false,
+          "privateBody": false,
+          "protectedBody": false
+        }
+      },
+      "screenshot": "../screens/pretty-author-native-static-twentytwentyfive-768.png"
+    },
+    {
+      "theme": "twentytwentyfive",
+      "width": 375,
+      "numericAlias": {
+        "path": "/?author=8&page=2&query-4-page=2&commentPage=2",
+        "actualAuthor": 8,
+        "archivePage": 2
+      },
+      "plain": {
+        "generated": "/?author=8",
+        "observation": {
+          "errors": [],
+          "heading": "Author: Native Public Writer",
+          "overflow": false,
+          "privateBody": false,
+          "protectedBody": false
+        }
+      },
+      "partial": {
+        "generated": "/blog-author/native-pretty-login",
+        "observation": {
+          "errors": [],
+          "heading": "Author: Native Public Writer",
+          "overflow": false,
+          "privateBody": false,
+          "protectedBody": false
+        },
+        "screenshot": "../screens/pretty-author-native-partial-twentytwentyfive-375.png"
+      },
+      "staticFront": {
+        "resolvedRoot": true,
+        "archiveUnaffected": true,
+        "observation": {
+          "errors": [],
+          "heading": "Author: Native Public Writer",
+          "overflow": false,
+          "privateBody": false,
+          "protectedBody": false
+        }
+      },
+      "screenshot": "../screens/pretty-author-native-static-twentytwentyfive-375.png"
+    },
+    {
+      "theme": "classic",
+      "width": 1440,
+      "numericAlias": {
+        "path": "/?author=8&page=2&query-4-page=2&commentPage=2",
+        "actualAuthor": 8,
+        "archivePage": 2
+      },
+      "plain": {
+        "generated": "/?author=8",
+        "observation": {
+          "errors": [],
+          "heading": "Author: Native Public Writer",
+          "overflow": false,
+          "privateBody": false,
+          "protectedBody": false
+        }
+      },
+      "partial": {
+        "generated": "/blog-author/native-pretty-login",
+        "observation": {
+          "errors": [],
+          "heading": "Author: Native Public Writer",
+          "overflow": false,
+          "privateBody": false,
+          "protectedBody": false
+        },
+        "screenshot": "../screens/pretty-author-native-partial-classic-1440.png"
+      },
+      "staticFront": {
+        "resolvedRoot": true,
+        "archiveUnaffected": true,
+        "observation": {
+          "errors": [],
+          "heading": "Author: Native Public Writer",
+          "overflow": false,
+          "privateBody": false,
+          "protectedBody": false
+        }
+      },
+      "screenshot": "../screens/pretty-author-native-static-classic-1440.png"
+    },
+    {
+      "theme": "classic",
+      "width": 768,
+      "numericAlias": {
+        "path": "/?author=8&page=2&query-4-page=2&commentPage=2",
+        "actualAuthor": 8,
+        "archivePage": 2
+      },
+      "plain": {
+        "generated": "/?author=8",
+        "observation": {
+          "errors": [],
+          "heading": "Author: Native Public Writer",
+          "overflow": false,
+          "privateBody": false,
+          "protectedBody": false
+        }
+      },
+      "partial": {
+        "generated": "/blog-author/native-pretty-login",
+        "observation": {
+          "errors": [],
+          "heading": "Author: Native Public Writer",
+          "overflow": false,
+          "privateBody": false,
+          "protectedBody": false
+        },
+        "screenshot": "../screens/pretty-author-native-partial-classic-768.png"
+      },
+      "staticFront": {
+        "resolvedRoot": true,
+        "archiveUnaffected": true,
+        "observation": {
+          "errors": [],
+          "heading": "Author: Native Public Writer",
+          "overflow": false,
+          "privateBody": false,
+          "protectedBody": false
+        }
+      },
+      "screenshot": "../screens/pretty-author-native-static-classic-768.png"
+    },
+    {
+      "theme": "classic",
+      "width": 375,
+      "numericAlias": {
+        "path": "/?author=8&page=2&query-4-page=2&commentPage=2",
+        "actualAuthor": 8,
+        "archivePage": 2
+      },
+      "plain": {
+        "generated": "/?author=8",
+        "observation": {
+          "errors": [],
+          "heading": "Author: Native Public Writer",
+          "overflow": false,
+          "privateBody": false,
+          "protectedBody": false
+        }
+      },
+      "partial": {
+        "generated": "/blog-author/native-pretty-login",
+        "observation": {
+          "errors": [],
+          "heading": "Author: Native Public Writer",
+          "overflow": false,
+          "privateBody": false,
+          "protectedBody": false
+        },
+        "screenshot": "../screens/pretty-author-native-partial-classic-375.png"
+      },
+      "staticFront": {
+        "resolvedRoot": true,
+        "archiveUnaffected": true,
+        "observation": {
+          "errors": [],
+          "heading": "Author: Native Public Writer",
+          "overflow": false,
+          "privateBody": false,
+          "protectedBody": false
+        }
+      },
+      "screenshot": "../screens/pretty-author-native-static-classic-375.png"
+    }
+  ],
+  "http": [
+    {
+      "theme": "twentytwentyfive",
+      "method": "GET",
+      "path": "/author/native-empty-login/",
+      "status": 200,
+      "noSecretBody": true
+    },
+    {
+      "theme": "twentytwentyfive",
+      "method": "HEAD",
+      "path": "/author/native-empty-login/",
+      "status": 200,
+      "noSecretBody": true
+    },
+    {
+      "theme": "twentytwentyfive",
+      "method": "GET",
+      "path": "/author/native-empty-login/page/2/",
+      "status": 404,
+      "noSecretBody": true
+    },
+    {
+      "theme": "twentytwentyfive",
+      "method": "HEAD",
+      "path": "/author/native-empty-login/page/2/",
+      "status": 404,
+      "noSecretBody": true
+    },
+    {
+      "theme": "twentytwentyfive",
+      "method": "GET",
+      "path": "/author/native-absent-author/",
+      "status": 404,
+      "noSecretBody": true
+    },
+    {
+      "theme": "twentytwentyfive",
+      "method": "HEAD",
+      "path": "/author/native-absent-author/",
+      "status": 404,
+      "noSecretBody": true
+    },
+    {
+      "theme": "twentytwentyfive",
+      "method": "GET",
+      "path": "/author/native-pretty-login/page/999/",
+      "status": 404,
+      "noSecretBody": true
+    },
+    {
+      "theme": "twentytwentyfive",
+      "method": "HEAD",
+      "path": "/author/native-pretty-login/page/999/",
+      "status": 404,
+      "noSecretBody": true
+    },
+    {
+      "theme": "twentytwentyfive",
+      "method": "GET",
+      "path": "/?author=10&page=999",
+      "status": 200,
+      "noSecretBody": true
+    },
+    {
+      "theme": "twentytwentyfive",
+      "method": "HEAD",
+      "path": "/?author=10&page=999",
+      "status": 200,
+      "noSecretBody": true
+    },
+    {
+      "theme": "twentytwentyfive",
+      "method": "GET",
+      "path": "/author/123/",
+      "status": 200,
+      "noSecretBody": true
+    },
+    {
+      "theme": "twentytwentyfive",
+      "method": "HEAD",
+      "path": "/author/123/",
+      "status": 200,
+      "noSecretBody": true
+    },
+    {
+      "theme": "twentytwentyfive",
+      "kind": "reserved-vs-page-and-taxonomy",
+      "authorPrecedesPage": true,
+      "explicitLegacyPage": true,
+      "configuredTaxonomyWins": true,
+      "screenshot": "../screens/pretty-author-native-taxonomy-twentytwentyfive.png"
+    },
+    {
+      "theme": "twentytwentyfive",
+      "kind": "numeric-child",
+      "exactChildAndChildBody": true
+    },
+    {
+      "theme": "twentytwentyfive",
+      "kind": "source-normalization-quirk",
+      "generatedRawLink": "/author/nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn--2/",
+      "rawAssignedId": 12,
+      "resolvedId": 13,
+      "secretWithheld": true,
+      "screenshot": "../screens/pretty-author-native-quirk-twentytwentyfive.png"
+    },
+    {
+      "theme": "classic",
+      "method": "GET",
+      "path": "/author/native-empty-login/",
+      "status": 200,
+      "noSecretBody": true
+    },
+    {
+      "theme": "classic",
+      "method": "HEAD",
+      "path": "/author/native-empty-login/",
+      "status": 200,
+      "noSecretBody": true
+    },
+    {
+      "theme": "classic",
+      "method": "GET",
+      "path": "/author/native-empty-login/page/2/",
+      "status": 404,
+      "noSecretBody": true
+    },
+    {
+      "theme": "classic",
+      "method": "HEAD",
+      "path": "/author/native-empty-login/page/2/",
+      "status": 404,
+      "noSecretBody": true
+    },
+    {
+      "theme": "classic",
+      "method": "GET",
+      "path": "/author/native-absent-author/",
+      "status": 404,
+      "noSecretBody": true
+    },
+    {
+      "theme": "classic",
+      "method": "HEAD",
+      "path": "/author/native-absent-author/",
+      "status": 404,
+      "noSecretBody": true
+    },
+    {
+      "theme": "classic",
+      "method": "GET",
+      "path": "/author/native-pretty-login/page/999/",
+      "status": 404,
+      "noSecretBody": true
+    },
+    {
+      "theme": "classic",
+      "method": "HEAD",
+      "path": "/author/native-pretty-login/page/999/",
+      "status": 404,
+      "noSecretBody": true
+    },
+    {
+      "theme": "classic",
+      "method": "GET",
+      "path": "/?author=10&page=999",
+      "status": 200,
+      "noSecretBody": true
+    },
+    {
+      "theme": "classic",
+      "method": "HEAD",
+      "path": "/?author=10&page=999",
+      "status": 200,
+      "noSecretBody": true
+    },
+    {
+      "theme": "classic",
+      "method": "GET",
+      "path": "/author/123/",
+      "status": 200,
+      "noSecretBody": true
+    },
+    {
+      "theme": "classic",
+      "method": "HEAD",
+      "path": "/author/123/",
+      "status": 200,
+      "noSecretBody": true
+    },
+    {
+      "theme": "classic",
+      "kind": "reserved-vs-page-and-taxonomy",
+      "authorPrecedesPage": true,
+      "explicitLegacyPage": true,
+      "configuredTaxonomyWins": true,
+      "screenshot": "../screens/pretty-author-native-taxonomy-classic.png"
+    },
+    {
+      "theme": "classic",
+      "kind": "numeric-child",
+      "exactChildAndChildBody": true
+    },
+    {
+      "theme": "classic",
+      "kind": "source-normalization-quirk",
+      "generatedRawLink": "/author/nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn--2/",
+      "rawAssignedId": 12,
+      "resolvedId": 13,
+      "secretWithheld": true,
+      "screenshot": "../screens/pretty-author-native-quirk-classic.png"
+    }
+  ],
+  "hierarchy": [
+    {
+      "theme": "twentytwentyfive",
+      "width": 375,
+      "selected": "author-native-pretty-login",
+      "normalizedAuthor": 8,
+      "screenshot": "../screens/pretty-author-native-tier-twentytwentyfive-author-native-pretty-login.png"
+    },
+    {
+      "theme": "twentytwentyfive",
+      "width": 375,
+      "selected": "author-8",
+      "normalizedAuthor": 8,
+      "screenshot": "../screens/pretty-author-native-tier-twentytwentyfive-author-8.png"
+    },
+    {
+      "theme": "twentytwentyfive",
+      "width": 375,
+      "selected": "author",
+      "normalizedAuthor": 8,
+      "screenshot": "../screens/pretty-author-native-tier-twentytwentyfive-author.png"
+    },
+    {
+      "theme": "twentytwentyfive",
+      "width": 375,
+      "selected": "archive",
+      "normalizedAuthor": 8,
+      "screenshot": "../screens/pretty-author-native-tier-twentytwentyfive-archive.png"
+    },
+    {
+      "theme": "twentytwentyfive",
+      "width": 375,
+      "selected": "index",
+      "normalizedAuthor": 8,
+      "screenshot": "../screens/pretty-author-native-tier-twentytwentyfive-index.png"
+    },
+    {
+      "theme": "classic",
+      "width": 375,
+      "selected": "author-native-pretty-login",
+      "normalizedAuthor": 8,
+      "screenshot": "../screens/pretty-author-native-tier-classic-author-native-pretty-login.png"
+    },
+    {
+      "theme": "classic",
+      "width": 375,
+      "selected": "author-8",
+      "normalizedAuthor": 8,
+      "screenshot": "../screens/pretty-author-native-tier-classic-author-8.png"
+    },
+    {
+      "theme": "classic",
+      "width": 375,
+      "selected": "author",
+      "normalizedAuthor": 8,
+      "screenshot": "../screens/pretty-author-native-tier-classic-author.png"
+    },
+    {
+      "theme": "classic",
+      "width": 375,
+      "selected": "archive",
+      "normalizedAuthor": 8,
+      "screenshot": "../screens/pretty-author-native-tier-classic-archive.png"
+    },
+    {
+      "theme": "classic",
+      "width": 375,
+      "selected": "index",
+      "normalizedAuthor": 8,
+      "screenshot": "../screens/pretty-author-native-tier-classic-index.png"
+    }
+  ]
+}
