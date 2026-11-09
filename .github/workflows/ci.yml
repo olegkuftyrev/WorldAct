@@ -86,6 +86,10 @@ jobs:
           tests/pretty-author-identity.test.ts tests/pretty-author-identity-pinning.test.ts
           tests/pretty-author-portability.test.ts tests/public-author-archive-ui.test.ts
           tests/post-author-link-defaults.test.ts
+          tests/author-name-query-original.test.ts tests/author-name-query-search-control.test.ts
+          tests/author-name-query-native-original.test.ts tests/author-name-query-boundaries.test.ts
+          tests/author-name-query-transport.test.ts tests/author-name-query-encoded-keys.test.ts
+          tests/public-author-name-query-ui.test.ts
           tests/pretty-author-independent-boundaries.test.ts tests/pretty-author-taxonomy-priority.test.ts
           tests/user-creation-concurrency.test.ts tests/user-nicenames-migration.test.ts
           tests/author-permalink-portability.test.ts
