@@ -543,7 +543,7 @@ async function savePost(
       // No date intent must not synthesize a new schedule. A saved fixed draft
       // reuses its selected GMT, overriding an inactive legacy due value; a
       // genuinely changed explicit UTC schedule retains its existing priority.
-      const existingSelection=existing?.postDateGmt || existing?.status==="future" && existing?.postDate;
+      const existingSelection=existing?.postDateGmt || ["publish","future","private"].includes(existing?.status) && existing?.postDate;
       if(!civilIntent && (input.scheduledAt===null || !changedSchedule && !existingSelection))throw new HttpError(400,"Choose a publication date before scheduling this post.");
     }
     if(status==="publish" || status==="future"){
