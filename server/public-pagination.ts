@@ -14,7 +14,7 @@ export function publicPaginationLocation(requestPath: string | undefined, values
   const internal = new Set(["postId", "requestPath", "type", "contentPage"]);
   for (const [key, value] of Object.entries(values))
     if (!internal.has(key) && (typeof value === "string" || typeof value === "number"))
-      query.set(key.slice(0, 80), String(value).slice(0, 300));
+      query.set(key.slice(0, 80), String(value).slice(0, key==="author_name"?2000:300));
   for (const key of internal) query.delete(key);
   return { path: path || "/", query };
 }
