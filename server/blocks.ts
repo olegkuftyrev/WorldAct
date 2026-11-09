@@ -42,6 +42,7 @@ import { normalizeBlockRenderAttributes } from "./block-render-attributes.js";
 import { isPublicRequestPath } from "./public-pagination.js";
 import {listingRequestPath,hasNamedAuthorQuery,normalizeListingQuery,type NamedAuthorPin} from "./author-query.js";
 import {resolvePublicDocumentRoute} from "./public-documents.js";
+import {ordinaryListingPageRequested} from "./public-listing-page.js";
 
 const escapeHTML = (value: unknown) =>
   String(value ?? "").replace(
@@ -843,10 +844,10 @@ router.get("/api/public/templates/:slug", async (req:AuthRequest, res) => {
   if (!isPublicRequestPath(requestPath))
     throw new HttpError(400, "Use a site-relative request path.");
   const nameVisible=hasNamedAuthorQuery(req.query,requestPath);
-  const namedPath=nameVisible?listingRequestPath(requestPath,req.query):null;
-  const namedRoute=namedPath&&!post?await resolvePublicDocumentRoute(namedPath,{namedPin,authenticated:Boolean(req.user)}):null;
-  if(namedRoute?.status===404)throw new HttpError(404,"Named author listing not found.");
-  const listing=namedRoute?.listing;
+  const listingPath=nameVisible||!post&&!preview&&ordinaryListingPageRequested(req.query,requestPath)?listingRequestPath(requestPath,req.query):null;
+  const listingRoute=listingPath&&!post?await resolvePublicDocumentRoute(listingPath,{namedPin,authenticated:Boolean(req.user)}):null;
+  if(listingRoute?.status===404)throw new HttpError(404,"Public listing page not found.");
+  const listing=listingRoute?.listing;
   if(listing?.namedAuthor?.selected)observePublicAuthor(reader,listing.namedAuthor.selected);
   const prettyAuthor=listing?.namedAuthor?{recognized:false,archive:null}:await resolvePrettyAuthorArchive(authorArchiveRequestPath(requestPath,req.query,settings),settings);
   if(!listing?.namedAuthor&&selectedAuthor && (!prettyAuthor.archive || selectedAuthor.authorId!==prettyAuthor.archive.authorId || selectedAuthor.slug!==prettyAuthor.archive.slug))throw new HttpError(404,"The selected author archive identity retired.");
@@ -861,9 +862,9 @@ router.get("/api/public/templates/:slug", async (req:AuthRequest, res) => {
     const resolved = await resolvePublicPath(requestPath);
     if (resolved?.id === post.id && resolved.contentPage) contentPage = resolved.contentPage;
   }
-  const normalizedNamed=namedPath?normalizeListingQuery(readPublicPath(namedPath).query,{singular:Boolean(post),archive:namedRoute?.archive,namedAuthor:listing?.namedAuthor}):null;
-  const query: Record<string, unknown> = normalizedNamed?{...normalizedNamed.values}:{};
-  if(!normalizedNamed)for (const [key, value] of Object.entries(req.query))
+  const normalizedListing=listingPath&&(nameVisible||listing)?normalizeListingQuery(readPublicPath(listingPath).query,{singular:Boolean(post),archive:listingRoute?.archive,namedAuthor:listing?.namedAuthor}):null;
+  const query: Record<string, unknown> = normalizedListing?{...normalizedListing.values}:{};
+  if(!normalizedListing)for (const [key, value] of Object.entries(req.query))
     if (
       !["postId", "requestPath", "type"].includes(key) &&
       typeof value === "string"
@@ -886,7 +887,7 @@ router.get("/api/public/templates/:slug", async (req:AuthRequest, res) => {
       listing,
       // On a singular request page selects the document body, not an inherited
       // Query Loop. Its explicit query-N-page remains independently authoritative.
-      page: post ? 1 : normalizedNamed?.archivePage || prettyAuthor.archive?.page || Number(req.query.page) || 1,
+      page: post ? 1 : normalizedListing?.archivePage || prettyAuthor.archive?.page || Number(req.query.page) || 1,
       contentPage,
       placeholderBindings: false,
       user: (req as AuthRequest).user,

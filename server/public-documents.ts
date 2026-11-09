@@ -5,6 +5,7 @@ import { resolvePublicPath } from "./permalinks.js";
 import { readPlainPermalinkQuery } from "../shared/plain-permalink-query.js";
 import { readPublicPath, resolvePublicArchive } from "./public-path.js";
 import {applyNamedAuthorListing,namedAuthorInput,type NamedAuthorPin,type PublicListingContext} from "./author-query.js";
+import {applyOrdinaryListingPage,missingPublicListing,ordinaryListingPageRequested} from "./public-listing-page.js";
 
 // Keep this inventory aligned with the actual React routes in src/App.tsx.
 const frameworkPaths = new Set([
@@ -29,11 +30,11 @@ export async function resolvePublicDocumentRoute(path:string,options:{namedPin?:
   const resolution=await resolvePublicDocumentRouteBase(path);
   if(resolution.kind==="framework")return resolution;
   const query=readPublicPath(path).query;
-  const nameVisible=[...query.keys()].some(key=>/^author_name(?:\[|$)/.test(key));
   // Safe404 surroundings must not reinterpret a retained missing path as a
   // new root name listing. Fixed identities likewise ignore valid selectors.
-  if(resolution.status===404)return nameVisible?{...resolution,listing:{kind:"not-found",archive:resolution.archive || null}}:resolution;
-  if(!namedAuthorInput(query))return resolution;
+  if(resolution.status===404)return missingPublicListing(resolution);
+  if(!namedAuthorInput(query))return ordinaryListingPageRequested({},path)
+    ?applyOrdinaryListingPage(resolution,query,await getSettings(),pool,options.authenticated):resolution;
   if(resolution.kind==="singular"||resolution.kind==="front-page")return {...resolution,listing:{kind:resolution.kind,archive:resolution.archive || null}};
   return applyNamedAuthorListing(path,resolution,query,await getSettings(),pool,options.namedPin,options.authenticated);
 }
@@ -50,7 +51,7 @@ async function resolvePublicDocumentRouteBase(path: string): Promise<PublicDocum
   if (fixed.kind === "invalid" || (fixed.kind !== "none" && pathname !== "/")) return missing();
   const root = pathname === "/";
   const filtered = [...query].some(([key, value]) => value && archiveQuery.test(key));
-  // Ordinary home/search/archive query paging remains valid even with no results.
+  // Select home/search/archive identity before the later-page count gate.
   if (root && fixed.kind === "none") {
     if (filtered) return { status: 200, kind: "archive" };
     if (query.has("page")) {

@@ -14,6 +14,7 @@ import {completePublicRead,observePublicPost,observePublicAuthor,settledPublicRe
 import {listingRequestPath,hasNamedAuthorQuery,listingFilterValues,publicListingWhere,normalizeListingQuery,type PublicListingContext,type NamedAuthorPin} from "./author-query.js";
 import {readPublicPath} from "./public-path.js";
 import {resolvePublicDocumentRoute} from "./public-documents.js";
+import {ordinaryListingPageRequested} from "./public-listing-page.js";
 
 export type PublicReadContext = {
   query: Record<string, unknown>; requestPath?: string; user?: User;authorArchive?:AuthorArchive;
@@ -97,12 +98,14 @@ async function readPublicSiteOnce(context: PublicReadContext,selection:{author?:
   const settings=await getSettings();
   let listing=context.listing;
   const nameVisible=hasNamedAuthorQuery(context.query,context.requestPath);
-  if(!listing&&nameVisible){
+  if(!listing&&(nameVisible||ordinaryListingPageRequested(context.query,context.requestPath))){
     const path=listingRequestPath(context.requestPath,context.query),resolved=await resolvePublicDocumentRoute(path,{namedPin:selection.named,authenticated:Boolean(context.user)});
-    if(resolved.status===404)throw new HttpError(404,"Named author listing not found.");
+    if(resolved.status===404)throw new HttpError(404,"Public listing page not found.");
     listing=resolved.listing;
-    const query=normalizeListingQuery(readPublicPath(path).query,{singular:["singular","front-page"].includes(resolved.kind),archive:resolved.archive,namedAuthor:listing?.namedAuthor});
-    context={...context,query:{...query.values,page:query.archivePage}};
+    if(listing){
+      const query=normalizeListingQuery(readPublicPath(path).query,{singular:["singular","front-page"].includes(resolved.kind),archive:resolved.archive,namedAuthor:listing.namedAuthor});
+      context={...context,query:{...query.values,page:query.archivePage}};
+    }
   }
   const named=listing?.namedAuthor;
   if(named?.selected)observePublicAuthor(context.canReadProtectedPost,named.selected);
@@ -118,9 +121,9 @@ async function readPublicSiteOnce(context: PublicReadContext,selection:{author?:
       tag: z.string().min(1).max(220).optional(),
       author: z.coerce.number().int().positive().max(2147483647).optional(),
     })
-    .parse({...listingFilterValues(context.query,named?listing!.archive:null),...(pretty?.archive?{author:pretty.archive.authorId,page:pretty.archive.page || context.query.page}: {})});
+    .parse({...listingFilterValues(context.query,listing?.archive || null),...(pretty?.archive?{author:pretty.archive.authorId,page:pretty.archive.page || context.query.page}: {})});
   let args: unknown[] = [];
-  const dateArchive = parseDateArchiveQuery(named?listingFilterValues(context.query,listing!.archive):context.query);
+  const dateArchive = parseDateArchiveQuery(listingFilterValues(context.query,listing?.archive || null));
   let where = "p.type='post' AND p.status='publish'";
   if (filter.author) { args.push(filter.author); where += ` AND p.author_id=$${args.length}`; }
   if (filter.search) {
@@ -136,7 +139,7 @@ async function readPublicSiteOnce(context: PublicReadContext,selection:{author?:
   const dateWhere: string[] = [];
   appendPostDateArchiveSQL(dateWhere, args, "p.post_date::timestamp without time zone", dateArchive, settings.timezone, settings.weekStartsOn);
   if (dateWhere.length) where += " AND " + dateWhere.map((clause) => `(${clause})`).join(" AND ");
-  if(named){const predicate=publicListingWhere(listingFilterValues(context.query,listing!.archive),settings,named,Boolean(context.user));where=predicate.where.join(" AND ");args=predicate.args;}
+  if(listing){const predicate=publicListingWhere(listingFilterValues(context.query,listing.archive),settings,named,Boolean(context.user));where=predicate.where.join(" AND ");args=predicate.args;}
   if(listing?.kind==="not-found")where+=" AND FALSE";
   const count = await pool.query(
     `SELECT count(*)::int AS total FROM posts p WHERE ${where}`,
