@@ -1,0 +1,73 @@
+{
+  "status": "BUILD_ONLY_PASS_NO_ENV_DATABASE_API_OR_TESTS",
+  "time": "2026-11-09T16:23:16.078658+00:00",
+  "runtimeFreeze": "90dc05ec16f95c9fad60eb95840154ef37c7daca",
+  "tree": "049d09dbdebeb8b79d3ed13f045c930b94c2000a",
+  "nodeSHA256": "7f5e15d054e0a888ae362f95b055c587dab1dff8c9fd836b0d98ea1eafb96093",
+  "sourceHashes": [
+    {
+      "file": "server/block-renderer.ts",
+      "sha256": "a3ead8521060e4ab3cf1dd17e530e2881bb50a57df5dcf65e67b3e6ec898277f"
+    },
+    {
+      "file": "server/public-document-data.ts",
+      "sha256": "9ed138b6a9865f67182f43901db9247c8e1cef696b9be745d76fcd0ca613d838"
+    },
+    {
+      "file": "server/public-read.ts",
+      "sha256": "289a2f08c0ae1073a8cb6323cad0b96479c411efc926640810beb90ca08b932b"
+    },
+    {
+      "file": "server/blocks.ts",
+      "sha256": "63e10033b2b43c60fe5a83043c962fbd0da40dc178f8be9b59f62c3697ce8851"
+    },
+    {
+      "file": "server/compat.ts",
+      "sha256": "53a8eb6dd6a97e9ebeb515c222b9e208488a2b28c2dc415ae7ba0c6201cff34f"
+    },
+    {
+      "file": "server/query-title-context.ts",
+      "sha256": "7c1dd48501b9e8b8289cb1971a206543eda90178cfd13a10c55723f4e80f5ac6"
+    }
+  ],
+  "typecheck": {
+    "exitCode": 0,
+    "command": "node node_modules/typescript/bin/tsc --noEmit"
+  },
+  "vitePublicSSR": {
+    "exitCode": 0,
+    "command": "node node_modules/vite/bin/vite.js build --configLoader runner"
+  },
+  "nativeEsbuild": {
+    "exitCode": 0,
+    "command": "native @esbuild/darwin-arm64/bin/esbuild server/index.ts --bundle --platform=node --format=esm --packages=external --outfile=dist-server/index.js"
+  },
+  "logs": {
+    "typecheck": {
+      "privateLogBasename": "worldact-archive-query-title-home-typecheck.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "mode": "0o600"
+    },
+    "vite": {
+      "privateLogBasename": "worldact-archive-query-title-home-vite.log",
+      "sha256": "59e01c3f8e1c2fd0570c5336de058747c9e5e2f67d97c897793bc431a02f7d66",
+      "bytes": 2342,
+      "mode": "0o600"
+    },
+    "nodebuild": {
+      "privateLogBasename": "worldact-archive-query-title-home-nodebuild.log",
+      "sha256": "0234230e8d919a9579fafce7bed2fcea538b397ab37b8576dec542e4b19f9293",
+      "bytes": 56,
+      "mode": "0o600"
+    }
+  },
+  "readonlyDependencies": {
+    "ownerUid": 501,
+    "ownerMode": "0755",
+    "nonSymlink": true,
+    "lockSHA256": "233888ed8f864581a8835aab0b4c33ccd7fbc391f2a98650b63fcf8db8814892"
+  },
+  "noRuntimeEditsDuringBuild": true,
+  "noEnvDatabaseServicesApiOrTests": true
+}

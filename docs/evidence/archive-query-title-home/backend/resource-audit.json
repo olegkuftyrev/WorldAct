@@ -1,0 +1,69 @@
+{
+  "status": "OWNED_DATABASES_SESSIONS_PORTS_CLOSED_CONFIG_AND_LINK_RETAINED_FOR_ROOT_REVIEW",
+  "time": "2026-11-09T16:33:34.836Z",
+  "candidate": "befc9c8750925e7c6f4e5201465be35184f833c3",
+  "runtimeFreeze": "90dc05ec16f95c9fad60eb95840154ef37c7daca",
+  "nodeSHA256": "7f5e15d054e0a888ae362f95b055c587dab1dff8c9fd836b0d98ea1eafb96093",
+  "runReports": [
+    {
+      "file": "archive-query-title-home-backend-final-source-run.json",
+      "sha256": "7f23beeb68ebcb477dcb76b479655f98ac35508aee41171e4b4c7308946eb019",
+      "rawLogSHA256": "43bf4b252752e7f86c3a9b8a074e0612b7669f5e16ea071e6ad4339218de3cb9",
+      "runnerPID": 23855,
+      "observedDatabaseSessionCount": 97
+    },
+    {
+      "file": "archive-query-title-home-backend-final-compiled-run.json",
+      "sha256": "8c3a715c84d25e2f2ad3139b1f89671f71f8dece8fa8499fdc9dd3b6399f889a",
+      "rawLogSHA256": "8252edcb74608fc388822d8a59bab3c51550872f656a05d2e8ebb479e7eb6860",
+      "runnerPID": 24126,
+      "observedDatabaseSessionCount": 99
+    }
+  ],
+  "journaledDatabases": [
+    "worldact_test_1794241902581_bd3b785c",
+    "worldact_test_1794241955211_2f491209"
+  ],
+  "neverCreatedAnchor": "worldact_archive_query_title_home_backend_anchor",
+  "anchorAbsent": true,
+  "remainingDatabases": [],
+  "remainingSessions": [],
+  "phaseApplications": [
+    "worldact_archive_query_title_home_backend_source",
+    "worldact_archive_query_title_home_backend_compiled"
+  ],
+  "primaryPortsPhysicallyBoundAndReleased": {
+    "3046": true,
+    "3047": true,
+    "3048": true
+  },
+  "port3048UnusedByGuards": true,
+  "fixed3062NeverUsed": true,
+  "environment": {
+    "uid": 501,
+    "mode": "0600",
+    "regularNonSymlink": true,
+    "retained": true,
+    "path": "<owned-checkout>/.env"
+  },
+  "dependencyLink": {
+    "uid": 501,
+    "retained": true,
+    "path": "<owned-checkout>/node_modules",
+    "exactKnownTarget": "<shared-dependency-owner>/node_modules",
+    "sharedOwnerUid": 501,
+    "sharedOwnerMode": "0755",
+    "sharedOwnerNonSymlink": true,
+    "locksMatched": true,
+    "sharedOwnerUnmodified": true
+  },
+  "noArchiveCreated": true,
+  "allOriginalBeforeFailuresBuildsRawProofsLogsRetained": true,
+  "noMainOrIndependentMutation": true,
+  "normalFinallyUploads": {
+    "bothStandardRunnersExitZero": true,
+    "runner": "scripts/test-isolated.mjs removes disposable upload directory in finally",
+    "exactUploadPathsJournaled": false,
+    "limitation": "No independent per-upload-path absence certificate or global temporary-directory sweep is claimed."
+  }
+}

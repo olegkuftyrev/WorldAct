@@ -1,0 +1,293 @@
+{
+  "schemaVersion": 1,
+  "scope": "SCOPED_ORDINARY_POSTS_HOME_EXPLICIT_ARCHIVE_QUERY_TITLE_BACKEND",
+  "runtimeFreeze": "90dc05ec16f95c9fad60eb95840154ef37c7daca",
+  "finalTestOnlyHead": "befc9c8750925e7c6f4e5201465be35184f833c3",
+  "nodeSHA256": "7f5e15d054e0a888ae362f95b055c587dab1dff8c9fd836b0d98ea1eafb96093",
+  "payloadCorrespondence": [
+    {
+      "file": "review.md",
+      "privateSourceBasename": "archive-query-title-home-backend-review.md",
+      "privateSourceSHA256": "b6117674c9c400e912a47b8a0019af3ef8be5c66a8feaee16f7a3268665d663d",
+      "privateSourceBytes": 4949,
+      "publishedSHA256": "b6117674c9c400e912a47b8a0019af3ef8be5c66a8feaee16f7a3268665d663d",
+      "publishedBytes": 4949,
+      "transformation": "Literal private path-prefix substitutions only; all other bytes unchanged.",
+      "substitutions": []
+    },
+    {
+      "file": "checks.json",
+      "privateSourceBasename": "archive-query-title-home-backend-checks.json",
+      "privateSourceSHA256": "7ac83a7bfd5acec032530a35c476c8d282fc57b68729ef1d53887c43502cd137",
+      "privateSourceBytes": 42042,
+      "publishedSHA256": "5af0c6c893894bf125826116a939ec5613f118f245f79ee2f51ef0fdfdf7a531",
+      "publishedBytes": 41972,
+      "transformation": "Literal private path-prefix substitutions only; all other bytes unchanged.",
+      "substitutions": [
+        {
+          "toPrefix": "<private-evidence>/",
+          "count": 10
+        },
+        {
+          "toPrefix": "<private-logs>/worldact-archive-query-title-home-",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "file": "resource-audit.json",
+      "privateSourceBasename": "archive-query-title-home-backend-resource-audit.json",
+      "privateSourceSHA256": "d8be503cf1754952e1ec0381cbd223394e5b591729bf469e1bba39302de305c8",
+      "privateSourceBytes": 2599,
+      "publishedSHA256": "b11c89a339fde5b974c34dc271dbdb1a7cb90d7ce039fd3b14bb64a4f87f7197",
+      "publishedBytes": 2533,
+      "transformation": "Literal private path-prefix substitutions only; all other bytes unchanged.",
+      "substitutions": [
+        {
+          "toPrefix": "<owned-checkout>/",
+          "count": 2
+        },
+        {
+          "toPrefix": "<shared-dependency-owner>/",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "file": "owned-cleanup.json",
+      "privateSourceBasename": "archive-query-title-home-backend-owned-cleanup.json",
+      "privateSourceSHA256": "1d6e39a2622f08ec7cdad1fa5d13efc193c862f5edafcd50bb3a78dddb1bace8",
+      "privateSourceBytes": 3080,
+      "publishedSHA256": "49bf48288a9e1177737c6425126254f037b84cbd6c85258cfd51d7bc76c43e49",
+      "publishedBytes": 2970,
+      "transformation": "Literal private path-prefix substitutions only; all other bytes unchanged.",
+      "substitutions": [
+        {
+          "toPrefix": "<owned-checkout>/",
+          "count": 4
+        },
+        {
+          "toPrefix": "<shared-dependency-owner>/",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "file": "build-checks.json",
+      "privateSourceBasename": "archive-query-title-home-build-checks.json",
+      "privateSourceSHA256": "1f67b8df0d91aab2c5b15ce90500081cd1fe6de8857b042ed51d2291e24e4684",
+      "privateSourceBytes": 2556,
+      "publishedSHA256": "1f67b8df0d91aab2c5b15ce90500081cd1fe6de8857b042ed51d2291e24e4684",
+      "publishedBytes": 2556,
+      "transformation": "Literal private path-prefix substitutions only; all other bytes unchanged.",
+      "substitutions": []
+    }
+  ],
+  "README": {
+    "file": "README.md",
+    "sha256": "cd11d5d6500f6565fd37f7f42d31039824decf8510c1511ba46a583149d446b9",
+    "bytes": 2722
+  },
+  "frozenSelector": {
+    "receipt": {
+      "file": "archive-query-title-home-complete-affected-selector.json",
+      "sha256": "11b56d19067a3e9b79ad7717454bba0d7fd8f4375efe7dc65d2492aa4a9b0506"
+    },
+    "entries": [
+      {
+        "file": "tests/archive-query-title-home-before.test.ts",
+        "sha256": "af82c59144a210e3d9d6e3d070b88a3f9d8cc97631b5d35ff786154f9354a9cc",
+        "prospectiveCount": 3
+      },
+      {
+        "file": "tests/archive-query-title-home-body-original.test.ts",
+        "sha256": "14dc9e1cc335174df1b4f826ddf57699e97d0add3daffacfb80639c9adf0264b",
+        "prospectiveCount": 4
+      },
+      {
+        "file": "tests/archive-query-title-home-direct-original.test.ts",
+        "sha256": "bf0eea47871d083b23217643b9b3dbb93851349f8801b957143c327ee077cba8",
+        "prospectiveCount": 4
+      },
+      {
+        "file": "tests/singular-archive-query-title-before.test.ts",
+        "sha256": "fa7f74eaab2edf81507422dc96015f823ee5a1de41e2a2f4bc9d902385966724",
+        "prospectiveCount": 6
+      },
+      {
+        "file": "tests/singular-archive-query-title-posts-page.test.ts",
+        "sha256": "454a4bdce36dcf096e53fb670cde36a18220d05474505dd61a3dc492bf008820",
+        "prospectiveCount": 4
+      },
+      {
+        "file": "tests/blocks.test.ts",
+        "sha256": "fa0fb26d5a57b93232b4d9b481eebaa729ce5e0e76c951db6239c85152a93fd3",
+        "prospectiveCount": 9
+      },
+      {
+        "file": "tests/date-archives.test.ts",
+        "sha256": "a79de3f453d0122ec702747614ec17409407eea47e6de859448768df30758958",
+        "prospectiveCount": 4
+      },
+      {
+        "file": "tests/public-document-data.test.ts",
+        "sha256": "dee95240a579ec16327b0ca10f1497cbf2deae37dfd218113a08675cfa0454b1",
+        "prospectiveCount": 7
+      },
+      {
+        "file": "tests/plain-source-pagination.test.ts",
+        "sha256": "45799bfcba76f728470cd5370cd27ca960f1862508522023d7ff308a6759e21c",
+        "prospectiveCount": 1
+      },
+      {
+        "file": "tests/front-page-availability.test.ts",
+        "sha256": "fa255c13b7bb6c98e4d805b965b727030b7db78cda9e4ccd4ed498fa9030b7e1",
+        "prospectiveCount": 6
+      },
+      {
+        "file": "tests/author-name-independent-count-grant.test.ts",
+        "sha256": "6643e7832a8272913a88bab1bac653a6cb674f25e25bd9c09139cfc65252f031",
+        "prospectiveCount": 4
+      },
+      {
+        "file": "tests/singular-date-template-priority-original.test.ts",
+        "sha256": "f15f083451c0890f9ecd1c77f2a6c0826ff1ee02847e8cbd5507eb0f9757cb07",
+        "prospectiveCount": 6
+      }
+    ],
+    "actualCountsEachMode": [
+      3,
+      4,
+      4,
+      6,
+      4,
+      9,
+      4,
+      7,
+      1,
+      6,
+      4,
+      6
+    ],
+    "countNowMeasured": 58
+  },
+  "runtimeFiles": [
+    {
+      "file": "server/block-renderer.ts",
+      "sha256": "a3ead8521060e4ab3cf1dd17e530e2881bb50a57df5dcf65e67b3e6ec898277f"
+    },
+    {
+      "file": "server/public-document-data.ts",
+      "sha256": "9ed138b6a9865f67182f43901db9247c8e1cef696b9be745d76fcd0ca613d838"
+    },
+    {
+      "file": "server/public-read.ts",
+      "sha256": "289a2f08c0ae1073a8cb6323cad0b96479c411efc926640810beb90ca08b932b"
+    },
+    {
+      "file": "server/blocks.ts",
+      "sha256": "63e10033b2b43c60fe5a83043c962fbd0da40dc178f8be9b59f62c3697ce8851"
+    },
+    {
+      "file": "server/compat.ts",
+      "sha256": "53a8eb6dd6a97e9ebeb515c222b9e208488a2b28c2dc415ae7ba0c6201cff34f"
+    },
+    {
+      "file": "server/query-title-context.ts",
+      "sha256": "7c1dd48501b9e8b8289cb1971a206543eda90178cfd13a10c55723f4e80f5ac6"
+    }
+  ],
+  "countLedger": {
+    "source": {
+      "mode": "source",
+      "files": 12,
+      "tests": 58,
+      "pass": 58,
+      "fail": 0,
+      "skip": 0,
+      "cancel": 0,
+      "exitCode": 0,
+      "perFileCounts": [
+        3,
+        4,
+        4,
+        6,
+        4,
+        9,
+        4,
+        7,
+        1,
+        6,
+        4,
+        6
+      ],
+      "proofResponses": 64,
+      "proofGroups": [
+        6,
+        16,
+        6,
+        23,
+        13
+      ],
+      "privateRunReceipt": {
+        "file": "archive-query-title-home-backend-final-source-run.json",
+        "sha256": "7f23beeb68ebcb477dcb76b479655f98ac35508aee41171e4b4c7308946eb019"
+      },
+      "rawLogBasename": "worldact-archive-query-title-home-final-source.log",
+      "rawLogSHA256": "43bf4b252752e7f86c3a9b8a074e0612b7669f5e16ea071e6ad4339218de3cb9",
+      "rawLogBytes": 25253
+    },
+    "compiledAPI": {
+      "mode": "compiled",
+      "files": 12,
+      "tests": 58,
+      "pass": 58,
+      "fail": 0,
+      "skip": 0,
+      "cancel": 0,
+      "exitCode": 0,
+      "perFileCounts": [
+        3,
+        4,
+        4,
+        6,
+        4,
+        9,
+        4,
+        7,
+        1,
+        6,
+        4,
+        6
+      ],
+      "proofResponses": 64,
+      "proofGroups": [
+        6,
+        16,
+        6,
+        23,
+        13
+      ],
+      "privateRunReceipt": {
+        "file": "archive-query-title-home-backend-final-compiled-run.json",
+        "sha256": "8c3a715c84d25e2f2ad3139b1f89671f71f8dece8fa8499fdc9dd3b6399f889a"
+      },
+      "rawLogBasename": "worldact-archive-query-title-home-final-compiled.log",
+      "rawLogSHA256": "8252edcb74608fc388822d8a59bab3c51550872f656a05d2e8ebb479e7eb6860",
+      "rawLogBytes": 25274
+    },
+    "disjointPreviousTitleTestsEachMode": 47,
+    "disjointNewHomeTestsEachMode": 11,
+    "actualHTTPResponsesEachMode": 64,
+    "sourceImportsRemainSourceInCompiledAPIMode": true,
+    "noWholeFreshFixedBrowserOrReleaseClaim": true
+  },
+  "publicationPolicy": {
+    "payloadTransformation": "Only literal private path-prefix substitutions; no field, result, whitespace or assertion edits.",
+    "fivePrivatePayloads": 5,
+    "totalPublishedFilesIncludingREADMEAndManifest": 7,
+    "privateMappingReceiptBasename": "archive-query-title-home-backend-publication-correspondence.json",
+    "privateProofsRawLogsOriginalFailuresAndBuildsRetained": true,
+    "noRuntimeTestsCIUIOrMainChanges": true
+  }
+}

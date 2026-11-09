@@ -1,0 +1,1368 @@
+{
+  "status": "SCOPED_ORDINARY_POSTS_HOME_EXPLICIT_ARCHIVE_TITLE_PASS",
+  "created": "2026-11-09T16:35:14.361091+00:00",
+  "base": "0f7dd2f3d55a72a3b2b498a152a10332ef066c68",
+  "runtimeFreeze": "90dc05ec16f95c9fad60eb95840154ef37c7daca",
+  "finalTestOnlyHead": "befc9c8750925e7c6f4e5201465be35184f833c3",
+  "tree": "f111ffcbdea2408ddbf5d15456bc1bad21bbb79f",
+  "nodeSHA256": "7f5e15d054e0a888ae362f95b055c587dab1dff8c9fd836b0d98ea1eafb96093",
+  "runtime": {
+    "files": [
+      {
+        "file": "server/block-renderer.ts",
+        "sha256": "a3ead8521060e4ab3cf1dd17e530e2881bb50a57df5dcf65e67b3e6ec898277f"
+      },
+      {
+        "file": "server/public-document-data.ts",
+        "sha256": "9ed138b6a9865f67182f43901db9247c8e1cef696b9be745d76fcd0ca613d838"
+      },
+      {
+        "file": "server/public-read.ts",
+        "sha256": "289a2f08c0ae1073a8cb6323cad0b96479c411efc926640810beb90ca08b932b"
+      },
+      {
+        "file": "server/blocks.ts",
+        "sha256": "63e10033b2b43c60fe5a83043c962fbd0da40dc178f8be9b59f62c3697ce8851"
+      },
+      {
+        "file": "server/compat.ts",
+        "sha256": "53a8eb6dd6a97e9ebeb515c222b9e208488a2b28c2dc415ae7ba0c6201cff34f"
+      },
+      {
+        "file": "server/query-title-context.ts",
+        "sha256": "7c1dd48501b9e8b8289cb1971a206543eda90178cfd13a10c55723f4e80f5ac6"
+      }
+    ],
+    "diffSHA256": "651ae0a4cd6d1a5008d04749db4f1584786607ebc43bdeeb7e6fac68e1bd2221",
+    "added": 93,
+    "removed": 16,
+    "pureHelperNoImports": true,
+    "onlyFinalTagsInRenderState": true,
+    "noSQLAwaitDTOGrantFenceOrderChange": true
+  },
+  "build": {
+    "status": "BUILD_ONLY_PASS_NO_ENV_DATABASE_API_OR_TESTS",
+    "time": "2026-11-09T16:23:16.078658+00:00",
+    "runtimeFreeze": "90dc05ec16f95c9fad60eb95840154ef37c7daca",
+    "tree": "049d09dbdebeb8b79d3ed13f045c930b94c2000a",
+    "nodeSHA256": "7f5e15d054e0a888ae362f95b055c587dab1dff8c9fd836b0d98ea1eafb96093",
+    "sourceHashes": [
+      {
+        "file": "server/block-renderer.ts",
+        "sha256": "a3ead8521060e4ab3cf1dd17e530e2881bb50a57df5dcf65e67b3e6ec898277f"
+      },
+      {
+        "file": "server/public-document-data.ts",
+        "sha256": "9ed138b6a9865f67182f43901db9247c8e1cef696b9be745d76fcd0ca613d838"
+      },
+      {
+        "file": "server/public-read.ts",
+        "sha256": "289a2f08c0ae1073a8cb6323cad0b96479c411efc926640810beb90ca08b932b"
+      },
+      {
+        "file": "server/blocks.ts",
+        "sha256": "63e10033b2b43c60fe5a83043c962fbd0da40dc178f8be9b59f62c3697ce8851"
+      },
+      {
+        "file": "server/compat.ts",
+        "sha256": "53a8eb6dd6a97e9ebeb515c222b9e208488a2b28c2dc415ae7ba0c6201cff34f"
+      },
+      {
+        "file": "server/query-title-context.ts",
+        "sha256": "7c1dd48501b9e8b8289cb1971a206543eda90178cfd13a10c55723f4e80f5ac6"
+      }
+    ],
+    "typecheck": {
+      "exitCode": 0,
+      "command": "node node_modules/typescript/bin/tsc --noEmit"
+    },
+    "vitePublicSSR": {
+      "exitCode": 0,
+      "command": "node node_modules/vite/bin/vite.js build --configLoader runner"
+    },
+    "nativeEsbuild": {
+      "exitCode": 0,
+      "command": "native @esbuild/darwin-arm64/bin/esbuild server/index.ts --bundle --platform=node --format=esm --packages=external --outfile=dist-server/index.js"
+    },
+    "logs": {
+      "typecheck": {
+        "privateLogBasename": "worldact-archive-query-title-home-typecheck.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0,
+        "mode": "0o600"
+      },
+      "vite": {
+        "privateLogBasename": "worldact-archive-query-title-home-vite.log",
+        "sha256": "59e01c3f8e1c2fd0570c5336de058747c9e5e2f67d97c897793bc431a02f7d66",
+        "bytes": 2342,
+        "mode": "0o600"
+      },
+      "nodebuild": {
+        "privateLogBasename": "worldact-archive-query-title-home-nodebuild.log",
+        "sha256": "0234230e8d919a9579fafce7bed2fcea538b397ab37b8576dec542e4b19f9293",
+        "bytes": 56,
+        "mode": "0o600"
+      }
+    },
+    "readonlyDependencies": {
+      "ownerUid": 501,
+      "ownerMode": "0755",
+      "nonSymlink": true,
+      "lockSHA256": "233888ed8f864581a8835aab0b4c33ccd7fbc391f2a98650b63fcf8db8814892"
+    },
+    "noRuntimeEditsDuringBuild": true,
+    "noEnvDatabaseServicesApiOrTests": true
+  },
+  "updatedFinalTestTypecheck": {
+    "exitCode": 0,
+    "logBasename": "worldact-archive-query-title-home-final-typecheck.log",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "frozenSelector": {
+    "receipt": {
+      "file": "archive-query-title-home-complete-affected-selector.json",
+      "sha256": "11b56d19067a3e9b79ad7717454bba0d7fd8f4375efe7dc65d2492aa4a9b0506"
+    },
+    "entries": [
+      {
+        "file": "tests/archive-query-title-home-before.test.ts",
+        "sha256": "af82c59144a210e3d9d6e3d070b88a3f9d8cc97631b5d35ff786154f9354a9cc",
+        "prospectiveCount": 3
+      },
+      {
+        "file": "tests/archive-query-title-home-body-original.test.ts",
+        "sha256": "14dc9e1cc335174df1b4f826ddf57699e97d0add3daffacfb80639c9adf0264b",
+        "prospectiveCount": 4
+      },
+      {
+        "file": "tests/archive-query-title-home-direct-original.test.ts",
+        "sha256": "bf0eea47871d083b23217643b9b3dbb93851349f8801b957143c327ee077cba8",
+        "prospectiveCount": 4
+      },
+      {
+        "file": "tests/singular-archive-query-title-before.test.ts",
+        "sha256": "fa7f74eaab2edf81507422dc96015f823ee5a1de41e2a2f4bc9d902385966724",
+        "prospectiveCount": 6
+      },
+      {
+        "file": "tests/singular-archive-query-title-posts-page.test.ts",
+        "sha256": "454a4bdce36dcf096e53fb670cde36a18220d05474505dd61a3dc492bf008820",
+        "prospectiveCount": 4
+      },
+      {
+        "file": "tests/blocks.test.ts",
+        "sha256": "fa0fb26d5a57b93232b4d9b481eebaa729ce5e0e76c951db6239c85152a93fd3",
+        "prospectiveCount": 9
+      },
+      {
+        "file": "tests/date-archives.test.ts",
+        "sha256": "a79de3f453d0122ec702747614ec17409407eea47e6de859448768df30758958",
+        "prospectiveCount": 4
+      },
+      {
+        "file": "tests/public-document-data.test.ts",
+        "sha256": "dee95240a579ec16327b0ca10f1497cbf2deae37dfd218113a08675cfa0454b1",
+        "prospectiveCount": 7
+      },
+      {
+        "file": "tests/plain-source-pagination.test.ts",
+        "sha256": "45799bfcba76f728470cd5370cd27ca960f1862508522023d7ff308a6759e21c",
+        "prospectiveCount": 1
+      },
+      {
+        "file": "tests/front-page-availability.test.ts",
+        "sha256": "fa255c13b7bb6c98e4d805b965b727030b7db78cda9e4ccd4ed498fa9030b7e1",
+        "prospectiveCount": 6
+      },
+      {
+        "file": "tests/author-name-independent-count-grant.test.ts",
+        "sha256": "6643e7832a8272913a88bab1bac653a6cb674f25e25bd9c09139cfc65252f031",
+        "prospectiveCount": 4
+      },
+      {
+        "file": "tests/singular-date-template-priority-original.test.ts",
+        "sha256": "f15f083451c0890f9ecd1c77f2a6c0826ff1ee02847e8cbd5507eb0f9757cb07",
+        "prospectiveCount": 6
+      }
+    ],
+    "actualCountsEachMode": [
+      3,
+      4,
+      4,
+      6,
+      4,
+      9,
+      4,
+      7,
+      1,
+      6,
+      4,
+      6
+    ],
+    "countNowMeasured": 58
+  },
+  "externalBefore": {
+    "scope": "Historical external owner executions accepted by root; no before execution by this backend stage",
+    "outerAf82": {
+      "testSHA256": "af82c59144a210e3d9d6e3d070b88a3f9d8cc97631b5d35ff786154f9354a9cc",
+      "historicalRuntime": "eba54f98188fe6752ad37380bd6e4cb7b18b82bc",
+      "nodeSHA256": "300199e4aebe00b526fee49af14904d50cacd20333b07c99c2ded6ba3ddf7070",
+      "eachMode": {
+        "tests": 3,
+        "pass": 1,
+        "fail": 2,
+        "responses": 6
+      },
+      "rootAudit": {
+        "file": "root-archive-query-title-home-before-audit.json",
+        "sha256": "67d4d52aeb43581bea1f6c962c790037b4e4bbe5f6e067a973785beedc0bb626"
+      }
+    },
+    "body14dc": {
+      "testSHA256": "14dc9e1cc335174df1b4f826ddf57699e97d0add3daffacfb80639c9adf0264b",
+      "historicalRuntime": "0f7dd2f3d55a72a3b2b498a152a10332ef066c68",
+      "nodeSHA256": "300199e4aebe00b526fee49af14904d50cacd20333b07c99c2ded6ba3ddf7070",
+      "eachMode": {
+        "tests": 4,
+        "pass": 1,
+        "fail": 3,
+        "responses": 16
+      },
+      "rootAudit": {
+        "file": "root-archive-query-title-home-body-before-audit.json",
+        "sha256": "74bc3997f1d0a395ddd76a2000ba8b03058411fccd3db6bfa7121896fd82028b"
+      }
+    },
+    "directBf0": {
+      "testSHA256": "bf0eea47871d083b23217643b9b3dbb93851349f8801b957143c327ee077cba8",
+      "historicalRuntime": "0f7dd2f3d55a72a3b2b498a152a10332ef066c68",
+      "nodeSHA256": "300199e4aebe00b526fee49af14904d50cacd20333b07c99c2ded6ba3ddf7070",
+      "eachMode": {
+        "tests": 4,
+        "pass": 2,
+        "fail": 2,
+        "responses": 6
+      },
+      "rootAudit": {
+        "file": "root-archive-query-title-home-direct-before-audit.json",
+        "sha256": "23f7f6685dc1176f3ac965504204e7c0db3fd435da7c08dc76258c9ddc66c218"
+      }
+    },
+    "allBeforeOriginalsAndTheirLogsBuildsRetained": true
+  },
+  "runs": [
+    {
+      "mode": "source",
+      "port": 3046,
+      "candidate": "befc9c8750925e7c6f4e5201465be35184f833c3",
+      "runtimeFreeze": "90dc05ec16f95c9fad60eb95840154ef37c7daca",
+      "tree": "f111ffcbdea2408ddbf5d15456bc1bad21bbb79f",
+      "nodeSha256": "7f5e15d054e0a888ae362f95b055c587dab1dff8c9fd836b0d98ea1eafb96093",
+      "selectorSha256": "11b56d19067a3e9b79ad7717454bba0d7fd8f4375efe7dc65d2492aa4a9b0506",
+      "files": [
+        "tests/archive-query-title-home-before.test.ts",
+        "tests/archive-query-title-home-body-original.test.ts",
+        "tests/archive-query-title-home-direct-original.test.ts",
+        "tests/singular-archive-query-title-before.test.ts",
+        "tests/singular-archive-query-title-posts-page.test.ts",
+        "tests/blocks.test.ts",
+        "tests/date-archives.test.ts",
+        "tests/public-document-data.test.ts",
+        "tests/plain-source-pagination.test.ts",
+        "tests/front-page-availability.test.ts",
+        "tests/author-name-independent-count-grant.test.ts",
+        "tests/singular-date-template-priority-original.test.ts"
+      ],
+      "log": "<private-logs>/worldact-archive-query-title-home-final-source.log",
+      "anchor": "worldact_archive_query_title_home_backend_anchor",
+      "applicationName": "worldact_archive_query_title_home_backend_source",
+      "URLApplicationNamePresent": false,
+      "launchGates": {
+        "all12TestAnd6RuntimeHashesMatch": true,
+        "readOnlyDependenciesAndLockVerified": true,
+        "regularOwnConfig600": true,
+        "anchorAbsent": true,
+        "priorPhaseDatabaseAndApplicationSessionsAbsent": true,
+        "primaryPortsPhysicallyFree": {
+          "3046": true,
+          "3047": true,
+          "3048": true
+        }
+      },
+      "databases": [
+        "worldact_test_1794241902581_bd3b785c"
+      ],
+      "observedDatabaseSessionGroups": [
+        {
+          "datname": "worldact_test_1794241902581_bd3b785c",
+          "pid": 762709
+        },
+        {
+          "datname": "worldact_test_1794241902581_bd3b785c",
+          "pid": 762710
+        },
+        {
+          "datname": "worldact_test_1794241902581_bd3b785c",
+          "pid": 762718
+        },
+        {
+          "datname": "worldact_test_1794241902581_bd3b785c",
+          "pid": 762719
+        },
+        {
+          "datname": "worldact_test_1794241902581_bd3b785c",
+          "pid": 762720
+        },
+        {
+          "datname": "worldact_test_1794241902581_bd3b785c",
+          "pid": 762721
+        },
+        {
+          "datname": "worldact_test_1794241902581_bd3b785c",
+          "pid": 762722
+        },
+        {
+          "datname": "worldact_test_1794241902581_bd3b785c",
+          "pid": 762723
+        },
+        {
+          "datname": "worldact_test_1794241902581_bd3b785c",
+          "pid": 762724
+        },
+        {
+          "datname": "worldact_test_1794241902581_bd3b785c",
+          "pid": 762725
+        },
+        {
+          "datname": "worldact_test_1794241902581_bd3b785c",
+          "pid": 762726
+        },
+        {
+          "datname": "worldact_test_1794241902581_bd3b785c",
+          "pid": 762727
+        },
+        {
+          "datname": "worldact_test_1794241902581_bd3b785c",
+          "pid": 762728
+        },
+        {
+          "datname": "worldact_test_1794241902581_bd3b785c",
+          "pid": 762729
+        },
+        {
+          "datname": "worldact_test_1794241902581_bd3b785c",
+          "pid": 762730
+        },
+        {
+          "datname": "worldact_test_1794241902581_bd3b785c",
+          "pid": 762731
+        },
+        {
+          "datname": "worldact_test_1794241902581_bd3b785c",
+          "pid": 762732
+        },
+        {
+          "datname": "worldact_test_1794241902581_bd3b785c",
+          "pid": 762733
+        },
+        {
+          "datname": "worldact_test_1794241902581_bd3b785c",
+          "pid": 762734
+        },
+        {
+          "datname": "worldact_test_1794241902581_bd3b785c",
+          "pid": 762735
+        },
+        {
+          "datname": "worldact_test_1794241902581_bd3b785c",
+          "pid": 762736
+        },
+        {
+          "datname": "worldact_test_1794241902581_bd3b785c",
+          "pid": 762737
+        },
+        {
+          "datname": "worldact_test_1794241902581_bd3b785c",
+          "pid": 762745
+        },
+        {
+          "datname": "worldact_test_1794241902581_bd3b785c",
+          "pid": 762746
+        },
+        {
+          "datname": "worldact_test_1794241902581_bd3b785c",
+          "pid": 762747
+        },
+        {
+          "datname": "worldact_test_1794241902581_bd3b785c",
+          "pid": 762748
+        },
+        {
+          "datname": "worldact_test_1794241902581_bd3b785c",
+          "pid": 762749
+        },
+        {
+          "datname": "worldact_test_1794241902581_bd3b785c",
+          "pid": 762750
+        },
+        {
+          "datname": "worldact_test_1794241902581_bd3b785c",
+          "pid": 762751
+        },
+        {
+          "datname": "worldact_test_1794241902581_bd3b785c",
+          "pid": 762752
+        },
+        {
+          "datname": "worldact_test_1794241902581_bd3b785c",
+          "pid": 762762
+        },
+        {
+          "datname": "worldact_test_1794241902581_bd3b785c",
+          "pid": 762763
+        },
+        {
+          "datname": "worldact_test_1794241902581_bd3b785c",
+          "pid": 762764
+        },
+        {
+          "datname": "worldact_test_1794241902581_bd3b785c",
+          "pid": 762765
+        },
+        {
+          "datname": "worldact_test_1794241902581_bd3b785c",
+          "pid": 762766
+        },
+        {
+          "datname": "worldact_test_1794241902581_bd3b785c",
+          "pid": 762767
+        },
+        {
+          "datname": "worldact_test_1794241902581_bd3b785c",
+          "pid": 762771
+        },
+        {
+          "datname": "worldact_test_1794241902581_bd3b785c",
+          "pid": 762772
+        },
+        {
+          "datname": "worldact_test_1794241902581_bd3b785c",
+          "pid": 762773
+        },
+        {
+          "datname": "worldact_test_1794241902581_bd3b785c",
+          "pid": 762774
+        },
+        {
+          "datname": "worldact_test_1794241902581_bd3b785c",
+          "pid": 762775
+        },
+        {
+          "datname": "worldact_test_1794241902581_bd3b785c",
+          "pid": 762776
+        },
+        {
+          "datname": "worldact_test_1794241902581_bd3b785c",
+          "pid": 762777
+        },
+        {
+          "datname": "worldact_test_1794241902581_bd3b785c",
+          "pid": 762778
+        },
+        {
+          "datname": "worldact_test_1794241902581_bd3b785c",
+          "pid": 762779
+        },
+        {
+          "datname": "worldact_test_1794241902581_bd3b785c",
+          "pid": 762780
+        },
+        {
+          "datname": "worldact_test_1794241902581_bd3b785c",
+          "pid": 762789
+        },
+        {
+          "datname": "worldact_test_1794241902581_bd3b785c",
+          "pid": 762790
+        },
+        {
+          "datname": "worldact_test_1794241902581_bd3b785c",
+          "pid": 762791
+        },
+        {
+          "datname": "worldact_test_1794241902581_bd3b785c",
+          "pid": 762792
+        },
+        {
+          "datname": "worldact_test_1794241902581_bd3b785c",
+          "pid": 762793
+        },
+        {
+          "datname": "worldact_test_1794241902581_bd3b785c",
+          "pid": 762815
+        },
+        {
+          "datname": "worldact_test_1794241902581_bd3b785c",
+          "pid": 762816
+        },
+        {
+          "datname": "worldact_test_1794241902581_bd3b785c",
+          "pid": 762817
+        },
+        {
+          "datname": "worldact_test_1794241902581_bd3b785c",
+          "pid": 762818
+        },
+        {
+          "datname": "worldact_test_1794241902581_bd3b785c",
+          "pid": 762825
+        },
+        {
+          "datname": "worldact_test_1794241902581_bd3b785c",
+          "pid": 762838
+        },
+        {
+          "datname": "worldact_test_1794241902581_bd3b785c",
+          "pid": 762839
+        },
+        {
+          "datname": "worldact_test_1794241902581_bd3b785c",
+          "pid": 762840
+        },
+        {
+          "datname": "worldact_test_1794241902581_bd3b785c",
+          "pid": 762841
+        },
+        {
+          "datname": "worldact_test_1794241902581_bd3b785c",
+          "pid": 762846
+        },
+        {
+          "datname": "worldact_test_1794241902581_bd3b785c",
+          "pid": 762847
+        },
+        {
+          "datname": "worldact_test_1794241902581_bd3b785c",
+          "pid": 762848
+        },
+        {
+          "datname": "worldact_test_1794241902581_bd3b785c",
+          "pid": 762862
+        },
+        {
+          "datname": "worldact_test_1794241902581_bd3b785c",
+          "pid": 762863
+        },
+        {
+          "datname": "worldact_test_1794241902581_bd3b785c",
+          "pid": 762864
+        },
+        {
+          "datname": "worldact_test_1794241902581_bd3b785c",
+          "pid": 762865
+        },
+        {
+          "datname": "worldact_test_1794241902581_bd3b785c",
+          "pid": 762871
+        },
+        {
+          "datname": "worldact_test_1794241902581_bd3b785c",
+          "pid": 762877
+        },
+        {
+          "datname": "worldact_test_1794241902581_bd3b785c",
+          "pid": 762878
+        },
+        {
+          "datname": "worldact_test_1794241902581_bd3b785c",
+          "pid": 762879
+        },
+        {
+          "datname": "worldact_test_1794241902581_bd3b785c",
+          "pid": 762880
+        },
+        {
+          "datname": "worldact_test_1794241902581_bd3b785c",
+          "pid": 762881
+        },
+        {
+          "datname": "worldact_test_1794241902581_bd3b785c",
+          "pid": 762892
+        },
+        {
+          "datname": "worldact_test_1794241902581_bd3b785c",
+          "pid": 762894
+        },
+        {
+          "datname": "worldact_test_1794241902581_bd3b785c",
+          "pid": 762895
+        },
+        {
+          "datname": "worldact_test_1794241902581_bd3b785c",
+          "pid": 762896
+        },
+        {
+          "datname": "worldact_test_1794241902581_bd3b785c",
+          "pid": 762897
+        },
+        {
+          "datname": "worldact_test_1794241902581_bd3b785c",
+          "pid": 762898
+        },
+        {
+          "datname": "worldact_test_1794241902581_bd3b785c",
+          "pid": 762899
+        },
+        {
+          "datname": "worldact_test_1794241902581_bd3b785c",
+          "pid": 762911
+        },
+        {
+          "datname": "worldact_test_1794241902581_bd3b785c",
+          "pid": 762912
+        },
+        {
+          "datname": "worldact_test_1794241902581_bd3b785c",
+          "pid": 762913
+        },
+        {
+          "datname": "worldact_test_1794241902581_bd3b785c",
+          "pid": 762914
+        },
+        {
+          "datname": "worldact_test_1794241902581_bd3b785c",
+          "pid": 762915
+        },
+        {
+          "datname": "worldact_test_1794241902581_bd3b785c",
+          "pid": 762917
+        },
+        {
+          "datname": "worldact_test_1794241902581_bd3b785c",
+          "pid": 762918
+        },
+        {
+          "datname": "worldact_test_1794241902581_bd3b785c",
+          "pid": 762919
+        },
+        {
+          "datname": "worldact_test_1794241902581_bd3b785c",
+          "pid": 762920
+        },
+        {
+          "datname": "worldact_test_1794241902581_bd3b785c",
+          "pid": 762921
+        },
+        {
+          "datname": "worldact_test_1794241902581_bd3b785c",
+          "pid": 762922
+        },
+        {
+          "datname": "worldact_test_1794241902581_bd3b785c",
+          "pid": 762934
+        },
+        {
+          "datname": "worldact_test_1794241902581_bd3b785c",
+          "pid": 762935
+        },
+        {
+          "datname": "worldact_test_1794241902581_bd3b785c",
+          "pid": 762936
+        },
+        {
+          "datname": "worldact_test_1794241902581_bd3b785c",
+          "pid": 762937
+        },
+        {
+          "datname": "worldact_test_1794241902581_bd3b785c",
+          "pid": 762938
+        },
+        {
+          "datname": "worldact_test_1794241902581_bd3b785c",
+          "pid": 762939
+        }
+      ],
+      "started": "2026-11-09T16:31:42.530Z",
+      "runnerPID": 23855,
+      "tests": 58,
+      "pass": 58,
+      "fail": 0,
+      "skipped": 0,
+      "cancelled": 0,
+      "perFileCounts": [
+        3,
+        4,
+        4,
+        6,
+        4,
+        9,
+        4,
+        7,
+        1,
+        6,
+        4,
+        6
+      ],
+      "completedFiles": 12,
+      "exitCode": 0,
+      "logSha256": "43bf4b252752e7f86c3a9b8a074e0612b7669f5e16ea071e6ad4339218de3cb9",
+      "finished": "2026-11-09T16:32:04.350Z",
+      "anchorAbsent": true,
+      "remainingDatabases": [],
+      "remainingSessions": [],
+      "primaryPortsPhysicallyFree": {
+        "3046": true,
+        "3047": true,
+        "3048": true
+      },
+      "portFree": true,
+      "proofs": [
+        {
+          "kind": "home-outer",
+          "path": "<private-evidence>/archive-query-title-home-backend-source-home-outer-proof.json",
+          "sha256": "d37e476e6f625620818506e7f7d7e45bd404bafb5f027df16dd2ecb9f39fb4fe",
+          "dispatches": 6,
+          "wantedDispatches": 6,
+          "dispatchesMatch": true,
+          "mode": "600",
+          "uid": 501,
+          "regularNonSymlink": true
+        },
+        {
+          "kind": "home-body",
+          "path": "<private-evidence>/archive-query-title-home-backend-source-home-body-proof.json",
+          "sha256": "9654ed54cd9fb5891bbca82e79891279af47862822658d1574a9047a796f85b8",
+          "dispatches": 16,
+          "wantedDispatches": 16,
+          "dispatchesMatch": true,
+          "mode": "600",
+          "uid": 501,
+          "regularNonSymlink": true
+        },
+        {
+          "kind": "home-direct",
+          "path": "<private-evidence>/archive-query-title-home-backend-source-home-direct-proof.json",
+          "sha256": "ba2f9e01b4dc882446540f81f1c21ccf9b702d1dfa87c3dfdc1d8cab250f116a",
+          "dispatches": 6,
+          "wantedDispatches": 6,
+          "dispatchesMatch": true,
+          "mode": "600",
+          "uid": 501,
+          "regularNonSymlink": true
+        },
+        {
+          "kind": "singular",
+          "path": "<private-evidence>/archive-query-title-home-backend-source-singular-proof.json",
+          "sha256": "4e574d24a3a0780c2b20121dd57d8e54e8e84a750c8ae282aa030ee820ca1f48",
+          "dispatches": 23,
+          "wantedDispatches": 23,
+          "dispatchesMatch": true,
+          "mode": "600",
+          "uid": 501,
+          "regularNonSymlink": true
+        },
+        {
+          "kind": "posts-page",
+          "path": "<private-evidence>/archive-query-title-home-backend-source-posts-page-proof.json",
+          "sha256": "687088d95e109c3088aab381b14d3e2fdc9224184f9c7b0e1a00350fa3705c0e",
+          "dispatches": 13,
+          "wantedDispatches": 13,
+          "dispatchesMatch": true,
+          "mode": "600",
+          "uid": 501,
+          "regularNonSymlink": true
+        }
+      ],
+      "totalProofResponses": 64,
+      "privateReceipt": {
+        "file": "archive-query-title-home-backend-final-source-run.json",
+        "sha256": "7f23beeb68ebcb477dcb76b479655f98ac35508aee41171e4b4c7308946eb019"
+      }
+    },
+    {
+      "mode": "compiled",
+      "port": 3047,
+      "candidate": "befc9c8750925e7c6f4e5201465be35184f833c3",
+      "runtimeFreeze": "90dc05ec16f95c9fad60eb95840154ef37c7daca",
+      "tree": "f111ffcbdea2408ddbf5d15456bc1bad21bbb79f",
+      "nodeSha256": "7f5e15d054e0a888ae362f95b055c587dab1dff8c9fd836b0d98ea1eafb96093",
+      "selectorSha256": "11b56d19067a3e9b79ad7717454bba0d7fd8f4375efe7dc65d2492aa4a9b0506",
+      "files": [
+        "tests/archive-query-title-home-before.test.ts",
+        "tests/archive-query-title-home-body-original.test.ts",
+        "tests/archive-query-title-home-direct-original.test.ts",
+        "tests/singular-archive-query-title-before.test.ts",
+        "tests/singular-archive-query-title-posts-page.test.ts",
+        "tests/blocks.test.ts",
+        "tests/date-archives.test.ts",
+        "tests/public-document-data.test.ts",
+        "tests/plain-source-pagination.test.ts",
+        "tests/front-page-availability.test.ts",
+        "tests/author-name-independent-count-grant.test.ts",
+        "tests/singular-date-template-priority-original.test.ts"
+      ],
+      "log": "<private-logs>/worldact-archive-query-title-home-final-compiled.log",
+      "anchor": "worldact_archive_query_title_home_backend_anchor",
+      "applicationName": "worldact_archive_query_title_home_backend_compiled",
+      "URLApplicationNamePresent": false,
+      "launchGates": {
+        "all12TestAnd6RuntimeHashesMatch": true,
+        "readOnlyDependenciesAndLockVerified": true,
+        "regularOwnConfig600": true,
+        "anchorAbsent": true,
+        "priorPhaseDatabaseAndApplicationSessionsAbsent": true,
+        "primaryPortsPhysicallyFree": {
+          "3046": true,
+          "3047": true,
+          "3048": true
+        }
+      },
+      "databases": [
+        "worldact_test_1794241955211_2f491209"
+      ],
+      "observedDatabaseSessionGroups": [
+        {
+          "datname": "worldact_test_1794241955211_2f491209",
+          "pid": 763089
+        },
+        {
+          "datname": "worldact_test_1794241955211_2f491209",
+          "pid": 763097
+        },
+        {
+          "datname": "worldact_test_1794241955211_2f491209",
+          "pid": 763098
+        },
+        {
+          "datname": "worldact_test_1794241955211_2f491209",
+          "pid": 763099
+        },
+        {
+          "datname": "worldact_test_1794241955211_2f491209",
+          "pid": 763100
+        },
+        {
+          "datname": "worldact_test_1794241955211_2f491209",
+          "pid": 763101
+        },
+        {
+          "datname": "worldact_test_1794241955211_2f491209",
+          "pid": 763102
+        },
+        {
+          "datname": "worldact_test_1794241955211_2f491209",
+          "pid": 763103
+        },
+        {
+          "datname": "worldact_test_1794241955211_2f491209",
+          "pid": 763104
+        },
+        {
+          "datname": "worldact_test_1794241955211_2f491209",
+          "pid": 763105
+        },
+        {
+          "datname": "worldact_test_1794241955211_2f491209",
+          "pid": 763106
+        },
+        {
+          "datname": "worldact_test_1794241955211_2f491209",
+          "pid": 763107
+        },
+        {
+          "datname": "worldact_test_1794241955211_2f491209",
+          "pid": 763115
+        },
+        {
+          "datname": "worldact_test_1794241955211_2f491209",
+          "pid": 763116
+        },
+        {
+          "datname": "worldact_test_1794241955211_2f491209",
+          "pid": 763117
+        },
+        {
+          "datname": "worldact_test_1794241955211_2f491209",
+          "pid": 763118
+        },
+        {
+          "datname": "worldact_test_1794241955211_2f491209",
+          "pid": 763119
+        },
+        {
+          "datname": "worldact_test_1794241955211_2f491209",
+          "pid": 763120
+        },
+        {
+          "datname": "worldact_test_1794241955211_2f491209",
+          "pid": 763121
+        },
+        {
+          "datname": "worldact_test_1794241955211_2f491209",
+          "pid": 763122
+        },
+        {
+          "datname": "worldact_test_1794241955211_2f491209",
+          "pid": 763123
+        },
+        {
+          "datname": "worldact_test_1794241955211_2f491209",
+          "pid": 763124
+        },
+        {
+          "datname": "worldact_test_1794241955211_2f491209",
+          "pid": 763125
+        },
+        {
+          "datname": "worldact_test_1794241955211_2f491209",
+          "pid": 763126
+        },
+        {
+          "datname": "worldact_test_1794241955211_2f491209",
+          "pid": 763127
+        },
+        {
+          "datname": "worldact_test_1794241955211_2f491209",
+          "pid": 763128
+        },
+        {
+          "datname": "worldact_test_1794241955211_2f491209",
+          "pid": 763129
+        },
+        {
+          "datname": "worldact_test_1794241955211_2f491209",
+          "pid": 763130
+        },
+        {
+          "datname": "worldact_test_1794241955211_2f491209",
+          "pid": 763131
+        },
+        {
+          "datname": "worldact_test_1794241955211_2f491209",
+          "pid": 763132
+        },
+        {
+          "datname": "worldact_test_1794241955211_2f491209",
+          "pid": 763141
+        },
+        {
+          "datname": "worldact_test_1794241955211_2f491209",
+          "pid": 763142
+        },
+        {
+          "datname": "worldact_test_1794241955211_2f491209",
+          "pid": 763143
+        },
+        {
+          "datname": "worldact_test_1794241955211_2f491209",
+          "pid": 763144
+        },
+        {
+          "datname": "worldact_test_1794241955211_2f491209",
+          "pid": 763145
+        },
+        {
+          "datname": "worldact_test_1794241955211_2f491209",
+          "pid": 763146
+        },
+        {
+          "datname": "worldact_test_1794241955211_2f491209",
+          "pid": 763147
+        },
+        {
+          "datname": "worldact_test_1794241955211_2f491209",
+          "pid": 763148
+        },
+        {
+          "datname": "worldact_test_1794241955211_2f491209",
+          "pid": 763149
+        },
+        {
+          "datname": "worldact_test_1794241955211_2f491209",
+          "pid": 763150
+        },
+        {
+          "datname": "worldact_test_1794241955211_2f491209",
+          "pid": 763151
+        },
+        {
+          "datname": "worldact_test_1794241955211_2f491209",
+          "pid": 763152
+        },
+        {
+          "datname": "worldact_test_1794241955211_2f491209",
+          "pid": 763153
+        },
+        {
+          "datname": "worldact_test_1794241955211_2f491209",
+          "pid": 763154
+        },
+        {
+          "datname": "worldact_test_1794241955211_2f491209",
+          "pid": 763155
+        },
+        {
+          "datname": "worldact_test_1794241955211_2f491209",
+          "pid": 763156
+        },
+        {
+          "datname": "worldact_test_1794241955211_2f491209",
+          "pid": 763157
+        },
+        {
+          "datname": "worldact_test_1794241955211_2f491209",
+          "pid": 763158
+        },
+        {
+          "datname": "worldact_test_1794241955211_2f491209",
+          "pid": 763159
+        },
+        {
+          "datname": "worldact_test_1794241955211_2f491209",
+          "pid": 763160
+        },
+        {
+          "datname": "worldact_test_1794241955211_2f491209",
+          "pid": 763169
+        },
+        {
+          "datname": "worldact_test_1794241955211_2f491209",
+          "pid": 763170
+        },
+        {
+          "datname": "worldact_test_1794241955211_2f491209",
+          "pid": 763171
+        },
+        {
+          "datname": "worldact_test_1794241955211_2f491209",
+          "pid": 763172
+        },
+        {
+          "datname": "worldact_test_1794241955211_2f491209",
+          "pid": 763173
+        },
+        {
+          "datname": "worldact_test_1794241955211_2f491209",
+          "pid": 763174
+        },
+        {
+          "datname": "worldact_test_1794241955211_2f491209",
+          "pid": 763182
+        },
+        {
+          "datname": "worldact_test_1794241955211_2f491209",
+          "pid": 763183
+        },
+        {
+          "datname": "worldact_test_1794241955211_2f491209",
+          "pid": 763184
+        },
+        {
+          "datname": "worldact_test_1794241955211_2f491209",
+          "pid": 763185
+        },
+        {
+          "datname": "worldact_test_1794241955211_2f491209",
+          "pid": 763186
+        },
+        {
+          "datname": "worldact_test_1794241955211_2f491209",
+          "pid": 763189
+        },
+        {
+          "datname": "worldact_test_1794241955211_2f491209",
+          "pid": 763191
+        },
+        {
+          "datname": "worldact_test_1794241955211_2f491209",
+          "pid": 763199
+        },
+        {
+          "datname": "worldact_test_1794241955211_2f491209",
+          "pid": 763200
+        },
+        {
+          "datname": "worldact_test_1794241955211_2f491209",
+          "pid": 763201
+        },
+        {
+          "datname": "worldact_test_1794241955211_2f491209",
+          "pid": 763202
+        },
+        {
+          "datname": "worldact_test_1794241955211_2f491209",
+          "pid": 763204
+        },
+        {
+          "datname": "worldact_test_1794241955211_2f491209",
+          "pid": 763205
+        },
+        {
+          "datname": "worldact_test_1794241955211_2f491209",
+          "pid": 763210
+        },
+        {
+          "datname": "worldact_test_1794241955211_2f491209",
+          "pid": 763211
+        },
+        {
+          "datname": "worldact_test_1794241955211_2f491209",
+          "pid": 763212
+        },
+        {
+          "datname": "worldact_test_1794241955211_2f491209",
+          "pid": 763213
+        },
+        {
+          "datname": "worldact_test_1794241955211_2f491209",
+          "pid": 763214
+        },
+        {
+          "datname": "worldact_test_1794241955211_2f491209",
+          "pid": 763215
+        },
+        {
+          "datname": "worldact_test_1794241955211_2f491209",
+          "pid": 763233
+        },
+        {
+          "datname": "worldact_test_1794241955211_2f491209",
+          "pid": 763234
+        },
+        {
+          "datname": "worldact_test_1794241955211_2f491209",
+          "pid": 763235
+        },
+        {
+          "datname": "worldact_test_1794241955211_2f491209",
+          "pid": 763236
+        },
+        {
+          "datname": "worldact_test_1794241955211_2f491209",
+          "pid": 763237
+        },
+        {
+          "datname": "worldact_test_1794241955211_2f491209",
+          "pid": 763238
+        },
+        {
+          "datname": "worldact_test_1794241955211_2f491209",
+          "pid": 763249
+        },
+        {
+          "datname": "worldact_test_1794241955211_2f491209",
+          "pid": 763250
+        },
+        {
+          "datname": "worldact_test_1794241955211_2f491209",
+          "pid": 763251
+        },
+        {
+          "datname": "worldact_test_1794241955211_2f491209",
+          "pid": 763252
+        },
+        {
+          "datname": "worldact_test_1794241955211_2f491209",
+          "pid": 763253
+        },
+        {
+          "datname": "worldact_test_1794241955211_2f491209",
+          "pid": 763254
+        },
+        {
+          "datname": "worldact_test_1794241955211_2f491209",
+          "pid": 763255
+        },
+        {
+          "datname": "worldact_test_1794241955211_2f491209",
+          "pid": 763256
+        },
+        {
+          "datname": "worldact_test_1794241955211_2f491209",
+          "pid": 763268
+        },
+        {
+          "datname": "worldact_test_1794241955211_2f491209",
+          "pid": 763269
+        },
+        {
+          "datname": "worldact_test_1794241955211_2f491209",
+          "pid": 763270
+        },
+        {
+          "datname": "worldact_test_1794241955211_2f491209",
+          "pid": 763271
+        },
+        {
+          "datname": "worldact_test_1794241955211_2f491209",
+          "pid": 763272
+        },
+        {
+          "datname": "worldact_test_1794241955211_2f491209",
+          "pid": 763279
+        },
+        {
+          "datname": "worldact_test_1794241955211_2f491209",
+          "pid": 763280
+        },
+        {
+          "datname": "worldact_test_1794241955211_2f491209",
+          "pid": 763281
+        },
+        {
+          "datname": "worldact_test_1794241955211_2f491209",
+          "pid": 763282
+        },
+        {
+          "datname": "worldact_test_1794241955211_2f491209",
+          "pid": 763283
+        }
+      ],
+      "started": "2026-11-09T16:32:35.166Z",
+      "runnerPID": 24126,
+      "tests": 58,
+      "pass": 58,
+      "fail": 0,
+      "skipped": 0,
+      "cancelled": 0,
+      "perFileCounts": [
+        3,
+        4,
+        4,
+        6,
+        4,
+        9,
+        4,
+        7,
+        1,
+        6,
+        4,
+        6
+      ],
+      "completedFiles": 12,
+      "exitCode": 0,
+      "logSha256": "8252edcb74608fc388822d8a59bab3c51550872f656a05d2e8ebb479e7eb6860",
+      "finished": "2026-11-09T16:32:51.614Z",
+      "anchorAbsent": true,
+      "remainingDatabases": [],
+      "remainingSessions": [],
+      "primaryPortsPhysicallyFree": {
+        "3046": true,
+        "3047": true,
+        "3048": true
+      },
+      "portFree": true,
+      "proofs": [
+        {
+          "kind": "home-outer",
+          "path": "<private-evidence>/archive-query-title-home-backend-compiled-home-outer-proof.json",
+          "sha256": "7261b098de97f60e823ca424d24e4857d4ede9c32cda2fab128d4f815bbcf5da",
+          "dispatches": 6,
+          "wantedDispatches": 6,
+          "dispatchesMatch": true,
+          "mode": "600",
+          "uid": 501,
+          "regularNonSymlink": true
+        },
+        {
+          "kind": "home-body",
+          "path": "<private-evidence>/archive-query-title-home-backend-compiled-home-body-proof.json",
+          "sha256": "82bb137b65191f5ce0863508a43a26b784046808d1452ff00e1fb32d22f8d8a7",
+          "dispatches": 16,
+          "wantedDispatches": 16,
+          "dispatchesMatch": true,
+          "mode": "600",
+          "uid": 501,
+          "regularNonSymlink": true
+        },
+        {
+          "kind": "home-direct",
+          "path": "<private-evidence>/archive-query-title-home-backend-compiled-home-direct-proof.json",
+          "sha256": "1cb01212baa3b5d3f47c8520ce52a83e845044a80815962fcc825634bc2be7fe",
+          "dispatches": 6,
+          "wantedDispatches": 6,
+          "dispatchesMatch": true,
+          "mode": "600",
+          "uid": 501,
+          "regularNonSymlink": true
+        },
+        {
+          "kind": "singular",
+          "path": "<private-evidence>/archive-query-title-home-backend-compiled-singular-proof.json",
+          "sha256": "33d3d5e7f8adc68cffe65821071a2a7771a08275f2c6129eb92d38f0d0e6cf23",
+          "dispatches": 23,
+          "wantedDispatches": 23,
+          "dispatchesMatch": true,
+          "mode": "600",
+          "uid": 501,
+          "regularNonSymlink": true
+        },
+        {
+          "kind": "posts-page",
+          "path": "<private-evidence>/archive-query-title-home-backend-compiled-posts-page-proof.json",
+          "sha256": "113168123a1621ffab4dc027aa69d9a1b7b12ffee604895879f8fed0ce4aeccb",
+          "dispatches": 13,
+          "wantedDispatches": 13,
+          "dispatchesMatch": true,
+          "mode": "600",
+          "uid": 501,
+          "regularNonSymlink": true
+        }
+      ],
+      "totalProofResponses": 64,
+      "privateReceipt": {
+        "file": "archive-query-title-home-backend-final-compiled-run.json",
+        "sha256": "8c3a715c84d25e2f2ad3139b1f89671f71f8dece8fa8499fdc9dd3b6399f889a"
+      }
+    }
+  ],
+  "final": {
+    "filesEachMode": 12,
+    "passEachMode": 58,
+    "failSkipCancelEachMode": 0,
+    "proofResponsesEachMode": 64,
+    "proofGroupResponsesEachMode": [
+      6,
+      16,
+      6,
+      23,
+      13
+    ],
+    "existingTitleGuardPassEachMode": 47,
+    "threeNewHomeFilesPassEachMode": 11,
+    "directSourceImportsRemainSOURCEInCompiledApiMode": true,
+    "wholeFreshFixedBrowserNativeOrReleaseClaim": false
+  },
+  "resourceAudit": {
+    "receipt": {
+      "file": "archive-query-title-home-backend-resource-audit.json",
+      "sha256": "d8be503cf1754952e1ec0381cbd223394e5b591729bf469e1bba39302de305c8"
+    },
+    "ownedDBs": 2,
+    "ownedDBsAnchorAndPhaseGroupsAbsent": true,
+    "portsPhysicallyFree": [
+      3046,
+      3047,
+      3048
+    ],
+    "3048UnusedByGuards": true,
+    "3062NeverUsed": true,
+    "configAndOwnReadonlyDepsLinkRetainedForRootReview": true,
+    "sharedOwnerUnmodified": true,
+    "noArchiveCreated": true,
+    "uploads": {
+      "bothStandardRunnersExitZero": true,
+      "runner": "scripts/test-isolated.mjs removes disposable upload directory in finally",
+      "exactUploadPathsJournaled": false,
+      "limitation": "No independent per-upload-path absence certificate or global temporary-directory sweep is claimed."
+    }
+  },
+  "preserved": [
+    "Old selected-singular/default/preserve/resolved-path decisions including active configured posts-page454",
+    "Generic preview/publicPost/pages/frontPage/postsPage unmarked by home eligibility",
+    "Root path/date-only vs transport-only labels; no new query validation/errors",
+    "All other QueryTitle types/labels, query flags, SQL predicates/counters/template selection/canonical/grants/fences",
+    "All12 testbytes immutable, no assertion rewrite"
+  ],
+  "setupMetadataNote": "Initial read-only static verifier indexed files[] as objects; corrected to the existing entries[] format before any launch. No source/test/log/result rewrite or product failure, and all subsequent launch gates reverified exact hashes."
+}

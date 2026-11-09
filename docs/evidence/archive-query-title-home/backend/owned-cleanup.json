@@ -1,0 +1,74 @@
+{
+  "status": "ONLY_OWNED_ENV_AND_READONLY_LINK_REMOVED",
+  "time": "2026-11-09T16:41:43.338Z",
+  "candidate": "befc9c8750925e7c6f4e5201465be35184f833c3",
+  "runtimeFreeze": "90dc05ec16f95c9fad60eb95840154ef37c7daca",
+  "nodeSHA256": "7f5e15d054e0a888ae362f95b055c587dab1dff8c9fd836b0d98ea1eafb96093",
+  "authorization": "Root approved exact owned .env and dependency-link removal after scoped raw-log/DOM/resource review.",
+  "environment": {
+    "path": "<owned-checkout>/.env",
+    "uid": 501,
+    "mode": "0600",
+    "regularNonSymlink": true,
+    "sha256": "7749b52262fbf6acbb42fc260247514cd726aa9306caf1bdefceed4cac0f80ca",
+    "removed": true,
+    "absent": true,
+    "expectedBytesVerified": true,
+    "verificationProvenance": "Original preparation did not contemporaneously record the environment hash. Expected bytes were reconstructed from the unchanged private local connection source using the preserved preparation recipe (clear URL search, set never-created anchor pathname, JSON-stringify DATABASE_URL plus newline) and compared byte-for-byte before removal. No credential bytes are included."
+  },
+  "dependencyLink": {
+    "path": "<owned-checkout>/node_modules",
+    "uid": 501,
+    "exactKnownTarget": "<shared-dependency-owner>/node_modules",
+    "removed": true,
+    "absent": true,
+    "sharedOwnerBefore": {
+      "uid": 501,
+      "mode": "0755",
+      "nonSymlink": true
+    },
+    "sharedOwnerAfter": {
+      "uid": 501,
+      "mode": "0755",
+      "nonSymlink": true
+    },
+    "sharedLockSHA256": "233888ed8f864581a8835aab0b4c33ccd7fbc391f2a98650b63fcf8db8814892",
+    "sharedOwnerUnmodified": true,
+    "noInstall": true
+  },
+  "previousResourceAudit": {
+    "file": "archive-query-title-home-backend-resource-audit.json",
+    "sha256": "d8be503cf1754952e1ec0381cbd223394e5b591729bf469e1bba39302de305c8",
+    "retainedStateIsHistorical": true
+  },
+  "journaledDatabases": [
+    "worldact_test_1794241902581_bd3b785c",
+    "worldact_test_1794241955211_2f491209"
+  ],
+  "neverCreatedAnchor": "worldact_archive_query_title_home_backend_anchor",
+  "remainingDatabases": [],
+  "remainingPhaseSessions": [],
+  "portsPhysicallyBoundAndReleased": {
+    "3046": true,
+    "3047": true,
+    "3048": true
+  },
+  "cleanupPoolEnded": true,
+  "archivesCreated": 0,
+  "removedPathsOnly": [
+    "<owned-checkout>/.env",
+    "<owned-checkout>/node_modules"
+  ],
+  "preserved": [
+    "All private original tests, setup failures, before/after proofs, raw logs, receipts and builds",
+    "Shared dependency owner and MAIN",
+    "Older permanently retained failed and conditional archives"
+  ],
+  "normalFinallyUploads": {
+    "bothStandardRunnersExitZero": true,
+    "runner": "scripts/test-isolated.mjs removes disposable upload directory in finally",
+    "exactUploadPathsJournaled": false,
+    "limitation": "No independent per-upload-path absence certificate or global temporary-directory sweep is claimed."
+  },
+  "noRuntimeTestsCIUIOrMainEdits": true
+}
