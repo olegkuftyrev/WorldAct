@@ -92,7 +92,7 @@ export function readPublicSite(context:PublicReadContext){
   return completePublicRead(context.canReadProtectedPost,reader=>readPublicSiteOnce({...context,canReadProtectedPost:reader},selection));
 }
 async function readPublicSiteOnce(context: PublicReadContext,selection:{author?:AuthorArchive;named:NamedAuthorPin}) {
-  const selectedAuthor=context.authorArchive || selection.author;
+  let selectedAuthor=context.authorArchive || selection.author;
   if(selectedAuthor)observePublicAuthor(context.canReadProtectedPost,selectedAuthor);
   if(selection.named.value?.selected)observePublicAuthor(context.canReadProtectedPost,selection.named.value.selected);
   const settings=await getSettings();
@@ -102,6 +102,12 @@ async function readPublicSiteOnce(context: PublicReadContext,selection:{author?:
     const path=listingRequestPath(context.requestPath,context.query),resolved=await resolvePublicDocumentRoute(path,{namedPin:selection.named,authenticated:Boolean(context.user)});
     if(resolved.status===404)throw new HttpError(404,"Public listing page not found.");
     listing=resolved.listing;
+    const author=resolved.archive&&"type" in resolved.archive&&resolved.archive.type==="author"?resolved.archive:null;
+    if(author&&!listing?.namedAuthor){
+      if(selectedAuthor&&(selectedAuthor.authorId!==author.authorId||selectedAuthor.slug!==author.slug))throw new HttpError(404,"The author archive identity changed.");
+      selection.author ||= author;selectedAuthor ||= author;
+      observePublicAuthor(context.canReadProtectedPost,author);
+    }
     if(listing||nameVisible){
       const query=normalizeListingQuery(readPublicPath(path).query,{singular:["singular","front-page"].includes(resolved.kind),archive:resolved.archive,namedAuthor:listing?.namedAuthor});
       // Direct ordinary first pages keep their prior raw transport policy
