@@ -111,6 +111,8 @@ jobs:
           tests/public-listing-pretty-identity-original.test.ts
           tests/public-document-data.test.ts
           tests/singular-date-template-priority-original.test.ts
+          tests/singular-archive-query-title-before.test.ts
+          tests/singular-archive-query-title-posts-page.test.ts
           tests/public-document-view.test.ts
           tests/public-document-ssr.test.ts
           tests/native-continuation.test.ts
