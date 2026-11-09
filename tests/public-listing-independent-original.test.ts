@@ -1,4 +1,4 @@
-import test,{after}from"./isolated-test.js";
+import test,{after} from "./isolated-test.js";
 import assert from"node:assert/strict";
 import {DOMParser}from"linkedom";
 import {pool}from"../server/db.js";

@@ -1,4 +1,4 @@
-import test,{after}from"./isolated-test.js";
+import test,{after} from "./isolated-test.js";
 import assert from"node:assert/strict";
 import {pool}from"../server/db.js";
 const base=process.env.TEST_API_URL!,origin=process.env.APP_ORIGIN!;after(()=>pool.end());
