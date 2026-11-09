@@ -4,7 +4,8 @@ import {commentsOpen} from "../shared/comment-open.js";
 import {commentReturnPath,commentLoginHref} from "../shared/comment-links.js";
 import { date as formatDate } from "@wordpress/date";
 import socialIcons from "../src/theme-source/social-icons.json";
-import { MAX_RENDER_NODES, type Node, type Context, type State } from "./block-renderer.js";
+import { MAX_RENDER_BYTES, MAX_RENDER_NODES, type Node, type Context, type State } from "./block-renderer.js";
+import {searchQueryFieldParts} from "./search-query-fields.js";
 import { postFields, postMetadataFields } from "./db.js";
 import { postPermalink } from "./permalinks.js";
 import {observePublicPost} from "./public-read-attempt.js";
@@ -81,7 +82,10 @@ export async function renderThemeBlock(
   if(name==="core/search") {
     const id="wp-search-"+state.nodes,label=plainText(String(a.label || "Search")),button=plainText(String(a.buttonText || "Search"));
     const style=a.width?` style="width:${int(a.width,100,2000)}${a.widthUnit==="%"?"%":"px"}"`:"";
-    return `<form${attributes(`wp-block-search wp-block-search__button-${a.buttonPosition==="button-inside"?"inside":"outside"}`)} role="search" method="get" action="/">${a.showLabel===false?"":`<label class="wp-block-search__label" for="${id}">${esc(label)}</label>`}<div class="wp-block-search__inside-wrapper"${style}><input class="wp-block-search__input" id="${id}" type="search" name="s" value="${esc(state.options.query?.search || state.options.query?.s || "")}" placeholder="${esc(a.placeholder || "")}" required>${a.buttonPosition==="no-button"?"":`<button class="wp-block-search__button wp-element-button" type="submit">${esc(button)}</button>`}</div></form>`;
+    const before=`<form${attributes(`wp-block-search wp-block-search__button-${a.buttonPosition==="button-inside"?"inside":"outside"}`)} role="search" method="get" action="/">${a.showLabel===false?"":`<label class="wp-block-search__label" for="${id}">${esc(label)}</label>`}<div class="wp-block-search__inside-wrapper"${style}><input class="wp-block-search__input" id="${id}" type="search" name="s" value="${esc(state.options.query?.search || state.options.query?.s || "")}" placeholder="${esc(a.placeholder || "")}" required>`;
+    const after=`${a.buttonPosition==="no-button"?"":`<button class="wp-block-search__button wp-element-button" type="submit">${esc(button)}</button>`}</div></form>`;
+    const fields=searchQueryFieldParts(a.query,MAX_RENDER_BYTES-state.outputBytes,Buffer.byteLength(before,"utf8")+Buffer.byteLength(after,"utf8"));
+    return [before,...fields,after].join("");
   }
   if(name==="core/post-navigation-link") {
     if(!p?.id)return "";
