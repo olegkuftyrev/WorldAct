@@ -1,0 +1,137 @@
+{
+  "scope": "Second immediate anonymous native comment hit existing429 admission; no runtime finding or successful Source comment claim in this attempt.",
+  "requests": [
+    {
+      "id": 1033,
+      "method": "GET",
+      "path": "/ordinary-native-locked-classic/?page=2&query-7-page=2&commentPage=1",
+      "status": 200,
+      "startedAt": 1794229089887,
+      "finishedAt": 1794229089910
+    },
+    {
+      "id": 1034,
+      "method": "GET",
+      "path": "/assets/index-BsgYOWhl.css",
+      "status": 304,
+      "startedAt": 1794229089924,
+      "finishedAt": 1794229089925
+    },
+    {
+      "id": 1035,
+      "method": "GET",
+      "path": "/vendor/wordpress/wp-content/themes/twentytwentyfive/assets/fonts/manrope/Manrope-VariableFont_wght.woff2",
+      "status": 304,
+      "startedAt": 1794229089933,
+      "finishedAt": 1794229089934
+    },
+    {
+      "id": 1036,
+      "method": "GET",
+      "path": "/?page=7&query-7-page=1&query-8-page=1&commentPage=2",
+      "status": 404,
+      "startedAt": 1794229090997,
+      "finishedAt": 1794229091021
+    },
+    {
+      "id": 1037,
+      "method": "GET",
+      "path": "/assets/index-BsgYOWhl.css",
+      "status": 200,
+      "startedAt": 1794229091036,
+      "finishedAt": 1794229091038
+    },
+    {
+      "id": 1038,
+      "method": "GET",
+      "path": "/vendor/wordpress/wp-content/themes/twentytwentyfive/assets/fonts/manrope/Manrope-VariableFont_wght.woff2",
+      "status": 200,
+      "startedAt": 1794229091040,
+      "finishedAt": 1794229091041
+    },
+    {
+      "id": 1039,
+      "method": "GET",
+      "path": "/favicon.ico",
+      "status": 404,
+      "startedAt": 1794229091055,
+      "finishedAt": 1794229091083
+    },
+    {
+      "id": 1040,
+      "method": "HEAD",
+      "path": "/?page=7&query-7-page=1&query-8-page=1&commentPage=2",
+      "status": 404,
+      "startedAt": 1794229091083,
+      "finishedAt": 1794229091102
+    },
+    {
+      "id": 1041,
+      "method": "GET",
+      "path": "/ordinary-native-locked-twentytwentyfive/?page=2&query-7-page=2&commentPage=1",
+      "status": 200,
+      "startedAt": 1794229091167,
+      "finishedAt": 1794229091202
+    },
+    {
+      "id": 1042,
+      "method": "GET",
+      "path": "/assets/index-BsgYOWhl.css",
+      "status": 304,
+      "startedAt": 1794229091216,
+      "finishedAt": 1794229091217
+    },
+    {
+      "id": 1043,
+      "method": "GET",
+      "path": "/vendor/wordpress/wp-content/themes/twentytwentyfive/assets/fonts/manrope/Manrope-VariableFont_wght.woff2",
+      "status": 304,
+      "startedAt": 1794229091217,
+      "finishedAt": 1794229091217
+    },
+    {
+      "id": 1044,
+      "method": "POST",
+      "path": "/post-password",
+      "status": 303,
+      "location": "/ordinary-native-locked-twentytwentyfive/?page=2&query-7-page=2&commentPage=1",
+      "startedAt": 1794229091330,
+      "finishedAt": 1794229091377
+    },
+    {
+      "id": 1045,
+      "method": "GET",
+      "path": "/ordinary-native-locked-twentytwentyfive/?page=2&query-7-page=2&commentPage=1",
+      "status": 200,
+      "startedAt": 1794229091380,
+      "finishedAt": 1794229091416
+    },
+    {
+      "id": 1046,
+      "method": "GET",
+      "path": "/assets/index-BsgYOWhl.css",
+      "status": 304,
+      "startedAt": 1794229091430,
+      "finishedAt": 1794229091431
+    },
+    {
+      "id": 1047,
+      "method": "GET",
+      "path": "/vendor/wordpress/wp-content/themes/twentytwentyfive/assets/fonts/manrope/Manrope-VariableFont_wght.woff2",
+      "status": 304,
+      "startedAt": 1794229091430,
+      "finishedAt": 1794229091431
+    },
+    {
+      "id": 1048,
+      "method": "POST",
+      "path": "/wp-comments-post.php",
+      "status": 429,
+      "startedAt": 1794229091580,
+      "finishedAt": 1794229091591
+    }
+  ],
+  "originalLog": "public-listing-native-nojs.log",
+  "classicPassingProofRetained": "public-listing-native-nojs-proof.json",
+  "scriptRestoredAndBrowserClosedByFinally": true
+}

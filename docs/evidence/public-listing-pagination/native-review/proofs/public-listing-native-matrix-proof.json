@@ -1,0 +1,1331 @@
+{
+  "code": "c9cc2b13f5baba71cb88f9685c6937daa02f9310",
+  "tree": "05d7338089c08211f1a170b7b58e0032e579e431",
+  "nodeSha256": "b8012b887e1b2281774e7318ad70f4a9debfb4d396eaeb3cd41e8e752ae1d80c",
+  "rows": [
+    {
+      "theme": "classic",
+      "width": 1440,
+      "scene": "ordinary-main-page2-200-page7-404-native-SSR-history-reload",
+      "valid": {
+        "boot": {
+          "archive": null,
+          "kind": "home",
+          "posts": [
+            {
+              "authorId": 3,
+              "id": 7,
+              "locked": false
+            }
+          ],
+          "query": {
+            "archivePage": 2,
+            "blockPages": {
+              "query-7-page": 1
+            },
+            "category": "",
+            "commentPage": 2,
+            "contentPage": 1,
+            "date": null,
+            "search": "",
+            "tag": "",
+            "values": {
+              "commentPage": "2",
+              "page": "2",
+              "query-7-page": "1"
+            }
+          },
+          "status": 200
+        },
+        "canonicalCount": 1,
+        "errors": [],
+        "heading": "Blog",
+        "historyLength": 2,
+        "originalSSRNodeRetained": true,
+        "overflow": false,
+        "path": "/?page=2&query-7-page=1&commentPage=2",
+        "queryLoops": [],
+        "robotsCount": 0,
+        "text": "WorldAct\nOrdinary Native Journal\nOrdinary Native Numeric Child\nOrdinary Native Parent\nOrdinary Native Static Front\nSample Page\nBlog\nSearch posts\nSearch\nOrdinary Native Bob\n\nFebruary 3, 2001\n\nORDINARY NATIVE FIRST BODY Ordinary Native Bob\n\nPages: 1 2\n\n\u2190 Newer posts\n2 of 6\nOlder posts \u2192\nWorldAct\n\nJust another WorldAct site\n\nBlog\nOrdinary Native Journal\nOrdinary Native Numeric Child\nOrdinary Native Parent\nOrdinary Native Static Front\n\nDesigned with WorldAct\n\nLog in"
+      },
+      "missing": {
+        "boot": {
+          "archive": null,
+          "kind": "not-found",
+          "posts": [],
+          "query": {
+            "archivePage": 7,
+            "blockPages": {
+              "query-7-page": 1,
+              "query-8-page": 1
+            },
+            "category": "",
+            "commentPage": 2,
+            "contentPage": 1,
+            "date": null,
+            "search": "",
+            "tag": "",
+            "values": {
+              "commentPage": "2",
+              "page": "7",
+              "query-7-page": "1",
+              "query-8-page": "1"
+            }
+          },
+          "status": 404
+        },
+        "canonicalCount": 0,
+        "errors": [],
+        "heading": "Page not found",
+        "historyLength": 3,
+        "originalSSRNodeRetained": true,
+        "overflow": false,
+        "path": "/?page=7&query-7-page=1&query-8-page=1&commentPage=2",
+        "queryLoops": [],
+        "robotsCount": 0,
+        "text": "WorldAct\nOrdinary Native Journal\nOrdinary Native Numeric Child\nOrdinary Native Parent\nOrdinary Native Static Front\nSample Page\nPage not found\n\nIt looks like nothing was found at this location.\n\nReturn to home\nWorldAct\n\nJust another WorldAct site\n\nBlog\nOrdinary Native Journal\nOrdinary Native Numeric Child\nOrdinary Native Parent\nOrdinary Native Static Front\n\nDesigned with WorldAct\n\nLog in"
+      },
+      "home": {
+        "path": "/",
+        "historyLength": 4,
+        "modelReads": [
+          {
+            "id": 132,
+            "method": "GET",
+            "path": "/api/public/document?path=%2F",
+            "startedAt": 1794228938387,
+            "status": 200,
+            "finishedAt": 1794228938403,
+            "model": {
+              "status": 200,
+              "kind": "home",
+              "archive": null,
+              "query": {
+                "search": "",
+                "category": "",
+                "tag": "",
+                "date": null,
+                "archivePage": 1,
+                "contentPage": 1,
+                "blockPages": {},
+                "values": {
+                  "page": "1"
+                }
+              },
+              "posts": [
+                {
+                  "id": 6,
+                  "authorId": 2,
+                  "locked": false
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "back": {
+        "path": "/?page=7&query-7-page=1&query-8-page=1&commentPage=2",
+        "historyLength": 4,
+        "modelReads": [
+          {
+            "id": 134,
+            "method": "GET",
+            "path": "/api/public/document?path=%2F%3Fpage%3D7%26query-7-page%3D1%26query-8-page%3D1%26commentPage%3D2",
+            "startedAt": 1794228938519,
+            "status": 404,
+            "finishedAt": 1794228938533,
+            "model": {
+              "status": 404,
+              "kind": "not-found",
+              "archive": null,
+              "query": {
+                "search": "",
+                "category": "",
+                "tag": "",
+                "date": null,
+                "archivePage": 7,
+                "contentPage": 1,
+                "commentPage": 2,
+                "blockPages": {
+                  "query-7-page": 1,
+                  "query-8-page": 1
+                },
+                "values": {
+                  "page": "7",
+                  "query-7-page": "1",
+                  "query-8-page": "1",
+                  "commentPage": "2"
+                }
+              },
+              "posts": []
+            }
+          }
+        ]
+      },
+      "reloaded": {
+        "boot": {
+          "archive": null,
+          "kind": "not-found",
+          "posts": [],
+          "query": {
+            "archivePage": 7,
+            "blockPages": {
+              "query-7-page": 1,
+              "query-8-page": 1
+            },
+            "category": "",
+            "commentPage": 2,
+            "contentPage": 1,
+            "date": null,
+            "search": "",
+            "tag": "",
+            "values": {
+              "commentPage": "2",
+              "page": "7",
+              "query-7-page": "1",
+              "query-8-page": "1"
+            }
+          },
+          "status": 404
+        },
+        "canonicalCount": 0,
+        "errors": [],
+        "heading": "Page not found",
+        "historyLength": 4,
+        "originalSSRNodeRetained": true,
+        "overflow": false,
+        "path": "/?page=7&query-7-page=1&query-8-page=1&commentPage=2",
+        "queryLoops": [],
+        "robotsCount": 0,
+        "text": "WorldAct\nOrdinary Native Journal\nOrdinary Native Numeric Child\nOrdinary Native Parent\nOrdinary Native Static Front\nSample Page\nPage not found\n\nIt looks like nothing was found at this location.\n\nReturn to home\nWorldAct\n\nJust another WorldAct site\n\nBlog\nOrdinary Native Journal\nOrdinary Native Numeric Child\nOrdinary Native Parent\nOrdinary Native Static Front\n\nDesigned with WorldAct\n\nLog in"
+      },
+      "actualNativeGET404": true,
+      "actualHEAD404EmptyBody": true,
+      "screenshots": [
+        "../screens/public-listing-native-classic-valid-page2-1440.png",
+        "../screens/public-listing-native-classic-missing-page7-1440.png"
+      ]
+    },
+    {
+      "theme": "classic",
+      "width": 768,
+      "scene": "ordinary-main-page2-200-page7-404-native-SSR-history-reload",
+      "valid": {
+        "boot": {
+          "archive": null,
+          "kind": "home",
+          "posts": [
+            {
+              "authorId": 3,
+              "id": 7,
+              "locked": false
+            }
+          ],
+          "query": {
+            "archivePage": 2,
+            "blockPages": {
+              "query-7-page": 1
+            },
+            "category": "",
+            "commentPage": 2,
+            "contentPage": 1,
+            "date": null,
+            "search": "",
+            "tag": "",
+            "values": {
+              "commentPage": "2",
+              "page": "2",
+              "query-7-page": "1"
+            }
+          },
+          "status": 200
+        },
+        "canonicalCount": 1,
+        "errors": [],
+        "heading": "Blog",
+        "historyLength": 2,
+        "originalSSRNodeRetained": true,
+        "overflow": false,
+        "path": "/?page=2&query-7-page=1&commentPage=2",
+        "queryLoops": [],
+        "robotsCount": 0,
+        "text": "WorldAct\nOrdinary Native Journal\nOrdinary Native Numeric Child\nOrdinary Native Parent\nOrdinary Native Static Front\nSample Page\nBlog\nSearch posts\nSearch\nOrdinary Native Bob\n\nFebruary 3, 2001\n\nORDINARY NATIVE FIRST BODY Ordinary Native Bob\n\nPages: 1 2\n\n\u2190 Newer posts\n2 of 6\nOlder posts \u2192\nWorldAct\n\nJust another WorldAct site\n\nBlog\nOrdinary Native Journal\nOrdinary Native Numeric Child\nOrdinary Native Parent\nOrdinary Native Static Front\n\nDesigned with WorldAct\n\nLog in"
+      },
+      "missing": {
+        "boot": {
+          "archive": null,
+          "kind": "not-found",
+          "posts": [],
+          "query": {
+            "archivePage": 7,
+            "blockPages": {
+              "query-7-page": 1,
+              "query-8-page": 1
+            },
+            "category": "",
+            "commentPage": 2,
+            "contentPage": 1,
+            "date": null,
+            "search": "",
+            "tag": "",
+            "values": {
+              "commentPage": "2",
+              "page": "7",
+              "query-7-page": "1",
+              "query-8-page": "1"
+            }
+          },
+          "status": 404
+        },
+        "canonicalCount": 0,
+        "errors": [],
+        "heading": "Page not found",
+        "historyLength": 3,
+        "originalSSRNodeRetained": true,
+        "overflow": false,
+        "path": "/?page=7&query-7-page=1&query-8-page=1&commentPage=2",
+        "queryLoops": [],
+        "robotsCount": 0,
+        "text": "WorldAct\nOrdinary Native Journal\nOrdinary Native Numeric Child\nOrdinary Native Parent\nOrdinary Native Static Front\nSample Page\nPage not found\n\nIt looks like nothing was found at this location.\n\nReturn to home\nWorldAct\n\nJust another WorldAct site\n\nBlog\nOrdinary Native Journal\nOrdinary Native Numeric Child\nOrdinary Native Parent\nOrdinary Native Static Front\n\nDesigned with WorldAct\n\nLog in"
+      },
+      "home": {
+        "path": "/",
+        "historyLength": 4,
+        "modelReads": [
+          {
+            "id": 160,
+            "method": "GET",
+            "path": "/api/public/document?path=%2F",
+            "startedAt": 1794228940596,
+            "status": 200,
+            "finishedAt": 1794228940614,
+            "model": {
+              "status": 200,
+              "kind": "home",
+              "archive": null,
+              "query": {
+                "search": "",
+                "category": "",
+                "tag": "",
+                "date": null,
+                "archivePage": 1,
+                "contentPage": 1,
+                "blockPages": {},
+                "values": {
+                  "page": "1"
+                }
+              },
+              "posts": [
+                {
+                  "id": 6,
+                  "authorId": 2,
+                  "locked": false
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "back": {
+        "path": "/?page=7&query-7-page=1&query-8-page=1&commentPage=2",
+        "historyLength": 4,
+        "modelReads": [
+          {
+            "id": 162,
+            "method": "GET",
+            "path": "/api/public/document?path=%2F%3Fpage%3D7%26query-7-page%3D1%26query-8-page%3D1%26commentPage%3D2",
+            "startedAt": 1794228940729,
+            "status": 404,
+            "finishedAt": 1794228940749,
+            "model": {
+              "status": 404,
+              "kind": "not-found",
+              "archive": null,
+              "query": {
+                "search": "",
+                "category": "",
+                "tag": "",
+                "date": null,
+                "archivePage": 7,
+                "contentPage": 1,
+                "commentPage": 2,
+                "blockPages": {
+                  "query-7-page": 1,
+                  "query-8-page": 1
+                },
+                "values": {
+                  "page": "7",
+                  "query-7-page": "1",
+                  "query-8-page": "1",
+                  "commentPage": "2"
+                }
+              },
+              "posts": []
+            }
+          }
+        ]
+      },
+      "reloaded": {
+        "boot": {
+          "archive": null,
+          "kind": "not-found",
+          "posts": [],
+          "query": {
+            "archivePage": 7,
+            "blockPages": {
+              "query-7-page": 1,
+              "query-8-page": 1
+            },
+            "category": "",
+            "commentPage": 2,
+            "contentPage": 1,
+            "date": null,
+            "search": "",
+            "tag": "",
+            "values": {
+              "commentPage": "2",
+              "page": "7",
+              "query-7-page": "1",
+              "query-8-page": "1"
+            }
+          },
+          "status": 404
+        },
+        "canonicalCount": 0,
+        "errors": [],
+        "heading": "Page not found",
+        "historyLength": 4,
+        "originalSSRNodeRetained": true,
+        "overflow": false,
+        "path": "/?page=7&query-7-page=1&query-8-page=1&commentPage=2",
+        "queryLoops": [],
+        "robotsCount": 0,
+        "text": "WorldAct\nOrdinary Native Journal\nOrdinary Native Numeric Child\nOrdinary Native Parent\nOrdinary Native Static Front\nSample Page\nPage not found\n\nIt looks like nothing was found at this location.\n\nReturn to home\nWorldAct\n\nJust another WorldAct site\n\nBlog\nOrdinary Native Journal\nOrdinary Native Numeric Child\nOrdinary Native Parent\nOrdinary Native Static Front\n\nDesigned with WorldAct\n\nLog in"
+      },
+      "actualNativeGET404": true,
+      "actualHEAD404EmptyBody": true,
+      "screenshots": [
+        "../screens/public-listing-native-classic-valid-page2-768.png",
+        "../screens/public-listing-native-classic-missing-page7-768.png"
+      ]
+    },
+    {
+      "theme": "classic",
+      "width": 375,
+      "scene": "ordinary-main-page2-200-page7-404-native-SSR-history-reload",
+      "valid": {
+        "boot": {
+          "archive": null,
+          "kind": "home",
+          "posts": [
+            {
+              "authorId": 3,
+              "id": 7,
+              "locked": false
+            }
+          ],
+          "query": {
+            "archivePage": 2,
+            "blockPages": {
+              "query-7-page": 1
+            },
+            "category": "",
+            "commentPage": 2,
+            "contentPage": 1,
+            "date": null,
+            "search": "",
+            "tag": "",
+            "values": {
+              "commentPage": "2",
+              "page": "2",
+              "query-7-page": "1"
+            }
+          },
+          "status": 200
+        },
+        "canonicalCount": 1,
+        "errors": [],
+        "heading": "Blog",
+        "historyLength": 2,
+        "originalSSRNodeRetained": true,
+        "overflow": false,
+        "path": "/?page=2&query-7-page=1&commentPage=2",
+        "queryLoops": [],
+        "robotsCount": 0,
+        "text": "WorldAct\nOrdinary Native Journal\nOrdinary Native Numeric Child\nOrdinary Native Parent\nOrdinary Native Static Front\nSample Page\nBlog\nSearch posts\nSearch\nOrdinary Native Bob\n\nFebruary 3, 2001\n\nORDINARY NATIVE FIRST BODY Ordinary Native Bob\n\nPages: 1 2\n\n\u2190 Newer posts\n2 of 6\nOlder posts \u2192\nWorldAct\n\nJust another WorldAct site\n\nBlog\nOrdinary Native Journal\nOrdinary Native Numeric Child\nOrdinary Native Parent\nOrdinary Native Static Front\n\nDesigned with WorldAct\n\nLog in"
+      },
+      "missing": {
+        "boot": {
+          "archive": null,
+          "kind": "not-found",
+          "posts": [],
+          "query": {
+            "archivePage": 7,
+            "blockPages": {
+              "query-7-page": 1,
+              "query-8-page": 1
+            },
+            "category": "",
+            "commentPage": 2,
+            "contentPage": 1,
+            "date": null,
+            "search": "",
+            "tag": "",
+            "values": {
+              "commentPage": "2",
+              "page": "7",
+              "query-7-page": "1",
+              "query-8-page": "1"
+            }
+          },
+          "status": 404
+        },
+        "canonicalCount": 0,
+        "errors": [],
+        "heading": "Page not found",
+        "historyLength": 3,
+        "originalSSRNodeRetained": true,
+        "overflow": false,
+        "path": "/?page=7&query-7-page=1&query-8-page=1&commentPage=2",
+        "queryLoops": [],
+        "robotsCount": 0,
+        "text": "WorldAct\nOrdinary Native Journal\nOrdinary Native Numeric Child\nOrdinary Native Parent\nOrdinary Native Static Front\nSample Page\nPage not found\n\nIt looks like nothing was found at this location.\n\nReturn to home\nWorldAct\n\nJust another WorldAct site\n\nBlog\nOrdinary Native Journal\nOrdinary Native Numeric Child\nOrdinary Native Parent\nOrdinary Native Static Front\n\nDesigned with WorldAct\n\nLog in"
+      },
+      "home": {
+        "path": "/",
+        "historyLength": 4,
+        "modelReads": [
+          {
+            "id": 188,
+            "method": "GET",
+            "path": "/api/public/document?path=%2F",
+            "startedAt": 1794228942952,
+            "status": 200,
+            "finishedAt": 1794228942969,
+            "model": {
+              "status": 200,
+              "kind": "home",
+              "archive": null,
+              "query": {
+                "search": "",
+                "category": "",
+                "tag": "",
+                "date": null,
+                "archivePage": 1,
+                "contentPage": 1,
+                "blockPages": {},
+                "values": {
+                  "page": "1"
+                }
+              },
+              "posts": [
+                {
+                  "id": 6,
+                  "authorId": 2,
+                  "locked": false
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "back": {
+        "path": "/?page=7&query-7-page=1&query-8-page=1&commentPage=2",
+        "historyLength": 4,
+        "modelReads": [
+          {
+            "id": 190,
+            "method": "GET",
+            "path": "/api/public/document?path=%2F%3Fpage%3D7%26query-7-page%3D1%26query-8-page%3D1%26commentPage%3D2",
+            "startedAt": 1794228943082,
+            "status": 404,
+            "finishedAt": 1794228943097,
+            "model": {
+              "status": 404,
+              "kind": "not-found",
+              "archive": null,
+              "query": {
+                "search": "",
+                "category": "",
+                "tag": "",
+                "date": null,
+                "archivePage": 7,
+                "contentPage": 1,
+                "commentPage": 2,
+                "blockPages": {
+                  "query-7-page": 1,
+                  "query-8-page": 1
+                },
+                "values": {
+                  "page": "7",
+                  "query-7-page": "1",
+                  "query-8-page": "1",
+                  "commentPage": "2"
+                }
+              },
+              "posts": []
+            }
+          }
+        ]
+      },
+      "reloaded": {
+        "boot": {
+          "archive": null,
+          "kind": "not-found",
+          "posts": [],
+          "query": {
+            "archivePage": 7,
+            "blockPages": {
+              "query-7-page": 1,
+              "query-8-page": 1
+            },
+            "category": "",
+            "commentPage": 2,
+            "contentPage": 1,
+            "date": null,
+            "search": "",
+            "tag": "",
+            "values": {
+              "commentPage": "2",
+              "page": "7",
+              "query-7-page": "1",
+              "query-8-page": "1"
+            }
+          },
+          "status": 404
+        },
+        "canonicalCount": 0,
+        "errors": [],
+        "heading": "Page not found",
+        "historyLength": 4,
+        "originalSSRNodeRetained": true,
+        "overflow": false,
+        "path": "/?page=7&query-7-page=1&query-8-page=1&commentPage=2",
+        "queryLoops": [],
+        "robotsCount": 0,
+        "text": "WorldAct\nOrdinary Native Journal\nOrdinary Native Numeric Child\nOrdinary Native Parent\nOrdinary Native Static Front\nSample Page\nPage not found\n\nIt looks like nothing was found at this location.\n\nReturn to home\nWorldAct\n\nJust another WorldAct site\n\nBlog\nOrdinary Native Journal\nOrdinary Native Numeric Child\nOrdinary Native Parent\nOrdinary Native Static Front\n\nDesigned with WorldAct\n\nLog in"
+      },
+      "actualNativeGET404": true,
+      "actualHEAD404EmptyBody": true,
+      "screenshots": [
+        "../screens/public-listing-native-classic-valid-page2-375.png",
+        "../screens/public-listing-native-classic-missing-page7-375.png"
+      ]
+    },
+    {
+      "theme": "twentytwentyfive",
+      "width": 1440,
+      "scene": "ordinary-main-page2-200-page7-404-native-SSR-history-reload",
+      "valid": {
+        "boot": {
+          "archive": null,
+          "kind": "home",
+          "posts": [
+            {
+              "authorId": 3,
+              "id": 7,
+              "locked": false
+            }
+          ],
+          "query": {
+            "archivePage": 2,
+            "blockPages": {
+              "query-7-page": 1
+            },
+            "category": "",
+            "commentPage": 2,
+            "contentPage": 1,
+            "date": null,
+            "search": "",
+            "tag": "",
+            "values": {
+              "commentPage": "2",
+              "page": "2",
+              "query-7-page": "1"
+            }
+          },
+          "status": 200
+        },
+        "canonicalCount": 1,
+        "errors": [],
+        "heading": "Blog",
+        "historyLength": 2,
+        "originalSSRNodeRetained": true,
+        "overflow": false,
+        "path": "/?page=2&query-7-page=1&commentPage=2",
+        "queryLoops": [
+          {
+            "postTemplateChildren": 3,
+            "text": "Ordinary Native Visible One\n\nORDINARY NATIVE FIRST BODY Ordinary Native Visible One\n\nPages: 1 2\n\nFebruary 3, 2001\nProtected: Ordinary Native Locked twentytwentyfive\n\nThis content is password protected. To view it please enter your password below:\n\nPassword: Enter\n\nProtected: Ordinary Native Locked classic\n\nThis content is password protected. To view it please enter your password below:\n\nPassword: Enter\n\nPrevious Page\n1 2"
+          }
+        ],
+        "robotsCount": 0,
+        "text": "WorldAct\n\nOrdinary Native Journal\nOrdinary Native Parent\nOrdinary Native Static Front\nSample Page\nBlog\nOrdinary Native Visible One\n\nORDINARY NATIVE FIRST BODY Ordinary Native Visible One\n\nPages: 1 2\n\nFebruary 3, 2001\nProtected: Ordinary Native Locked twentytwentyfive\n\nThis content is password protected. To view it please enter your password below:\n\nPassword: Enter\n\nProtected: Ordinary Native Locked classic\n\nThis content is password protected. To view it please enter your password below:\n\nPassword: Enter\n\nPrevious Page\n1 2\nWorldAct\n\nJust another WorldAct site\n\nBlog\nAbout\nFAQs\nAuthors\nEvents\nShop\nPatterns\nThemes\n\nTwenty Twenty-Five\n\nDesigned with WordPress"
+      },
+      "missing": {
+        "boot": {
+          "archive": null,
+          "kind": "not-found",
+          "posts": [],
+          "query": {
+            "archivePage": 7,
+            "blockPages": {
+              "query-7-page": 1,
+              "query-8-page": 1
+            },
+            "category": "",
+            "commentPage": 2,
+            "contentPage": 1,
+            "date": null,
+            "search": "",
+            "tag": "",
+            "values": {
+              "commentPage": "2",
+              "page": "7",
+              "query-7-page": "1",
+              "query-8-page": "1"
+            }
+          },
+          "status": 404
+        },
+        "canonicalCount": 0,
+        "errors": [],
+        "heading": "Ordinary Native Missing Page",
+        "historyLength": 3,
+        "originalSSRNodeRetained": true,
+        "overflow": false,
+        "path": "/?page=7&query-7-page=1&query-8-page=1&commentPage=2",
+        "queryLoops": [
+          {
+            "postTemplateChildren": 0,
+            "text": ""
+          },
+          {
+            "postTemplateChildren": 1,
+            "text": "Ordinary Native Visible One\n\nORDINARY NATIVE FIRST BODY Ordinary Native Visible One\n\nPages: 1 2"
+          }
+        ],
+        "robotsCount": 0,
+        "text": "Ordinary Native Missing Page\n\nReturn to home\n\nSearch\nSearch\n\nORDINARY INHERITED LOOP\n\nORDINARY INDEPENDENT LOOP\n\nOrdinary Native Visible One\n\nORDINARY NATIVE FIRST BODY Ordinary Native Visible One\n\nPages: 1 2"
+      },
+      "home": {
+        "path": "/",
+        "historyLength": 4,
+        "modelReads": [
+          {
+            "id": 216,
+            "method": "GET",
+            "path": "/api/public/document?path=%2F",
+            "startedAt": 1794228945253,
+            "status": 200,
+            "finishedAt": 1794228945280,
+            "model": {
+              "status": 200,
+              "kind": "home",
+              "archive": null,
+              "query": {
+                "search": "",
+                "category": "",
+                "tag": "",
+                "date": null,
+                "archivePage": 1,
+                "contentPage": 1,
+                "blockPages": {},
+                "values": {
+                  "page": "1"
+                }
+              },
+              "posts": [
+                {
+                  "id": 6,
+                  "authorId": 2,
+                  "locked": false
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "back": {
+        "path": "/?page=7&query-7-page=1&query-8-page=1&commentPage=2",
+        "historyLength": 4,
+        "modelReads": [
+          {
+            "id": 219,
+            "method": "GET",
+            "path": "/api/public/document?path=%2F%3Fpage%3D7%26query-7-page%3D1%26query-8-page%3D1%26commentPage%3D2",
+            "startedAt": 1794228945383,
+            "status": 404,
+            "finishedAt": 1794228945404,
+            "model": {
+              "status": 404,
+              "kind": "not-found",
+              "archive": null,
+              "query": {
+                "search": "",
+                "category": "",
+                "tag": "",
+                "date": null,
+                "archivePage": 7,
+                "contentPage": 1,
+                "commentPage": 2,
+                "blockPages": {
+                  "query-7-page": 1,
+                  "query-8-page": 1
+                },
+                "values": {
+                  "page": "7",
+                  "query-7-page": "1",
+                  "query-8-page": "1",
+                  "commentPage": "2"
+                }
+              },
+              "posts": []
+            }
+          }
+        ]
+      },
+      "reloaded": {
+        "boot": {
+          "archive": null,
+          "kind": "not-found",
+          "posts": [],
+          "query": {
+            "archivePage": 7,
+            "blockPages": {
+              "query-7-page": 1,
+              "query-8-page": 1
+            },
+            "category": "",
+            "commentPage": 2,
+            "contentPage": 1,
+            "date": null,
+            "search": "",
+            "tag": "",
+            "values": {
+              "commentPage": "2",
+              "page": "7",
+              "query-7-page": "1",
+              "query-8-page": "1"
+            }
+          },
+          "status": 404
+        },
+        "canonicalCount": 0,
+        "errors": [],
+        "heading": "Ordinary Native Missing Page",
+        "historyLength": 4,
+        "originalSSRNodeRetained": true,
+        "overflow": false,
+        "path": "/?page=7&query-7-page=1&query-8-page=1&commentPage=2",
+        "queryLoops": [
+          {
+            "postTemplateChildren": 0,
+            "text": ""
+          },
+          {
+            "postTemplateChildren": 1,
+            "text": "Ordinary Native Visible One\n\nORDINARY NATIVE FIRST BODY Ordinary Native Visible One\n\nPages: 1 2"
+          }
+        ],
+        "robotsCount": 0,
+        "text": "Ordinary Native Missing Page\n\nReturn to home\n\nSearch\nSearch\n\nORDINARY INHERITED LOOP\n\nORDINARY INDEPENDENT LOOP\n\nOrdinary Native Visible One\n\nORDINARY NATIVE FIRST BODY Ordinary Native Visible One\n\nPages: 1 2"
+      },
+      "actualNativeGET404": true,
+      "actualHEAD404EmptyBody": true,
+      "screenshots": [
+        "../screens/public-listing-native-twentytwentyfive-valid-page2-1440.png",
+        "../screens/public-listing-native-twentytwentyfive-missing-page7-1440.png"
+      ],
+      "sourceGlobalSearch": {
+        "form": {
+          "action": "/",
+          "fields": [
+            "s"
+          ],
+          "method": "get"
+        },
+        "path": "/?s=Ordinary+Native+Visible",
+        "modelStatus": 200,
+        "ambientCountersAbsent": true
+      }
+    },
+    {
+      "theme": "twentytwentyfive",
+      "width": 768,
+      "scene": "ordinary-main-page2-200-page7-404-native-SSR-history-reload",
+      "valid": {
+        "boot": {
+          "archive": null,
+          "kind": "home",
+          "posts": [
+            {
+              "authorId": 3,
+              "id": 7,
+              "locked": false
+            }
+          ],
+          "query": {
+            "archivePage": 2,
+            "blockPages": {
+              "query-7-page": 1
+            },
+            "category": "",
+            "commentPage": 2,
+            "contentPage": 1,
+            "date": null,
+            "search": "",
+            "tag": "",
+            "values": {
+              "commentPage": "2",
+              "page": "2",
+              "query-7-page": "1"
+            }
+          },
+          "status": 200
+        },
+        "canonicalCount": 1,
+        "errors": [],
+        "heading": "Blog",
+        "historyLength": 2,
+        "originalSSRNodeRetained": true,
+        "overflow": false,
+        "path": "/?page=2&query-7-page=1&commentPage=2",
+        "queryLoops": [
+          {
+            "postTemplateChildren": 3,
+            "text": "Ordinary Native Visible One\n\nORDINARY NATIVE FIRST BODY Ordinary Native Visible One\n\nPages: 1 2\n\nFebruary 3, 2001\nProtected: Ordinary Native Locked twentytwentyfive\n\nThis content is password protected. To view it please enter your password below:\n\nPassword: Enter\n\nProtected: Ordinary Native Locked classic\n\nThis content is password protected. To view it please enter your password below:\n\nPassword: Enter\n\nPrevious Page\n1 2"
+          }
+        ],
+        "robotsCount": 0,
+        "text": "WorldAct\n\nOrdinary Native Journal\nOrdinary Native Parent\nOrdinary Native Static Front\nSample Page\nBlog\nOrdinary Native Visible One\n\nORDINARY NATIVE FIRST BODY Ordinary Native Visible One\n\nPages: 1 2\n\nFebruary 3, 2001\nProtected: Ordinary Native Locked twentytwentyfive\n\nThis content is password protected. To view it please enter your password below:\n\nPassword: Enter\n\nProtected: Ordinary Native Locked classic\n\nThis content is password protected. To view it please enter your password below:\n\nPassword: Enter\n\nPrevious Page\n1 2\nWorldAct\n\nJust another WorldAct site\n\nBlog\nAbout\nFAQs\nAuthors\nEvents\nShop\nPatterns\nThemes\n\nTwenty Twenty-Five\n\nDesigned with WordPress"
+      },
+      "missing": {
+        "boot": {
+          "archive": null,
+          "kind": "not-found",
+          "posts": [],
+          "query": {
+            "archivePage": 7,
+            "blockPages": {
+              "query-7-page": 1,
+              "query-8-page": 1
+            },
+            "category": "",
+            "commentPage": 2,
+            "contentPage": 1,
+            "date": null,
+            "search": "",
+            "tag": "",
+            "values": {
+              "commentPage": "2",
+              "page": "7",
+              "query-7-page": "1",
+              "query-8-page": "1"
+            }
+          },
+          "status": 404
+        },
+        "canonicalCount": 0,
+        "errors": [],
+        "heading": "Ordinary Native Missing Page",
+        "historyLength": 3,
+        "originalSSRNodeRetained": true,
+        "overflow": false,
+        "path": "/?page=7&query-7-page=1&query-8-page=1&commentPage=2",
+        "queryLoops": [
+          {
+            "postTemplateChildren": 0,
+            "text": ""
+          },
+          {
+            "postTemplateChildren": 1,
+            "text": "Ordinary Native Visible One\n\nORDINARY NATIVE FIRST BODY Ordinary Native Visible One\n\nPages: 1 2"
+          }
+        ],
+        "robotsCount": 0,
+        "text": "Ordinary Native Missing Page\n\nReturn to home\n\nSearch\nSearch\n\nORDINARY INHERITED LOOP\n\nORDINARY INDEPENDENT LOOP\n\nOrdinary Native Visible One\n\nORDINARY NATIVE FIRST BODY Ordinary Native Visible One\n\nPages: 1 2"
+      },
+      "home": {
+        "path": "/",
+        "historyLength": 4,
+        "modelReads": [
+          {
+            "id": 253,
+            "method": "GET",
+            "path": "/api/public/document?path=%2F",
+            "startedAt": 1794228947705,
+            "status": 200,
+            "finishedAt": 1794228947732,
+            "model": {
+              "status": 200,
+              "kind": "home",
+              "archive": null,
+              "query": {
+                "search": "",
+                "category": "",
+                "tag": "",
+                "date": null,
+                "archivePage": 1,
+                "contentPage": 1,
+                "blockPages": {},
+                "values": {
+                  "page": "1"
+                }
+              },
+              "posts": [
+                {
+                  "id": 6,
+                  "authorId": 2,
+                  "locked": false
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "back": {
+        "path": "/?page=7&query-7-page=1&query-8-page=1&commentPage=2",
+        "historyLength": 4,
+        "modelReads": [
+          {
+            "id": 256,
+            "method": "GET",
+            "path": "/api/public/document?path=%2F%3Fpage%3D7%26query-7-page%3D1%26query-8-page%3D1%26commentPage%3D2",
+            "startedAt": 1794228947833,
+            "status": 404,
+            "finishedAt": 1794228947855,
+            "model": {
+              "status": 404,
+              "kind": "not-found",
+              "archive": null,
+              "query": {
+                "search": "",
+                "category": "",
+                "tag": "",
+                "date": null,
+                "archivePage": 7,
+                "contentPage": 1,
+                "commentPage": 2,
+                "blockPages": {
+                  "query-7-page": 1,
+                  "query-8-page": 1
+                },
+                "values": {
+                  "page": "7",
+                  "query-7-page": "1",
+                  "query-8-page": "1",
+                  "commentPage": "2"
+                }
+              },
+              "posts": []
+            }
+          }
+        ]
+      },
+      "reloaded": {
+        "boot": {
+          "archive": null,
+          "kind": "not-found",
+          "posts": [],
+          "query": {
+            "archivePage": 7,
+            "blockPages": {
+              "query-7-page": 1,
+              "query-8-page": 1
+            },
+            "category": "",
+            "commentPage": 2,
+            "contentPage": 1,
+            "date": null,
+            "search": "",
+            "tag": "",
+            "values": {
+              "commentPage": "2",
+              "page": "7",
+              "query-7-page": "1",
+              "query-8-page": "1"
+            }
+          },
+          "status": 404
+        },
+        "canonicalCount": 0,
+        "errors": [],
+        "heading": "Ordinary Native Missing Page",
+        "historyLength": 4,
+        "originalSSRNodeRetained": true,
+        "overflow": false,
+        "path": "/?page=7&query-7-page=1&query-8-page=1&commentPage=2",
+        "queryLoops": [
+          {
+            "postTemplateChildren": 0,
+            "text": ""
+          },
+          {
+            "postTemplateChildren": 1,
+            "text": "Ordinary Native Visible One\n\nORDINARY NATIVE FIRST BODY Ordinary Native Visible One\n\nPages: 1 2"
+          }
+        ],
+        "robotsCount": 0,
+        "text": "Ordinary Native Missing Page\n\nReturn to home\n\nSearch\nSearch\n\nORDINARY INHERITED LOOP\n\nORDINARY INDEPENDENT LOOP\n\nOrdinary Native Visible One\n\nORDINARY NATIVE FIRST BODY Ordinary Native Visible One\n\nPages: 1 2"
+      },
+      "actualNativeGET404": true,
+      "actualHEAD404EmptyBody": true,
+      "screenshots": [
+        "../screens/public-listing-native-twentytwentyfive-valid-page2-768.png",
+        "../screens/public-listing-native-twentytwentyfive-missing-page7-768.png"
+      ],
+      "sourceGlobalSearch": {
+        "form": {
+          "action": "/",
+          "fields": [
+            "s"
+          ],
+          "method": "get"
+        },
+        "path": "/?s=Ordinary+Native+Visible",
+        "modelStatus": 200,
+        "ambientCountersAbsent": true
+      }
+    },
+    {
+      "theme": "twentytwentyfive",
+      "width": 375,
+      "scene": "ordinary-main-page2-200-page7-404-native-SSR-history-reload",
+      "valid": {
+        "boot": {
+          "archive": null,
+          "kind": "home",
+          "posts": [
+            {
+              "authorId": 3,
+              "id": 7,
+              "locked": false
+            }
+          ],
+          "query": {
+            "archivePage": 2,
+            "blockPages": {
+              "query-7-page": 1
+            },
+            "category": "",
+            "commentPage": 2,
+            "contentPage": 1,
+            "date": null,
+            "search": "",
+            "tag": "",
+            "values": {
+              "commentPage": "2",
+              "page": "2",
+              "query-7-page": "1"
+            }
+          },
+          "status": 200
+        },
+        "canonicalCount": 1,
+        "errors": [],
+        "heading": "Blog",
+        "historyLength": 2,
+        "originalSSRNodeRetained": true,
+        "overflow": false,
+        "path": "/?page=2&query-7-page=1&commentPage=2",
+        "queryLoops": [
+          {
+            "postTemplateChildren": 3,
+            "text": "Ordinary Native Visible One\n\nORDINARY NATIVE FIRST BODY Ordinary Native Visible One\n\nPages: 1 2\n\nFebruary 3, 2001\nProtected: Ordinary Native Locked twentytwentyfive\n\nThis content is password protected. To view it please enter your password below:\n\nPassword: Enter\n\nProtected: Ordinary Native Locked classic\n\nThis content is password protected. To view it please enter your password below:\n\nPassword: Enter\n\nPrevious Page\n1 2"
+          }
+        ],
+        "robotsCount": 0,
+        "text": "WorldAct\n\nBlog\nOrdinary Native Visible One\n\nORDINARY NATIVE FIRST BODY Ordinary Native Visible One\n\nPages: 1 2\n\nFebruary 3, 2001\nProtected: Ordinary Native Locked twentytwentyfive\n\nThis content is password protected. To view it please enter your password below:\n\nPassword: Enter\n\nProtected: Ordinary Native Locked classic\n\nThis content is password protected. To view it please enter your password below:\n\nPassword: Enter\n\nPrevious Page\n1 2\nWorldAct\n\nJust another WorldAct site\n\nBlog\nAbout\nFAQs\nAuthors\nEvents\nShop\nPatterns\nThemes\n\nTwenty Twenty-Five\n\nDesigned with WordPress"
+      },
+      "missing": {
+        "boot": {
+          "archive": null,
+          "kind": "not-found",
+          "posts": [],
+          "query": {
+            "archivePage": 7,
+            "blockPages": {
+              "query-7-page": 1,
+              "query-8-page": 1
+            },
+            "category": "",
+            "commentPage": 2,
+            "contentPage": 1,
+            "date": null,
+            "search": "",
+            "tag": "",
+            "values": {
+              "commentPage": "2",
+              "page": "7",
+              "query-7-page": "1",
+              "query-8-page": "1"
+            }
+          },
+          "status": 404
+        },
+        "canonicalCount": 0,
+        "errors": [],
+        "heading": "Ordinary Native Missing Page",
+        "historyLength": 3,
+        "originalSSRNodeRetained": true,
+        "overflow": false,
+        "path": "/?page=7&query-7-page=1&query-8-page=1&commentPage=2",
+        "queryLoops": [
+          {
+            "postTemplateChildren": 0,
+            "text": ""
+          },
+          {
+            "postTemplateChildren": 1,
+            "text": "Ordinary Native Visible One\n\nORDINARY NATIVE FIRST BODY Ordinary Native Visible One\n\nPages: 1 2"
+          }
+        ],
+        "robotsCount": 0,
+        "text": "Ordinary Native Missing Page\n\nReturn to home\n\nSearch\nSearch\n\nORDINARY INHERITED LOOP\n\nORDINARY INDEPENDENT LOOP\n\nOrdinary Native Visible One\n\nORDINARY NATIVE FIRST BODY Ordinary Native Visible One\n\nPages: 1 2"
+      },
+      "home": {
+        "path": "/",
+        "historyLength": 4,
+        "modelReads": [
+          {
+            "id": 290,
+            "method": "GET",
+            "path": "/api/public/document?path=%2F",
+            "startedAt": 1794228950152,
+            "status": 200,
+            "finishedAt": 1794228950183,
+            "model": {
+              "status": 200,
+              "kind": "home",
+              "archive": null,
+              "query": {
+                "search": "",
+                "category": "",
+                "tag": "",
+                "date": null,
+                "archivePage": 1,
+                "contentPage": 1,
+                "blockPages": {},
+                "values": {
+                  "page": "1"
+                }
+              },
+              "posts": [
+                {
+                  "id": 6,
+                  "authorId": 2,
+                  "locked": false
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "back": {
+        "path": "/?page=7&query-7-page=1&query-8-page=1&commentPage=2",
+        "historyLength": 4,
+        "modelReads": [
+          {
+            "id": 293,
+            "method": "GET",
+            "path": "/api/public/document?path=%2F%3Fpage%3D7%26query-7-page%3D1%26query-8-page%3D1%26commentPage%3D2",
+            "startedAt": 1794228950283,
+            "status": 404,
+            "finishedAt": 1794228950301,
+            "model": {
+              "status": 404,
+              "kind": "not-found",
+              "archive": null,
+              "query": {
+                "search": "",
+                "category": "",
+                "tag": "",
+                "date": null,
+                "archivePage": 7,
+                "contentPage": 1,
+                "commentPage": 2,
+                "blockPages": {
+                  "query-7-page": 1,
+                  "query-8-page": 1
+                },
+                "values": {
+                  "page": "7",
+                  "query-7-page": "1",
+                  "query-8-page": "1",
+                  "commentPage": "2"
+                }
+              },
+              "posts": []
+            }
+          }
+        ]
+      },
+      "reloaded": {
+        "boot": {
+          "archive": null,
+          "kind": "not-found",
+          "posts": [],
+          "query": {
+            "archivePage": 7,
+            "blockPages": {
+              "query-7-page": 1,
+              "query-8-page": 1
+            },
+            "category": "",
+            "commentPage": 2,
+            "contentPage": 1,
+            "date": null,
+            "search": "",
+            "tag": "",
+            "values": {
+              "commentPage": "2",
+              "page": "7",
+              "query-7-page": "1",
+              "query-8-page": "1"
+            }
+          },
+          "status": 404
+        },
+        "canonicalCount": 0,
+        "errors": [],
+        "heading": "Ordinary Native Missing Page",
+        "historyLength": 4,
+        "originalSSRNodeRetained": true,
+        "overflow": false,
+        "path": "/?page=7&query-7-page=1&query-8-page=1&commentPage=2",
+        "queryLoops": [
+          {
+            "postTemplateChildren": 0,
+            "text": ""
+          },
+          {
+            "postTemplateChildren": 1,
+            "text": "Ordinary Native Visible One\n\nORDINARY NATIVE FIRST BODY Ordinary Native Visible One\n\nPages: 1 2"
+          }
+        ],
+        "robotsCount": 0,
+        "text": "Ordinary Native Missing Page\n\nReturn to home\n\nSearch\nSearch\n\nORDINARY INHERITED LOOP\n\nORDINARY INDEPENDENT LOOP\n\nOrdinary Native Visible One\n\nORDINARY NATIVE FIRST BODY Ordinary Native Visible One\n\nPages: 1 2"
+      },
+      "actualNativeGET404": true,
+      "actualHEAD404EmptyBody": true,
+      "screenshots": [
+        "../screens/public-listing-native-twentytwentyfive-valid-page2-375.png",
+        "../screens/public-listing-native-twentytwentyfive-missing-page7-375.png",
+        "../screens/public-listing-native-twentytwentyfive-global-search-375.png"
+      ],
+      "sourceGlobalSearch": {
+        "form": {
+          "action": "/",
+          "fields": [
+            "s"
+          ],
+          "method": "get"
+        },
+        "path": "/?s=Ordinary+Native+Visible",
+        "modelStatus": 200,
+        "ambientCountersAbsent": true
+      }
+    }
+  ]
+}

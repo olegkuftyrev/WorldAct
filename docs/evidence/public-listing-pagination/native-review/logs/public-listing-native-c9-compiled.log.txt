@@ -1,0 +1,161 @@
+WorldAct database migrated.
+WorldAct seeded. Sign in with username admin or your administrator email.
+Running against a disposable local database and upload directory; outgoing mail uses the local outbox.
+▶ ordinary main listing page counts select status without consuming independent content counters
+  ✔ actual home excessive main page is404 on all listing transports (98.602333ms)
+  ✔ actual search excessive main page is404 on all listing transports (42.474208ms)
+  ✔ actual excerpt-only search excessive main page is404 on all listing transports (46.56475ms)
+  ✔ actual category path excessive main page is404 on all listing transports (41.073833ms)
+  ✔ actual tag path excessive main page is404 on all listing transports (41.728291ms)
+  ✔ actual date path excessive main page is404 on all listing transports (40.198042ms)
+  ✔ actual numeric author excessive main page is404 on all listing transports (30.57225ms)
+  ✔ actual full intersection excessive main page is404 on all listing transports (36.914625ms)
+  ✔ actual empty known category excessive main page is404 on all listing transports (39.490041ms)
+  ✔ actual unknown numeric query excessive main page is404 on all listing transports (44.561625ms)
+  ✔ actual unknown category query excessive main page is404 on all listing transports (34.22175ms)
+  ✔ actual empty date query excessive main page is404 on all listing transports (31.900042ms)
+  ✔ valid later pages and endpoint A retain their current shapes (247.809375ms)
+  ✔ all existing first-page empty query quirks remain200 (359.84ms)
+  ✔ anonymous protected search is empty later but authenticated main count stays valid (76.662333ms)
+  ✔ genuinely empty home first page stays200 and later page404 (73.702917ms)
+  ✔ resolved configured posts-page keeps its identity while empty later pages404 including Plain (163.99775ms)
+  ✔ fixed bodies, static fronts and selected template postId never consume an ordinary archive page (243.864459ms)
+✔ ordinary main listing page counts select status without consuming independent content counters (2165.006625ms)
+ℹ {"path":"/?page=7","statuses":{"nativeGet":404,"nativeHead":404,"document":404,"site":404,"template":404}}
+ℹ {"path":"/?search=Paging+Visible&page=4","statuses":{"nativeGet":404,"nativeHead":404,"document":404,"site":404,"template":404}}
+ℹ {"path":"/?search=ExcerptNeedle&page=3","statuses":{"nativeGet":404,"nativeHead":404,"document":404,"site":404,"template":404}}
+ℹ {"path":"/category/ordinary-page-1794228819317-category/?page=6","statuses":{"nativeGet":404,"nativeHead":404,"document":404,"site":404,"template":404,"resolve":404}}
+ℹ {"path":"/tag/ordinary-page-1794228819317-tag/?page=6","statuses":{"nativeGet":404,"nativeHead":404,"document":404,"site":404,"template":404,"resolve":404}}
+ℹ {"path":"/2001/02/03/?page=6","statuses":{"nativeGet":404,"nativeHead":404,"document":404,"site":404,"template":404,"resolve":404}}
+ℹ {"path":"/?author=2&page=6","statuses":{"nativeGet":404,"nativeHead":404,"document":404,"site":404,"template":404}}
+ℹ {"path":"/?author=2&category=ordinary-page-1794228819317-category&tag=ordinary-page-1794228819317-tag&year=2001&monthnum=2&day=3&search=ExcerptNeedle&page=3","statuses":{"nativeGet":404,"nativeHead":404,"document":404,"site":404,"template":404}}
+ℹ {"path":"/category/ordinary-page-1794228819317-empty/?page=2","statuses":{"nativeGet":404,"nativeHead":404,"document":404,"site":404,"template":404,"resolve":404}}
+ℹ {"path":"/?author=2147483647&page=2","statuses":{"nativeGet":404,"nativeHead":404,"document":404,"site":404,"template":404}}
+ℹ {"path":"/?category=missing-ordinary-page-1794228819317&page=2","statuses":{"nativeGet":404,"nativeHead":404,"document":404,"site":404,"template":404}}
+ℹ {"path":"/?year=1901&monthnum=2&page=2","statuses":{"nativeGet":404,"nativeHead":404,"document":404,"site":404,"template":404}}
+ℹ {"path":"/?page=2","statuses":{"nativeGet":200,"nativeHead":200,"document":200,"site":200,"template":200}}
+ℹ {"path":"/?search=ExcerptNeedle&page=2","statuses":{"nativeGet":200,"nativeHead":200,"document":200,"site":200,"template":200}}
+ℹ {"path":"/category/ordinary-page-1794228819317-category/?page=2","statuses":{"nativeGet":200,"nativeHead":200,"document":200,"site":200,"template":200,"resolve":200}}
+ℹ {"path":"/2001/02/03/?page=2","statuses":{"nativeGet":200,"nativeHead":200,"document":200,"site":200,"template":200,"resolve":200}}
+ℹ {"path":"/?author=2&page=2","statuses":{"nativeGet":200,"nativeHead":200,"document":200,"site":200,"template":200}}
+ℹ {"path":"/?search=absent-ordinary-page-1794228819317","statuses":{"nativeGet":200,"nativeHead":200,"document":200,"site":200,"template":200}}
+ℹ {"path":"/?s=","statuses":{"nativeGet":200,"nativeHead":200,"document":200,"site":200,"template":200}}
+ℹ {"path":"/?s=%20%20","statuses":{"nativeGet":200,"nativeHead":200,"document":200,"site":200,"template":200}}
+ℹ {"path":"/?author=2147483647","statuses":{"nativeGet":200,"nativeHead":200,"document":200,"site":200,"template":200}}
+ℹ {"path":"/?category=missing-ordinary-page-1794228819317","statuses":{"nativeGet":200,"nativeHead":200,"document":200,"site":200,"template":200}}
+ℹ {"path":"/?year=1901&monthnum=2","statuses":{"nativeGet":200,"nativeHead":200,"document":200,"site":200,"template":200}}
+ℹ {"path":"/category/ordinary-page-1794228819317-empty/","statuses":{"nativeGet":200,"nativeHead":200,"document":200,"site":200,"template":200}}
+ℹ {"path":"/?query-7-page=999&commentPage=999","statuses":{"nativeGet":200,"nativeHead":200,"document":200,"site":200,"template":200}}
+ℹ {"path":"/?paged=999","statuses":{"nativeGet":200,"nativeHead":200,"document":200,"site":200,"template":200}}
+ℹ {"path":"/?search=ProtectedNeedle&page=2","statuses":{"nativeGet":404,"nativeHead":404,"document":404,"site":404,"template":404}}
+ℹ {"path":"/?search=ProtectedNeedle&page=2","statuses":{"nativeGet":200,"nativeHead":200,"document":200,"site":200,"template":200}}
+ℹ {"path":"/","statuses":{"nativeGet":200,"nativeHead":200,"document":200,"site":200,"template":200}}
+ℹ {"path":"/?page=2","statuses":{"nativeGet":404,"nativeHead":404,"document":404,"site":404,"template":404}}
+ℹ {"path":"/?page_id=14&page=7","statuses":{"nativeGet":404,"nativeHead":404,"document":404,"site":404,"template":404,"resolve":404}}
+ℹ {"path":"/ordinary-page-1794228819317-posts/?page=7","statuses":{"nativeGet":404,"nativeHead":404,"document":404,"site":404,"template":404,"resolve":404}}
+ℹ {"path":"/ordinary-page-1794228819317-posts/?page=2","statuses":{"nativeGet":200,"nativeHead":200,"document":200,"site":200,"template":200,"resolve":200}}
+ℹ {"path":"/?page_id=14&page=2","statuses":{"nativeGet":200,"nativeHead":200,"document":200,"site":200,"template":200,"resolve":200}}
+ℹ tests 19
+ℹ suites 0
+ℹ pass 19
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2486.250541
+▶ ordinary empty page and existing pretty-author filtered paging preserve their prior status
+  ✔ empty first main page stays200 /?page= (71.385625ms)
+  ✔ empty first main page stays200 /?author=1&page= (47.839375ms)
+  ✔ empty first main page stays200 /?category=missing-ordinary-preserved-page-1794228822056&page= (35.881708ms)
+  ✔ resolved pretty author retains its existing unfiltered page policy (48.232917ms)
+✔ ordinary empty page and existing pretty-author filtered paging preserve their prior status (344.144917ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 5
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 553.489292
+▶ empty visible name retains direct-site normalization and search aliases
+  ✔ explicit empty-name alias remains filtered (57.410209ms)
+  ✔ visible path-only alias remains filtered (42.023417ms)
+✔ empty visible name retains direct-site normalization and search aliases (239.478125ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 3
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 441.426292
+▶ direct site preserves its established explicit and path-only empty page boundary
+  ✔ explicit (8.003708ms)
+  ✔ path-only (25.772875ms)
+  ✔ explicit plus path (4.6435ms)
+✔ direct site preserves its established explicit and path-only empty page boundary (139.783541ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 344.850834
+▶ ordinary resolve preflight cannot replace its selected canonical body with a later slug owner
+  ✔ unchanged canonical body2 survives the same actual preflight wait (34.574125ms)
+  ✔ held preflight retains its first body ID after a canonical slug replacement (33.544791ms)
+✔ ordinary resolve preflight cannot replace its selected canonical body with a later slug owner (283.364625ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 3
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 487.911792
+▶ Node renders real public documents with actual identity status and preserves other HTTP handlers
+  ✔ empty ordinary first pages stay valid and empty later main pages return404 (237.731959ms)
+  ✔ HTML bootstraps remain private across anonymous, session and password contexts without changing authentication (559.670458ms)
+  ✔ all source presets, hierarchical pages, aliases, fixed IDs and clamped body pages keep public identity (2006.573792ms)
+  ✔ selected static-front body paging requires the same actual public identity (514.020125ms)
+  ✔ accepted category canonicals with more than 64 ancestors remain public within the URL bound (486.908167ms)
+  ✔ missing, unpublished, wrong-type and malformed fixed identities return 404 HTML (743.206541ms)
+  ✔ taxonomy and date archives share actual existence and local dates with the API resolver (480.859833ms)
+  ✔ production headers describe singular open unprotected records, never home queries or archives (1369.868292ms)
+  ✔ framework destinations, legacy redirects, JSON APIs, feeds and files retain their real handlers (47.337625ms)
+  ✔ malformed and oversized URLs have bounded errors and database failures stay generic 500s (47.659417ms)
+✔ Node renders real public documents with actual identity status and preserves other HTTP handlers (6728.574291ms)
+✔ missing index errors are separate from document classification on the actual Node server (612.727459ms)
+ℹ tests 12
+ℹ suites 0
+ℹ pass 12
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 7660.004958
+✔ public views render persisted four-theme documents in Node without DOM globals and retain native forms (789.142958ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 1
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1111.163625
+▶ ordinary preflight retains the first validated pretty author for direct site and template requests
+  ✔ site keeps A through the same measured projection wait (30.952917ms)
+  ✔ site does not rebind to later public B after validated pretty A (27.2605ms)
+  ✔ template keeps A through the same measured projection wait (25.527083ms)
+  ✔ template does not rebind to later public B after validated pretty A (26.788625ms)
+✔ ordinary preflight retains the first validated pretty author for direct site and template requests (365.170792ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 5
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 565.422667
+Isolated regression complete: 8 test files passed.

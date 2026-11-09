@@ -1,0 +1,14 @@
+classic 1440 main404/hydration/history PASS
+classic 768 main404/hydration/history PASS
+classic 375 main404/hydration/history PASS
+file:///private[private-evidence-directory]/public-listing-native-harness/browser.mjs:4
+export function br(...args){const r=spawnSync(binary,['--session',session,...args],{encoding:'utf8',maxBuffer:2e7});if(r.status)throw Error(r.stderr+r.stdout);return r.stdout;}
+                                                                                                                                      ^
+
+Error: ✗ Unknown action 'Search' for find. Valid actions: click, fill, check, hover, text.
+
+    at br (file:///private[private-evidence-directory]/public-listing-native-harness/browser.mjs:4:135)
+    at file:///private[private-evidence-directory]/public-listing-native-harness/matrix.mjs:13:272
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+
+Node.js v24.14.1

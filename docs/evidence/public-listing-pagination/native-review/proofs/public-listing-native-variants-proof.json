@@ -1,0 +1,2121 @@
+{
+  "code": "c9cc2b13f5baba71cb88f9685c6937daa02f9310",
+  "tree": "05d7338089c08211f1a170b7b58e0032e579e431",
+  "nodeSha256": "b8012b887e1b2281774e7318ad70f4a9debfb4d396eaeb3cd41e8e752ae1d80c",
+  "rows": [
+    {
+      "theme": "classic",
+      "scene": "33-nativeGET-HEAD-document-status-boundaries-and-current-quirks",
+      "observations": [
+        {
+          "label": "home-excessive",
+          "path": "/?page=7",
+          "nativeGET": 404,
+          "nativeHEAD": 404,
+          "headBodyEmpty": true,
+          "document": 404,
+          "kind": "not-found",
+          "archive": null,
+          "query": {
+            "search": "",
+            "category": "",
+            "tag": "",
+            "date": null,
+            "archivePage": 7,
+            "contentPage": 1,
+            "blockPages": {},
+            "values": {
+              "page": "7"
+            }
+          },
+          "posts": [],
+          "totalPosts": 0
+        },
+        {
+          "label": "title-search-excessive",
+          "path": "/?search=Ordinary+Native+Visible&page=3",
+          "nativeGET": 404,
+          "nativeHEAD": 404,
+          "headBodyEmpty": true,
+          "document": 404,
+          "kind": "not-found",
+          "archive": null,
+          "query": {
+            "search": "Ordinary Native Visible",
+            "category": "",
+            "tag": "",
+            "date": null,
+            "archivePage": 3,
+            "contentPage": 1,
+            "blockPages": {},
+            "values": {
+              "search": "Ordinary Native Visible",
+              "page": "3"
+            }
+          },
+          "posts": [],
+          "totalPosts": 0
+        },
+        {
+          "label": "excerpt-only-excessive",
+          "path": "/?search=NativeExcerptNeedle&page=3",
+          "nativeGET": 404,
+          "nativeHEAD": 404,
+          "headBodyEmpty": true,
+          "document": 404,
+          "kind": "not-found",
+          "archive": null,
+          "query": {
+            "search": "NativeExcerptNeedle",
+            "category": "",
+            "tag": "",
+            "date": null,
+            "archivePage": 3,
+            "contentPage": 1,
+            "blockPages": {},
+            "values": {
+              "search": "NativeExcerptNeedle",
+              "page": "3"
+            }
+          },
+          "posts": [],
+          "totalPosts": 0
+        },
+        {
+          "label": "category-excessive",
+          "path": "/category/listing-native-news-d44594c7/?page=6",
+          "nativeGET": 404,
+          "nativeHEAD": 404,
+          "headBodyEmpty": true,
+          "document": 404,
+          "kind": "not-found",
+          "archive": {
+            "id": 2,
+            "taxonomy": "category",
+            "slug": "listing-native-news-d44594c7",
+            "name": "Ordinary Native News"
+          },
+          "query": {
+            "search": "",
+            "category": "listing-native-news-d44594c7",
+            "tag": "",
+            "date": null,
+            "archivePage": 6,
+            "contentPage": 1,
+            "blockPages": {},
+            "values": {
+              "page": "6",
+              "category": "listing-native-news-d44594c7"
+            }
+          },
+          "posts": [],
+          "totalPosts": 0
+        },
+        {
+          "label": "tag-excessive",
+          "path": "/tag/listing-native-tag-d44594c7/?page=6",
+          "nativeGET": 404,
+          "nativeHEAD": 404,
+          "headBodyEmpty": true,
+          "document": 404,
+          "kind": "not-found",
+          "archive": {
+            "id": 5,
+            "taxonomy": "tag",
+            "slug": "listing-native-tag-d44594c7",
+            "name": "Ordinary Native Tag"
+          },
+          "query": {
+            "search": "",
+            "category": "",
+            "tag": "listing-native-tag-d44594c7",
+            "date": null,
+            "archivePage": 6,
+            "contentPage": 1,
+            "blockPages": {},
+            "values": {
+              "page": "6",
+              "tag": "listing-native-tag-d44594c7"
+            }
+          },
+          "posts": [],
+          "totalPosts": 0
+        },
+        {
+          "label": "date-excessive",
+          "path": "/2001/02/03/?page=4",
+          "nativeGET": 404,
+          "nativeHEAD": 404,
+          "headBodyEmpty": true,
+          "document": 404,
+          "kind": "not-found",
+          "archive": {
+            "type": "date",
+            "year": 2001,
+            "month": 2,
+            "day": 3,
+            "name": "Day: February 3, 2001",
+            "permalink": "/2001/02/03/"
+          },
+          "query": {
+            "search": "",
+            "category": "",
+            "tag": "",
+            "date": {
+              "type": "date",
+              "year": 2001,
+              "month": 2,
+              "day": 3,
+              "name": "Day: February 3, 2001",
+              "permalink": "/2001/02/03/"
+            },
+            "archivePage": 4,
+            "contentPage": 1,
+            "blockPages": {},
+            "values": {
+              "page": "4",
+              "year": "2001",
+              "monthnum": "2",
+              "day": "3"
+            }
+          },
+          "posts": [],
+          "totalPosts": 0
+        },
+        {
+          "label": "numeric-author-excessive",
+          "path": "/?author=2&page=6",
+          "nativeGET": 404,
+          "nativeHEAD": 404,
+          "headBodyEmpty": true,
+          "document": 404,
+          "kind": "not-found",
+          "archive": null,
+          "query": {
+            "search": "",
+            "category": "",
+            "tag": "",
+            "author": 2,
+            "date": null,
+            "archivePage": 6,
+            "contentPage": 1,
+            "blockPages": {},
+            "values": {
+              "author": "2",
+              "page": "6"
+            }
+          },
+          "posts": [],
+          "totalPosts": 0
+        },
+        {
+          "label": "full-intersection-excessive",
+          "path": "/?author=2&category=listing-native-news-d44594c7&tag=listing-native-tag-d44594c7&year=2001&monthnum=2&day=3&search=NativeExcerptNeedle&page=3",
+          "nativeGET": 404,
+          "nativeHEAD": 404,
+          "headBodyEmpty": true,
+          "document": 404,
+          "kind": "not-found",
+          "archive": null,
+          "query": {
+            "search": "NativeExcerptNeedle",
+            "category": "listing-native-news-d44594c7",
+            "tag": "listing-native-tag-d44594c7",
+            "author": 2,
+            "date": null,
+            "archivePage": 3,
+            "contentPage": 1,
+            "blockPages": {},
+            "values": {
+              "author": "2",
+              "category": "listing-native-news-d44594c7",
+              "tag": "listing-native-tag-d44594c7",
+              "year": "2001",
+              "monthnum": "2",
+              "day": "3",
+              "search": "NativeExcerptNeedle",
+              "page": "3"
+            }
+          },
+          "posts": [],
+          "totalPosts": 0
+        },
+        {
+          "label": "known-empty-category-later",
+          "path": "/category/listing-native-empty-d44594c7/?page=2",
+          "nativeGET": 404,
+          "nativeHEAD": 404,
+          "headBodyEmpty": true,
+          "document": 404,
+          "kind": "not-found",
+          "archive": {
+            "id": 4,
+            "taxonomy": "category",
+            "slug": "listing-native-empty-d44594c7",
+            "name": "Ordinary Native Empty"
+          },
+          "query": {
+            "search": "",
+            "category": "listing-native-empty-d44594c7",
+            "tag": "",
+            "date": null,
+            "archivePage": 2,
+            "contentPage": 1,
+            "blockPages": {},
+            "values": {
+              "page": "2",
+              "category": "listing-native-empty-d44594c7"
+            }
+          },
+          "posts": [],
+          "totalPosts": 0
+        },
+        {
+          "label": "unknown-numeric-query-later",
+          "path": "/?author=2147483647&page=2",
+          "nativeGET": 404,
+          "nativeHEAD": 404,
+          "headBodyEmpty": true,
+          "document": 404,
+          "kind": "not-found",
+          "archive": null,
+          "query": {
+            "search": "",
+            "category": "",
+            "tag": "",
+            "author": 2147483647,
+            "date": null,
+            "archivePage": 2,
+            "contentPage": 1,
+            "blockPages": {},
+            "values": {
+              "author": "2147483647",
+              "page": "2"
+            }
+          },
+          "posts": [],
+          "totalPosts": 0
+        },
+        {
+          "label": "unknown-category-query-later",
+          "path": "/?category=listing-native-absent&page=2",
+          "nativeGET": 404,
+          "nativeHEAD": 404,
+          "headBodyEmpty": true,
+          "document": 404,
+          "kind": "not-found",
+          "archive": null,
+          "query": {
+            "search": "",
+            "category": "listing-native-absent",
+            "tag": "",
+            "date": null,
+            "archivePage": 2,
+            "contentPage": 1,
+            "blockPages": {},
+            "values": {
+              "category": "listing-native-absent",
+              "page": "2"
+            }
+          },
+          "posts": [],
+          "totalPosts": 0
+        },
+        {
+          "label": "empty-query-date-later",
+          "path": "/?year=1901&monthnum=2&page=2",
+          "nativeGET": 404,
+          "nativeHEAD": 404,
+          "headBodyEmpty": true,
+          "document": 404,
+          "kind": "not-found",
+          "archive": null,
+          "query": {
+            "search": "",
+            "category": "",
+            "tag": "",
+            "date": null,
+            "archivePage": 2,
+            "contentPage": 1,
+            "blockPages": {},
+            "values": {
+              "year": "1901",
+              "monthnum": "2",
+              "page": "2"
+            }
+          },
+          "posts": [],
+          "totalPosts": 0
+        },
+        {
+          "label": "anonymous-protected-search-later",
+          "path": "/?search=Ordinary+Native+Locked&page=2",
+          "nativeGET": 404,
+          "nativeHEAD": 404,
+          "headBodyEmpty": true,
+          "document": 404,
+          "kind": "not-found",
+          "archive": null,
+          "query": {
+            "search": "Ordinary Native Locked",
+            "category": "",
+            "tag": "",
+            "date": null,
+            "archivePage": 2,
+            "contentPage": 1,
+            "blockPages": {},
+            "values": {
+              "search": "Ordinary Native Locked",
+              "page": "2"
+            }
+          },
+          "posts": [],
+          "totalPosts": 0
+        },
+        {
+          "label": "valid-home-page2",
+          "path": "/?page=2",
+          "nativeGET": 200,
+          "nativeHEAD": 200,
+          "headBodyEmpty": true,
+          "document": 200,
+          "kind": "home",
+          "archive": null,
+          "query": {
+            "search": "",
+            "category": "",
+            "tag": "",
+            "date": null,
+            "archivePage": 2,
+            "contentPage": 1,
+            "blockPages": {},
+            "values": {
+              "page": "2"
+            }
+          },
+          "posts": [
+            {
+              "id": 7,
+              "authorId": 3,
+              "locked": false
+            }
+          ],
+          "totalPosts": 6
+        },
+        {
+          "label": "valid-title-search-page2",
+          "path": "/?search=Ordinary+Native+Visible&page=2",
+          "nativeGET": 200,
+          "nativeHEAD": 200,
+          "headBodyEmpty": true,
+          "document": 200,
+          "kind": "archive",
+          "archive": null,
+          "query": {
+            "search": "Ordinary Native Visible",
+            "category": "",
+            "tag": "",
+            "date": null,
+            "archivePage": 2,
+            "contentPage": 1,
+            "blockPages": {},
+            "values": {
+              "search": "Ordinary Native Visible",
+              "page": "2"
+            }
+          },
+          "posts": [
+            {
+              "id": 4,
+              "authorId": 2,
+              "locked": false
+            }
+          ],
+          "totalPosts": 2
+        },
+        {
+          "label": "valid-category-page2",
+          "path": "/category/listing-native-news-d44594c7/?page=2",
+          "nativeGET": 200,
+          "nativeHEAD": 200,
+          "headBodyEmpty": true,
+          "document": 200,
+          "kind": "archive",
+          "archive": {
+            "id": 2,
+            "taxonomy": "category",
+            "slug": "listing-native-news-d44594c7",
+            "name": "Ordinary Native News"
+          },
+          "query": {
+            "search": "",
+            "category": "listing-native-news-d44594c7",
+            "tag": "",
+            "date": null,
+            "archivePage": 2,
+            "contentPage": 1,
+            "blockPages": {},
+            "values": {
+              "page": "2",
+              "category": "listing-native-news-d44594c7"
+            }
+          },
+          "posts": [
+            {
+              "id": 5,
+              "authorId": 2,
+              "locked": false
+            }
+          ],
+          "totalPosts": 5
+        },
+        {
+          "label": "valid-numeric-page2",
+          "path": "/?author=2&page=2",
+          "nativeGET": 200,
+          "nativeHEAD": 200,
+          "headBodyEmpty": true,
+          "document": 200,
+          "kind": "archive",
+          "archive": {
+            "type": "author",
+            "name": "Listing Native alice",
+            "authorId": 2,
+            "slug": "listing-native-alice-d44594c7",
+            "permalink": "/author/listing-native-alice-d44594c7/"
+          },
+          "query": {
+            "search": "",
+            "category": "",
+            "tag": "",
+            "author": 2,
+            "date": null,
+            "archivePage": 2,
+            "contentPage": 1,
+            "blockPages": {},
+            "values": {
+              "author": "2",
+              "page": "2"
+            }
+          },
+          "posts": [
+            {
+              "id": 5,
+              "authorId": 2,
+              "locked": false
+            }
+          ],
+          "totalPosts": 5
+        },
+        {
+          "label": "raw-empty-firstpage",
+          "path": "/?page=",
+          "nativeGET": 200,
+          "nativeHEAD": 200,
+          "headBodyEmpty": true,
+          "document": 200,
+          "kind": "home",
+          "archive": null,
+          "query": {
+            "search": "",
+            "category": "",
+            "tag": "",
+            "date": null,
+            "archivePage": 1,
+            "contentPage": 1,
+            "blockPages": {},
+            "values": {
+              "page": "1"
+            }
+          },
+          "posts": [
+            {
+              "id": 6,
+              "authorId": 2,
+              "locked": false
+            }
+          ],
+          "totalPosts": 6
+        },
+        {
+          "label": "raw-empty-numeric-firstpage",
+          "path": "/?author=2&page=",
+          "nativeGET": 200,
+          "nativeHEAD": 200,
+          "headBodyEmpty": true,
+          "document": 200,
+          "kind": "archive",
+          "archive": {
+            "type": "author",
+            "name": "Listing Native alice",
+            "authorId": 2,
+            "slug": "listing-native-alice-d44594c7",
+            "permalink": "/author/listing-native-alice-d44594c7/"
+          },
+          "query": {
+            "search": "",
+            "category": "",
+            "tag": "",
+            "author": 2,
+            "date": null,
+            "archivePage": 1,
+            "contentPage": 1,
+            "blockPages": {},
+            "values": {
+              "author": "2",
+              "page": "1"
+            }
+          },
+          "posts": [
+            {
+              "id": 6,
+              "authorId": 2,
+              "locked": false
+            }
+          ],
+          "totalPosts": 5
+        },
+        {
+          "label": "raw-empty-unknown-category-firstpage",
+          "path": "/?category=listing-native-absent&page=",
+          "nativeGET": 200,
+          "nativeHEAD": 200,
+          "headBodyEmpty": true,
+          "document": 200,
+          "kind": "archive",
+          "archive": null,
+          "query": {
+            "search": "",
+            "category": "listing-native-absent",
+            "tag": "",
+            "date": null,
+            "archivePage": 1,
+            "contentPage": 1,
+            "blockPages": {},
+            "values": {
+              "category": "listing-native-absent",
+              "page": "1"
+            }
+          },
+          "posts": [],
+          "totalPosts": 0
+        },
+        {
+          "label": "empty-search-firstpage",
+          "path": "/?s=",
+          "nativeGET": 200,
+          "nativeHEAD": 200,
+          "headBodyEmpty": true,
+          "document": 200,
+          "kind": "home",
+          "archive": null,
+          "query": {
+            "search": "",
+            "category": "",
+            "tag": "",
+            "date": null,
+            "archivePage": 1,
+            "contentPage": 1,
+            "blockPages": {},
+            "values": {
+              "page": "1"
+            }
+          },
+          "posts": [
+            {
+              "id": 6,
+              "authorId": 2,
+              "locked": false
+            }
+          ],
+          "totalPosts": 6
+        },
+        {
+          "label": "whitespace-search-firstpage",
+          "path": "/?s=%20%20",
+          "nativeGET": 200,
+          "nativeHEAD": 200,
+          "headBodyEmpty": true,
+          "document": 200,
+          "kind": "archive",
+          "archive": null,
+          "query": {
+            "search": "",
+            "category": "",
+            "tag": "",
+            "date": null,
+            "archivePage": 1,
+            "contentPage": 1,
+            "blockPages": {},
+            "values": {
+              "page": "1"
+            }
+          },
+          "posts": [
+            {
+              "id": 6,
+              "authorId": 2,
+              "locked": false
+            }
+          ],
+          "totalPosts": 6
+        },
+        {
+          "label": "unknown-numeric-firstpage",
+          "path": "/?author=2147483647",
+          "nativeGET": 200,
+          "nativeHEAD": 200,
+          "headBodyEmpty": true,
+          "document": 200,
+          "kind": "archive",
+          "archive": null,
+          "query": {
+            "search": "",
+            "category": "",
+            "tag": "",
+            "author": 2147483647,
+            "date": null,
+            "archivePage": 1,
+            "contentPage": 1,
+            "blockPages": {},
+            "values": {
+              "author": "2147483647",
+              "page": "1"
+            }
+          },
+          "posts": [],
+          "totalPosts": 0
+        },
+        {
+          "label": "unknown-category-firstpage",
+          "path": "/?category=listing-native-absent",
+          "nativeGET": 200,
+          "nativeHEAD": 200,
+          "headBodyEmpty": true,
+          "document": 200,
+          "kind": "archive",
+          "archive": null,
+          "query": {
+            "search": "",
+            "category": "listing-native-absent",
+            "tag": "",
+            "date": null,
+            "archivePage": 1,
+            "contentPage": 1,
+            "blockPages": {},
+            "values": {
+              "category": "listing-native-absent",
+              "page": "1"
+            }
+          },
+          "posts": [],
+          "totalPosts": 0
+        },
+        {
+          "label": "empty-date-firstpage",
+          "path": "/?year=1901&monthnum=2",
+          "nativeGET": 200,
+          "nativeHEAD": 200,
+          "headBodyEmpty": true,
+          "document": 200,
+          "kind": "archive",
+          "archive": {
+            "type": "date",
+            "year": 1901,
+            "month": 2,
+            "name": "Month: February 1901",
+            "permalink": "/1901/02/"
+          },
+          "query": {
+            "search": "",
+            "category": "",
+            "tag": "",
+            "date": {
+              "type": "date",
+              "year": 1901,
+              "month": 2,
+              "name": "Month: February 1901",
+              "permalink": "/1901/02/"
+            },
+            "archivePage": 1,
+            "contentPage": 1,
+            "blockPages": {},
+            "values": {
+              "year": "1901",
+              "monthnum": "2",
+              "page": "1"
+            }
+          },
+          "posts": [],
+          "totalPosts": 0
+        },
+        {
+          "label": "known-empty-category-firstpage",
+          "path": "/category/listing-native-empty-d44594c7/",
+          "nativeGET": 200,
+          "nativeHEAD": 200,
+          "headBodyEmpty": true,
+          "document": 200,
+          "kind": "archive",
+          "archive": {
+            "id": 4,
+            "taxonomy": "category",
+            "slug": "listing-native-empty-d44594c7",
+            "name": "Ordinary Native Empty"
+          },
+          "query": {
+            "search": "",
+            "category": "listing-native-empty-d44594c7",
+            "tag": "",
+            "date": null,
+            "archivePage": 1,
+            "contentPage": 1,
+            "blockPages": {},
+            "values": {
+              "category": "listing-native-empty-d44594c7",
+              "page": "1"
+            }
+          },
+          "posts": [],
+          "totalPosts": 0
+        },
+        {
+          "label": "independent-counters-mainfirstpage",
+          "path": "/?query-7-page=999&commentPage=999",
+          "nativeGET": 200,
+          "nativeHEAD": 200,
+          "headBodyEmpty": true,
+          "document": 200,
+          "kind": "home",
+          "archive": null,
+          "query": {
+            "search": "",
+            "category": "",
+            "tag": "",
+            "date": null,
+            "archivePage": 1,
+            "contentPage": 1,
+            "commentPage": 999,
+            "blockPages": {
+              "query-7-page": 999
+            },
+            "values": {
+              "query-7-page": "999",
+              "commentPage": "999",
+              "page": "1"
+            }
+          },
+          "posts": [
+            {
+              "id": 6,
+              "authorId": 2,
+              "locked": false
+            }
+          ],
+          "totalPosts": 6
+        },
+        {
+          "label": "preserved-pretty-unfiltered-pagepolicy",
+          "path": "/author/listing-native-alice-d44594c7/?page=2&search=listing-native-absent",
+          "nativeGET": 200,
+          "nativeHEAD": 200,
+          "headBodyEmpty": true,
+          "document": 200,
+          "kind": "archive",
+          "archive": {
+            "type": "author",
+            "name": "Listing Native alice",
+            "authorId": 2,
+            "slug": "listing-native-alice-d44594c7",
+            "permalink": "/author/listing-native-alice-d44594c7/",
+            "page": 2
+          },
+          "query": {
+            "search": "listing-native-absent",
+            "category": "",
+            "tag": "",
+            "author": 2,
+            "date": null,
+            "archivePage": 2,
+            "contentPage": 1,
+            "blockPages": {},
+            "values": {
+              "page": "2",
+              "search": "listing-native-absent",
+              "author": "2"
+            }
+          },
+          "posts": [],
+          "totalPosts": 0
+        },
+        {
+          "label": "known404-malformedpage-policy",
+          "path": "/listing-native-missing-path/?page=0",
+          "nativeGET": 404,
+          "nativeHEAD": 404,
+          "headBodyEmpty": true,
+          "document": 404,
+          "kind": "not-found",
+          "archive": null,
+          "query": {
+            "search": "",
+            "category": "",
+            "tag": "",
+            "date": null,
+            "archivePage": 1,
+            "contentPage": 1,
+            "blockPages": {},
+            "values": {
+              "page": "1"
+            }
+          },
+          "posts": [],
+          "totalPosts": 0
+        },
+        {
+          "label": "root-malformedpage",
+          "path": "/?page=0",
+          "nativeGET": 400,
+          "nativeHEAD": 400,
+          "headBodyEmpty": true,
+          "document": 400
+        },
+        {
+          "label": "root-duplicatepage",
+          "path": "/?page=2&page=3",
+          "nativeGET": 400,
+          "nativeHEAD": 400,
+          "headBodyEmpty": true,
+          "document": 400
+        },
+        {
+          "label": "root-nestedpage",
+          "path": "/?page%5B%5D=2",
+          "nativeGET": 400,
+          "nativeHEAD": 400,
+          "headBodyEmpty": true,
+          "document": 400
+        },
+        {
+          "label": "empty-name-s-alias",
+          "path": "/?author_name=&s=Ordinary+Native+Visible&page=2",
+          "nativeGET": 200,
+          "nativeHEAD": 200,
+          "headBodyEmpty": true,
+          "document": 200,
+          "kind": "archive",
+          "archive": null,
+          "query": {
+            "search": "Ordinary Native Visible",
+            "category": "",
+            "tag": "",
+            "date": null,
+            "archivePage": 2,
+            "contentPage": 1,
+            "blockPages": {},
+            "values": {
+              "page": "2",
+              "search": "Ordinary Native Visible"
+            }
+          },
+          "posts": [
+            {
+              "id": 4,
+              "authorId": 2,
+              "locked": false
+            }
+          ],
+          "totalPosts": 2
+        }
+      ],
+      "directControls": [
+        {
+          "label": "root-resolve-boundary",
+          "path": "/?page=2",
+          "status": 404
+        },
+        {
+          "label": "category-resolve-resource",
+          "path": "/category/listing-native-news-d44594c7/?page=2",
+          "status": 200
+        },
+        {
+          "label": "date-resolve-missing",
+          "path": "/2001/02/03/?page=4",
+          "status": 404
+        },
+        {
+          "label": "explicit-empty",
+          "query": {
+            "page": ""
+          },
+          "status": 400
+        },
+        {
+          "label": "path-only-empty",
+          "query": {
+            "requestPath": "/?page="
+          },
+          "status": 200
+        },
+        {
+          "label": "explicit-path-empty",
+          "query": {
+            "page": "",
+            "requestPath": "/?page="
+          },
+          "status": 400
+        },
+        {
+          "label": "direct-template-selected-body2",
+          "status": 200,
+          "correctBody2": true
+        }
+      ],
+      "browserRawEmpty": {
+        "boot": {
+          "archive": null,
+          "kind": "home",
+          "posts": [
+            {
+              "authorId": 2,
+              "id": 6,
+              "locked": false
+            }
+          ],
+          "query": {
+            "archivePage": 1,
+            "blockPages": {},
+            "category": "",
+            "contentPage": 1,
+            "date": null,
+            "search": "",
+            "tag": "",
+            "values": {
+              "page": "1"
+            }
+          },
+          "status": 200
+        },
+        "canonicalCount": 1,
+        "errors": [],
+        "heading": "Blog",
+        "historyLength": 2,
+        "originalSSRNodeRetained": true,
+        "overflow": false,
+        "path": "/?page=",
+        "queryLoops": [],
+        "robotsCount": 0,
+        "text": "WorldAct\nOrdinary Native Journal\nOrdinary Native Numeric Child\nOrdinary Native Parent\nOrdinary Native Static Front\nSample Page\nBlog\nSearch posts\nSearch\nOrdinary Native Outside\n\nApril 1, 2001\n\nORDINARY NATIVE FIRST BODY Ordinary Native Outside\n\nPages: 1 2\n\n\u2190 Newer posts\n1 of 6\nOlder posts \u2192\nWorldAct\n\nJust another WorldAct site\n\nBlog\nOrdinary Native Journal\nOrdinary Native Numeric Child\nOrdinary Native Parent\nOrdinary Native Static Front\n\nDesigned with WorldAct\n\nLog in"
+      },
+      "browserPrettyEmpty": {
+        "boot": {
+          "archive": {
+            "authorId": 2,
+            "name": "Listing Native alice",
+            "page": 2,
+            "permalink": "/author/listing-native-alice-d44594c7/",
+            "slug": "listing-native-alice-d44594c7",
+            "type": "author"
+          },
+          "kind": "archive",
+          "posts": [],
+          "query": {
+            "archivePage": 2,
+            "author": 2,
+            "blockPages": {},
+            "category": "",
+            "contentPage": 1,
+            "date": null,
+            "search": "listing-native-absent",
+            "tag": "",
+            "values": {
+              "author": "2",
+              "page": "2",
+              "search": "listing-native-absent"
+            }
+          },
+          "status": 200
+        },
+        "canonicalCount": 1,
+        "errors": [],
+        "heading": "Search results for: listing-native-absent",
+        "historyLength": 3,
+        "originalSSRNodeRetained": true,
+        "overflow": false,
+        "path": "/author/listing-native-alice-d44594c7/?page=2&search=listing-native-absent",
+        "queryLoops": [],
+        "robotsCount": 0,
+        "text": "WorldAct\nOrdinary Native Journal\nOrdinary Native Numeric Child\nOrdinary Native Parent\nOrdinary Native Static Front\nSample Page\nSearch results for: listing-native-absent\nSearch posts\nSearch\nShow all posts\n\nNo posts yet. Check back soon.\n\nWorldAct\n\nJust another WorldAct site\n\nBlog\nOrdinary Native Journal\nOrdinary Native Numeric Child\nOrdinary Native Parent\nOrdinary Native Static Front\n\nDesigned with WorldAct\n\nLog in"
+      },
+      "screenshots": [
+        "../screens/public-listing-native-classic-raw-empty-firstpage-375.png",
+        "../screens/public-listing-native-classic-preserved-pretty-empty-page2-375.png"
+      ]
+    },
+    {
+      "theme": "twentytwentyfive",
+      "scene": "33-nativeGET-HEAD-document-status-boundaries-and-current-quirks",
+      "observations": [
+        {
+          "label": "home-excessive",
+          "path": "/?page=7",
+          "nativeGET": 404,
+          "nativeHEAD": 404,
+          "headBodyEmpty": true,
+          "document": 404,
+          "kind": "not-found",
+          "archive": null,
+          "query": {
+            "search": "",
+            "category": "",
+            "tag": "",
+            "date": null,
+            "archivePage": 7,
+            "contentPage": 1,
+            "blockPages": {},
+            "values": {
+              "page": "7"
+            }
+          },
+          "posts": [],
+          "totalPosts": 0
+        },
+        {
+          "label": "title-search-excessive",
+          "path": "/?search=Ordinary+Native+Visible&page=3",
+          "nativeGET": 404,
+          "nativeHEAD": 404,
+          "headBodyEmpty": true,
+          "document": 404,
+          "kind": "not-found",
+          "archive": null,
+          "query": {
+            "search": "Ordinary Native Visible",
+            "category": "",
+            "tag": "",
+            "date": null,
+            "archivePage": 3,
+            "contentPage": 1,
+            "blockPages": {},
+            "values": {
+              "search": "Ordinary Native Visible",
+              "page": "3"
+            }
+          },
+          "posts": [],
+          "totalPosts": 0
+        },
+        {
+          "label": "excerpt-only-excessive",
+          "path": "/?search=NativeExcerptNeedle&page=3",
+          "nativeGET": 404,
+          "nativeHEAD": 404,
+          "headBodyEmpty": true,
+          "document": 404,
+          "kind": "not-found",
+          "archive": null,
+          "query": {
+            "search": "NativeExcerptNeedle",
+            "category": "",
+            "tag": "",
+            "date": null,
+            "archivePage": 3,
+            "contentPage": 1,
+            "blockPages": {},
+            "values": {
+              "search": "NativeExcerptNeedle",
+              "page": "3"
+            }
+          },
+          "posts": [],
+          "totalPosts": 0
+        },
+        {
+          "label": "category-excessive",
+          "path": "/category/listing-native-news-d44594c7/?page=6",
+          "nativeGET": 404,
+          "nativeHEAD": 404,
+          "headBodyEmpty": true,
+          "document": 404,
+          "kind": "not-found",
+          "archive": {
+            "id": 2,
+            "taxonomy": "category",
+            "slug": "listing-native-news-d44594c7",
+            "name": "Ordinary Native News"
+          },
+          "query": {
+            "search": "",
+            "category": "listing-native-news-d44594c7",
+            "tag": "",
+            "date": null,
+            "archivePage": 6,
+            "contentPage": 1,
+            "blockPages": {},
+            "values": {
+              "page": "6",
+              "category": "listing-native-news-d44594c7"
+            }
+          },
+          "posts": [],
+          "totalPosts": 0
+        },
+        {
+          "label": "tag-excessive",
+          "path": "/tag/listing-native-tag-d44594c7/?page=6",
+          "nativeGET": 404,
+          "nativeHEAD": 404,
+          "headBodyEmpty": true,
+          "document": 404,
+          "kind": "not-found",
+          "archive": {
+            "id": 5,
+            "taxonomy": "tag",
+            "slug": "listing-native-tag-d44594c7",
+            "name": "Ordinary Native Tag"
+          },
+          "query": {
+            "search": "",
+            "category": "",
+            "tag": "listing-native-tag-d44594c7",
+            "date": null,
+            "archivePage": 6,
+            "contentPage": 1,
+            "blockPages": {},
+            "values": {
+              "page": "6",
+              "tag": "listing-native-tag-d44594c7"
+            }
+          },
+          "posts": [],
+          "totalPosts": 0
+        },
+        {
+          "label": "date-excessive",
+          "path": "/2001/02/03/?page=4",
+          "nativeGET": 404,
+          "nativeHEAD": 404,
+          "headBodyEmpty": true,
+          "document": 404,
+          "kind": "not-found",
+          "archive": {
+            "type": "date",
+            "year": 2001,
+            "month": 2,
+            "day": 3,
+            "name": "Day: February 3, 2001",
+            "permalink": "/2001/02/03/"
+          },
+          "query": {
+            "search": "",
+            "category": "",
+            "tag": "",
+            "date": {
+              "type": "date",
+              "year": 2001,
+              "month": 2,
+              "day": 3,
+              "name": "Day: February 3, 2001",
+              "permalink": "/2001/02/03/"
+            },
+            "archivePage": 4,
+            "contentPage": 1,
+            "blockPages": {},
+            "values": {
+              "page": "4",
+              "year": "2001",
+              "monthnum": "2",
+              "day": "3"
+            }
+          },
+          "posts": [],
+          "totalPosts": 0
+        },
+        {
+          "label": "numeric-author-excessive",
+          "path": "/?author=2&page=6",
+          "nativeGET": 404,
+          "nativeHEAD": 404,
+          "headBodyEmpty": true,
+          "document": 404,
+          "kind": "not-found",
+          "archive": null,
+          "query": {
+            "search": "",
+            "category": "",
+            "tag": "",
+            "author": 2,
+            "date": null,
+            "archivePage": 6,
+            "contentPage": 1,
+            "blockPages": {},
+            "values": {
+              "author": "2",
+              "page": "6"
+            }
+          },
+          "posts": [],
+          "totalPosts": 0
+        },
+        {
+          "label": "full-intersection-excessive",
+          "path": "/?author=2&category=listing-native-news-d44594c7&tag=listing-native-tag-d44594c7&year=2001&monthnum=2&day=3&search=NativeExcerptNeedle&page=3",
+          "nativeGET": 404,
+          "nativeHEAD": 404,
+          "headBodyEmpty": true,
+          "document": 404,
+          "kind": "not-found",
+          "archive": null,
+          "query": {
+            "search": "NativeExcerptNeedle",
+            "category": "listing-native-news-d44594c7",
+            "tag": "listing-native-tag-d44594c7",
+            "author": 2,
+            "date": null,
+            "archivePage": 3,
+            "contentPage": 1,
+            "blockPages": {},
+            "values": {
+              "author": "2",
+              "category": "listing-native-news-d44594c7",
+              "tag": "listing-native-tag-d44594c7",
+              "year": "2001",
+              "monthnum": "2",
+              "day": "3",
+              "search": "NativeExcerptNeedle",
+              "page": "3"
+            }
+          },
+          "posts": [],
+          "totalPosts": 0
+        },
+        {
+          "label": "known-empty-category-later",
+          "path": "/category/listing-native-empty-d44594c7/?page=2",
+          "nativeGET": 404,
+          "nativeHEAD": 404,
+          "headBodyEmpty": true,
+          "document": 404,
+          "kind": "not-found",
+          "archive": {
+            "id": 4,
+            "taxonomy": "category",
+            "slug": "listing-native-empty-d44594c7",
+            "name": "Ordinary Native Empty"
+          },
+          "query": {
+            "search": "",
+            "category": "listing-native-empty-d44594c7",
+            "tag": "",
+            "date": null,
+            "archivePage": 2,
+            "contentPage": 1,
+            "blockPages": {},
+            "values": {
+              "page": "2",
+              "category": "listing-native-empty-d44594c7"
+            }
+          },
+          "posts": [],
+          "totalPosts": 0
+        },
+        {
+          "label": "unknown-numeric-query-later",
+          "path": "/?author=2147483647&page=2",
+          "nativeGET": 404,
+          "nativeHEAD": 404,
+          "headBodyEmpty": true,
+          "document": 404,
+          "kind": "not-found",
+          "archive": null,
+          "query": {
+            "search": "",
+            "category": "",
+            "tag": "",
+            "author": 2147483647,
+            "date": null,
+            "archivePage": 2,
+            "contentPage": 1,
+            "blockPages": {},
+            "values": {
+              "author": "2147483647",
+              "page": "2"
+            }
+          },
+          "posts": [],
+          "totalPosts": 0
+        },
+        {
+          "label": "unknown-category-query-later",
+          "path": "/?category=listing-native-absent&page=2",
+          "nativeGET": 404,
+          "nativeHEAD": 404,
+          "headBodyEmpty": true,
+          "document": 404,
+          "kind": "not-found",
+          "archive": null,
+          "query": {
+            "search": "",
+            "category": "listing-native-absent",
+            "tag": "",
+            "date": null,
+            "archivePage": 2,
+            "contentPage": 1,
+            "blockPages": {},
+            "values": {
+              "category": "listing-native-absent",
+              "page": "2"
+            }
+          },
+          "posts": [],
+          "totalPosts": 0
+        },
+        {
+          "label": "empty-query-date-later",
+          "path": "/?year=1901&monthnum=2&page=2",
+          "nativeGET": 404,
+          "nativeHEAD": 404,
+          "headBodyEmpty": true,
+          "document": 404,
+          "kind": "not-found",
+          "archive": null,
+          "query": {
+            "search": "",
+            "category": "",
+            "tag": "",
+            "date": null,
+            "archivePage": 2,
+            "contentPage": 1,
+            "blockPages": {},
+            "values": {
+              "year": "1901",
+              "monthnum": "2",
+              "page": "2"
+            }
+          },
+          "posts": [],
+          "totalPosts": 0
+        },
+        {
+          "label": "anonymous-protected-search-later",
+          "path": "/?search=Ordinary+Native+Locked&page=2",
+          "nativeGET": 404,
+          "nativeHEAD": 404,
+          "headBodyEmpty": true,
+          "document": 404,
+          "kind": "not-found",
+          "archive": null,
+          "query": {
+            "search": "Ordinary Native Locked",
+            "category": "",
+            "tag": "",
+            "date": null,
+            "archivePage": 2,
+            "contentPage": 1,
+            "blockPages": {},
+            "values": {
+              "search": "Ordinary Native Locked",
+              "page": "2"
+            }
+          },
+          "posts": [],
+          "totalPosts": 0
+        },
+        {
+          "label": "valid-home-page2",
+          "path": "/?page=2",
+          "nativeGET": 200,
+          "nativeHEAD": 200,
+          "headBodyEmpty": true,
+          "document": 200,
+          "kind": "home",
+          "archive": null,
+          "query": {
+            "search": "",
+            "category": "",
+            "tag": "",
+            "date": null,
+            "archivePage": 2,
+            "contentPage": 1,
+            "blockPages": {},
+            "values": {
+              "page": "2"
+            }
+          },
+          "posts": [
+            {
+              "id": 7,
+              "authorId": 3,
+              "locked": false
+            }
+          ],
+          "totalPosts": 6
+        },
+        {
+          "label": "valid-title-search-page2",
+          "path": "/?search=Ordinary+Native+Visible&page=2",
+          "nativeGET": 200,
+          "nativeHEAD": 200,
+          "headBodyEmpty": true,
+          "document": 200,
+          "kind": "archive",
+          "archive": null,
+          "query": {
+            "search": "Ordinary Native Visible",
+            "category": "",
+            "tag": "",
+            "date": null,
+            "archivePage": 2,
+            "contentPage": 1,
+            "blockPages": {},
+            "values": {
+              "search": "Ordinary Native Visible",
+              "page": "2"
+            }
+          },
+          "posts": [
+            {
+              "id": 4,
+              "authorId": 2,
+              "locked": false
+            }
+          ],
+          "totalPosts": 2
+        },
+        {
+          "label": "valid-category-page2",
+          "path": "/category/listing-native-news-d44594c7/?page=2",
+          "nativeGET": 200,
+          "nativeHEAD": 200,
+          "headBodyEmpty": true,
+          "document": 200,
+          "kind": "archive",
+          "archive": {
+            "id": 2,
+            "taxonomy": "category",
+            "slug": "listing-native-news-d44594c7",
+            "name": "Ordinary Native News"
+          },
+          "query": {
+            "search": "",
+            "category": "listing-native-news-d44594c7",
+            "tag": "",
+            "date": null,
+            "archivePage": 2,
+            "contentPage": 1,
+            "blockPages": {},
+            "values": {
+              "page": "2",
+              "category": "listing-native-news-d44594c7"
+            }
+          },
+          "posts": [
+            {
+              "id": 5,
+              "authorId": 2,
+              "locked": false
+            }
+          ],
+          "totalPosts": 5
+        },
+        {
+          "label": "valid-numeric-page2",
+          "path": "/?author=2&page=2",
+          "nativeGET": 200,
+          "nativeHEAD": 200,
+          "headBodyEmpty": true,
+          "document": 200,
+          "kind": "archive",
+          "archive": {
+            "type": "author",
+            "name": "Listing Native alice",
+            "authorId": 2,
+            "slug": "listing-native-alice-d44594c7",
+            "permalink": "/author/listing-native-alice-d44594c7/"
+          },
+          "query": {
+            "search": "",
+            "category": "",
+            "tag": "",
+            "author": 2,
+            "date": null,
+            "archivePage": 2,
+            "contentPage": 1,
+            "blockPages": {},
+            "values": {
+              "author": "2",
+              "page": "2"
+            }
+          },
+          "posts": [
+            {
+              "id": 5,
+              "authorId": 2,
+              "locked": false
+            }
+          ],
+          "totalPosts": 5
+        },
+        {
+          "label": "raw-empty-firstpage",
+          "path": "/?page=",
+          "nativeGET": 200,
+          "nativeHEAD": 200,
+          "headBodyEmpty": true,
+          "document": 200,
+          "kind": "home",
+          "archive": null,
+          "query": {
+            "search": "",
+            "category": "",
+            "tag": "",
+            "date": null,
+            "archivePage": 1,
+            "contentPage": 1,
+            "blockPages": {},
+            "values": {
+              "page": "1"
+            }
+          },
+          "posts": [
+            {
+              "id": 6,
+              "authorId": 2,
+              "locked": false
+            }
+          ],
+          "totalPosts": 6
+        },
+        {
+          "label": "raw-empty-numeric-firstpage",
+          "path": "/?author=2&page=",
+          "nativeGET": 200,
+          "nativeHEAD": 200,
+          "headBodyEmpty": true,
+          "document": 200,
+          "kind": "archive",
+          "archive": {
+            "type": "author",
+            "name": "Listing Native alice",
+            "authorId": 2,
+            "slug": "listing-native-alice-d44594c7",
+            "permalink": "/author/listing-native-alice-d44594c7/"
+          },
+          "query": {
+            "search": "",
+            "category": "",
+            "tag": "",
+            "author": 2,
+            "date": null,
+            "archivePage": 1,
+            "contentPage": 1,
+            "blockPages": {},
+            "values": {
+              "author": "2",
+              "page": "1"
+            }
+          },
+          "posts": [
+            {
+              "id": 6,
+              "authorId": 2,
+              "locked": false
+            }
+          ],
+          "totalPosts": 5
+        },
+        {
+          "label": "raw-empty-unknown-category-firstpage",
+          "path": "/?category=listing-native-absent&page=",
+          "nativeGET": 200,
+          "nativeHEAD": 200,
+          "headBodyEmpty": true,
+          "document": 200,
+          "kind": "archive",
+          "archive": null,
+          "query": {
+            "search": "",
+            "category": "listing-native-absent",
+            "tag": "",
+            "date": null,
+            "archivePage": 1,
+            "contentPage": 1,
+            "blockPages": {},
+            "values": {
+              "category": "listing-native-absent",
+              "page": "1"
+            }
+          },
+          "posts": [],
+          "totalPosts": 0
+        },
+        {
+          "label": "empty-search-firstpage",
+          "path": "/?s=",
+          "nativeGET": 200,
+          "nativeHEAD": 200,
+          "headBodyEmpty": true,
+          "document": 200,
+          "kind": "home",
+          "archive": null,
+          "query": {
+            "search": "",
+            "category": "",
+            "tag": "",
+            "date": null,
+            "archivePage": 1,
+            "contentPage": 1,
+            "blockPages": {},
+            "values": {
+              "page": "1"
+            }
+          },
+          "posts": [
+            {
+              "id": 6,
+              "authorId": 2,
+              "locked": false
+            }
+          ],
+          "totalPosts": 6
+        },
+        {
+          "label": "whitespace-search-firstpage",
+          "path": "/?s=%20%20",
+          "nativeGET": 200,
+          "nativeHEAD": 200,
+          "headBodyEmpty": true,
+          "document": 200,
+          "kind": "archive",
+          "archive": null,
+          "query": {
+            "search": "",
+            "category": "",
+            "tag": "",
+            "date": null,
+            "archivePage": 1,
+            "contentPage": 1,
+            "blockPages": {},
+            "values": {
+              "page": "1"
+            }
+          },
+          "posts": [
+            {
+              "id": 6,
+              "authorId": 2,
+              "locked": false
+            }
+          ],
+          "totalPosts": 6
+        },
+        {
+          "label": "unknown-numeric-firstpage",
+          "path": "/?author=2147483647",
+          "nativeGET": 200,
+          "nativeHEAD": 200,
+          "headBodyEmpty": true,
+          "document": 200,
+          "kind": "archive",
+          "archive": null,
+          "query": {
+            "search": "",
+            "category": "",
+            "tag": "",
+            "author": 2147483647,
+            "date": null,
+            "archivePage": 1,
+            "contentPage": 1,
+            "blockPages": {},
+            "values": {
+              "author": "2147483647",
+              "page": "1"
+            }
+          },
+          "posts": [],
+          "totalPosts": 0
+        },
+        {
+          "label": "unknown-category-firstpage",
+          "path": "/?category=listing-native-absent",
+          "nativeGET": 200,
+          "nativeHEAD": 200,
+          "headBodyEmpty": true,
+          "document": 200,
+          "kind": "archive",
+          "archive": null,
+          "query": {
+            "search": "",
+            "category": "listing-native-absent",
+            "tag": "",
+            "date": null,
+            "archivePage": 1,
+            "contentPage": 1,
+            "blockPages": {},
+            "values": {
+              "category": "listing-native-absent",
+              "page": "1"
+            }
+          },
+          "posts": [],
+          "totalPosts": 0
+        },
+        {
+          "label": "empty-date-firstpage",
+          "path": "/?year=1901&monthnum=2",
+          "nativeGET": 200,
+          "nativeHEAD": 200,
+          "headBodyEmpty": true,
+          "document": 200,
+          "kind": "archive",
+          "archive": {
+            "type": "date",
+            "year": 1901,
+            "month": 2,
+            "name": "Month: February 1901",
+            "permalink": "/1901/02/"
+          },
+          "query": {
+            "search": "",
+            "category": "",
+            "tag": "",
+            "date": {
+              "type": "date",
+              "year": 1901,
+              "month": 2,
+              "name": "Month: February 1901",
+              "permalink": "/1901/02/"
+            },
+            "archivePage": 1,
+            "contentPage": 1,
+            "blockPages": {},
+            "values": {
+              "year": "1901",
+              "monthnum": "2",
+              "page": "1"
+            }
+          },
+          "posts": [],
+          "totalPosts": 0
+        },
+        {
+          "label": "known-empty-category-firstpage",
+          "path": "/category/listing-native-empty-d44594c7/",
+          "nativeGET": 200,
+          "nativeHEAD": 200,
+          "headBodyEmpty": true,
+          "document": 200,
+          "kind": "archive",
+          "archive": {
+            "id": 4,
+            "taxonomy": "category",
+            "slug": "listing-native-empty-d44594c7",
+            "name": "Ordinary Native Empty"
+          },
+          "query": {
+            "search": "",
+            "category": "listing-native-empty-d44594c7",
+            "tag": "",
+            "date": null,
+            "archivePage": 1,
+            "contentPage": 1,
+            "blockPages": {},
+            "values": {
+              "category": "listing-native-empty-d44594c7",
+              "page": "1"
+            }
+          },
+          "posts": [],
+          "totalPosts": 0
+        },
+        {
+          "label": "independent-counters-mainfirstpage",
+          "path": "/?query-7-page=999&commentPage=999",
+          "nativeGET": 200,
+          "nativeHEAD": 200,
+          "headBodyEmpty": true,
+          "document": 200,
+          "kind": "home",
+          "archive": null,
+          "query": {
+            "search": "",
+            "category": "",
+            "tag": "",
+            "date": null,
+            "archivePage": 1,
+            "contentPage": 1,
+            "commentPage": 999,
+            "blockPages": {
+              "query-7-page": 999
+            },
+            "values": {
+              "query-7-page": "999",
+              "commentPage": "999",
+              "page": "1"
+            }
+          },
+          "posts": [
+            {
+              "id": 6,
+              "authorId": 2,
+              "locked": false
+            }
+          ],
+          "totalPosts": 6
+        },
+        {
+          "label": "preserved-pretty-unfiltered-pagepolicy",
+          "path": "/author/listing-native-alice-d44594c7/?page=2&search=listing-native-absent",
+          "nativeGET": 200,
+          "nativeHEAD": 200,
+          "headBodyEmpty": true,
+          "document": 200,
+          "kind": "archive",
+          "archive": {
+            "type": "author",
+            "name": "Listing Native alice",
+            "authorId": 2,
+            "slug": "listing-native-alice-d44594c7",
+            "permalink": "/author/listing-native-alice-d44594c7/",
+            "page": 2
+          },
+          "query": {
+            "search": "listing-native-absent",
+            "category": "",
+            "tag": "",
+            "author": 2,
+            "date": null,
+            "archivePage": 2,
+            "contentPage": 1,
+            "blockPages": {},
+            "values": {
+              "page": "2",
+              "search": "listing-native-absent",
+              "author": "2"
+            }
+          },
+          "posts": [],
+          "totalPosts": 0
+        },
+        {
+          "label": "known404-malformedpage-policy",
+          "path": "/listing-native-missing-path/?page=0",
+          "nativeGET": 404,
+          "nativeHEAD": 404,
+          "headBodyEmpty": true,
+          "document": 404,
+          "kind": "not-found",
+          "archive": null,
+          "query": {
+            "search": "",
+            "category": "",
+            "tag": "",
+            "date": null,
+            "archivePage": 1,
+            "contentPage": 1,
+            "blockPages": {},
+            "values": {
+              "page": "1"
+            }
+          },
+          "posts": [],
+          "totalPosts": 0
+        },
+        {
+          "label": "root-malformedpage",
+          "path": "/?page=0",
+          "nativeGET": 400,
+          "nativeHEAD": 400,
+          "headBodyEmpty": true,
+          "document": 400
+        },
+        {
+          "label": "root-duplicatepage",
+          "path": "/?page=2&page=3",
+          "nativeGET": 400,
+          "nativeHEAD": 400,
+          "headBodyEmpty": true,
+          "document": 400
+        },
+        {
+          "label": "root-nestedpage",
+          "path": "/?page%5B%5D=2",
+          "nativeGET": 400,
+          "nativeHEAD": 400,
+          "headBodyEmpty": true,
+          "document": 400
+        },
+        {
+          "label": "empty-name-s-alias",
+          "path": "/?author_name=&s=Ordinary+Native+Visible&page=2",
+          "nativeGET": 200,
+          "nativeHEAD": 200,
+          "headBodyEmpty": true,
+          "document": 200,
+          "kind": "archive",
+          "archive": null,
+          "query": {
+            "search": "Ordinary Native Visible",
+            "category": "",
+            "tag": "",
+            "date": null,
+            "archivePage": 2,
+            "contentPage": 1,
+            "blockPages": {},
+            "values": {
+              "page": "2",
+              "search": "Ordinary Native Visible"
+            }
+          },
+          "posts": [
+            {
+              "id": 4,
+              "authorId": 2,
+              "locked": false
+            }
+          ],
+          "totalPosts": 2
+        }
+      ],
+      "directControls": [
+        {
+          "label": "root-resolve-boundary",
+          "path": "/?page=2",
+          "status": 404
+        },
+        {
+          "label": "category-resolve-resource",
+          "path": "/category/listing-native-news-d44594c7/?page=2",
+          "status": 200
+        },
+        {
+          "label": "date-resolve-missing",
+          "path": "/2001/02/03/?page=4",
+          "status": 404
+        },
+        {
+          "label": "explicit-empty",
+          "query": {
+            "page": ""
+          },
+          "status": 400
+        },
+        {
+          "label": "path-only-empty",
+          "query": {
+            "requestPath": "/?page="
+          },
+          "status": 200
+        },
+        {
+          "label": "explicit-path-empty",
+          "query": {
+            "page": "",
+            "requestPath": "/?page="
+          },
+          "status": 400
+        },
+        {
+          "label": "direct-template-selected-body2",
+          "status": 200,
+          "correctBody2": true
+        }
+      ],
+      "browserRawEmpty": {
+        "boot": {
+          "archive": null,
+          "kind": "home",
+          "posts": [
+            {
+              "authorId": 2,
+              "id": 6,
+              "locked": false
+            }
+          ],
+          "query": {
+            "archivePage": 1,
+            "blockPages": {},
+            "category": "",
+            "contentPage": 1,
+            "date": null,
+            "search": "",
+            "tag": "",
+            "values": {
+              "page": "1"
+            }
+          },
+          "status": 200
+        },
+        "canonicalCount": 1,
+        "errors": [],
+        "heading": "Blog",
+        "historyLength": 2,
+        "originalSSRNodeRetained": true,
+        "overflow": false,
+        "path": "/?page=",
+        "queryLoops": [
+          {
+            "postTemplateChildren": 3,
+            "text": "Ordinary Native Outside\n\nORDINARY NATIVE FIRST BODY Ordinary Native Outside\n\nPages: 1 2\n\nApril 1, 2001\nOrdinary Native Bob\n\nORDINARY NATIVE FIRST BODY Ordinary Native Bob\n\nPages: 1 2\n\nFebruary 3, 2001\nOrdinary Native Visible Two\n\nORDINARY NATIVE FIRST BODY Ordinary Native Visible Two\n\nPages: 1 2\n\nFebruary 3, 2001\n1 2\nNext Page"
+          }
+        ],
+        "robotsCount": 0,
+        "text": "WorldAct\n\nBlog\nOrdinary Native Outside\n\nORDINARY NATIVE FIRST BODY Ordinary Native Outside\n\nPages: 1 2\n\nApril 1, 2001\nOrdinary Native Bob\n\nORDINARY NATIVE FIRST BODY Ordinary Native Bob\n\nPages: 1 2\n\nFebruary 3, 2001\nOrdinary Native Visible Two\n\nORDINARY NATIVE FIRST BODY Ordinary Native Visible Two\n\nPages: 1 2\n\nFebruary 3, 2001\n1 2\nNext Page\nWorldAct\n\nJust another WorldAct site\n\nBlog\nAbout\nFAQs\nAuthors\nEvents\nShop\nPatterns\nThemes\n\nTwenty Twenty-Five\n\nDesigned with WordPress"
+      },
+      "browserPrettyEmpty": {
+        "boot": {
+          "archive": {
+            "authorId": 2,
+            "name": "Listing Native alice",
+            "page": 2,
+            "permalink": "/author/listing-native-alice-d44594c7/",
+            "slug": "listing-native-alice-d44594c7",
+            "type": "author"
+          },
+          "kind": "archive",
+          "posts": [],
+          "query": {
+            "archivePage": 2,
+            "author": 2,
+            "blockPages": {},
+            "category": "",
+            "contentPage": 1,
+            "date": null,
+            "search": "listing-native-absent",
+            "tag": "",
+            "values": {
+              "author": "2",
+              "page": "2",
+              "search": "listing-native-absent"
+            }
+          },
+          "status": 200
+        },
+        "canonicalCount": 1,
+        "errors": [],
+        "heading": "Search results for: listing-native-absent",
+        "historyLength": 3,
+        "originalSSRNodeRetained": true,
+        "overflow": false,
+        "path": "/author/listing-native-alice-d44594c7/?page=2&search=listing-native-absent",
+        "queryLoops": [
+          {
+            "postTemplateChildren": 0,
+            "text": "Sorry, but nothing was found. Please try a search with different keywords."
+          },
+          {
+            "postTemplateChildren": 4,
+            "text": "Ordinary Native Outside\nApril 1, 2001\nOrdinary Native Bob\nFebruary 3, 2001\nOrdinary Native Visible Two\nFebruary 3, 2001\nOrdinary Native Visible One\nFebruary 3, 2001"
+          }
+        ],
+        "robotsCount": 0,
+        "text": "WorldAct\n\nSearch results for: listing-native-absent\nSearch\n\nSorry, but nothing was found. Please try a search with different keywords.\n\nMORE POSTS\nOrdinary Native Outside\nApril 1, 2001\nOrdinary Native Bob\nFebruary 3, 2001\nOrdinary Native Visible Two\nFebruary 3, 2001\nOrdinary Native Visible One\nFebruary 3, 2001\nWorldAct\n\nJust another WorldAct site\n\nBlog\nAbout\nFAQs\nAuthors\nEvents\nShop\nPatterns\nThemes\n\nTwenty Twenty-Five\n\nDesigned with WordPress"
+      },
+      "screenshots": [
+        "../screens/public-listing-native-twentytwentyfive-raw-empty-firstpage-375.png",
+        "../screens/public-listing-native-twentytwentyfive-preserved-pretty-empty-page2-375.png"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,57 @@
+{
+  "scope": "Only owned disposable ordinary-listing native resources",
+  "code": "c9cc2b13f5baba71cb88f9685c6937daa02f9310",
+  "startedAtUTC": "2026-11-09T13:04:42.175Z",
+  "seedCount": 1,
+  "originalPrivateEvidencePreserved": true,
+  "mainTouched": false,
+  "foreignResourcesTouched": false,
+  "primaryBrowserUnauthenticated": true,
+  "noVaultWasCreated": true,
+  "allOwnedBrowserSessionsClosed": true,
+  "ownedBrowserSessions": 3,
+  "serviceOwnership": [
+    {
+      "pid": 96736,
+      "physicalCwdVerified": true,
+      "commandVerified": true,
+      "ports": [
+        3035
+      ]
+    },
+    {
+      "pid": 93958,
+      "physicalCwdVerified": true,
+      "commandVerified": true,
+      "ports": [
+        3036,
+        3037
+      ]
+    }
+  ],
+  "ownedPortsFree": [
+    3035,
+    3036,
+    3037,
+    5195
+  ],
+  "noOwnedTransactionRemains": true,
+  "uniqueOwnedDatabaseAbsent": true,
+  "uniqueOwnedUploadsAbsent": true,
+  "readOnlyDependencyOwner": {
+    "target": "[read-only-dependency-owner]",
+    "realTarget": "[read-only-dependency-owner]",
+    "mode": "0755",
+    "uid": 501,
+    "nonsymlink": true,
+    "contentOrModeMutationDuringThisStage": false
+  },
+  "ownDependencyLinksRemoved": 2,
+  "ownEnvAbsent": true,
+  "privateConfigAndFixtureRemoved": true,
+  "noPersistentNativeSqlHooksViewsFunctionsOrHoldsCreated": true,
+  "guardRunnerCleanupCompletedNormally": true,
+  "otherOwnersArchivesAndBackupsPreserved": true,
+  "checkoutsAndBothBuildStagesRetained": true,
+  "completedAtUTC": "2026-11-09T13:04:42.773Z"
+}

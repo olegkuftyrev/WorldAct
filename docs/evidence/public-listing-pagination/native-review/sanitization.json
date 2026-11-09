@@ -1,0 +1,11 @@
+{
+  "exactCurrentPrivateValuesScanPassed": true,
+  "credentialPatternScanPassed": true,
+  "individuallyInspectedPngs": 37,
+  "originalProofAndSelectedPngHashesReverified": true,
+  "timeUTC": "2026-11-09T13:03:11.305235+00:00",
+  "finalTextFilePatternScanPassed": true,
+  "finalTextFilesScanned": 18,
+  "finalTimeUTC": "2026-11-09T13:05:14.045958+00:00",
+  "selectedPngsAndOriginalProofHashesReverified": true
+}

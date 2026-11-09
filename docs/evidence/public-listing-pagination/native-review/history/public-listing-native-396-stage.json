@@ -1,0 +1,11 @@
+{
+  "code": "39688c75196415ce755b3db6a2ccef72ecc73379",
+  "nodeSha256": "d8600119f8338e55668514fa39b192839e0aa78b436b84c9d55c23bdab01e051",
+  "apiStoppedAfterOwnershipVerification": true,
+  "seedCount": 1,
+  "guardSourceTests": 47,
+  "guardSourcePass": 47,
+  "guardCompiledTests": 47,
+  "guardCompiledPass": 47,
+  "browserOpened": false
+}

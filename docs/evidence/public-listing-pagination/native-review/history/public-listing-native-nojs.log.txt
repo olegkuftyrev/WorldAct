@@ -1,0 +1,11 @@
+classic genuineNoJS missing404/password/comment303 PASS
+file:///private[private-evidence-directory]/public-listing-native-harness/nojs-control.mjs:4
+export function browser(session){const br=(...args)=>{const r=spawnSync(binary,['--session',session,...args],{encoding:'utf8',maxBuffer:1e7});if(r.status)throw Error(r.stderr+r.stdout);return r.stdout;};const ev=code=>{const r=spawnSync(binary,['--session',session,'--json','eval','--stdin'],{encoding:'utf8',input:code,maxBuffer:1e7});if(r.status)throw Error(r.stderr+r.stdout);return JSON.parse(r.stdout).data.result;};return{br,ev};}
+                                                                                                                                                                ^
+
+Error: ✗ Wait timed out after 25000ms
+
+    at br (file:///private[private-evidence-directory]/public-listing-native-harness/nojs-control.mjs:4:161)
+    at file:///private[private-evidence-directory]/public-listing-native-harness/nojs.mjs:5:390
+
+Node.js v24.14.1

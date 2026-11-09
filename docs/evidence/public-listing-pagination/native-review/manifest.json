@@ -1,0 +1,289 @@
+{
+  "scope": "All repository evidence files except this self-referential manifest",
+  "code": "c9cc2b13f5baba71cb88f9685c6937daa02f9310",
+  "nodeSha256": "b8012b887e1b2281774e7318ad70f4a9debfb4d396eaeb3cd41e8e752ae1d80c",
+  "count": 56,
+  "pngs": 37,
+  "files": [
+    {
+      "path": "README.md",
+      "sha256": "ac8c21d95903feda64cc35198dc201f854e29dac1b7479935dd9b9a65f49f262",
+      "bytes": 10076
+    },
+    {
+      "path": "artifact-receipts.json",
+      "sha256": "8cac92369ec3c4be6f74784ba568ebdffcc6894225bbf95a03a3f767c676fb9d",
+      "bytes": 25690
+    },
+    {
+      "path": "checks.json",
+      "sha256": "e93d1659cf69708ee4785df4aaba95e2b3603f2b270a8b8ef4b0f412248ab5a5",
+      "bytes": 5569
+    },
+    {
+      "path": "cleanup.json",
+      "sha256": "d24193e44bbe4d68b6f67d81e87684e9fd43e69ce1b6dee915f192d07866df3b",
+      "bytes": 1527
+    },
+    {
+      "path": "history/public-listing-native-396-stage.json",
+      "sha256": "b0f5d7a4e41b8648fa3e7d4d585c54f5571aecb9dd7586bea94cec69719650be",
+      "bytes": 339
+    },
+    {
+      "path": "history/public-listing-native-matrix.log.txt",
+      "sha256": "a95a099a7e5fd14051b647cefe5ceb33c3115cc9838da56160b4cee1f9101e7f",
+      "bytes": 930
+    },
+    {
+      "path": "history/public-listing-native-nojs-original-flood-receipt.json",
+      "sha256": "b3b19929a34d85d817b40e2abdd5a7eff6928b15ea6c33b2bfaddb5727327fa1",
+      "bytes": 3928
+    },
+    {
+      "path": "history/public-listing-native-nojs.log.txt",
+      "sha256": "6e55db743229cd20c0d918609fcd5fd143bd67263e53c3d9737fdf111c112a0d",
+      "bytes": 1013
+    },
+    {
+      "path": "logs/public-listing-native-c9-compiled.log.txt",
+      "sha256": "66a85de039eb59564da85964a866957190e678b00fd4831d418b4064e7359763",
+      "bytes": 11391
+    },
+    {
+      "path": "logs/public-listing-native-c9-node.log.txt",
+      "sha256": "c095eb128117aac94c8d9a4cc50fb063ee0c95b2e5b3978e729278bc8ef862d7",
+      "bytes": 56
+    },
+    {
+      "path": "logs/public-listing-native-c9-source.log.txt",
+      "sha256": "3042fde954b215516b7d590a721f16dd8eab0cff45c6f6f4684faa96a846b3f1",
+      "bytes": 11382
+    },
+    {
+      "path": "logs/public-listing-native-c9-typecheck.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "logs/public-listing-native-c9-vite.log.txt",
+      "sha256": "6cbb9a73dabfa240d6ec806b5e0adae6e4c181885367703ae2fefe83f5a9221d",
+      "bytes": 2562
+    },
+    {
+      "path": "proofs/public-listing-native-matrix-proof.json",
+      "sha256": "d3d527ad5cd088cada07925d89e645a421bc36e834d9b45a8664a146275eea39",
+      "bytes": 45364
+    },
+    {
+      "path": "proofs/public-listing-native-nojs-proof.json",
+      "sha256": "92d4590e9fd8b584afc12e777673acdbb441aab9579570488fcd6e191b94dafb",
+      "bytes": 3014
+    },
+    {
+      "path": "proofs/public-listing-native-nojs-source-proof.json",
+      "sha256": "7d13842a535b3d9ab15ed1fdef13462b2c9969b40802fbc90580b877e5702ff7",
+      "bytes": 3095
+    },
+    {
+      "path": "proofs/public-listing-native-paths-proof.json",
+      "sha256": "77aeb47b81d8c72b6dcf9d6d87b30b370444c011ef15f5d97cd0eda943916d05",
+      "bytes": 129820
+    },
+    {
+      "path": "proofs/public-listing-native-variants-proof.json",
+      "sha256": "5fa92ba0076c1c65f1fb304086c075ee922dcb5a5f92d68d6618e594b2a07a12",
+      "bytes": 60767
+    },
+    {
+      "path": "sanitization.json",
+      "sha256": "a5f9e3da09f5e25232add8073a9bb80490a2d5375c7eaa41b3736a16b282133e",
+      "bytes": 411
+    },
+    {
+      "path": "screens/public-listing-native-classic-category-page2-1440.png",
+      "sha256": "45f5e4f72aa2e2457addfa42eb022d8c7a077dd85e45a3b75a07205b61d4cd57",
+      "bytes": 86449
+    },
+    {
+      "path": "screens/public-listing-native-classic-category-page2-375.png",
+      "sha256": "bbe2ade6f2b6fa8313bd4795cc9a192589824a694e34057f60fd3e24178f10f1",
+      "bytes": 54715
+    },
+    {
+      "path": "screens/public-listing-native-classic-category-page2-768.png",
+      "sha256": "49423d3ae3bb7e9abbae6910d2e17f547be295e931dbc18d410924879579e8c8",
+      "bytes": 70902
+    },
+    {
+      "path": "screens/public-listing-native-classic-missing-page7-1440.png",
+      "sha256": "b083a0816aa1c160c9bd582add02dc13b55c19e537e9cf17c98adb252d1cfe5c",
+      "bytes": 59659
+    },
+    {
+      "path": "screens/public-listing-native-classic-missing-page7-375.png",
+      "sha256": "2a7d1899a9128c36e89bf2c5327ffb24ecc9787bac136ae491c12d1741e2c468",
+      "bytes": 47368
+    },
+    {
+      "path": "screens/public-listing-native-classic-missing-page7-768.png",
+      "sha256": "2114a03ce768b2c7e2a5e467c60f3712e2c9ebd3e62e25d9b77278413fd067be",
+      "bytes": 53715
+    },
+    {
+      "path": "screens/public-listing-native-classic-nojs-comment-375.png",
+      "sha256": "3b114f13743168c454f7f79bcc364862fe5594918574e95d704a4aa2f5e0f832",
+      "bytes": 36275
+    },
+    {
+      "path": "screens/public-listing-native-classic-nojs-missing-375.png",
+      "sha256": "c753ded728704d24e2e8c6512276d4af68449ed2c82aa8e866a0693f9c1f9585",
+      "bytes": 47807
+    },
+    {
+      "path": "screens/public-listing-native-classic-nojs-unlocked-375.png",
+      "sha256": "6942409ad737cdee1e87a088ee8435c44682d1d875c6fb3a02a5f3e69e27ba38",
+      "bytes": 58441
+    },
+    {
+      "path": "screens/public-listing-native-classic-numeric-child-body2-375.png",
+      "sha256": "bd357250158bd4c83a89f13b40327de55324a341aa407d311c262e0047a7657c",
+      "bytes": 51669
+    },
+    {
+      "path": "screens/public-listing-native-classic-posts-page2-1440.png",
+      "sha256": "08dbcad275941ac3847ee77e8f379ea04a0cbecbda2ed29b13f023c474d69ccf",
+      "bytes": 77005
+    },
+    {
+      "path": "screens/public-listing-native-classic-posts-page2-375.png",
+      "sha256": "282ea17ce9332b9c9294ea1857dd1a29c800bd8fdfd7839a000c2987b1dac458",
+      "bytes": 50078
+    },
+    {
+      "path": "screens/public-listing-native-classic-posts-page2-768.png",
+      "sha256": "680519cf9b797ec0be6e405c88fa3671a46b2011fc61285319fc14b4f020ab6f",
+      "bytes": 62168
+    },
+    {
+      "path": "screens/public-listing-native-classic-preserved-pretty-empty-page2-375.png",
+      "sha256": "e5f76dcba26e494e240e5ca19c4b9ba4f4b157e18bb57d5872f00b1921870fbe",
+      "bytes": 50513
+    },
+    {
+      "path": "screens/public-listing-native-classic-raw-empty-firstpage-375.png",
+      "sha256": "a238f44c336630b4b9253f28b18a0be3ce1535003f4d23a056124200161ac9dd",
+      "bytes": 44422
+    },
+    {
+      "path": "screens/public-listing-native-classic-valid-page2-1440.png",
+      "sha256": "c6f54e4d1855a90571b081d65122b3585424db8c24221775aef5aa2e47967ee2",
+      "bytes": 70401
+    },
+    {
+      "path": "screens/public-listing-native-classic-valid-page2-375.png",
+      "sha256": "2eee7e7a5b463515c00455936395b5a045679386a02d959e382c1d337be289c5",
+      "bytes": 43460
+    },
+    {
+      "path": "screens/public-listing-native-classic-valid-page2-768.png",
+      "sha256": "aaca6d3dd8b24c6f6b353eb9554edf6d96b6a055a755de33897033420408e9bb",
+      "bytes": 56157
+    },
+    {
+      "path": "screens/public-listing-native-twentytwentyfive-category-page2-1440.png",
+      "sha256": "f6ef3a2996d9924ff0422be826269c98edba508019c8eade541fea44870cf6ae",
+      "bytes": 67103
+    },
+    {
+      "path": "screens/public-listing-native-twentytwentyfive-category-page2-375.png",
+      "sha256": "3bbd138d477d1c7ac1fe85081345803c0e7990d11c29be008397a61ad9b0e18d",
+      "bytes": 47098
+    },
+    {
+      "path": "screens/public-listing-native-twentytwentyfive-category-page2-768.png",
+      "sha256": "befd9d3df9246d9d4ecfe04875d1e8af289205013ce89b08f6d9481248e659be",
+      "bytes": 61624
+    },
+    {
+      "path": "screens/public-listing-native-twentytwentyfive-global-search-375.png",
+      "sha256": "ce66a85f2ece52796a092b76803a0c0394c8429039cbe54e9271ef8a3d318ff8",
+      "bytes": 53846
+    },
+    {
+      "path": "screens/public-listing-native-twentytwentyfive-missing-page7-1440.png",
+      "sha256": "797ffc9c3568612245a189013f29dbb81a311f75549e6c6cf999efa61524450e",
+      "bytes": 54286
+    },
+    {
+      "path": "screens/public-listing-native-twentytwentyfive-missing-page7-375.png",
+      "sha256": "5bcc5da63390376258e8dc370ad2b41c48140707b0d3076f8de8e50c3b57ebeb",
+      "bytes": 40957
+    },
+    {
+      "path": "screens/public-listing-native-twentytwentyfive-missing-page7-768.png",
+      "sha256": "7fe7e061ca8d42020a7973e2f0caca28dd53d1bb3783d26d951528140a72b10b",
+      "bytes": 45908
+    },
+    {
+      "path": "screens/public-listing-native-twentytwentyfive-nojs-comment-375.png",
+      "sha256": "787a993760c330557949ba951c4a5384c53e7b161aaddf21b292d6c46ea962a8",
+      "bytes": 35382
+    },
+    {
+      "path": "screens/public-listing-native-twentytwentyfive-nojs-missing-375.png",
+      "sha256": "5bcc5da63390376258e8dc370ad2b41c48140707b0d3076f8de8e50c3b57ebeb",
+      "bytes": 40957
+    },
+    {
+      "path": "screens/public-listing-native-twentytwentyfive-nojs-unlocked-375.png",
+      "sha256": "dafcf543785c3b7c88ae311c8eb617de5478cd558ed9e219e40a1e5e43b9f8f9",
+      "bytes": 47622
+    },
+    {
+      "path": "screens/public-listing-native-twentytwentyfive-numeric-child-body2-375.png",
+      "sha256": "19178189711ad14652f6ea840264d2f884959369c0f0a5508c97c88215af740d",
+      "bytes": 39329
+    },
+    {
+      "path": "screens/public-listing-native-twentytwentyfive-posts-page2-1440.png",
+      "sha256": "e79c7952699bb56c0b6ff0feaecfaf0d08faf8bc3da0ea73d2490f3586f11ebf",
+      "bytes": 62061
+    },
+    {
+      "path": "screens/public-listing-native-twentytwentyfive-posts-page2-375.png",
+      "sha256": "6305872204d2c7a6340ec161d0a3f688dfa7d170738b8f71b2c434140c6cef8f",
+      "bytes": 54187
+    },
+    {
+      "path": "screens/public-listing-native-twentytwentyfive-posts-page2-768.png",
+      "sha256": "0faad50b7361338b88bd3ecb00e86bba09161f41d7958937d080ff8235cffe0c",
+      "bytes": 65154
+    },
+    {
+      "path": "screens/public-listing-native-twentytwentyfive-preserved-pretty-empty-page2-375.png",
+      "sha256": "cf6589ed03366387d11d9c43d87c0b3eb2e4ceceea10c0204732e4fa92afd44e",
+      "bytes": 53844
+    },
+    {
+      "path": "screens/public-listing-native-twentytwentyfive-raw-empty-firstpage-375.png",
+      "sha256": "9eea838c759f917fee859abb588747563ababb05685c40029aaed79ae3800d8d",
+      "bytes": 49004
+    },
+    {
+      "path": "screens/public-listing-native-twentytwentyfive-valid-page2-1440.png",
+      "sha256": "e79c7952699bb56c0b6ff0feaecfaf0d08faf8bc3da0ea73d2490f3586f11ebf",
+      "bytes": 62061
+    },
+    {
+      "path": "screens/public-listing-native-twentytwentyfive-valid-page2-375.png",
+      "sha256": "6305872204d2c7a6340ec161d0a3f688dfa7d170738b8f71b2c434140c6cef8f",
+      "bytes": 54187
+    },
+    {
+      "path": "screens/public-listing-native-twentytwentyfive-valid-page2-768.png",
+      "sha256": "0faad50b7361338b88bd3ecb00e86bba09161f41d7958937d080ff8235cffe0c",
+      "bytes": 65154
+    }
+  ]
+}

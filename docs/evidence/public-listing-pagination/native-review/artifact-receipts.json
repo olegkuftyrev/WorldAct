@@ -1,0 +1,440 @@
+{
+  "code": "c9cc2b13f5baba71cb88f9685c6937daa02f9310",
+  "records": [
+    {
+      "path": "proofs/public-listing-native-matrix-proof.json",
+      "sha256": "d3d527ad5cd088cada07925d89e645a421bc36e834d9b45a8664a146275eea39",
+      "originalPrivateFilename": "public-listing-native-matrix-proof.json",
+      "originalSha256": "212433c1ad06ed82ec587c252b53da10e0b64b3d69ce35190cf89f7ee0347378",
+      "copyPolicy": "Private strings sanitized; screenshot links made relative. Original private bytes preserved."
+    },
+    {
+      "path": "proofs/public-listing-native-paths-proof.json",
+      "sha256": "77aeb47b81d8c72b6dcf9d6d87b30b370444c011ef15f5d97cd0eda943916d05",
+      "originalPrivateFilename": "public-listing-native-paths-proof.json",
+      "originalSha256": "75a66d7a7bdc63e0be2ca0e11a8fbeb6f8ced7e40124082a521f458c9d268ed4",
+      "copyPolicy": "Private strings sanitized; screenshot links made relative. Original private bytes preserved."
+    },
+    {
+      "path": "proofs/public-listing-native-variants-proof.json",
+      "sha256": "5fa92ba0076c1c65f1fb304086c075ee922dcb5a5f92d68d6618e594b2a07a12",
+      "originalPrivateFilename": "public-listing-native-variants-proof.json",
+      "originalSha256": "42a9de819531de896fcee402b5a2532189f5231af2b2d7a61f4aee6651a85ebd",
+      "copyPolicy": "Private strings sanitized; screenshot links made relative. Original private bytes preserved."
+    },
+    {
+      "path": "proofs/public-listing-native-nojs-proof.json",
+      "sha256": "92d4590e9fd8b584afc12e777673acdbb441aab9579570488fcd6e191b94dafb",
+      "originalPrivateFilename": "public-listing-native-nojs-proof.json",
+      "originalSha256": "edb442d6883434290648246161d18b8ac9700ce95c18a0edb21fc5268b1341cc",
+      "copyPolicy": "Private strings sanitized; screenshot links made relative. Original private bytes preserved."
+    },
+    {
+      "path": "proofs/public-listing-native-nojs-source-proof.json",
+      "sha256": "7d13842a535b3d9ab15ed1fdef13462b2c9969b40802fbc90580b877e5702ff7",
+      "originalPrivateFilename": "public-listing-native-nojs-source-proof.json",
+      "originalSha256": "84d4db41b17a958f531c924c91919ead0e0419c9b466ea020167a979005f76f9",
+      "copyPolicy": "Private strings sanitized; screenshot links made relative. Original private bytes preserved."
+    },
+    {
+      "path": "screens/public-listing-native-classic-category-page2-1440.png",
+      "sha256": "45f5e4f72aa2e2457addfa42eb022d8c7a077dd85e45a3b75a07205b61d4cd57",
+      "originalPrivateFilename": "public-listing-native-classic-category-page2-1440.png",
+      "originalSha256": "45f5e4f72aa2e2457addfa42eb022d8c7a077dd85e45a3b75a07205b61d4cd57",
+      "individuallyInspected": true,
+      "copyPolicy": "Byte-identical selected PNG; synthetic owned fixture."
+    },
+    {
+      "path": "screens/public-listing-native-classic-category-page2-375.png",
+      "sha256": "bbe2ade6f2b6fa8313bd4795cc9a192589824a694e34057f60fd3e24178f10f1",
+      "originalPrivateFilename": "public-listing-native-classic-category-page2-375.png",
+      "originalSha256": "bbe2ade6f2b6fa8313bd4795cc9a192589824a694e34057f60fd3e24178f10f1",
+      "individuallyInspected": true,
+      "copyPolicy": "Byte-identical selected PNG; synthetic owned fixture."
+    },
+    {
+      "path": "screens/public-listing-native-classic-category-page2-768.png",
+      "sha256": "49423d3ae3bb7e9abbae6910d2e17f547be295e931dbc18d410924879579e8c8",
+      "originalPrivateFilename": "public-listing-native-classic-category-page2-768.png",
+      "originalSha256": "49423d3ae3bb7e9abbae6910d2e17f547be295e931dbc18d410924879579e8c8",
+      "individuallyInspected": true,
+      "copyPolicy": "Byte-identical selected PNG; synthetic owned fixture."
+    },
+    {
+      "path": "screens/public-listing-native-classic-missing-page7-1440.png",
+      "sha256": "b083a0816aa1c160c9bd582add02dc13b55c19e537e9cf17c98adb252d1cfe5c",
+      "originalPrivateFilename": "public-listing-native-classic-missing-page7-1440.png",
+      "originalSha256": "b083a0816aa1c160c9bd582add02dc13b55c19e537e9cf17c98adb252d1cfe5c",
+      "individuallyInspected": true,
+      "copyPolicy": "Byte-identical selected PNG; synthetic owned fixture."
+    },
+    {
+      "path": "screens/public-listing-native-classic-missing-page7-375.png",
+      "sha256": "2a7d1899a9128c36e89bf2c5327ffb24ecc9787bac136ae491c12d1741e2c468",
+      "originalPrivateFilename": "public-listing-native-classic-missing-page7-375.png",
+      "originalSha256": "2a7d1899a9128c36e89bf2c5327ffb24ecc9787bac136ae491c12d1741e2c468",
+      "individuallyInspected": true,
+      "copyPolicy": "Byte-identical selected PNG; synthetic owned fixture."
+    },
+    {
+      "path": "screens/public-listing-native-classic-missing-page7-768.png",
+      "sha256": "2114a03ce768b2c7e2a5e467c60f3712e2c9ebd3e62e25d9b77278413fd067be",
+      "originalPrivateFilename": "public-listing-native-classic-missing-page7-768.png",
+      "originalSha256": "2114a03ce768b2c7e2a5e467c60f3712e2c9ebd3e62e25d9b77278413fd067be",
+      "individuallyInspected": true,
+      "copyPolicy": "Byte-identical selected PNG; synthetic owned fixture."
+    },
+    {
+      "path": "screens/public-listing-native-classic-nojs-comment-375.png",
+      "sha256": "3b114f13743168c454f7f79bcc364862fe5594918574e95d704a4aa2f5e0f832",
+      "originalPrivateFilename": "public-listing-native-classic-nojs-comment-375.png",
+      "originalSha256": "3b114f13743168c454f7f79bcc364862fe5594918574e95d704a4aa2f5e0f832",
+      "individuallyInspected": true,
+      "copyPolicy": "Byte-identical selected PNG; synthetic owned fixture."
+    },
+    {
+      "path": "screens/public-listing-native-classic-nojs-missing-375.png",
+      "sha256": "c753ded728704d24e2e8c6512276d4af68449ed2c82aa8e866a0693f9c1f9585",
+      "originalPrivateFilename": "public-listing-native-classic-nojs-missing-375.png",
+      "originalSha256": "c753ded728704d24e2e8c6512276d4af68449ed2c82aa8e866a0693f9c1f9585",
+      "individuallyInspected": true,
+      "copyPolicy": "Byte-identical selected PNG; synthetic owned fixture."
+    },
+    {
+      "path": "screens/public-listing-native-classic-nojs-unlocked-375.png",
+      "sha256": "6942409ad737cdee1e87a088ee8435c44682d1d875c6fb3a02a5f3e69e27ba38",
+      "originalPrivateFilename": "public-listing-native-classic-nojs-unlocked-375.png",
+      "originalSha256": "6942409ad737cdee1e87a088ee8435c44682d1d875c6fb3a02a5f3e69e27ba38",
+      "individuallyInspected": true,
+      "copyPolicy": "Byte-identical selected PNG; synthetic owned fixture."
+    },
+    {
+      "path": "screens/public-listing-native-classic-numeric-child-body2-375.png",
+      "sha256": "bd357250158bd4c83a89f13b40327de55324a341aa407d311c262e0047a7657c",
+      "originalPrivateFilename": "public-listing-native-classic-numeric-child-body2-375.png",
+      "originalSha256": "bd357250158bd4c83a89f13b40327de55324a341aa407d311c262e0047a7657c",
+      "individuallyInspected": true,
+      "copyPolicy": "Byte-identical selected PNG; synthetic owned fixture."
+    },
+    {
+      "path": "screens/public-listing-native-classic-posts-page2-1440.png",
+      "sha256": "08dbcad275941ac3847ee77e8f379ea04a0cbecbda2ed29b13f023c474d69ccf",
+      "originalPrivateFilename": "public-listing-native-classic-posts-page2-1440.png",
+      "originalSha256": "08dbcad275941ac3847ee77e8f379ea04a0cbecbda2ed29b13f023c474d69ccf",
+      "individuallyInspected": true,
+      "copyPolicy": "Byte-identical selected PNG; synthetic owned fixture."
+    },
+    {
+      "path": "screens/public-listing-native-classic-posts-page2-375.png",
+      "sha256": "282ea17ce9332b9c9294ea1857dd1a29c800bd8fdfd7839a000c2987b1dac458",
+      "originalPrivateFilename": "public-listing-native-classic-posts-page2-375.png",
+      "originalSha256": "282ea17ce9332b9c9294ea1857dd1a29c800bd8fdfd7839a000c2987b1dac458",
+      "individuallyInspected": true,
+      "copyPolicy": "Byte-identical selected PNG; synthetic owned fixture."
+    },
+    {
+      "path": "screens/public-listing-native-classic-posts-page2-768.png",
+      "sha256": "680519cf9b797ec0be6e405c88fa3671a46b2011fc61285319fc14b4f020ab6f",
+      "originalPrivateFilename": "public-listing-native-classic-posts-page2-768.png",
+      "originalSha256": "680519cf9b797ec0be6e405c88fa3671a46b2011fc61285319fc14b4f020ab6f",
+      "individuallyInspected": true,
+      "copyPolicy": "Byte-identical selected PNG; synthetic owned fixture."
+    },
+    {
+      "path": "screens/public-listing-native-classic-preserved-pretty-empty-page2-375.png",
+      "sha256": "e5f76dcba26e494e240e5ca19c4b9ba4f4b157e18bb57d5872f00b1921870fbe",
+      "originalPrivateFilename": "public-listing-native-classic-preserved-pretty-empty-page2-375.png",
+      "originalSha256": "e5f76dcba26e494e240e5ca19c4b9ba4f4b157e18bb57d5872f00b1921870fbe",
+      "individuallyInspected": true,
+      "copyPolicy": "Byte-identical selected PNG; synthetic owned fixture."
+    },
+    {
+      "path": "screens/public-listing-native-classic-raw-empty-firstpage-375.png",
+      "sha256": "a238f44c336630b4b9253f28b18a0be3ce1535003f4d23a056124200161ac9dd",
+      "originalPrivateFilename": "public-listing-native-classic-raw-empty-firstpage-375.png",
+      "originalSha256": "a238f44c336630b4b9253f28b18a0be3ce1535003f4d23a056124200161ac9dd",
+      "individuallyInspected": true,
+      "copyPolicy": "Byte-identical selected PNG; synthetic owned fixture."
+    },
+    {
+      "path": "screens/public-listing-native-classic-valid-page2-1440.png",
+      "sha256": "c6f54e4d1855a90571b081d65122b3585424db8c24221775aef5aa2e47967ee2",
+      "originalPrivateFilename": "public-listing-native-classic-valid-page2-1440.png",
+      "originalSha256": "c6f54e4d1855a90571b081d65122b3585424db8c24221775aef5aa2e47967ee2",
+      "individuallyInspected": true,
+      "copyPolicy": "Byte-identical selected PNG; synthetic owned fixture."
+    },
+    {
+      "path": "screens/public-listing-native-classic-valid-page2-375.png",
+      "sha256": "2eee7e7a5b463515c00455936395b5a045679386a02d959e382c1d337be289c5",
+      "originalPrivateFilename": "public-listing-native-classic-valid-page2-375.png",
+      "originalSha256": "2eee7e7a5b463515c00455936395b5a045679386a02d959e382c1d337be289c5",
+      "individuallyInspected": true,
+      "copyPolicy": "Byte-identical selected PNG; synthetic owned fixture."
+    },
+    {
+      "path": "screens/public-listing-native-classic-valid-page2-768.png",
+      "sha256": "aaca6d3dd8b24c6f6b353eb9554edf6d96b6a055a755de33897033420408e9bb",
+      "originalPrivateFilename": "public-listing-native-classic-valid-page2-768.png",
+      "originalSha256": "aaca6d3dd8b24c6f6b353eb9554edf6d96b6a055a755de33897033420408e9bb",
+      "individuallyInspected": true,
+      "copyPolicy": "Byte-identical selected PNG; synthetic owned fixture."
+    },
+    {
+      "path": "screens/public-listing-native-twentytwentyfive-category-page2-1440.png",
+      "sha256": "f6ef3a2996d9924ff0422be826269c98edba508019c8eade541fea44870cf6ae",
+      "originalPrivateFilename": "public-listing-native-twentytwentyfive-category-page2-1440.png",
+      "originalSha256": "f6ef3a2996d9924ff0422be826269c98edba508019c8eade541fea44870cf6ae",
+      "individuallyInspected": true,
+      "copyPolicy": "Byte-identical selected PNG; synthetic owned fixture."
+    },
+    {
+      "path": "screens/public-listing-native-twentytwentyfive-category-page2-375.png",
+      "sha256": "3bbd138d477d1c7ac1fe85081345803c0e7990d11c29be008397a61ad9b0e18d",
+      "originalPrivateFilename": "public-listing-native-twentytwentyfive-category-page2-375.png",
+      "originalSha256": "3bbd138d477d1c7ac1fe85081345803c0e7990d11c29be008397a61ad9b0e18d",
+      "individuallyInspected": true,
+      "copyPolicy": "Byte-identical selected PNG; synthetic owned fixture."
+    },
+    {
+      "path": "screens/public-listing-native-twentytwentyfive-category-page2-768.png",
+      "sha256": "befd9d3df9246d9d4ecfe04875d1e8af289205013ce89b08f6d9481248e659be",
+      "originalPrivateFilename": "public-listing-native-twentytwentyfive-category-page2-768.png",
+      "originalSha256": "befd9d3df9246d9d4ecfe04875d1e8af289205013ce89b08f6d9481248e659be",
+      "individuallyInspected": true,
+      "copyPolicy": "Byte-identical selected PNG; synthetic owned fixture."
+    },
+    {
+      "path": "screens/public-listing-native-twentytwentyfive-global-search-375.png",
+      "sha256": "ce66a85f2ece52796a092b76803a0c0394c8429039cbe54e9271ef8a3d318ff8",
+      "originalPrivateFilename": "public-listing-native-twentytwentyfive-global-search-375.png",
+      "originalSha256": "ce66a85f2ece52796a092b76803a0c0394c8429039cbe54e9271ef8a3d318ff8",
+      "individuallyInspected": true,
+      "copyPolicy": "Byte-identical selected PNG; synthetic owned fixture."
+    },
+    {
+      "path": "screens/public-listing-native-twentytwentyfive-missing-page7-1440.png",
+      "sha256": "797ffc9c3568612245a189013f29dbb81a311f75549e6c6cf999efa61524450e",
+      "originalPrivateFilename": "public-listing-native-twentytwentyfive-missing-page7-1440.png",
+      "originalSha256": "797ffc9c3568612245a189013f29dbb81a311f75549e6c6cf999efa61524450e",
+      "individuallyInspected": true,
+      "copyPolicy": "Byte-identical selected PNG; synthetic owned fixture."
+    },
+    {
+      "path": "screens/public-listing-native-twentytwentyfive-missing-page7-375.png",
+      "sha256": "5bcc5da63390376258e8dc370ad2b41c48140707b0d3076f8de8e50c3b57ebeb",
+      "originalPrivateFilename": "public-listing-native-twentytwentyfive-missing-page7-375.png",
+      "originalSha256": "5bcc5da63390376258e8dc370ad2b41c48140707b0d3076f8de8e50c3b57ebeb",
+      "individuallyInspected": true,
+      "copyPolicy": "Byte-identical selected PNG; synthetic owned fixture."
+    },
+    {
+      "path": "screens/public-listing-native-twentytwentyfive-missing-page7-768.png",
+      "sha256": "7fe7e061ca8d42020a7973e2f0caca28dd53d1bb3783d26d951528140a72b10b",
+      "originalPrivateFilename": "public-listing-native-twentytwentyfive-missing-page7-768.png",
+      "originalSha256": "7fe7e061ca8d42020a7973e2f0caca28dd53d1bb3783d26d951528140a72b10b",
+      "individuallyInspected": true,
+      "copyPolicy": "Byte-identical selected PNG; synthetic owned fixture."
+    },
+    {
+      "path": "screens/public-listing-native-twentytwentyfive-nojs-comment-375.png",
+      "sha256": "787a993760c330557949ba951c4a5384c53e7b161aaddf21b292d6c46ea962a8",
+      "originalPrivateFilename": "public-listing-native-twentytwentyfive-nojs-comment-375.png",
+      "originalSha256": "787a993760c330557949ba951c4a5384c53e7b161aaddf21b292d6c46ea962a8",
+      "individuallyInspected": true,
+      "copyPolicy": "Byte-identical selected PNG; synthetic owned fixture."
+    },
+    {
+      "path": "screens/public-listing-native-twentytwentyfive-nojs-missing-375.png",
+      "sha256": "5bcc5da63390376258e8dc370ad2b41c48140707b0d3076f8de8e50c3b57ebeb",
+      "originalPrivateFilename": "public-listing-native-twentytwentyfive-nojs-missing-375.png",
+      "originalSha256": "5bcc5da63390376258e8dc370ad2b41c48140707b0d3076f8de8e50c3b57ebeb",
+      "individuallyInspected": true,
+      "copyPolicy": "Byte-identical selected PNG; synthetic owned fixture."
+    },
+    {
+      "path": "screens/public-listing-native-twentytwentyfive-nojs-unlocked-375.png",
+      "sha256": "dafcf543785c3b7c88ae311c8eb617de5478cd558ed9e219e40a1e5e43b9f8f9",
+      "originalPrivateFilename": "public-listing-native-twentytwentyfive-nojs-unlocked-375.png",
+      "originalSha256": "dafcf543785c3b7c88ae311c8eb617de5478cd558ed9e219e40a1e5e43b9f8f9",
+      "individuallyInspected": true,
+      "copyPolicy": "Byte-identical selected PNG; synthetic owned fixture."
+    },
+    {
+      "path": "screens/public-listing-native-twentytwentyfive-numeric-child-body2-375.png",
+      "sha256": "19178189711ad14652f6ea840264d2f884959369c0f0a5508c97c88215af740d",
+      "originalPrivateFilename": "public-listing-native-twentytwentyfive-numeric-child-body2-375.png",
+      "originalSha256": "19178189711ad14652f6ea840264d2f884959369c0f0a5508c97c88215af740d",
+      "individuallyInspected": true,
+      "copyPolicy": "Byte-identical selected PNG; synthetic owned fixture."
+    },
+    {
+      "path": "screens/public-listing-native-twentytwentyfive-posts-page2-1440.png",
+      "sha256": "e79c7952699bb56c0b6ff0feaecfaf0d08faf8bc3da0ea73d2490f3586f11ebf",
+      "originalPrivateFilename": "public-listing-native-twentytwentyfive-posts-page2-1440.png",
+      "originalSha256": "e79c7952699bb56c0b6ff0feaecfaf0d08faf8bc3da0ea73d2490f3586f11ebf",
+      "individuallyInspected": true,
+      "copyPolicy": "Byte-identical selected PNG; synthetic owned fixture."
+    },
+    {
+      "path": "screens/public-listing-native-twentytwentyfive-posts-page2-375.png",
+      "sha256": "6305872204d2c7a6340ec161d0a3f688dfa7d170738b8f71b2c434140c6cef8f",
+      "originalPrivateFilename": "public-listing-native-twentytwentyfive-posts-page2-375.png",
+      "originalSha256": "6305872204d2c7a6340ec161d0a3f688dfa7d170738b8f71b2c434140c6cef8f",
+      "individuallyInspected": true,
+      "copyPolicy": "Byte-identical selected PNG; synthetic owned fixture."
+    },
+    {
+      "path": "screens/public-listing-native-twentytwentyfive-posts-page2-768.png",
+      "sha256": "0faad50b7361338b88bd3ecb00e86bba09161f41d7958937d080ff8235cffe0c",
+      "originalPrivateFilename": "public-listing-native-twentytwentyfive-posts-page2-768.png",
+      "originalSha256": "0faad50b7361338b88bd3ecb00e86bba09161f41d7958937d080ff8235cffe0c",
+      "individuallyInspected": true,
+      "copyPolicy": "Byte-identical selected PNG; synthetic owned fixture."
+    },
+    {
+      "path": "screens/public-listing-native-twentytwentyfive-preserved-pretty-empty-page2-375.png",
+      "sha256": "cf6589ed03366387d11d9c43d87c0b3eb2e4ceceea10c0204732e4fa92afd44e",
+      "originalPrivateFilename": "public-listing-native-twentytwentyfive-preserved-pretty-empty-page2-375.png",
+      "originalSha256": "cf6589ed03366387d11d9c43d87c0b3eb2e4ceceea10c0204732e4fa92afd44e",
+      "individuallyInspected": true,
+      "copyPolicy": "Byte-identical selected PNG; synthetic owned fixture."
+    },
+    {
+      "path": "screens/public-listing-native-twentytwentyfive-raw-empty-firstpage-375.png",
+      "sha256": "9eea838c759f917fee859abb588747563ababb05685c40029aaed79ae3800d8d",
+      "originalPrivateFilename": "public-listing-native-twentytwentyfive-raw-empty-firstpage-375.png",
+      "originalSha256": "9eea838c759f917fee859abb588747563ababb05685c40029aaed79ae3800d8d",
+      "individuallyInspected": true,
+      "copyPolicy": "Byte-identical selected PNG; synthetic owned fixture."
+    },
+    {
+      "path": "screens/public-listing-native-twentytwentyfive-valid-page2-1440.png",
+      "sha256": "e79c7952699bb56c0b6ff0feaecfaf0d08faf8bc3da0ea73d2490f3586f11ebf",
+      "originalPrivateFilename": "public-listing-native-twentytwentyfive-valid-page2-1440.png",
+      "originalSha256": "e79c7952699bb56c0b6ff0feaecfaf0d08faf8bc3da0ea73d2490f3586f11ebf",
+      "individuallyInspected": true,
+      "copyPolicy": "Byte-identical selected PNG; synthetic owned fixture."
+    },
+    {
+      "path": "screens/public-listing-native-twentytwentyfive-valid-page2-375.png",
+      "sha256": "6305872204d2c7a6340ec161d0a3f688dfa7d170738b8f71b2c434140c6cef8f",
+      "originalPrivateFilename": "public-listing-native-twentytwentyfive-valid-page2-375.png",
+      "originalSha256": "6305872204d2c7a6340ec161d0a3f688dfa7d170738b8f71b2c434140c6cef8f",
+      "individuallyInspected": true,
+      "copyPolicy": "Byte-identical selected PNG; synthetic owned fixture."
+    },
+    {
+      "path": "screens/public-listing-native-twentytwentyfive-valid-page2-768.png",
+      "sha256": "0faad50b7361338b88bd3ecb00e86bba09161f41d7958937d080ff8235cffe0c",
+      "originalPrivateFilename": "public-listing-native-twentytwentyfive-valid-page2-768.png",
+      "originalSha256": "0faad50b7361338b88bd3ecb00e86bba09161f41d7958937d080ff8235cffe0c",
+      "individuallyInspected": true,
+      "copyPolicy": "Byte-identical selected PNG; synthetic owned fixture."
+    },
+    {
+      "path": "history/public-listing-native-396-stage.json",
+      "sha256": "b0f5d7a4e41b8648fa3e7d4d585c54f5571aecb9dd7586bea94cec69719650be",
+      "originalPrivateFilename": "public-listing-native-396-stage.json",
+      "originalSha256": "b0f5d7a4e41b8648fa3e7d4d585c54f5571aecb9dd7586bea94cec69719650be",
+      "copyPolicy": "Private path/value sanitization only; original preserved."
+    },
+    {
+      "path": "history/public-listing-native-nojs-original-flood-receipt.json",
+      "sha256": "b3b19929a34d85d817b40e2abdd5a7eff6928b15ea6c33b2bfaddb5727327fa1",
+      "originalPrivateFilename": "public-listing-native-nojs-original-flood-receipt.json",
+      "originalSha256": "b3b19929a34d85d817b40e2abdd5a7eff6928b15ea6c33b2bfaddb5727327fa1",
+      "copyPolicy": "Private path/value sanitization only; original preserved."
+    },
+    {
+      "path": "logs/public-listing-native-c9-typecheck.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "originalPrivateFilename": "public-listing-native-c9-typecheck.log",
+      "originalSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "copyPolicy": "Private strings sanitized and trailing whitespace stripped only in repository copy."
+    },
+    {
+      "path": "logs/public-listing-native-c9-vite.log.txt",
+      "sha256": "6cbb9a73dabfa240d6ec806b5e0adae6e4c181885367703ae2fefe83f5a9221d",
+      "originalPrivateFilename": "public-listing-native-c9-vite.log",
+      "originalSha256": "6cbb9a73dabfa240d6ec806b5e0adae6e4c181885367703ae2fefe83f5a9221d",
+      "copyPolicy": "Private strings sanitized and trailing whitespace stripped only in repository copy."
+    },
+    {
+      "path": "logs/public-listing-native-c9-node.log.txt",
+      "sha256": "c095eb128117aac94c8d9a4cc50fb063ee0c95b2e5b3978e729278bc8ef862d7",
+      "originalPrivateFilename": "public-listing-native-c9-node.log",
+      "originalSha256": "c095eb128117aac94c8d9a4cc50fb063ee0c95b2e5b3978e729278bc8ef862d7",
+      "copyPolicy": "Private strings sanitized and trailing whitespace stripped only in repository copy."
+    },
+    {
+      "path": "logs/public-listing-native-c9-source.log.txt",
+      "sha256": "3042fde954b215516b7d590a721f16dd8eab0cff45c6f6f4684faa96a846b3f1",
+      "originalPrivateFilename": "public-listing-native-c9-source.log",
+      "originalSha256": "3042fde954b215516b7d590a721f16dd8eab0cff45c6f6f4684faa96a846b3f1",
+      "copyPolicy": "Private strings sanitized and trailing whitespace stripped only in repository copy."
+    },
+    {
+      "path": "logs/public-listing-native-c9-compiled.log.txt",
+      "sha256": "66a85de039eb59564da85964a866957190e678b00fd4831d418b4064e7359763",
+      "originalPrivateFilename": "public-listing-native-c9-compiled.log",
+      "originalSha256": "66a85de039eb59564da85964a866957190e678b00fd4831d418b4064e7359763",
+      "copyPolicy": "Private strings sanitized and trailing whitespace stripped only in repository copy."
+    },
+    {
+      "path": "history/public-listing-native-matrix.log.txt",
+      "sha256": "a95a099a7e5fd14051b647cefe5ceb33c3115cc9838da56160b4cee1f9101e7f",
+      "originalPrivateFilename": "public-listing-native-matrix.log",
+      "originalSha256": "70999bd37373c8f9cfbec2ab17fd8eae04b088493e88c0a4c4d77138d53193f0",
+      "copyPolicy": "Private strings sanitized and trailing whitespace stripped only in repository copy."
+    },
+    {
+      "path": "history/public-listing-native-nojs.log.txt",
+      "sha256": "6e55db743229cd20c0d918609fcd5fd143bd67263e53c3d9737fdf111c112a0d",
+      "originalPrivateFilename": "public-listing-native-nojs.log",
+      "originalSha256": "a6efd1b0a1d2d1aebe98b4f9b31c9e3edaa58e81023db22d21db0003e32e9db8",
+      "copyPolicy": "Private strings sanitized and trailing whitespace stripped only in repository copy."
+    }
+  ],
+  "privateHistory": [
+    {
+      "originalPrivateFilename": "public-listing-native-node.log",
+      "sha256": "debc6439696e52530feccb85d594ba120771e33bcfea70c31e348100e8dfda0b",
+      "preservedPrivately": true
+    },
+    {
+      "originalPrivateFilename": "public-listing-native-matrix-original-find-syntax-proof.json",
+      "sha256": "a31c69836c6e3de0b014a9af947e41b77ebda28a66a25d7324789fd90d02e0d8",
+      "preservedPrivately": true
+    },
+    {
+      "originalPrivateFilename": "public-listing-native-harness/matrix-original-find-syntax.mjs",
+      "sha256": "5eb490dd658c8c0f60fe98f28696e58262b2f7f1b0f427a8308fa8c0d0b0ed5c",
+      "preservedPrivately": true
+    },
+    {
+      "originalPrivateFilename": "public-listing-native-harness/nojs-original-flood.mjs",
+      "sha256": "ab375bee73cf61cd0070df08acf7bc5a51c0ba1bb4be0d16f1cf01553ae87e8c",
+      "preservedPrivately": true
+    },
+    {
+      "originalPrivateFilename": "public-listing-native-source.log",
+      "sha256": "ab73eb80b484ebda4ea55768e016cb2629498f78dc482a28bf0a346a54c7c5ad",
+      "preservedPrivately": true
+    },
+    {
+      "originalPrivateFilename": "public-listing-native-compiled.log",
+      "sha256": "fbecac5390c2502f34fb43b795f4c6f3eb4add41abb6126d9c3c8d3261b6f455",
+      "preservedPrivately": true
+    },
+    {
+      "originalPrivateFilename": "public-listing-native-396-build/dist-server/index.js",
+      "sha256": "d8600119f8338e55668514fa39b192839e0aa78b436b84c9d55c23bdab01e051",
+      "preservedPrivately": true
+    }
+  ],
+  "originalPrivateBytesPreserved": true,
+  "selectedPngCopiesByteIdentical": true,
+  "sanitization": "No credentials, cookies, session values, database/CDP URLs or private environment. Synthetic public fixture data retained.",
+  "privateCleanupOriginalSha256": "ac69e615c4bbc093952298a8c5f40ff9bf63c9d6c3cb5fb2f46ff552a6404ddf"
+}

@@ -1,0 +1,150 @@
+{
+  "result": "PASS within stated native scope",
+  "code": "c9cc2b13f5baba71cb88f9685c6937daa02f9310",
+  "tree": "05d7338089c08211f1a170b7b58e0032e579e431",
+  "nodeSha256": "b8012b887e1b2281774e7318ad70f4a9debfb4d396eaeb3cd41e8e752ae1d80c",
+  "runtimeUiCssEditsAuthoredDuringReview": false,
+  "versions": {
+    "node": "24.14.1",
+    "agentBrowser": "0.41.2",
+    "browser": "Brave153.1.95.104 / Chromium153"
+  },
+  "build": {
+    "tsc": "PASS",
+    "viteRunner": "PASS",
+    "esbuild": "PASS",
+    "dependencyLockSha256": "233888ed8f864581a8835aab0b4c33ccd7fbc391f2a98650b63fcf8db8814892"
+  },
+  "guardedChecks": {
+    "files": 8,
+    "source": {
+      "tests": 52,
+      "pass": 52,
+      "fail": 0,
+      "skip": 0
+    },
+    "actualCompiledApiRunner": {
+      "tests": 52,
+      "pass": 52,
+      "fail": 0,
+      "skip": 0
+    },
+    "selector": [
+      "tests/public-listing-pagination-original.test.ts",
+      "tests/public-listing-preserved-page-original.test.ts",
+      "tests/public-listing-empty-name-original.test.ts",
+      "tests/public-listing-direct-empty-page-original.test.ts",
+      "tests/public-listing-compat-identity-original.test.ts",
+      "tests/public-http-status.test.ts",
+      "tests/public-document-view.test.ts"
+    ],
+    "selectorAdditional": [
+      "tests/public-listing-pretty-identity-original.test.ts"
+    ],
+    "caveat": "PublicDocumentView renders source against actual selected API; HTTP claims use actual compiled API. No all-compiled-client assertion."
+  },
+  "native": {
+    "themes": [
+      "classic",
+      "twentytwentyfive"
+    ],
+    "widths": [
+      1440,
+      768,
+      375
+    ],
+    "groupedRows": 16,
+    "rowCounts": {
+      "matrix": 6,
+      "paths": 6,
+      "variants": 2,
+      "nojs": 1,
+      "nojs-source": 1
+    },
+    "pathBrowserSubscenes": 66,
+    "pairedNativeGetHeadWithDocumentCases": 66,
+    "directControls": 14,
+    "genuineNojsThemeRows": 2,
+    "selectedPngs": 37,
+    "individuallyInspectedPngs": 37,
+    "noFakeResponsesOrRuntimeHooks": true,
+    "oneInitialRevalidationExpected": true
+  },
+  "previous396Stage": {
+    "retained": true,
+    "sourcePass": 47,
+    "compiledPass": 47,
+    "browserScenes": 0,
+    "releaseAcceptance": false,
+    "bundleSha256": "d8600119f8338e55668514fa39b192839e0aa78b436b84c9d55c23bdab01e051"
+  },
+  "setupHistory": [
+    "Original esbuild binary incorrectly passed to node; corrected executable builds exact final hash.",
+    "Original find-label CLI argument order failed; doctor passed, corrected harness reran complete matrix.",
+    "Immediate second anonymous comment429 admission preserved; scripts restored/browser closed; Source-only same-post retry after real elapsed interval passed without settings/IP/database reset."
+  ],
+  "limits": [
+    "Existing first-page and pretty-author filtered-page200 quirks are controls, not generalized WordPress status parity.",
+    "Source Query Loops retain their existing block perPage/filter/custom MorePosts contracts; main-model empty does not mean every independent loop is empty.",
+    "Source home template literal Blog and Classic configured posts-page title remain distinct.",
+    "No paged alias, live WordPress pixel comparison, BFCache, performance, whole-CMS or all-caller privacy claim.",
+    "No native legacy React PublicSite component or repeated pending-account/private hold claim; unchanged ownership is covered by prior separate accepted evidence.",
+    "Default global core/search unchanged; explicit attributes.query proposal remains future work."
+  ],
+  "originalHistoryHashes": [
+    {
+      "originalPrivateFilename": "public-listing-native-node.log",
+      "sha256": "debc6439696e52530feccb85d594ba120771e33bcfea70c31e348100e8dfda0b",
+      "preservedPrivately": true
+    },
+    {
+      "originalPrivateFilename": "public-listing-native-matrix-original-find-syntax-proof.json",
+      "sha256": "a31c69836c6e3de0b014a9af947e41b77ebda28a66a25d7324789fd90d02e0d8",
+      "preservedPrivately": true
+    },
+    {
+      "originalPrivateFilename": "public-listing-native-harness/matrix-original-find-syntax.mjs",
+      "sha256": "5eb490dd658c8c0f60fe98f28696e58262b2f7f1b0f427a8308fa8c0d0b0ed5c",
+      "preservedPrivately": true
+    },
+    {
+      "originalPrivateFilename": "public-listing-native-harness/nojs-original-flood.mjs",
+      "sha256": "ab375bee73cf61cd0070df08acf7bc5a51c0ba1bb4be0d16f1cf01553ae87e8c",
+      "preservedPrivately": true
+    },
+    {
+      "originalPrivateFilename": "public-listing-native-source.log",
+      "sha256": "ab73eb80b484ebda4ea55768e016cb2629498f78dc482a28bf0a346a54c7c5ad",
+      "preservedPrivately": true
+    },
+    {
+      "originalPrivateFilename": "public-listing-native-compiled.log",
+      "sha256": "fbecac5390c2502f34fb43b795f4c6f3eb4add41abb6126d9c3c8d3261b6f455",
+      "preservedPrivately": true
+    },
+    {
+      "originalPrivateFilename": "public-listing-native-396-build/dist-server/index.js",
+      "sha256": "d8600119f8338e55668514fa39b192839e0aa78b436b84c9d55c23bdab01e051",
+      "preservedPrivately": true
+    }
+  ],
+  "seedCount": 1,
+  "immutableOriginalsPreserved": true,
+  "cleanup": {
+    "receipt": "cleanup.json",
+    "originalPrivateReceiptSha256": "ac69e615c4bbc093952298a8c5f40ff9bf63c9d6c3cb5fb2f46ff552a6404ddf",
+    "portsFree": [
+      3035,
+      3036,
+      3037,
+      5195
+    ],
+    "uniqueDatabaseAbsent": true,
+    "uniqueUploadsAbsent": true,
+    "browsersClosed": 3,
+    "noVaultCreated": true,
+    "envRemoved": true,
+    "ownDependencyLinksRemoved": 2,
+    "readOnlyDependencyOwnerMode": "0755"
+  }
+}

@@ -1,0 +1,93 @@
+{
+  "code": "c9cc2b13f5baba71cb88f9685c6937daa02f9310",
+  "tree": "05d7338089c08211f1a170b7b58e0032e579e431",
+  "nodeSha256": "b8012b887e1b2281774e7318ad70f4a9debfb4d396eaeb3cd41e8e752ae1d80c",
+  "rows": [
+    {
+      "theme": "classic",
+      "width": 375,
+      "scene": "genuineNoJS-missing404-and-existing-password-comment-body2-context",
+      "ownedTargetOnly": true,
+      "scriptExecutionDisabledConfirmed": true,
+      "applicationLifecycleAbsent": true,
+      "missingNativeGET404": true,
+      "missingHEAD404EmptyBody": true,
+      "modelReads": 0,
+      "passwordPOST303": true,
+      "commentPOST303": true,
+      "secondBodyVisible": true,
+      "firstBodyAbsent": true,
+      "savedCommentVisible": true,
+      "finalQuery": {
+        "commentPage": "1",
+        "page": "2",
+        "query-7-page": "2"
+      },
+      "requests": [
+        {
+          "id": 1020,
+          "method": "GET",
+          "path": "/?page=7&query-7-page=1&query-8-page=1&commentPage=2",
+          "startedAt": 1794229089317,
+          "status": 404,
+          "finishedAt": 1794229089345
+        },
+        {
+          "id": 1024,
+          "method": "HEAD",
+          "path": "/?page=7&query-7-page=1&query-8-page=1&commentPage=2",
+          "startedAt": 1794229089403,
+          "status": 404,
+          "finishedAt": 1794229089422
+        },
+        {
+          "id": 1025,
+          "method": "GET",
+          "path": "/ordinary-native-locked-classic/?page=2&query-7-page=2&commentPage=1",
+          "startedAt": 1794229089488,
+          "status": 200,
+          "finishedAt": 1794229089510
+        },
+        {
+          "id": 1028,
+          "method": "POST",
+          "path": "/post-password",
+          "startedAt": 1794229089619,
+          "status": 303,
+          "location": "/ordinary-native-locked-classic/?page=2&query-7-page=2&commentPage=1",
+          "finishedAt": 1794229089672
+        },
+        {
+          "id": 1029,
+          "method": "GET",
+          "path": "/ordinary-native-locked-classic/?page=2&query-7-page=2&commentPage=1",
+          "startedAt": 1794229089676,
+          "status": 200,
+          "finishedAt": 1794229089700
+        },
+        {
+          "id": 1032,
+          "method": "POST",
+          "path": "/wp-comments-post.php",
+          "startedAt": 1794229089867,
+          "status": 303,
+          "location": "/ordinary-native-locked-classic/?page=2&query-7-page=2&commentPage=1#comment-2",
+          "finishedAt": 1794229089885
+        },
+        {
+          "id": 1033,
+          "method": "GET",
+          "path": "/ordinary-native-locked-classic/?page=2&query-7-page=2&commentPage=1",
+          "startedAt": 1794229089887,
+          "status": 200,
+          "finishedAt": 1794229089910
+        }
+      ],
+      "screenshots": [
+        "../screens/public-listing-native-classic-nojs-missing-375.png",
+        "../screens/public-listing-native-classic-nojs-unlocked-375.png",
+        "../screens/public-listing-native-classic-nojs-comment-375.png"
+      ]
+    }
+  ]
+}
