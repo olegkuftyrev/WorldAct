@@ -1,0 +1,64 @@
+{
+  "sha": "c0587edf1e88f4ebeb0a696156e5ef43a1f8849c",
+  "rows": [
+    {
+      "theme": "twentytwentyfive",
+      "htmlStatus": 200,
+      "modelStatus": 200,
+      "noPrivateIdentityOrSecrets": true,
+      "publicAuthorId": 2,
+      "canonical": "/by/native-author_case/4/author-identity-native-post/",
+      "numericArchive": {
+        "notFound": false,
+        "scroll": 375,
+        "url": "/?author=2",
+        "width": 375
+      },
+      "screenshot": "identity-twentytwentyfive-375.png"
+    },
+    {
+      "theme": "classic",
+      "htmlStatus": 200,
+      "modelStatus": 200,
+      "noPrivateIdentityOrSecrets": true,
+      "publicAuthorId": 2,
+      "canonical": "/by/native-author_case/4/author-identity-native-post/",
+      "numericArchive": {
+        "notFound": false,
+        "scroll": 375,
+        "url": "/?author=2",
+        "width": 375
+      },
+      "screenshot": "identity-classic-375.png"
+    }
+  ],
+  "profileChange": {
+    "nicenameUnchanged": true,
+    "permalinkUnchanged": true,
+    "displayNicknameEmailChanged": true
+  },
+  "rest": {
+    "publicUserSlug": "native-author_case",
+    "collectionSlug": "native-author_case",
+    "embeddedAuthorSlug": "native-author_case",
+    "meSlug": "admin",
+    "numericAuthorLink": "/?author=2",
+    "noRawUsernameOrEmail": true
+  },
+  "actualPostReassignment": {
+    "oldPathStatus": 404,
+    "newPublicAuthorId": 3,
+    "newCanonical": "/by/second-writerqa/4/author-identity-native-post/"
+  },
+  "actualAuthorDeletion": {
+    "destinationAuthorId": 3,
+    "destinationCanonical": "/by/second-writerqa/8/author-native-reassigned-post/",
+    "retiredPublicUserStatus": 404
+  },
+  "wrongAndRawUsernamePathsFenced": true,
+  "sanitizedFromReceipt": {
+    "filename": "author-native-final-identity-proof.json",
+    "sha256": "0140369b8dab8ffa7e5daff207f15da1a3193811002f1769fddd323e74e55829"
+  },
+  "overallBackendStatus": "NEEDS_REVISION: separate accumulated different-author body wait finding remains"
+}

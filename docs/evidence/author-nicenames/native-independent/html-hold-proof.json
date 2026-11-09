@@ -1,0 +1,173 @@
+{
+  "sha": "c0587edf1e88f4ebeb0a696156e5ef43a1f8849c",
+  "rows": [
+    {
+      "theme": "twentytwentyfive",
+      "mutation": "expire",
+      "width": 375,
+      "observed": {
+        "activeAuthorExpressionWait": true,
+        "calls": 2
+      },
+      "after": {
+        "bootstrap": true,
+        "commentSecret": false,
+        "lifecycle": false,
+        "locked": true,
+        "modelStatus": 200,
+        "nativeCommentForm": false,
+        "notFound": false,
+        "passwordForm": true,
+        "scroll": 375,
+        "selectedBodySecret": false,
+        "width": 375
+      },
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/?p=5&page=2&query-4-page=2&commentPage=2&replytocom=9",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/assets/index-BsgYOWhl.css",
+          "status": 304
+        },
+        {
+          "method": "GET",
+          "path": "/vendor/wordpress/wp-content/themes/twentytwentyfive/assets/fonts/manrope/Manrope-VariableFont_wght.woff2",
+          "status": 304
+        }
+      ],
+      "screenshot": "html-hold-twentytwentyfive-expire-375.png"
+    },
+    {
+      "theme": "twentytwentyfive",
+      "mutation": "private",
+      "width": 375,
+      "observed": {
+        "activeAuthorExpressionWait": true,
+        "calls": 2
+      },
+      "after": {
+        "bootstrap": true,
+        "commentSecret": false,
+        "lifecycle": false,
+        "modelStatus": 404,
+        "nativeCommentForm": false,
+        "notFound": true,
+        "passwordForm": false,
+        "scroll": 375,
+        "selectedBodySecret": false,
+        "width": 375
+      },
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/?p=5&page=2&query-4-page=2&commentPage=2&replytocom=9",
+          "status": 404
+        },
+        {
+          "method": "GET",
+          "path": "/vendor/wordpress/wp-content/themes/twentytwentyfive/assets/images/404-image.webp",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/assets/index-BsgYOWhl.css",
+          "status": 304
+        },
+        {
+          "method": "GET",
+          "path": "/vendor/wordpress/wp-content/themes/twentytwentyfive/assets/fonts/manrope/Manrope-VariableFont_wght.woff2",
+          "status": 304
+        }
+      ],
+      "screenshot": "html-hold-twentytwentyfive-private-375.png"
+    },
+    {
+      "theme": "classic",
+      "mutation": "expire",
+      "width": 375,
+      "observed": {
+        "activeAuthorExpressionWait": true,
+        "calls": 2
+      },
+      "after": {
+        "bootstrap": true,
+        "commentSecret": false,
+        "lifecycle": false,
+        "locked": true,
+        "modelStatus": 200,
+        "nativeCommentForm": false,
+        "notFound": false,
+        "passwordForm": true,
+        "scroll": 375,
+        "selectedBodySecret": false,
+        "width": 375
+      },
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/?p=5&page=2&query-4-page=2&commentPage=2&replytocom=9",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/assets/index-BsgYOWhl.css",
+          "status": 304
+        },
+        {
+          "method": "GET",
+          "path": "/vendor/wordpress/wp-content/themes/twentytwentyfive/assets/fonts/manrope/Manrope-VariableFont_wght.woff2",
+          "status": 304
+        }
+      ],
+      "screenshot": "html-hold-classic-expire-375.png"
+    },
+    {
+      "theme": "classic",
+      "mutation": "private",
+      "width": 375,
+      "observed": {
+        "activeAuthorExpressionWait": true,
+        "calls": 2
+      },
+      "after": {
+        "bootstrap": true,
+        "commentSecret": false,
+        "lifecycle": false,
+        "modelStatus": 404,
+        "nativeCommentForm": false,
+        "notFound": true,
+        "passwordForm": false,
+        "scroll": 375,
+        "selectedBodySecret": false,
+        "width": 375
+      },
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/?p=5&page=2&query-4-page=2&commentPage=2&replytocom=9",
+          "status": 404
+        },
+        {
+          "method": "GET",
+          "path": "/assets/index-BsgYOWhl.css",
+          "status": 304
+        },
+        {
+          "method": "GET",
+          "path": "/vendor/wordpress/wp-content/themes/twentytwentyfive/assets/fonts/manrope/Manrope-VariableFont_wght.woff2",
+          "status": 304
+        }
+      ],
+      "screenshot": "html-hold-classic-private-375.png"
+    }
+  ],
+  "sanitizedFromReceipt": {
+    "filename": "author-native-final-html-hold-proof.json",
+    "sha256": "cff4d2831181b7ac7a79174c6a4dcbb127a3ad27e146fc655e6456f9f470c2c9"
+  },
+  "overallBackendStatus": "NEEDS_REVISION: separate accumulated different-author body wait finding remains"
+}

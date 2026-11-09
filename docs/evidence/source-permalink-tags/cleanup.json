@@ -1,0 +1,16 @@
+{
+  "browserClose": "\u2713 Browser closed",
+  "vaultDelete": "\u2713 Done",
+  "portsFree": [
+    3044,
+    3050,
+    3051
+  ],
+  "databaseAbsent": true,
+  "uploadsRemoved": true,
+  "environmentRemoved": true,
+  "ownedDependencyLinkRemoved": true,
+  "sharedDependencyOwnerRetained": true,
+  "privateCredentialRecordRemoved": true,
+  "mainHealthStatus": 200
+}

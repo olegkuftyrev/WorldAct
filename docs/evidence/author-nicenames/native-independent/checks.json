@@ -1,0 +1,197 @@
+{
+  "sha": "c0587edf1e88f4ebeb0a696156e5ef43a1f8849c",
+  "scope": "Independent author identity native/public presentation; backend/global acceptance separate",
+  "observedVerdict": "PASS for exact c058 scoped native/public presentation",
+  "predecessor": {
+    "sha": "f0198b71b80b35b46b030d12affdf0bf7b173955",
+    "status": "NEEDS_REVISION from independent backend; only basic Settings observed here",
+    "basicSettingsRows": 3
+  },
+  "ownGuards": {
+    "source": {
+      "files": 6,
+      "pass": 65,
+      "fail": 0,
+      "skipped": 0
+    },
+    "compiled": {
+      "files": 6,
+      "pass": 65,
+      "fail": 0,
+      "skipped": 0
+    }
+  },
+  "ownBuild": "TSC + Vite runner production + compiled server PASS",
+  "proofs": {
+    "author-native-final-c058-settings-proof.json": {
+      "rows": 3,
+      "sha256": "c4efe542146546295962032be7aff3c7117282b6083885f94eb1f755d874b004"
+    },
+    "author-native-final-identity-proof.json": {
+      "rows": 2,
+      "sha256": "0140369b8dab8ffa7e5daff207f15da1a3193811002f1769fddd323e74e55829"
+    },
+    "author-native-final-js-proof.json": {
+      "rows": 6,
+      "sha256": "e00c84c1ca4c0365d2e98cbca0a9e4fe6fa22409dc20253447258b8bb71dde3a"
+    },
+    "author-native-final-nojs-proof.json": {
+      "rows": 6,
+      "sha256": "8d5f6880f3faa87dfa1cabc65867ea55e89bef68315fed5e3206c5973b8a2bc4"
+    },
+    "author-native-final-password-proof.json": {
+      "rows": 6,
+      "sha256": "28f75a9d306ebf367ee0f1c53da3ac7477c7c57f950dd419dde47cc9aec4de7e"
+    },
+    "author-native-final-js-comment-proof.json": {
+      "rows": 2,
+      "sha256": "73ef521b1a8d6f530543fea9db731097ccc9c0764d4df30ff6ce7f0cde72a67f"
+    },
+    "author-native-final-html-hold-proof.json": {
+      "rows": 4,
+      "sha256": "cff4d2831181b7ac7a79174c6a4dcbb127a3ad27e146fc655e6456f9f470c2c9"
+    }
+  },
+  "screenshotsDirectlyInspected": [
+    "password-twentytwentyfive-1440.png",
+    "identity-twentytwentyfive-375.png",
+    "nojs-classic-375.png",
+    "password-twentytwentyfive-375.png",
+    "js-comment-classic-375.png",
+    "password-classic-375.png",
+    "js-twentytwentyfive-768.png",
+    "c058-settings-375.png",
+    "html-hold-twentytwentyfive-private-375.png",
+    "js-classic-768.png",
+    "identity-classic-375.png",
+    "js-twentytwentyfive-1440.png",
+    "html-hold-twentytwentyfive-expire-375.png",
+    "js-comment-twentytwentyfive-375.png",
+    "nojs-twentytwentyfive-375.png",
+    "nojs-twentytwentyfive-768.png",
+    "c058-settings-1440.png",
+    "js-classic-375.png",
+    "html-hold-classic-private-375.png",
+    "c058-settings-768.png",
+    "js-twentytwentyfive-375.png",
+    "nojs-classic-1440.png",
+    "password-classic-768.png",
+    "password-twentytwentyfive-768.png",
+    "html-hold-classic-expire-375.png",
+    "nojs-classic-768.png",
+    "password-classic-1440.png",
+    "nojs-twentytwentyfive-1440.png",
+    "js-classic-1440.png"
+  ],
+  "logs": {
+    "worldact-author-native-final-build.log": {
+      "sha256": "c4ebef1a53161a1eb6c01e72114edf00aa1bae4bca3b052c1f5172781dcfe998"
+    },
+    "worldact-author-native-final-html-holds-browser.log": {
+      "sha256": "678c09f551803007bea54b404bd889468933ad5cbbdd7d2c5432f08e2999a1d4"
+    },
+    "worldact-author-native-final-server.log": {
+      "sha256": "f8ee0f982026603c653c0896771a9241b87a0ce580026e8114f5df1676c0ddab"
+    },
+    "worldact-author-native-final-nojs-browser.log": {
+      "sha256": "284a1b47c634806f012a2b8987174fb332c697e0f46a6e78563525449b61c075"
+    },
+    "worldact-author-native-final-compiled.log": {
+      "sha256": "1d2cf002faa618e8292119d55cb47ccc68e50d1afc2497db5ccf73a3e77948be",
+      "counts": {
+        "pass": 65,
+        "fail": 0,
+        "skipped": 0
+      }
+    },
+    "worldact-author-native-final-js-comments-browser.log": {
+      "sha256": "6c626bc12068bf51e9f914243716596420dffaa830728e92f2ebd7cbf6f3e612"
+    },
+    "worldact-author-native-final-passwords-browser.log": {
+      "sha256": "1c8cbe4a795f7a27dd76266d45cb2bbbc458805d447a3f18dbc8f3da246e6993"
+    },
+    "worldact-author-native-final-source.log": {
+      "sha256": "461b516288673e0d06455b9cbfa0c1e57c970a63fc2d222ca9c65397734b181c",
+      "counts": {
+        "pass": 65,
+        "fail": 0,
+        "skipped": 0
+      }
+    },
+    "worldact-author-native-final-public-browser.log": {
+      "sha256": "b17c7dcfcf69238d55416558eded9746495cdc34a618d70693d9c9e757000385"
+    },
+    "worldact-author-native-final-public-browser-final.log": {
+      "sha256": "5116292a9777578778eaa2f2390f352337c0da732016472b767e1d27154c5154"
+    }
+  },
+  "ownedSQLHoldCleanup": {
+    "usersIsRestoredTable": true,
+    "ownedWaitRelationsAbsent": true,
+    "ownedWaitFunctionAbsent": true
+  },
+  "limits": [
+    "Current tenth-tag text-help UI only; future tag-button branch not integrated here.",
+    "Two themes and one browser; not full theme/browser or whole-CMS parity.",
+    "No BFCache certification, performance measurement, main migration or fresh archive certificate by this reviewer.",
+    "Actual four no-JS initialHTML holds distinct from separate backend model/helper probes.",
+    "Profile changes and post/user reassignment performed via actual APIs; numeric author links clicked in browser.",
+    "No retroactive revocation claim for bytes already delivered; the policy changes occur before the held new document response is emitted."
+  ],
+  "ownedResources": "Retained intentionally for root-authorized focused UI-only successor review; cleanup follows that separate stage",
+  "overallBackendStatus": "NEEDS_REVISION: separately confirmed home/archive/site accumulated A body across later different B-author wait",
+  "cleanupAfterSeparateUIFollowup": {
+    "sha": "701e7f4f5bfa426f506d639e6b8719bf8fc3137c",
+    "underlyingPublicStatus": "NEEDS_REVISION for separately confirmed accumulated different-author body wait; scoped UI gate only",
+    "actualUILogoutAllFour": true,
+    "ownVaultIndependentlyAbsent": true,
+    "browserSessionsClosed": true,
+    "ownAPIServerAndProxyStopped": true,
+    "ownedPersistentDatabaseIndependentlyAbsent": true,
+    "ownedUploadsRemoved": true,
+    "ownEnvAndPrivateConfigsRemoved": true,
+    "onlyOwnedDependencySymlinkRemoved": true,
+    "fullDependencyOwnerRetained": true,
+    "ports": {
+      "3035": "free",
+      "3036": "free",
+      "3037": "free",
+      "5195": "free"
+    },
+    "allFourBrowserSocketsAbsent": true,
+    "checkoutCleanBeforeEvidence": true,
+    "mainReadOnlyHealth": 200,
+    "ownHelpersRemovedCount": 17
+  },
+  "screenSHA256": {
+    "password-twentytwentyfive-1440.png": "7df6a334f9053926fa5760de38638a2e8c9ab08c6e12a6d3494d4865e1b0d2bf",
+    "identity-twentytwentyfive-375.png": "4266d9fe68148b967ef771690e36d84999db5c1fe8dea03fcc227708b02ef196",
+    "nojs-classic-375.png": "e27ede68239097157459583f897c6a4115218bbb898c844b0c269a2dc98bdecc",
+    "password-twentytwentyfive-375.png": "b8eaab69d69a1aa6370dc60b12274e2071099936dcc7e897921cce0b2a5d040c",
+    "js-comment-classic-375.png": "102c8f00660f03c89877d0287b289a6d12e8dc1d5a2a870a30704bf0e62c6654",
+    "password-classic-375.png": "9155b9aea101ecd087d7f993019c092106229bb13251c4e2e3293d28a5853a4c",
+    "js-twentytwentyfive-768.png": "07ab255e28a2ddd2d845fef98703557b52433498f94d78250f65bb77969126ca",
+    "c058-settings-375.png": "142df20ded1324254078d1e138d929231be9bd40c876d699e9e961e8980c83d7",
+    "html-hold-twentytwentyfive-private-375.png": "71c057c6cbe8a87556b2dd5c06d21d98625ca81b17ba744122e21e1eba0386fe",
+    "js-classic-768.png": "c6d965dfb576e44507ca5d2fe0167325bf186ef3338dfde3ec3e74775f98064f",
+    "identity-classic-375.png": "ea9856507fb69b59f05a602a8a91689d3c67db9949520b37ccae18d966d0dc0e",
+    "js-twentytwentyfive-1440.png": "da70f3dbdac3c13afd143031b4c5e19cd534af5c142f604d356cb397b26890eb",
+    "html-hold-twentytwentyfive-expire-375.png": "36c208ec8221949b885da84d6ebc593f200819447aae762c1373ba26008ce1aa",
+    "js-comment-twentytwentyfive-375.png": "a91638cff11071ac9ec7fff21a542b5d15ca1c30073fff3d6c0addc50eafcb39",
+    "nojs-twentytwentyfive-375.png": "81818f9111c4bfcdec6d89cbc0f985bc1e3e6af643b3b9863eae611d2cc45ee9",
+    "nojs-twentytwentyfive-768.png": "944b1b2696f5c73d47b33b8f23a5699284f9d1b11333eb828a42059fa4095ef7",
+    "c058-settings-1440.png": "f9e0c606d5eab26841a5ae8687dc899192a75f32a37cb011fcf157613a243155",
+    "js-classic-375.png": "7130e73747fcf2068cd04fb91509cf2e1229ec6675a538e5836ea7bdc713d0a1",
+    "html-hold-classic-private-375.png": "51467082397ba4f63e100698c8decd1121d3e269dad7d27a20c9d4a7b0ff7763",
+    "c058-settings-768.png": "5eaadce35cee1911cb62e8ce261c1f89e1b11181e64069c471f5a59cd2aa3ff7",
+    "js-twentytwentyfive-375.png": "a93f172812039f04eb275997f975125f2a371b35e87c1650128cf48f4ae24e93",
+    "nojs-classic-1440.png": "188f13f7e2ab3f160863132a012d6dc1893ea7bc0d448562125f9c1d542ee0c0",
+    "password-classic-768.png": "d306afb8542638232184690f26855cfabda4141e0996616afaed26eed9fe638d",
+    "password-twentytwentyfive-768.png": "729714f386130ed1dcf1049fa6710091bca3a030380c5d8ab12648b076635f08",
+    "html-hold-classic-expire-375.png": "4e7c2121e78c76856863830aca2b0708a44c2e14508eafc9847bbbe13e9bdd42",
+    "nojs-classic-768.png": "b57c08465575b91a0425bc98c4008599e45441a07e65cbd2175b5390e223968a",
+    "password-classic-1440.png": "36cbc5b46f59c5d69c3133f8ac57874d1d1f77473846de1d23d8cbde3aef81e8",
+    "nojs-twentytwentyfive-1440.png": "bb957601614cb543b0328ed10e84f339123fb4c1579a0601714211f26823c7bd",
+    "js-classic-1440.png": "d842c51b2f61b575ae0f6b267e5e53ca21040428ff2fef0aafe075c5041b781d"
+  }
+}

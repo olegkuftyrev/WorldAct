@@ -1,0 +1,24 @@
+# Persisted authors and complete public-read attempts
+
+WorldAct assigns a stable, unique ASCII author nicename on account creation and uses the actual persisted post owner for `%author%`. The shared settings inventory has ten tokens. Existing numeric author archives remain available; pretty author archive URLs are a separate continuation.
+
+The additive migration preserves account spelling and all old fields. It backfills unassigned identities in ID order, reserves assigned identities, and rejects invalid or duplicate assigned values atomically. Account creation, registration, installation and seeding share the creation barrier and transactional allocator. Deployment requires quiesced writers, a verified database/uploads backup and fresh restore, the normal migration, and old-data verification without reseeding. See [the identity contract](../../../server/user-nicenames.md).
+
+## Review and corrected predecessors
+
+Original immutable wait regressions rejected the initial implementation and its first successor: selected documents, earlier archive/query bodies and RSS/Atom could retain an earlier authorization decision while another post's author lookup waited. Complete request-local attempts now collect actual post observations, settle parallel reads, recheck the accumulated policy after assembly, and rebuild the complete attempt once; a second change returns409. Writes and comment admission are not replayed. Supplied-client and authorized editorial behavior remains.
+
+The accumulated successor `66abece` passed the body regressions but missed direct neighboring metadata and internal RSS excerpts. Final author runtime `f3289f4` observes those paths, breadcrumbs/page items, sitemap/search and media-parent reads, resets attempt-owned embed caches, and distinguishes protected generic feed metadata from readable excerpts. Root independently read the complete change and [call-site inventory](../../direct-public-read-inventory.md) and reran the integrated regressions.
+
+The original navigation probe's whole-response title assertion also rejected a newly valid public PAGE after changing a POST's type. Its original bytes and failing after-results remain preserved. A separately frozen corrected probe still fails all five cases on66, requires the stale POST presentation and canonical to disappear, and requires the fresh valid PAGE and canonical to remain. That corrected probe and the unchanged internal RSS probe each pass5/5 in source and compiled modes. Earlier failed stages remain documented separately, without retroactive acceptance.
+
+## Integrated checks
+
+- Production composition `94e69e1`: TypeScript, Vite runner-loader and Node build passed; all173 source files passed **1008 checks**, with8 conditional-stage skips.
+- Test-only successor `d958b30` changes nested migration-fixture cleanup. The initial compiled attempt hit a late57P01 when immediate FORCE DROP raced pool shutdown; the failed log is retained. Cleanup now waits for that owned database's sessions to close and uses ordinary DROP. Its9 migration cases passed source; the complete actual126-file CI compiled selector then passed **875 checks**, with5 conditional-stage skips.
+- Production source and built assets did not change for that test-only correction. Fresh author archives passed source export, fresh source restore and fresh compiled restore,1/1 each; both fresh unseeded installers passed7 checks with1 conditional skip. Restores use different post IDs, administrator IDs and destination author associations and exercise Plain/custom URLs, both themes, actual Node HTML and native comment303 returns.
+- Six immutable author/body/direct-consumer probes retain their expected hashes. Direct imported helpers/migrations remain TypeScript in compiled-mode tests; HTTP endpoints use the actual bundled Node server.
+
+Source-derived tag controls passed independent browser checks at1440/768/375, including all ten buttons, keyboard focus/caret behavior, saved settings and rejected-save draft retention. Their component is unchanged in this integration. Earlier c058 native document checks remain explicitly scoped historical evidence; they do not certify all later public consumers. See [tag controls](tag-controls-independent/README.md), [native document scope](native-independent/README.md) and [authored controls](../source-permalink-tags/README.md). No live WordPress pixel-equivalence claim is made.
+
+These checks establish this bounded continuation, not whole-CMS parity or performance. Statement-boundary policy decisions cannot revoke already returned bytes. Arbitrary title/settings/term/user/media relationships, external RSS snapshots, imported accounts, explicit nicename editing, pretty author archives, canonical redirects and historical civil dates remain separate. The release operator records the backup, old-data preservation and exact Node22/24 CI verification separately.

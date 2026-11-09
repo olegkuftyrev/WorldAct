@@ -1,0 +1,346 @@
+{
+  "sha": "c0587edf1e88f4ebeb0a696156e5ef43a1f8849c",
+  "rows": [
+    {
+      "theme": "twentytwentyfive",
+      "width": 1440,
+      "before": {
+        "body2": true,
+        "bootstrap": true,
+        "gate": false,
+        "lifecycle": false,
+        "parent": "4",
+        "query2": true,
+        "scriptRan": false
+      },
+      "after": {
+        "body1": false,
+        "body2": true,
+        "commentPage": "2",
+        "query2": true,
+        "queryPage": "2",
+        "reply": null,
+        "scriptRan": false,
+        "scroll": 1440,
+        "text": true,
+        "url": "/by/native-author_case/4/author-identity-native-post/2/?query-4-page=2&commentPage=2#comment-10",
+        "visible": true,
+        "width": 1440
+      },
+      "saved": {
+        "id": 10,
+        "parent_id": 4,
+        "user_id": 1,
+        "status": "approved"
+      },
+      "requests": [
+        {
+          "method": "POST",
+          "path": "/wp-comments-post.php",
+          "status": 303
+        },
+        {
+          "method": "GET",
+          "path": "/by/native-author_case/4/author-identity-native-post/2/?query-4-page=2&commentPage=2",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/assets/index-BsgYOWhl.css",
+          "status": 304
+        },
+        {
+          "method": "GET",
+          "path": "/vendor/wordpress/wp-content/themes/twentytwentyfive/assets/fonts/manrope/Manrope-VariableFont_wght.woff2",
+          "status": 304
+        }
+      ],
+      "screenshot": "nojs-twentytwentyfive-1440.png"
+    },
+    {
+      "theme": "twentytwentyfive",
+      "width": 768,
+      "before": {
+        "body2": true,
+        "bootstrap": true,
+        "gate": false,
+        "lifecycle": false,
+        "parent": "4",
+        "query2": true,
+        "scriptRan": false
+      },
+      "after": {
+        "body1": false,
+        "body2": true,
+        "commentPage": "2",
+        "query2": true,
+        "queryPage": "2",
+        "reply": null,
+        "scriptRan": false,
+        "scroll": 768,
+        "text": true,
+        "url": "/by/native-author_case/4/author-identity-native-post/2/?query-4-page=2&commentPage=2#comment-11",
+        "visible": true,
+        "width": 768
+      },
+      "saved": {
+        "id": 11,
+        "parent_id": 4,
+        "user_id": 1,
+        "status": "approved"
+      },
+      "requests": [
+        {
+          "method": "POST",
+          "path": "/wp-comments-post.php",
+          "status": 303
+        },
+        {
+          "method": "GET",
+          "path": "/by/native-author_case/4/author-identity-native-post/2/?query-4-page=2&commentPage=2",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/assets/index-BsgYOWhl.css",
+          "status": 304
+        },
+        {
+          "method": "GET",
+          "path": "/vendor/wordpress/wp-content/themes/twentytwentyfive/assets/fonts/manrope/Manrope-VariableFont_wght.woff2",
+          "status": 304
+        }
+      ],
+      "screenshot": "nojs-twentytwentyfive-768.png"
+    },
+    {
+      "theme": "twentytwentyfive",
+      "width": 375,
+      "before": {
+        "body2": true,
+        "bootstrap": true,
+        "gate": false,
+        "lifecycle": false,
+        "parent": "4",
+        "query2": true,
+        "scriptRan": false
+      },
+      "after": {
+        "body1": false,
+        "body2": true,
+        "commentPage": "2",
+        "query2": true,
+        "queryPage": "2",
+        "reply": null,
+        "scriptRan": false,
+        "scroll": 375,
+        "text": true,
+        "url": "/by/native-author_case/4/author-identity-native-post/2/?query-4-page=2&commentPage=2#comment-12",
+        "visible": true,
+        "width": 375
+      },
+      "saved": {
+        "id": 12,
+        "parent_id": 4,
+        "user_id": 1,
+        "status": "approved"
+      },
+      "requests": [
+        {
+          "method": "POST",
+          "path": "/wp-comments-post.php",
+          "status": 303
+        },
+        {
+          "method": "GET",
+          "path": "/by/native-author_case/4/author-identity-native-post/2/?query-4-page=2&commentPage=2",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/assets/index-BsgYOWhl.css",
+          "status": 304
+        },
+        {
+          "method": "GET",
+          "path": "/vendor/wordpress/wp-content/themes/twentytwentyfive/assets/fonts/manrope/Manrope-VariableFont_wght.woff2",
+          "status": 304
+        }
+      ],
+      "screenshot": "nojs-twentytwentyfive-375.png"
+    },
+    {
+      "theme": "classic",
+      "width": 1440,
+      "before": {
+        "body2": true,
+        "bootstrap": true,
+        "gate": false,
+        "lifecycle": false,
+        "parent": "4",
+        "query2": true,
+        "scriptRan": false
+      },
+      "after": {
+        "body1": false,
+        "body2": true,
+        "commentPage": "2",
+        "query2": true,
+        "queryPage": "2",
+        "reply": null,
+        "scriptRan": false,
+        "scroll": 1440,
+        "text": true,
+        "url": "/by/native-author_case/4/author-identity-native-post/2/?query-4-page=2&commentPage=2#comment-13",
+        "visible": true,
+        "width": 1440
+      },
+      "saved": {
+        "id": 13,
+        "parent_id": 4,
+        "user_id": 1,
+        "status": "approved"
+      },
+      "requests": [
+        {
+          "method": "POST",
+          "path": "/wp-comments-post.php",
+          "status": 303
+        },
+        {
+          "method": "GET",
+          "path": "/by/native-author_case/4/author-identity-native-post/2/?query-4-page=2&commentPage=2",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/assets/index-BsgYOWhl.css",
+          "status": 304
+        },
+        {
+          "method": "GET",
+          "path": "/vendor/wordpress/wp-content/themes/twentytwentyfive/assets/fonts/manrope/Manrope-VariableFont_wght.woff2",
+          "status": 304
+        }
+      ],
+      "screenshot": "nojs-classic-1440.png"
+    },
+    {
+      "theme": "classic",
+      "width": 768,
+      "before": {
+        "body2": true,
+        "bootstrap": true,
+        "gate": false,
+        "lifecycle": false,
+        "parent": "4",
+        "query2": true,
+        "scriptRan": false
+      },
+      "after": {
+        "body1": false,
+        "body2": true,
+        "commentPage": "2",
+        "query2": true,
+        "queryPage": "2",
+        "reply": null,
+        "scriptRan": false,
+        "scroll": 768,
+        "text": true,
+        "url": "/by/native-author_case/4/author-identity-native-post/2/?query-4-page=2&commentPage=2#comment-14",
+        "visible": true,
+        "width": 768
+      },
+      "saved": {
+        "id": 14,
+        "parent_id": 4,
+        "user_id": 1,
+        "status": "approved"
+      },
+      "requests": [
+        {
+          "method": "POST",
+          "path": "/wp-comments-post.php",
+          "status": 303
+        },
+        {
+          "method": "GET",
+          "path": "/by/native-author_case/4/author-identity-native-post/2/?query-4-page=2&commentPage=2",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/assets/index-BsgYOWhl.css",
+          "status": 304
+        },
+        {
+          "method": "GET",
+          "path": "/vendor/wordpress/wp-content/themes/twentytwentyfive/assets/fonts/manrope/Manrope-VariableFont_wght.woff2",
+          "status": 304
+        }
+      ],
+      "screenshot": "nojs-classic-768.png"
+    },
+    {
+      "theme": "classic",
+      "width": 375,
+      "before": {
+        "body2": true,
+        "bootstrap": true,
+        "gate": false,
+        "lifecycle": false,
+        "parent": "4",
+        "query2": true,
+        "scriptRan": false
+      },
+      "after": {
+        "body1": false,
+        "body2": true,
+        "commentPage": "2",
+        "query2": true,
+        "queryPage": "2",
+        "reply": null,
+        "scriptRan": false,
+        "scroll": 375,
+        "text": true,
+        "url": "/by/native-author_case/4/author-identity-native-post/2/?query-4-page=2&commentPage=2#comment-15",
+        "visible": true,
+        "width": 375
+      },
+      "saved": {
+        "id": 15,
+        "parent_id": 4,
+        "user_id": 1,
+        "status": "approved"
+      },
+      "requests": [
+        {
+          "method": "POST",
+          "path": "/wp-comments-post.php",
+          "status": 303
+        },
+        {
+          "method": "GET",
+          "path": "/by/native-author_case/4/author-identity-native-post/2/?query-4-page=2&commentPage=2",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/assets/index-BsgYOWhl.css",
+          "status": 304
+        },
+        {
+          "method": "GET",
+          "path": "/vendor/wordpress/wp-content/themes/twentytwentyfive/assets/fonts/manrope/Manrope-VariableFont_wght.woff2",
+          "status": 304
+        }
+      ],
+      "screenshot": "nojs-classic-375.png"
+    }
+  ],
+  "sanitizedFromReceipt": {
+    "filename": "author-native-final-nojs-proof.json",
+    "sha256": "8d5f6880f3faa87dfa1cabc65867ea55e89bef68315fed5e3206c5973b8a2bc4"
+  },
+  "overallBackendStatus": "NEEDS_REVISION: separate accumulated different-author body wait finding remains"
+}

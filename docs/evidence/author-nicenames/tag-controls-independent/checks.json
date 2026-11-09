@@ -1,0 +1,89 @@
+{
+  "sha": "701e7f4f5bfa426f506d639e6b8719bf8fc3137c",
+  "parent": "c0587edf1e88f4ebeb0a696156e5ef43a1f8849c",
+  "cherryPicked": "b9fef5d5d250b6da21ff5a47c18c42cc0a9ccee6",
+  "onlyChangedFile": "src/components/PermalinkSettings.tsx",
+  "componentSHA256": "b83d3a06dcbf112382b772397170583ed792ce3d64d472985c84c9ffd4196996",
+  "nodeBundleBefore": "eca7762216cfdf1b773cd73d284183b7650715e4bb75f55fa87fe6aab3521ed7",
+  "nodeBundleAfter": "eca7762216cfdf1b773cd73d284183b7650715e4bb75f55fa87fe6aab3521ed7",
+  "cssBytesUnchanged": true,
+  "verdict": "PASS for source-shaped ten-token controls only",
+  "underlyingBackendVerdict": "NEEDS_REVISION: accumulated home/archive/site post A across later different B author wait; release held",
+  "nativeWidths": [
+    1440,
+    768,
+    375
+  ],
+  "nativeRows": 3,
+  "publicSmokes": 2,
+  "screenshotsDirectlyInspected": [
+    "768-viewport.png",
+    "public-twentytwentyfive-375.png",
+    "1440.png",
+    "375-invalid.png",
+    "1440-viewport.png",
+    "375.png",
+    "768.png",
+    "public-classic-375.png",
+    "375-viewport.png"
+  ],
+  "putOutcomesPerWidth": {
+    "validSave": [
+      200
+    ],
+    "invalidSave": [
+      400
+    ],
+    "unintendedControlPuts": 0
+  },
+  "proofSHA256": {
+    "author-native-tag-ui-proof.json": "48b7b955d04a652730cb95b5a923bebbbc28172ccc8d0e74d2ff948cf34e29c8",
+    "author-native-tag-ui-public-proof.json": "5b2a60280f7166c702fe96ab67f0c7517c36d78c57bba8e15abdb8869baa8ef8"
+  },
+  "logSHA256": {
+    "worldact-author-native-tag-ui-browser-complete.log": "9e5967a6fcf2c093d345e85bbe796f889e3047f3556efee6a6b7e8fcc10aebef",
+    "worldact-author-native-tag-ui-server.log": "f8ee0f982026603c653c0896771a9241b87a0ce580026e8114f5df1676c0ddab",
+    "worldact-author-native-tag-ui-public-smoke.log": "400bab6533165a2160c2743be71539d9b3462ca3df49c60313e6892cbd3d8792",
+    "worldact-author-native-tag-ui-browser.log": "a34dd27f9077258075a8dee17028a248ebe8f177525eab128e33c13aa2cd4ff1",
+    "worldact-author-native-tag-ui-browser-final.log": "3a3f4a33573953f49d98f25a979f452f23700a9c5c0ce166db2e542cb0535217",
+    "worldact-author-native-tag-ui-build.log": "b8576f9efe44c042ea4bc2828fea8bd99a188fe7fb799f1b96b92a5567177751"
+  },
+  "harnessCorrections": [
+    "At375 a preset radio was above the viewport after scrolling to buttons; explicit native scroll preceded the real click on the complete rerun.",
+    "On a reused authenticated session, visiting /login redirects to /admin; the rerun checks the real Settings-or-login state before authentication. Earlier failed logs remain separate."
+  ],
+  "cleanup": {
+    "sha": "701e7f4f5bfa426f506d639e6b8719bf8fc3137c",
+    "underlyingPublicStatus": "NEEDS_REVISION for separately confirmed accumulated different-author body wait; scoped UI gate only",
+    "actualUILogoutAllFour": true,
+    "ownVaultIndependentlyAbsent": true,
+    "browserSessionsClosed": true,
+    "ownAPIServerAndProxyStopped": true,
+    "ownedPersistentDatabaseIndependentlyAbsent": true,
+    "ownedUploadsRemoved": true,
+    "ownEnvAndPrivateConfigsRemoved": true,
+    "onlyOwnedDependencySymlinkRemoved": true,
+    "fullDependencyOwnerRetained": true,
+    "ports": {
+      "3035": "free",
+      "3036": "free",
+      "3037": "free",
+      "5195": "free"
+    },
+    "allFourBrowserSocketsAbsent": true,
+    "checkoutCleanBeforeEvidence": true,
+    "mainReadOnlyHealth": 200,
+    "ownHelpersRemovedCount": 17
+  },
+  "screenSHA256": {
+    "768-viewport.png": "7eb75a53fa61ceaf265f147a72f517501054b14b35bb97798a5d2e4af6b1ab68",
+    "public-twentytwentyfive-375.png": "c437e2a3f48b662e8c624bf1360a899b0c16f7ab337a51ca5bc84b318766647f",
+    "1440.png": "871b27f6673cdda7803713bb9628756133cec1f9ba93ec3f28f0534a3d3eaab4",
+    "375-invalid.png": "ce05e60946d76268b4b1044876435d76346ffdad5dc3c2f1c7263d1226b8d696",
+    "1440-viewport.png": "211c3b1239ee870103bffda9ad8c3b03a8295c89992dac8e758f089759631698",
+    "375.png": "708ea869ac5f0f9c922299cb04a86591589045e7465a8125e45a08f6813d6dfd",
+    "768.png": "ef6b8b2694fd55495117b25acf014c7adb2caae98794228ffa569a38960b0240",
+    "public-classic-375.png": "ac76f104d47d4524f488c00cb3cb3df72d02bafc98a9eb8681893be704018b82",
+    "375-viewport.png": "9a27e6cdc0cb03e14c3bdafcb4b6eaf3244494c1115939f5316a342af92fe283"
+  }
+}

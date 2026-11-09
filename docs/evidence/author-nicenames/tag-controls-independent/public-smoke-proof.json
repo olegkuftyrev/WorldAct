@@ -1,0 +1,77 @@
+{
+  "sha": "701e7f4f5bfa426f506d639e6b8719bf8fc3137c",
+  "rows": [
+    {
+      "theme": "twentytwentyfive",
+      "width": 375,
+      "initial": {
+        "body1": false,
+        "body2": true,
+        "canonical": 1,
+        "errors": [],
+        "query2": true,
+        "same": true,
+        "scroll": 375,
+        "titles": 1,
+        "width": 375
+      },
+      "after": {
+        "body2": true,
+        "errors": [],
+        "length": 10,
+        "push": 1,
+        "query2": true,
+        "url": "/by/native-author_case/4/author-identity-native-post/2/?query-4-page=2&commentPage=3&replytocom=4"
+      },
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/public/document?path=%2Fby%2Fnative-author_case%2F4%2Fauthor-identity-native-post%2F2%2F%3Fquery-4-page%3D2%26commentPage%3D3%26replytocom%3D4",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/vendor/wordpress/wp-content/themes/twentytwentyfive/assets/fonts/manrope/Manrope-VariableFont_wght.woff2",
+          "status": 304
+        }
+      ],
+      "screenshot": "public-twentytwentyfive-375.png"
+    },
+    {
+      "theme": "classic",
+      "width": 375,
+      "initial": {
+        "body1": false,
+        "body2": true,
+        "canonical": 1,
+        "errors": [],
+        "query2": true,
+        "same": true,
+        "scroll": 375,
+        "titles": 1,
+        "width": 375
+      },
+      "after": {
+        "body2": true,
+        "errors": [],
+        "length": 8,
+        "push": 1,
+        "query2": true,
+        "url": "/by/native-author_case/4/author-identity-native-post/2/?query-4-page=2&commentPage=3&replytocom=4"
+      },
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/public/document?path=%2Fby%2Fnative-author_case%2F4%2Fauthor-identity-native-post%2F2%2F%3Fquery-4-page%3D2%26commentPage%3D3%26replytocom%3D4",
+          "status": 200
+        }
+      ],
+      "screenshot": "public-classic-375.png"
+    }
+  ],
+  "sanitizedFromReceipt": {
+    "filename": "author-native-tag-ui-public-proof.json",
+    "sha256": "5b2a60280f7166c702fe96ab67f0c7517c36d78c57bba8e15abdb8869baa8ef8"
+  },
+  "overallBackendStatus": "NEEDS_REVISION: UI-only scoped observations do not close accumulated different-author body wait"
+}
