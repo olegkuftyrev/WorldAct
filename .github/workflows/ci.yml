@@ -102,6 +102,11 @@ jobs:
           tests/plain-permalink-routing.test.ts tests/plain-source-pagination.test.ts
           tests/front-page-availability.test.ts
           tests/public-http-status.test.ts
+          tests/public-listing-pagination-original.test.ts tests/public-listing-empty-name-original.test.ts
+          tests/public-listing-preserved-page-original.test.ts tests/public-listing-direct-empty-page-original.test.ts
+          tests/public-listing-compat-identity-original.test.ts tests/public-listing-independent-original.test.ts
+          tests/public-listing-independent-wait-original.test.ts tests/public-listing-independent-after-boundaries-original.test.ts
+          tests/public-listing-template-boundaries.test.ts tests/public-listing-pagination-portability.test.ts
           tests/public-document-data.test.ts
           tests/public-document-view.test.ts
           tests/public-document-ssr.test.ts
@@ -244,6 +249,25 @@ jobs:
           AUTHOR_NAME_ARCHIVE_STAGE: restore
           AUTHOR_NAME_ARCHIVE_PATH: ${{ runner.temp }}/worldact-named-authors.json
         run: node scripts/test-isolated.mjs tests/author-name-query-portability.test.ts
+      - name: Export ordinary public listing archive
+        if: matrix.node == 24
+        env:
+          PUBLIC_LISTING_ARCHIVE_STAGE: export
+          PUBLIC_LISTING_ARCHIVE_PATH: ${{ runner.temp }}/worldact-public-listing.json
+        run: node scripts/test-isolated.mjs tests/public-listing-pagination-portability.test.ts
+      - name: Restore ordinary listing archive to a fresh source database
+        if: matrix.node == 24
+        env:
+          PUBLIC_LISTING_ARCHIVE_STAGE: restore
+          PUBLIC_LISTING_ARCHIVE_PATH: ${{ runner.temp }}/worldact-public-listing.json
+        run: node scripts/test-isolated.mjs tests/public-listing-pagination-portability.test.ts
+      - name: Restore ordinary listing archive on a fresh compiled server
+        if: matrix.node == 24
+        env:
+          ISOLATED_TEST_COMPILED: "true"
+          PUBLIC_LISTING_ARCHIVE_STAGE: restore
+          PUBLIC_LISTING_ARCHIVE_PATH: ${{ runner.temp }}/worldact-public-listing.json
+        run: node scripts/test-isolated.mjs tests/public-listing-pagination-portability.test.ts
       - name: Export publication-status archive
         if: matrix.node == 24
         env:
