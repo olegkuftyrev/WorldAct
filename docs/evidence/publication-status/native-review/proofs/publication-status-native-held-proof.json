@@ -1,0 +1,956 @@
+{
+  "code": "45e9cbccff6ac8ded4151e2fa430a3e4e2c44395",
+  "tree": "578c195e272188d78ec489131e3ab80d22f8753b",
+  "uiCode": "703251b07f0feb4ac0ada956e205a8abda447170",
+  "nodeSha256": "6e3c50f4dc969b0d6389a20c1f2ee9215f49e8fb81bd19f9ed042a13d645e03f",
+  "rows": [
+    {
+      "scene": "ordinary-and-normalized-clean",
+      "width": 1440,
+      "mode": "code",
+      "ordinary": {
+        "id": 1766,
+        "method": "PUT",
+        "path": "/api/posts/42",
+        "startedAt": 1794209051298,
+        "fields": [
+          "title",
+          "content",
+          "blocks",
+          "footnotes",
+          "excerpt",
+          "slug",
+          "status",
+          "categoryIds",
+          "tagIds",
+          "featuredMediaId",
+          "parentId",
+          "menuOrder",
+          "templateSlug",
+          "commentStatus",
+          "pingStatus",
+          "authorId",
+          "format",
+          "sticky",
+          "password",
+          "version",
+          "type"
+        ],
+        "body": {
+          "title": "Native Clean code 1440 ordinary",
+          "content": "<!-- wp:paragraph --><p>NATIVE SAVED CONTENT.</p><!-- /wp:paragraph -->",
+          "status": "draft",
+          "version": 1,
+          "type": "post"
+        },
+        "status": 200,
+        "finishedAt": 1794209051327,
+        "result": {
+          "post": {
+            "id": 42,
+            "title": "Native Clean code 1440 ordinary",
+            "status": "draft",
+            "postDate": "2026-11-09T13:09:11",
+            "postDateGmt": null,
+            "scheduledAt": null,
+            "publishedAt": null,
+            "version": 2
+          }
+        }
+      },
+      "ordinaryReload": {
+        "beforeUnloadPrevented": false,
+        "state": {
+          "date": "2026-11-09T13:09:11",
+          "disabled": false,
+          "hostZone": "America/Los_Angeles",
+          "indicator": "Draft",
+          "now": 1794209052036,
+          "overflow": false,
+          "primary": "Publish",
+          "text": "W\nNative Clean code 1440 ordinary \u00b7 Post\nSave draft\nPublish\nPatterns\nEditing code\nExit code editor\nType text or HTML\nPost\nBlock\nNative Clean code 1440 ordinary\n\n3 words \u00b7 Draft\n\nStatus\nDraft\nPending Review\nPublished\nScheduled\nPrivate\nPublish\n\nSite timezone: +05:45. Publication time: 2026-11-09 13:09:11\n\nReset to immediately\nVisibility\nPublic\nPrivate\nPassword protected\n\nRevisions\n\nLink\nSlug\nAuthor\nFormat\nCategories\nUncategorized\nManage categories \u2197\nTags\nFeatured image\nSet featured image\nTemplate\nTemplate\nDefault template\nExcerpt\nDiscussion\nPost options\nPost\n3 words\nDraft",
+          "title": "Native Clean code 1440 ordinary"
+        }
+      },
+      "normalized": {
+        "id": 1802,
+        "method": "PUT",
+        "path": "/api/posts/42",
+        "startedAt": 1794209052801,
+        "fields": [
+          "title",
+          "content",
+          "blocks",
+          "footnotes",
+          "excerpt",
+          "slug",
+          "status",
+          "categoryIds",
+          "tagIds",
+          "featuredMediaId",
+          "parentId",
+          "menuOrder",
+          "templateSlug",
+          "commentStatus",
+          "pingStatus",
+          "authorId",
+          "format",
+          "sticky",
+          "postDate",
+          "password",
+          "version",
+          "type"
+        ],
+        "body": {
+          "title": "Native Clean code 1440 ordinary",
+          "content": "<!-- wp:paragraph --><p>NATIVE SAVED CONTENT.</p><!-- /wp:paragraph -->",
+          "status": "future",
+          "postDate": "2099-03-04T05:06:37",
+          "version": 2,
+          "type": "post"
+        },
+        "status": 200,
+        "finishedAt": 1794209052823,
+        "result": {
+          "post": {
+            "id": 42,
+            "title": "Native Clean code 1440 ordinary",
+            "status": "future",
+            "postDate": "2099-03-04T05:06:37",
+            "postDateGmt": "2099-03-03T23:21:37.000Z",
+            "scheduledAt": "2099-03-03T23:21:37.000Z",
+            "publishedAt": null,
+            "version": 3
+          }
+        }
+      },
+      "screenshot": "../screens/publication-status-native-clean-code-1440.png"
+    },
+    {
+      "scene": "ordinary-and-normalized-clean",
+      "width": 1440,
+      "mode": "visual",
+      "ordinary": {
+        "id": 1875,
+        "method": "PUT",
+        "path": "/api/posts/43",
+        "startedAt": 1794209054367,
+        "fields": [
+          "title",
+          "content",
+          "blocks",
+          "footnotes",
+          "excerpt",
+          "slug",
+          "status",
+          "categoryIds",
+          "tagIds",
+          "featuredMediaId",
+          "parentId",
+          "menuOrder",
+          "templateSlug",
+          "commentStatus",
+          "pingStatus",
+          "authorId",
+          "format",
+          "sticky",
+          "password",
+          "version",
+          "type"
+        ],
+        "body": {
+          "title": "Native Clean visual 1440 ordinary",
+          "content": "<!-- wp:paragraph --><p>NATIVE SAVED CONTENT.</p><!-- /wp:paragraph -->",
+          "status": "draft",
+          "version": 1,
+          "type": "post"
+        },
+        "status": 200,
+        "finishedAt": 1794209054393,
+        "result": {
+          "post": {
+            "id": 43,
+            "title": "Native Clean visual 1440 ordinary",
+            "status": "draft",
+            "postDate": "2026-11-09T13:09:14",
+            "postDateGmt": null,
+            "scheduledAt": null,
+            "publishedAt": null,
+            "version": 2
+          }
+        }
+      },
+      "ordinaryReload": {
+        "beforeUnloadPrevented": false,
+        "state": {
+          "date": "2026-11-09T13:09:14",
+          "disabled": false,
+          "hostZone": "America/Los_Angeles",
+          "indicator": "Draft",
+          "now": 1794209055098,
+          "overflow": false,
+          "primary": "Publish",
+          "text": "W\nNative Clean visual 1440 ordinary \u00b7 Post\nSave draft\nPublish\nPatterns\nDocument\nPost\nBlock\nNative Clean visual 1440 ordinary\n\n3 words \u00b7 Draft\n\nStatus\nDraft\nPending Review\nPublished\nScheduled\nPrivate\nPublish\n\nSite timezone: +05:45. Publication time: 2026-11-09 13:09:14\n\nReset to immediately\nVisibility\nPublic\nPrivate\nPassword protected\n\nRevisions\n\nLink\nSlug\nAuthor\nFormat\nCategories\nUncategorized\nManage categories \u2197\nTags\nFeatured image\nSet featured image\nTemplate\nTemplate\nDefault template\nExcerpt\nDiscussion\nPost options\nPost\n3 words\nDraft",
+          "title": "Native Clean visual 1440 ordinary"
+        }
+      },
+      "normalized": null,
+      "screenshot": "../screens/publication-status-native-clean-visual-1440.png"
+    },
+    {
+      "scene": "ordinary-and-normalized-clean",
+      "width": 768,
+      "mode": "code",
+      "ordinary": {
+        "id": 1949,
+        "method": "PUT",
+        "path": "/api/posts/44",
+        "startedAt": 1794209055931,
+        "fields": [
+          "title",
+          "content",
+          "blocks",
+          "footnotes",
+          "excerpt",
+          "slug",
+          "status",
+          "categoryIds",
+          "tagIds",
+          "featuredMediaId",
+          "parentId",
+          "menuOrder",
+          "templateSlug",
+          "commentStatus",
+          "pingStatus",
+          "authorId",
+          "format",
+          "sticky",
+          "password",
+          "version",
+          "type"
+        ],
+        "body": {
+          "title": "Native Clean code 768 ordinary",
+          "content": "<!-- wp:paragraph --><p>NATIVE SAVED CONTENT.</p><!-- /wp:paragraph -->",
+          "status": "draft",
+          "version": 1,
+          "type": "post"
+        },
+        "status": 200,
+        "finishedAt": 1794209055955,
+        "result": {
+          "post": {
+            "id": 44,
+            "title": "Native Clean code 768 ordinary",
+            "status": "draft",
+            "postDate": "2026-11-09T13:09:15",
+            "postDateGmt": null,
+            "scheduledAt": null,
+            "publishedAt": null,
+            "version": 2
+          }
+        }
+      },
+      "ordinaryReload": {
+        "beforeUnloadPrevented": false,
+        "state": {
+          "date": "2026-11-09T13:09:15",
+          "disabled": false,
+          "hostZone": "America/Los_Angeles",
+          "indicator": "Draft",
+          "now": 1794209056676,
+          "overflow": false,
+          "primary": "Publish",
+          "text": "W\nSave draft\nPublish\nPatterns\nEditing code\nExit code editor\nType text or HTML\nPost\nBlock\nNative Clean code 768 ordinary\n\n3 words \u00b7 Draft\n\nStatus\nDraft\nPending Review\nPublished\nScheduled\nPrivate\nPublish\n\nSite timezone: +05:45. Publication time: 2026-11-09 13:09:15\n\nReset to immediately\nVisibility\nPublic\nPrivate\nPassword protected\n\nRevisions\n\nLink\nSlug\nAuthor\nFormat\nCategories\nUncategorized\nManage categories \u2197\nTags\nFeatured image\nSet featured image\nTemplate\nTemplate\nDefault template\nExcerpt\nDiscussion\nPost options\nPost\n3 words\nDraft",
+          "title": "Native Clean code 768 ordinary"
+        }
+      },
+      "normalized": {
+        "id": 1985,
+        "method": "PUT",
+        "path": "/api/posts/44",
+        "startedAt": 1794209057453,
+        "fields": [
+          "title",
+          "content",
+          "blocks",
+          "footnotes",
+          "excerpt",
+          "slug",
+          "status",
+          "categoryIds",
+          "tagIds",
+          "featuredMediaId",
+          "parentId",
+          "menuOrder",
+          "templateSlug",
+          "commentStatus",
+          "pingStatus",
+          "authorId",
+          "format",
+          "sticky",
+          "postDate",
+          "password",
+          "version",
+          "type"
+        ],
+        "body": {
+          "title": "Native Clean code 768 ordinary",
+          "content": "<!-- wp:paragraph --><p>NATIVE SAVED CONTENT.</p><!-- /wp:paragraph -->",
+          "status": "future",
+          "postDate": "2099-03-04T05:06:37",
+          "version": 2,
+          "type": "post"
+        },
+        "status": 200,
+        "finishedAt": 1794209057479,
+        "result": {
+          "post": {
+            "id": 44,
+            "title": "Native Clean code 768 ordinary",
+            "status": "future",
+            "postDate": "2099-03-04T05:06:37",
+            "postDateGmt": "2099-03-03T23:21:37.000Z",
+            "scheduledAt": "2099-03-03T23:21:37.000Z",
+            "publishedAt": null,
+            "version": 3
+          }
+        }
+      },
+      "screenshot": "../screens/publication-status-native-clean-code-768.png"
+    },
+    {
+      "scene": "ordinary-and-normalized-clean",
+      "width": 768,
+      "mode": "visual",
+      "ordinary": {
+        "id": 2097,
+        "method": "PUT",
+        "path": "/api/posts/46",
+        "startedAt": 1794209188361,
+        "fields": [
+          "title",
+          "content",
+          "blocks",
+          "footnotes",
+          "excerpt",
+          "slug",
+          "status",
+          "categoryIds",
+          "tagIds",
+          "featuredMediaId",
+          "parentId",
+          "menuOrder",
+          "templateSlug",
+          "commentStatus",
+          "pingStatus",
+          "authorId",
+          "format",
+          "sticky",
+          "password",
+          "version",
+          "type"
+        ],
+        "body": {
+          "title": "Native Clean visual 768 ordinary",
+          "content": "<!-- wp:paragraph --><p>NATIVE SAVED CONTENT.</p><!-- /wp:paragraph -->",
+          "status": "draft",
+          "version": 1,
+          "type": "post"
+        },
+        "status": 200,
+        "finishedAt": 1794209188388,
+        "result": {
+          "post": {
+            "id": 46,
+            "title": "Native Clean visual 768 ordinary",
+            "status": "draft",
+            "postDate": "2026-11-09T13:11:28",
+            "postDateGmt": null,
+            "scheduledAt": null,
+            "publishedAt": null,
+            "version": 2
+          }
+        }
+      },
+      "ordinaryReload": {
+        "beforeUnloadPrevented": false,
+        "state": {
+          "date": "2026-11-09T13:11:28",
+          "disabled": false,
+          "hostZone": "America/Los_Angeles",
+          "indicator": "Draft",
+          "now": 1794209189162,
+          "overflow": false,
+          "primary": "Publish",
+          "text": "W\nSave draft\nPublish\nPatterns\nPost\nBlock\nNative Clean visual 768 ordinary\n\n3 words \u00b7 Draft\n\nStatus\nDraft\nPending Review\nPublished\nScheduled\nPrivate\nPublish\n\nSite timezone: +05:45. Publication time: 2026-11-09 13:11:28\n\nReset to immediately\nVisibility\nPublic\nPrivate\nPassword protected\n\nRevisions\n\nLink\nSlug\nAuthor\nFormat\nCategories\nUncategorized\nManage categories \u2197\nTags\nFeatured image\nSet featured image\nTemplate\nTemplate\nDefault template\nExcerpt\nDiscussion\nPost options\nPost\n3 words\nDraft",
+          "title": "Native Clean visual 768 ordinary"
+        }
+      },
+      "normalized": null,
+      "screenshot": "../screens/publication-status-native-clean-visual-768.png"
+    },
+    {
+      "scene": "ordinary-and-normalized-clean",
+      "width": 375,
+      "mode": "code",
+      "ordinary": {
+        "id": 2171,
+        "method": "PUT",
+        "path": "/api/posts/47",
+        "startedAt": 1794209190092,
+        "fields": [
+          "title",
+          "content",
+          "blocks",
+          "footnotes",
+          "excerpt",
+          "slug",
+          "status",
+          "categoryIds",
+          "tagIds",
+          "featuredMediaId",
+          "parentId",
+          "menuOrder",
+          "templateSlug",
+          "commentStatus",
+          "pingStatus",
+          "authorId",
+          "format",
+          "sticky",
+          "password",
+          "version",
+          "type"
+        ],
+        "body": {
+          "title": "Native Clean code 375 ordinary",
+          "content": "<!-- wp:paragraph --><p>NATIVE SAVED CONTENT.</p><!-- /wp:paragraph -->",
+          "status": "draft",
+          "version": 1,
+          "type": "post"
+        },
+        "status": 200,
+        "finishedAt": 1794209190118,
+        "result": {
+          "post": {
+            "id": 47,
+            "title": "Native Clean code 375 ordinary",
+            "status": "draft",
+            "postDate": "2026-11-09T13:11:30",
+            "postDateGmt": null,
+            "scheduledAt": null,
+            "publishedAt": null,
+            "version": 2
+          }
+        }
+      },
+      "ordinaryReload": {
+        "beforeUnloadPrevented": false,
+        "state": {
+          "date": "2026-11-09T13:11:30",
+          "disabled": false,
+          "hostZone": "America/Los_Angeles",
+          "indicator": "Draft",
+          "now": 1794209190862,
+          "overflow": false,
+          "primary": "Publish",
+          "text": "W\nSave draft\nPublish\nPatterns\nEditing code\nExit code editor\nType text or HTML\nPost\nBlock\nNative Clean code 375 ordinary\n\n3 words \u00b7 Draft\n\nStatus\nDraft\nPending Review\nPublished\nScheduled\nPrivate\nPublish\n\nSite timezone: +05:45. Publication time: 2026-11-09 13:11:30\n\nReset to immediately\nVisibility\nPublic\nPrivate\nPassword protected\n\nRevisions\n\nLink\nSlug\nAuthor\nFormat\nCategories\nUncategorized\nManage categories \u2197\nTags\nFeatured image\nSet featured image\nTemplate\nTemplate\nDefault template\nExcerpt\nDiscussion\nPost options\nPost\n3 words\nDraft",
+          "title": "Native Clean code 375 ordinary"
+        }
+      },
+      "normalized": {
+        "id": 2207,
+        "method": "PUT",
+        "path": "/api/posts/47",
+        "startedAt": 1794209191623,
+        "fields": [
+          "title",
+          "content",
+          "blocks",
+          "footnotes",
+          "excerpt",
+          "slug",
+          "status",
+          "categoryIds",
+          "tagIds",
+          "featuredMediaId",
+          "parentId",
+          "menuOrder",
+          "templateSlug",
+          "commentStatus",
+          "pingStatus",
+          "authorId",
+          "format",
+          "sticky",
+          "postDate",
+          "password",
+          "version",
+          "type"
+        ],
+        "body": {
+          "title": "Native Clean code 375 ordinary",
+          "content": "<!-- wp:paragraph --><p>NATIVE SAVED CONTENT.</p><!-- /wp:paragraph -->",
+          "status": "future",
+          "postDate": "2099-03-04T05:06:37",
+          "version": 2,
+          "type": "post"
+        },
+        "status": 200,
+        "finishedAt": 1794209191647,
+        "result": {
+          "post": {
+            "id": 47,
+            "title": "Native Clean code 375 ordinary",
+            "status": "future",
+            "postDate": "2099-03-04T05:06:37",
+            "postDateGmt": "2099-03-03T23:21:37.000Z",
+            "scheduledAt": "2099-03-03T23:21:37.000Z",
+            "publishedAt": null,
+            "version": 3
+          }
+        }
+      },
+      "screenshot": "../screens/publication-status-native-clean-code-375.png"
+    },
+    {
+      "scene": "ordinary-and-normalized-clean",
+      "width": 375,
+      "mode": "visual",
+      "ordinary": {
+        "id": 2281,
+        "method": "PUT",
+        "path": "/api/posts/48",
+        "startedAt": 1794209193309,
+        "fields": [
+          "title",
+          "content",
+          "blocks",
+          "footnotes",
+          "excerpt",
+          "slug",
+          "status",
+          "categoryIds",
+          "tagIds",
+          "featuredMediaId",
+          "parentId",
+          "menuOrder",
+          "templateSlug",
+          "commentStatus",
+          "pingStatus",
+          "authorId",
+          "format",
+          "sticky",
+          "password",
+          "version",
+          "type"
+        ],
+        "body": {
+          "title": "Native Clean visual 375 ordinary",
+          "content": "<!-- wp:paragraph --><p>NATIVE SAVED CONTENT.</p><!-- /wp:paragraph -->",
+          "status": "draft",
+          "version": 1,
+          "type": "post"
+        },
+        "status": 200,
+        "finishedAt": 1794209193334,
+        "result": {
+          "post": {
+            "id": 48,
+            "title": "Native Clean visual 375 ordinary",
+            "status": "draft",
+            "postDate": "2026-11-09T13:11:33",
+            "postDateGmt": null,
+            "scheduledAt": null,
+            "publishedAt": null,
+            "version": 2
+          }
+        }
+      },
+      "ordinaryReload": {
+        "beforeUnloadPrevented": false,
+        "state": {
+          "date": "2026-11-09T13:11:33",
+          "disabled": false,
+          "hostZone": "America/Los_Angeles",
+          "indicator": "Draft",
+          "now": 1794209194094,
+          "overflow": false,
+          "primary": "Publish",
+          "text": "W\nSave draft\nPublish\nPatterns\nPost\nBlock\nNative Clean visual 375 ordinary\n\n3 words \u00b7 Draft\n\nStatus\nDraft\nPending Review\nPublished\nScheduled\nPrivate\nPublish\n\nSite timezone: +05:45. Publication time: 2026-11-09 13:11:33\n\nReset to immediately\nVisibility\nPublic\nPrivate\nPassword protected\n\nRevisions\n\nLink\nSlug\nAuthor\nFormat\nCategories\nUncategorized\nManage categories \u2197\nTags\nFeatured image\nSet featured image\nTemplate\nTemplate\nDefault template\nExcerpt\nDiscussion\nPost options\nPost\n3 words\nDraft",
+          "title": "Native Clean visual 375 ordinary"
+        }
+      },
+      "normalized": null,
+      "screenshot": "../screens/publication-status-native-clean-visual-375.png"
+    },
+    {
+      "scene": "actual-final-put-row-wait-preserves-new-edits",
+      "width": 375,
+      "postId": 50,
+      "observation": {
+        "requestId": 2392,
+        "actualPendingPath": "/api/posts/50",
+        "statusAbsent": true,
+        "actualBlockingObserved": [
+          {
+            "waitEventType": "Lock",
+            "waitEvent": "transactionid"
+          }
+        ]
+      },
+      "response": {
+        "id": 2392,
+        "method": "PUT",
+        "path": "/api/posts/50",
+        "startedAt": 1794209270949,
+        "fields": [
+          "title",
+          "content",
+          "blocks",
+          "footnotes",
+          "excerpt",
+          "slug",
+          "status",
+          "categoryIds",
+          "tagIds",
+          "featuredMediaId",
+          "parentId",
+          "menuOrder",
+          "templateSlug",
+          "commentStatus",
+          "pingStatus",
+          "authorId",
+          "format",
+          "sticky",
+          "password",
+          "version",
+          "type"
+        ],
+        "body": {
+          "title": "SENT FINAL PUT TITLE",
+          "content": "<!-- wp:paragraph --><p>SENT FINAL PUT BODY</p><!-- /wp:paragraph -->",
+          "status": "future",
+          "version": 1,
+          "type": "post"
+        },
+        "status": 200,
+        "finishedAt": 1794209271832,
+        "result": {
+          "post": {
+            "id": 50,
+            "title": "SENT FINAL PUT TITLE",
+            "status": "future",
+            "postDate": "2099-03-04T05:06:37",
+            "postDateGmt": "2099-03-03T23:21:37.000Z",
+            "scheduledAt": "2099-03-03T23:21:37.000Z",
+            "publishedAt": "2099-03-03T23:21:37.000Z",
+            "version": 2
+          }
+        }
+      },
+      "latest": {
+        "date": "2099-04-05T06:07:19",
+        "disabled": false,
+        "hostZone": "America/Los_Angeles",
+        "indicator": "Unsaved changes",
+        "now": 1794209271927,
+        "overflow": false,
+        "primary": "Schedule",
+        "text": "W\nSave draft\nSchedule\n\nPublication scheduled.\n\nDismiss\nPatterns\nEditing code\nExit code editor\nType text or HTML\nPost\nBlock\nNEW UNSAVED TITLE FINAL PUT\n\n5 words \u00b7 Pending Review\n\nStatus\nDraft\nPending Review\nPublished\nScheduled\nPrivate\nPublish\n\nSite timezone: +05:45. Publication time: 2099-04-05 06:07:19\n\nReset to immediately\nVisibility\nPublic\nPrivate\nPassword protected\n\nRevisions\n\nLink\nSlug\nAuthor\nFormat\nCategories\nUncategorized\nManage categories \u2197\nTags\nFeatured image\nSet featured image\nTemplate\nTemplate\nDefault template\nExcerpt\nDiscussion\nPost options\nPost\n5 words\nUnsaved changes",
+        "title": "NEW UNSAVED TITLE FINAL PUT"
+      },
+      "recovered": {
+        "copy": {
+          "hasNewBody": true,
+          "keys": [
+            "title",
+            "content",
+            "excerpt",
+            "blocks",
+            "footnotes",
+            "savedAt",
+            "version"
+          ],
+          "noProvenance": true,
+          "title": "NEW UNSAVED TITLE FINAL PUT"
+        },
+        "dirtyBeforeUnload": true,
+        "actualNativeRestoreShowsNewContent": true
+      },
+      "screenshot": "../screens/publication-status-native-held-final-put.png"
+    },
+    {
+      "scene": "actual-create-actor-wait",
+      "newEdits": false,
+      "width": 375,
+      "postId": 51,
+      "observation": {
+        "requestId": 2461,
+        "actualPendingPath": "/api/posts",
+        "statusAbsent": true,
+        "actualBlockingObserved": [
+          {
+            "waitEventType": "Lock",
+            "waitEvent": "transactionid"
+          }
+        ]
+      },
+      "calls": [
+        {
+          "id": 2461,
+          "method": "POST",
+          "path": "/api/posts",
+          "startedAt": 1794209273936,
+          "fields": [
+            "title",
+            "content",
+            "blocks",
+            "footnotes",
+            "excerpt",
+            "slug",
+            "status",
+            "categoryIds",
+            "tagIds",
+            "featuredMediaId",
+            "parentId",
+            "menuOrder",
+            "templateSlug",
+            "sticky",
+            "password",
+            "type"
+          ],
+          "body": {
+            "title": "SENT NEW DRAFT CLEAN",
+            "content": "<!-- wp:paragraph -->\n<p></p>\n<!-- /wp:paragraph -->",
+            "status": "draft",
+            "type": "post"
+          },
+          "status": 201,
+          "finishedAt": 1794209274000,
+          "result": {
+            "post": {
+              "id": 51,
+              "title": "SENT NEW DRAFT CLEAN",
+              "status": "draft",
+              "postDate": "2026-11-09T13:12:53",
+              "postDateGmt": null,
+              "scheduledAt": null,
+              "publishedAt": null,
+              "version": 1
+            }
+          }
+        },
+        {
+          "id": 2462,
+          "method": "PUT",
+          "path": "/api/posts/51",
+          "startedAt": 1794209274013,
+          "fields": [
+            "title",
+            "content",
+            "blocks",
+            "footnotes",
+            "excerpt",
+            "slug",
+            "status",
+            "categoryIds",
+            "tagIds",
+            "featuredMediaId",
+            "parentId",
+            "menuOrder",
+            "templateSlug",
+            "sticky",
+            "password",
+            "version",
+            "type"
+          ],
+          "body": {
+            "title": "SENT NEW DRAFT CLEAN",
+            "content": "<!-- wp:paragraph -->\n<p></p>\n<!-- /wp:paragraph -->",
+            "status": "draft",
+            "version": 1,
+            "type": "post"
+          },
+          "status": 200,
+          "finishedAt": 1794209274045,
+          "result": {
+            "post": {
+              "id": 51,
+              "title": "SENT NEW DRAFT CLEAN",
+              "status": "draft",
+              "postDate": "2026-11-09T13:12:54",
+              "postDateGmt": null,
+              "scheduledAt": null,
+              "publishedAt": null,
+              "version": 2
+            }
+          }
+        }
+      ],
+      "current": {
+        "date": "2026-11-09T13:12:54",
+        "disabled": false,
+        "hostZone": "America/Los_Angeles",
+        "indicator": "Draft",
+        "now": 1794209274120,
+        "overflow": false,
+        "primary": "Publish",
+        "text": "W\nSave draft\nPublish\n\nDraft saved.\n\nDismiss\nPatterns\nEditing code\nExit code editor\nType text or HTML\nPost\nBlock\nSENT NEW DRAFT CLEAN\n\n0 words \u00b7 Draft\n\nStatus\nDraft\nPending Review\nPublished\nScheduled\nPrivate\nPublish\n\nSite timezone: +05:45. Publication time: 2026-11-09 13:12:54\n\nReset to immediately\nVisibility\nPublic\nPrivate\nPassword protected\n\nRevisions\n\nLink\nSlug\nAuthor\nFormat\nCategories\nUncategorized\nManage categories \u2197\nTags\nFeatured image\nSet featured image\nTemplate\nTemplate\nDefault template\nExcerpt\nDiscussion\nPost options\nPost\n0 words\nDraft",
+        "title": "SENT NEW DRAFT CLEAN"
+      },
+      "saved": {
+        "status": "draft",
+        "postDate": "2026-11-09T13:12:54",
+        "postDateGmt": null
+      },
+      "recovered": null,
+      "screenshot": "../screens/publication-status-native-held-create-clean.png"
+    },
+    {
+      "scene": "actual-create-actor-wait",
+      "newEdits": true,
+      "width": 375,
+      "postId": 52,
+      "observation": {
+        "requestId": 2534,
+        "actualPendingPath": "/api/posts",
+        "statusAbsent": true,
+        "actualBlockingObserved": [
+          {
+            "waitEventType": "Lock",
+            "waitEvent": "transactionid"
+          }
+        ]
+      },
+      "calls": [
+        {
+          "id": 2534,
+          "method": "POST",
+          "path": "/api/posts",
+          "startedAt": 1794209275394,
+          "fields": [
+            "title",
+            "content",
+            "blocks",
+            "footnotes",
+            "excerpt",
+            "slug",
+            "status",
+            "categoryIds",
+            "tagIds",
+            "featuredMediaId",
+            "parentId",
+            "menuOrder",
+            "templateSlug",
+            "sticky",
+            "password",
+            "type"
+          ],
+          "body": {
+            "title": "SENT NEW DRAFT EDITED",
+            "content": "<!-- wp:paragraph -->\n<p></p>\n<!-- /wp:paragraph -->",
+            "status": "draft",
+            "type": "post"
+          },
+          "status": 201,
+          "finishedAt": 1794209276930,
+          "result": {
+            "post": {
+              "id": 52,
+              "title": "SENT NEW DRAFT EDITED",
+              "status": "draft",
+              "postDate": "2026-11-09T13:12:56",
+              "postDateGmt": null,
+              "scheduledAt": null,
+              "publishedAt": null,
+              "version": 1
+            }
+          }
+        },
+        {
+          "id": 2535,
+          "method": "PUT",
+          "path": "/api/posts/52",
+          "startedAt": 1794209276940,
+          "fields": [
+            "title",
+            "content",
+            "blocks",
+            "footnotes",
+            "excerpt",
+            "slug",
+            "status",
+            "categoryIds",
+            "tagIds",
+            "featuredMediaId",
+            "parentId",
+            "menuOrder",
+            "templateSlug",
+            "sticky",
+            "postDate",
+            "password",
+            "version",
+            "type"
+          ],
+          "body": {
+            "title": "SENT NEW DRAFT EDITED",
+            "content": "<!-- wp:paragraph -->\n<p></p>\n<!-- /wp:paragraph -->",
+            "status": "future",
+            "postDate": "2099-05-06T07:08:37",
+            "version": 1,
+            "type": "post"
+          },
+          "status": 200,
+          "finishedAt": 1794209276959,
+          "result": {
+            "post": {
+              "id": 52,
+              "title": "SENT NEW DRAFT EDITED",
+              "status": "future",
+              "postDate": "2099-05-06T07:08:37",
+              "postDateGmt": "2099-05-06T01:23:37.000Z",
+              "scheduledAt": "2099-05-06T01:23:37.000Z",
+              "publishedAt": null,
+              "version": 2
+            }
+          }
+        }
+      ],
+      "current": {
+        "date": "2099-06-07T08:09:19",
+        "disabled": false,
+        "hostZone": "America/Los_Angeles",
+        "indicator": "Unsaved changes",
+        "now": 1794209277048,
+        "overflow": false,
+        "primary": "Schedule",
+        "text": "W\nSave draft\nSchedule\n\nPublication scheduled.\n\nDismiss\nPatterns\nEditing code\nExit code editor\nType text or HTML\nPost\nBlock\nNEW UNSAVED TITLE CREATE\n\n4 words \u00b7 Pending Review\n\nStatus\nDraft\nPending Review\nPublished\nScheduled\nPrivate\nPublish\n\nSite timezone: +05:45. Publication time: 2099-06-07 08:09:19\n\nReset to immediately\nVisibility\nPublic\nPrivate\nPassword protected\n\nRevisions\n\nLink\nSlug\nAuthor\nFormat\nCategories\nUncategorized\nManage categories \u2197\nTags\nFeatured image\nSet featured image\nTemplate\nTemplate\nDefault template\nExcerpt\nDiscussion\nPost options\nPost\n4 words\nUnsaved changes",
+        "title": "NEW UNSAVED TITLE CREATE"
+      },
+      "saved": {
+        "status": "future",
+        "postDate": "2099-05-06T07:08:37",
+        "postDateGmt": "2099-05-06T01:23:37.000Z"
+      },
+      "recovered": {
+        "copy": {
+          "hasNewBody": true,
+          "keys": [
+            "title",
+            "content",
+            "excerpt",
+            "blocks",
+            "footnotes",
+            "savedAt",
+            "version"
+          ],
+          "noProvenance": true,
+          "title": "NEW UNSAVED TITLE CREATE"
+        },
+        "dirtyBeforeUnload": true,
+        "actualNativeRestoreShowsNewContent": true
+      },
+      "screenshot": "../screens/publication-status-native-held-create-edited.png"
+    }
+  ]
+}

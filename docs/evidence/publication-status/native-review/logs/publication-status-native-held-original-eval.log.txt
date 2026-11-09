@@ -1,0 +1,14 @@
+768 visual clean ordinary/normalized PASS
+375 code clean ordinary/normalized PASS
+375 visual clean ordinary/normalized PASS
+file:///private[private-review-directory]/publication-status-native-harness/native-browser.mjs:5
+export function ev(js){const r=spawnSync(binary,['--session',session,'--json','eval','--stdin'],{input:js,encoding:'utf8',maxBuffer:2e7});if(r.status)throw Error(r.stderr+r.stdout);return JSON.parse(r.stdout).data.result;}
+                                                                                                                                                            ^
+
+Error: {"success":false,"data":null,"error":"Evaluation error: SyntaxError: missing ) after argument list"}
+
+    at ev (file:///private[private-review-directory]/publication-status-native-harness/native-browser.mjs:5:157)
+    at file:///private[private-review-directory]/publication-status-native-harness/native-held-resume.mjs:14:527
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+
+Node.js v24.14.1

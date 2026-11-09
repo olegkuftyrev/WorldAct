@@ -1,0 +1,690 @@
+{
+  "code": "759a553bbd99bf46ee8360fb5b0d05cd5ab72710",
+  "nodeSha256": "6e3c50f4dc969b0d6389a20c1f2ee9215f49e8fb81bd19f9ed042a13d645e03f",
+  "rows": [
+    {
+      "scene": "quick-ordinary-publish-keeps-chosen-date-and-returns-future",
+      "width": 1440,
+      "response": {
+        "id": 472,
+        "method": "PUT",
+        "path": "/api/posts/13",
+        "startedAt": 1794208450440,
+        "fields": [
+          "title",
+          "slug",
+          "status",
+          "categoryIds",
+          "sticky",
+          "commentStatus",
+          "pingStatus",
+          "authorId",
+          "templateSlug",
+          "format",
+          "version"
+        ],
+        "body": {
+          "title": "Native Quick Run4 1440",
+          "status": "publish",
+          "version": 1
+        },
+        "status": 200,
+        "finishedAt": 1794208450468,
+        "result": {
+          "post": {
+            "id": 13,
+            "title": "Native Quick Run4 1440",
+            "status": "future",
+            "postDate": "2099-02-03T04:05:19",
+            "postDateGmt": "2099-02-02T22:20:19.000Z",
+            "scheduledAt": "2099-02-02T22:20:19.000Z",
+            "publishedAt": "2099-02-02T22:20:19.000Z",
+            "version": 2
+          }
+        }
+      },
+      "saved": {
+        "id": 13,
+        "status": "future",
+        "postDate": "2099-02-03T04:05:19",
+        "postDateGmt": "2099-02-02T22:20:19.000Z"
+      },
+      "view": {
+        "dates": [
+          "Scheduled\n2099/02/03 at 4:05 am"
+        ],
+        "overflow": false,
+        "text": "Posts Add New Post\n\nPost updated.\n\nDismiss\nAll (1)| Published (0)| Drafts (0)| Scheduled (1)| Trash (0)\nSearch Posts\nSearch Posts\nBulk actions\nBulk actions\nEdit\nMove to Trash\nApply\nFilter by date\nAll dates\nFebruary 2099\nJanuary 2099\nNovember 2026\nFilter by category\nAll Categories\nUncategorized\nFilter\n1 item\n\tTitle\tAuthor\tCategories\tTags\t\nComments\n\tDate \u2193\n\t\nNative Quick Run4 1440 \u2014 Scheduled\nEdit | Quick Edit | Trash | Continue editing\n\tAdministrator\tUncategorized\t\u2014\t\n0\n\tScheduled\n2099/02/03 at 4:05 am\n\tTitle\tAuthor\tCategories\tTags\t\nComments\n\tDate \u2193\n1 item"
+      },
+      "screenshot": "../screens/publication-status-native-quick-1440.png"
+    },
+    {
+      "scene": "bulk-publish-now-draft-future-reset-pending-preserved",
+      "width": 1440,
+      "response": {
+        "id": 493,
+        "method": "POST",
+        "path": "/api/posts/bulk",
+        "startedAt": 1794208451373,
+        "fields": [
+          "ids",
+          "changes",
+          "categoryMode",
+          "tagMode",
+          "versions"
+        ],
+        "body": {
+          "ids": [
+            16,
+            15,
+            14
+          ],
+          "versions": {
+            "14": 1,
+            "15": 1,
+            "16": 1
+          },
+          "changes": {
+            "status": "publish"
+          }
+        },
+        "status": 200,
+        "finishedAt": 1794208451432,
+        "result": {
+          "posts": [
+            {
+              "id": 16,
+              "title": "Native Bulk Now Run4 1440 pending",
+              "status": "future",
+              "postDate": "2099-02-03T04:05:19",
+              "postDateGmt": "2099-02-02T22:20:19.000Z",
+              "scheduledAt": "2099-02-02T22:20:19.000Z",
+              "publishedAt": "2099-02-02T22:20:19.000Z",
+              "version": 2
+            },
+            {
+              "id": 15,
+              "title": "Native Bulk Now Run4 1440 future",
+              "status": "publish",
+              "postDate": "2026-11-09T12:59:11",
+              "postDateGmt": "2026-11-09T07:14:11.404Z",
+              "scheduledAt": null,
+              "publishedAt": "2026-11-09T07:14:11.404Z",
+              "version": 2
+            },
+            {
+              "id": 14,
+              "title": "Native Bulk Now Run4 1440 draft",
+              "status": "publish",
+              "postDate": "2026-11-09T12:59:11",
+              "postDateGmt": "2026-11-09T07:14:11.423Z",
+              "scheduledAt": null,
+              "publishedAt": "2026-11-09T07:14:11.423Z",
+              "version": 2
+            }
+          ],
+          "updated": [
+            16,
+            15,
+            14
+          ],
+          "errors": []
+        }
+      },
+      "saved": [
+        {
+          "id": 14,
+          "originalStatus": "draft",
+          "status": "publish",
+          "postDate": "2026-11-09T12:59:11",
+          "postDateGmt": "2026-11-09T07:14:11.423Z",
+          "scheduledAt": null
+        },
+        {
+          "id": 15,
+          "originalStatus": "future",
+          "status": "publish",
+          "postDate": "2026-11-09T12:59:11",
+          "postDateGmt": "2026-11-09T07:14:11.404Z",
+          "scheduledAt": null
+        },
+        {
+          "id": 16,
+          "originalStatus": "pending",
+          "status": "future",
+          "postDate": "2099-02-03T04:05:19",
+          "postDateGmt": "2099-02-02T22:20:19.000Z",
+          "scheduledAt": "2099-02-02T22:20:19.000Z"
+        }
+      ],
+      "view": {
+        "dates": [
+          "Scheduled\n2099/02/03 at 4:05 am",
+          "Published\n2026/11/09 at 12:59 pm",
+          "Published\n2026/11/09 at 12:59 pm"
+        ],
+        "overflow": false,
+        "text": "Posts Add New Post\n\n3 posts updated.\n\nDismiss\nAll (3)| Published (2)| Drafts (0)| Scheduled (1)| Trash (0)\nSearch Posts\nSearch Posts\nBulk actions\nBulk actions\nEdit\nMove to Trash\nApply\nFilter by date\nAll dates\nFebruary 2099\nJanuary 2099\nNovember 2026\nFilter by category\nAll Categories\nUncategorized\nFilter\n3 items\n\tTitle\tAuthor\tCategories\tTags\t\nComments\n\tDate \u2193\n\t\nNative Bulk Now Run4 1440 pending \u2014 Scheduled\nEdit | Quick Edit | Trash | Continue editing\n\tAdministrator\tUncategorized\t\u2014\t\n0\n\tScheduled\n2099/02/03 at 4:05 am\n\t\nNative Bulk Now Run4 1440 draft\nEdit | Quick Edit | Trash | View\n\tAdministrator\tUncategorized\t\u2014\t\n0\n\tPublished\n2026/11/09 at 12:59 pm\n\t\nNative Bulk Now Run4 1440 future\nEdit | Quick Edit | Trash | View\n\tAdministrator\tUncategorized\t\u2014\t\n0\n\tPublished\n2026/11/09 at 12:59 pm\n\tTitle\tAuthor\tCategories\tTags\t\nComments\n\tDate \u2193\n3 items"
+      },
+      "screenshot": "../screens/publication-status-native-bulk-now-1440.png"
+    },
+    {
+      "scene": "bulk-valid-past-chosen-schedule-submits-and-returns-publish",
+      "width": 1440,
+      "response": {
+        "id": 514,
+        "method": "POST",
+        "path": "/api/posts/bulk",
+        "startedAt": 1794208452855,
+        "fields": [
+          "ids",
+          "changes",
+          "categoryMode",
+          "tagMode",
+          "versions"
+        ],
+        "body": {
+          "ids": [
+            17
+          ],
+          "versions": {
+            "17": 1
+          },
+          "changes": {
+            "status": "future",
+            "postDate": "2001-02-03T04:05:19"
+          }
+        },
+        "status": 200,
+        "finishedAt": 1794208452881,
+        "result": {
+          "posts": [
+            {
+              "id": 17,
+              "title": "Native Bulk Past Run4 1440",
+              "status": "publish",
+              "postDate": "2001-02-03T04:05:19",
+              "postDateGmt": "2001-02-02T22:20:19.000Z",
+              "scheduledAt": null,
+              "publishedAt": "2001-02-02T22:20:19.000Z",
+              "version": 2
+            }
+          ],
+          "updated": [
+            17
+          ],
+          "errors": []
+        }
+      },
+      "saved": {
+        "status": "publish",
+        "postDate": "2001-02-03T04:05:19",
+        "postDateGmt": "2001-02-02T22:20:19.000Z"
+      },
+      "view": {
+        "dates": [
+          "Published\n2001/02/03 at 4:05 am"
+        ],
+        "overflow": false,
+        "text": "Posts Add New Post\n\n1 post updated.\n\nDismiss\nAll (1)| Published (1)| Drafts (0)| Trash (0)\nSearch Posts\nSearch Posts\nBulk actions\nBulk actions\nEdit\nMove to Trash\nApply\nFilter by date\nAll dates\nFebruary 2099\nJanuary 2099\nNovember 2026\nFebruary 2001\nFilter by category\nAll Categories\nUncategorized\nFilter\n1 item\n\tTitle\tAuthor\tCategories\tTags\t\nComments\n\tDate \u2193\n\t\nNative Bulk Past Run4 1440\nEdit | Quick Edit | Trash | View\n\tAdministrator\tUncategorized\t\u2014\t\n0\n\tPublished\n2001/02/03 at 4:05 am\n\tTitle\tAuthor\tCategories\tTags\t\nComments\n\tDate \u2193\n1 item"
+      },
+      "screenshot": "../screens/publication-status-native-bulk-past-1440.png"
+    },
+    {
+      "scene": "quick-ordinary-publish-keeps-chosen-date-and-returns-future",
+      "width": 768,
+      "response": {
+        "id": 535,
+        "method": "PUT",
+        "path": "/api/posts/18",
+        "startedAt": 1794208453705,
+        "fields": [
+          "title",
+          "slug",
+          "status",
+          "categoryIds",
+          "sticky",
+          "commentStatus",
+          "pingStatus",
+          "authorId",
+          "templateSlug",
+          "format",
+          "version"
+        ],
+        "body": {
+          "title": "Native Quick Run4 768",
+          "status": "publish",
+          "version": 1
+        },
+        "status": 200,
+        "finishedAt": 1794208453730,
+        "result": {
+          "post": {
+            "id": 18,
+            "title": "Native Quick Run4 768",
+            "status": "future",
+            "postDate": "2099-02-03T04:05:19",
+            "postDateGmt": "2099-02-02T22:20:19.000Z",
+            "scheduledAt": "2099-02-02T22:20:19.000Z",
+            "publishedAt": "2099-02-02T22:20:19.000Z",
+            "version": 2
+          }
+        }
+      },
+      "saved": {
+        "id": 18,
+        "status": "future",
+        "postDate": "2099-02-03T04:05:19",
+        "postDateGmt": "2099-02-02T22:20:19.000Z"
+      },
+      "view": {
+        "dates": [
+          "Scheduled2099/02/03 at 4:05 am"
+        ],
+        "overflow": false,
+        "text": "Posts Add New Post\n\nPost updated.\n\nDismiss\nAll (1)| Published (0)| Drafts (0)| Scheduled (1)| Trash (0)\nSearch Posts\nSearch Posts\nBulk actions\nBulk actions\nEdit\nMove to Trash\nApply\nFilter by date\nAll dates\nFebruary 2099\nJanuary 2099\nNovember 2026\nFebruary 2001\nFilter by category\nAll Categories\nUncategorized\nFilter\nTitle\nNative Quick Run4 768 \u2014 Scheduled\nEdit\n|\nQuick Edit\n|\nTrash\n|\nContinue editing\nTitle\n1 item"
+      },
+      "screenshot": "../screens/publication-status-native-quick-768.png"
+    },
+    {
+      "scene": "bulk-publish-now-draft-future-reset-pending-preserved",
+      "width": 768,
+      "response": {
+        "id": 556,
+        "method": "POST",
+        "path": "/api/posts/bulk",
+        "startedAt": 1794208454638,
+        "fields": [
+          "ids",
+          "changes",
+          "categoryMode",
+          "tagMode",
+          "versions"
+        ],
+        "body": {
+          "ids": [
+            21,
+            20,
+            19
+          ],
+          "versions": {
+            "19": 1,
+            "20": 1,
+            "21": 1
+          },
+          "changes": {
+            "status": "publish"
+          }
+        },
+        "status": 200,
+        "finishedAt": 1794208454687,
+        "result": {
+          "posts": [
+            {
+              "id": 21,
+              "title": "Native Bulk Now Run4 768 pending",
+              "status": "future",
+              "postDate": "2099-02-03T04:05:19",
+              "postDateGmt": "2099-02-02T22:20:19.000Z",
+              "scheduledAt": "2099-02-02T22:20:19.000Z",
+              "publishedAt": "2099-02-02T22:20:19.000Z",
+              "version": 2
+            },
+            {
+              "id": 20,
+              "title": "Native Bulk Now Run4 768 future",
+              "status": "publish",
+              "postDate": "2026-11-09T12:59:14",
+              "postDateGmt": "2026-11-09T07:14:14.663Z",
+              "scheduledAt": null,
+              "publishedAt": "2026-11-09T07:14:14.663Z",
+              "version": 2
+            },
+            {
+              "id": 19,
+              "title": "Native Bulk Now Run4 768 draft",
+              "status": "publish",
+              "postDate": "2026-11-09T12:59:14",
+              "postDateGmt": "2026-11-09T07:14:14.678Z",
+              "scheduledAt": null,
+              "publishedAt": "2026-11-09T07:14:14.678Z",
+              "version": 2
+            }
+          ],
+          "updated": [
+            21,
+            20,
+            19
+          ],
+          "errors": []
+        }
+      },
+      "saved": [
+        {
+          "id": 19,
+          "originalStatus": "draft",
+          "status": "publish",
+          "postDate": "2026-11-09T12:59:14",
+          "postDateGmt": "2026-11-09T07:14:14.678Z",
+          "scheduledAt": null
+        },
+        {
+          "id": 20,
+          "originalStatus": "future",
+          "status": "publish",
+          "postDate": "2026-11-09T12:59:14",
+          "postDateGmt": "2026-11-09T07:14:14.663Z",
+          "scheduledAt": null
+        },
+        {
+          "id": 21,
+          "originalStatus": "pending",
+          "status": "future",
+          "postDate": "2099-02-03T04:05:19",
+          "postDateGmt": "2099-02-02T22:20:19.000Z",
+          "scheduledAt": "2099-02-02T22:20:19.000Z"
+        }
+      ],
+      "view": {
+        "dates": [
+          "Scheduled2099/02/03 at 4:05 am",
+          "Published2026/11/09 at 12:59 pm",
+          "Published2026/11/09 at 12:59 pm"
+        ],
+        "overflow": false,
+        "text": "Posts Add New Post\n\n3 posts updated.\n\nDismiss\nAll (3)| Published (2)| Drafts (0)| Scheduled (1)| Trash (0)\nSearch Posts\nSearch Posts\nBulk actions\nBulk actions\nEdit\nMove to Trash\nApply\nFilter by date\nAll dates\nFebruary 2099\nJanuary 2099\nNovember 2026\nFebruary 2001\nFilter by category\nAll Categories\nUncategorized\nFilter\nTitle\nNative Bulk Now Run4 768 pending \u2014 Scheduled\nEdit\n|\nQuick Edit\n|\nTrash\n|\nContinue editing\nNative Bulk Now Run4 768 draft\nEdit\n|\nQuick Edit\n|\nTrash\n|\nView\nNative Bulk Now Run4 768 future\nEdit\n|\nQuick Edit\n|\nTrash\n|\nView\nTitle\n3 items"
+      },
+      "screenshot": "../screens/publication-status-native-bulk-now-768.png"
+    },
+    {
+      "scene": "bulk-valid-past-chosen-schedule-submits-and-returns-publish",
+      "width": 768,
+      "response": {
+        "id": 577,
+        "method": "POST",
+        "path": "/api/posts/bulk",
+        "startedAt": 1794208456122,
+        "fields": [
+          "ids",
+          "changes",
+          "categoryMode",
+          "tagMode",
+          "versions"
+        ],
+        "body": {
+          "ids": [
+            22
+          ],
+          "versions": {
+            "22": 1
+          },
+          "changes": {
+            "status": "future",
+            "postDate": "2001-02-03T04:05:19"
+          }
+        },
+        "status": 200,
+        "finishedAt": 1794208456150,
+        "result": {
+          "posts": [
+            {
+              "id": 22,
+              "title": "Native Bulk Past Run4 768",
+              "status": "publish",
+              "postDate": "2001-02-03T04:05:19",
+              "postDateGmt": "2001-02-02T22:20:19.000Z",
+              "scheduledAt": null,
+              "publishedAt": "2001-02-02T22:20:19.000Z",
+              "version": 2
+            }
+          ],
+          "updated": [
+            22
+          ],
+          "errors": []
+        }
+      },
+      "saved": {
+        "status": "publish",
+        "postDate": "2001-02-03T04:05:19",
+        "postDateGmt": "2001-02-02T22:20:19.000Z"
+      },
+      "view": {
+        "dates": [
+          "Published2001/02/03 at 4:05 am"
+        ],
+        "overflow": false,
+        "text": "Posts Add New Post\n\n1 post updated.\n\nDismiss\nAll (1)| Published (1)| Drafts (0)| Trash (0)\nSearch Posts\nSearch Posts\nBulk actions\nBulk actions\nEdit\nMove to Trash\nApply\nFilter by date\nAll dates\nFebruary 2099\nJanuary 2099\nNovember 2026\nFebruary 2001\nFilter by category\nAll Categories\nUncategorized\nFilter\nTitle\nNative Bulk Past Run4 768\nEdit\n|\nQuick Edit\n|\nTrash\n|\nView\nTitle\n1 item"
+      },
+      "screenshot": "../screens/publication-status-native-bulk-past-768.png"
+    },
+    {
+      "scene": "quick-ordinary-publish-keeps-chosen-date-and-returns-future",
+      "width": 375,
+      "response": {
+        "id": 598,
+        "method": "PUT",
+        "path": "/api/posts/23",
+        "startedAt": 1794208456955,
+        "fields": [
+          "title",
+          "slug",
+          "status",
+          "categoryIds",
+          "sticky",
+          "commentStatus",
+          "pingStatus",
+          "authorId",
+          "templateSlug",
+          "format",
+          "version"
+        ],
+        "body": {
+          "title": "Native Quick Run4 375",
+          "status": "publish",
+          "version": 1
+        },
+        "status": 200,
+        "finishedAt": 1794208456988,
+        "result": {
+          "post": {
+            "id": 23,
+            "title": "Native Quick Run4 375",
+            "status": "future",
+            "postDate": "2099-02-03T04:05:19",
+            "postDateGmt": "2099-02-02T22:20:19.000Z",
+            "scheduledAt": "2099-02-02T22:20:19.000Z",
+            "publishedAt": "2099-02-02T22:20:19.000Z",
+            "version": 2
+          }
+        }
+      },
+      "saved": {
+        "id": 23,
+        "status": "future",
+        "postDate": "2099-02-03T04:05:19",
+        "postDateGmt": "2099-02-02T22:20:19.000Z"
+      },
+      "view": {
+        "dates": [
+          "Scheduled\n2099/02/03 at 4:05 am"
+        ],
+        "overflow": false,
+        "text": "Posts Add New Post\n\nPost updated.\n\nDismiss\nAll (1)| Published (0)| Drafts (0)| Scheduled (1)| Trash (0)\nSearch Posts\nSearch Posts\nBulk actions\nBulk actions\nEdit\nMove to Trash\nApply\nFilter by date\nAll dates\nFebruary 2099\nJanuary 2099\nNovember 2026\nFebruary 2001\nFilter by category\nAll Categories\nUncategorized\nFilter\nTitle\nDate \u2193\nNative Quick Run4 375 \u2014 Scheduled\nEdit\n|\nQuick Edit\n|\nTrash\n|\nContinue editing\nScheduled\n2099/02/03 at 4:05 am\nTitle\nDate \u2193\n1 item"
+      },
+      "screenshot": "../screens/publication-status-native-quick-375.png"
+    },
+    {
+      "scene": "bulk-publish-now-draft-future-reset-pending-preserved",
+      "width": 375,
+      "response": {
+        "id": 619,
+        "method": "POST",
+        "path": "/api/posts/bulk",
+        "startedAt": 1794208457855,
+        "fields": [
+          "ids",
+          "changes",
+          "categoryMode",
+          "tagMode",
+          "versions"
+        ],
+        "body": {
+          "ids": [
+            26,
+            25,
+            24
+          ],
+          "versions": {
+            "24": 1,
+            "25": 1,
+            "26": 1
+          },
+          "changes": {
+            "status": "publish"
+          }
+        },
+        "status": 200,
+        "finishedAt": 1794208457905,
+        "result": {
+          "posts": [
+            {
+              "id": 26,
+              "title": "Native Bulk Now Run4 375 pending",
+              "status": "future",
+              "postDate": "2099-02-03T04:05:19",
+              "postDateGmt": "2099-02-02T22:20:19.000Z",
+              "scheduledAt": "2099-02-02T22:20:19.000Z",
+              "publishedAt": "2099-02-02T22:20:19.000Z",
+              "version": 2
+            },
+            {
+              "id": 25,
+              "title": "Native Bulk Now Run4 375 future",
+              "status": "publish",
+              "postDate": "2026-11-09T12:59:17",
+              "postDateGmt": "2026-11-09T07:14:17.881Z",
+              "scheduledAt": null,
+              "publishedAt": "2026-11-09T07:14:17.881Z",
+              "version": 2
+            },
+            {
+              "id": 24,
+              "title": "Native Bulk Now Run4 375 draft",
+              "status": "publish",
+              "postDate": "2026-11-09T12:59:17",
+              "postDateGmt": "2026-11-09T07:14:17.897Z",
+              "scheduledAt": null,
+              "publishedAt": "2026-11-09T07:14:17.897Z",
+              "version": 2
+            }
+          ],
+          "updated": [
+            26,
+            25,
+            24
+          ],
+          "errors": []
+        }
+      },
+      "saved": [
+        {
+          "id": 24,
+          "originalStatus": "draft",
+          "status": "publish",
+          "postDate": "2026-11-09T12:59:17",
+          "postDateGmt": "2026-11-09T07:14:17.897Z",
+          "scheduledAt": null
+        },
+        {
+          "id": 25,
+          "originalStatus": "future",
+          "status": "publish",
+          "postDate": "2026-11-09T12:59:17",
+          "postDateGmt": "2026-11-09T07:14:17.881Z",
+          "scheduledAt": null
+        },
+        {
+          "id": 26,
+          "originalStatus": "pending",
+          "status": "future",
+          "postDate": "2099-02-03T04:05:19",
+          "postDateGmt": "2099-02-02T22:20:19.000Z",
+          "scheduledAt": "2099-02-02T22:20:19.000Z"
+        }
+      ],
+      "view": {
+        "dates": [
+          "Scheduled\n2099/02/03 at 4:05 am",
+          "Published\n2026/11/09 at 12:59 pm",
+          "Published\n2026/11/09 at 12:59 pm"
+        ],
+        "overflow": false,
+        "text": "Posts Add New Post\n\n3 posts updated.\n\nDismiss\nAll (3)| Published (2)| Drafts (0)| Scheduled (1)| Trash (0)\nSearch Posts\nSearch Posts\nBulk actions\nBulk actions\nEdit\nMove to Trash\nApply\nFilter by date\nAll dates\nFebruary 2099\nJanuary 2099\nNovember 2026\nFebruary 2001\nFilter by category\nAll Categories\nUncategorized\nFilter\nTitle\nDate \u2193\nNative Bulk Now Run4 375 pending \u2014 Scheduled\nEdit\n|\nQuick Edit\n|\nTrash\n|\nContinue editing\nScheduled\n2099/02/03 at 4:05 am\nNative Bulk Now Run4 375 draft\nEdit\n|\nQuick Edit\n|\nTrash\n|\nView\nPublished\n2026/11/09 at 12:59 pm\nNative Bulk Now Run4 375 future\nEdit\n|\nQuick Edit\n|\nTrash\n|\nView\nPublished\n2026/11/09 at 12:59 pm\nTitle\nDate \u2193\n3 items"
+      },
+      "screenshot": "../screens/publication-status-native-bulk-now-375.png"
+    },
+    {
+      "scene": "bulk-valid-past-chosen-schedule-submits-and-returns-publish",
+      "width": 375,
+      "response": {
+        "id": 640,
+        "method": "POST",
+        "path": "/api/posts/bulk",
+        "startedAt": 1794208459355,
+        "fields": [
+          "ids",
+          "changes",
+          "categoryMode",
+          "tagMode",
+          "versions"
+        ],
+        "body": {
+          "ids": [
+            27
+          ],
+          "versions": {
+            "27": 1
+          },
+          "changes": {
+            "status": "future",
+            "postDate": "2001-02-03T04:05:19"
+          }
+        },
+        "status": 200,
+        "finishedAt": 1794208459385,
+        "result": {
+          "posts": [
+            {
+              "id": 27,
+              "title": "Native Bulk Past Run4 375",
+              "status": "publish",
+              "postDate": "2001-02-03T04:05:19",
+              "postDateGmt": "2001-02-02T22:20:19.000Z",
+              "scheduledAt": null,
+              "publishedAt": "2001-02-02T22:20:19.000Z",
+              "version": 2
+            }
+          ],
+          "updated": [
+            27
+          ],
+          "errors": []
+        }
+      },
+      "saved": {
+        "status": "publish",
+        "postDate": "2001-02-03T04:05:19",
+        "postDateGmt": "2001-02-02T22:20:19.000Z"
+      },
+      "view": {
+        "dates": [
+          "Published\n2001/02/03 at 4:05 am"
+        ],
+        "overflow": false,
+        "text": "Posts Add New Post\n\n1 post updated.\n\nDismiss\nAll (1)| Published (1)| Drafts (0)| Trash (0)\nSearch Posts\nSearch Posts\nBulk actions\nBulk actions\nEdit\nMove to Trash\nApply\nFilter by date\nAll dates\nFebruary 2099\nJanuary 2099\nNovember 2026\nFebruary 2001\nFilter by category\nAll Categories\nUncategorized\nFilter\nTitle\nDate \u2193\nNative Bulk Past Run4 375\nEdit\n|\nQuick Edit\n|\nTrash\n|\nView\nPublished\n2001/02/03 at 4:05 am\nTitle\nDate \u2193\n1 item"
+      },
+      "screenshot": "../screens/publication-status-native-bulk-past-375.png"
+    }
+  ]
+}

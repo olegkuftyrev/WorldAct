@@ -41,6 +41,7 @@ import { useEditorPreferences } from "../editor/EditorPreferences";
 import { useEditorShortcuts } from "../editor/editorShortcuts";
 import type { EditorPreferencePatch } from "../editor/preferenceQueue";
 import { documentRecovery, editorOwnerMatches, editorTargetMatches } from "../editor/documentRecovery";
+import { acknowledgedDraftPublication, documentHasUnsentChanges, liveDocumentSnapshot, submittedSnapshotAfterDraft, type DraftPublicationAcknowledgement } from "../editor/documentSnapshot";
 import { formatPostCivil } from "../../shared/post-civil-date";
 import { publicationAction, publicationDateChange, publicationDatePayload } from "../editor/publicationDate";
 
@@ -392,6 +393,7 @@ export default function Editor({ type }: { type: "post" | "page" }) {
     dirtyRef = useRef(dirty),
     savedFingerprint = useRef(""),
     draftCreation = useRef<Promise<number> | null>(null),
+    draftPublication = useRef<(DraftPublicationAcknowledgement & { id: number }) | null>(null),
     loadGeneration = useRef(0),
     documentGeneration = useRef(0),
     createdRoute = useRef<number | null>(null),
@@ -414,7 +416,7 @@ export default function Editor({ type }: { type: "post" | "page" }) {
   }, []);
   const documentSnapshot = useCallback((): DocumentState => {
     const editor = blockEditor.current, current = docRef.current;
-    return editor ? { ...current, content: editor.getHTML(), blocks: editor.getBlocks(), footnotes: editor.getFootnotes() } : current;
+    return liveDocumentSnapshot(current, editor);
   }, []);
   const targetMatches = editorTargetMatches(id, postId, createdRoute.current) && editorOwnerMatches(loadedTarget.current, targetKey, `${user?.id}:${type}:new`, postId, createdRoute.current);
   const documentReady = targetMatches && !loading && !loadError;
@@ -436,6 +438,7 @@ export default function Editor({ type }: { type: "post" | "page" }) {
   }, [id, storageKey, documentSnapshot]);
   function applyPost(post: Post) {
     documentGeneration.current++;
+    draftPublication.current = null;
     const document = postDocument(post);
     loadedTarget.current = targetKey;
     docRef.current = document; idRef.current = post.id; versionRef.current = post.version; dirtyRef.current = false;
@@ -456,6 +459,7 @@ export default function Editor({ type }: { type: "post" | "page" }) {
       return;
     }
     const generation = ++loadGeneration.current;
+    draftPublication.current = null;
     busyRef.current = false; setBusy(false); setOptionsDialog(null); setTyping(false);
     setLoadFailure(null); setPostId(id ? Number(id) : null); setDirty(false); setRevisionOpen(false); setRevisionBusy(false);
     dirtyRef.current = false;
@@ -629,10 +633,11 @@ export default function Editor({ type }: { type: "post" | "page" }) {
       if(loadGeneration.current!==generation)return post.id;
       idRef.current=post.id;versionRef.current=post.version;
       setPostId(post.id);setVersion(post.version);setPermalink(postLink(post));
-      setDoc(current => ({ ...current, savedStatus: post.status, postDateOriginal: post.postDate, postDateGmt: post.postDateGmt,
-        ...(current.postDate === snapshot.postDate && current.postDateIntent === snapshot.postDateIntent
-          ? { postDate: post.postDate, postDateIntent: undefined, scheduledAt: post.scheduledAt || "" }
-          : publicationDateChange(current.postDate, post.postDate)) }));
+      const creation = { id: post.id, from: { postDate: snapshot.postDate, postDateIntent: snapshot.postDateIntent }, post };
+      draftPublication.current = creation;
+      const acknowledged = { ...docRef.current, ...acknowledgedDraftPublication(docRef.current, creation) };
+      docRef.current = acknowledged;
+      setDoc(acknowledged);
       createdRoute.current=post.id;
       localStorage.removeItem(storageKey(null));
       navigate(`${base}/${post.id}`,{replace:true});
@@ -758,6 +763,9 @@ export default function Editor({ type }: { type: "post" | "page" }) {
         json(currentId ? "PUT" : "POST", payload(snapshot, nextStatus)),
       );
       if (!isCurrent()) return;
+      const baseline = submittedSnapshotAfterDraft(snapshot, draftPublication.current?.id === currentId ? draftPublication.current : null);
+      const unchanged = !documentHasUnsentChanges(docRef.current, baseline, blockEditor.current);
+      draftPublication.current = null;
       setPostId(post.id);
       setPermalink(postLink(post));
       idRef.current = post.id;
@@ -766,18 +774,17 @@ export default function Editor({ type }: { type: "post" | "page" }) {
       setDoc((current) => ({
         ...current,
         footnotes:JSON.stringify(current.footnotes)===JSON.stringify(snapshot.footnotes)?post.footnotes || []:current.footnotes,
-        status: post.status,
+        status: current.status === baseline.status ? post.status : current.status,
         savedStatus: post.status,
-        slug: post.slug,
+        slug: current.slug === baseline.slug ? post.slug : current.slug,
         scheduledAt: post.scheduledAt || "",
         postDateOriginal: post.postDate,
         postDateGmt: post.postDateGmt,
-        ...(current.postDate === snapshot.postDate && current.postDateIntent === snapshot.postDateIntent
+        ...(current.postDate === baseline.postDate && current.postDateIntent === baseline.postDateIntent
           ? { postDate: post.postDate, postDateIntent: undefined }
           : publicationDateChange(current.postDate, post.postDate)),
       }));
       blockEditor.current?.acknowledgeFootnotes(post.footnotes || [],snapshot.footnotes);
-      const unchanged = JSON.stringify(docRef.current) === fingerprint;
       setDirty(!unchanged);
       savedFingerprint.current = fingerprint;
       setNotice(

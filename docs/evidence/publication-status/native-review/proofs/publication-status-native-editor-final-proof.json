@@ -1,0 +1,1196 @@
+{
+  "code": "45e9cbccff6ac8ded4151e2fa430a3e4e2c44395",
+  "tree": "578c195e272188d78ec489131e3ab80d22f8753b",
+  "uiCode": "703251b07f0feb4ac0ada956e205a8abda447170",
+  "nodeSha256": "6e3c50f4dc969b0d6389a20c1f2ee9215f49e8fb81bd19f9ed042a13d645e03f",
+  "rows": [
+    {
+      "scene": "minute-window-crossing",
+      "width": 1440,
+      "postId": 33,
+      "first": {
+        "button": "Schedule",
+        "seconds": 81
+      },
+      "late": {
+        "button": "Publish",
+        "seconds": 59
+      },
+      "response": {
+        "id": 1069,
+        "method": "PUT",
+        "path": "/api/posts/33",
+        "startedAt": 1794208876074,
+        "fields": [
+          "title",
+          "content",
+          "blocks",
+          "footnotes",
+          "excerpt",
+          "slug",
+          "status",
+          "categoryIds",
+          "tagIds",
+          "featuredMediaId",
+          "parentId",
+          "menuOrder",
+          "templateSlug",
+          "commentStatus",
+          "pingStatus",
+          "authorId",
+          "format",
+          "sticky",
+          "postDate",
+          "password",
+          "version",
+          "type"
+        ],
+        "body": {
+          "title": "Native Crossing Published 1440",
+          "content": "<!-- wp:paragraph --><p>NATIVE SAVED CONTENT.</p><!-- /wp:paragraph -->",
+          "status": "publish",
+          "postDate": "2026-11-09T13:07:15",
+          "version": 1,
+          "type": "post"
+        },
+        "status": 200,
+        "finishedAt": 1794208876111,
+        "result": {
+          "post": {
+            "id": 33,
+            "title": "Native Crossing Published 1440",
+            "status": "publish",
+            "postDate": "2026-11-09T13:07:15",
+            "postDateGmt": "2026-11-09T07:22:15.000Z",
+            "scheduledAt": null,
+            "publishedAt": "2026-11-09T07:22:15.000Z",
+            "version": 2
+          }
+        }
+      },
+      "saved": {
+        "status": "publish",
+        "postDate": "2026-11-09T13:07:15",
+        "postDateGmt": "2026-11-09T07:22:15.000Z"
+      },
+      "cleanReload": {
+        "beforeUnloadPrevented": false,
+        "state": {
+          "date": "2026-11-09T13:07:15",
+          "disabled": false,
+          "hostZone": "America/Los_Angeles",
+          "indicator": "Published",
+          "now": 1794208876924,
+          "overflow": false,
+          "primary": "Save",
+          "text": "W\nNative Crossing Published 1440 \u00b7 Post\nSave\nPatterns\nDocument\nPost\nBlock\nNative Crossing Published 1440\n\n3 words \u00b7 Published\n\nStatus\nDraft\nPending Review\nPublished\nScheduled\nPrivate\nPublish\n\nSite timezone: +05:45. Publication time: 2026-11-09 13:07:15\n\nReset to immediately\nVisibility\nPublic\nPrivate\nPassword protected\n\nRevisions\n\nLink\nSlug\nAuthor\nFormat\nCategories\nUncategorized\nManage categories \u2197\nTags\nFeatured image\nSet featured image\nTemplate\nTemplate\nDefault template\nExcerpt\nDiscussion\nPost options\nPost\n3 words\nPublished",
+          "title": "Native Crossing Published 1440"
+        }
+      },
+      "cleanLeaveNoConfirm": true,
+      "screenshot": "../screens/publication-status-native-final-crossing-1440.png"
+    },
+    {
+      "scene": "fixed-pair-zone-edit-clear-floating-guard",
+      "width": 1440,
+      "postId": 34,
+      "unchangedSelectedGmt": "2099-01-01T21:19:19.000Z",
+      "unchanged": {
+        "id": 1148,
+        "method": "PUT",
+        "path": "/api/posts/34",
+        "startedAt": 1794208877762,
+        "fields": [
+          "title",
+          "content",
+          "blocks",
+          "footnotes",
+          "excerpt",
+          "slug",
+          "status",
+          "categoryIds",
+          "tagIds",
+          "featuredMediaId",
+          "parentId",
+          "menuOrder",
+          "templateSlug",
+          "commentStatus",
+          "pingStatus",
+          "authorId",
+          "format",
+          "sticky",
+          "password",
+          "version",
+          "type"
+        ],
+        "body": {
+          "title": "Native Fixed 1440",
+          "content": "<!-- wp:paragraph --><p>NATIVE SAVED CONTENT.</p><!-- /wp:paragraph -->",
+          "status": "future",
+          "version": 1,
+          "type": "post"
+        },
+        "status": 200,
+        "finishedAt": 1794208877786,
+        "result": {
+          "post": {
+            "id": 34,
+            "title": "Native Fixed 1440",
+            "status": "future",
+            "postDate": "2099-01-02T03:04:19",
+            "postDateGmt": "2099-01-01T21:19:19.000Z",
+            "scheduledAt": "2099-01-01T21:19:19.000Z",
+            "publishedAt": "2099-01-01T21:19:19.000Z",
+            "version": 2
+          }
+        }
+      },
+      "changed": {
+        "id": 1150,
+        "method": "PUT",
+        "path": "/api/posts/34",
+        "startedAt": 1794208878558,
+        "fields": [
+          "title",
+          "content",
+          "blocks",
+          "footnotes",
+          "excerpt",
+          "slug",
+          "status",
+          "categoryIds",
+          "tagIds",
+          "featuredMediaId",
+          "parentId",
+          "menuOrder",
+          "templateSlug",
+          "commentStatus",
+          "pingStatus",
+          "authorId",
+          "format",
+          "sticky",
+          "postDate",
+          "password",
+          "version",
+          "type"
+        ],
+        "body": {
+          "title": "Native Fixed 1440",
+          "content": "<!-- wp:paragraph --><p>NATIVE SAVED CONTENT.</p><!-- /wp:paragraph -->",
+          "status": "future",
+          "postDate": "2099-01-03T04:05:37",
+          "version": 2,
+          "type": "post"
+        },
+        "status": 200,
+        "finishedAt": 1794208878578,
+        "result": {
+          "post": {
+            "id": 34,
+            "title": "Native Fixed 1440",
+            "status": "future",
+            "postDate": "2099-01-03T04:05:37",
+            "postDateGmt": "2099-01-03T04:05:37.000Z",
+            "scheduledAt": "2099-01-03T04:05:37.000Z",
+            "publishedAt": "2099-01-01T21:19:19.000Z",
+            "version": 3
+          }
+        }
+      },
+      "cleared": {
+        "id": 1152,
+        "method": "PUT",
+        "path": "/api/posts/34",
+        "startedAt": 1794208878805,
+        "fields": [
+          "title",
+          "content",
+          "blocks",
+          "footnotes",
+          "excerpt",
+          "slug",
+          "status",
+          "categoryIds",
+          "tagIds",
+          "featuredMediaId",
+          "parentId",
+          "menuOrder",
+          "templateSlug",
+          "commentStatus",
+          "pingStatus",
+          "authorId",
+          "format",
+          "sticky",
+          "postDate",
+          "password",
+          "version",
+          "type"
+        ],
+        "body": {
+          "title": "Native Fixed 1440",
+          "content": "<!-- wp:paragraph --><p>NATIVE SAVED CONTENT.</p><!-- /wp:paragraph -->",
+          "status": "draft",
+          "postDate": null,
+          "version": 3,
+          "type": "post"
+        },
+        "status": 200,
+        "finishedAt": 1794208878827,
+        "result": {
+          "post": {
+            "id": 34,
+            "title": "Native Fixed 1440",
+            "status": "draft",
+            "postDate": "2026-11-09T07:21:18",
+            "postDateGmt": null,
+            "scheduledAt": null,
+            "publishedAt": null,
+            "version": 4
+          }
+        }
+      },
+      "floating": {
+        "status": "draft",
+        "postDate": "2026-11-09T07:21:18",
+        "postDateGmt": null,
+        "scheduledAt": null
+      },
+      "clearReload": {
+        "beforeUnloadPrevented": false,
+        "state": {
+          "date": "2026-11-09T07:21:18",
+          "disabled": false,
+          "hostZone": "America/Los_Angeles",
+          "indicator": "Draft",
+          "now": 1794208879536,
+          "overflow": false,
+          "primary": "Publish",
+          "text": "W\nNative Fixed 1440 \u00b7 Post\nSave draft\nPublish\nPatterns\nDocument\nPost\nBlock\nNative Fixed 1440\n\n3 words \u00b7 Draft\n\nStatus\nDraft\nPending Review\nPublished\nScheduled\nPrivate\nPublish\n\nSite timezone: UTC. Publication time: 2026-11-09 07:21:18\n\nReset to immediately\nVisibility\nPublic\nPrivate\nPassword protected\n\nRevisions\n\nLink\nSlug\nAuthor\nFormat\nCategories\nUncategorized\nManage categories \u2197\nTags\nFeatured image\nSet featured image\nTemplate\nTemplate\nDefault template\nExcerpt\nDiscussion\nPost options\nPost\n3 words\nDraft",
+          "title": "Native Fixed 1440"
+        }
+      },
+      "noAccidentalFloatingFutureWrite": true,
+      "immediate": {
+        "id": 1189,
+        "method": "PUT",
+        "path": "/api/posts/34",
+        "startedAt": 1794208879705,
+        "fields": [
+          "title",
+          "content",
+          "blocks",
+          "footnotes",
+          "excerpt",
+          "slug",
+          "status",
+          "categoryIds",
+          "tagIds",
+          "featuredMediaId",
+          "parentId",
+          "menuOrder",
+          "templateSlug",
+          "commentStatus",
+          "pingStatus",
+          "authorId",
+          "format",
+          "sticky",
+          "password",
+          "version",
+          "type"
+        ],
+        "body": {
+          "title": "Native Fixed 1440",
+          "content": "<!-- wp:paragraph --><p>NATIVE SAVED CONTENT.</p><!-- /wp:paragraph -->",
+          "status": "publish",
+          "version": 4,
+          "type": "post"
+        },
+        "status": 200,
+        "finishedAt": 1794208879729,
+        "result": {
+          "post": {
+            "id": 34,
+            "title": "Native Fixed 1440",
+            "status": "publish",
+            "postDate": "2026-11-09T07:21:19",
+            "postDateGmt": "2026-11-09T07:21:19.716Z",
+            "scheduledAt": null,
+            "publishedAt": "2026-11-09T07:21:19.716Z",
+            "version": 5
+          }
+        }
+      },
+      "screenshots": [
+        "../screens/publication-status-native-final-fixed-1440.png",
+        "../screens/publication-status-native-final-clear-1440.png"
+      ]
+    },
+    {
+      "scene": "saved-future-null-gmt-past-date-title-only",
+      "width": 1440,
+      "postId": 35,
+      "response": {
+        "id": 1227,
+        "method": "PUT",
+        "path": "/api/posts/35",
+        "startedAt": 1794208880572,
+        "fields": [
+          "title",
+          "content",
+          "blocks",
+          "footnotes",
+          "excerpt",
+          "slug",
+          "status",
+          "categoryIds",
+          "tagIds",
+          "featuredMediaId",
+          "parentId",
+          "menuOrder",
+          "templateSlug",
+          "commentStatus",
+          "pingStatus",
+          "authorId",
+          "format",
+          "sticky",
+          "password",
+          "version",
+          "type"
+        ],
+        "body": {
+          "title": "Native Unfixed Title Saved 1440",
+          "content": "<!-- wp:paragraph --><p>NATIVE SAVED CONTENT.</p><!-- /wp:paragraph -->",
+          "status": "future",
+          "version": 1,
+          "type": "post"
+        },
+        "status": 200,
+        "finishedAt": 1794208880597,
+        "result": {
+          "post": {
+            "id": 35,
+            "title": "Native Unfixed Title Saved 1440",
+            "status": "publish",
+            "postDate": "2001-02-03T04:05:19",
+            "postDateGmt": "2001-02-02T22:20:19.000Z",
+            "scheduledAt": "2099-01-01T00:00:00.000Z",
+            "publishedAt": "2001-02-02T22:20:19.000Z",
+            "version": 2
+          }
+        }
+      },
+      "resolved": {
+        "status": "publish",
+        "postDate": "2001-02-03T04:05:19",
+        "postDateGmt": "2001-02-02T22:20:19.000Z"
+      },
+      "cleanReload": {
+        "beforeUnloadPrevented": false,
+        "state": {
+          "date": "2001-02-03T04:05:19",
+          "disabled": false,
+          "hostZone": "America/Los_Angeles",
+          "indicator": "Published",
+          "now": 1794208881312,
+          "overflow": false,
+          "primary": "Save",
+          "text": "W\nNative Unfixed Title Saved 1440 \u00b7 Post\nSave\nPatterns\nDocument\nPost\nBlock\nNative Unfixed Title Saved 1440\n\n3 words \u00b7 Published\n\nStatus\nDraft\nPending Review\nPublished\nScheduled\nPrivate\nPublish\n\nSite timezone: +05:45. Publication time: 2001-02-03 04:05:19\n\nReset to immediately\nVisibility\nPublic\nPrivate\nPassword protected\n\nRevisions\n\nLink\nSlug\nAuthor\nFormat\nCategories\nUncategorized\nManage categories \u2197\nTags\nFeatured image\nSet featured image\nTemplate\nTemplate\nDefault template\nExcerpt\nDiscussion\nPost options\nPost\n3 words\nPublished",
+          "title": "Native Unfixed Title Saved 1440"
+        }
+      },
+      "screenshot": "../screens/publication-status-native-final-unfixed-1440.png"
+    },
+    {
+      "scene": "minute-window-crossing",
+      "width": 768,
+      "postId": 36,
+      "first": {
+        "button": "Schedule",
+        "seconds": 82
+      },
+      "late": {
+        "button": "Publish",
+        "seconds": 59
+      },
+      "response": {
+        "id": 1301,
+        "method": "PUT",
+        "path": "/api/posts/36",
+        "startedAt": 1794208905130,
+        "fields": [
+          "title",
+          "content",
+          "blocks",
+          "footnotes",
+          "excerpt",
+          "slug",
+          "status",
+          "categoryIds",
+          "tagIds",
+          "featuredMediaId",
+          "parentId",
+          "menuOrder",
+          "templateSlug",
+          "commentStatus",
+          "pingStatus",
+          "authorId",
+          "format",
+          "sticky",
+          "postDate",
+          "password",
+          "version",
+          "type"
+        ],
+        "body": {
+          "title": "Native Crossing Published 768",
+          "content": "<!-- wp:paragraph --><p>NATIVE SAVED CONTENT.</p><!-- /wp:paragraph -->",
+          "status": "publish",
+          "postDate": "2026-11-09T13:07:44",
+          "version": 1,
+          "type": "post"
+        },
+        "status": 200,
+        "finishedAt": 1794208905155,
+        "result": {
+          "post": {
+            "id": 36,
+            "title": "Native Crossing Published 768",
+            "status": "publish",
+            "postDate": "2026-11-09T13:07:44",
+            "postDateGmt": "2026-11-09T07:22:44.000Z",
+            "scheduledAt": null,
+            "publishedAt": "2026-11-09T07:22:44.000Z",
+            "version": 2
+          }
+        }
+      },
+      "saved": {
+        "status": "publish",
+        "postDate": "2026-11-09T13:07:44",
+        "postDateGmt": "2026-11-09T07:22:44.000Z"
+      },
+      "cleanReload": {
+        "beforeUnloadPrevented": false,
+        "state": {
+          "date": "2026-11-09T13:07:44",
+          "disabled": false,
+          "hostZone": "America/Los_Angeles",
+          "indicator": "Published",
+          "now": 1794208905881,
+          "overflow": false,
+          "primary": "Save",
+          "text": "W\nSave\nPatterns\nPost\nBlock\nNative Crossing Published 768\n\n3 words \u00b7 Published\n\nStatus\nDraft\nPending Review\nPublished\nScheduled\nPrivate\nPublish\n\nSite timezone: +05:45. Publication time: 2026-11-09 13:07:44\n\nReset to immediately\nVisibility\nPublic\nPrivate\nPassword protected\n\nRevisions\n\nLink\nSlug\nAuthor\nFormat\nCategories\nUncategorized\nManage categories \u2197\nTags\nFeatured image\nSet featured image\nTemplate\nTemplate\nDefault template\nExcerpt\nDiscussion\nPost options\nPost\n3 words\nPublished",
+          "title": "Native Crossing Published 768"
+        }
+      },
+      "cleanLeaveNoConfirm": true,
+      "screenshot": "../screens/publication-status-native-final-crossing-768.png"
+    },
+    {
+      "scene": "fixed-pair-zone-edit-clear-floating-guard",
+      "width": 768,
+      "postId": 37,
+      "unchangedSelectedGmt": "2099-01-01T21:19:19.000Z",
+      "unchanged": {
+        "id": 1380,
+        "method": "PUT",
+        "path": "/api/posts/37",
+        "startedAt": 1794208906737,
+        "fields": [
+          "title",
+          "content",
+          "blocks",
+          "footnotes",
+          "excerpt",
+          "slug",
+          "status",
+          "categoryIds",
+          "tagIds",
+          "featuredMediaId",
+          "parentId",
+          "menuOrder",
+          "templateSlug",
+          "commentStatus",
+          "pingStatus",
+          "authorId",
+          "format",
+          "sticky",
+          "password",
+          "version",
+          "type"
+        ],
+        "body": {
+          "title": "Native Fixed 768",
+          "content": "<!-- wp:paragraph --><p>NATIVE SAVED CONTENT.</p><!-- /wp:paragraph -->",
+          "status": "future",
+          "version": 1,
+          "type": "post"
+        },
+        "status": 200,
+        "finishedAt": 1794208906757,
+        "result": {
+          "post": {
+            "id": 37,
+            "title": "Native Fixed 768",
+            "status": "future",
+            "postDate": "2099-01-02T03:04:19",
+            "postDateGmt": "2099-01-01T21:19:19.000Z",
+            "scheduledAt": "2099-01-01T21:19:19.000Z",
+            "publishedAt": "2099-01-01T21:19:19.000Z",
+            "version": 2
+          }
+        }
+      },
+      "changed": {
+        "id": 1382,
+        "method": "PUT",
+        "path": "/api/posts/37",
+        "startedAt": 1794208907573,
+        "fields": [
+          "title",
+          "content",
+          "blocks",
+          "footnotes",
+          "excerpt",
+          "slug",
+          "status",
+          "categoryIds",
+          "tagIds",
+          "featuredMediaId",
+          "parentId",
+          "menuOrder",
+          "templateSlug",
+          "commentStatus",
+          "pingStatus",
+          "authorId",
+          "format",
+          "sticky",
+          "postDate",
+          "password",
+          "version",
+          "type"
+        ],
+        "body": {
+          "title": "Native Fixed 768",
+          "content": "<!-- wp:paragraph --><p>NATIVE SAVED CONTENT.</p><!-- /wp:paragraph -->",
+          "status": "future",
+          "postDate": "2099-01-03T04:05:37",
+          "version": 2,
+          "type": "post"
+        },
+        "status": 200,
+        "finishedAt": 1794208907598,
+        "result": {
+          "post": {
+            "id": 37,
+            "title": "Native Fixed 768",
+            "status": "future",
+            "postDate": "2099-01-03T04:05:37",
+            "postDateGmt": "2099-01-03T04:05:37.000Z",
+            "scheduledAt": "2099-01-03T04:05:37.000Z",
+            "publishedAt": "2099-01-01T21:19:19.000Z",
+            "version": 3
+          }
+        }
+      },
+      "cleared": {
+        "id": 1384,
+        "method": "PUT",
+        "path": "/api/posts/37",
+        "startedAt": 1794208907837,
+        "fields": [
+          "title",
+          "content",
+          "blocks",
+          "footnotes",
+          "excerpt",
+          "slug",
+          "status",
+          "categoryIds",
+          "tagIds",
+          "featuredMediaId",
+          "parentId",
+          "menuOrder",
+          "templateSlug",
+          "commentStatus",
+          "pingStatus",
+          "authorId",
+          "format",
+          "sticky",
+          "postDate",
+          "password",
+          "version",
+          "type"
+        ],
+        "body": {
+          "title": "Native Fixed 768",
+          "content": "<!-- wp:paragraph --><p>NATIVE SAVED CONTENT.</p><!-- /wp:paragraph -->",
+          "status": "draft",
+          "postDate": null,
+          "version": 3,
+          "type": "post"
+        },
+        "status": 200,
+        "finishedAt": 1794208907858,
+        "result": {
+          "post": {
+            "id": 37,
+            "title": "Native Fixed 768",
+            "status": "draft",
+            "postDate": "2026-11-09T07:21:47",
+            "postDateGmt": null,
+            "scheduledAt": null,
+            "publishedAt": null,
+            "version": 4
+          }
+        }
+      },
+      "floating": {
+        "status": "draft",
+        "postDate": "2026-11-09T07:21:47",
+        "postDateGmt": null,
+        "scheduledAt": null
+      },
+      "clearReload": {
+        "beforeUnloadPrevented": false,
+        "state": {
+          "date": "2026-11-09T07:21:47",
+          "disabled": false,
+          "hostZone": "America/Los_Angeles",
+          "indicator": "Draft",
+          "now": 1794208908725,
+          "overflow": false,
+          "primary": "Publish",
+          "text": "W\nSave draft\nPublish\nPatterns\nPost\nBlock\nNative Fixed 768\n\n3 words \u00b7 Draft\n\nStatus\nDraft\nPending Review\nPublished\nScheduled\nPrivate\nPublish\n\nSite timezone: UTC. Publication time: 2026-11-09 07:21:47\n\nReset to immediately\nVisibility\nPublic\nPrivate\nPassword protected\n\nRevisions\n\nLink\nSlug\nAuthor\nFormat\nCategories\nUncategorized\nManage categories \u2197\nTags\nFeatured image\nSet featured image\nTemplate\nTemplate\nDefault template\nExcerpt\nDiscussion\nPost options\nPost\n3 words\nDraft",
+          "title": "Native Fixed 768"
+        }
+      },
+      "noAccidentalFloatingFutureWrite": true,
+      "immediate": {
+        "id": 1421,
+        "method": "PUT",
+        "path": "/api/posts/37",
+        "startedAt": 1794208908939,
+        "fields": [
+          "title",
+          "content",
+          "blocks",
+          "footnotes",
+          "excerpt",
+          "slug",
+          "status",
+          "categoryIds",
+          "tagIds",
+          "featuredMediaId",
+          "parentId",
+          "menuOrder",
+          "templateSlug",
+          "commentStatus",
+          "pingStatus",
+          "authorId",
+          "format",
+          "sticky",
+          "password",
+          "version",
+          "type"
+        ],
+        "body": {
+          "title": "Native Fixed 768",
+          "content": "<!-- wp:paragraph --><p>NATIVE SAVED CONTENT.</p><!-- /wp:paragraph -->",
+          "status": "publish",
+          "version": 4,
+          "type": "post"
+        },
+        "status": 200,
+        "finishedAt": 1794208908967,
+        "result": {
+          "post": {
+            "id": 37,
+            "title": "Native Fixed 768",
+            "status": "publish",
+            "postDate": "2026-11-09T07:21:48",
+            "postDateGmt": "2026-11-09T07:21:48.956Z",
+            "scheduledAt": null,
+            "publishedAt": "2026-11-09T07:21:48.956Z",
+            "version": 5
+          }
+        }
+      },
+      "screenshots": [
+        "../screens/publication-status-native-final-fixed-768.png",
+        "../screens/publication-status-native-final-clear-768.png"
+      ]
+    },
+    {
+      "scene": "saved-future-null-gmt-past-date-title-only",
+      "width": 768,
+      "postId": 38,
+      "response": {
+        "id": 1459,
+        "method": "PUT",
+        "path": "/api/posts/38",
+        "startedAt": 1794208909787,
+        "fields": [
+          "title",
+          "content",
+          "blocks",
+          "footnotes",
+          "excerpt",
+          "slug",
+          "status",
+          "categoryIds",
+          "tagIds",
+          "featuredMediaId",
+          "parentId",
+          "menuOrder",
+          "templateSlug",
+          "commentStatus",
+          "pingStatus",
+          "authorId",
+          "format",
+          "sticky",
+          "password",
+          "version",
+          "type"
+        ],
+        "body": {
+          "title": "Native Unfixed Title Saved 768",
+          "content": "<!-- wp:paragraph --><p>NATIVE SAVED CONTENT.</p><!-- /wp:paragraph -->",
+          "status": "future",
+          "version": 1,
+          "type": "post"
+        },
+        "status": 200,
+        "finishedAt": 1794208909814,
+        "result": {
+          "post": {
+            "id": 38,
+            "title": "Native Unfixed Title Saved 768",
+            "status": "publish",
+            "postDate": "2001-02-03T04:05:19",
+            "postDateGmt": "2001-02-02T22:20:19.000Z",
+            "scheduledAt": "2099-01-01T00:00:00.000Z",
+            "publishedAt": "2001-02-02T22:20:19.000Z",
+            "version": 2
+          }
+        }
+      },
+      "resolved": {
+        "status": "publish",
+        "postDate": "2001-02-03T04:05:19",
+        "postDateGmt": "2001-02-02T22:20:19.000Z"
+      },
+      "cleanReload": {
+        "beforeUnloadPrevented": false,
+        "state": {
+          "date": "2001-02-03T04:05:19",
+          "disabled": false,
+          "hostZone": "America/Los_Angeles",
+          "indicator": "Published",
+          "now": 1794208910541,
+          "overflow": false,
+          "primary": "Save",
+          "text": "W\nSave\nPatterns\nPost\nBlock\nNative Unfixed Title Saved 768\n\n3 words \u00b7 Published\n\nStatus\nDraft\nPending Review\nPublished\nScheduled\nPrivate\nPublish\n\nSite timezone: +05:45. Publication time: 2001-02-03 04:05:19\n\nReset to immediately\nVisibility\nPublic\nPrivate\nPassword protected\n\nRevisions\n\nLink\nSlug\nAuthor\nFormat\nCategories\nUncategorized\nManage categories \u2197\nTags\nFeatured image\nSet featured image\nTemplate\nTemplate\nDefault template\nExcerpt\nDiscussion\nPost options\nPost\n3 words\nPublished",
+          "title": "Native Unfixed Title Saved 768"
+        }
+      },
+      "screenshot": "../screens/publication-status-native-final-unfixed-768.png"
+    },
+    {
+      "scene": "minute-window-crossing",
+      "width": 375,
+      "postId": 39,
+      "first": {
+        "button": "Schedule",
+        "seconds": 82
+      },
+      "late": {
+        "button": "Publish",
+        "seconds": 59
+      },
+      "response": {
+        "id": 1533,
+        "method": "PUT",
+        "path": "/api/posts/39",
+        "startedAt": 1794208934116,
+        "fields": [
+          "title",
+          "content",
+          "blocks",
+          "footnotes",
+          "excerpt",
+          "slug",
+          "status",
+          "categoryIds",
+          "tagIds",
+          "featuredMediaId",
+          "parentId",
+          "menuOrder",
+          "templateSlug",
+          "commentStatus",
+          "pingStatus",
+          "authorId",
+          "format",
+          "sticky",
+          "postDate",
+          "password",
+          "version",
+          "type"
+        ],
+        "body": {
+          "title": "Native Crossing Published 375",
+          "content": "<!-- wp:paragraph --><p>NATIVE SAVED CONTENT.</p><!-- /wp:paragraph -->",
+          "status": "publish",
+          "postDate": "2026-11-09T13:08:13",
+          "version": 1,
+          "type": "post"
+        },
+        "status": 200,
+        "finishedAt": 1794208934153,
+        "result": {
+          "post": {
+            "id": 39,
+            "title": "Native Crossing Published 375",
+            "status": "publish",
+            "postDate": "2026-11-09T13:08:13",
+            "postDateGmt": "2026-11-09T07:23:13.000Z",
+            "scheduledAt": null,
+            "publishedAt": "2026-11-09T07:23:13.000Z",
+            "version": 2
+          }
+        }
+      },
+      "saved": {
+        "status": "publish",
+        "postDate": "2026-11-09T13:08:13",
+        "postDateGmt": "2026-11-09T07:23:13.000Z"
+      },
+      "cleanReload": {
+        "beforeUnloadPrevented": false,
+        "state": {
+          "date": "2026-11-09T13:08:13",
+          "disabled": false,
+          "hostZone": "America/Los_Angeles",
+          "indicator": "Published",
+          "now": 1794208934893,
+          "overflow": false,
+          "primary": "Save",
+          "text": "W\nSave\nPatterns\nPost\nBlock\nNative Crossing Published 375\n\n3 words \u00b7 Published\n\nStatus\nDraft\nPending Review\nPublished\nScheduled\nPrivate\nPublish\n\nSite timezone: +05:45. Publication time: 2026-11-09 13:08:13\n\nReset to immediately\nVisibility\nPublic\nPrivate\nPassword protected\n\nRevisions\n\nLink\nSlug\nAuthor\nFormat\nCategories\nUncategorized\nManage categories \u2197\nTags\nFeatured image\nSet featured image\nTemplate\nTemplate\nDefault template\nExcerpt\nDiscussion\nPost options\nPost\n3 words\nPublished",
+          "title": "Native Crossing Published 375"
+        }
+      },
+      "cleanLeaveNoConfirm": true,
+      "screenshot": "../screens/publication-status-native-final-crossing-375.png"
+    },
+    {
+      "scene": "fixed-pair-zone-edit-clear-floating-guard",
+      "width": 375,
+      "postId": 40,
+      "unchangedSelectedGmt": "2099-01-01T21:19:19.000Z",
+      "unchanged": {
+        "id": 1611,
+        "method": "PUT",
+        "path": "/api/posts/40",
+        "startedAt": 1794208935754,
+        "fields": [
+          "title",
+          "content",
+          "blocks",
+          "footnotes",
+          "excerpt",
+          "slug",
+          "status",
+          "categoryIds",
+          "tagIds",
+          "featuredMediaId",
+          "parentId",
+          "menuOrder",
+          "templateSlug",
+          "commentStatus",
+          "pingStatus",
+          "authorId",
+          "format",
+          "sticky",
+          "password",
+          "version",
+          "type"
+        ],
+        "body": {
+          "title": "Native Fixed 375",
+          "content": "<!-- wp:paragraph --><p>NATIVE SAVED CONTENT.</p><!-- /wp:paragraph -->",
+          "status": "future",
+          "version": 1,
+          "type": "post"
+        },
+        "status": 200,
+        "finishedAt": 1794208935810,
+        "result": {
+          "post": {
+            "id": 40,
+            "title": "Native Fixed 375",
+            "status": "future",
+            "postDate": "2099-01-02T03:04:19",
+            "postDateGmt": "2099-01-01T21:19:19.000Z",
+            "scheduledAt": "2099-01-01T21:19:19.000Z",
+            "publishedAt": "2099-01-01T21:19:19.000Z",
+            "version": 2
+          }
+        }
+      },
+      "changed": {
+        "id": 1613,
+        "method": "PUT",
+        "path": "/api/posts/40",
+        "startedAt": 1794208936802,
+        "fields": [
+          "title",
+          "content",
+          "blocks",
+          "footnotes",
+          "excerpt",
+          "slug",
+          "status",
+          "categoryIds",
+          "tagIds",
+          "featuredMediaId",
+          "parentId",
+          "menuOrder",
+          "templateSlug",
+          "commentStatus",
+          "pingStatus",
+          "authorId",
+          "format",
+          "sticky",
+          "postDate",
+          "password",
+          "version",
+          "type"
+        ],
+        "body": {
+          "title": "Native Fixed 375",
+          "content": "<!-- wp:paragraph --><p>NATIVE SAVED CONTENT.</p><!-- /wp:paragraph -->",
+          "status": "future",
+          "postDate": "2099-01-03T04:05:37",
+          "version": 2,
+          "type": "post"
+        },
+        "status": 200,
+        "finishedAt": 1794208936827,
+        "result": {
+          "post": {
+            "id": 40,
+            "title": "Native Fixed 375",
+            "status": "future",
+            "postDate": "2099-01-03T04:05:37",
+            "postDateGmt": "2099-01-03T04:05:37.000Z",
+            "scheduledAt": "2099-01-03T04:05:37.000Z",
+            "publishedAt": "2099-01-01T21:19:19.000Z",
+            "version": 3
+          }
+        }
+      },
+      "cleared": {
+        "id": 1615,
+        "method": "PUT",
+        "path": "/api/posts/40",
+        "startedAt": 1794208937053,
+        "fields": [
+          "title",
+          "content",
+          "blocks",
+          "footnotes",
+          "excerpt",
+          "slug",
+          "status",
+          "categoryIds",
+          "tagIds",
+          "featuredMediaId",
+          "parentId",
+          "menuOrder",
+          "templateSlug",
+          "commentStatus",
+          "pingStatus",
+          "authorId",
+          "format",
+          "sticky",
+          "postDate",
+          "password",
+          "version",
+          "type"
+        ],
+        "body": {
+          "title": "Native Fixed 375",
+          "content": "<!-- wp:paragraph --><p>NATIVE SAVED CONTENT.</p><!-- /wp:paragraph -->",
+          "status": "draft",
+          "postDate": null,
+          "version": 3,
+          "type": "post"
+        },
+        "status": 200,
+        "finishedAt": 1794208937077,
+        "result": {
+          "post": {
+            "id": 40,
+            "title": "Native Fixed 375",
+            "status": "draft",
+            "postDate": "2026-11-09T07:22:17",
+            "postDateGmt": null,
+            "scheduledAt": null,
+            "publishedAt": null,
+            "version": 4
+          }
+        }
+      },
+      "floating": {
+        "status": "draft",
+        "postDate": "2026-11-09T07:22:17",
+        "postDateGmt": null,
+        "scheduledAt": null
+      },
+      "clearReload": {
+        "beforeUnloadPrevented": false,
+        "state": {
+          "date": "2026-11-09T07:22:17",
+          "disabled": false,
+          "hostZone": "America/Los_Angeles",
+          "indicator": "Draft",
+          "now": 1794208937823,
+          "overflow": false,
+          "primary": "Publish",
+          "text": "W\nSave draft\nPublish\nPatterns\nPost\nBlock\nNative Fixed 375\n\n3 words \u00b7 Draft\n\nStatus\nDraft\nPending Review\nPublished\nScheduled\nPrivate\nPublish\n\nSite timezone: UTC. Publication time: 2026-11-09 07:22:17\n\nReset to immediately\nVisibility\nPublic\nPrivate\nPassword protected\n\nRevisions\n\nLink\nSlug\nAuthor\nFormat\nCategories\nUncategorized\nManage categories \u2197\nTags\nFeatured image\nSet featured image\nTemplate\nTemplate\nDefault template\nExcerpt\nDiscussion\nPost options\nPost\n3 words\nDraft",
+          "title": "Native Fixed 375"
+        }
+      },
+      "noAccidentalFloatingFutureWrite": true,
+      "immediate": {
+        "id": 1652,
+        "method": "PUT",
+        "path": "/api/posts/40",
+        "startedAt": 1794208938020,
+        "fields": [
+          "title",
+          "content",
+          "blocks",
+          "footnotes",
+          "excerpt",
+          "slug",
+          "status",
+          "categoryIds",
+          "tagIds",
+          "featuredMediaId",
+          "parentId",
+          "menuOrder",
+          "templateSlug",
+          "commentStatus",
+          "pingStatus",
+          "authorId",
+          "format",
+          "sticky",
+          "password",
+          "version",
+          "type"
+        ],
+        "body": {
+          "title": "Native Fixed 375",
+          "content": "<!-- wp:paragraph --><p>NATIVE SAVED CONTENT.</p><!-- /wp:paragraph -->",
+          "status": "publish",
+          "version": 4,
+          "type": "post"
+        },
+        "status": 200,
+        "finishedAt": 1794208938050,
+        "result": {
+          "post": {
+            "id": 40,
+            "title": "Native Fixed 375",
+            "status": "publish",
+            "postDate": "2026-11-09T07:22:18",
+            "postDateGmt": "2026-11-09T07:22:18.035Z",
+            "scheduledAt": null,
+            "publishedAt": "2026-11-09T07:22:18.035Z",
+            "version": 5
+          }
+        }
+      },
+      "screenshots": [
+        "../screens/publication-status-native-final-fixed-375.png",
+        "../screens/publication-status-native-final-clear-375.png"
+      ]
+    },
+    {
+      "scene": "saved-future-null-gmt-past-date-title-only",
+      "width": 375,
+      "postId": 41,
+      "response": {
+        "id": 1689,
+        "method": "PUT",
+        "path": "/api/posts/41",
+        "startedAt": 1794208938952,
+        "fields": [
+          "title",
+          "content",
+          "blocks",
+          "footnotes",
+          "excerpt",
+          "slug",
+          "status",
+          "categoryIds",
+          "tagIds",
+          "featuredMediaId",
+          "parentId",
+          "menuOrder",
+          "templateSlug",
+          "commentStatus",
+          "pingStatus",
+          "authorId",
+          "format",
+          "sticky",
+          "password",
+          "version",
+          "type"
+        ],
+        "body": {
+          "title": "Native Unfixed Title Saved 375",
+          "content": "<!-- wp:paragraph --><p>NATIVE SAVED CONTENT.</p><!-- /wp:paragraph -->",
+          "status": "future",
+          "version": 1,
+          "type": "post"
+        },
+        "status": 200,
+        "finishedAt": 1794208938988,
+        "result": {
+          "post": {
+            "id": 41,
+            "title": "Native Unfixed Title Saved 375",
+            "status": "publish",
+            "postDate": "2001-02-03T04:05:19",
+            "postDateGmt": "2001-02-02T22:20:19.000Z",
+            "scheduledAt": "2099-01-01T00:00:00.000Z",
+            "publishedAt": "2001-02-02T22:20:19.000Z",
+            "version": 2
+          }
+        }
+      },
+      "resolved": {
+        "status": "publish",
+        "postDate": "2001-02-03T04:05:19",
+        "postDateGmt": "2001-02-02T22:20:19.000Z"
+      },
+      "cleanReload": {
+        "beforeUnloadPrevented": false,
+        "state": {
+          "date": "2001-02-03T04:05:19",
+          "disabled": false,
+          "hostZone": "America/Los_Angeles",
+          "indicator": "Published",
+          "now": 1794208939715,
+          "overflow": false,
+          "primary": "Save",
+          "text": "W\nSave\nPatterns\nPost\nBlock\nNative Unfixed Title Saved 375\n\n3 words \u00b7 Published\n\nStatus\nDraft\nPending Review\nPublished\nScheduled\nPrivate\nPublish\n\nSite timezone: +05:45. Publication time: 2001-02-03 04:05:19\n\nReset to immediately\nVisibility\nPublic\nPrivate\nPassword protected\n\nRevisions\n\nLink\nSlug\nAuthor\nFormat\nCategories\nUncategorized\nManage categories \u2197\nTags\nFeatured image\nSet featured image\nTemplate\nTemplate\nDefault template\nExcerpt\nDiscussion\nPost options\nPost\n3 words\nPublished",
+          "title": "Native Unfixed Title Saved 375"
+        }
+      },
+      "screenshot": "../screens/publication-status-native-final-unfixed-375.png"
+    }
+  ]
+}

@@ -1,0 +1,39 @@
+{
+  "scope": "Only publication native reviewer owned resources; original receipts/checkouts/builds preserved.",
+  "seedCount": 1,
+  "browser": {
+    "loggedOut": true,
+    "sessionNull": true,
+    "ownVaultProfilesDeleted": 2,
+    "ownBrowserClosed": true,
+    "noOtherSessionTouched": true
+  },
+  "services": [
+    {
+      "port": 3035,
+      "expectedOwnedListenerVerified": true,
+      "cwdVerified": true
+    },
+    {
+      "port": 3036,
+      "expectedOwnedListenerVerified": true,
+      "cwdVerified": true
+    },
+    {
+      "port": 3037,
+      "expectedOwnedListenerVerified": true,
+      "cwdVerified": true
+    }
+  ],
+  "sqlHoldsWereTransactionsOnly": true,
+  "noSqlViewsFunctionsHooksCreated": true,
+  "otherOwnersUntouched": true,
+  "allOwnPortsFree": true,
+  "noActiveOwnedTransactionsBeforeDrop": true,
+  "testAnchorNeverCreatedVerifiedAbsent": true,
+  "onlyUniqueNativeDatabaseDropped": true,
+  "onlyUniqueUploadsRemoved": true,
+  "ownDependencyLinksRemoved": 3,
+  "dependencyOwnerPreserved": true,
+  "ownEnvironmentAndCredentialConfigsRemoved": true
+}

@@ -1,0 +1,78 @@
+{
+  "code": "759a553bbd99bf46ee8360fb5b0d05cd5ab72710",
+  "nodeSha256": "6e3c50f4dc969b0d6389a20c1f2ee9215f49e8fb81bd19f9ed042a13d645e03f",
+  "rows": [
+    {
+      "mode": "visual",
+      "postId": 9,
+      "normalization": "draft-to-draft ordinary save",
+      "initialBlocksNull": false,
+      "returnedBlocksCount": 1,
+      "response": {
+        "id": 352,
+        "method": "PUT",
+        "path": "/api/posts/9",
+        "startedAt": 1794207705552,
+        "fields": [
+          "title",
+          "content",
+          "blocks",
+          "footnotes",
+          "excerpt",
+          "slug",
+          "status",
+          "categoryIds",
+          "tagIds",
+          "featuredMediaId",
+          "parentId",
+          "menuOrder",
+          "templateSlug",
+          "commentStatus",
+          "pingStatus",
+          "authorId",
+          "format",
+          "sticky",
+          "password",
+          "version",
+          "type"
+        ],
+        "body": {
+          "title": "Native Dirty Before visual unchanged response",
+          "content": "<!-- wp:paragraph --><p>NATIVE SAVED CONTENT.</p><!-- /wp:paragraph -->",
+          "status": "draft",
+          "version": 1,
+          "type": "post"
+        },
+        "status": 200,
+        "finishedAt": 1794207705579,
+        "result": {
+          "post": {
+            "id": 9,
+            "title": "Native Dirty Before visual unchanged response",
+            "status": "draft",
+            "postDate": "2026-11-09T12:46:45",
+            "postDateGmt": null,
+            "scheduledAt": null,
+            "publishedAt": null,
+            "version": 2
+          }
+        }
+      },
+      "after": {
+        "date": "2026-11-09T12:46:45",
+        "disabled": false,
+        "hostZone": "America/Los_Angeles",
+        "indicator": "Unsaved changes",
+        "now": 1794207705675,
+        "overflow": false,
+        "primary": "Publish",
+        "text": "W\nNative Dirty Before visual unchanged response \u00b7 Post\nSave draft\nPublish\n\nDraft saved.\n\nDismiss\nPatterns\nChange block type or style\nDisplays more block tools\nDocument\n/\nParagraph\nPost\nBlock\nNative Dirty Before visual unchanged response\n\n3 words \u00b7 Draft\n\nStatus\nDraft\nPending Review\nPublished\nScheduled\nPrivate\nPublish\n\nSite timezone: +05:45. Publication time: 2026-11-09 12:46:45\n\nReset to immediately\nVisibility\nPublic\nPrivate\nPassword protected\n\nRevisions\n\nLink\nSlug\nAuthor\nFormat\nCategories\nUncategorized\nManage categories \u2197\nTags\nFeatured image\nSet featured image\nTemplate\nTemplate\nDefault template\nExcerpt\nDiscussion\nPost options\nPost\n3 words\nUnsaved changes",
+        "title": "Native Dirty Before visual unchanged response"
+      },
+      "actualBeforeUnload": {
+        "prevented": true
+      },
+      "screenshot": "../screens/publication-status-native-dirty-before-visual.png"
+    }
+  ]
+}

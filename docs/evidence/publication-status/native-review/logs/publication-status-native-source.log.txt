@@ -1,0 +1,99 @@
+WorldAct database migrated.
+WorldAct seeded. Sign in with username admin or your administrator email.
+Running against a disposable local database and upload directory; outgoing mail uses the local outbox.
+✔ editor keeps seconds and only changed or explicitly cleared local dates enter the write payload (0.768458ms)
+✔ reloaded fixed drafts schedule the selected GMT, including seconds and a changed site zone (0.106792ms)
+✔ only edited civil fields derive a new instant; clearing discards the old selected and legacy due instants (4.501083ms)
+✔ floating draft publication stays immediate after zone changes, including stale legacy due metadata (0.246334ms)
+✔ schedule hints use the explicit site zone, reject DST gaps and ignore the browser host zone (2.230833ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 5
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 264.322625
+✔ editor Publish and Schedule hints share the whole-second sixty boundary (2.546958ms)
+✔ valid saved schedules remain submittable after entering the minute window or passing due (0.706584ms)
+✔ a loaded chosen schedule that is now past due can reach the authoritative save (0.119ms)
+✔ fixed draft hints retain selected GMT through site-zone changes and inactive legacy due dates (0.323042ms)
+✔ changed civil dates use the current explicit zone with seconds retained (1.839375ms)
+✔ floating and explicitly cleared drafts publish immediately without resurrecting stale due metadata (0.304167ms)
+✔ missing zones, invalid civil fields and DST gaps cannot submit a schedule (0.930417ms)
+ℹ tests 7
+ℹ suites 0
+ℹ pass 7
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 259.774875
+✔ saved nonfloating rows without selected GMT can submit their unchanged civil date (5.045458ms)
+✔ saved provenance rather than an unsaved status control determines null-GMT fallback (0.29775ms)
+✔ new, draft and pending floating rows still require an independent chosen date to schedule (0.492583ms)
+✔ selected fixed GMT always wins over civil, saved status, changed site zone and inactive due (0.062583ms)
+✔ explicit clear discards nonfloating provenance while changed dates use the new site zone (0.198333ms)
+✔ saved null-GMT fallback never normalizes gaps, invalid civil or missing site zones (1.050375ms)
+ℹ tests 6
+ℹ suites 0
+ℹ pass 6
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 262.730083
+▶ save-time selected GMT classification and bulk Publish Now follow the supplied minute policy
+  ✔ core publish with selected future date becomes future with matching active due (31.382709ms)
+  ✔ core future inside60seconds publishes while selected instant remains in the future (21.52375ms)
+  ✔ REST publish status is normalized from its actual GMT date (27.962875ms)
+  ✔ title-only inherited publish uses selected GMT instead of old publication clock (35.314875ms)
+  ✔ title-only inherited future uses selected GMT instead of divergent inactive due (34.305458ms)
+  ✔ bulk Publish Now resets fixed draft and overrides its valid explicit date payload (35.728792ms)
+  ✔ bulk Publish Now resets a fixed scheduled post from its late item clock (29.633542ms)
+  ✔ bulk pending publication retains selected future date and normalizes rather than resetting (26.790084ms)
+  ✔ draft pending private statuses remain outside classification (38.507416ms)
+✔ save-time selected GMT classification and bulk Publish Now follow the supplied minute policy (401.405416ms)
+ℹ tests 10
+ℹ suites 0
+ℹ pass 10
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 637.243708
+▶ existing nonfloating null GMT preserves stored civil for unchanged or absent publication intent
+  ✔ published unchanged core local date derives stored civil instead of resetting to now (51.873042ms)
+  ✔ published unchanged REST local date derives the same stored civil (51.768958ms)
+  ✔ inherited future unchanged local date derives stored civil and active due (26.812833ms)
+  ✔ publish to requested future can use its stored nonfloating civil without new date intent (25.675417ms)
+  ✔ private to requested future can use its stored nonfloating civil without new date intent (23.487333ms)
+  ✔ floating draft unchanged local publication still fixes from the current clock (25.22175ms)
+  ✔ explicit null reset still chooses now rather than deriving old civil (24.895958ms)
+  ✔ ordinary private title-only null pair remains unchanged (24.927708ms)
+  ✔ a fixed GMT unchanged local date remains fixed after the site zone changes (23.50975ms)
+✔ existing nonfloating null GMT preserves stored civil for unchanged or absent publication intent (401.630334ms)
+ℹ tests 10
+ℹ suites 0
+ℹ pass 10
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 634.519167
+▶ bulk Publish Now validates explicit unfixed civil intent without rebasing a fixed pair
+  ✔ identical fixed civil keeps its original GMT exemption before Publish Now reset (59.979333ms)
+  ✔ identical explicit nonfloating null-GMT civil must finish strict derivation before reset (25.2665ms)
+  ✔ no-date Publish Now can reset an old nonfloating unfixed gap (29.334834ms)
+  ✔ genuinely changed gap is rejected before reset (25.076292ms)
+  ✔ floating unchanged civil and explicit null retain current-clock reset semantics (57.181709ms)
+✔ bulk Publish Now validates explicit unfixed civil intent without rebasing a fixed pair (299.315625ms)
+ℹ tests 6
+ℹ suites 0
+ℹ pass 6
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 532.404791
+Isolated regression complete: 6 test files passed.
