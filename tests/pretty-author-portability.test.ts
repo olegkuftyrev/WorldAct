@@ -67,6 +67,6 @@ test("fresh imported author archives generate destination identity paths in reta
    const head=await fetch(base+target,{method:"HEAD"});assert.equal(head.status,200);assert.equal(await head.text(),"");
   }
   const excessive=canonical.includes("?")?canonical+"&page=999":canonical.replace(/\/$/,"")+"/page/999"+(canonical.endsWith("/")?"/":"");
-  assert.equal((await fetch(base+excessive)).status,canonical.includes("?")?200:404);
+  assert.equal((await fetch(base+excessive)).status,404);
  }
 });
