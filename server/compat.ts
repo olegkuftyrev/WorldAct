@@ -163,24 +163,27 @@ router.get("/api/public/resolve", async (req, res) => {
       "Use a site-relative path.",
     )
     .parse(req.query.path);
-  let resolved;
+  let resolved,pageRoute:Awaited<ReturnType<typeof resolvePublicDocumentRoute>>|null=null;
   try {
-    const pageRoute=ordinaryListingPageRequested({},path)?await resolvePublicDocumentRoute(path,{authenticated:Boolean((req as AuthRequest).user)}):null;
+    pageRoute=ordinaryListingPageRequested({},path)?await resolvePublicDocumentRoute(path,{authenticated:Boolean((req as AuthRequest).user)}):null;
     if(pageRoute?.status===404)throw new HttpError(404,"Public listing page not found.");
+    if(pageRoute?.selectedId&&pageRoute.selectedType)resolved={id:pageRoute.selectedId,type:pageRoute.selectedType,...(pageRoute.contentPage?{contentPage:pageRoute.contentPage}:{})};
     const nameInput=[...new URLSearchParams(path.includes("?")?path.slice(path.indexOf("?")+1):"").keys()].some(key=>/^author_name(?:\[|$)/.test(key));
     if(nameInput){
       const route=pageRoute || await resolvePublicDocumentRoute(path,{authenticated:Boolean((req as AuthRequest).user)});
       if(route.status===404)throw new HttpError(404,"Named author listing not found.");
       if(route.listing?.namedAuthor){res.json({archive:route.archive || null,namedAuthor:route.listing.namedAuthor,...(route.kind==="posts-page"?{kind:"posts-page"}: {})});return;}
       if(route.selectedId&&route.selectedType)resolved={id:route.selectedId,type:route.selectedType,...(route.contentPage?{contentPage:route.contentPage}:{})};
-    }else resolved = await resolvePublicPath(path);
+    }else if(!pageRoute)resolved = await resolvePublicPath(path);
   } catch (error) {
     if (error instanceof URIError)
       throw new HttpError(400, "The URL path is malformed.");
     throw error;
   }
   if (!resolved) {
-    const archive = await resolvePublicArchive(path);
+    // The page preflight already chose its immutable post/resource identity.
+    // A second path lookup could substitute a later owner of the same slug.
+    const archive = pageRoute?pageRoute.archive:await resolvePublicArchive(path);
     if (archive) { res.json({ archive }); return; }
     throw new HttpError(404, "Post not found.");
   }
