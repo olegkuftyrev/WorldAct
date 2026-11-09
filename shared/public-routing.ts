@@ -71,7 +71,7 @@ export function sourceTemplateCandidates(context: {
     : context.search ? ["search", "index"]
     : context.category ? [`category-${context.category}`, "category", "archive", "index"]
     : context.tag ? [`tag-${context.tag}`, "tag", "archive", "index"]
-    : context.author ? [...(context.authorSlug?[`author-${context.authorSlug}`]:[]),...(context.authorId?[`author-${context.authorId}`]:[]),"author", "archive", "index"] : context.date ? ["date", "archive", "index"]
+    : context.author ? [...(context.authorSlug?[`author-${context.authorSlug}`]:[]),...(context.authorId?[`author-${context.authorId}`]:[]),"author", "archive", "index"] : context.date && !(context.single && context.post) ? ["date", "archive", "index"]
     : context.single && context.post ? [
       ...(context.frontPage ? ["front-page"] : []), ...(context.post.templateSlug ? [context.post.templateSlug] : []),
       ...(context.post.type === "page" ? [`page-${context.post.slug}`, `page-${context.post.id}`, "page"] : [`single-post-${context.post.slug}`, "single-post", "single"]), "singular", "index",
