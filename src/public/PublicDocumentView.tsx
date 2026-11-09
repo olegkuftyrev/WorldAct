@@ -378,12 +378,12 @@ export function PublicDocumentView({model,state=initialPublicInteraction(model),
                       ? `Category: ${archive?.name || categoryFilter}`
                       : tagFilter
                         ? `Tag: ${archive?.name || tagFilter}`
-                        : authorFilter && !hasDateFilter && !isPostsPage
+                        : authorFilter && (!namedAuthor || !hasDateFilter && !isPostsPage)
                           ? `Author: ${archive?.name || "Posts"}`
                           : hasDateFilter
                             ? site.data?.archive?.name || dateArchive?.name || "Archives"
                           : isPostsPage
-                            ? post?.title || site.data.postsPage?.title || "Blog"
+                            ? post?.title || (namedAuthor ? site.data.postsPage?.title : undefined) || "Blog"
                             : "Blog"}
                 </h1>
                 <form

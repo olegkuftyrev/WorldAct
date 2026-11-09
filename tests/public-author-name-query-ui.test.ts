@@ -6,7 +6,7 @@ import {parseHTML} from "linkedom";
 import type {NamedAuthorSelection,PublicArchive,PublicDocumentModel,PublicPost} from "../shared/public-document.js";
 import {normalizePublicQuery} from "../shared/public-routing.js";
 import {PublicDocumentView} from "../src/public/PublicDocumentView.js";
-import {hasNamedAuthorParameter,shouldResolveNamedAuthorQuery,legacyPublicAuthorQuery,isNamedAuthorListing} from "../src/publicAuthorQuery.js";
+import {hasNamedAuthorParameter,shouldResolveNamedAuthorQuery,legacyPublicAuthorQuery,isNamedAuthorListing,selectLegacyPublicSourceTemplate,legacyPublicListingQuery} from "../src/publicAuthorQuery.js";
 import {shouldResolveStaticFrontPage} from "../src/plainPermalinkRouting.js";
 import {publicArchivePageLocation,publicArchiveSearchPath} from "../src/publicArchiveLinks.js";
 
@@ -75,4 +75,27 @@ test("minimal selected-null descriptor denotes a safe-empty listing while no des
 test("named query does not restore a static front page; exactly-empty name retains absent behavior",()=>{
  const site={settings:{frontPageMode:"page" as const,frontPageId:90},frontPage:null};
  assert.equal(shouldResolveStaticFrontPage("/",new URLSearchParams("%61uthor_name=writer"),site),false);assert.equal(shouldResolveStaticFrontPage("/",new URLSearchParams("author_name=%20"),site),false);assert.equal(shouldResolveStaticFrontPage("/",new URLSearchParams("author_name="),site),true);
+});
+
+
+test("numeric-only mixed headings preserve their prior priority outside named descriptors",()=>{
+ const date:PublicArchive={type:"date",year:2026,name:"2026",permalink:"/2026/"};
+ for(const [path,archive,kind,title] of [["/2026/?author=4",date,"archive","Author: 2026"],["/journal/?author=4",null,"posts-page","Author: Posts"]] as const){const fixture=model(path,archive,{selected:author},kind);fixture.route.query=normalizePublicQuery(new URL(path,"https://worldact.invalid").searchParams,{singular:false,archive});assert.equal(render(fixture).querySelector("h1.blog-heading")?.textContent,title);}
+});
+
+test("legacy source template priority changes only for named presentation descriptors",()=>{
+ const docs=["author-selected-writer","date","home","single-post"].map((slug,id)=>({id,slug,title:slug,type:"template" as const}));
+ const base={notFound:false,single:false,post:null,frontPage:false,search:false,author:true,authorSlug:author.slug,authorId:author.authorId,date:false,postsPage:false};
+ for(const extra of[{date:true},{postsPage:true},{single:true,post:{id:2,type:"post" as const,slug:"post",templateSlug:""}}]){assert.equal(selectLegacyPublicSourceTemplate(docs,{...base,...extra})?.slug,"author-selected-writer");}
+ assert.equal(selectLegacyPublicSourceTemplate(docs,{...base,date:true,namedAuthor:{selected:author}})?.slug,"date");assert.equal(selectLegacyPublicSourceTemplate(docs,{...base,postsPage:true,namedAuthor:{selected:author}})?.slug,"home");assert.equal(selectLegacyPublicSourceTemplate(docs,{...base,single:true,post:{id:2,type:"post",slug:"post",templateSlug:""},namedAuthor:{selected:author}})?.slug,"single-post");
+});
+
+test("named legacy taxonomy transport retains visible contradictory filter for server path priority",()=>{
+ const visible=new URLSearchParams("category=visible-b&%61uthor_name=selected-writer&page=2&query-4-page=3&commentPage=2"),normalized=new URLSearchParams("category=path-a&author_name=selected-writer&page=2&query-4-page=3"),transport=legacyPublicListingQuery(visible,normalized);
+ assert.equal(transport.get("category"),"visible-b");assert.equal(transport.get("commentPage"),"2");assert.equal(transport.get("query-4-page"),"3");assert.equal(transport.get("author_name"),"selected-writer");assert.equal(legacyPublicListingQuery(new URLSearchParams("category=visible-b"),normalized).get("category"),"path-a");
+});
+
+test("named legacy date transport retains visible year and malformed original scalar shapes",()=>{
+ const visible=new URLSearchParams("year=2002&author_name=selected-writer&author=4&author=7"),normalized=new URLSearchParams("year=2001&author_name=selected-writer&author=7&page=1"),transport=legacyPublicListingQuery(visible,normalized);
+ assert.equal(transport.get("year"),"2002");assert.deepEqual(transport.getAll("author"),["4","7"]);assert.equal(transport.has("page"),false);
 });

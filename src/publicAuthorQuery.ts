@@ -1,4 +1,5 @@
-import type {NamedAuthorSelection,PublicArchive} from "../shared/public-document";
+import {selectPublicSourceTemplate,sourceTemplateCandidates} from "../shared/public-routing";
+import type {PublicTemplateRef,NamedAuthorSelection,PublicArchive} from "../shared/public-document";
 
 /** Inspect decoded keys, without selecting an account or normalizing its name.
  * Even malformed recognized keys must reach the server's scalar validation. */
@@ -24,4 +25,18 @@ export type PublicResolvedListing={archive?:PublicArchive|null;namedAuthor?:Name
 /** A selected-null descriptor is a resolved safe-empty listing, not a miss. */
 export function isNamedAuthorListing(result:PublicResolvedListing|null):boolean {
  return result?.namedAuthor!==undefined;
+}
+
+
+/** Select the legacy template from resolved presentation while retaining the
+ * pre-existing numeric-only query priority outside named listings. */
+export function selectLegacyPublicSourceTemplate<T extends PublicTemplateRef>(documents:T[]|undefined,context:Parameters<typeof sourceTemplateCandidates>[0]&{postsPage:boolean;namedAuthor?:NamedAuthorSelection}):T|null {
+ const {postsPage,namedAuthor,...source}=context;
+ return selectPublicSourceTemplate(documents || [],{...source,author:namedAuthor?source.author&&!source.single&&!postsPage&&!source.date:source.author});
+}
+
+/** Named requests retain the visible query, including contradictory path
+ * filters and malformed scalar shapes. The server applies path priority. */
+export function legacyPublicListingQuery(visible:URLSearchParams,normalized:URLSearchParams):URLSearchParams {
+ return new URLSearchParams(hasNamedAuthorParameter(visible)?visible:normalized);
 }
