@@ -1,0 +1,221 @@
+{
+  "status": "PASS_BOUNDED_INDEPENDENT_ACCEPTANCE",
+  "frozenCommit": "887d8bb7b5aa84bdf66e70aaefa8755584c395d1",
+  "tree": "7b9381576e97f98086bc451f89bacf81503671c2",
+  "runtimeEquivalentTo": "eba54f98188fe6752ad37380bd6e4cb7b18b82bc",
+  "base": "49caf8906acbe92ad2ace84818391b6e3f079d47",
+  "nodeSHA256": "300199e4aebe00b526fee49af14904d50cacd20333b07c99c2ded6ba3ddf7070",
+  "testOnlyCompanionSHA256": "454a4bdce36dcf096e53fb670cde36a18220d05474505dd61a3dc492bf008820",
+  "correctedOriginalSHA256": "fa7f74eaab2edf81507422dc96015f823ee5a1de41e2a2f4bc9d902385966724",
+  "perFileCounts": [
+    6,
+    4,
+    9,
+    4,
+    7,
+    1,
+    6,
+    4,
+    6
+  ],
+  "modes": {
+    "source": {
+      "counts": {
+        "tests": 47,
+        "pass": 47,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0
+      },
+      "exitCode": 0,
+      "complete": true,
+      "files": [
+        "tests/singular-archive-query-title-before.test.ts",
+        "tests/singular-archive-query-title-posts-page.test.ts",
+        "tests/blocks.test.ts",
+        "tests/date-archives.test.ts",
+        "tests/public-document-data.test.ts",
+        "tests/plain-source-pagination.test.ts",
+        "tests/front-page-availability.test.ts",
+        "tests/author-name-independent-count-grant.test.ts",
+        "tests/singular-date-template-priority-original.test.ts"
+      ],
+      "rawLog": "<private-log>/worldact-public-listing-independent-archive-title-final-source.log",
+      "rawSHA256": "50d24b9b7811923fd2aa080626b9663445db294057df32c95e5515362751ede7",
+      "databaseJournal": [
+        "worldact_test_1794238682870_55a91ac5"
+      ],
+      "remainingDatabases": [],
+      "newFixtureResponses": {
+        "original": 23,
+        "companion": 13,
+        "total": 36
+      }
+    },
+    "compiled": {
+      "counts": {
+        "tests": 47,
+        "pass": 47,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0
+      },
+      "exitCode": 0,
+      "complete": true,
+      "files": [
+        "tests/singular-archive-query-title-before.test.ts",
+        "tests/singular-archive-query-title-posts-page.test.ts",
+        "tests/blocks.test.ts",
+        "tests/date-archives.test.ts",
+        "tests/public-document-data.test.ts",
+        "tests/plain-source-pagination.test.ts",
+        "tests/front-page-availability.test.ts",
+        "tests/author-name-independent-count-grant.test.ts",
+        "tests/singular-date-template-priority-original.test.ts"
+      ],
+      "rawLog": "<private-log>/worldact-public-listing-independent-archive-title-final-compiled.log",
+      "rawSHA256": "658fb53ba5a9ac246766ffb8f06a3a05ac8729f709de2db86bc0b3c5e752888e",
+      "databaseJournal": [
+        "worldact_test_1794238715285_ff39f892"
+      ],
+      "remainingDatabases": [],
+      "newFixtureResponses": {
+        "original": 23,
+        "companion": 13,
+        "total": 36
+      }
+    }
+  },
+  "artifactManifest": [
+    {
+      "path": "<private-evidence>/singular-archive-query-title-independent-provenance-review.md",
+      "sha256": "faaefdc5bb779290a11ff5029ce63ea0a75cf542cc9db5c7994805edf9073e2b",
+      "bytes": 4362,
+      "mode": "0o600"
+    },
+    {
+      "path": "<private-evidence>/singular-archive-query-title-posts-page-companion-plan.md",
+      "sha256": "4e3f05b44ad5ca64e50218220b55ffe3c310c797f0290ade677e74a6988ce98f",
+      "bytes": 4230,
+      "mode": "0o600"
+    },
+    {
+      "path": "<private-evidence>/singular-archive-query-title-posts-page-original.test.ts",
+      "sha256": "454a4bdce36dcf096e53fb670cde36a18220d05474505dd61a3dc492bf008820",
+      "bytes": 14641,
+      "mode": "0o600"
+    },
+    {
+      "path": "<private-evidence>/singular-archive-query-title-posts-page-construction.diff",
+      "sha256": "44a2e5867468e5b6718c02d923de8109731f64aef7050a494ce2a2d284f4a1e9",
+      "bytes": 15407,
+      "mode": "0o600"
+    },
+    {
+      "path": "<private-evidence>/singular-archive-query-title-independent-companion-construction.json",
+      "sha256": "2cab2a67eda7dc7f61633862ef96d3d8b465a86fe21cfb72db8322d6cccd8f79",
+      "bytes": 2987,
+      "mode": "0o600"
+    },
+    {
+      "path": "<private-evidence>/singular-archive-query-title-independent-companion-selector.json",
+      "sha256": "929f6dcb5bb5f76999289305694e1ab216846f6f9d13b002d04f89e559a7e2b1",
+      "bytes": 3502,
+      "mode": "0o600"
+    },
+    {
+      "path": "<private-evidence>/singular-archive-query-title-independent-run-selector.json",
+      "sha256": "6cea251d98b79a9b0b3c8feb004bdc29ec36c3fec8a3e9efaafb52728bbba16c",
+      "bytes": 452,
+      "mode": "0o600"
+    },
+    {
+      "path": "<private-evidence>/singular-archive-query-title-independent-preflight.json",
+      "sha256": "d6ac6e5536b56943473f7c730b0e0b89b2f903f871cdacd143083faec46df27e",
+      "bytes": 712,
+      "mode": "0o600"
+    },
+    {
+      "path": "<private-evidence>/singular-archive-query-title-independent-build.json",
+      "sha256": "0ce59236fe072e095a4e19d0435588765b1deaafc61da72a5378a1b7e78d043b",
+      "bytes": 1048,
+      "mode": "0o600"
+    },
+    {
+      "path": "<private-evidence>/singular-archive-query-title-independent-build.log",
+      "sha256": "7c48d2333543fcb19ab8e5ac8967238cc4b2c30caaba69f20f4ab0625b8f522c",
+      "bytes": 2399,
+      "mode": "0o600"
+    },
+    {
+      "path": "<private-evidence>/singular-archive-query-title-independent-fingerprints-before.json",
+      "sha256": "1df3b76e11b28d6d06a1ae5694c4e9f87b49c89bc27b1d9f42301df1ef09fae0",
+      "bytes": 98060,
+      "mode": "0o600"
+    },
+    {
+      "path": "<private-evidence>/singular-archive-query-title-independent-fingerprints-after.json",
+      "sha256": "6169d85a49a77d11402168d8f38f17b048b2c1d2cdaadcd283a0fc391538920a",
+      "bytes": 97871,
+      "mode": "0o600"
+    },
+    {
+      "path": "<private-evidence>/singular-archive-query-title-independent-observations.json",
+      "sha256": "828b66c728fa17fefae193f58c9cfdc70e63183a6c076e34cc71a3d86486d0de",
+      "bytes": 14555,
+      "mode": "0o600"
+    },
+    {
+      "path": "<private-evidence>/singular-archive-query-title-independent-auxiliary-bind-error.json",
+      "sha256": "a5e62de23d9b983fc2a3a53cd28095cf1b2966696779bf8d4e5254a1869f0e37",
+      "bytes": 1339,
+      "mode": "0o600"
+    },
+    {
+      "path": "<private-evidence>/singular-archive-query-title-independent-cleanup.json",
+      "sha256": "054d9aae3f8cca7c241cda03039b079007cfc8e08c1b89ae31027fb1e07280a4",
+      "bytes": 1823,
+      "mode": "0o600"
+    },
+    {
+      "path": "<private-evidence>/public-listing-independent-archive-title-final-source-run.json",
+      "sha256": "bd1af625b13e513f2f08101a9a34993bf5e19a539b64fe5d863aa2649c8663e2",
+      "bytes": 903,
+      "mode": "0o600"
+    },
+    {
+      "path": "<private-evidence>/singular-archive-title-independent-source-fa7-proof.json",
+      "sha256": "8c8b4d5a12eca1bb61b3489d94dcbd3788e276e90f65e76464fde62ec0bf9a66",
+      "bytes": 782065,
+      "mode": "0o600"
+    },
+    {
+      "path": "<private-evidence>/singular-archive-title-independent-source-posts-page-proof.json",
+      "sha256": "31f2416cea743a7a3020b841cd8c7ba00a6261e4e71612027b3718480b66a207",
+      "bytes": 222124,
+      "mode": "0o600"
+    },
+    {
+      "path": "<private-evidence>/public-listing-independent-archive-title-final-compiled-run.json",
+      "sha256": "8df1114b0e472948c4bcdaf40d27c868d2dbfa7d4b1a4b75adabd59b25233a15",
+      "bytes": 909,
+      "mode": "0o600"
+    },
+    {
+      "path": "<private-evidence>/singular-archive-title-independent-compiled-fa7-proof.json",
+      "sha256": "502b400be925944acb5158fa8899f9a462a7fc37557bf6986a3c7d651b54d455",
+      "bytes": 782065,
+      "mode": "0o600"
+    },
+    {
+      "path": "<private-evidence>/singular-archive-title-independent-compiled-posts-page-proof.json",
+      "sha256": "372ad7bbe037b331ef246d85a9c02b995bc461e0309445570e3bfe521b4cc9b9",
+      "bytes": 222124,
+      "mode": "0o600"
+    }
+  ],
+  "runtimeSourceImportsRemainSourceInCompiledGuard": true,
+  "noMainProductionSchemaOrRuntimeEdit": true,
+  "noWholeFreshFixedOrNativeBrowserRun": true,
+  "auxiliaryCheckerErrorRetained": true
+}

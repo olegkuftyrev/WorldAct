@@ -1,0 +1,62 @@
+{
+  "status": "OWNED_RESOURCES_CLEAN",
+  "head": "887d8bb7b5aa84bdf66e70aaefa8755584c395d1",
+  "frozenMatches": {
+    "head": true,
+    "tree": true,
+    "sourceFiles": true,
+    "tests": true,
+    "buildFiles": true
+  },
+  "journalDatabases": [
+    "worldact_test_1794238682870_55a91ac5",
+    "worldact_test_1794238715285_ff39f892"
+  ],
+  "neverCreatedAnchor": "worldact_singular_archive_title_independent_anchor",
+  "remainingDatabaseRows": [],
+  "journalApplications": [
+    "worldact_listing_independent_archive-title-final-source",
+    "worldact_listing_independent_archive-title-final-compiled"
+  ],
+  "remainingSessionRows": [],
+  "ports": [
+    {
+      "port": 3068,
+      "exitCode": 1,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "port": 3069,
+      "exitCode": 1,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "port": 3070,
+      "exitCode": 1,
+      "stdout": "",
+      "stderr": ""
+    }
+  ],
+  "config": {
+    "uid": 501,
+    "mode": 384,
+    "sha256": "86eb8972f90c299e9590080dad862fb8b8d24f0ae9b8ce73ac8baa5e895564f0",
+    "removed": true
+  },
+  "dependencyLink": {
+    "uid": 501,
+    "target": "<verified-dependency-owner>/node_modules",
+    "removed": true
+  },
+  "dependencyOwner": {
+    "uid": 501,
+    "mode": 493,
+    "symlink": false,
+    "lockSHA256": "233888ed8f864581a8835aab0b4c33ccd7fbc391f2a98650b63fcf8db8814892"
+  },
+  "uploads": "Both guarded runners exited0 after their normal finally upload-directory removal; exact random upload paths were not separately journaled, so no glob search/deletion or independent per-path cleanup claim.",
+  "retained": "Own frozen checkout, independent build outputs, private proofs/logs/reports; all older before trees/CBC archives retained. No site archive created in this bounded scope.",
+  "gitStatus": ""
+}

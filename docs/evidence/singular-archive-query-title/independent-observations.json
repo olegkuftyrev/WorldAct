@@ -1,0 +1,580 @@
+{
+  "source": {
+    "fa7": {
+      "path": "<private-evidence>/singular-archive-title-independent-source-fa7-proof.json",
+      "sha256": "8c8b4d5a12eca1bb61b3489d94dcbd3788e276e90f65e76464fde62ec0bf9a66",
+      "dispatches": 23,
+      "publicGroups": [
+        {
+          "label": "post-bare",
+          "statuses": [
+            200,
+            200,
+            200
+          ],
+          "headBytes": 0,
+          "routeKind": "singular",
+          "selectedId": 4,
+          "selectedType": "post",
+          "postId": 4,
+          "template": "archive-title-mw9fdygv-assigned",
+          "nativeIsland": true,
+          "nativeArchiveWrappers": 0,
+          "modelArchiveWrappers": 0
+        },
+        {
+          "label": "post-year",
+          "statuses": [
+            200,
+            200,
+            200
+          ],
+          "headBytes": 0,
+          "routeKind": "singular",
+          "selectedId": 4,
+          "selectedType": "post",
+          "postId": 4,
+          "template": "archive-title-mw9fdygv-assigned",
+          "nativeIsland": true,
+          "nativeArchiveWrappers": 0,
+          "modelArchiveWrappers": 0
+        },
+        {
+          "label": "page-bare",
+          "statuses": [
+            200,
+            200,
+            200
+          ],
+          "headBytes": 0,
+          "routeKind": "singular",
+          "selectedId": 5,
+          "selectedType": "page",
+          "postId": 5,
+          "template": "archive-title-mw9fdygv-assigned",
+          "nativeIsland": true,
+          "nativeArchiveWrappers": 0,
+          "modelArchiveWrappers": 0
+        },
+        {
+          "label": "page-year",
+          "statuses": [
+            200,
+            200,
+            200
+          ],
+          "headBytes": 0,
+          "routeKind": "singular",
+          "selectedId": 5,
+          "selectedType": "page",
+          "postId": 5,
+          "template": "archive-title-mw9fdygv-assigned",
+          "nativeIsland": true,
+          "nativeArchiveWrappers": 0,
+          "modelArchiveWrappers": 0
+        },
+        {
+          "label": "date-archive",
+          "statuses": [
+            200,
+            200,
+            200
+          ],
+          "headBytes": 0,
+          "routeKind": "archive",
+          "template": "date",
+          "nativeIsland": true,
+          "nativeArchiveWrappers": 3,
+          "modelArchiveWrappers": 3
+        }
+      ],
+      "directGroups": [
+        {
+          "label": "direct-bare",
+          "statuses": [
+            200,
+            200
+          ],
+          "headBytes": 0,
+          "template": "archive-title-mw9fdygv-assigned",
+          "archiveWrappers": 0
+        },
+        {
+          "label": "direct-year",
+          "statuses": [
+            200,
+            200
+          ],
+          "headBytes": 0,
+          "template": "archive-title-mw9fdygv-assigned",
+          "archiveWrappers": 0
+        }
+      ],
+      "bodyGroups": [
+        {
+          "label": "body-bare",
+          "statuses": [
+            200,
+            200
+          ],
+          "headBytes": 0,
+          "body": {
+            "id": 4,
+            "type": "post",
+            "locked": false,
+            "bodyIds": [
+              "archive-title-mw9fdygv-post-body"
+            ],
+            "archiveAnchors": []
+          }
+        },
+        {
+          "label": "body-year",
+          "statuses": [
+            200,
+            200
+          ],
+          "headBytes": 0,
+          "body": {
+            "id": 4,
+            "type": "post",
+            "locked": false,
+            "bodyIds": [
+              "archive-title-mw9fdygv-post-body"
+            ],
+            "archiveAnchors": []
+          }
+        }
+      ]
+    },
+    "companion": {
+      "path": "<private-evidence>/singular-archive-title-independent-source-posts-page-proof.json",
+      "sha256": "31f2416cea743a7a3020b841cd8c7ba00a6261e4e71612027b3718480b66a207",
+      "dispatches": 13,
+      "pairs": [
+        {
+          "label": "configured-pretty",
+          "statuses": [
+            200,
+            200
+          ],
+          "headBytes": 0,
+          "body": {
+            "id": 6,
+            "type": "page",
+            "locked": false,
+            "bodyIds": [
+              "query-title-posts-page-mw9fdzmx-configured-body"
+            ],
+            "archiveAnchors": [
+              {
+                "id": "query-title-posts-page-mw9fdzmx-configured-archive",
+                "text": "Blog"
+              }
+            ]
+          }
+        },
+        {
+          "label": "configured-plain",
+          "statuses": [
+            200,
+            200
+          ],
+          "headBytes": 0,
+          "body": {
+            "id": 6,
+            "type": "page",
+            "locked": false,
+            "bodyIds": [
+              "query-title-posts-page-mw9fdzmx-configured-body"
+            ],
+            "archiveAnchors": [
+              {
+                "id": "query-title-posts-page-mw9fdzmx-configured-archive",
+                "text": "Blog"
+              }
+            ]
+          }
+        },
+        {
+          "label": "ordinary-pretty",
+          "statuses": [
+            200,
+            200
+          ],
+          "headBytes": 0,
+          "body": {
+            "id": 7,
+            "type": "page",
+            "locked": false,
+            "bodyIds": [
+              "query-title-posts-page-mw9fdzmx-ordinary-body"
+            ],
+            "archiveAnchors": []
+          }
+        },
+        {
+          "label": "ordinary-plain",
+          "statuses": [
+            200,
+            200
+          ],
+          "headBytes": 0,
+          "body": {
+            "id": 7,
+            "type": "page",
+            "locked": false,
+            "bodyIds": [
+              "query-title-posts-page-mw9fdzmx-ordinary-body"
+            ],
+            "archiveAnchors": []
+          }
+        },
+        {
+          "label": "configured-standalone",
+          "statuses": [
+            200,
+            200
+          ],
+          "headBytes": 0,
+          "body": {
+            "id": 6,
+            "type": "page",
+            "locked": false,
+            "bodyIds": [
+              "query-title-posts-page-mw9fdzmx-configured-body"
+            ],
+            "archiveAnchors": []
+          }
+        }
+      ],
+      "document": {
+        "statuses": [
+          200,
+          200,
+          200
+        ],
+        "headBytes": 0,
+        "routeKind": "posts-page",
+        "selectedId": 6,
+        "selectedType": "page",
+        "post": {
+          "id": 6,
+          "type": "page",
+          "locked": false,
+          "bodyIds": [
+            "query-title-posts-page-mw9fdzmx-configured-body"
+          ],
+          "archiveAnchors": [
+            {
+              "id": "query-title-posts-page-mw9fdzmx-configured-archive",
+              "text": "Blog"
+            }
+          ]
+        },
+        "presentationKind": "source",
+        "chosenTemplate": {
+          "id": 10,
+          "slug": "home",
+          "title": "Home",
+          "type": "template",
+          "version": 1,
+          "updatedAt": "2026-11-09T15:38:03.354Z",
+          "isCustom": true
+        },
+        "nativeIsland": true,
+        "nativeListingQuery": true,
+        "modelListingQuery": true
+      }
+    }
+  },
+  "compiled": {
+    "fa7": {
+      "path": "<private-evidence>/singular-archive-title-independent-compiled-fa7-proof.json",
+      "sha256": "502b400be925944acb5158fa8899f9a462a7fc37557bf6986a3c7d651b54d455",
+      "dispatches": 23,
+      "publicGroups": [
+        {
+          "label": "post-bare",
+          "statuses": [
+            200,
+            200,
+            200
+          ],
+          "headBytes": 0,
+          "routeKind": "singular",
+          "selectedId": 4,
+          "selectedType": "post",
+          "postId": 4,
+          "template": "archive-title-mw9femvg-assigned",
+          "nativeIsland": true,
+          "nativeArchiveWrappers": 0,
+          "modelArchiveWrappers": 0
+        },
+        {
+          "label": "post-year",
+          "statuses": [
+            200,
+            200,
+            200
+          ],
+          "headBytes": 0,
+          "routeKind": "singular",
+          "selectedId": 4,
+          "selectedType": "post",
+          "postId": 4,
+          "template": "archive-title-mw9femvg-assigned",
+          "nativeIsland": true,
+          "nativeArchiveWrappers": 0,
+          "modelArchiveWrappers": 0
+        },
+        {
+          "label": "page-bare",
+          "statuses": [
+            200,
+            200,
+            200
+          ],
+          "headBytes": 0,
+          "routeKind": "singular",
+          "selectedId": 5,
+          "selectedType": "page",
+          "postId": 5,
+          "template": "archive-title-mw9femvg-assigned",
+          "nativeIsland": true,
+          "nativeArchiveWrappers": 0,
+          "modelArchiveWrappers": 0
+        },
+        {
+          "label": "page-year",
+          "statuses": [
+            200,
+            200,
+            200
+          ],
+          "headBytes": 0,
+          "routeKind": "singular",
+          "selectedId": 5,
+          "selectedType": "page",
+          "postId": 5,
+          "template": "archive-title-mw9femvg-assigned",
+          "nativeIsland": true,
+          "nativeArchiveWrappers": 0,
+          "modelArchiveWrappers": 0
+        },
+        {
+          "label": "date-archive",
+          "statuses": [
+            200,
+            200,
+            200
+          ],
+          "headBytes": 0,
+          "routeKind": "archive",
+          "template": "date",
+          "nativeIsland": true,
+          "nativeArchiveWrappers": 3,
+          "modelArchiveWrappers": 3
+        }
+      ],
+      "directGroups": [
+        {
+          "label": "direct-bare",
+          "statuses": [
+            200,
+            200
+          ],
+          "headBytes": 0,
+          "template": "archive-title-mw9femvg-assigned",
+          "archiveWrappers": 0
+        },
+        {
+          "label": "direct-year",
+          "statuses": [
+            200,
+            200
+          ],
+          "headBytes": 0,
+          "template": "archive-title-mw9femvg-assigned",
+          "archiveWrappers": 0
+        }
+      ],
+      "bodyGroups": [
+        {
+          "label": "body-bare",
+          "statuses": [
+            200,
+            200
+          ],
+          "headBytes": 0,
+          "body": {
+            "id": 4,
+            "type": "post",
+            "locked": false,
+            "bodyIds": [
+              "archive-title-mw9femvg-post-body"
+            ],
+            "archiveAnchors": []
+          }
+        },
+        {
+          "label": "body-year",
+          "statuses": [
+            200,
+            200
+          ],
+          "headBytes": 0,
+          "body": {
+            "id": 4,
+            "type": "post",
+            "locked": false,
+            "bodyIds": [
+              "archive-title-mw9femvg-post-body"
+            ],
+            "archiveAnchors": []
+          }
+        }
+      ]
+    },
+    "companion": {
+      "path": "<private-evidence>/singular-archive-title-independent-compiled-posts-page-proof.json",
+      "sha256": "372ad7bbe037b331ef246d85a9c02b995bc461e0309445570e3bfe521b4cc9b9",
+      "dispatches": 13,
+      "pairs": [
+        {
+          "label": "configured-pretty",
+          "statuses": [
+            200,
+            200
+          ],
+          "headBytes": 0,
+          "body": {
+            "id": 6,
+            "type": "page",
+            "locked": false,
+            "bodyIds": [
+              "query-title-posts-page-mw9fenp8-configured-body"
+            ],
+            "archiveAnchors": [
+              {
+                "id": "query-title-posts-page-mw9fenp8-configured-archive",
+                "text": "Blog"
+              }
+            ]
+          }
+        },
+        {
+          "label": "configured-plain",
+          "statuses": [
+            200,
+            200
+          ],
+          "headBytes": 0,
+          "body": {
+            "id": 6,
+            "type": "page",
+            "locked": false,
+            "bodyIds": [
+              "query-title-posts-page-mw9fenp8-configured-body"
+            ],
+            "archiveAnchors": [
+              {
+                "id": "query-title-posts-page-mw9fenp8-configured-archive",
+                "text": "Blog"
+              }
+            ]
+          }
+        },
+        {
+          "label": "ordinary-pretty",
+          "statuses": [
+            200,
+            200
+          ],
+          "headBytes": 0,
+          "body": {
+            "id": 7,
+            "type": "page",
+            "locked": false,
+            "bodyIds": [
+              "query-title-posts-page-mw9fenp8-ordinary-body"
+            ],
+            "archiveAnchors": []
+          }
+        },
+        {
+          "label": "ordinary-plain",
+          "statuses": [
+            200,
+            200
+          ],
+          "headBytes": 0,
+          "body": {
+            "id": 7,
+            "type": "page",
+            "locked": false,
+            "bodyIds": [
+              "query-title-posts-page-mw9fenp8-ordinary-body"
+            ],
+            "archiveAnchors": []
+          }
+        },
+        {
+          "label": "configured-standalone",
+          "statuses": [
+            200,
+            200
+          ],
+          "headBytes": 0,
+          "body": {
+            "id": 6,
+            "type": "page",
+            "locked": false,
+            "bodyIds": [
+              "query-title-posts-page-mw9fenp8-configured-body"
+            ],
+            "archiveAnchors": []
+          }
+        }
+      ],
+      "document": {
+        "statuses": [
+          200,
+          200,
+          200
+        ],
+        "headBytes": 0,
+        "routeKind": "posts-page",
+        "selectedId": 6,
+        "selectedType": "page",
+        "post": {
+          "id": 6,
+          "type": "page",
+          "locked": false,
+          "bodyIds": [
+            "query-title-posts-page-mw9fenp8-configured-body"
+          ],
+          "archiveAnchors": [
+            {
+              "id": "query-title-posts-page-mw9fenp8-configured-archive",
+              "text": "Blog"
+            }
+          ]
+        },
+        "presentationKind": "source",
+        "chosenTemplate": {
+          "id": 10,
+          "slug": "home",
+          "title": "Home",
+          "type": "template",
+          "version": 1,
+          "updatedAt": "2026-11-09T15:38:35.626Z",
+          "isCustom": true
+        },
+        "nativeIsland": true,
+        "nativeListingQuery": true,
+        "modelListingQuery": true
+      }
+    }
+  }
+}

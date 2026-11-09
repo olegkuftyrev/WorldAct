@@ -1,0 +1,75 @@
+{
+  "status": "FROZEN_TEST_CONSTRUCTION_ONLY_NO_BUILD_OR_EXECUTION",
+  "checkout": "<independent-checkout>",
+  "head": "887d8bb7b5aa84bdf66e70aaefa8755584c395d1",
+  "parent": "8af226719e353612c105dbc68306d213bc23e587",
+  "runtimeEquivalentTo": "eba54f98188fe6752ad37380bd6e4cb7b18b82bc",
+  "files": [
+    {
+      "file": "tests/singular-archive-query-title-before.test.ts",
+      "sha256": "fa7f74eaab2edf81507422dc96015f823ee5a1de41e2a2f4bc9d902385966724",
+      "expectedCount": 6,
+      "executionScope": "Actual HTTP GET/HEAD/document/template/body; public native HTML parsed without a browser; unchanged corrected fa7 fixture."
+    },
+    {
+      "file": "tests/singular-archive-query-title-posts-page.test.ts",
+      "sha256": "454a4bdce36dcf096e53fb670cde36a18220d05474505dd61a3dc492bf008820",
+      "expectedCount": 4,
+      "executionScope": "Actual HTTP only;5 GET/HEAD API pairs + public GET/HEAD/model triple =13 consumed responses; no imported renderer/service."
+    },
+    {
+      "file": "tests/blocks.test.ts",
+      "sha256": "fa0fb26d5a57b93232b4d9b481eebaa729ce5e0e76c951db6239c85152a93fd3",
+      "expectedCount": 9,
+      "executionScope": "SOURCE renderer, real supplied PostgreSQL client and HTTP block-entity REST in one file; compiled API mode does not compile renderer imports."
+    },
+    {
+      "file": "tests/date-archives.test.ts",
+      "sha256": "a79de3f453d0122ec702747614ec17409407eea47e6de859448768df30758958",
+      "expectedCount": 4,
+      "executionScope": "MIXED pure/source calendar/date SQL and SOURCE renderer plus actual HTTP public date/site/settings/resolve APIs."
+    },
+    {
+      "file": "tests/public-document-data.test.ts",
+      "sha256": "dee95240a579ec16327b0ca10f1497cbf2deae37dfd218113a08675cfa0454b1",
+      "expectedCount": 7,
+      "executionScope": "MIXED direct SOURCE document/context/identity/body/template helpers plus real HTTP and protected grant/body APIs."
+    },
+    {
+      "file": "tests/plain-source-pagination.test.ts",
+      "sha256": "45799bfcba76f728470cd5370cd27ca960f1862508522023d7ff308a6759e21c",
+      "expectedCount": 1,
+      "executionScope": "Actual HTTP template/body/comments/QueryLoop controls; SOURCE pool fixture SQL only."
+    },
+    {
+      "file": "tests/front-page-availability.test.ts",
+      "sha256": "fa255c13b7bb6c98e4d805b965b727030b7db78cda9e4ccd4ed498fa9030b7e1",
+      "expectedCount": 6,
+      "executionScope": "MIXED actual HTTP settings/site/resolve/post/unlock and imported SOURCE front-page adapter helper."
+    },
+    {
+      "file": "tests/author-name-independent-count-grant.test.ts",
+      "sha256": "6643e7832a8272913a88bab1bac653a6cb674f25e25bd9c09139cfc65252f031",
+      "expectedCount": 4,
+      "executionScope": "Actual HTTP count retirement and final-author/password fence waits; SOURCE pool fixtures/markers only."
+    },
+    {
+      "file": "tests/singular-date-template-priority-original.test.ts",
+      "sha256": "f15f083451c0890f9ecd1c77f2a6c0826ff1ee02847e8cbd5507eb0f9757cb07",
+      "expectedCount": 6,
+      "executionScope": "Actual HTTP GET/HEAD/model selected-template/body/Plain/date/404 controls only; no direct service renderer calls."
+    }
+  ],
+  "expectedFiles": 9,
+  "expectedCount": 47,
+  "expectedCountIsMeasured": false,
+  "sourceAndCompiledApiPorts": [
+    3068,
+    3069
+  ],
+  "unusedPort": 3070,
+  "serialPerDatabase": true,
+  "excludesFixed3062": true,
+  "noWholeFreshNative": true,
+  "directSourceScopeRetained": true
+}
