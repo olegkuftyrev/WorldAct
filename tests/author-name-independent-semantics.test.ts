@@ -1,0 +1,67 @@
+import test,{after} from "./isolated-test.js";
+import assert from "node:assert/strict";
+import {DOMParser} from "linkedom";
+import {pool} from "../server/db.js";
+const base=process.env.TEST_API_URL!,origin=process.env.APP_ORIGIN!;
+after(()=>pool.end());
+
+test("independent named queries select actual users without replacing numeric, path or custom-loop identities",async t=>{
+ const initial=(await pool.query("SELECT data FROM settings WHERE id=1")).rows[0].data;
+ const users:number[]=[],posts:number[]=[],terms:number[]=[],documents:number[]=[];
+ const stamp="ni-"+Date.now(),privateBody="NI-PRIVATE-BODY-SECRET",protectedBody="NI-LOCKED-BODY-SECRET",profileSecret="NI-PROFILE-SECRET";
+ let cookie="";
+ async function request(path:string,method="GET",body?:unknown,authenticated=false){
+  const response=await fetch(base+path,{method,headers:{Origin:origin,Cookie:authenticated?cookie:"","Content-Type":"application/json"},body:body===undefined?undefined:JSON.stringify(body),signal:AbortSignal.timeout(15000)});
+  const text=await response.text();let data:any;try{data=JSON.parse(text);}catch{}return {response,text,data};
+ }
+ async function admin(path:string,method="GET",body?:unknown){const r=await request(path,method,body,true);assert.ok(r.response.ok,`${path}: ${r.response.status} ${r.text}`);return r.data;}
+ const named=(name:string,more:Record<string,string>={})=>"/?"+new URLSearchParams({author_name:name,...more});
+ const model=(path:string)=>request("/api/public/document?"+new URLSearchParams({path}));
+ async function person(label:string){const slug=stamp+"-"+label;const r=(await pool.query("INSERT INTO users(username,nicename,email,display_name,password_hash,role,profile) VALUES($1,$2,$3,$4,'NI-UNUSABLE-PASSWORD-SECRET','author',$5::jsonb) RETURNING id,nicename",["different-login-"+label+"-"+Date.now(),slug,slug+"@example.test","Independent named "+label,JSON.stringify({description:profileSecret})])).rows[0];users.push(r.id);return {...r,slug};}
+ async function make(authorId:number,title:string,body:Record<string,unknown>={}){const p=(await admin("/api/posts","POST",{authorId,title,status:"publish",postDate:"2001-02-03T04:05:06",content:"<p>NI-FIRST-"+title+"</p><!--nextpage--><p>NI-SECOND-"+title+"</p>",...body})).post;posts.push(p.id);return p;}
+ function onlyAuthor(rows:any[],id:number){assert.ok(rows.length>0,"a matching public row is required");assert.ok(rows.every(p=>p.authorId===id),JSON.stringify(rows.map(p=>({id:p.id,authorId:p.authorId}))));}
+ function noSecrets(text:string){assert.doesNotMatch(text,new RegExp([privateBody,protectedBody,profileSecret,"NI-UNUSABLE-PASSWORD-SECRET","password_hash","different-login-"].join("|")));}
+ try{
+  const login=await request("/api/auth/login","POST",{login:process.env.ADMIN_EMAIL,password:process.env.ADMIN_PASSWORD});assert.equal(login.response.status,200);cookie=login.response.headers.get("set-cookie")!.split(";")[0];
+  await admin("/api/settings","PUT",{theme:"twentytwentyfive",frontPageMode:"posts",frontPageId:null,postsPageId:null,postsPerPage:100,permalinkStructure:"/%year%/%monthnum%/%day%/%post_id%/%postname%/",pingServices:[]});
+  const a=await person("alpha"),b=await person("beta"),empty=await person("empty"),privateOnly=await person("private");
+  const term=(await admin("/api/terms","POST",{taxonomy:"category",name:stamp+"-category",slug:stamp+"-category"})).term;terms.push(term.id);
+  const pa=await make(a.id,"NI-QUERY-ALPHA",{categoryIds:[term.id]}),pb=await make(b.id,"NI-QUERY-BETA",{categoryIds:[term.id]});
+  await make(a.id,"NI-QUERY-LOCKED",{password:"NI-fixture-password-123",content:"<p>"+protectedBody+"</p>"});
+  await make(privateOnly.id,"NI-QUERY-PRIVATE",{status:"private",content:"<p>"+privateBody+"</p>"});
+  const inherited='<!-- wp:query {"queryId":81,"query":{"inherit":true,"perPage":100}} --><!-- wp:post-template --><!-- wp:post-title /--><!-- /wp:post-template --><!-- /wp:query -->';
+  const overridden='<!-- wp:query {"queryId":82,"query":{"inherit":true,"author":['+a.id+'],"perPage":100}} --><!-- wp:post-template --><!-- wp:post-title /--><!-- /wp:post-template --><!-- /wp:query -->';
+  const custom='<!-- wp:query {"queryId":83,"query":{"inherit":false,"author":['+b.id+'],"perPage":100}} --><!-- wp:post-template --><!-- wp:post-title /--><!-- /wp:post-template --><!-- /wp:query -->';
+  const inheritedSlug=stamp+"-inherited",overrideSlug=stamp+"-override",customSlug=stamp+"-custom";
+  for(const [slug,content]of [["author-"+a.slug,"<p>NI-REAL-AUTHOR-TEMPLATE</p><!-- wp:query-title /-->"+inherited],[inheritedSlug,inherited],[overrideSlug,overridden],[customSlug,custom]]){const d=(await admin("/api/site-editor/documents","POST",{type:"template",slug,title:slug,content})).document;documents.push(d.id);}
+
+  await t.test("named-only main document selects persisted slug and actual author template",async()=>{const r=await model(named(a.slug));assert.equal(r.response.status,200);onlyAuthor(r.data.site.posts,a.id);assert.equal(r.data.route.kind,"archive");assert.equal(r.data.route.archive.authorId,a.id);assert.equal(r.data.route.archive.slug,a.slug);assert.match(r.data.presentation.html,/NI-REAL-AUTHOR-TEMPLATE/);});
+  await t.test("direct site selects the name rather than the unfiltered home list",async()=>{const r=await request("/api/public/site?"+new URLSearchParams({author_name:b.slug}));assert.equal(r.response.status,200);onlyAuthor(r.data.posts,b.id);assert.equal(r.data.archive.authorId,b.id);});
+  await t.test("metadata resolver resolves a named archive without a body/DTO extension assertion",async()=>{const r=await request("/api/public/resolve?"+new URLSearchParams({path:named(a.slug)}));assert.equal(r.response.status,200);assert.equal(r.data.archive.authorId,a.id);});
+  await t.test("actual native GET independently applies name filter to embedded main model",async()=>{const r=await request(named(b.slug));assert.equal(r.response.status,200);const dom=new DOMParser().parseFromString(r.text,"text/html"),node=dom.querySelector("#worldact-public-document");assert.ok(node);const data=JSON.parse(node.textContent!);onlyAuthor(data.site.posts,b.id);});
+  await t.test("actual native HEAD independently rejects an unknown named archive",async()=>{const r=await request(named(stamp+"-missing"),"HEAD");assert.equal(r.response.status,404);assert.equal(r.text,"");});
+  await t.test("unknown and normalized-empty names are not absent selection",async()=>{for(const value of [stamp+"-missing","   ","prefix/"+a.slug+"//"]){const r=await model(named(value));assert.equal(r.response.status,404,value);}});
+  await t.test("exactly empty author_name retains ordinary absent-name behavior",async()=>{const absent=await model("/"),empty=await model(named(""));assert.equal(empty.response.status,absent.response.status);assert.equal(empty.data.route.kind,absent.data.route.kind);assert.deepEqual(empty.data.site.posts.map((p:any)=>p.id),absent.data.site.posts.map((p:any)=>p.id));});
+  await t.test("empty and private-only named accounts have empty safe first pages",async()=>{for(const who of [empty,privateOnly]){const r=await model(named(who.slug));assert.equal(r.response.status,200);assert.equal(r.data.site.posts.length,0);assert.equal(r.data.route.archive.authorId,who.id);noSecrets(r.text);}});
+  await t.test("empty named account second page is404 in model and native HEAD",async()=>{const path=named(empty.slug,{page:"2"});assert.equal((await model(path)).response.status,404);assert.equal((await request(path,"HEAD")).response.status,404);});
+  await t.test("numeric/name mismatch intersects to empty while selecting the named presentation",async()=>{const r=await model(named(b.slug,{author:String(a.id)}));assert.equal(r.response.status,200);assert.equal(r.data.site.posts.length,0);assert.equal(r.data.route.archive.authorId,b.id);assert.equal((await model(named(b.slug,{author:String(a.id),page:"2"}))).response.status,404);});
+  await t.test("unknown-name nonempty search is safe-empty, not a fallback to search hits",async()=>{const r=await model(named(stamp+"-missing",{search:"NI-QUERY"}));assert.equal(r.response.status,200);assert.equal(r.data.site.posts.length,0);assert.equal(r.data.route.archive,null);assert.equal((await model(named(stamp+"-missing",{search:"NI-QUERY",page:"2"}))).response.status,404);});
+  await t.test("unknown-name empty/whitespace search does not create a safe-empty exception",async()=>{for(const more of [{search:""},{search:" "},{s:""},{s:" "}] as Record<string,string>[])assert.equal((await model(named(stamp+"-missing",more))).response.status,404);});
+  await t.test("inherited loop preserves numeric/name intersection rather than presenting numeric user's rows",async()=>{const path=named(b.slug,{author:String(a.id)}),r=await request("/api/public/templates/"+inheritedSlug+"?"+new URLSearchParams({requestPath:path,author:String(a.id),author_name:b.slug}));assert.equal(r.response.status,200);assert.doesNotMatch(r.data.content,/NI-QUERY-ALPHA|NI-QUERY-BETA|NI-QUERY-LOCKED/);});
+  await t.test("inherited block author override cannot erase the selected named predicate",async()=>{const path=named(b.slug),r=await request("/api/public/templates/"+overrideSlug+"?"+new URLSearchParams({requestPath:path,author_name:b.slug}));assert.equal(r.response.status,200);assert.doesNotMatch(r.data.content,/NI-QUERY-ALPHA|NI-QUERY-BETA|NI-QUERY-LOCKED/);});
+  await t.test("independent custom loop retains explicit public author on safe-empty named listing",async()=>{const path=named(stamp+"-missing",{search:"NI-QUERY"}),r=await request("/api/public/templates/"+customSlug+"?"+new URLSearchParams({requestPath:path,author_name:stamp+"-missing",search:"NI-QUERY"}));assert.equal(r.response.status,200);assert.match(r.data.content,/NI-QUERY-BETA/);assert.doesNotMatch(r.data.content,/NI-QUERY-ALPHA|NI-QUERY-LOCKED|NI-QUERY-PRIVATE/);});
+  await t.test("the same public request never emits private/password/account profile fields",async()=>{for(const path of [named(a.slug),named(privateOnly.slug),named(stamp+"-missing",{search:"NI-QUERY"})])noSecrets((await model(path)).text);});
+  await t.test("query scalar duplicates arrays nested names and malformed values remain bounded400",async()=>{for(const query of ["author_name="+a.slug+"&author_name="+b.slug,"author_name[]="+a.slug,"author_name[x]="+a.slug,"author_name=%ZZ","author_name="+a.slug+"%5Cother","author_name=%00"]){assert.equal((await model("/?"+query)).response.status,400,query);}});
+  await t.test("source final component and ASCII query aliases resolve the stored account",async()=>{for(const value of [a.slug.toUpperCase(),a.slug.replace(/-/g,"."),"prefix/"+a.slug,"prefix/"+a.slug+"/"]){const r=await model(named(value));assert.equal(r.response.status,200);onlyAuthor(r.data.site.posts,a.id);}});
+  await t.test("taxonomy/date paths retain archive identity while named input narrows main rows",async()=>{for(const path of ["/"+initial.categoryBase+"/"+term.slug+"/?author_name="+b.slug,"/2001/02/03/?author_name="+b.slug]){const r=await model(path);assert.equal(r.response.status,200);onlyAuthor(r.data.site.posts,b.id);assert.equal(path.startsWith("/2001")?r.data.route.archive.type:r.data.route.archive.taxonomy,path.startsWith("/2001")?"date":"category");}});
+  await t.test("pretty selected author cannot be replaced by a different nonempty name",async()=>{const path="/author/"+a.slug+"/?author_name="+b.slug;assert.equal((await model(path)).response.status,400);assert.equal((await model("/author/"+stamp+"-missing/?author_name="+a.slug)).response.status,404);});
+  await t.test("fixed Plain/legacy singular and framework identities retain existing priority",async()=>{for(const path of ["/?p="+pa.id+"&page=2&author_name="+b.slug,"/posts/"+pa.slug+"?author_name="+b.slug]){const r=await model(path);assert.equal(r.response.status,200);assert.equal(r.data.post.id,pa.id);assert.equal(r.data.route.kind,"singular");if(path.startsWith("/?")){assert.match(r.data.post.content,/NI-SECOND-NI-QUERY-ALPHA/);assert.doesNotMatch(r.data.post.content,/NI-FIRST-NI-QUERY-ALPHA/);}}const framework=await model("/admin?author_name="+a.slug);assert.equal(framework.response.status,400);assert.equal(framework.data.kind,"framework");});
+  await t.test("static front does not absorb named archive; selected posts page retains its identity",async()=>{const front=await make(a.id,"NI-STATIC-FRONT",{type:"page",slug:stamp+"-front"}),listing=await make(a.id,"NI-POSTS-LISTING",{type:"page",slug:stamp+"-listing"});await admin("/api/settings","PUT",{frontPageMode:"page",frontPageId:front.id,postsPageId:listing.id});try{const root=await model(named(b.slug));assert.equal(root.response.status,200);assert.equal(root.data.route.kind,"archive");onlyAuthor(root.data.site.posts,b.id);const page=await model(listing.permalink+"?author_name="+b.slug);assert.equal(page.response.status,200);assert.equal(page.data.route.kind,"posts-page");onlyAuthor(page.data.site.posts,b.id);}finally{await admin("/api/settings","PUT",{frontPageMode:"posts",frontPageId:null,postsPageId:null});}});
+ }finally{
+  if(documents.length)await pool.query("DELETE FROM site_documents WHERE id=ANY($1::int[])",[documents]);
+  if(posts.length)await pool.query("DELETE FROM posts WHERE id=ANY($1::int[])",[posts]);
+  if(terms.length)await pool.query("DELETE FROM terms WHERE id=ANY($1::int[])",[terms]);
+  if(users.length)await pool.query("DELETE FROM users WHERE id=ANY($1::int[])",[users]);
+  await pool.query("UPDATE settings SET data=$1 WHERE id=1",[initial]);
+ }
+});

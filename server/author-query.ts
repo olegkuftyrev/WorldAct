@@ -61,7 +61,7 @@ export function listingFilterValues(input:Record<string,unknown>,archive:PublicA
 export async function resolveNamedAuthor(query:URLSearchParams,settings:Settings,db:Database=pool,pin:NamedAuthorPin={}):Promise<NamedAuthorSelection|undefined>{
   const input=namedAuthorInput(query);if(!input)return undefined;
   if(pin.value)return pin.value;
-  const parts=input.name.split("/"),component=parts.at(-1)||parts.at(-2)||"",slug=normalizeAuthorArchiveSlug(component);
+  const parts=input.name.split("/"),last=parts.at(-1)!,component=parts.length===1?last:last!==""&&last!=="0"?last:parts.at(-2)||"",slug=normalizeAuthorArchiveSlug(component);
   const person=slug?(await db.query("SELECT id,nicename,display_name AS name FROM users WHERE nicename=$1",[slug])).rows[0]:null;
   return pin.value={selected:person?{type:"author",authorId:person.id,slug:person.nicename,name:person.name,permalink:authorArchivePath(person,settings)}:null,...(input.numericAuthor?{numericAuthor:input.numericAuthor}:{})};
 }

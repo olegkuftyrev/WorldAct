@@ -91,6 +91,11 @@ jobs:
           tests/author-name-query-transport.test.ts tests/author-name-query-encoded-keys.test.ts
           tests/public-author-name-query-ui.test.ts
           tests/pretty-author-independent-boundaries.test.ts tests/pretty-author-taxonomy-priority.test.ts
+          tests/author-name-independent-identity.test.ts tests/author-name-independent-semantics.test.ts tests/author-name-query-boundaries.test.ts
+          tests/author-name-query-encoded-keys.test.ts tests/author-name-query-native-original.test.ts tests/author-name-query-original.test.ts
+          tests/author-name-query-path-bounds.test.ts tests/author-name-query-portability.test.ts tests/author-name-query-search-control.test.ts
+          tests/author-name-query-transactions.test.ts tests/author-name-query-transport.test.ts tests/author-name-zero-component.test.ts
+          tests/public-author-name-query-ui.test.ts
           tests/user-creation-concurrency.test.ts tests/user-nicenames-migration.test.ts
           tests/author-permalink-portability.test.ts
           tests/page-delete-reparent.test.ts tests/post-mutation-locks.test.ts
@@ -223,6 +228,25 @@ jobs:
           PRETTY_AUTHOR_ARCHIVE_STAGE: restore
           PRETTY_AUTHOR_ARCHIVE_PATH: ${{ runner.temp }}/worldact-pretty-authors.json
         run: node scripts/test-isolated.mjs tests/pretty-author-portability.test.ts
+      - name: Export named author query archive
+        if: matrix.node == 24
+        env:
+          AUTHOR_NAME_ARCHIVE_STAGE: export
+          AUTHOR_NAME_ARCHIVE_PATH: ${{ runner.temp }}/worldact-named-authors.json
+        run: node scripts/test-isolated.mjs tests/author-name-query-portability.test.ts
+      - name: Restore named author query archive to a fresh source database
+        if: matrix.node == 24
+        env:
+          AUTHOR_NAME_ARCHIVE_STAGE: restore
+          AUTHOR_NAME_ARCHIVE_PATH: ${{ runner.temp }}/worldact-named-authors.json
+        run: node scripts/test-isolated.mjs tests/author-name-query-portability.test.ts
+      - name: Restore named author query archive on a fresh compiled server
+        if: matrix.node == 24
+        env:
+          ISOLATED_TEST_COMPILED: "true"
+          AUTHOR_NAME_ARCHIVE_STAGE: restore
+          AUTHOR_NAME_ARCHIVE_PATH: ${{ runner.temp }}/worldact-named-authors.json
+        run: node scripts/test-isolated.mjs tests/author-name-query-portability.test.ts
       - name: Export publication-status archive
         if: matrix.node == 24
         env:

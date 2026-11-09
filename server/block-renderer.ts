@@ -27,7 +27,7 @@ import { prepareShortcodeDocument } from "./shortcodes.js";
 import { hasShortcodes } from "./shortcode-parser.js";
 import { applyBlockBindings, patternOverrides, type PatternOverrides } from "./block-bindings.js";
 import { publicPaginationLocation } from "./public-pagination.js";
-import {completePublicRead,observePublicPost} from "./public-read-attempt.js";
+import {completePublicRead,observePublicPost,observePublicAuthor} from "./public-read-attempt.js";
 import {appendNamedAuthorSQL,listingFilterValues,type PublicListingContext} from "./author-query.js";
 
 export type BlockDatabase = Pick<pg.Pool, "query"> | pg.PoolClient;
@@ -1264,6 +1264,7 @@ export function renderSiteDocument(document:RenderDocument,options:RenderOptions
   return completePublicRead(options.canReadProtectedPost,reader=>renderSiteDocumentOnce(document,{...options,canReadProtectedPost:reader}),options.db || pool);
 }
 async function renderSiteDocumentOnce(document:RenderDocument,options:RenderOptions={}):Promise<string>{
+  if(!options.preview&&options.listing?.namedAuthor?.selected)observePublicAuthor(options.canReadProtectedPost,options.listing.namedAuthor.selected);
   const stored = storedStaticHTML(document);
   if (stored !== undefined) return stored;
   const state = await createState({
@@ -1288,6 +1289,7 @@ export function renderPublicContent(post:RenderPost,options:RenderOptions={}):Pr
   return completePublicRead(options.canReadProtectedPost,reader=>renderPublicContentOnce(post,{...options,canReadProtectedPost:reader}),options.db || pool);
 }
 async function renderPublicContentOnce(post:RenderPost,options:RenderOptions={}):Promise<string>{
+  if(!options.preview&&options.listing?.namedAuthor?.selected)observePublicAuthor(options.canReadProtectedPost,options.listing.namedAuthor.selected);
   if(!options.preview)observePublicPost(options.canReadProtectedPost,{...post,locked:postNeedsPassword(post)});
   let state:State|undefined;
   if(postNeedsPassword(post)){
