@@ -52,6 +52,7 @@ type DocumentState = {
   excerpt: string;
   slug: string;
   status: Post["status"];
+  savedStatus: Post["status"];
   scheduledAt: string;
   postDate: string;
   postDateOriginal: string;
@@ -79,6 +80,7 @@ const emptyDocument = (): DocumentState => ({
   excerpt: "",
   slug: "",
   status: "draft",
+  savedStatus: "draft",
   scheduledAt: "",
   postDate: "",
   postDateOriginal: "",
@@ -100,6 +102,7 @@ const postDocument = (post: Post): DocumentState => ({
   excerpt: post.excerpt,
   slug: post.slug,
   status: post.status,
+  savedStatus: post.status,
   scheduledAt: post.scheduledAt || "",
   postDate: post.postDate,
   postDateOriginal: post.postDate,
@@ -600,7 +603,7 @@ export default function Editor({ type }: { type: "post" | "page" }) {
       nextStatus === "publish" && current.visibility === "private"
         ? "private"
         : nextStatus;
-    const { visibility: _visibility, password: _password, scheduledAt: _scheduledAt,
+    const { visibility: _visibility, password: _password, scheduledAt: _scheduledAt, savedStatus: _savedStatus,
       postDate: _postDate, postDateOriginal: _postDateOriginal, postDateGmt: _postDateGmt, postDateIntent, ...fields } = current;
     return {
       ...fields,
@@ -626,7 +629,7 @@ export default function Editor({ type }: { type: "post" | "page" }) {
       if(loadGeneration.current!==generation)return post.id;
       idRef.current=post.id;versionRef.current=post.version;
       setPostId(post.id);setVersion(post.version);setPermalink(postLink(post));
-      setDoc(current => ({ ...current, postDateOriginal: post.postDate, postDateGmt: post.postDateGmt,
+      setDoc(current => ({ ...current, savedStatus: post.status, postDateOriginal: post.postDate, postDateGmt: post.postDateGmt,
         ...(current.postDate === snapshot.postDate && current.postDateIntent === snapshot.postDateIntent
           ? { postDate: post.postDate, postDateIntent: undefined, scheduledAt: post.scheduledAt || "" }
           : publicationDateChange(current.postDate, post.postDate)) }));
@@ -764,6 +767,7 @@ export default function Editor({ type }: { type: "post" | "page" }) {
         ...current,
         footnotes:JSON.stringify(current.footnotes)===JSON.stringify(snapshot.footnotes)?post.footnotes || []:current.footnotes,
         status: post.status,
+        savedStatus: post.status,
         slug: post.slug,
         scheduledAt: post.scheduledAt || "",
         postDateOriginal: post.postDate,
@@ -940,7 +944,7 @@ export default function Editor({ type }: { type: "post" | "page" }) {
       const unchanged = JSON.stringify(documentSnapshot()) === fingerprint;
       setRevisionBusy(false);
       if (unchanged) applyPost(post);
-      else { versionRef.current = post.version; setVersion(post.version); savedFingerprint.current = JSON.stringify(postDocument(post)); }
+      else { versionRef.current = post.version; setVersion(post.version); setDoc(current => ({ ...current, savedStatus: post.status })); savedFingerprint.current = JSON.stringify(postDocument(post)); }
       versionRef.current = post.version;
       setRevisionOpen(false);
       setNotice(unchanged ? "Revision restored." : "Revision restored. Your newer changes are still unsaved.");
