@@ -109,7 +109,7 @@ async function readPublicDocumentOnce(path: string, context: PublicDocumentConte
     if(single || resolution.status===404)site.posts=[];
     const renderOptions={requestPath:path,query:query.values,post:body?.rawPost || null,page:single?1:query.archivePage,contentPage:query.contentPage,user:context.user,canReadProtectedPost:context.canReadProtectedPost};
     let presentation:PublicDocumentModel["presentation"];
-    const document=site.settings.theme!=="classic" ? selectPublicSourceTemplate(rawDesign.templates,{notFound:resolution.status===404,single,post,frontPage:route.kind==="front-page",search:Boolean(query.search),category:query.category,tag:query.tag,author:Boolean(query.author),date:Boolean(query.date || site.archive && "type" in site.archive && site.archive.type==="date")}) : null;
+    const document=site.settings.theme!=="classic" ? selectPublicSourceTemplate(rawDesign.templates,{notFound:resolution.status===404,single,post,frontPage:route.kind==="front-page",search:Boolean(query.search),category:query.category,tag:query.tag,author:Boolean(query.author),...(site.archive && "type" in site.archive && site.archive.type==="author"?{authorSlug:site.archive.slug,authorId:site.archive.authorId}:{}),date:Boolean(query.date || site.archive && "type" in site.archive && site.archive.type==="date")}) : null;
     if(document) presentation={kind:"source",document:templateRef(document),html:await renderPublicTemplateDocument(document,renderOptions)};
     else {
       const slots:Extract<PublicDocumentModel["presentation"],{kind:"classic"}>["slots"]={};

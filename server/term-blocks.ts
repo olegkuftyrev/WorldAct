@@ -1,3 +1,4 @@
+import {authorArchivePath,parseAuthorArchivePath} from "../shared/author-archive.js";
 import moment from "moment-timezone";
 import type { BlockDatabase, Context, Node, RenderPost, State } from "./block-renderer.js";
 import { postPermalink } from "./permalinks.js";
@@ -98,8 +99,8 @@ async function breadcrumbs(node: Node, context: Context, state: State, attribute
     for (const ancestor of await termAncestors(term, state)) crumbs.push({ label: ancestor.name, url: termLink(ancestor, state) });
     crumbs.push(current(term.name, termLink(term, state)));
   } else if (authorId) {
-    const person = await cached(state, `breadcrumb-author:${authorId}`, async () => (await state.db.query("SELECT display_name AS name FROM users WHERE id=$1 AND EXISTS(SELECT 1 FROM posts WHERE author_id=$1 AND status='publish')", [authorId])).rows[0]);
-    if (person) crumbs.push(current(person.name, "/?author=" + authorId));
+    const person = await cached(state, `breadcrumb-author:${authorId}`, async () => (await state.db.query("SELECT id,nicename,display_name AS name FROM users WHERE id=$1"+(parseAuthorArchivePath(state.options.requestPath || "/",state.settings)?"":" AND EXISTS(SELECT 1 FROM posts WHERE author_id=$1 AND status='publish')"), [authorId])).rows[0]);
+    if (person) crumbs.push(current(person.name, authorArchivePath(person,state.settings)));
   } else if (front) {
     // The configured front page is represented by Home; source adds only Page N.
   } else if (postsIndex) {

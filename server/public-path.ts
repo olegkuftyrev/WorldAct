@@ -1,3 +1,4 @@
+import {resolvePrettyAuthorArchive} from "./author-archives.js";
 import { pool, getSettings } from "./db.js";
 import { appendPostDateArchiveSQL, dateArchiveDTO, parseDateArchivePath } from "./date-archives.js";
 import { readPlainPermalinkQuery } from "../shared/plain-permalink-query.js";
@@ -38,6 +39,8 @@ export async function resolvePublicArchive(path: string) {
     )).rows[0];
     if (term) return term;
   }
+  const author = await resolvePrettyAuthorArchive(path,settings);
+  if(author.recognized)return author.archive;
   const archive = parseDateArchivePath(path);
   if (!archive) return null;
   const args: unknown[] = [], where = ["p.type='post'", "p.status='publish'"];

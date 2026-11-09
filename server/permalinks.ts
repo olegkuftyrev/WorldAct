@@ -1,3 +1,4 @@
+import {resolvePrettyAuthorArchive} from "./author-archives.js";
 import { pool, getSettings } from "./db.js";
 import type pg from "pg";
 import { readPlainPermalinkQuery } from "../shared/plain-permalink-query.js";
@@ -220,7 +221,9 @@ export async function resolvePublicPath(path: string) {
       }
     }
   }
-  const settings = await getSettings(), exact = await resolveExactPublicPath(path, settings);
+  const settings = await getSettings();
+  if((await resolvePrettyAuthorArchive(path,settings)).recognized)return null;
+  const exact = await resolveExactPublicPath(path, settings);
   if (exact) return rootContentPage ? {...exact,contentPage:rootContentPage} : exact;
   const normalized = "/" + path.split("?")[0].replace(/^\/+|\/+$/g, "") + "/";
   const suffix = /^(.*\/)([1-9]\d{0,9})\/$/.exec(normalized);

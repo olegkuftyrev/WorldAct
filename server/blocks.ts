@@ -1,3 +1,5 @@
+import {resolvePrettyAuthorArchive} from "./author-archives.js";
+import {authorArchivePath} from "../shared/author-archive.js";
 import {renderPublicTemplateDocument} from "./public-presentation.js";
 import {completePublicRead} from "./public-read-attempt.js";
 import {pingbackHeader} from "./incoming-ping-policy.js";
@@ -401,7 +403,7 @@ router.get("/wp-json/wp/v2/users/me", async (req: AuthRequest, res) => {
   const profile = record?.profile || {};
   res.json({ id:user.id, username:user.username, name:user.displayName, slug:record.nicename, email:user.email,
     first_name:profile.firstName || "",last_name:profile.lastName || "",nickname:profile.nickname || user.username,
-    description:profile.bio || "",url:profile.website || "",link:`/?author=${user.id}`,roles:[user.role],
+    description:profile.bio || "",url:profile.website || "",link:authorArchivePath({id:user.id,nicename:record.nicename},await getSettings()),roles:[user.role],
     locale:profile.locale || "en_US",registered_date:record?.created_at,avatar_urls:{24:"/vendor/wordpress/avatar.svg",48:"/vendor/wordpress/avatar.svg",96:"/vendor/wordpress/avatar.svg"},
   });
 });
@@ -425,7 +427,8 @@ router.get("/wp-json/wp/v2/users{/:id}", async (req: AuthRequest, res) => {
   const total = (await pool.query(`SELECT count(*)::int AS total FROM users u WHERE ${where.join(" AND ")}`, args)).rows[0].total;
   if (input.page > 1 && (input.page - 1) * input.per_page >= total) throw new HttpError(400, "The page number requested is larger than the number of pages available.");
   const rows = (await pool.query(`SELECT u.id,u.username,u.nicename,u.display_name,u.profile FROM users u WHERE ${where.join(" AND ")} ORDER BY u.display_name,u.id LIMIT $${args.length + 1} OFFSET $${args.length + 2}`, [...args, input.per_page, (input.page - 1) * input.per_page])).rows;
-  const records = rows.map(u => ({ id:u.id,name:u.display_name,slug:u.nicename,description:u.profile?.bio || "",url:u.profile?.website || "",link:`/?author=${u.id}`,avatar_urls:{} }));
+  const archiveSettings=await getSettings();
+  const records = rows.map(u => ({ id:u.id,name:u.display_name,slug:u.nicename,description:u.profile?.bio || "",url:u.profile?.website || "",link:authorArchivePath(u,archiveSettings),avatar_urls:{} }));
   if (id) { if (!records[0]) throw new HttpError(404,"Author not found."); res.json(records[0]); }
   else {
     res.setHeader("X-WP-Total",total); res.setHeader("X-WP-TotalPages",Math.ceil(total/input.per_page));
@@ -832,6 +835,9 @@ router.get("/api/public/templates/:slug", async (req:AuthRequest, res) => {
   const requestPath = String(req.query.requestPath || "/").slice(0, 2000);
   if (!isPublicRequestPath(requestPath))
     throw new HttpError(400, "Use a site-relative request path.");
+  const prettyAuthor=await resolvePrettyAuthorArchive(requestPath,settings);
+  if(prettyAuthor.recognized && !prettyAuthor.archive)throw new HttpError(404,"Author archive not found.");
+  if(prettyAuthor.archive && req.query.author!==undefined && req.query.author!==String(prettyAuthor.archive.authorId))throw new HttpError(400,"The author archive identities conflict.");
   let contentPage = parseContentPage(req.query.contentPage ?? (post ? req.query.page : undefined));
   if (post && req.query.contentPage === undefined && req.query.page === undefined) {
     // Source templates are requested separately from their public path. Match
@@ -847,6 +853,7 @@ router.get("/api/public/templates/:slug", async (req:AuthRequest, res) => {
       typeof value === "string"
     )
       query[key] = value.slice(0, 300);
+  if(prettyAuthor.archive){query.author=String(prettyAuthor.archive.authorId);if(prettyAuthor.archive.page)query.page=String(prettyAuthor.archive.page);}
   return {
     document: {
       id: doc.id,

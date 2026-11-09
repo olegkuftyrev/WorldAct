@@ -1,3 +1,4 @@
+import {resolvePrettyAuthorArchive} from "./author-archives.js";
 import { pool, getSettings } from "./db.js";
 import { pingbackHeader } from "./incoming-ping-policy.js";
 import { resolvePublicPath } from "./permalinks.js";
@@ -55,6 +56,8 @@ export async function resolvePublicDocumentRoute(path: string): Promise<PublicDo
     )).rows[0];
     if (!post) return missing();
   } else {
+    const author=await resolvePrettyAuthorArchive(path);
+    if(author.recognized)return author.archive?{status:200,kind:"archive",archive:author.archive}:missing();
     const identity = await resolvePublicPath(path);
     contentPage = identity?.contentPage;
     if (identity) post = (await pool.query(

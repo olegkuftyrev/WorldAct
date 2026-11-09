@@ -14,7 +14,7 @@ export type PublicSettings = Partial<Pick<Settings,
 };
 export type PublicViewer = null | { id: number; displayName: string; role: Role; showAdminBar: boolean };
 export type PublicArchive = { taxonomy: "category" | "tag"; slug: string; name?: string }
-  | { type: "author"; name: string; authorId: number }
+  | { type: "author"; name: string; authorId: number; slug: string; permalink: string; page?:number }
   | { type: "date"; year: number; month?: number; day?: number; week?: number; name: string; permalink: string };
 export type PublicQuery = {
   search: string; category: string; tag: string; author?: number;

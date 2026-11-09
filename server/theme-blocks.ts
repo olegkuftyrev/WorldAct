@@ -1,3 +1,4 @@
+import {authorArchivePath} from "../shared/author-archive.js";
 import {renderedCommentContent} from "./comment-policy.js";
 import {commentsOpen} from "../shared/comment-open.js";
 import {commentReturnPath,commentLoginHref} from "../shared/comment-links.js";
@@ -66,12 +67,12 @@ export async function renderThemeBlock(
     const id=c?int(c.userId,0):a.userId!=null?int(a.userId,0):int(p?.authorId ?? p?.author_id ?? state.options.query?.author,0);
     if(!c && !id)return "";
     const size=int(a.size,96,512);
-    const account=id?await cached(state,`avatar:${id}`,async()=>(await state.db.query("SELECT display_name AS name,email FROM users WHERE id=$1",[id])).rows[0]):null;
+    const account=id?await cached(state,`avatar:${id}`,async()=>(await state.db.query("SELECT id,nicename,display_name AS name,email FROM users WHERE id=$1",[id])).rows[0]):null;
     if(!c && !account)return "";
     const name=String(c?c.authorName || "":account.name || "");
     const email=account?account.email:c?._avatarEmail || "";
     const image=`<img src="${esc(avatarURL(email,state.settings,size))}" alt="${esc(name+" Avatar")}" width="${size}" height="${size}" class="avatar avatar-${size} photo wp-block-avatar__image" loading="lazy">`;
-    const url=c?safeUrl(c.authorUrl):`/?author=${id}`;
+    const url=c?safeUrl(c.authorUrl):account.nicename?authorArchivePath(account,state.settings):"";
     const newTab=a.linkTarget==="_blank";
     const linked=a.isLink && url?`<a href="${esc(url)}" class="wp-block-avatar__link"${newTab?` target="_blank" rel="noopener noreferrer" aria-label="${esc(`(${name} ${c?"website link":"author archive"}, opens in a new tab)`)}"`:""}>${image}</a>`:image;
     return `<div${attributes()}>${linked}</div>`;

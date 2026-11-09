@@ -1,3 +1,4 @@
+import {authorArchivePath,parseAuthorArchivePath} from "../shared/author-archive.js";
 import { parse } from "@wordpress/block-serialization-default-parser";
 import type pg from "pg";
 import { pool, getSettings, postFields, postMetadataFields } from "./db.js";
@@ -363,7 +364,7 @@ async function author(post: RenderPost, state: State) {
     async () =>
       (
         await state.db.query(
-          "SELECT id,username,display_name AS name,profile FROM users WHERE id=$1",
+          "SELECT id,username,nicename,display_name AS name,profile FROM users WHERE id=$1",
           [id],
         )
       ).rows[0] || { id, name: post.authorName || "", profile: {} },
@@ -530,7 +531,7 @@ async function queryPosts(
     if (authorIds.length) {
       const people = (
         await state.db.query(
-          "SELECT id,username,display_name AS name,profile FROM users WHERE id=ANY($1::int[])",
+          "SELECT id,username,nicename,display_name AS name,profile FROM users WHERE id=ANY($1::int[])",
           [authorIds],
         )
       ).rows;
@@ -905,7 +906,7 @@ async function renderNode(
           async () =>
             (
               await state.db.query(
-                "SELECT display_name AS name FROM users WHERE id=$1 AND EXISTS(SELECT 1 FROM posts p WHERE p.author_id=$1 AND p.status='publish')",
+                "SELECT display_name AS name FROM users WHERE id=$1"+(parseAuthorArchivePath(state.options.requestPath || "/",state.settings)?"":" AND EXISTS(SELECT 1 FROM posts p WHERE p.author_id=$1 AND p.status='publish')"),
                 [id],
               )
             ).rows[0],
@@ -1206,13 +1207,15 @@ async function renderNode(
         : "";
     }
     const person = await author(p, state);
+    const archiveURL=person.nicename?authorArchivePath(person,state.settings):"";
     const personName = esc(person.name || p.authorName || ""),
       profile = person.profile || {};
     if (name === "core/post-author-biography")
       return `<div${attr()}>${esc(profile.bio || "")}</div>`;
     if (name === "core/post-author-name")
-      return `<div${attr()}>${a.isLink ? `<a href="/?author=${integer(person.id, 0, 1, 2147483647)}"${a.linkTarget === "_blank" ? ' target="_blank" rel="noopener noreferrer"' : ""}>${personName}</a>` : personName}</div>`;
-    return `<div${attr()}>${a.byline ? `<p class="wp-block-post-author__byline">${esc(a.byline)}</p>` : ""}<div class="wp-block-post-author__content"><p class="wp-block-post-author__name">${personName}</p>${a.showBio ? `<p class="wp-block-post-author__bio">${esc(profile.bio || "")}</p>` : ""}</div></div>`;
+      return `<div${attr()}>${a.isLink && archiveURL ? `<a href="${esc(archiveURL)}"${a.linkTarget === "_blank" ? ' target="_blank" rel="noopener noreferrer"' : ""}>${personName}</a>` : personName}</div>`;
+    const linkedName=a.isLink && a.linkTarget && archiveURL?`<a href="${esc(archiveURL)}" target="${a.linkTarget==="_blank"?"_blank":"_self"}"${a.linkTarget==="_blank"?' rel="noopener noreferrer"':""}>${personName}</a>`:personName;
+    return `<div${attr()}>${a.byline ? `<p class="wp-block-post-author__byline">${esc(a.byline)}</p>` : ""}<div class="wp-block-post-author__content"><p class="wp-block-post-author__name">${linkedName}</p>${a.showBio ? `<p class="wp-block-post-author__bio">${esc(profile.bio || "")}</p>` : ""}</div></div>`;
   }
   return staticHTML(node, context, state);
 }
