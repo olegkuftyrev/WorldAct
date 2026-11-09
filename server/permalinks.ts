@@ -2,7 +2,7 @@ import { pool, getSettings } from "./db.js";
 import type pg from "pg";
 import { readPlainPermalinkQuery } from "../shared/plain-permalink-query.js";
 import { readPublicPath } from "./public-path.js";
-import { restLocalDate } from "./date.js";
+import {parsePostCivil} from "./post-date.js";
 import { HttpError } from "./utils.js";
 import { permalinkTokenCaptures, permalinkTokenPattern, type PermalinkToken } from "../shared/permalink-tokens.js";
 type Database = Pick<pg.Pool, "query"> | pg.PoolClient;
@@ -11,7 +11,7 @@ const segment = (value: string) => encodeURIComponent(value);
 /** Persisted association, never a supplied author DTO. Public metadata callers
  * retain their publication/type fence across this additional database read.
  * Authenticated private editors supply the current explicit status instead. */
-export async function authorPermalinkNicename(post: Record<string, any>, db: Database = pool): Promise<string> {
+async function authorPermalinkIdentity(post: Record<string, any>, db: Database = pool): Promise<{nicename:string;authorId:number}> {
   const expectedStatus=post.status ?? "publish";
   const owner=(await db.query("SELECT author_id FROM posts WHERE id=$1 AND type='post' AND status=$2",[post.id,expectedStatus])).rows[0];
   if(!owner)throw new HttpError(404,"Post author identity is no longer available.");
@@ -22,8 +22,9 @@ export async function authorPermalinkNicename(post: Record<string, any>, db: Dat
   // Check again only after it returns, without another author-expression read.
   if(!(await db.query("SELECT 1 FROM posts WHERE id=$1 AND type='post' AND status=$2 AND author_id=$3",[post.id,expectedStatus,owner.author_id])).rowCount)
     throw new HttpError(404,"Post author identity is no longer available.");
-  return row.nicename;
+  return {nicename:row.nicename,authorId:owner.author_id};
 }
+export async function authorPermalinkNicename(post:Record<string,any>,db:Database=pool):Promise<string>{return (await authorPermalinkIdentity(post,db)).nicename;}
 /** Select the source's lowest-ID assigned category and its ancestors in one
  * statement snapshot. Supplied DTO terms can be partial or stale. UNION visits
  * each persisted ancestor once, including malformed historical cycles. */
@@ -84,24 +85,31 @@ export async function postPermalink(
     return "/" + slugs.map(segment).join("/") + (settings.permalinkStructure.endsWith("/")?"/":"");
   }
   if (!settings.permalinkStructure) return "/?p="+post.id;
-  const date = new Date(
-    post.publishedAt ??
-      post.published_at ??
-      post.createdAt ??
-      post.created_at ??
-      Date.now(),
-  );
-  // One chosen instant/current-site-clock conversion supplies all six fields.
-  // Historical stored local publication dates are a separate fidelity contract.
-  const [year, monthnum, day, hour, minute, second] = restLocalDate(date, settings.timezone).split(/[-T:]/);
+  const category=settings.permalinkStructure.includes("%category%") ? await categoryPermalinkPath(post.id,settings,db) : "";
+  const authorIdentity=settings.permalinkStructure.includes("%author%") ? await authorPermalinkIdentity(post,db) : null;
+  const author=segment(authorIdentity?.nicename || "");
+  let civil="2000-01-01T00:00:00";
+  if(/%(?:year|monthnum|day|hour|minute|second)%/.test(settings.permalinkStructure)){
+    // A projection can wait after taking its MVCC snapshot. Ordinary reads use
+    // a short SHARE NOWAIT statement. EvalPlanQual follows a concurrent tuple
+    // update after that wait before returning the selected civil value. An
+    // explicit read-only snapshot (portable exports/caller reads) retains its
+    // own coherent historical snapshot and cannot acquire row locks.
+    const readOnly=(await db.query("SELECT current_setting('transaction_read_only') AS readonly")).rows[0]?.readonly==="on";
+    const args:unknown[]=[post.id,post.type || "post",post.status ?? "publish"];
+    const owner=authorIdentity?(args.push(authorIdentity.authorId)," AND author_id=$4"):"";
+    let row:any;
+    try{row=(await db.query("SELECT post_date FROM posts WHERE id=$1 AND type=$2 AND status=$3"+owner+(readOnly?"":" FOR SHARE NOWAIT"),args)).rows[0];}
+    catch(error){if(["55P03","40001"].includes((error as {code?:string}).code || ""))throw new HttpError(409,"The post publication changed while its permalink was being read. Reload to continue.");throw error;}
+    if(!parsePostCivil(row?.post_date))throw new HttpError(404,"Post publication identity is no longer available.");
+    civil=row.post_date;
+  }
+  const [year,monthnum,day,hour,minute,second]=civil.split(/[-T:]/);
   const values: Record<PermalinkToken, string> = {
     postname: segment(post.slug),
     post_id: String(post.id),
     year, monthnum, day, hour, minute, second,
-    category: settings.permalinkStructure.includes("%category%")
-      ? await categoryPermalinkPath(post.id,settings,db) : "",
-    author: settings.permalinkStructure.includes("%author%")
-      ? segment(await authorPermalinkNicename(post,db)) : "",
+    category, author,
   };
   return settings.permalinkStructure.replace(
     permalinkTokenPattern(),

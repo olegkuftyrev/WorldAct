@@ -1,10 +1,14 @@
 # Post list dates and month metadata
 
-The supplied source uses the chosen local post date for Date sorting, month membership and month choices (`wp-includes/class-wp-query.php` around2092–2099 and `wp-admin/includes/class-wp-list-table.php` around745–752). Source column-date around1291–1317 formats that same post date. These files are reference data, not runtime or instructions; PHP/MySQL is never executed.
+Posts/Pages DTOs expose canonical stored `postDate` civil text and nullable selected `postDateGmt`. Date/month membership and available month choices use that stored calendar independently of later timezone changes. Date ordering retains the existing UTC effective publication/schedule expression; Modified ordering remains independent. Search/category filters do not erase month choices; accessible author/type/Trash boundaries remain enforced.
 
-For WorldAct's existing timestamp model, `POST_DATE_SQL` selects the current schedule for future records, then the chosen publication date, then creation. A previously published post rescheduled into the future therefore uses its new schedule rather than its old publication. Drafts without a chosen date fall back to creation. Modified ordering remains independent. This does not introduce a second persisted local-date column or alter existing timestamps/publication behavior.
+The React list formats civil fields using the site zone, while missed-schedule detection uses the actual `scheduledAt` UTC instant. Export options, WXR month selection and serialized local publication dates share the stored civil value; GMT and existing UTC schedule remain separate. See the [complete civil-date contract](post-civil-dates.md) for write rules, migration/deployment, portability and remaining source-order/status gaps.
 
-Posts/Pages month filtering and choices use the existing shared named/fixed-offset site-timezone SQL helper. Available `months` are bounded by the actual accessible post type and Trash view; they do not disappear with an empty search or selected category/month. Author/contributor metadata stays within their existing own-content boundary. The list response exposes only the effective `postDate`, site `timezone` and month values needed by the real date controls. Export month choices, WXR month selection and WXR post-date values share the same expression and no longer prefer stale publication dates over a current future schedule. Importing that WXR retains the future schedule rather than an earlier publication.
+`tests/post-list-dates.test.ts` deliberately covers stored-civil stability after a Los Angeles→fixed-offset zone change, backdating/rescheduling, fixed draft fixtures, role/Trash scope, independent instant/Modified order, available months and actual WXR export/import. Raw fixture timestamp changes explicitly supply civil metadata when they intend to change that chosen calendar.
+
+## Earlier instant-model validation
+
+The following records describe earlier bounded stages before persisted civil dates were added; their counts and timezone-shifting behavior are historical evidence, not certification of the current package.
 
 The React list uses the response's effective date and site clock for the source-style date label and actual month choices. Independent native review on `9153e04` passed named/fixed-offset clocks, Date versus Modified sorting, future/rescheduled dates, Posts/Pages and role-scoped months. Search/filter drafts, keyboard focus, history, delayed list responses and account changes were included. Those controls have no new CSS.
 

@@ -53,7 +53,7 @@ import { assertPostAccess } from "./core.js";
 import { postFormats } from "../shared/post-formats.js";
 import { assertCommentAccess, canEditPostComments, contributorCanEditPostStatus } from "./comment-access.js";
 import { resolvePublicArchive } from "./public-path.js";
-import { POST_DATE_SQL } from "./post-date.js";
+import {postCivilSQL,publicationPair,resolvePostDate,parsePostCivil,civilFromInstant,postCivilInstant} from "./post-date.js";
 import { parseFootnotes, serializeFootnotes, freshFootnoteIds, MAX_FOOTNOTES_BYTES } from "./footnotes.js";
 import { excerptText } from "./excerpts.js";
 import { postAccessReader, postHasPassword, protectedPostExcerpt, publicPostTitle } from "./post-passwords.js";
@@ -213,7 +213,7 @@ router.get(
     res
       .type("application/rss+xml")
       .send(
-        `<?xml version="1.0" encoding="UTF-8"?><rss version="2.0" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>${esc(settings.siteTitle)}</title><link>${esc(settings.siteUrl)}</link><description>${esc(settings.tagline)}</description><language>en-US</language><atom:link href="${esc(feed)}" rel="self" type="application/rss+xml"/>${posts.map((p) => `<item><title>${esc(p.title)}</title><link>${esc(absolute(p.permalink, settings.siteUrl))}</link><guid isPermaLink="false">worldact:${p.id}</guid><pubDate>${new Date(p.publishedAt).toUTCString()}</pubDate><dc:creator>${cdata(p.authorName)}</dc:creator><description>${cdata(p.excerpt || excerptText(p.content).slice(0, 400))}</description><content:encoded>${cdata(settings.feedExcerpt ? p.excerpt || "<p>" + esc(excerptText(p.content).slice(0, 400)) + "</p>" : p.content)}</content:encoded>${p.terms.map((t: any) => `<category>${cdata(t.name)}</category>`).join("")}</item>`).join("")}</channel></rss>`,
+        `<?xml version="1.0" encoding="UTF-8"?><rss version="2.0" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>${esc(settings.siteTitle)}</title><link>${esc(settings.siteUrl)}</link><description>${esc(settings.tagline)}</description><language>en-US</language><atom:link href="${esc(feed)}" rel="self" type="application/rss+xml"/>${posts.map((p) => `<item><title>${esc(p.title)}</title><link>${esc(absolute(p.permalink, settings.siteUrl))}</link><guid isPermaLink="false">worldact:${p.id}</guid><pubDate>${p.postDateGmt ? new Date(p.postDateGmt).toUTCString() : ""}</pubDate><dc:creator>${cdata(p.authorName)}</dc:creator><description>${cdata(p.excerpt || excerptText(p.content).slice(0, 400))}</description><content:encoded>${cdata(settings.feedExcerpt ? p.excerpt || "<p>" + esc(excerptText(p.content).slice(0, 400)) + "</p>" : p.content)}</content:encoded>${p.terms.map((t: any) => `<category>${cdata(t.name)}</category>`).join("")}</item>`).join("")}</channel></rss>`,
       );
   },
 );
@@ -223,7 +223,7 @@ router.get(["/feed/atom", "/feed/atom/", "/atom.xml"], async (req, res) => {
   res
     .type("application/atom+xml")
     .send(
-      `<?xml version="1.0" encoding="UTF-8"?><feed xmlns="http://www.w3.org/2005/Atom"><title>${esc(settings.siteTitle)}</title><subtitle>${esc(settings.tagline)}</subtitle><id>${esc(settings.siteUrl)}</id><link href="${esc(absolute("/feed/atom/", settings.siteUrl))}" rel="self"/><link href="${esc(settings.siteUrl)}"/><updated>${posts[0] ? iso(posts[0].updatedAt) : new Date().toISOString()}</updated>${posts.map((p) => `<entry><title>${esc(p.title)}</title><id>urn:worldact:post:${p.id}</id><link href="${esc(absolute(p.permalink, settings.siteUrl))}"/><published>${iso(p.publishedAt)}</published><updated>${iso(p.updatedAt)}</updated><author><name>${esc(p.authorName)}</name></author><summary>${esc(p.excerpt || excerptText(p.content).slice(0, 400))}</summary><content type="html">${esc(settings.feedExcerpt ? p.excerpt || excerptText(p.content).slice(0, 400) : p.content)}</content></entry>`).join("")}</feed>`,
+      `<?xml version="1.0" encoding="UTF-8"?><feed xmlns="http://www.w3.org/2005/Atom"><title>${esc(settings.siteTitle)}</title><subtitle>${esc(settings.tagline)}</subtitle><id>${esc(settings.siteUrl)}</id><link href="${esc(absolute("/feed/atom/", settings.siteUrl))}" rel="self"/><link href="${esc(settings.siteUrl)}"/><updated>${posts[0] ? iso(posts[0].updatedAt) : new Date().toISOString()}</updated>${posts.map((p) => `<entry><title>${esc(p.title)}</title><id>urn:worldact:post:${p.id}</id><link href="${esc(absolute(p.permalink, settings.siteUrl))}"/><published>${p.postDateGmt ? iso(p.postDateGmt) : ""}</published><updated>${iso(p.updatedAt)}</updated><author><name>${esc(p.authorName)}</name></author><summary>${esc(p.excerpt || excerptText(p.content).slice(0, 400))}</summary><content type="html">${esc(settings.feedExcerpt ? p.excerpt || excerptText(p.content).slice(0, 400) : p.content)}</content></entry>`).join("")}</feed>`,
     );
 });
 router.get(["/comments/feed", "/comments/feed/"], async (req, res) => {
@@ -360,8 +360,8 @@ async function wpPost(post: any, req: AuthRequest, edit = false,reader:NonNullab
     : excerptWords.length ? `<p>${esc(excerptWords.slice(0, 55).join(" "))}${excerptWords.length > 55 ? " […]" : ""}</p>` : "";
   return {
     id: post.id,
-    date: restLocalDate(publicationDate, settings.timezone),
-    date_gmt: iso(publicationDate).replace(/Z$/, ""),
+    date: post.postDate,
+    date_gmt: iso(post.postDateGmt || postCivilInstant(post.postDate,settings.timezone)).replace(/Z$/, ""),
     guid: { rendered: link },
     modified: restLocalDate(post.updatedAt, settings.timezone),
     modified_gmt: iso(post.updatedAt).replace(/Z$/, ""),
@@ -602,8 +602,8 @@ for (const collection of ["posts", "pages"] as const) {
       ["before", "<"],
     ] as const)
       if (req.query[field]) {
-        args.push(z.iso.datetime({ offset: true }).parse(req.query[field]));
-        where += ` AND coalesce(p.published_at,p.created_at)${operator}$${args.length}`;
+        args.push(restLocalDate(z.iso.datetime({ offset: true }).parse(req.query[field]),(await getSettings()).timezone));
+        where += ` AND p.post_date::timestamp without time zone${operator}$${args.length}::timestamp without time zone`;
       }
     const total = (
       await pool.query(
@@ -739,10 +739,8 @@ for (const collection of ["posts", "pages"] as const) {
       if (!existing || existing.type !== type)
         throw new HttpError(404, "Post not found.");
     }
-    if (data.date || data.date_gmt) {
-      const date = restDateToUTC((data.date_gmt || data.date)!, (await getSettings()).timezone, !!data.date_gmt);
-      body[(data.status || existing?.status) === "future" ? "scheduledAt" : "publishedAt"] = date;
-    }
+    if(data.date!==undefined)body.restDate=data.date;
+    if(data.date_gmt!==undefined)body.restDateGmt=data.date_gmt;
     const result = await forward(
       req,
       "/posts" + (req.params.id ? "/" + parseId(req.params.id) : ""),
@@ -1537,7 +1535,7 @@ router.get("/wp-json/wp/v2/statuses", (req: AuthRequest, res) =>
 
 router.get("/api/tools/export/options", admin, async (_req, res) => {
   const settings = await getSettings(), dateArgs: unknown[] = [], mediaDateArgs: unknown[] = [];
-  const local = dateArchiveLocalSQL(POST_DATE_SQL, dateArgs, settings.timezone);
+  const local = postCivilSQL();
   const mediaLocal = dateArchiveLocalSQL("m.created_at", mediaDateArgs, settings.timezone);
   const [authors, categories, months, mediaMonths] = await Promise.all([
     pool.query('SELECT id,display_name AS "displayName" FROM users WHERE EXISTS(SELECT 1 FROM posts WHERE author_id=users.id) OR EXISTS(SELECT 1 FROM media WHERE author_id=users.id) ORDER BY display_name,id'),
@@ -1559,7 +1557,7 @@ router.get("/api/tools/export", admin, async (req, res, next) => {
     await client.query("BEGIN ISOLATION LEVEL REPEATABLE READ READ ONLY");
     s = await getSettings(client);
     const selected = wxrExportWhere(input, s.timezone);
-    posts = input.content === "attachment" ? { rows: [] } : await client.query(`SELECT ${postFields},${POST_DATE_SQL} AS "exportDate",u.username,u.email AS "authorEmail" FROM posts p JOIN users u ON u.id=p.author_id WHERE ${selected.sql} ORDER BY p.id`, selected.args);
+    posts = input.content === "attachment" ? { rows: [] } : await client.query(`SELECT ${postFields},u.username,u.email AS "authorEmail" FROM posts p JOIN users u ON u.id=p.author_id WHERE ${selected.sql} ORDER BY p.id`, selected.args);
     const entityQuery = 'SELECT b.*,u.username,u.email AS "authorEmail",u.display_name AS "authorName",u.id AS "authorId" FROM block_entities b JOIN users u ON u.id=b.author_id';
     entities = { rows: [] };
     if (input.content === "all") entities = await client.query(entityQuery + " ORDER BY b.id");
@@ -1617,7 +1615,7 @@ router.get("/api/tools/export", admin, async (req, res, next) => {
   const itemXml = await Promise.all(
     posts.rows.map(
       async (p) =>
-        `<item><title>${cdata(p.title)}</title><link>${esc(absolute(p.exportPermalink, s.siteUrl))}</link><pubDate>${new Date(p.exportDate).toUTCString()}</pubDate><dc:creator>${cdata(p.username)}</dc:creator><guid isPermaLink="false">worldact:${p.id}</guid><description/><content:encoded>${cdata(exportedContent(p))}</content:encoded><excerpt:encoded>${cdata(p.excerpt)}</excerpt:encoded><wp:post_id>${p.id}</wp:post_id><wp:post_date>${wpLocalDate(p.exportDate, s.timezone)}</wp:post_date><wp:post_date_gmt>${wpDate(p.exportDate)}</wp:post_date_gmt><wp:post_modified>${wpLocalDate(p.updatedAt, s.timezone)}</wp:post_modified><wp:post_modified_gmt>${wpDate(p.updatedAt)}</wp:post_modified_gmt><wp:comment_status>${p.commentStatus}</wp:comment_status><wp:ping_status>${p.pingStatus || "closed"}</wp:ping_status><wp:post_name>${cdata(p.slug)}</wp:post_name><wp:status>${p.hasPassword ? "draft" : p.status}</wp:status><wp:post_parent>${p.parentId || 0}</wp:post_parent><wp:menu_order>${p.menuOrder}</wp:menu_order><wp:post_type>${p.type}</wp:post_type><wp:post_password/><wp:is_sticky>${p.sticky ? 1 : 0}</wp:is_sticky>${p.hasPassword ? "<wp:postmeta><wp:meta_key>_worldact_password_protected</wp:meta_key><wp:meta_value>1</wp:meta_value></wp:postmeta>" : ""}${p.templateSlug ? `<wp:postmeta><wp:meta_key>_wp_page_template</wp:meta_key><wp:meta_value>${cdata(p.templateSlug)}</wp:meta_value></wp:postmeta>` : ""}${p.featuredMediaId ? `<wp:postmeta><wp:meta_key>_thumbnail_id</wp:meta_key><wp:meta_value>${p.featuredMediaId + 2147483648}</wp:meta_value></wp:postmeta>` : ""}${p.format && p.format !== "standard" ? `<category domain="post_format" nicename="post-format-${esc(p.format)}">${cdata(p.format)}</category>` : ""}${p.terms.map((t: any) => `<category domain="${t.taxonomy === "tag" ? "post_tag" : "category"}" nicename="${esc(t.slug)}">${cdata(t.name)}</category>`).join("")}${comments.rows
+        `<item><title>${cdata(p.title)}</title><link>${esc(absolute(p.exportPermalink, s.siteUrl))}</link><pubDate>${p.postDateGmt ? new Date(p.postDateGmt).toUTCString() : ""}</pubDate><dc:creator>${cdata(p.username)}</dc:creator><guid isPermaLink="false">worldact:${p.id}</guid><description/><content:encoded>${cdata(exportedContent(p))}</content:encoded><excerpt:encoded>${cdata(p.excerpt)}</excerpt:encoded><wp:post_id>${p.id}</wp:post_id><wp:post_date>${p.postDate.replace("T"," ")}</wp:post_date><wp:post_date_gmt>${p.postDateGmt ? wpDate(p.postDateGmt) : "0000-00-00 00:00:00"}</wp:post_date_gmt><wp:post_modified>${wpLocalDate(p.updatedAt, s.timezone)}</wp:post_modified><wp:post_modified_gmt>${wpDate(p.updatedAt)}</wp:post_modified_gmt><wp:comment_status>${p.commentStatus}</wp:comment_status><wp:ping_status>${p.pingStatus || "closed"}</wp:ping_status><wp:post_name>${cdata(p.slug)}</wp:post_name><wp:status>${p.hasPassword ? "draft" : p.status}</wp:status><wp:post_parent>${p.parentId || 0}</wp:post_parent><wp:menu_order>${p.menuOrder}</wp:menu_order><wp:post_type>${p.type}</wp:post_type><wp:post_password/><wp:is_sticky>${p.sticky ? 1 : 0}</wp:is_sticky>${p.hasPassword ? "<wp:postmeta><wp:meta_key>_worldact_password_protected</wp:meta_key><wp:meta_value>1</wp:meta_value></wp:postmeta>" : ""}${p.templateSlug ? `<wp:postmeta><wp:meta_key>_wp_page_template</wp:meta_key><wp:meta_value>${cdata(p.templateSlug)}</wp:meta_value></wp:postmeta>` : ""}${p.featuredMediaId ? `<wp:postmeta><wp:meta_key>_thumbnail_id</wp:meta_key><wp:meta_value>${p.featuredMediaId + 2147483648}</wp:meta_value></wp:postmeta>` : ""}${p.format && p.format !== "standard" ? `<category domain="post_format" nicename="post-format-${esc(p.format)}">${cdata(p.format)}</category>` : ""}${p.terms.map((t: any) => `<category domain="${t.taxonomy === "tag" ? "post_tag" : "category"}" nicename="${esc(t.slug)}">${cdata(t.name)}</category>`).join("")}${comments.rows
           .filter((c) => c.post_id === p.id)
           .map(
             (c) =>
@@ -1702,6 +1700,7 @@ router.post("/api/tools/import", admin, async (req: AuthRequest, res, next) => {
     await client.query(
       "SELECT pg_advisory_xact_lock(hashtext('worldact-wxr-import'))",
     );
+    const importDateSettings=await getSettings(client);
     const entityItems=items.filter((item:any)=>["wp_block","wp_navigation"].includes(text(item["wp:post_type"])));
     const entityGraph=await allocateImportedBlockEntities(client,entityItems.map((item:any)=>({
       id:zero(item["wp:post_id"]),kind:text(item["wp:post_type"])==="wp_block"?"reusable":"navigation",
@@ -1837,7 +1836,13 @@ router.post("/api/tools/import", admin, async (req: AuthRequest, res, next) => {
       const raw = portable.rawContent,
         content = cleanContent(raw),
         excerpt = plainText(text(item["excerpt:encoded"])).slice(0, 20000),
-        date = parsedDate(item["wp:post_date_gmt"] || item["wp:post_date"]);
+        rawLocalDate=text(item["wp:post_date"]).trim(),rawGmtDate=text(item["wp:post_date_gmt"]).trim();
+      const zeroDate=(value:string)=>!value || value==="0000-00-00 00:00:00" || value==="0000-00-00T00:00:00";
+      const localDate=zeroDate(rawLocalDate)?null:rawLocalDate.replace(" ","T");
+      const gmtDate=zeroDate(rawGmtDate)?null:rawGmtDate.replace(" ","T")+"Z";
+      if(localDate && !parsePostCivil(localDate))throw new HttpError(400,"The export contains an invalid local publication date.");
+      if(gmtDate)publicationPair(localDate || civilFromInstant(gmtDate,importDateSettings.timezone),gmtDate);
+      let date:Date|null=gmtDate?new Date(gmtDate):null;
       let status = text(item["wp:status"]) || "draft";
       if (
         !["publish", "draft", "pending", "future", "private", "trash"].includes(
@@ -1845,6 +1850,14 @@ router.post("/api/tools/import", admin, async (req: AuthRequest, res, next) => {
         )
       )
         status = "draft";
+      let datePair:{postDate:string;postDateGmt:string|null};
+      if(localDate && gmtDate)datePair=publicationPair(localDate,gmtDate);
+      else if(localDate){
+        datePair=publicationPair(localDate,["draft","pending"].includes(status)?null:postCivilInstant(localDate,importDateSettings.timezone));
+        referenceWarnings.add("A WXR publication pair was approximated using the destination timezone because the source timezone was unavailable.");
+      }else if(gmtDate){datePair=publicationPair(civilFromInstant(gmtDate,importDateSettings.timezone),gmtDate);referenceWarnings.add("A WXR local publication date was approximated using the destination timezone.");}
+      else datePair=resolvePostDate({},undefined,status,importDateSettings.timezone,new Date());
+      date=datePair.postDateGmt?new Date(datePair.postDateGmt):null;
       const protectedFlag = list(item["wp:postmeta"]).some(
         (meta: any) =>
           text(meta["wp:meta_key"]) === "_worldact_password_protected" &&
@@ -1857,7 +1870,7 @@ router.post("/api/tools/import", admin, async (req: AuthRequest, res, next) => {
         ? await hashPassword(password.slice(0, 1024))
         : null;
       const inserted = await client.query(
-        `INSERT INTO posts(type,title,slug,content,raw_content,excerpt,status,author_id,published_at,scheduled_at,menu_order,comment_status,sticky,password_hash,created_at,updated_at) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,coalesce($15,now()),coalesce($16,now())) RETURNING id`,
+        `INSERT INTO posts(type,title,slug,content,raw_content,excerpt,status,author_id,published_at,scheduled_at,menu_order,comment_status,sticky,password_hash,created_at,updated_at,post_date,post_date_gmt) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,coalesce($15,now()),coalesce($16,now()),$17,$18) RETURNING id`,
         [
           type,
           title,
@@ -1880,6 +1893,7 @@ router.post("/api/tools/import", admin, async (req: AuthRequest, res, next) => {
           passwordHash,
           date,
           parsedDate(item["wp:post_modified_gmt"] || item["wp:post_modified"]),
+          datePair.postDate,datePair.postDateGmt,
         ],
       );
       const id = inserted.rows[0].id;

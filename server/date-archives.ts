@@ -148,3 +148,17 @@ export function dateArchiveTitle(archive: DateArchive, { showPrefix = true }: { 
 export function dateArchiveDTO(archive: DateArchive) {
   return { type: "date" as const, ...archive, name: dateArchiveTitle(archive), permalink: dateArchivePath(archive) };
 }
+
+/** Stored post civil membership is independent of the current site timezone. */
+export function postCivilBounds(archive:DateArchive){
+ validate(archive);
+ const start=moment.utc(`${pad(archive.year,4)}-${pad(archive.month ?? 1)}-${pad(archive.day ?? 1)}T00:00:00`,"YYYY-MM-DDTHH:mm:ss",true);
+ const end=start.clone().add(1,archive.day!==undefined?"day":archive.month!==undefined?"month":"year");
+ return {start:start.format("YYYY-MM-DDTHH:mm:ss"),end:end.year()===10000?"10000-01-01T00:00:00":end.format("YYYY-MM-DDTHH:mm:ss")};
+}
+export function appendPostDateArchiveSQL(where:string[],args:unknown[],column:string,archive:DateArchive|null,_timezone:string,weekStartsOn=0){
+ if(!archive)return;
+ const bounds=postCivilBounds(archive);args.push(bounds.start,bounds.end);
+ where.push(`${column}>=$${args.length-1}::timestamp without time zone AND ${column}<$${args.length}::timestamp without time zone`);
+ if(archive.week!==undefined){args.push(archive.week);where.push(`${dateArchiveWeekSQL(column,weekStartsOn)}=$${args.length}::int`);}
+}

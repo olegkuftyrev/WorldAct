@@ -31,7 +31,6 @@ import {
 } from "../components/AdminUI";
 
 type ListedPost = Post & {
-  postDate: string | null;
   commentCount?: number;
   approvedCommentCount?: number;
   pendingCommentCount?: number;
@@ -463,6 +462,7 @@ export default function PostList({ type }: { type: "post" | "page" }) {
               <tr className="inline-edit-row">
                 <td colSpan={visibleColumnCount}>
                   <PostBulkEdit
+                    timezone={resource.data?.timezone}
                     posts={posts.filter((post) => selected.includes(post.id))}
                     type={type}
                     canPublish={canPublish}
@@ -696,7 +696,7 @@ export default function PostList({ type }: { type: "post" | "page" }) {
   );
 }
 function PostDateCell({ post, timezone }: { post: ListedPost; timezone: string | undefined }) {
-  const value = postListDate(post.postDate, timezone, post.status);
+  const value = postListDate(post.postDate, timezone, post.status, Date.now(), post.scheduledAt);
   return <td className="date column-date">
     {value.missed ? <strong className="error-message">{value.label}</strong> : value.label}<br />{value.text}
   </td>;
@@ -742,7 +742,6 @@ function QuickEdit({
         title,
         slug,
         status,
-        scheduledAt: status === "future" ? post.scheduledAt : null,
         categoryIds: categories,
         ...(canSticky ? { sticky } : {}),
         commentStatus,

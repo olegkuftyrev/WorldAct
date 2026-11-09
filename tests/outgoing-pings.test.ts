@@ -65,7 +65,7 @@ test('transactional publication hooks, durable two-worker delivery, leases, supp
     const sources:string[]=[];const worker=createOutgoingPingWorker({environment:()=> 'production',protocol:{...noNetwork,async pingback(_target,source){sources.push(source);return 'sent';}}});
     await enqueue(document.id);await worker.runOnce();await worker.runOnce();assert.equal(sources[0],new URL(document.permalink,before.siteUrl).href);
     await pool.query("UPDATE posts SET published_at=NULL,created_at='2010-06-01T06:30:00Z',content=$1,raw_content=$1 WHERE id=$2",['<a href="https://target.example.test/creation">Fallback</a>',document.id]);
-    const fallback=(await ok('/api/posts/'+document.id)).data.post;assert.match(fallback.permalink,new RegExp('^/2010/05/31/'+parent.slug+'/'+category.slug+'/'));
+    const fallback=(await ok('/api/posts/'+document.id)).data.post;assert.match(fallback.permalink,new RegExp('^/2011/12/31/'+parent.slug+'/'+category.slug+'/'));
     await enqueue(document.id);await worker.runOnce();await worker.runOnce();assert.equal(sources[1],new URL(fallback.permalink,before.siteUrl).href);
    }finally{await ok('/api/settings','PUT',{timezone:before.timezone,permalinkStructure:before.permalinkStructure});}
   });

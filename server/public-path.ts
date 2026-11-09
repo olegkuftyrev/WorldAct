@@ -1,5 +1,5 @@
 import { pool, getSettings } from "./db.js";
-import { appendDateArchiveSQL, dateArchiveDTO, parseDateArchivePath } from "./date-archives.js";
+import { appendPostDateArchiveSQL, dateArchiveDTO, parseDateArchivePath } from "./date-archives.js";
 import { readPlainPermalinkQuery } from "../shared/plain-permalink-query.js";
 import { HttpError } from "./utils.js";
 
@@ -41,7 +41,7 @@ export async function resolvePublicArchive(path: string) {
   const archive = parseDateArchivePath(path);
   if (!archive) return null;
   const args: unknown[] = [], where = ["p.type='post'", "p.status='publish'"];
-  appendDateArchiveSQL(where, args, "coalesce(p.published_at,p.created_at)", archive, settings.timezone, settings.weekStartsOn);
+  appendPostDateArchiveSQL(where, args, "p.post_date::timestamp without time zone", archive, settings.timezone, settings.weekStartsOn);
   return (await pool.query(
     `SELECT 1 FROM posts p WHERE ${where.map(clause => `(${clause})`).join(" AND ")} LIMIT 1`, args,
   )).rowCount ? dateArchiveDTO(archive) : null;

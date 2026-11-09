@@ -1,5 +1,6 @@
 import { parseDocument } from "htmlparser2";
 import moment from "moment-timezone";
+import {postCivilZoned} from "./post-date.js";
 import type { Context, Node, RenderPost, State } from "./block-renderer.js";
 import { cleanContent, HttpError } from "./utils.js";
 import { postNeedsPassword } from "./post-passwords.js";
@@ -52,7 +53,7 @@ async function postValue(args: Record<string, any>, node: Node, context: Context
   const navigation = ["core/navigation-link", "core/navigation-submenu"].includes(node.name || "");
   const postId = navigation ? id(node.attrs.id) : id(context.post?.id);
   if (!postId) return null;
-  const post = context.post?.id === postId ? context.post : await cached(state, `binding-post:${postId}`, async () => (await state.db.query(`SELECT p.id,p.type,p.slug,p.status,p.author_id AS "authorId",p.parent_id AS "parentId",p.published_at AS "publishedAt",p.updated_at AS "updatedAt",p.created_at AS "createdAt",password_hash IS NOT NULL AS "hasPassword",
+  const post = context.post?.id === postId ? context.post : await cached(state, `binding-post:${postId}`, async () => (await state.db.query(`SELECT p.id,p.type,p.post_date AS "postDate",p.post_date_gmt AS "postDateGmt",p.slug,p.status,p.author_id AS "authorId",p.parent_id AS "parentId",p.published_at AS "publishedAt",p.updated_at AS "updatedAt",p.created_at AS "createdAt",password_hash IS NOT NULL AS "hasPassword",
     COALESCE((SELECT jsonb_build_array(jsonb_build_object('slug',t.slug)) FROM terms t JOIN post_terms pt ON pt.term_id=t.id WHERE pt.post_id=p.id AND t.taxonomy='category' ORDER BY t.name,t.id LIMIT 1),'[]'::jsonb) AS categories
     FROM posts p WHERE p.id=$1`, [postId])).rows[0]);
   if (!post || !await readablePost(post, state)) return null;
@@ -62,6 +63,7 @@ async function postValue(args: Record<string, any>, node: Node, context: Context
   const modified = post.updatedAt ?? post.updated_at ?? published;
   // The source compares get_the_*_date('U'), whose precision is whole seconds.
   if (field === "modified" && !(Math.floor(new Date(modified).valueOf() / 1000) > Math.floor(new Date(published).valueOf() / 1000))) return { value: "" };
+  if(field==="date" && post.postDate)return {value:postCivilZoned(post.postDate,state.settings.timezone)};
   let date = moment(field === "modified" ? modified : published);
   if (!date.isValid()) return null;
   date = /^[+-]/.test(state.settings.timezone) ? date.utcOffset(state.settings.timezone) : date.tz(state.settings.timezone);

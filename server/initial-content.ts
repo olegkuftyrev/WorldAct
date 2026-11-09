@@ -41,23 +41,25 @@ To get started with moderating, editing, and deleting comments, please visit the
 Commenter avatars come from <a href="https://gravatar.com/">Gravatar</a>.`;
 
 /** Shared once-only transaction for CLI and browser installation. No backfill. */
+import {resolvePostDate} from "./post-date.js";
 export async function seedInitialContent(client: PoolClient, adminId: number) {
   const marker = await client.query(
     "INSERT INTO seed_markers (name) VALUES ('initial-content-v1') ON CONFLICT DO NOTHING RETURNING name",
   );
   if (!marker.rowCount) return;
   const settings = await getSettings(client);
+  const chosenNow=new Date(),fixedDate=resolvePostDate({},undefined,"publish",settings.timezone,chosenNow),draftDate=resolvePostDate({},undefined,"draft",settings.timezone,chosenNow);
   const post = await client.query(
-    `INSERT INTO posts (type,title,slug,content,raw_content,excerpt,status,author_id,published_at,ping_status)
-     VALUES ('post','Hello world!','hello-world',$1,$2,'','publish',$3,now(),$4)
+    `INSERT INTO posts (type,title,slug,content,raw_content,excerpt,status,author_id,published_at,ping_status,post_date,post_date_gmt)
+     VALUES ('post','Hello world!','hello-world',$1,$2,'','publish',$3,$6,$4,$5,$6)
      ON CONFLICT (slug) DO NOTHING RETURNING id`,
-    [cleanContent(initialHelloContent), cleanRawContent(initialHelloContent), adminId, settings.defaultPingStatus],
+    [cleanContent(initialHelloContent), cleanRawContent(initialHelloContent), adminId, settings.defaultPingStatus, fixedDate.postDate,fixedDate.postDateGmt],
   );
   await client.query(
-    `INSERT INTO posts (type,title,slug,content,raw_content,excerpt,status,author_id,published_at,comment_status,template_slug)
-     VALUES ('page','Sample Page','sample-page',$1,$2,'','publish',$3,now(),'closed','')
+    `INSERT INTO posts (type,title,slug,content,raw_content,excerpt,status,author_id,published_at,comment_status,template_slug,post_date,post_date_gmt)
+     VALUES ('page','Sample Page','sample-page',$1,$2,'','publish',$3,$5,'closed','',$4,$5)
      ON CONFLICT (slug) DO NOTHING`,
-    [cleanContent(initialSamplePageContent), cleanRawContent(initialSamplePageContent), adminId],
+    [cleanContent(initialSamplePageContent), cleanRawContent(initialSamplePageContent), adminId,fixedDate.postDate,fixedDate.postDateGmt],
   );
   if (post.rows[0]) {
     await client.query(
@@ -72,10 +74,10 @@ export async function seedInitialContent(client: PoolClient, adminId: number) {
   }
   const policyRaw = privacyPolicyRawContent(buildPrivacyPolicyGuide(settings));
   const policy = await client.query(
-    `INSERT INTO posts(type,title,slug,content,raw_content,excerpt,status,author_id,comment_status,template_slug)
-     VALUES('page','Privacy Policy','privacy-policy',$1,$2,'','draft',$3,'closed','')
+    `INSERT INTO posts(type,title,slug,content,raw_content,excerpt,status,author_id,comment_status,template_slug,post_date,post_date_gmt)
+     VALUES('page','Privacy Policy','privacy-policy',$1,$2,'','draft',$3,'closed','',$4,$5)
      ON CONFLICT(slug) DO NOTHING RETURNING id`,
-    [cleanContent(policyRaw), cleanRawContent(policyRaw), adminId],
+    [cleanContent(policyRaw), cleanRawContent(policyRaw), adminId,draftDate.postDate,draftDate.postDateGmt],
   );
   const policyId = policy.rows[0]?.id ?? (await client.query("SELECT id FROM posts WHERE slug='privacy-policy' AND type='page'")).rows[0]?.id;
   if (policyId && !settings.privacyPageId) await client.query(

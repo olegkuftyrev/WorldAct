@@ -9,6 +9,7 @@ import {
   useResource,
 } from "../components/AdminUI";
 import "../post-fields.css";
+import { publicationDateInput, publicationInstant } from "../editor/publicationDate";
 
 export type Author = {
   id: number;
@@ -17,7 +18,8 @@ export type Author = {
   role: string;
 };
 export { postFormats, type PostFormat } from "../../shared/post-formats";
-export type PostChanges = Partial<Post> & {
+export type PostChanges = Omit<Partial<Post>, "postDate"> & {
+  postDate?: string | null;
   pingStatus?: "open" | "closed";
   authorId?: number;
   password?: string;
@@ -46,6 +48,7 @@ export default function PostBulkEdit({
   terms,
   close,
   saved,
+  timezone,
 }: {
   posts: Post[];
   type: "post" | "page";
@@ -56,13 +59,14 @@ export default function PostBulkEdit({
   terms: Term[];
   close: () => void;
   saved: (result: BulkPostResult) => Promise<void>;
+  timezone?: string;
 }) {
   const [ids, setIds] = useState(posts.map((post) => post.id));
   const [changes, setChanges] = useState<PostChanges>({});
   const [categoryMode, setCategoryMode] = useState<"add" | "replace">("add"),
     [tagMode, setTagMode] = useState<"add" | "replace">("add");
   const [passwordMode, setPasswordMode] = useState(false),
-    [scheduledAt, setScheduledAt] = useState("");
+    [postDate, setPostDate] = useState("");
   const [busy, setBusy] = useState(false),
     [error, setError] = useState("");
   const pages = useResource<{ posts: Post[] }>(
@@ -151,7 +155,7 @@ export default function PostBulkEdit({
     }
     if (
       changes.status === "future" &&
-      (!scheduledAt || new Date(scheduledAt) <= new Date())
+      (!timezone || !publicationInstant(postDate, timezone) || Date.parse(publicationInstant(postDate, timezone)!) <= Date.now())
     ) {
       setError("Choose a future publication date and time.");
       return;
@@ -165,7 +169,7 @@ export default function PostBulkEdit({
           changes: {
             ...changes,
             ...(changes.status === "future"
-              ? { scheduledAt: new Date(scheduledAt).toISOString() }
+              ? { postDate }
               : {}),
             ...(!passwordMode ? {} : { password: changes.password || "" }),
           },
@@ -261,10 +265,17 @@ export default function PostBulkEdit({
               Publish on
               <input
                 type="datetime-local"
+                aria-label="Bulk publication date"
+                aria-describedby="bulk-publication-date-zone"
+                step="1"
+                min="0001-01-01T00:00:00"
+                max="9999-12-31T23:59:59"
                 required
-                value={scheduledAt}
-                onChange={(event) => setScheduledAt(event.target.value)}
+                disabled={!timezone}
+                value={postDate}
+                onChange={(event) => setPostDate(publicationDateInput(event.target.value))}
               />
+              <span className="description" id="bulk-publication-date-zone">{timezone ? `Site timezone: ${timezone}` : "Loading site timezone…"}</span>
             </label>
           )}
           <label>

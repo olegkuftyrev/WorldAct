@@ -8,7 +8,7 @@ after(() => pool.end());
 
 test("persisted source flood identities, statuses and integer-second boundaries", async t => {
   const user = (await pool.query("SELECT id FROM users WHERE role='administrator' ORDER BY id LIMIT 1")).rows[0].id;
-  const post = (await pool.query("INSERT INTO posts(type,title,slug,author_id,status) VALUES('post','Flood policy','flood-policy-'||gen_random_uuid(),$1,'publish') RETURNING id", [user])).rows[0].id;
+  const post = (await pool.query("INSERT INTO posts(type,title,slug,author_id,status,post_date,post_date_gmt) VALUES('post','Flood policy','flood-policy-'||gen_random_uuid(),$1,'publish',to_char(CASE WHEN coalesce((SELECT data->>'timezone' FROM settings WHERE id=1),'America/Los_Angeles')~'^[+-]' THEN timezone(coalesce((SELECT data->>'timezone' FROM settings WHERE id=1),'America/Los_Angeles')::interval,coalesce(CASE WHEN 'publish'='future' THEN NULL::timestamptz END,NULL::timestamptz,NULL::timestamptz,now())) ELSE timezone(coalesce((SELECT data->>'timezone' FROM settings WHERE id=1),'America/Los_Angeles'),coalesce(CASE WHEN 'publish'='future' THEN NULL::timestamptz END,NULL::timestamptz,NULL::timestamptz,now())) END,'YYYY-MM-DD\"T\"HH24:MI:SS'),coalesce(CASE WHEN 'publish'='future' THEN NULL::timestamptz END,NULL::timestamptz,NULL::timestamptz,now())) RETURNING id", [user])).rows[0].id;
   const current = new Date("2026-11-08T20:00:00Z");
   const guest = { email: "guest@example.test", ip: "192.0.2.4" };
   async function predecessor(values: { age?: number; email?: string; ip?: string; status?: string; type?: string; userId?: number } = {}) {

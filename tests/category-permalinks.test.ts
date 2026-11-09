@@ -52,7 +52,7 @@ test("category canonical links share lowest-ID hierarchy across metadata, resolu
     });
     await t.test("current default category supplies an unassigned post fallback without adopting its parents",async()=>{
       await api("/api/settings","PUT",{defaultCategoryId:child.id});
-      const unassigned=(await pool.query("INSERT INTO posts(type,title,slug,status,author_id) VALUES('post',$1,$1,'draft',$2) RETURNING id,type,slug",[stamp+"-unassigned",post.authorId])).rows[0];posts.push(unassigned.id);
+      const unassigned=(await pool.query("INSERT INTO posts(type,title,slug,status,author_id,post_date,post_date_gmt) VALUES('post',$1,$1,'draft',$2,to_char(CASE WHEN coalesce((SELECT data->>'timezone' FROM settings WHERE id=1),'America/Los_Angeles')~'^[+-]' THEN timezone(coalesce((SELECT data->>'timezone' FROM settings WHERE id=1),'America/Los_Angeles')::interval,coalesce(CASE WHEN 'draft'='future' THEN NULL::timestamptz END,NULL::timestamptz,NULL::timestamptz,now())) ELSE timezone(coalesce((SELECT data->>'timezone' FROM settings WHERE id=1),'America/Los_Angeles'),coalesce(CASE WHEN 'draft'='future' THEN NULL::timestamptz END,NULL::timestamptz,NULL::timestamptz,now())) END,'YYYY-MM-DD\"T\"HH24:MI:SS'),NULL) RETURNING id,type,slug",[stamp+"-unassigned",post.authorId])).rows[0];posts.push(unassigned.id);
       assert.equal(await postPermalink(unassigned),`/${child.slug}/${unassigned.slug}/`);
     });
     await t.test("valid hierarchies deeper than thirty categories keep every accepted ancestor",async()=>{

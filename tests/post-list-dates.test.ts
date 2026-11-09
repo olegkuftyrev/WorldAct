@@ -39,7 +39,7 @@ test("admin Date order, month membership and available months share publication/
     const rescheduled = await post("rescheduled", {publishedAt: "2020-01-15T12:00:00Z"});
     await ok(`/posts/${rescheduled.id}`, "PUT", {status: "future", scheduledAt: "2100-07-01T06:30:00Z"});
     const draft = await post("draft", {status: "draft"});
-    await pool.query("UPDATE posts SET created_at='2023-02-01T07:30:00Z',updated_at='2025-01-01T00:00:00Z' WHERE id=$1", [draft.id]);
+    await pool.query("UPDATE posts SET created_at='2023-02-01T07:30:00Z',post_date='2023-01-31T23:30:00',updated_at='2025-01-01T00:00:00Z' WHERE id=$1", [draft.id]);
     const trash = await post("trash", {publishedAt: "1891-02-01T07:30:00Z"});
     await ok(`/posts/${trash.id}`, "PUT", {status: "trash"});
 
@@ -48,7 +48,7 @@ test("admin Date order, month membership and available months share publication/
       assert.deepEqual(selected(await list({status: "publish", order: "desc"})), [later.id, earlier.id]);
       const february = await list({month: "2024-02"});
       assert.deepEqual(selected(february), [earlier.id]);
-      assert.equal(february.posts[0].postDate, earlier.publishedAt);
+      assert.equal(february.posts[0].postDate, "2024-02-29T23:30:00");
       assert.equal(february.timezone, "America/Los_Angeles");
       assert.equal(february.pagination.totalPosts, 1); assert.equal(february.counts.publish, 1);
       assert.deepEqual(selected(await list({month: "2024-03"})), [later.id]);
@@ -56,12 +56,12 @@ test("admin Date order, month membership and available months share publication/
     });
     await t.test("scheduled and previously published rescheduled records use the current schedule", async () => {
       assert.deepEqual(selected(await list({status: "future"})), [futureEarlier.id, futureLater.id, rescheduled.id]);
-      assert.equal((await list({status: "future"})).posts.find((record: {id: number}) => record.id === rescheduled.id).postDate, "2100-07-01T06:30:00.000Z");
+      assert.equal((await list({status: "future"})).posts.find((record: {id: number}) => record.id === rescheduled.id).postDate, "2100-06-30T23:30:00");
       assert.deepEqual(selected(await list({status: "future", month: "2100-05"})), [futureEarlier.id]);
       assert.deepEqual(selected(await list({status: "future", month: "2100-06"})), [futureLater.id, rescheduled.id]);
       assert.equal((await list({status: "future", month: "2020-01"})).pagination.totalPosts, 0);
       assert.deepEqual(selected(await list({status: "draft", month: "2023-01"})), [draft.id]);
-      assert.equal((await list({status: "draft", month: "2023-01"})).posts[0].postDate, "2023-02-01T07:30:00.000Z");
+      assert.equal((await list({status: "draft", month: "2023-01"})).posts[0].postDate, "2023-01-31T23:30:00");
     });
     await t.test("Modified ordering remains independent of the chosen post date", async () => {
       await pool.query("UPDATE posts SET updated_at=CASE id WHEN $1 THEN '2025-02-01'::timestamptz ELSE '2025-01-01'::timestamptz END WHERE id=ANY($2::int[])", [earlier.id, [earlier.id, later.id]]);
@@ -108,21 +108,21 @@ test("admin Date order, month membership and available months share publication/
       await ok("/settings", "PUT", { timezone: "+05:45" });
       try {
         const choices = await ok("/tools/export/options");
-        assert.ok(choices.months.posts.includes("2100-07"));
-        const shifted = (await exported("2100-07")).items.find(item => Number(item["wp:post_id"]) === rescheduled.id);
+        assert.ok(choices.months.posts.includes("2100-06"));
+        const shifted = (await exported("2100-06")).items.find(item => Number(item["wp:post_id"]) === rescheduled.id);
         assert.ok(shifted);
-        assert.equal(shifted["wp:post_date"], "2100-07-01 12:15:00");
+        assert.equal(shifted["wp:post_date"], "2100-06-30 23:30:00");
         assert.equal(shifted["wp:post_date_gmt"], "2100-07-01 06:30:00");
-        assert.equal((await exported("2100-06")).items.some(item => Number(item["wp:post_id"]) === rescheduled.id), false);
+        assert.equal((await exported("2100-07")).items.some(item => Number(item["wp:post_id"]) === rescheduled.id), false);
       } finally { await ok("/settings", "PUT", { timezone: "America/Los_Angeles" }); }
     });
-    await t.test("supported fixed-offset timezones move month membership and choices together", async () => {
+    await t.test("changing the site timezone preserves stored civil month membership and choices", async () => {
       await ok("/settings", "PUT", {timezone: "+05:45"});
-      assert.deepEqual(selected(await list({status: "publish", month: "2024-03"})), [earlier.id, later.id]);
+      assert.deepEqual(selected(await list({status: "publish", month: "2024-03"})), [later.id]);
       assert.equal((await list()).timezone, "+05:45");
-      assert.equal((await list({status: "publish", month: "2024-02"})).pagination.totalPosts, 0);
-      assert.deepEqual(selected(await list({status: "future", month: "2100-07"})), [rescheduled.id]);
-      assert.ok((await list()).months.includes("2100-07"));
+      assert.equal((await list({status: "publish", month: "2024-02"})).pagination.totalPosts, 1);
+      assert.deepEqual(selected(await list({status: "future", month: "2100-06"})), [futureLater.id,rescheduled.id]);
+      assert.ok((await list()).months.includes("2100-06"));
       await ok("/settings", "PUT", {timezone: "America/Los_Angeles"});
     });
     await t.test("author month metadata and filtered counts cannot reveal another author's months", async () => {

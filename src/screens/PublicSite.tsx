@@ -32,7 +32,6 @@ import {
   api,
   ApiError,
   json,
-  date,
   type Post,
   type Comment,
   type Settings,
@@ -43,6 +42,8 @@ import {
 } from "../api";
 import "./public.css";
 import { postLink } from "../publicLinks";
+import { formatPostCivil } from "../../shared/post-civil-date";
+import { date as formatDate } from "@wordpress/date";
 import {
   Session,
   Brand,
@@ -303,17 +304,17 @@ export default function PublicSite({
           )
           .join("") || '<a href="/">Home</a>',
     postTitle: item?.title || "",
-    postDate: item ? displayDate(item.publishedAt) : "",
+    postDate: item ? displayDate(item) : "",
     postAuthor: item?.authorName || "",
     content: item?.content || "",
     postList: posts
       .map(
         (post) =>
-          `<article class="format-${escapeHTML(post.format || "standard")}"><h2><a href="${escapeHTML(postLink(post))}">${escapeHTML(post.title)}</a></h2><p class="post-meta">${escapeHTML(displayDate(post.publishedAt))}</p>${post.locked ? "<p>This content is password protected.</p>" : post.excerpt ? `<p>${escapeHTML(post.excerpt)}</p>` : post.content}</article>`,
+          `<article class="format-${escapeHTML(post.format || "standard")}"><h2><a href="${escapeHTML(postLink(post))}">${escapeHTML(post.title)}</a></h2><p class="post-meta">${escapeHTML(displayDate(post))}</p>${post.locked ? "<p>This content is password protected.</p>" : post.excerpt ? `<p>${escapeHTML(post.excerpt)}</p>` : post.content}</article>`,
       )
       .join(""),
   });
-  const displayDate = (value: string | null) => publicDate(value, settings);
+  const displayDate = (value: Post) => publicDate(value, settings);
   useEffect(() => {
     document.title = `${post && detail ? post.title : title}${post && detail ? ` – ${title}` : ""}`;
     if (preview || settings?.discourageSearchEngines) {
@@ -601,7 +602,7 @@ export default function PublicSite({
                   <h1>{post.title}</h1>
                   {post.type === "post" && (
                     <p className="post-meta">
-                      {displayDate(post.publishedAt)}
+                      {displayDate(post)}
                       <span>by {post.authorName}</span>
                       {readTime(post) && <span>{readTime(post)} min read</span>}
                     </p>
@@ -674,7 +675,11 @@ export default function PublicSite({
                   </h2>
                   <ClassicCommentThread
                     comments={comments}
-                    displayDate={displayDate}
+                    displayDate={value => {
+                      if (!value) return "—";
+                      try { return formatDate(settings?.dateFormat || "F j, Y", value, settings?.timezone || "UTC"); }
+                      catch { return "—"; }
+                    }}
                     threaded={settings?.threadComments !== false}
                     maxDepth={settings?.threadDepth || 5}
                     canReply={commentsOpen(post, settings)}
@@ -907,7 +912,7 @@ export default function PublicSite({
                         </Link>
                       </h2>
                       <p className="post-meta">
-                        {displayDate(item.publishedAt)}
+                        {displayDate(item)}
                         {readTime(item) && (
                           <span>{readTime(item)} min read</span>
                         )}
@@ -1022,36 +1027,9 @@ export default function PublicSite({
   );
 }
 
-function publicDate(
-  value: string | null,
-  settings?: Partial<Settings>,
-): string {
-  if (!value) return "—";
-  const dateValue = new Date(value);
-  try {
-    const parts = new Intl.DateTimeFormat("en-US", {
-      timeZone: settings?.timezone || "UTC",
-      year: "numeric",
-      month: "2-digit",
-      day: "2-digit",
-    }).formatToParts(dateValue);
-    const part = (kind: Intl.DateTimeFormatPartTypes) =>
-      parts.find((item) => item.type === kind)?.value || "";
-    const year = part("year"),
-      month = part("month"),
-      day = part("day");
-    if (settings?.dateFormat === "Y-m-d") return `${year}-${month}-${day}`;
-    if (settings?.dateFormat === "m/d/Y") return `${month}/${day}/${year}`;
-    if (settings?.dateFormat === "d/m/Y") return `${day}/${month}/${year}`;
-    return new Intl.DateTimeFormat("en-US", {
-      timeZone: settings?.timezone || "UTC",
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-    }).format(dateValue);
-  } catch {
-    return date(value);
-  }
+function publicDate(post: Pick<Post, "postDate">, settings?: Partial<Settings>): string {
+  try { return formatPostCivil(post.postDate, settings?.dateFormat || "F j, Y", settings?.timezone || "UTC"); }
+  catch { return "—"; }
 }
 
 type PublicDesign = {

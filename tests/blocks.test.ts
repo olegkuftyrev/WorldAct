@@ -62,7 +62,7 @@ test("canonical block rendering, public isolation, pagination, nested context an
       );
       const row = (
         await db.query(
-          'INSERT INTO posts(type,title,slug,content,raw_content,status,password_hash,author_id,published_at) VALUES(\'post\',$1,$2,$3,$4,$5,$6,$7,now()) RETURNING id,title,slug,status,content,raw_content AS "rawContent",published_at AS "publishedAt",author_id AS "authorId",type',
+          'INSERT INTO posts(type,title,slug,content,raw_content,status,password_hash,author_id,published_at,post_date,post_date_gmt) VALUES(\'post\',$1,$2,$3,$4,$5,$6,$7,now(),to_char(CASE WHEN coalesce((SELECT data->>\'timezone\' FROM settings WHERE id=1),\'America/Los_Angeles\')~\'^[+-]\' THEN timezone(coalesce((SELECT data->>\'timezone\' FROM settings WHERE id=1),\'America/Los_Angeles\')::interval,coalesce(CASE WHEN $5::varchar=\'future\' THEN NULL::timestamptz END,now()::timestamptz,NULL::timestamptz,now())) ELSE timezone(coalesce((SELECT data->>\'timezone\' FROM settings WHERE id=1),\'America/Los_Angeles\'),coalesce(CASE WHEN $5::varchar=\'future\' THEN NULL::timestamptz END,now()::timestamptz,NULL::timestamptz,now())) END,\'YYYY-MM-DD"T"HH24:MI:SS\'),coalesce(CASE WHEN $5::varchar=\'future\' THEN NULL::timestamptz END,now()::timestamptz,NULL::timestamptz,now())) RETURNING id,title,slug,status,content,raw_content AS "rawContent",published_at AS "publishedAt",author_id AS "authorId",type',
           [
             stamp + " " + title,
             stamp + "-" + title.toLowerCase().replace(/ /g, "-"),
