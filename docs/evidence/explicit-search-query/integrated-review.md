@@ -129,4 +129,21 @@ production build, all-field preservation before restart, read-only smoke and
 exact released-head CI remain release gates. CI registers the new regression
 once:229 source files and182 compiled-selector files; the existing29 fresh
 archive phases remain unchanged. These are expected selector inventories, not
-yet a claim of final remote results or whole-CMS completion.
+yet a claim of final remote results or whole-CMS completion at that checkpoint.
+
+### Completed Search release
+
+Released head `bf4204aa1ade5eb604f34909846039ffb3f1e9af` subsequently passed
+[exact-head run42635099125](https://github.com/olegkuftyrev/WorldAct/actions/runs/42635099125).
+Both Node22/24 jobs and the overall run succeeded. Each actual source selector
+completed229 files/1357 passes/13 conditional skips; each compiled selector
+completed182 files/1224 passes/ten skips. Installation passed seven checks with
+one conditional skip. Node24 completed all29 fresh phases without failure,
+cancellation or skip; Node22 did not run those conditional phases.
+
+The new restore-verified current-site backup, all39-table/all-field preservation
+before restart, production build and read-only GET/HEAD/model smoke checks all
+passed. No migration or reseed ran. Root's own dependency link was removed only
+after exact CI success; root created no environment, fixture database or site
+export for this package. Backups and all original failure/build evidence remain
+preserved. This completes the bounded Search release gates above.
