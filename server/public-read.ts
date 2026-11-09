@@ -1,5 +1,6 @@
 import {authorArchivePath,authorArchiveRequestPath,resolvePrettyAuthorArchive,type AuthorArchive} from "./author-archives.js";
 import { z } from "zod";
+import {finalizePostsHomeTitleContext,selectedBodyTitleContext,postTitleContext,type ArchiveTitleRequestContext,type ArchiveTitlePostContext} from "./query-title-context.js";
 import { pool, getSettings, postFields, type User } from "./db.js";
 import { withPermalink } from "./permalinks.js";
 import { enhancePublicPost } from "./design.js";
@@ -19,18 +20,19 @@ import {ordinaryListingPageRequested} from "./public-listing-page.js";
 export type PublicReadContext = {
   query: Record<string, unknown>; requestPath?: string; user?: User;authorArchive?:AuthorArchive;
   listing?:PublicListingContext;
-  selectedSingular?: RenderOptions["selectedSingular"];
+  archiveTitleContext?: ArchiveTitleRequestContext;
   canReadProtectedPost: NonNullable<RenderOptions["canReadProtectedPost"]>;
 };
 function decoratePost(post: any) {
   const terms=post.terms || [];
   return {...post,terms,categories:terms.filter((term:any)=>term.taxonomy==="category"),tags:terms.filter((term:any)=>term.taxonomy==="tag"),categoryIds:terms.filter((term:any)=>term.taxonomy==="category").map((term:any)=>term.id),tagIds:terms.filter((term:any)=>term.taxonomy==="tag").map((term:any)=>term.id)};
 }
-export async function publicPost(post:any,locked=false,options:RenderOptions={}){
+type PublicPostOptions = Omit<RenderOptions,"archiveTitleContext"> & {archiveTitleContext?:ArchiveTitlePostContext};
+export async function publicPost(post:any,locked=false,options:PublicPostOptions={}){
   if(options.preview || !options.canReadProtectedPost)return publicPostOnce(post,locked,options);
   return completePublicRead(options.canReadProtectedPost,reader=>publicPostOnce(post,locked,{...options,canReadProtectedPost:reader}),options.db || pool);
 }
-async function publicPostOnce(post: any, locked = false, options: RenderOptions = {}) {
+async function publicPostOnce(post: any, locked = false, options: PublicPostOptions = {}) {
   if(!options.preview)observePublicPost(options.canReadProtectedPost,{...post,locked});
   const {
     blocks: _blocks,
@@ -40,9 +42,7 @@ async function publicPostOnce(post: any, locked = false, options: RenderOptions 
     ...safe
   } = decoratePost(post);
   const db=options.db || pool,settings=await getSettings(db),linked = await withPermalink(safe,settings,db);
-  const selectedSingular = options.selectedSingular === "resolved-path"
-    ? !(post.type === "page" && settings.frontPageMode === "page" && post.id === settings.postsPageId)
-    : options.selectedSingular;
+  const archiveTitleContext = postTitleContext(options.archiveTitleContext,post,settings);
   // Author structures add an asynchronous metadata read after body selection.
   // Recheck current public identity and password access after that wait, before
   // returning or rendering any selected body. Preview keeps its editor policy.
@@ -60,7 +60,7 @@ async function publicPostOnce(post: any, locked = false, options: RenderOptions 
     locked,
     footnotes: locked ? [] : safe.footnotes ?? [],
     ...(!locked ? { contentPagination: contentPagination(post, linked.permalink, options.contentPage || 1, options.preview,settings.permalinkStructure) } : {}),
-    content: locked ? "" : await renderPublicContent({ ...post, locked }, { requestPath: linked.permalink, ...options, selectedSingular }),
+    content: locked ? "" : await renderPublicContent({ ...post, locked }, { requestPath: linked.permalink, ...options, archiveTitleContext }),
     excerpt: locked ? "" : safe.excerpt,
   };
   return locked ? result : enhancePublicPost(result);
@@ -96,6 +96,10 @@ export function readPublicSite(context:PublicReadContext){
   return completePublicRead(context.canReadProtectedPost,reader=>readPublicSiteOnce({...context,canReadProtectedPost:reader},selection));
 }
 async function readPublicSiteOnce(context: PublicReadContext,selection:{author?:AuthorArchive;named:NamedAuthorPin}) {
+  const originalTitleQuery={...context.query};
+  const titleCandidate=context.archiveTitleContext === undefined
+    ? (!context.listing || context.listing.kind==="home"?{kind:"home-candidate" as const,requestPath:context.requestPath ?? "/"}:{kind:"preserve" as const})
+    : context.archiveTitleContext;
   let selectedAuthor=context.authorArchive || selection.author;
   if(selectedAuthor)observePublicAuthor(context.canReadProtectedPost,selectedAuthor);
   if(selection.named.value?.selected)observePublicAuthor(context.canReadProtectedPost,selection.named.value.selected);
@@ -170,12 +174,14 @@ async function readPublicSiteOnce(context: PublicReadContext,selection:{author?:
       `SELECT ${postFields},p.password_hash AS "_passwordHash" FROM posts p JOIN users u ON u.id=p.author_id WHERE p.type='page' AND p.status='publish' ORDER BY p.menu_order,p.title,p.id`,
     ),
   ]);
+  const titleContext=finalizePostsHomeTitleContext(titleCandidate,settings,originalTitleQuery,context.query);
   const sanitize = async (post: any, contentMode: "singular" | "archive" = "singular") => {
     const { _passwordHash, ...safe } = post;
     return publicPost(
       safe,
       Boolean(_passwordHash) && !(await context.canReadProtectedPost(post.id, pool)),
-      { query: context.query, listing, requestPath: "/", user: context.user, contentMode, canReadProtectedPost: context.canReadProtectedPost },
+      { query: context.query, listing, requestPath: "/", user: context.user, contentMode, canReadProtectedPost: context.canReadProtectedPost,
+        ...(contentMode==="archive" && titleContext.kind==="unfiltered-posts-home"?{archiveTitleContext:titleContext}:{}) },
     );
   };
   const { defaultPingbackFlag: _outgoingFlag, pingServices: _pingServices, adminEmail: _adminEmail, commentModerationKeys: _moderationKeys, disallowedCommentKeys: _disallowedKeys, ...safeSettings } = settings;
@@ -225,6 +231,6 @@ async function readPublishedPostByIdOnce(id: number, type: "post" | "page", cont
   if(!row) throw new HttpError(404,"Post not found.");
   const {_passwordHash,...post}=row;
   const locked=Boolean(_passwordHash) && !(await context.canReadProtectedPost(id,pool));
-  const visible=await publicPost(post,locked,{query:context.query,user:context.user,requestPath:context.requestPath,contentPage:parseContentPage(context.query.page),canReadProtectedPost:context.canReadProtectedPost,selectedSingular:context.selectedSingular ?? true});
+  const visible=await publicPost(post,locked,{query:context.query,user:context.user,requestPath:context.requestPath,contentPage:parseContentPage(context.query.page),canReadProtectedPost:context.canReadProtectedPost,archiveTitleContext:selectedBodyTitleContext(context.archiveTitleContext)});
   return {post:visible,...(await commentResponse(id,context,visible.locked)),rawPost:{...post,hasPassword:visible.hasPassword,locked:visible.locked,...(visible.locked?{content:"",rawContent:"",raw_content:"",blocks:[],excerpt:"",footnotes:[]}: {})}};
 }

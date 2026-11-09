@@ -188,7 +188,7 @@ router.get("/api/public/resolve", async (req, res) => {
     throw new HttpError(404, "Post not found.");
   }
   const result = await readPublishedPostById(resolved.id,resolved.type,{
-    query:{page:parseContentPage(resolved.contentPage ?? req.query.page)},user:(req as AuthRequest).user,requestPath:path,canReadProtectedPost:postAccessReader(req),selectedSingular:"resolved-path",
+    query:{page:parseContentPage(resolved.contentPage ?? req.query.page)},user:(req as AuthRequest).user,requestPath:path,canReadProtectedPost:postAccessReader(req),archiveTitleContext:"resolved-path",
   });
   if(result.post.id!==resolved.id)throw new HttpError(404,"Post not found.");
   const {rawPost: _rawPost,...data}=result;

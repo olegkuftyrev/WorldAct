@@ -1,4 +1,5 @@
 import {readPublicPath} from "./public-path.js";
+import {finalizePostsHomeTitleContext} from "./query-title-context.js";
 import {resolvePrettyAuthorArchive,authorArchiveRequestPath} from "./author-archives.js";
 import {authorArchivePath} from "../shared/author-archive.js";
 import {renderPublicTemplateDocument} from "./public-presentation.js";
@@ -806,6 +807,7 @@ router.get("/api/public/templates/:slug", async (req:AuthRequest, res) => {
   const output=await completePublicRead(postAccessReader(req),async reader=>{
   if(selectedAuthor)observePublicAuthor(reader,selectedAuthor);
   if(namedPin.value?.selected)observePublicAuthor(reader,namedPin.value.selected);
+  const originalTitleQuery={...req.query};
   const settings = await getSettings();
   const templateSlug = z
       .string()
@@ -888,7 +890,7 @@ router.get("/api/public/templates/:slug", async (req:AuthRequest, res) => {
     },
     content: await renderPublicTemplateDocument(doc, {
       post,
-      selectedSingular: Boolean(post),
+      archiveTitleContext: post?{kind:"selected-singular"}:finalizePostsHomeTitleContext(preview || listing?.namedAuthor || prettyAuthor.recognized || listingRoute && listingRoute.kind!=="home"?{kind:"preserve"}:{kind:"home-candidate",requestPath},settings,originalTitleQuery,query),
       requestPath,
       templateSlug: doc.slug,
       query,
