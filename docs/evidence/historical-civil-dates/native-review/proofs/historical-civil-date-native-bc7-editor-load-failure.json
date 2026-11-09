@@ -1,0 +1,149 @@
+{
+  "sha": "bc7d6448d30bdf81e47fe81c2874317a6b7458ae",
+  "nodeSha256": "19fb5f985d34b456286b7aefa65adee03df10740b232f4688d7bee34d457139d",
+  "rows": [
+    {
+      "method": "GET",
+      "path": "/api/posts/4",
+      "status": 200,
+      "postId": 4,
+      "statusFixture": "publish"
+    },
+    {
+      "method": "GET",
+      "path": "/api/posts/8",
+      "status": 200,
+      "postId": 8,
+      "statusFixture": "future"
+    },
+    {
+      "method": "GET",
+      "path": "/api/posts/9",
+      "status": 200,
+      "postId": 9,
+      "statusFixture": "future"
+    },
+    {
+      "method": "GET",
+      "path": "/api/posts/10",
+      "status": 200,
+      "postId": 10,
+      "statusFixture": "future"
+    },
+    {
+      "method": "GET",
+      "path": "/api/posts/11",
+      "status": 200,
+      "postId": 11,
+      "statusFixture": "draft"
+    }
+  ],
+  "browser": {
+    "body": "W\nLoading\u2026 \u00b7 Post\nSave draft\nPublish\n\nThe post publication changed while its permalink was being read. Reload to continue.\n\nPost\n0 words\nSaving paused",
+    "errors": [],
+    "url": "/admin/posts/8",
+    "width": 1280
+  },
+  "screenshot": "../screens/historical-civil-date-native-bc7-editor-load-failure.png",
+  "actualOriginalRequests": [
+    {
+      "id": 30,
+      "method": "GET",
+      "path": "/assets/Editor-BAJQ9KcL.js",
+      "status": 200
+    },
+    {
+      "id": 31,
+      "method": "GET",
+      "path": "/assets/GutenbergEditor-DOJ54qUg.js",
+      "status": 200
+    },
+    {
+      "id": 32,
+      "method": "GET",
+      "path": "/assets/style-DtRt78-H.js",
+      "status": 200
+    },
+    {
+      "id": 33,
+      "method": "GET",
+      "path": "/assets/style-D8oqX3h3.css",
+      "status": 200
+    },
+    {
+      "id": 34,
+      "method": "GET",
+      "path": "/assets/GutenbergEditor-BndIUFWj.css",
+      "status": 200
+    },
+    {
+      "id": 35,
+      "method": "GET",
+      "path": "/assets/index-B4XVGAKM.js",
+      "status": 200
+    },
+    {
+      "id": 36,
+      "method": "GET",
+      "path": "/assets/Editor-lCK1tJMm.css",
+      "status": 200
+    },
+    {
+      "id": 37,
+      "method": "GET",
+      "path": "/api/profile",
+      "status": 200
+    },
+    {
+      "id": 38,
+      "method": "GET",
+      "path": "/api/profile",
+      "status": 200
+    },
+    {
+      "id": 39,
+      "method": "GET",
+      "path": "/api/admin/plugin-notices",
+      "status": 200
+    },
+    {
+      "id": 40,
+      "method": "GET",
+      "path": "/api/public/site",
+      "status": 200
+    },
+    {
+      "id": 41,
+      "method": "PUT",
+      "path": "/api/posts/8/lock",
+      "status": 200
+    },
+    {
+      "id": 42,
+      "method": "GET",
+      "path": "/api/posts/8",
+      "status": 409
+    },
+    {
+      "id": 43,
+      "method": "GET",
+      "path": "/api/authors",
+      "status": 200
+    },
+    {
+      "id": 44,
+      "method": "GET",
+      "path": "/api/terms",
+      "status": 200
+    },
+    {
+      "id": 45,
+      "method": "GET",
+      "path": "/api/media",
+      "status": 200
+    }
+  ],
+  "subsequentDirectReads200": true,
+  "reloadRecovered": true,
+  "interpretation": "Initial editor acquires posts/:id/lock (FOR NO KEY UPDATE) while GET post resolves a time-token permalink (FOR SHARE NOWAIT). Initial GET409, later unmodified reads and reload200."
+}

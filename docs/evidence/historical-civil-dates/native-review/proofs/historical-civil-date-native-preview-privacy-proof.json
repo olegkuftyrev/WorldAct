@@ -1,0 +1,660 @@
+{
+  "sha": "23355068f8207675d387a7ee2abbda8030978534",
+  "postId": 26,
+  "otherAuthorId": 2,
+  "denial": [
+    {
+      "theme": "twentytwentyfive",
+      "label": "anonymous post preview",
+      "method": "GET",
+      "path": "/api/posts/26/preview",
+      "status": 401,
+      "hasMarker": false
+    },
+    {
+      "theme": "twentytwentyfive",
+      "label": "anonymous template preview",
+      "method": "GET",
+      "path": "/api/public/templates/single?preview=true&postId=26",
+      "status": 401,
+      "hasMarker": false
+    },
+    {
+      "theme": "twentytwentyfive",
+      "label": "other author post preview",
+      "method": "GET",
+      "path": "/api/posts/26/preview",
+      "status": 403,
+      "hasMarker": false
+    },
+    {
+      "theme": "twentytwentyfive",
+      "label": "other author template preview",
+      "method": "GET",
+      "path": "/api/public/templates/single?preview=true&postId=26",
+      "status": 403,
+      "hasMarker": false
+    },
+    {
+      "theme": "twentytwentyfive",
+      "label": "ordinary public draft template",
+      "method": "GET",
+      "path": "/api/public/templates/single?postId=26",
+      "status": 404,
+      "hasMarker": false
+    },
+    {
+      "theme": "twentytwentyfive",
+      "label": "ordinary draft canonical",
+      "method": "GET",
+      "path": "/date/2000/10/31/23/59/37/26/civil-preview-saved-draft/",
+      "status": 404,
+      "hasMarker": false
+    },
+    {
+      "theme": "classic",
+      "label": "anonymous post preview",
+      "method": "GET",
+      "path": "/api/posts/26/preview",
+      "status": 401,
+      "hasMarker": false
+    },
+    {
+      "theme": "classic",
+      "label": "anonymous template preview",
+      "method": "GET",
+      "path": "/api/public/templates/single?preview=true&postId=26",
+      "status": 401,
+      "hasMarker": false
+    },
+    {
+      "theme": "classic",
+      "label": "other author post preview",
+      "method": "GET",
+      "path": "/api/posts/26/preview",
+      "status": 403,
+      "hasMarker": false
+    },
+    {
+      "theme": "classic",
+      "label": "other author template preview",
+      "method": "GET",
+      "path": "/api/public/templates/single?preview=true&postId=26",
+      "status": 403,
+      "hasMarker": false
+    },
+    {
+      "theme": "classic",
+      "label": "ordinary public draft template",
+      "method": "GET",
+      "path": "/api/public/templates/single?postId=26",
+      "status": 404,
+      "hasMarker": false
+    },
+    {
+      "theme": "classic",
+      "label": "ordinary draft canonical",
+      "method": "GET",
+      "path": "/date/2000/10/31/23/59/37/26/civil-preview-saved-draft/",
+      "status": 404,
+      "hasMarker": false
+    }
+  ],
+  "rows": [
+    {
+      "theme": "twentytwentyfive",
+      "width": 1440,
+      "postId": 26,
+      "postDate": "2000-10-31T23:59:37",
+      "observation": {
+        "chosen": true,
+        "errors": [],
+        "heads": 1,
+        "latest": true,
+        "overflow": false,
+        "saved": false,
+        "title": "Civil preview latest autosave \u2013 WorldAct"
+      },
+      "requests": [
+        {
+          "id": 2705,
+          "method": "GET",
+          "path": "/preview/26",
+          "status": 200
+        },
+        {
+          "id": 2715,
+          "method": "GET",
+          "path": "/api/posts/26/preview",
+          "status": 200
+        },
+        {
+          "id": 2719,
+          "method": "GET",
+          "path": "/api/public/templates/single?contentPage=1&requestPath=%2Fpreview%2F26&preview=true&postId=26",
+          "status": 200
+        }
+      ],
+      "screenshot": "../screens/historical-civil-date-native-private-preview-v3-twentytwentyfive-1440.png"
+    },
+    {
+      "theme": "twentytwentyfive",
+      "width": 768,
+      "postId": 26,
+      "postDate": "2000-10-31T23:59:37",
+      "observation": {
+        "chosen": true,
+        "errors": [],
+        "heads": 1,
+        "latest": true,
+        "overflow": false,
+        "saved": false,
+        "title": "Civil preview latest autosave \u2013 WorldAct"
+      },
+      "requests": [
+        {
+          "id": 2721,
+          "method": "GET",
+          "path": "/preview/26",
+          "status": 200
+        },
+        {
+          "id": 2731,
+          "method": "GET",
+          "path": "/api/posts/26/preview",
+          "status": 200
+        },
+        {
+          "id": 2735,
+          "method": "GET",
+          "path": "/api/public/templates/single?contentPage=1&requestPath=%2Fpreview%2F26&preview=true&postId=26",
+          "status": 200
+        }
+      ],
+      "screenshot": "../screens/historical-civil-date-native-private-preview-v3-twentytwentyfive-768.png"
+    },
+    {
+      "theme": "twentytwentyfive",
+      "width": 375,
+      "postId": 26,
+      "postDate": "2000-10-31T23:59:37",
+      "observation": {
+        "chosen": true,
+        "errors": [],
+        "heads": 1,
+        "latest": true,
+        "overflow": false,
+        "saved": false,
+        "title": "Civil preview latest autosave \u2013 WorldAct"
+      },
+      "requests": [
+        {
+          "id": 2737,
+          "method": "GET",
+          "path": "/preview/26",
+          "status": 200
+        },
+        {
+          "id": 2746,
+          "method": "GET",
+          "path": "/api/posts/26/preview",
+          "status": 200
+        },
+        {
+          "id": 2751,
+          "method": "GET",
+          "path": "/api/public/templates/single?contentPage=1&requestPath=%2Fpreview%2F26&preview=true&postId=26",
+          "status": 200
+        }
+      ],
+      "screenshot": "../screens/historical-civil-date-native-private-preview-v3-twentytwentyfive-375.png"
+    },
+    {
+      "theme": "classic",
+      "width": 1440,
+      "postId": 26,
+      "postDate": "2000-10-31T23:59:37",
+      "observation": {
+        "chosen": true,
+        "errors": [],
+        "heads": 1,
+        "latest": true,
+        "overflow": false,
+        "saved": false,
+        "title": "Civil preview latest autosave \u2013 WorldAct"
+      },
+      "requests": [
+        {
+          "id": 2753,
+          "method": "GET",
+          "path": "/preview/26",
+          "status": 200
+        },
+        {
+          "id": 2762,
+          "method": "GET",
+          "path": "/api/posts/26/preview",
+          "status": 200
+        },
+        {
+          "id": 2766,
+          "method": "GET",
+          "path": "/api/public/templates/single?contentPage=1&requestPath=%2Fpreview%2F26&preview=true&postId=26",
+          "status": 200
+        }
+      ],
+      "screenshot": "../screens/historical-civil-date-native-private-preview-v3-classic-1440.png"
+    },
+    {
+      "theme": "classic",
+      "width": 768,
+      "postId": 26,
+      "postDate": "2000-10-31T23:59:37",
+      "observation": {
+        "chosen": true,
+        "errors": [],
+        "heads": 1,
+        "latest": true,
+        "overflow": false,
+        "saved": false,
+        "title": "Civil preview latest autosave \u2013 WorldAct"
+      },
+      "requests": [
+        {
+          "id": 2767,
+          "method": "GET",
+          "path": "/preview/26",
+          "status": 200
+        },
+        {
+          "id": 2776,
+          "method": "GET",
+          "path": "/api/posts/26/preview",
+          "status": 200
+        },
+        {
+          "id": 2780,
+          "method": "GET",
+          "path": "/api/public/templates/single?contentPage=1&requestPath=%2Fpreview%2F26&preview=true&postId=26",
+          "status": 200
+        }
+      ],
+      "screenshot": "../screens/historical-civil-date-native-private-preview-v3-classic-768.png"
+    },
+    {
+      "theme": "classic",
+      "width": 375,
+      "postId": 26,
+      "postDate": "2000-10-31T23:59:37",
+      "observation": {
+        "chosen": true,
+        "errors": [],
+        "heads": 1,
+        "latest": true,
+        "overflow": false,
+        "saved": false,
+        "title": "Civil preview latest autosave \u2013 WorldAct"
+      },
+      "requests": [
+        {
+          "id": 2781,
+          "method": "GET",
+          "path": "/preview/26",
+          "status": 200
+        },
+        {
+          "id": 2790,
+          "method": "GET",
+          "path": "/api/posts/26/preview",
+          "status": 200
+        },
+        {
+          "id": 2794,
+          "method": "GET",
+          "path": "/api/public/templates/single?contentPage=1&requestPath=%2Fpreview%2F26&preview=true&postId=26",
+          "status": 200
+        }
+      ],
+      "screenshot": "../screens/historical-civil-date-native-private-preview-v3-classic-375.png"
+    }
+  ],
+  "holds": [
+    {
+      "theme": "twentytwentyfive",
+      "width": 375,
+      "actualSecondAutosaveSqlWait": true,
+      "departedViaLogout": true,
+      "currentOtherAuthorDenied": true,
+      "observation": {
+        "alert": "You can only edit your own content. ",
+        "errors": [],
+        "hasMarker": false,
+        "hasSaved": false,
+        "other": false,
+        "url": "/preview/26"
+      },
+      "requests": [
+        {
+          "id": 2810,
+          "method": "POST",
+          "path": "/api/auth/logout",
+          "status": 200
+        },
+        {
+          "id": 2811,
+          "method": "GET",
+          "path": "/api/session",
+          "status": 200
+        },
+        {
+          "id": 2812,
+          "method": "GET",
+          "path": "/api/auth/registration",
+          "status": 200
+        },
+        {
+          "id": 2813,
+          "method": "GET",
+          "path": "/vendor/wordpress/wp-admin/css/colors/modern/colors.css",
+          "status": 304
+        },
+        {
+          "id": 2814,
+          "method": "POST",
+          "path": "/api/auth/login",
+          "status": 200
+        },
+        {
+          "id": 2815,
+          "method": "GET",
+          "path": "/api/session",
+          "status": 200
+        },
+        {
+          "id": 2816,
+          "method": "GET",
+          "path": "/api/public/design",
+          "status": 200
+        },
+        {
+          "id": 2817,
+          "method": "GET",
+          "path": "/api/public/site?page=1",
+          "status": 200
+        },
+        {
+          "id": 2818,
+          "method": "GET",
+          "path": "/api/posts/26/preview",
+          "status": 403
+        },
+        {
+          "id": 2819,
+          "method": "GET",
+          "path": "/api/profile",
+          "status": 200
+        },
+        {
+          "id": 2820,
+          "method": "GET",
+          "path": "/api/profile",
+          "status": 200
+        },
+        {
+          "id": 2821,
+          "method": "GET",
+          "path": "/vendor/wordpress/wp-content/themes/twentytwentyfive/assets/fonts/manrope/Manrope-VariableFont_wght.woff2",
+          "status": 304
+        },
+        {
+          "id": 2822,
+          "method": "GET",
+          "path": "/preview/26",
+          "status": 200
+        },
+        {
+          "id": 2823,
+          "method": "GET",
+          "path": "/assets/index-B3Kyd_KB.js",
+          "status": 304
+        },
+        {
+          "id": 2824,
+          "method": "GET",
+          "path": "/assets/index-BsgYOWhl.css",
+          "status": 304
+        },
+        {
+          "id": 2825,
+          "method": "GET",
+          "path": "/assets/playlists-B6HK4GV9.js",
+          "status": 304
+        },
+        {
+          "id": 2826,
+          "method": "GET",
+          "path": "/assets/App-CMvjQ72B.css",
+          "status": 304
+        },
+        {
+          "id": 2827,
+          "method": "GET",
+          "path": "/assets/App-0nsd74uh.js",
+          "status": 304
+        },
+        {
+          "id": 2828,
+          "method": "GET",
+          "path": "/api/session",
+          "status": 200
+        },
+        {
+          "id": 2829,
+          "method": "GET",
+          "path": "/vendor/wordpress/wp-content/themes/twentytwentyfive/assets/fonts/manrope/Manrope-VariableFont_wght.woff2",
+          "status": 304
+        },
+        {
+          "id": 2830,
+          "method": "GET",
+          "path": "/api/public/design",
+          "status": 200
+        },
+        {
+          "id": 2831,
+          "method": "GET",
+          "path": "/api/public/site?page=1",
+          "status": 200
+        },
+        {
+          "id": 2832,
+          "method": "GET",
+          "path": "/api/posts/26/preview",
+          "status": 403
+        },
+        {
+          "id": 2833,
+          "method": "GET",
+          "path": "/api/profile",
+          "status": 200
+        },
+        {
+          "id": 2834,
+          "method": "GET",
+          "path": "/api/profile",
+          "status": 200
+        },
+        {
+          "id": 2835,
+          "method": "GET",
+          "path": "/vendor/wordpress/wp-content/themes/twentytwentyfive/assets/fonts/manrope/Manrope-VariableFont_wght.woff2",
+          "status": 304
+        }
+      ],
+      "screenshot": "../screens/historical-civil-date-native-preview-logout-hold-v3-twentytwentyfive.png"
+    },
+    {
+      "theme": "classic",
+      "width": 375,
+      "actualSecondAutosaveSqlWait": true,
+      "departedViaLogout": true,
+      "currentOtherAuthorDenied": true,
+      "observation": {
+        "alert": "You can only edit your own content. ",
+        "errors": [],
+        "hasMarker": false,
+        "hasSaved": false,
+        "other": false,
+        "url": "/preview/26"
+      },
+      "requests": [
+        {
+          "id": 2863,
+          "method": "POST",
+          "path": "/api/auth/logout",
+          "status": 200
+        },
+        {
+          "id": 2864,
+          "method": "GET",
+          "path": "/api/session",
+          "status": 200
+        },
+        {
+          "id": 2865,
+          "method": "GET",
+          "path": "/api/auth/registration",
+          "status": 200
+        },
+        {
+          "id": 2866,
+          "method": "GET",
+          "path": "/vendor/wordpress/wp-admin/css/colors/modern/colors.css",
+          "status": 304
+        },
+        {
+          "id": 2867,
+          "method": "POST",
+          "path": "/api/auth/login",
+          "status": 200
+        },
+        {
+          "id": 2868,
+          "method": "GET",
+          "path": "/api/session",
+          "status": 200
+        },
+        {
+          "id": 2869,
+          "method": "GET",
+          "path": "/api/public/design",
+          "status": 200
+        },
+        {
+          "id": 2870,
+          "method": "GET",
+          "path": "/api/public/site?page=1",
+          "status": 200
+        },
+        {
+          "id": 2871,
+          "method": "GET",
+          "path": "/api/posts/26/preview",
+          "status": 403
+        },
+        {
+          "id": 2872,
+          "method": "GET",
+          "path": "/api/profile",
+          "status": 200
+        },
+        {
+          "id": 2873,
+          "method": "GET",
+          "path": "/api/profile",
+          "status": 200
+        },
+        {
+          "id": 2874,
+          "method": "GET",
+          "path": "/preview/26",
+          "status": 200
+        },
+        {
+          "id": 2875,
+          "method": "GET",
+          "path": "/assets/index-BsgYOWhl.css",
+          "status": 304
+        },
+        {
+          "id": 2876,
+          "method": "GET",
+          "path": "/assets/index-B3Kyd_KB.js",
+          "status": 304
+        },
+        {
+          "id": 2877,
+          "method": "GET",
+          "path": "/assets/App-0nsd74uh.js",
+          "status": 304
+        },
+        {
+          "id": 2878,
+          "method": "GET",
+          "path": "/assets/playlists-B6HK4GV9.js",
+          "status": 304
+        },
+        {
+          "id": 2879,
+          "method": "GET",
+          "path": "/assets/App-CMvjQ72B.css",
+          "status": 304
+        },
+        {
+          "id": 2880,
+          "method": "GET",
+          "path": "/api/session",
+          "status": 200
+        },
+        {
+          "id": 2881,
+          "method": "GET",
+          "path": "/api/public/design",
+          "status": 200
+        },
+        {
+          "id": 2882,
+          "method": "GET",
+          "path": "/api/public/site?page=1",
+          "status": 200
+        },
+        {
+          "id": 2883,
+          "method": "GET",
+          "path": "/api/posts/26/preview",
+          "status": 403
+        },
+        {
+          "id": 2884,
+          "method": "GET",
+          "path": "/api/profile",
+          "status": 200
+        },
+        {
+          "id": 2885,
+          "method": "GET",
+          "path": "/vendor/wordpress/wp-content/themes/twentytwentyfive/assets/fonts/manrope/Manrope-VariableFont_wght.woff2",
+          "status": 304
+        },
+        {
+          "id": 2886,
+          "method": "GET",
+          "path": "/api/profile",
+          "status": 200
+        }
+      ],
+      "screenshot": "../screens/historical-civil-date-native-preview-logout-hold-v3-classic.png"
+    }
+  ],
+  "ownedSqlObjectsRestored": true
+}

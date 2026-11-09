@@ -1,0 +1,198 @@
+{
+  "base": "bc7d6448d30bdf81e47fe81c2874317a6b7458ae",
+  "uiChange": "defer initial edit lease until document read completed",
+  "rows": [
+    {
+      "index": 0,
+      "postId": 8,
+      "get": {
+        "id": 118,
+        "method": "GET",
+        "path": "/api/posts/8",
+        "status": 200
+      },
+      "lease": {
+        "id": 128,
+        "method": "PUT",
+        "path": "/api/posts/8/lock",
+        "status": 200
+      }
+    },
+    {
+      "index": 1,
+      "postId": 9,
+      "get": {
+        "id": 164,
+        "method": "GET",
+        "path": "/api/posts/9",
+        "status": 200
+      },
+      "lease": {
+        "id": 175,
+        "method": "PUT",
+        "path": "/api/posts/9/lock",
+        "status": 200
+      }
+    },
+    {
+      "index": 2,
+      "postId": 10,
+      "get": {
+        "id": 210,
+        "method": "GET",
+        "path": "/api/posts/10",
+        "status": 200
+      },
+      "lease": {
+        "id": 220,
+        "method": "PUT",
+        "path": "/api/posts/10/lock",
+        "status": 200
+      }
+    },
+    {
+      "index": 3,
+      "postId": 8,
+      "get": {
+        "id": 256,
+        "method": "GET",
+        "path": "/api/posts/8",
+        "status": 200
+      },
+      "lease": {
+        "id": 266,
+        "method": "PUT",
+        "path": "/api/posts/8/lock",
+        "status": 200
+      }
+    },
+    {
+      "index": 4,
+      "postId": 9,
+      "get": {
+        "id": 302,
+        "method": "GET",
+        "path": "/api/posts/9",
+        "status": 200
+      },
+      "lease": {
+        "id": 312,
+        "method": "PUT",
+        "path": "/api/posts/9/lock",
+        "status": 200
+      }
+    },
+    {
+      "index": 5,
+      "postId": 10,
+      "get": {
+        "id": 348,
+        "method": "GET",
+        "path": "/api/posts/10",
+        "status": 200
+      },
+      "lease": {
+        "id": 357,
+        "method": "PUT",
+        "path": "/api/posts/10/lock",
+        "status": 200
+      }
+    },
+    {
+      "index": 6,
+      "postId": 8,
+      "get": {
+        "id": 393,
+        "method": "GET",
+        "path": "/api/posts/8",
+        "status": 200
+      },
+      "lease": {
+        "id": 403,
+        "method": "PUT",
+        "path": "/api/posts/8/lock",
+        "status": 200
+      }
+    },
+    {
+      "index": 7,
+      "postId": 9,
+      "get": {
+        "id": 439,
+        "method": "GET",
+        "path": "/api/posts/9",
+        "status": 200
+      },
+      "lease": {
+        "id": 449,
+        "method": "PUT",
+        "path": "/api/posts/9/lock",
+        "status": 200
+      }
+    },
+    {
+      "index": 8,
+      "postId": 10,
+      "get": {
+        "id": 485,
+        "method": "GET",
+        "path": "/api/posts/10",
+        "status": 200
+      },
+      "lease": {
+        "id": 495,
+        "method": "PUT",
+        "path": "/api/posts/10/lock",
+        "status": 200
+      }
+    },
+    {
+      "index": 9,
+      "postId": 8,
+      "get": {
+        "id": 531,
+        "method": "GET",
+        "path": "/api/posts/8",
+        "status": 200
+      },
+      "lease": {
+        "id": 541,
+        "method": "PUT",
+        "path": "/api/posts/8/lock",
+        "status": 200
+      }
+    },
+    {
+      "index": 10,
+      "postId": 9,
+      "get": {
+        "id": 577,
+        "method": "GET",
+        "path": "/api/posts/9",
+        "status": 200
+      },
+      "lease": {
+        "id": 587,
+        "method": "PUT",
+        "path": "/api/posts/9/lock",
+        "status": 200
+      }
+    },
+    {
+      "index": 11,
+      "postId": 10,
+      "get": {
+        "id": 623,
+        "method": "GET",
+        "path": "/api/posts/10",
+        "status": 200
+      },
+      "lease": {
+        "id": 633,
+        "method": "PUT",
+        "path": "/api/posts/10/lock",
+        "status": 200
+      }
+    }
+  ]
+}

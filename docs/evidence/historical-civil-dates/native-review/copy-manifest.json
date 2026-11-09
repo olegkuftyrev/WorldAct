@@ -1,0 +1,449 @@
+{
+  "codeSha": "23355068f8207675d387a7ee2abbda8030978534",
+  "copies": [
+    {
+      "path": "proofs/historical-civil-date-native-bc7-editor-load-failure.json",
+      "originalSha256": "24ee2707394d77e14d7accb22faa9553d6af76195c1bfe9f2bf28f077ab109ad",
+      "sanitizedSha256": "d6bfc8859e296994e3264d4548b9771861d14610e2c4d7ff5e26dcce21c92f65"
+    },
+    {
+      "path": "proofs/historical-civil-date-native-bulk-proof.json",
+      "originalSha256": "b6a94d2352720183b18cfca184bcbb7c4ca5601682c891c354c8b34e4212830a",
+      "sanitizedSha256": "6c480f48c78409373ea77c58af621540baf0c06cb26aa1700274de77c6f0e5ef"
+    },
+    {
+      "path": "proofs/historical-civil-date-native-classic-preview-original-failure.json",
+      "originalSha256": "0245142b3c746ab92fb143c0890a1704f63339ca676a054eed0bfa9ab79aca32",
+      "sanitizedSha256": "a04c3e3cd914301a9f4961281c779a8fe46bf6d526f453a3bdb8bce022f0f7c9"
+    },
+    {
+      "path": "proofs/historical-civil-date-native-consumers-proof.json",
+      "originalSha256": "d5a7ae1e1ef200bc76853273572c5eec59883da5319bdb7f0d8fd7961407be40",
+      "sanitizedSha256": "c1885412f3655870bd4c7f37a232ce2a60eda63cec25060d3986fb95deaebdc5"
+    },
+    {
+      "path": "proofs/historical-civil-date-native-editor-load-successor-proof.json",
+      "originalSha256": "3ddbb6e3bf3a0b80e519d53c73245954b6285f8386376cb0cb43eea4422228fd",
+      "sanitizedSha256": "241a78c5558a8fcfb79ec6f4b67d70e080695db965565752014c7dde788ab4bf"
+    },
+    {
+      "path": "proofs/historical-civil-date-native-editor-proof.json",
+      "originalSha256": "3bd46c01bad9556b8b26468f74c0cca6184e80feb81f25dfc4f52f5900f50db3",
+      "sanitizedSha256": "aecd6839b18aae29021f6f4e91f74de6692d0f42d62deed844b89ee21e3146bd"
+    },
+    {
+      "path": "proofs/historical-civil-date-native-final-public-js-proof.json",
+      "originalSha256": "27231f00fa5291b321f03ed9f4aebc6cac6718ae61544c3b36e91c0c36b9e908",
+      "sanitizedSha256": "390dd27a2e7fcd2bd87cb78656fa53f73a1dc8d025b8fdd51bfb7f1554e6da94"
+    },
+    {
+      "path": "proofs/historical-civil-date-native-js-proof.json",
+      "originalSha256": "eadf5d85552b93c84a6967bcec6c2ca4e3e2d4ff41e5d9a38ce56926cd36ec00",
+      "sanitizedSha256": "7be82ce117cc446040d319adfd409fc8935e4202aaabbdd52857d09406ded183"
+    },
+    {
+      "path": "proofs/historical-civil-date-native-missed-proof.json",
+      "originalSha256": "a707dabacf8d46d3913fcc61bbd1a67fb9dd723d9d99b433b4385020710ef3c0",
+      "sanitizedSha256": "01ae9e25ed08df28ac790b87611ab612f636d55be0a381ccffb7e49af3f79cb3"
+    },
+    {
+      "path": "proofs/historical-civil-date-native-nojs-proof.json",
+      "originalSha256": "1b94ec2f075418c583d7b1c320dd87dddaac4b6f3053a991d6ac46eae5c0d2ec",
+      "sanitizedSha256": "85b8feede8dccdfa5d3c9b232196717846d41360700f9dd472925768e88c0456"
+    },
+    {
+      "path": "proofs/historical-civil-date-native-password-proof.json",
+      "originalSha256": "ce75b5a858615bfc842fea50783838d9a05723968e314101a823c2a2c6cbe78f",
+      "sanitizedSha256": "baf72ad1b436831fbaadd34fb30f7fdc30887ff4ab7ac06c15b1744096076ef5"
+    },
+    {
+      "path": "proofs/historical-civil-date-native-preview-cache-proof.json",
+      "originalSha256": "4170f61d076610da135ba362a67f731d6ac41ab6bc98748cc37b1a7a971dcbf3",
+      "sanitizedSha256": "117c3b45ff17cdf9afa9efb78de1d6ea259d2d9170d724e9f88e7f732b5b6c8f"
+    },
+    {
+      "path": "proofs/historical-civil-date-native-preview-pending-proof.json",
+      "originalSha256": "d18c27a1b4367a0b86f98960a2f0e14d4f1fd66c28bfa56b13095d5e4d52c544",
+      "sanitizedSha256": "3dc260ea00583a561162c28395aa4d9ffe69eb24d1b57b91287012003c694d62"
+    },
+    {
+      "path": "proofs/historical-civil-date-native-preview-privacy-proof.json",
+      "originalSha256": "024263cb4a03bbba8eccfe86872d93e39b9c47612167f96785df319f9d4106ae",
+      "sanitizedSha256": "5bc082e4e3d5331e6a887e448c8ba2efbd1b6f600f40b665697d60324998c5c2"
+    },
+    {
+      "path": "screens/historical-civil-date-native-bc7-editor-load-failure.png",
+      "originalSha256": "646170879518c553fa22e9d2b610648d87e796aea79825958708c448d1a7df67",
+      "sanitizedSha256": "646170879518c553fa22e9d2b610648d87e796aea79825958708c448d1a7df67",
+      "directlyInspected": true,
+      "pngMetadataOnlyImageChunks": true
+    },
+    {
+      "path": "screens/historical-civil-date-native-bulk-1440.png",
+      "originalSha256": "151960f922bd196be4c5f995d1184587187f1d069600320bd896fcbba8785e09",
+      "sanitizedSha256": "151960f922bd196be4c5f995d1184587187f1d069600320bd896fcbba8785e09",
+      "directlyInspected": true,
+      "pngMetadataOnlyImageChunks": true
+    },
+    {
+      "path": "screens/historical-civil-date-native-bulk-375.png",
+      "originalSha256": "b88cd278af52d02f2c756175a9e3b09bebbbc0c4d02111d4ad1d589ad47822c6",
+      "sanitizedSha256": "b88cd278af52d02f2c756175a9e3b09bebbbc0c4d02111d4ad1d589ad47822c6",
+      "directlyInspected": true,
+      "pngMetadataOnlyImageChunks": true
+    },
+    {
+      "path": "screens/historical-civil-date-native-bulk-768.png",
+      "originalSha256": "23f348c896d700a3580758bacf091119ea29e0928e16e3233a86f302d9cba4d2",
+      "sanitizedSha256": "23f348c896d700a3580758bacf091119ea29e0928e16e3233a86f302d9cba4d2",
+      "directlyInspected": true,
+      "pngMetadataOnlyImageChunks": true
+    },
+    {
+      "path": "screens/historical-civil-date-native-classic-preview-original-failure.png",
+      "originalSha256": "0471ae1ae817debcb97136ea0e8bfa0b6355f6535d133c7973205b74a9e85fa9",
+      "sanitizedSha256": "0471ae1ae817debcb97136ea0e8bfa0b6355f6535d133c7973205b74a9e85fa9",
+      "directlyInspected": true,
+      "pngMetadataOnlyImageChunks": true
+    },
+    {
+      "path": "screens/historical-civil-date-native-editor-1440.png",
+      "originalSha256": "8a33c07c3937add95eaf1b9dcb3550cc9bee359bf2f9050292c72a3e81f48df2",
+      "sanitizedSha256": "8a33c07c3937add95eaf1b9dcb3550cc9bee359bf2f9050292c72a3e81f48df2",
+      "directlyInspected": true,
+      "pngMetadataOnlyImageChunks": true
+    },
+    {
+      "path": "screens/historical-civil-date-native-editor-375.png",
+      "originalSha256": "dbf151a155ee6928490d777aa59f3f432f81a70dce9387876224bea227c013ca",
+      "sanitizedSha256": "dbf151a155ee6928490d777aa59f3f432f81a70dce9387876224bea227c013ca",
+      "directlyInspected": true,
+      "pngMetadataOnlyImageChunks": true
+    },
+    {
+      "path": "screens/historical-civil-date-native-editor-768.png",
+      "originalSha256": "6d78f3c6419ecb23d7d9aac36240ccd97d3d073bdbb5a078998a77a7c3e7ba0d",
+      "sanitizedSha256": "6d78f3c6419ecb23d7d9aac36240ccd97d3d073bdbb5a078998a77a7c3e7ba0d",
+      "directlyInspected": true,
+      "pngMetadataOnlyImageChunks": true
+    },
+    {
+      "path": "screens/historical-civil-date-native-final-calendar-1440.png",
+      "originalSha256": "f0aa388492e1a0719744e69b07205ebb67412acdb0db823a993db45c093c807b",
+      "sanitizedSha256": "f0aa388492e1a0719744e69b07205ebb67412acdb0db823a993db45c093c807b",
+      "directlyInspected": true,
+      "pngMetadataOnlyImageChunks": true
+    },
+    {
+      "path": "screens/historical-civil-date-native-final-calendar-375.png",
+      "originalSha256": "bc2b1ac6451f1d2fa22d633e3bdb6f00e48e7f07491024118cd33b36a3b0086b",
+      "sanitizedSha256": "bc2b1ac6451f1d2fa22d633e3bdb6f00e48e7f07491024118cd33b36a3b0086b",
+      "directlyInspected": true,
+      "pngMetadataOnlyImageChunks": true
+    },
+    {
+      "path": "screens/historical-civil-date-native-final-calendar-768.png",
+      "originalSha256": "0ba59f846c7ff2d6fc4dbea26f4a943ce3519b9c47610988c5f1675e7c114b72",
+      "sanitizedSha256": "0ba59f846c7ff2d6fc4dbea26f4a943ce3519b9c47610988c5f1675e7c114b72",
+      "directlyInspected": true,
+      "pngMetadataOnlyImageChunks": true
+    },
+    {
+      "path": "screens/historical-civil-date-native-final-dashboard-1440.png",
+      "originalSha256": "c68814bdaf2661ec5c5843a7db03094a1fe9d8d14e04dd824b96853ac395f093",
+      "sanitizedSha256": "c68814bdaf2661ec5c5843a7db03094a1fe9d8d14e04dd824b96853ac395f093",
+      "directlyInspected": true,
+      "pngMetadataOnlyImageChunks": true
+    },
+    {
+      "path": "screens/historical-civil-date-native-final-dashboard-375.png",
+      "originalSha256": "31c27cf1bc8c19a9ce7078ab0f8736c8e0a5fc577d4736b73b1aed35424ce6b3",
+      "sanitizedSha256": "31c27cf1bc8c19a9ce7078ab0f8736c8e0a5fc577d4736b73b1aed35424ce6b3",
+      "directlyInspected": true,
+      "pngMetadataOnlyImageChunks": true
+    },
+    {
+      "path": "screens/historical-civil-date-native-final-dashboard-768.png",
+      "originalSha256": "bac48bb52335313ccf3157049d1e0a1a62219cfc1b56ee9a139bba8934c05047",
+      "sanitizedSha256": "bac48bb52335313ccf3157049d1e0a1a62219cfc1b56ee9a139bba8934c05047",
+      "directlyInspected": true,
+      "pngMetadataOnlyImageChunks": true
+    },
+    {
+      "path": "screens/historical-civil-date-native-final-preview-classic.png",
+      "originalSha256": "f5d340b4a9215062659ed338ffb4dfc9bb9a147227b3b9ba1b61ec573c2d4154",
+      "sanitizedSha256": "f5d340b4a9215062659ed338ffb4dfc9bb9a147227b3b9ba1b61ec573c2d4154",
+      "directlyInspected": true,
+      "pngMetadataOnlyImageChunks": true
+    },
+    {
+      "path": "screens/historical-civil-date-native-final-preview-twentytwentyfive.png",
+      "originalSha256": "e22421fdf56170a85544c4a84c8e72f753db7c63170139640f43441244df24dd",
+      "sanitizedSha256": "e22421fdf56170a85544c4a84c8e72f753db7c63170139640f43441244df24dd",
+      "directlyInspected": true,
+      "pngMetadataOnlyImageChunks": true
+    },
+    {
+      "path": "screens/historical-civil-date-native-final-public-js-classic-1440.png",
+      "originalSha256": "6c77a632d868a73e7e48d4a7d554dc88570728816df11c7eeb8544876b5fb6a5",
+      "sanitizedSha256": "6c77a632d868a73e7e48d4a7d554dc88570728816df11c7eeb8544876b5fb6a5",
+      "directlyInspected": true,
+      "pngMetadataOnlyImageChunks": true
+    },
+    {
+      "path": "screens/historical-civil-date-native-final-public-js-classic-375.png",
+      "originalSha256": "bd223817ccf300119c09b24d2791d06595d574d04c630ce5034ac521e05e6a9b",
+      "sanitizedSha256": "bd223817ccf300119c09b24d2791d06595d574d04c630ce5034ac521e05e6a9b",
+      "directlyInspected": true,
+      "pngMetadataOnlyImageChunks": true
+    },
+    {
+      "path": "screens/historical-civil-date-native-final-public-js-classic-768.png",
+      "originalSha256": "b5a74f3262b50056e0e93dbfc2e5bafb08f758b8cf468bc8e7e062a8a429279e",
+      "sanitizedSha256": "b5a74f3262b50056e0e93dbfc2e5bafb08f758b8cf468bc8e7e062a8a429279e",
+      "directlyInspected": true,
+      "pngMetadataOnlyImageChunks": true
+    },
+    {
+      "path": "screens/historical-civil-date-native-final-public-js-twentytwentyfive-1440.png",
+      "originalSha256": "06cd8f6451a118d905edb1a86c8502d1f8c405baeb24a99bc93ec9116a9a0afa",
+      "sanitizedSha256": "06cd8f6451a118d905edb1a86c8502d1f8c405baeb24a99bc93ec9116a9a0afa",
+      "directlyInspected": true,
+      "pngMetadataOnlyImageChunks": true
+    },
+    {
+      "path": "screens/historical-civil-date-native-final-public-js-twentytwentyfive-375.png",
+      "originalSha256": "1f5879ed4d91a77b0ce1bcef706b75b178d02289c42e164ed6812a187e4f9360",
+      "sanitizedSha256": "1f5879ed4d91a77b0ce1bcef706b75b178d02289c42e164ed6812a187e4f9360",
+      "directlyInspected": true,
+      "pngMetadataOnlyImageChunks": true
+    },
+    {
+      "path": "screens/historical-civil-date-native-final-public-js-twentytwentyfive-768.png",
+      "originalSha256": "6d7957ee26400c8410326867545e0bf61a153c93faac4cbc5e10691c2dcb90a2",
+      "sanitizedSha256": "6d7957ee26400c8410326867545e0bf61a153c93faac4cbc5e10691c2dcb90a2",
+      "directlyInspected": true,
+      "pngMetadataOnlyImageChunks": true
+    },
+    {
+      "path": "screens/historical-civil-date-native-final-same-gmt-classic.png",
+      "originalSha256": "b49d2ab5ddd9efe981060785bd6cceb6b0e5863221757e2a9df03346a66c84cd",
+      "sanitizedSha256": "b49d2ab5ddd9efe981060785bd6cceb6b0e5863221757e2a9df03346a66c84cd",
+      "directlyInspected": true,
+      "pngMetadataOnlyImageChunks": true
+    },
+    {
+      "path": "screens/historical-civil-date-native-final-same-gmt-twentytwentyfive.png",
+      "originalSha256": "a0e6a2171f6b7a85557b8c56862621951ddef8f82d17c67a22ad5be1e1d51d72",
+      "sanitizedSha256": "a0e6a2171f6b7a85557b8c56862621951ddef8f82d17c67a22ad5be1e1d51d72",
+      "directlyInspected": true,
+      "pngMetadataOnlyImageChunks": true
+    },
+    {
+      "path": "screens/historical-civil-date-native-js-classic-1440.png",
+      "originalSha256": "bfe3cbe8b629aca30080b314bf8005fac076b139e03c162d57bef09557b549e7",
+      "sanitizedSha256": "bfe3cbe8b629aca30080b314bf8005fac076b139e03c162d57bef09557b549e7",
+      "directlyInspected": true,
+      "pngMetadataOnlyImageChunks": true
+    },
+    {
+      "path": "screens/historical-civil-date-native-js-classic-375.png",
+      "originalSha256": "c5bd53fd3a3d776f26da0e7bad7072bcdd7ec6487e7b9ac3352e07107a95ddcd",
+      "sanitizedSha256": "c5bd53fd3a3d776f26da0e7bad7072bcdd7ec6487e7b9ac3352e07107a95ddcd",
+      "directlyInspected": true,
+      "pngMetadataOnlyImageChunks": true
+    },
+    {
+      "path": "screens/historical-civil-date-native-js-classic-768.png",
+      "originalSha256": "ebcbc62c078b053468400b6317d8c4f4742b7d2bafd0b1ce5245f015e4029449",
+      "sanitizedSha256": "ebcbc62c078b053468400b6317d8c4f4742b7d2bafd0b1ce5245f015e4029449",
+      "directlyInspected": true,
+      "pngMetadataOnlyImageChunks": true
+    },
+    {
+      "path": "screens/historical-civil-date-native-js-twentytwentyfive-1440.png",
+      "originalSha256": "c9370f2fd4d61051309a24ed95246168825240f8e1d1f39de85ccd03243770e9",
+      "sanitizedSha256": "c9370f2fd4d61051309a24ed95246168825240f8e1d1f39de85ccd03243770e9",
+      "directlyInspected": true,
+      "pngMetadataOnlyImageChunks": true
+    },
+    {
+      "path": "screens/historical-civil-date-native-js-twentytwentyfive-375.png",
+      "originalSha256": "4a310124f46d9b2b5bc4eb18634e49d21a0a29f72a7e6712e0ecefc878f38f03",
+      "sanitizedSha256": "4a310124f46d9b2b5bc4eb18634e49d21a0a29f72a7e6712e0ecefc878f38f03",
+      "directlyInspected": true,
+      "pngMetadataOnlyImageChunks": true
+    },
+    {
+      "path": "screens/historical-civil-date-native-js-twentytwentyfive-768.png",
+      "originalSha256": "102876e54d695222442cd98af0047b5eb98b54fb380310b64ab6ee53fa2ea61e",
+      "sanitizedSha256": "102876e54d695222442cd98af0047b5eb98b54fb380310b64ab6ee53fa2ea61e",
+      "directlyInspected": true,
+      "pngMetadataOnlyImageChunks": true
+    },
+    {
+      "path": "screens/historical-civil-date-native-missed-utc-375.png",
+      "originalSha256": "f228b309cd99ef73b941b2bb2ef0f104da04172db2b8f215f2cc14b65a8f13f9",
+      "sanitizedSha256": "f228b309cd99ef73b941b2bb2ef0f104da04172db2b8f215f2cc14b65a8f13f9",
+      "directlyInspected": true,
+      "pngMetadataOnlyImageChunks": true
+    },
+    {
+      "path": "screens/historical-civil-date-native-nojs-classic-1440.png",
+      "originalSha256": "67213acdcd09d248b524a1c4b4804ba060759300be2ab7f0bfbf96ee22357d6f",
+      "sanitizedSha256": "67213acdcd09d248b524a1c4b4804ba060759300be2ab7f0bfbf96ee22357d6f",
+      "directlyInspected": true,
+      "pngMetadataOnlyImageChunks": true
+    },
+    {
+      "path": "screens/historical-civil-date-native-nojs-classic-375.png",
+      "originalSha256": "271aa868ae30ff3b1cb08854c2f2f0008e63f7af2e3e03e8f05d57fcdb966696",
+      "sanitizedSha256": "271aa868ae30ff3b1cb08854c2f2f0008e63f7af2e3e03e8f05d57fcdb966696",
+      "directlyInspected": true,
+      "pngMetadataOnlyImageChunks": true
+    },
+    {
+      "path": "screens/historical-civil-date-native-nojs-classic-768.png",
+      "originalSha256": "7f52796852dfc1751a206b4f259d70b354603ade2ddf1f85686b0117f5def19a",
+      "sanitizedSha256": "7f52796852dfc1751a206b4f259d70b354603ade2ddf1f85686b0117f5def19a",
+      "directlyInspected": true,
+      "pngMetadataOnlyImageChunks": true
+    },
+    {
+      "path": "screens/historical-civil-date-native-nojs-twentytwentyfive-1440.png",
+      "originalSha256": "9bc6818923cae2577d15e49ae54fbc15cc28b8c78fc184106d96590fd84a8f38",
+      "sanitizedSha256": "9bc6818923cae2577d15e49ae54fbc15cc28b8c78fc184106d96590fd84a8f38",
+      "directlyInspected": true,
+      "pngMetadataOnlyImageChunks": true
+    },
+    {
+      "path": "screens/historical-civil-date-native-nojs-twentytwentyfive-375.png",
+      "originalSha256": "1c9b77c6eed0d39f9616b94dbd5682b652017e9f8a586821276103f56589bfa7",
+      "sanitizedSha256": "1c9b77c6eed0d39f9616b94dbd5682b652017e9f8a586821276103f56589bfa7",
+      "directlyInspected": true,
+      "pngMetadataOnlyImageChunks": true
+    },
+    {
+      "path": "screens/historical-civil-date-native-nojs-twentytwentyfive-768.png",
+      "originalSha256": "c5418c2d79337dde56e2ac51de324216aa4ce4ca29c1c13d0e48e5832b72750d",
+      "sanitizedSha256": "c5418c2d79337dde56e2ac51de324216aa4ce4ca29c1c13d0e48e5832b72750d",
+      "directlyInspected": true,
+      "pngMetadataOnlyImageChunks": true
+    },
+    {
+      "path": "screens/historical-civil-date-native-password-classic-1440.png",
+      "originalSha256": "8f2dceac5aefaa41d836b73072b5f3ca1773f30ecbe266dc62917120f7b04556",
+      "sanitizedSha256": "8f2dceac5aefaa41d836b73072b5f3ca1773f30ecbe266dc62917120f7b04556",
+      "directlyInspected": true,
+      "pngMetadataOnlyImageChunks": true
+    },
+    {
+      "path": "screens/historical-civil-date-native-password-classic-375.png",
+      "originalSha256": "acef86b962ba783502fe916be8617b6debc0963c0b6592247b62e842a865c506",
+      "sanitizedSha256": "acef86b962ba783502fe916be8617b6debc0963c0b6592247b62e842a865c506",
+      "directlyInspected": true,
+      "pngMetadataOnlyImageChunks": true
+    },
+    {
+      "path": "screens/historical-civil-date-native-password-classic-768.png",
+      "originalSha256": "2631112203d588c37c3afa56950ac9f0b5ea58cf5392a5c9a6f5e9770a5f78c7",
+      "sanitizedSha256": "2631112203d588c37c3afa56950ac9f0b5ea58cf5392a5c9a6f5e9770a5f78c7",
+      "directlyInspected": true,
+      "pngMetadataOnlyImageChunks": true
+    },
+    {
+      "path": "screens/historical-civil-date-native-password-twentytwentyfive-1440.png",
+      "originalSha256": "2d57555df62df458c0174b9059acf167bb39ee3d4f4353a801640d73b291e404",
+      "sanitizedSha256": "2d57555df62df458c0174b9059acf167bb39ee3d4f4353a801640d73b291e404",
+      "directlyInspected": true,
+      "pngMetadataOnlyImageChunks": true
+    },
+    {
+      "path": "screens/historical-civil-date-native-password-twentytwentyfive-375.png",
+      "originalSha256": "6523ce92562ba2c3e8e9d6e5ff7a4cded0865d2495b1aaf131f1ebf5fbf54147",
+      "sanitizedSha256": "6523ce92562ba2c3e8e9d6e5ff7a4cded0865d2495b1aaf131f1ebf5fbf54147",
+      "directlyInspected": true,
+      "pngMetadataOnlyImageChunks": true
+    },
+    {
+      "path": "screens/historical-civil-date-native-password-twentytwentyfive-768.png",
+      "originalSha256": "03ca147b342a8f9b3f23b4fd2e8a4bcba5f0e9d50b1a9984e76c01a4b7e956f8",
+      "sanitizedSha256": "03ca147b342a8f9b3f23b4fd2e8a4bcba5f0e9d50b1a9984e76c01a4b7e956f8",
+      "directlyInspected": true,
+      "pngMetadataOnlyImageChunks": true
+    },
+    {
+      "path": "screens/historical-civil-date-native-preview-logout-hold-v3-classic.png",
+      "originalSha256": "7ddc8d268481e10eba3ccbd23cc4bcd3c2d793e3782829eb5d6c40a0e78c5ee2",
+      "sanitizedSha256": "7ddc8d268481e10eba3ccbd23cc4bcd3c2d793e3782829eb5d6c40a0e78c5ee2",
+      "directlyInspected": true,
+      "pngMetadataOnlyImageChunks": true
+    },
+    {
+      "path": "screens/historical-civil-date-native-preview-logout-hold-v3-twentytwentyfive.png",
+      "originalSha256": "ee5739939c72b344954d1d67fbcf6c06b28f486575065ce2f31e0809c53a13af",
+      "sanitizedSha256": "ee5739939c72b344954d1d67fbcf6c06b28f486575065ce2f31e0809c53a13af",
+      "directlyInspected": true,
+      "pngMetadataOnlyImageChunks": true
+    },
+    {
+      "path": "screens/historical-civil-date-native-preview-single-pending-classic.png",
+      "originalSha256": "7ddc8d268481e10eba3ccbd23cc4bcd3c2d793e3782829eb5d6c40a0e78c5ee2",
+      "sanitizedSha256": "7ddc8d268481e10eba3ccbd23cc4bcd3c2d793e3782829eb5d6c40a0e78c5ee2",
+      "directlyInspected": true,
+      "pngMetadataOnlyImageChunks": true
+    },
+    {
+      "path": "screens/historical-civil-date-native-preview-single-pending-twentytwentyfive.png",
+      "originalSha256": "ee5739939c72b344954d1d67fbcf6c06b28f486575065ce2f31e0809c53a13af",
+      "sanitizedSha256": "ee5739939c72b344954d1d67fbcf6c06b28f486575065ce2f31e0809c53a13af",
+      "directlyInspected": true,
+      "pngMetadataOnlyImageChunks": true
+    },
+    {
+      "path": "screens/historical-civil-date-native-private-preview-v3-classic-1440.png",
+      "originalSha256": "7cd029d8fece663a9c09e07e5d8e9c7ec7d5f45a22e8d2420f858ef7bf8ec5cd",
+      "sanitizedSha256": "7cd029d8fece663a9c09e07e5d8e9c7ec7d5f45a22e8d2420f858ef7bf8ec5cd",
+      "directlyInspected": true,
+      "pngMetadataOnlyImageChunks": true
+    },
+    {
+      "path": "screens/historical-civil-date-native-private-preview-v3-classic-375.png",
+      "originalSha256": "3a95621c8a208403d6a2f6c226d76fcd07c9467769122e47e7e823b7a5f27e57",
+      "sanitizedSha256": "3a95621c8a208403d6a2f6c226d76fcd07c9467769122e47e7e823b7a5f27e57",
+      "directlyInspected": true,
+      "pngMetadataOnlyImageChunks": true
+    },
+    {
+      "path": "screens/historical-civil-date-native-private-preview-v3-classic-768.png",
+      "originalSha256": "c553fd374768c1422ea7c0ca38c95467ce402121df4c89f020336bbe7eae966d",
+      "sanitizedSha256": "c553fd374768c1422ea7c0ca38c95467ce402121df4c89f020336bbe7eae966d",
+      "directlyInspected": true,
+      "pngMetadataOnlyImageChunks": true
+    },
+    {
+      "path": "screens/historical-civil-date-native-private-preview-v3-twentytwentyfive-1440.png",
+      "originalSha256": "5f18f4d79e590c04392a24a845de8fc179938fbf0b1f6fbd5318358d54f56b72",
+      "sanitizedSha256": "5f18f4d79e590c04392a24a845de8fc179938fbf0b1f6fbd5318358d54f56b72",
+      "directlyInspected": true,
+      "pngMetadataOnlyImageChunks": true
+    },
+    {
+      "path": "screens/historical-civil-date-native-private-preview-v3-twentytwentyfive-375.png",
+      "originalSha256": "3c0b4fca66396a4023cdcb9c45ccbd623d66feaad881f47f7eabbc989dcced32",
+      "sanitizedSha256": "3c0b4fca66396a4023cdcb9c45ccbd623d66feaad881f47f7eabbc989dcced32",
+      "directlyInspected": true,
+      "pngMetadataOnlyImageChunks": true
+    },
+    {
+      "path": "screens/historical-civil-date-native-private-preview-v3-twentytwentyfive-768.png",
+      "originalSha256": "6d96dc694d77bb78e469cfdc47b4f22579e1aed69e36eadf308c8a4add7d5a50",
+      "sanitizedSha256": "6d96dc694d77bb78e469cfdc47b4f22579e1aed69e36eadf308c8a4add7d5a50",
+      "directlyInspected": true,
+      "pngMetadataOnlyImageChunks": true
+    }
+  ],
+  "proofJsonCount": 14,
+  "pngCount": 53,
+  "sanitization": "Private screenshot paths replaced with relative links; original private bytes and hashes preserved. Only fixture data, observations, status/method/path, code/version/hash, and explicit limits are copied."
+}

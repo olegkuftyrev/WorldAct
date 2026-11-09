@@ -1,0 +1,21 @@
+{
+  "sha": "23355068f8207675d387a7ee2abbda8030978534",
+  "rows": [
+    {
+      "method": "GET",
+      "path": "/api/posts/26/preview",
+      "status": 200,
+      "privateNoStore": true,
+      "noindex": true,
+      "currentAutosave": true
+    },
+    {
+      "method": "GET",
+      "path": "/api/public/templates/single?preview=true&postId=26",
+      "status": 200,
+      "privateNoStore": true,
+      "noindex": true,
+      "currentAutosave": true
+    }
+  ]
+}

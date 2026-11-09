@@ -1,0 +1,522 @@
+{
+  "scope": "Private original proof bytes and every actual generated screenshot, including superseded harness attempts. Original receipts are not relabeled.",
+  "items": [
+    {
+      "name": "historical-civil-date-native-bc7-editor-load-failure.json",
+      "sha256": "24ee2707394d77e14d7accb22faa9553d6af76195c1bfe9f2bf28f077ab109ad",
+      "bytes": 3282
+    },
+    {
+      "name": "historical-civil-date-native-bc7-editor-load-failure.png",
+      "sha256": "646170879518c553fa22e9d2b610648d87e796aea79825958708c448d1a7df67",
+      "bytes": 18370,
+      "directlyInspected": true,
+      "metadataChunksOnlyImage": true
+    },
+    {
+      "name": "historical-civil-date-native-bulk-1440.png",
+      "sha256": "151960f922bd196be4c5f995d1184587187f1d069600320bd896fcbba8785e09",
+      "bytes": 106373,
+      "directlyInspected": true,
+      "metadataChunksOnlyImage": true
+    },
+    {
+      "name": "historical-civil-date-native-bulk-375.png",
+      "sha256": "b88cd278af52d02f2c756175a9e3b09bebbbc0c4d02111d4ad1d589ad47822c6",
+      "bytes": 63431,
+      "directlyInspected": true,
+      "metadataChunksOnlyImage": true
+    },
+    {
+      "name": "historical-civil-date-native-bulk-768.png",
+      "sha256": "23f348c896d700a3580758bacf091119ea29e0928e16e3233a86f302d9cba4d2",
+      "bytes": 57755,
+      "directlyInspected": true,
+      "metadataChunksOnlyImage": true
+    },
+    {
+      "name": "historical-civil-date-native-bulk-proof.json",
+      "sha256": "b6a94d2352720183b18cfca184bcbb7c4ca5601682c891c354c8b34e4212830a",
+      "bytes": 2837
+    },
+    {
+      "name": "historical-civil-date-native-classic-preview-original-failure.json",
+      "sha256": "0245142b3c746ab92fb143c0890a1704f63339ca676a054eed0bfa9ab79aca32",
+      "bytes": 880
+    },
+    {
+      "name": "historical-civil-date-native-classic-preview-original-failure.png",
+      "sha256": "0471ae1ae817debcb97136ea0e8bfa0b6355f6535d133c7973205b74a9e85fa9",
+      "bytes": 32990,
+      "directlyInspected": true,
+      "metadataChunksOnlyImage": true
+    },
+    {
+      "name": "historical-civil-date-native-consumers-proof.json",
+      "sha256": "d5a7ae1e1ef200bc76853273572c5eec59883da5319bdb7f0d8fd7961407be40",
+      "bytes": 5673
+    },
+    {
+      "name": "historical-civil-date-native-editor-1440.png",
+      "sha256": "8a33c07c3937add95eaf1b9dcb3550cc9bee359bf2f9050292c72a3e81f48df2",
+      "bytes": 73046,
+      "directlyInspected": true,
+      "metadataChunksOnlyImage": true
+    },
+    {
+      "name": "historical-civil-date-native-editor-375.png",
+      "sha256": "dbf151a155ee6928490d777aa59f3f432f81a70dce9387876224bea227c013ca",
+      "bytes": 46583,
+      "directlyInspected": true,
+      "metadataChunksOnlyImage": true
+    },
+    {
+      "name": "historical-civil-date-native-editor-768.png",
+      "sha256": "6d78f3c6419ecb23d7d9aac36240ccd97d3d073bdbb5a078998a77a7c3e7ba0d",
+      "bytes": 58546,
+      "directlyInspected": true,
+      "metadataChunksOnlyImage": true
+    },
+    {
+      "name": "historical-civil-date-native-editor-load-successor-proof.json",
+      "sha256": "3ddbb6e3bf3a0b80e519d53c73245954b6285f8386376cb0cb43eea4422228fd",
+      "bytes": 3758
+    },
+    {
+      "name": "historical-civil-date-native-editor-proof.json",
+      "sha256": "3bd46c01bad9556b8b26468f74c0cca6184e80feb81f25dfc4f52f5900f50db3",
+      "bytes": 6103
+    },
+    {
+      "name": "historical-civil-date-native-final-calendar-1440.png",
+      "sha256": "f0aa388492e1a0719744e69b07205ebb67412acdb0db823a993db45c093c807b",
+      "bytes": 79107,
+      "directlyInspected": true,
+      "metadataChunksOnlyImage": true
+    },
+    {
+      "name": "historical-civil-date-native-final-calendar-375.png",
+      "sha256": "bc2b1ac6451f1d2fa22d633e3bdb6f00e48e7f07491024118cd33b36a3b0086b",
+      "bytes": 60784,
+      "directlyInspected": true,
+      "metadataChunksOnlyImage": true
+    },
+    {
+      "name": "historical-civil-date-native-final-calendar-768.png",
+      "sha256": "0ba59f846c7ff2d6fc4dbea26f4a943ce3519b9c47610988c5f1675e7c114b72",
+      "bytes": 70413,
+      "directlyInspected": true,
+      "metadataChunksOnlyImage": true
+    },
+    {
+      "name": "historical-civil-date-native-final-dashboard-1440.png",
+      "sha256": "c68814bdaf2661ec5c5843a7db03094a1fe9d8d14e04dd824b96853ac395f093",
+      "bytes": 309965,
+      "directlyInspected": true,
+      "metadataChunksOnlyImage": true
+    },
+    {
+      "name": "historical-civil-date-native-final-dashboard-375.png",
+      "sha256": "31c27cf1bc8c19a9ce7078ab0f8736c8e0a5fc577d4736b73b1aed35424ce6b3",
+      "bytes": 221084,
+      "directlyInspected": true,
+      "metadataChunksOnlyImage": true
+    },
+    {
+      "name": "historical-civil-date-native-final-dashboard-768.png",
+      "sha256": "bac48bb52335313ccf3157049d1e0a1a62219cfc1b56ee9a139bba8934c05047",
+      "bytes": 262769,
+      "directlyInspected": true,
+      "metadataChunksOnlyImage": true
+    },
+    {
+      "name": "historical-civil-date-native-final-preview-classic.png",
+      "sha256": "f5d340b4a9215062659ed338ffb4dfc9bb9a147227b3b9ba1b61ec573c2d4154",
+      "bytes": 54503,
+      "directlyInspected": true,
+      "metadataChunksOnlyImage": true
+    },
+    {
+      "name": "historical-civil-date-native-final-preview-twentytwentyfive.png",
+      "sha256": "e22421fdf56170a85544c4a84c8e72f753db7c63170139640f43441244df24dd",
+      "bytes": 42606,
+      "directlyInspected": true,
+      "metadataChunksOnlyImage": true
+    },
+    {
+      "name": "historical-civil-date-native-final-public-js-classic-1440.png",
+      "sha256": "6c77a632d868a73e7e48d4a7d554dc88570728816df11c7eeb8544876b5fb6a5",
+      "bytes": 109497,
+      "directlyInspected": true,
+      "metadataChunksOnlyImage": true
+    },
+    {
+      "name": "historical-civil-date-native-final-public-js-classic-375.png",
+      "sha256": "bd223817ccf300119c09b24d2791d06595d574d04c630ce5034ac521e05e6a9b",
+      "bytes": 88232,
+      "directlyInspected": true,
+      "metadataChunksOnlyImage": true
+    },
+    {
+      "name": "historical-civil-date-native-final-public-js-classic-768.png",
+      "sha256": "b5a74f3262b50056e0e93dbfc2e5bafb08f758b8cf468bc8e7e062a8a429279e",
+      "bytes": 97616,
+      "directlyInspected": true,
+      "metadataChunksOnlyImage": true
+    },
+    {
+      "name": "historical-civil-date-native-final-public-js-proof.json",
+      "sha256": "27231f00fa5291b321f03ed9f4aebc6cac6718ae61544c3b36e91c0c36b9e908",
+      "bytes": 6844
+    },
+    {
+      "name": "historical-civil-date-native-final-public-js-twentytwentyfive-1440.png",
+      "sha256": "06cd8f6451a118d905edb1a86c8502d1f8c405baeb24a99bc93ec9116a9a0afa",
+      "bytes": 68507,
+      "directlyInspected": true,
+      "metadataChunksOnlyImage": true
+    },
+    {
+      "name": "historical-civil-date-native-final-public-js-twentytwentyfive-375.png",
+      "sha256": "1f5879ed4d91a77b0ce1bcef706b75b178d02289c42e164ed6812a187e4f9360",
+      "bytes": 51433,
+      "directlyInspected": true,
+      "metadataChunksOnlyImage": true
+    },
+    {
+      "name": "historical-civil-date-native-final-public-js-twentytwentyfive-768.png",
+      "sha256": "6d7957ee26400c8410326867545e0bf61a153c93faac4cbc5e10691c2dcb90a2",
+      "bytes": 59463,
+      "directlyInspected": true,
+      "metadataChunksOnlyImage": true
+    },
+    {
+      "name": "historical-civil-date-native-final-same-gmt-classic.png",
+      "sha256": "b49d2ab5ddd9efe981060785bd6cceb6b0e5863221757e2a9df03346a66c84cd",
+      "bytes": 135120,
+      "directlyInspected": true,
+      "metadataChunksOnlyImage": true
+    },
+    {
+      "name": "historical-civil-date-native-final-same-gmt-twentytwentyfive.png",
+      "sha256": "a0e6a2171f6b7a85557b8c56862621951ddef8f82d17c67a22ad5be1e1d51d72",
+      "bytes": 107123,
+      "directlyInspected": true,
+      "metadataChunksOnlyImage": true
+    },
+    {
+      "name": "historical-civil-date-native-js-classic-1440.png",
+      "sha256": "bfe3cbe8b629aca30080b314bf8005fac076b139e03c162d57bef09557b549e7",
+      "bytes": 110161,
+      "directlyInspected": true,
+      "metadataChunksOnlyImage": true
+    },
+    {
+      "name": "historical-civil-date-native-js-classic-375.png",
+      "sha256": "c5bd53fd3a3d776f26da0e7bad7072bcdd7ec6487e7b9ac3352e07107a95ddcd",
+      "bytes": 88591,
+      "directlyInspected": true,
+      "metadataChunksOnlyImage": true
+    },
+    {
+      "name": "historical-civil-date-native-js-classic-768.png",
+      "sha256": "ebcbc62c078b053468400b6317d8c4f4742b7d2bafd0b1ce5245f015e4029449",
+      "bytes": 97527,
+      "directlyInspected": true,
+      "metadataChunksOnlyImage": true
+    },
+    {
+      "name": "historical-civil-date-native-js-proof.json",
+      "sha256": "eadf5d85552b93c84a6967bcec6c2ca4e3e2d4ff41e5d9a38ce56926cd36ec00",
+      "bytes": 6769
+    },
+    {
+      "name": "historical-civil-date-native-js-twentytwentyfive-1440.png",
+      "sha256": "c9370f2fd4d61051309a24ed95246168825240f8e1d1f39de85ccd03243770e9",
+      "bytes": 69124,
+      "directlyInspected": true,
+      "metadataChunksOnlyImage": true
+    },
+    {
+      "name": "historical-civil-date-native-js-twentytwentyfive-375.png",
+      "sha256": "4a310124f46d9b2b5bc4eb18634e49d21a0a29f72a7e6712e0ecefc878f38f03",
+      "bytes": 52318,
+      "directlyInspected": true,
+      "metadataChunksOnlyImage": true
+    },
+    {
+      "name": "historical-civil-date-native-js-twentytwentyfive-768.png",
+      "sha256": "102876e54d695222442cd98af0047b5eb98b54fb380310b64ab6ee53fa2ea61e",
+      "bytes": 59097,
+      "directlyInspected": true,
+      "metadataChunksOnlyImage": true
+    },
+    {
+      "name": "historical-civil-date-native-missed-proof.json",
+      "sha256": "a707dabacf8d46d3913fcc61bbd1a67fb9dd723d9d99b433b4385020710ef3c0",
+      "bytes": 1188
+    },
+    {
+      "name": "historical-civil-date-native-missed-utc-375.png",
+      "sha256": "f228b309cd99ef73b941b2bb2ef0f104da04172db2b8f215f2cc14b65a8f13f9",
+      "bytes": 46740,
+      "directlyInspected": true,
+      "metadataChunksOnlyImage": true
+    },
+    {
+      "name": "historical-civil-date-native-nojs-classic-1440.png",
+      "sha256": "67213acdcd09d248b524a1c4b4804ba060759300be2ab7f0bfbf96ee22357d6f",
+      "bytes": 159033,
+      "directlyInspected": true,
+      "metadataChunksOnlyImage": true
+    },
+    {
+      "name": "historical-civil-date-native-nojs-classic-375.png",
+      "sha256": "271aa868ae30ff3b1cb08854c2f2f0008e63f7af2e3e03e8f05d57fcdb966696",
+      "bytes": 151018,
+      "directlyInspected": true,
+      "metadataChunksOnlyImage": true
+    },
+    {
+      "name": "historical-civil-date-native-nojs-classic-768.png",
+      "sha256": "7f52796852dfc1751a206b4f259d70b354603ade2ddf1f85686b0117f5def19a",
+      "bytes": 152945,
+      "directlyInspected": true,
+      "metadataChunksOnlyImage": true
+    },
+    {
+      "name": "historical-civil-date-native-nojs-proof.json",
+      "sha256": "1b94ec2f075418c583d7b1c320dd87dddaac4b6f3053a991d6ac46eae5c0d2ec",
+      "bytes": 9804
+    },
+    {
+      "name": "historical-civil-date-native-nojs-twentytwentyfive-1440.png",
+      "sha256": "9bc6818923cae2577d15e49ae54fbc15cc28b8c78fc184106d96590fd84a8f38",
+      "bytes": 84934,
+      "directlyInspected": true,
+      "metadataChunksOnlyImage": true
+    },
+    {
+      "name": "historical-civil-date-native-nojs-twentytwentyfive-375.png",
+      "sha256": "1c9b77c6eed0d39f9616b94dbd5682b652017e9f8a586821276103f56589bfa7",
+      "bytes": 79610,
+      "directlyInspected": true,
+      "metadataChunksOnlyImage": true
+    },
+    {
+      "name": "historical-civil-date-native-nojs-twentytwentyfive-768.png",
+      "sha256": "c5418c2d79337dde56e2ac51de324216aa4ce4ca29c1c13d0e48e5832b72750d",
+      "bytes": 82087,
+      "directlyInspected": true,
+      "metadataChunksOnlyImage": true
+    },
+    {
+      "name": "historical-civil-date-native-password-classic-1440.png",
+      "sha256": "8f2dceac5aefaa41d836b73072b5f3ca1773f30ecbe266dc62917120f7b04556",
+      "bytes": 121619,
+      "directlyInspected": true,
+      "metadataChunksOnlyImage": true
+    },
+    {
+      "name": "historical-civil-date-native-password-classic-375.png",
+      "sha256": "acef86b962ba783502fe916be8617b6debc0963c0b6592247b62e842a865c506",
+      "bytes": 96397,
+      "directlyInspected": true,
+      "metadataChunksOnlyImage": true
+    },
+    {
+      "name": "historical-civil-date-native-password-classic-768.png",
+      "sha256": "2631112203d588c37c3afa56950ac9f0b5ea58cf5392a5c9a6f5e9770a5f78c7",
+      "bytes": 102088,
+      "directlyInspected": true,
+      "metadataChunksOnlyImage": true
+    },
+    {
+      "name": "historical-civil-date-native-password-proof.json",
+      "sha256": "ce75b5a858615bfc842fea50783838d9a05723968e314101a823c2a2c6cbe78f",
+      "bytes": 9402
+    },
+    {
+      "name": "historical-civil-date-native-password-twentytwentyfive-1440.png",
+      "sha256": "2d57555df62df458c0174b9059acf167bb39ee3d4f4353a801640d73b291e404",
+      "bytes": 76828,
+      "directlyInspected": true,
+      "metadataChunksOnlyImage": true
+    },
+    {
+      "name": "historical-civil-date-native-password-twentytwentyfive-375.png",
+      "sha256": "6523ce92562ba2c3e8e9d6e5ff7a4cded0865d2495b1aaf131f1ebf5fbf54147",
+      "bytes": 57632,
+      "directlyInspected": true,
+      "metadataChunksOnlyImage": true
+    },
+    {
+      "name": "historical-civil-date-native-password-twentytwentyfive-768.png",
+      "sha256": "03ca147b342a8f9b3f23b4fd2e8a4bcba5f0e9d50b1a9984e76c01a4b7e956f8",
+      "bytes": 66460,
+      "directlyInspected": true,
+      "metadataChunksOnlyImage": true
+    },
+    {
+      "name": "historical-civil-date-native-preview-cache-proof.json",
+      "sha256": "4170f61d076610da135ba362a67f731d6ac41ab6bc98748cc37b1a7a971dcbf3",
+      "bytes": 459
+    },
+    {
+      "name": "historical-civil-date-native-preview-logout-hold-twentytwentyfive.png",
+      "sha256": "ee5739939c72b344954d1d67fbcf6c06b28f486575065ce2f31e0809c53a13af",
+      "bytes": 10567,
+      "directlyInspected": true,
+      "metadataChunksOnlyImage": true
+    },
+    {
+      "name": "historical-civil-date-native-preview-logout-hold-v3-classic.png",
+      "sha256": "7ddc8d268481e10eba3ccbd23cc4bcd3c2d793e3782829eb5d6c40a0e78c5ee2",
+      "bytes": 36253,
+      "directlyInspected": true,
+      "metadataChunksOnlyImage": true
+    },
+    {
+      "name": "historical-civil-date-native-preview-logout-hold-v3-twentytwentyfive.png",
+      "sha256": "ee5739939c72b344954d1d67fbcf6c06b28f486575065ce2f31e0809c53a13af",
+      "bytes": 10567,
+      "directlyInspected": true,
+      "metadataChunksOnlyImage": true
+    },
+    {
+      "name": "historical-civil-date-native-preview-normal-proof.json",
+      "sha256": "eb2486e299f6cbea250b46c6d7d2948789a5a7873eec0b7faff8be37f661d87e",
+      "bytes": 8607
+    },
+    {
+      "name": "historical-civil-date-native-preview-pending-proof.json",
+      "sha256": "d18c27a1b4367a0b86f98960a2f0e14d4f1fd66c28bfa56b13095d5e4d52c544",
+      "bytes": 1964
+    },
+    {
+      "name": "historical-civil-date-native-preview-privacy-proof.json",
+      "sha256": "024263cb4a03bbba8eccfe86872d93e39b9c47612167f96785df319f9d4106ae",
+      "bytes": 16859
+    },
+    {
+      "name": "historical-civil-date-native-preview-single-pending-classic.png",
+      "sha256": "7ddc8d268481e10eba3ccbd23cc4bcd3c2d793e3782829eb5d6c40a0e78c5ee2",
+      "bytes": 36253,
+      "directlyInspected": true,
+      "metadataChunksOnlyImage": true
+    },
+    {
+      "name": "historical-civil-date-native-preview-single-pending-twentytwentyfive.png",
+      "sha256": "ee5739939c72b344954d1d67fbcf6c06b28f486575065ce2f31e0809c53a13af",
+      "bytes": 10567,
+      "directlyInspected": true,
+      "metadataChunksOnlyImage": true
+    },
+    {
+      "name": "historical-civil-date-native-preview-twentytwentyfive.png",
+      "sha256": "e22421fdf56170a85544c4a84c8e72f753db7c63170139640f43441244df24dd",
+      "bytes": 42606,
+      "directlyInspected": true,
+      "metadataChunksOnlyImage": true
+    },
+    {
+      "name": "historical-civil-date-native-private-preview-classic-1440.png",
+      "sha256": "7cd029d8fece663a9c09e07e5d8e9c7ec7d5f45a22e8d2420f858ef7bf8ec5cd",
+      "bytes": 74483,
+      "directlyInspected": true,
+      "metadataChunksOnlyImage": true
+    },
+    {
+      "name": "historical-civil-date-native-private-preview-classic-375.png",
+      "sha256": "3a95621c8a208403d6a2f6c226d76fcd07c9467769122e47e7e823b7a5f27e57",
+      "bytes": 50126,
+      "directlyInspected": true,
+      "metadataChunksOnlyImage": true
+    },
+    {
+      "name": "historical-civil-date-native-private-preview-classic-768.png",
+      "sha256": "c553fd374768c1422ea7c0ca38c95467ce402121df4c89f020336bbe7eae966d",
+      "bytes": 61255,
+      "directlyInspected": true,
+      "metadataChunksOnlyImage": true
+    },
+    {
+      "name": "historical-civil-date-native-private-preview-twentytwentyfive-1440.png",
+      "sha256": "5f18f4d79e590c04392a24a845de8fc179938fbf0b1f6fbd5318358d54f56b72",
+      "bytes": 38431,
+      "directlyInspected": true,
+      "metadataChunksOnlyImage": true
+    },
+    {
+      "name": "historical-civil-date-native-private-preview-twentytwentyfive-375.png",
+      "sha256": "3c0b4fca66396a4023cdcb9c45ccbd623d66feaad881f47f7eabbc989dcced32",
+      "bytes": 27164,
+      "directlyInspected": true,
+      "metadataChunksOnlyImage": true
+    },
+    {
+      "name": "historical-civil-date-native-private-preview-twentytwentyfive-768.png",
+      "sha256": "6d96dc694d77bb78e469cfdc47b4f22579e1aed69e36eadf308c8a4add7d5a50",
+      "bytes": 32723,
+      "directlyInspected": true,
+      "metadataChunksOnlyImage": true
+    },
+    {
+      "name": "historical-civil-date-native-private-preview-v3-classic-1440.png",
+      "sha256": "7cd029d8fece663a9c09e07e5d8e9c7ec7d5f45a22e8d2420f858ef7bf8ec5cd",
+      "bytes": 74483,
+      "directlyInspected": true,
+      "metadataChunksOnlyImage": true
+    },
+    {
+      "name": "historical-civil-date-native-private-preview-v3-classic-375.png",
+      "sha256": "3a95621c8a208403d6a2f6c226d76fcd07c9467769122e47e7e823b7a5f27e57",
+      "bytes": 50126,
+      "directlyInspected": true,
+      "metadataChunksOnlyImage": true
+    },
+    {
+      "name": "historical-civil-date-native-private-preview-v3-classic-768.png",
+      "sha256": "c553fd374768c1422ea7c0ca38c95467ce402121df4c89f020336bbe7eae966d",
+      "bytes": 61255,
+      "directlyInspected": true,
+      "metadataChunksOnlyImage": true
+    },
+    {
+      "name": "historical-civil-date-native-private-preview-v3-twentytwentyfive-1440.png",
+      "sha256": "5f18f4d79e590c04392a24a845de8fc179938fbf0b1f6fbd5318358d54f56b72",
+      "bytes": 38431,
+      "directlyInspected": true,
+      "metadataChunksOnlyImage": true
+    },
+    {
+      "name": "historical-civil-date-native-private-preview-v3-twentytwentyfive-375.png",
+      "sha256": "3c0b4fca66396a4023cdcb9c45ccbd623d66feaad881f47f7eabbc989dcced32",
+      "bytes": 27164,
+      "directlyInspected": true,
+      "metadataChunksOnlyImage": true
+    },
+    {
+      "name": "historical-civil-date-native-private-preview-v3-twentytwentyfive-768.png",
+      "sha256": "6d96dc694d77bb78e469cfdc47b4f22579e1aed69e36eadf308c8a4add7d5a50",
+      "bytes": 32723,
+      "directlyInspected": true,
+      "metadataChunksOnlyImage": true
+    },
+    {
+      "name": "historical-civil-date-native-same-gmt-classic.png",
+      "sha256": "b49d2ab5ddd9efe981060785bd6cceb6b0e5863221757e2a9df03346a66c84cd",
+      "bytes": 135120,
+      "directlyInspected": true,
+      "metadataChunksOnlyImage": true
+    },
+    {
+      "name": "historical-civil-date-native-same-gmt-twentytwentyfive.png",
+      "sha256": "a0e6a2171f6b7a85557b8c56862621951ddef8f82d17c67a22ad5be1e1d51d72",
+      "bytes": 107123,
+      "directlyInspected": true,
+      "metadataChunksOnlyImage": true
+    }
+  ],
+  "note": "Hashes of all 78 original private receipts are preserved. Ten superseded screenshot attempts and the preview-normal checkpoint are retained privately and are not copied into this completed proof subset."
+}

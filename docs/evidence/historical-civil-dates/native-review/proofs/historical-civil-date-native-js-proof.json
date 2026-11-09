@@ -1,0 +1,221 @@
+{
+  "sha": "740dc4be9d17500f5fe79ec28c81694cd8fa1472",
+  "rows": [
+    {
+      "theme": "twentytwentyfive",
+      "width": 1440,
+      "initial": {
+        "body1": false,
+        "body2": true,
+        "canonical": 1,
+        "errors": [],
+        "query2": true,
+        "same": true,
+        "scroll": 1440,
+        "titles": 1,
+        "width": 1440
+      },
+      "after": {
+        "body2": true,
+        "errors": [],
+        "length": 10,
+        "push": 1,
+        "query2": true,
+        "url": "/date/2001/12/31/23/59/37/4/chosen-civil-native-post/2/?query-4-page=2&commentPage=3&replytocom=4"
+      },
+      "publicationDate": "2001-12-31 23:59:37 +05:45",
+      "requests": [
+        {
+          "id": 1677,
+          "method": "GET",
+          "path": "/api/public/document?path=%2Fdate%2F2001%2F12%2F31%2F23%2F59%2F37%2F4%2Fchosen-civil-native-post%2F2%2F%3Fquery-4-page%3D2%26commentPage%3D3%26replytocom%3D4",
+          "status": 200
+        },
+        {
+          "id": 1678,
+          "method": "GET",
+          "path": "/vendor/wordpress/wp-content/themes/twentytwentyfive/assets/fonts/manrope/Manrope-VariableFont_wght.woff2",
+          "status": 304
+        }
+      ],
+      "screenshot": "../screens/historical-civil-date-native-js-twentytwentyfive-1440.png"
+    },
+    {
+      "theme": "twentytwentyfive",
+      "width": 768,
+      "initial": {
+        "body1": false,
+        "body2": true,
+        "canonical": 1,
+        "errors": [],
+        "query2": true,
+        "same": true,
+        "scroll": 768,
+        "titles": 1,
+        "width": 768
+      },
+      "after": {
+        "body2": true,
+        "errors": [],
+        "length": 10,
+        "push": 1,
+        "query2": true,
+        "url": "/date/2001/12/31/23/59/37/4/chosen-civil-native-post/2/?query-4-page=2&commentPage=3&replytocom=4"
+      },
+      "publicationDate": "2001-12-31 23:59:37 +05:45",
+      "requests": [
+        {
+          "id": 1722,
+          "method": "GET",
+          "path": "/api/public/document?path=%2Fdate%2F2001%2F12%2F31%2F23%2F59%2F37%2F4%2Fchosen-civil-native-post%2F2%2F%3Fquery-4-page%3D2%26commentPage%3D3%26replytocom%3D4",
+          "status": 200
+        },
+        {
+          "id": 1723,
+          "method": "GET",
+          "path": "/vendor/wordpress/wp-content/themes/twentytwentyfive/assets/fonts/manrope/Manrope-VariableFont_wght.woff2",
+          "status": 304
+        }
+      ],
+      "screenshot": "../screens/historical-civil-date-native-js-twentytwentyfive-768.png"
+    },
+    {
+      "theme": "twentytwentyfive",
+      "width": 375,
+      "initial": {
+        "body1": false,
+        "body2": true,
+        "canonical": 1,
+        "errors": [],
+        "query2": true,
+        "same": true,
+        "scroll": 375,
+        "titles": 1,
+        "width": 375
+      },
+      "after": {
+        "body2": true,
+        "errors": [],
+        "length": 10,
+        "push": 1,
+        "query2": true,
+        "url": "/date/2001/12/31/23/59/37/4/chosen-civil-native-post/2/?query-4-page=2&commentPage=3&replytocom=4"
+      },
+      "publicationDate": "2001-12-31 23:59:37 +05:45",
+      "requests": [
+        {
+          "id": 1767,
+          "method": "GET",
+          "path": "/api/public/document?path=%2Fdate%2F2001%2F12%2F31%2F23%2F59%2F37%2F4%2Fchosen-civil-native-post%2F2%2F%3Fquery-4-page%3D2%26commentPage%3D3%26replytocom%3D4",
+          "status": 200
+        },
+        {
+          "id": 1768,
+          "method": "GET",
+          "path": "/vendor/wordpress/wp-content/themes/twentytwentyfive/assets/fonts/manrope/Manrope-VariableFont_wght.woff2",
+          "status": 304
+        }
+      ],
+      "screenshot": "../screens/historical-civil-date-native-js-twentytwentyfive-375.png"
+    },
+    {
+      "theme": "classic",
+      "width": 1440,
+      "initial": {
+        "body1": false,
+        "body2": true,
+        "canonical": 1,
+        "errors": [],
+        "query2": true,
+        "same": true,
+        "scroll": 1440,
+        "titles": 1,
+        "width": 1440
+      },
+      "after": {
+        "body2": true,
+        "errors": [],
+        "length": 8,
+        "push": 1,
+        "query2": true,
+        "url": "/date/2001/12/31/23/59/37/4/chosen-civil-native-post/2/?query-4-page=2&commentPage=3&replytocom=4"
+      },
+      "publicationDate": "2001-12-31 23:59:37 +05:45",
+      "requests": [
+        {
+          "id": 1807,
+          "method": "GET",
+          "path": "/api/public/document?path=%2Fdate%2F2001%2F12%2F31%2F23%2F59%2F37%2F4%2Fchosen-civil-native-post%2F2%2F%3Fquery-4-page%3D2%26commentPage%3D3%26replytocom%3D4",
+          "status": 200
+        }
+      ],
+      "screenshot": "../screens/historical-civil-date-native-js-classic-1440.png"
+    },
+    {
+      "theme": "classic",
+      "width": 768,
+      "initial": {
+        "body1": false,
+        "body2": true,
+        "canonical": 1,
+        "errors": [],
+        "query2": true,
+        "same": true,
+        "scroll": 768,
+        "titles": 1,
+        "width": 768
+      },
+      "after": {
+        "body2": true,
+        "errors": [],
+        "length": 8,
+        "push": 1,
+        "query2": true,
+        "url": "/date/2001/12/31/23/59/37/4/chosen-civil-native-post/2/?query-4-page=2&commentPage=3&replytocom=4"
+      },
+      "publicationDate": "2001-12-31 23:59:37 +05:45",
+      "requests": [
+        {
+          "id": 1845,
+          "method": "GET",
+          "path": "/api/public/document?path=%2Fdate%2F2001%2F12%2F31%2F23%2F59%2F37%2F4%2Fchosen-civil-native-post%2F2%2F%3Fquery-4-page%3D2%26commentPage%3D3%26replytocom%3D4",
+          "status": 200
+        }
+      ],
+      "screenshot": "../screens/historical-civil-date-native-js-classic-768.png"
+    },
+    {
+      "theme": "classic",
+      "width": 375,
+      "initial": {
+        "body1": false,
+        "body2": true,
+        "canonical": 1,
+        "errors": [],
+        "query2": true,
+        "same": true,
+        "scroll": 375,
+        "titles": 1,
+        "width": 375
+      },
+      "after": {
+        "body2": true,
+        "errors": [],
+        "length": 8,
+        "push": 1,
+        "query2": true,
+        "url": "/date/2001/12/31/23/59/37/4/chosen-civil-native-post/2/?query-4-page=2&commentPage=3&replytocom=4"
+      },
+      "publicationDate": "2001-12-31 23:59:37 +05:45",
+      "requests": [
+        {
+          "id": 1883,
+          "method": "GET",
+          "path": "/api/public/document?path=%2Fdate%2F2001%2F12%2F31%2F23%2F59%2F37%2F4%2Fchosen-civil-native-post%2F2%2F%3Fquery-4-page%3D2%26commentPage%3D3%26replytocom%3D4",
+          "status": 200
+        }
+      ],
+      "screenshot": "../screens/historical-civil-date-native-js-classic-375.png"
+    }
+  ]
+}

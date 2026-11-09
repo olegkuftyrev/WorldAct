@@ -1,0 +1,39 @@
+{
+  "codeSha": "23355068f8207675d387a7ee2abbda8030978534",
+  "nodeSha256": "da76eac89167163ecca73f16cdd26ee642a5248c1e27c08f521cb64328dd8659",
+  "postAutosavesBaseTableRestored": true,
+  "noOwnedPreviewSqlObjects": true,
+  "ownApiAndProxyStopped": true,
+  "ownedPortsFree": [
+    3035,
+    3036,
+    3037,
+    5195
+  ],
+  "uniqueDatabaseAbsent": true,
+  "uniqueUploadsRemoved": true,
+  "ownEnvRemoved": true,
+  "ownThreeDependencySymlinksRemoved": true,
+  "readOnlyDependencyOwnerPreserved": true,
+  "ownTwoBrowserSocketsAbsent": true,
+  "mainReadOnlyHealthStatus": 200,
+  "mainDataOrConfigMutations": false,
+  "browser": {
+    "rows": [
+      {
+        "sessionRole": "normal-browser",
+        "nativeLogout": true,
+        "anonymousSession": true
+      },
+      {
+        "sessionRole": "no-script-browser",
+        "nativeLogout": true,
+        "anonymousSession": true
+      }
+    ],
+    "ownTwoVaultEntriesAbsent": true,
+    "ownTwoSessionsClosed": true,
+    "cleanupHarnessCorrection": "Native public logout can return to home and settle asynchronously. Initial cleanup URL expectation and immediate session check were corrected to a settled actual /api/session anonymous check for both browsers."
+  },
+  "secretConfigAndFixtureRemoved": true
+}

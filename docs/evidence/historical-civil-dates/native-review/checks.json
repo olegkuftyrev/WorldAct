@@ -1,0 +1,126 @@
+{
+  "verdict": "PASS: bounded civil-date UI/native gate at final233; not a whole-project/backend release certificate",
+  "finalCode": "23355068f8207675d387a7ee2abbda8030978534",
+  "finalTree": "ea84539e526a9dafb7ca59c1c83d6d8e5aaf78dc",
+  "backendEquivalentBeforePreview": "f7ba335415ff2878743291361fca047c2bc56342",
+  "nodeSha256": "da76eac89167163ecca73f16cdd26ee642a5248c1e27c08f521cb64328dd8659",
+  "readOnlyDependencyLockSha256": "233888ed8f864581a8835aab0b4c33ccd7fbc391f2a98650b63fcf8db8814892",
+  "build": {
+    "tsc": true,
+    "viteConfigLoaderRunner": true,
+    "serverEsbuild": true,
+    "nodeUnchangedAfterUiFix": true,
+    "cssUnchangedAfterUiFix": true
+  },
+  "guards": [
+    {
+      "stage": "bc7d6448d30bdf81e47fe81c2874317a6b7458ae",
+      "files": 10,
+      "source": {
+        "tests": 77,
+        "pass": 77,
+        "fail": 0,
+        "skip": 0
+      },
+      "actualCompiled": {
+        "tests": 77,
+        "pass": 77,
+        "fail": 0,
+        "skip": 0
+      }
+    },
+    {
+      "stage": "740dc4be9d17500f5fe79ec28c81694cd8fa1472 (same tracked tree as f7ba335415ff2878743291361fca047c2bc56342)",
+      "files": 11,
+      "source": {
+        "tests": 79,
+        "pass": 79,
+        "fail": 0,
+        "skip": 0
+      },
+      "actualCompiled": {
+        "tests": 79,
+        "pass": 79,
+        "fail": 0,
+        "skip": 0
+      }
+    },
+    {
+      "stage": "23355068f8207675d387a7ee2abbda8030978534",
+      "files": 7,
+      "source": {
+        "tests": 26,
+        "pass": 26,
+        "fail": 0,
+        "skip": 0
+      },
+      "actualCompiled": {
+        "tests": 26,
+        "pass": 26,
+        "fail": 0,
+        "skip": 0
+      },
+      "selector": [
+        "template-access",
+        "post-templates",
+        "template",
+        "public-document-data",
+        "public-document-ssr",
+        "public-document-view",
+        "editor-publication-date"
+      ]
+    }
+  ],
+  "native": {
+    "widths": [
+      1440,
+      768,
+      375
+    ],
+    "themes": [
+      "twentytwentyfive",
+      "classic"
+    ],
+    "browserZone": "America/Los_Angeles",
+    "siteZones": [
+      "America/Los_Angeles",
+      "+05:45",
+      "Pacific/Kiritimati"
+    ],
+    "coldEditorReadBeforeLease": 12,
+    "editorMultistepRows": 3,
+    "bulkRows": 3,
+    "initialHydrationAndHistoryRows": 6,
+    "genuineScriptDisabledComment303Rows": 6,
+    "genuineScriptDisabledPassword303Rows": 6,
+    "finalPublicHydrationRows": 6,
+    "finalConsumerRows": 10,
+    "selectedGmtFeedRows": 3,
+    "distinctCivilModelKeyThemes": 2,
+    "latestPrivateAutosavePreviewRows": 6,
+    "anonymousOtherActorPublicDraftDenialHttpCases": 12,
+    "measuredSecondExpressionLogoutHolds": 2,
+    "measuredPendingSingleTemplateLogoutDifferentActorHolds": 2,
+    "privateNoStoreNoindexHttpCases": 2,
+    "actualMissedUtcRows": 3
+  },
+  "evidence": {
+    "copiedCompletedProofsIncludingOriginalFailures": 14,
+    "copiedInspectedPngs": 53,
+    "allOriginalInspectedPngs": 63,
+    "privateOriginalReceiptCount": 78,
+    "privateOriginalReceiptManifestSha256": "f9d607809559b925ac300c068755b67769b760f9a2a6577aff04185fe36675b7",
+    "sourceOriginalBytesPreserved": true,
+    "sanitizedCopiesOnly": true
+  },
+  "cleanupComplete": true,
+  "limits": [
+    "No full WordPress parity or live reference pixel comparison",
+    "No BFCache certificate",
+    "No general backend privacy/civil migration certificate",
+    "No production or user MAIN database migration",
+    "No historical modified-clock change or exhaustive PHP-format normalization",
+    "No benchmark",
+    "Owned synthetic templates/fixtures; external avatar delivery intercepted"
+  ]
+}

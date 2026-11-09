@@ -1,0 +1,364 @@
+{
+  "sha": "740dc4be9d17500f5fe79ec28c81694cd8fa1472",
+  "rows": [
+    {
+      "theme": "twentytwentyfive",
+      "width": 1440,
+      "before": {
+        "body2": true,
+        "bootstrap": true,
+        "gate": false,
+        "lifecycle": false,
+        "parent": "4",
+        "query2": true,
+        "scriptRan": false
+      },
+      "after": {
+        "body1": false,
+        "body2": true,
+        "commentPage": "2",
+        "query2": true,
+        "queryPage": "2",
+        "reply": null,
+        "scriptRan": false,
+        "scroll": 1440,
+        "text": true,
+        "url": "/date/2001/12/31/23/59/37/4/chosen-civil-native-post/2/?query-4-page=2&commentPage=2#comment-10",
+        "visible": true,
+        "width": 1440
+      },
+      "saved": {
+        "id": 10,
+        "parent_id": 4,
+        "user_id": 1,
+        "status": "approved"
+      },
+      "requests": [
+        {
+          "id": 1914,
+          "method": "POST",
+          "path": "/wp-comments-post.php",
+          "status": 303
+        },
+        {
+          "id": 1915,
+          "method": "GET",
+          "path": "/date/2001/12/31/23/59/37/4/chosen-civil-native-post/2/?query-4-page=2&commentPage=2",
+          "status": 200
+        },
+        {
+          "id": 1916,
+          "method": "GET",
+          "path": "/assets/index-BsgYOWhl.css",
+          "status": 304
+        },
+        {
+          "id": 1917,
+          "method": "GET",
+          "path": "/vendor/wordpress/wp-content/themes/twentytwentyfive/assets/fonts/manrope/Manrope-VariableFont_wght.woff2",
+          "status": 304
+        }
+      ],
+      "screenshot": "../screens/historical-civil-date-native-nojs-twentytwentyfive-1440.png"
+    },
+    {
+      "theme": "twentytwentyfive",
+      "width": 768,
+      "before": {
+        "body2": true,
+        "bootstrap": true,
+        "gate": false,
+        "lifecycle": false,
+        "parent": "4",
+        "query2": true,
+        "scriptRan": false
+      },
+      "after": {
+        "body1": false,
+        "body2": true,
+        "commentPage": "2",
+        "query2": true,
+        "queryPage": "2",
+        "reply": null,
+        "scriptRan": false,
+        "scroll": 768,
+        "text": true,
+        "url": "/date/2001/12/31/23/59/37/4/chosen-civil-native-post/2/?query-4-page=2&commentPage=2#comment-11",
+        "visible": true,
+        "width": 768
+      },
+      "saved": {
+        "id": 11,
+        "parent_id": 4,
+        "user_id": 1,
+        "status": "approved"
+      },
+      "requests": [
+        {
+          "id": 1921,
+          "method": "POST",
+          "path": "/wp-comments-post.php",
+          "status": 303
+        },
+        {
+          "id": 1922,
+          "method": "GET",
+          "path": "/date/2001/12/31/23/59/37/4/chosen-civil-native-post/2/?query-4-page=2&commentPage=2",
+          "status": 200
+        },
+        {
+          "id": 1923,
+          "method": "GET",
+          "path": "/assets/index-BsgYOWhl.css",
+          "status": 304
+        },
+        {
+          "id": 1924,
+          "method": "GET",
+          "path": "/vendor/wordpress/wp-content/themes/twentytwentyfive/assets/fonts/manrope/Manrope-VariableFont_wght.woff2",
+          "status": 304
+        }
+      ],
+      "screenshot": "../screens/historical-civil-date-native-nojs-twentytwentyfive-768.png"
+    },
+    {
+      "theme": "twentytwentyfive",
+      "width": 375,
+      "before": {
+        "body2": true,
+        "bootstrap": true,
+        "gate": false,
+        "lifecycle": false,
+        "parent": "4",
+        "query2": true,
+        "scriptRan": false
+      },
+      "after": {
+        "body1": false,
+        "body2": true,
+        "commentPage": "2",
+        "query2": true,
+        "queryPage": "2",
+        "reply": null,
+        "scriptRan": false,
+        "scroll": 375,
+        "text": true,
+        "url": "/date/2001/12/31/23/59/37/4/chosen-civil-native-post/2/?query-4-page=2&commentPage=2#comment-12",
+        "visible": true,
+        "width": 375
+      },
+      "saved": {
+        "id": 12,
+        "parent_id": 4,
+        "user_id": 1,
+        "status": "approved"
+      },
+      "requests": [
+        {
+          "id": 1928,
+          "method": "POST",
+          "path": "/wp-comments-post.php",
+          "status": 303
+        },
+        {
+          "id": 1929,
+          "method": "GET",
+          "path": "/date/2001/12/31/23/59/37/4/chosen-civil-native-post/2/?query-4-page=2&commentPage=2",
+          "status": 200
+        },
+        {
+          "id": 1930,
+          "method": "GET",
+          "path": "/assets/index-BsgYOWhl.css",
+          "status": 304
+        },
+        {
+          "id": 1931,
+          "method": "GET",
+          "path": "/vendor/wordpress/wp-content/themes/twentytwentyfive/assets/fonts/manrope/Manrope-VariableFont_wght.woff2",
+          "status": 304
+        }
+      ],
+      "screenshot": "../screens/historical-civil-date-native-nojs-twentytwentyfive-375.png"
+    },
+    {
+      "theme": "classic",
+      "width": 1440,
+      "before": {
+        "body2": true,
+        "bootstrap": true,
+        "gate": false,
+        "lifecycle": false,
+        "parent": "4",
+        "query2": true,
+        "scriptRan": false
+      },
+      "after": {
+        "body1": false,
+        "body2": true,
+        "commentPage": "2",
+        "query2": true,
+        "queryPage": "2",
+        "reply": null,
+        "scriptRan": false,
+        "scroll": 1440,
+        "text": true,
+        "url": "/date/2001/12/31/23/59/37/4/chosen-civil-native-post/2/?query-4-page=2&commentPage=2#comment-13",
+        "visible": true,
+        "width": 1440
+      },
+      "saved": {
+        "id": 13,
+        "parent_id": 4,
+        "user_id": 1,
+        "status": "approved"
+      },
+      "requests": [
+        {
+          "id": 1935,
+          "method": "POST",
+          "path": "/wp-comments-post.php",
+          "status": 303
+        },
+        {
+          "id": 1936,
+          "method": "GET",
+          "path": "/date/2001/12/31/23/59/37/4/chosen-civil-native-post/2/?query-4-page=2&commentPage=2",
+          "status": 200
+        },
+        {
+          "id": 1937,
+          "method": "GET",
+          "path": "/assets/index-BsgYOWhl.css",
+          "status": 304
+        },
+        {
+          "id": 1938,
+          "method": "GET",
+          "path": "/vendor/wordpress/wp-content/themes/twentytwentyfive/assets/fonts/manrope/Manrope-VariableFont_wght.woff2"
+        }
+      ],
+      "screenshot": "../screens/historical-civil-date-native-nojs-classic-1440.png"
+    },
+    {
+      "theme": "classic",
+      "width": 768,
+      "before": {
+        "body2": true,
+        "bootstrap": true,
+        "gate": false,
+        "lifecycle": false,
+        "parent": "4",
+        "query2": true,
+        "scriptRan": false
+      },
+      "after": {
+        "body1": false,
+        "body2": true,
+        "commentPage": "2",
+        "query2": true,
+        "queryPage": "2",
+        "reply": null,
+        "scriptRan": false,
+        "scroll": 768,
+        "text": true,
+        "url": "/date/2001/12/31/23/59/37/4/chosen-civil-native-post/2/?query-4-page=2&commentPage=2#comment-14",
+        "visible": true,
+        "width": 768
+      },
+      "saved": {
+        "id": 14,
+        "parent_id": 4,
+        "user_id": 1,
+        "status": "approved"
+      },
+      "requests": [
+        {
+          "id": 1942,
+          "method": "POST",
+          "path": "/wp-comments-post.php",
+          "status": 303
+        },
+        {
+          "id": 1943,
+          "method": "GET",
+          "path": "/date/2001/12/31/23/59/37/4/chosen-civil-native-post/2/?query-4-page=2&commentPage=2",
+          "status": 200
+        },
+        {
+          "id": 1944,
+          "method": "GET",
+          "path": "/assets/index-BsgYOWhl.css",
+          "status": 304
+        },
+        {
+          "id": 1945,
+          "method": "GET",
+          "path": "/vendor/wordpress/wp-content/themes/twentytwentyfive/assets/fonts/manrope/Manrope-VariableFont_wght.woff2",
+          "status": 304
+        }
+      ],
+      "screenshot": "../screens/historical-civil-date-native-nojs-classic-768.png"
+    },
+    {
+      "theme": "classic",
+      "width": 375,
+      "before": {
+        "body2": true,
+        "bootstrap": true,
+        "gate": false,
+        "lifecycle": false,
+        "parent": "4",
+        "query2": true,
+        "scriptRan": false
+      },
+      "after": {
+        "body1": false,
+        "body2": true,
+        "commentPage": "2",
+        "query2": true,
+        "queryPage": "2",
+        "reply": null,
+        "scriptRan": false,
+        "scroll": 375,
+        "text": true,
+        "url": "/date/2001/12/31/23/59/37/4/chosen-civil-native-post/2/?query-4-page=2&commentPage=2#comment-15",
+        "visible": true,
+        "width": 375
+      },
+      "saved": {
+        "id": 15,
+        "parent_id": 4,
+        "user_id": 1,
+        "status": "approved"
+      },
+      "requests": [
+        {
+          "id": 1949,
+          "method": "POST",
+          "path": "/wp-comments-post.php",
+          "status": 303
+        },
+        {
+          "id": 1950,
+          "method": "GET",
+          "path": "/date/2001/12/31/23/59/37/4/chosen-civil-native-post/2/?query-4-page=2&commentPage=2",
+          "status": 200
+        },
+        {
+          "id": 1951,
+          "method": "GET",
+          "path": "/assets/index-BsgYOWhl.css",
+          "status": 304
+        },
+        {
+          "id": 1952,
+          "method": "GET",
+          "path": "/vendor/wordpress/wp-content/themes/twentytwentyfive/assets/fonts/manrope/Manrope-VariableFont_wght.woff2",
+          "status": 304
+        }
+      ],
+      "screenshot": "../screens/historical-civil-date-native-nojs-classic-375.png"
+    }
+  ]
+}

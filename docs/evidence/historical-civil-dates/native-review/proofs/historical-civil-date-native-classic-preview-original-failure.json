@@ -1,0 +1,22 @@
+{
+  "sha": "740dc4be9d17500f5fe79ec28c81694cd8fa1472",
+  "sameTreeAs": "f7ba335415ff2878743291361fca047c2bc56342",
+  "nodeSha256": "da76eac89167163ecca73f16cdd26ee642a5248c1e27c08f521cb64328dd8659",
+  "theme": "classic",
+  "request": {
+    "method": "GET",
+    "path": "/api/posts/4/preview",
+    "status": 200,
+    "previewHasExpectedBody": true,
+    "previewHasChosenDate": true
+  },
+  "browser": {
+    "errors": [],
+    "expectedBody": false,
+    "expectedDate": false,
+    "url": "/preview/4",
+    "width": 375
+  },
+  "explanation": "Classic custom single contains genuine Gutenberg post-title/post-date/post-content blocks. RenderedTemplate explicitly bypasses authenticated preview renderer and injects raw serialized block fallback, producing empty article.",
+  "screenshot": "../screens/historical-civil-date-native-classic-preview-original-failure.png"
+}

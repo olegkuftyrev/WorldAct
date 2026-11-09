@@ -1,0 +1,191 @@
+{
+  "sha": "740dc4be9d17500f5fe79ec28c81694cd8fa1472",
+  "rows": [
+    {
+      "width": 1440,
+      "initial": {
+        "action": "Schedule",
+        "browserZone": "America/Los_Angeles",
+        "description": "Site timezone: +05:45. Publication time: 2031-12-31 23:59:37",
+        "errors": [],
+        "overflow": false,
+        "status": "future",
+        "step": "1",
+        "value": "2031-12-31T23:59:37"
+      },
+      "unchanged": {
+        "postDate": "2031-12-31T23:59:37",
+        "postDateGmt": "2032-01-01T07:59:37.000Z",
+        "scheduledAt": "2032-01-01T07:59:37.000Z"
+      },
+      "changed": {
+        "postDate": "2033-02-03T04:05:19",
+        "postDateGmt": "2033-02-02T22:20:19.000Z",
+        "scheduledAt": "2033-02-02T22:20:19.000Z"
+      },
+      "cleared": {
+        "postDate": "2026-11-09T05:57:04",
+        "postDateGmt": null,
+        "scheduledAt": null
+      },
+      "fixedDraft": {
+        "id": 15,
+        "postDate": "2026-11-08T18:12:05",
+        "postDateGmt": "2026-11-09T02:12:05.000Z",
+        "scheduledAt": "2026-11-09T02:12:05.000Z"
+      },
+      "floatingView": {
+        "action": "Publish",
+        "browserZone": "America/Los_Angeles",
+        "description": "Site timezone: America/Los_Angeles. Publication time: 2026-11-09 14:12:06",
+        "errors": [],
+        "overflow": false,
+        "status": "draft",
+        "step": "1",
+        "value": "2026-11-09T14:12:06"
+      },
+      "inactive": {
+        "id": 17,
+        "postDate": "2002-01-02T03:04:37",
+        "postDateGmt": "2002-01-01T21:19:37.000Z",
+        "scheduledAt": "2035-02-02T22:20:19.000Z",
+        "status": "publish"
+      },
+      "final": {
+        "action": "Publish",
+        "browserZone": "America/Los_Angeles",
+        "description": "Site timezone: +05:45. Publication time: 2026-11-09 05:57:04",
+        "errors": [],
+        "overflow": false,
+        "status": "draft",
+        "step": "1",
+        "value": "2026-11-09T05:57:04"
+      },
+      "screenshot": "../screens/historical-civil-date-native-editor-1440.png"
+    },
+    {
+      "width": 768,
+      "initial": {
+        "action": "Schedule",
+        "browserZone": "America/Los_Angeles",
+        "description": "Site timezone: +05:45. Publication time: 2031-12-31 23:59:37",
+        "errors": [],
+        "overflow": false,
+        "status": "future",
+        "step": "1",
+        "value": "2031-12-31T23:59:37"
+      },
+      "unchanged": {
+        "postDate": "2031-12-31T23:59:37",
+        "postDateGmt": "2032-01-01T07:59:37.000Z",
+        "scheduledAt": "2032-01-01T07:59:37.000Z"
+      },
+      "changed": {
+        "postDate": "2033-02-03T04:05:19",
+        "postDateGmt": "2033-02-02T22:20:19.000Z",
+        "scheduledAt": "2033-02-02T22:20:19.000Z"
+      },
+      "cleared": {
+        "postDate": "2026-11-09T05:57:19",
+        "postDateGmt": null,
+        "scheduledAt": null
+      },
+      "fixedDraft": {
+        "id": 18,
+        "postDate": "2026-11-08T18:12:20",
+        "postDateGmt": "2026-11-09T02:12:20.000Z",
+        "scheduledAt": "2026-11-09T02:12:20.000Z"
+      },
+      "floatingView": {
+        "action": "Publish",
+        "browserZone": "America/Los_Angeles",
+        "description": "Site timezone: America/Los_Angeles. Publication time: 2026-11-09 14:12:20",
+        "errors": [],
+        "overflow": false,
+        "status": "draft",
+        "step": "1",
+        "value": "2026-11-09T14:12:20"
+      },
+      "inactive": {
+        "id": 20,
+        "postDate": "2002-01-02T03:04:37",
+        "postDateGmt": "2002-01-01T21:19:37.000Z",
+        "scheduledAt": "2035-02-02T22:20:19.000Z",
+        "status": "publish"
+      },
+      "final": {
+        "action": "Publish",
+        "browserZone": "America/Los_Angeles",
+        "description": "Site timezone: +05:45. Publication time: 2026-11-09 05:57:19",
+        "errors": [],
+        "overflow": false,
+        "status": "draft",
+        "step": "1",
+        "value": "2026-11-09T05:57:19"
+      },
+      "screenshot": "../screens/historical-civil-date-native-editor-768.png"
+    },
+    {
+      "width": 375,
+      "initial": {
+        "action": "Schedule",
+        "browserZone": "America/Los_Angeles",
+        "description": "Site timezone: +05:45. Publication time: 2031-12-31 23:59:37",
+        "errors": [],
+        "overflow": false,
+        "status": "future",
+        "step": "1",
+        "value": "2031-12-31T23:59:37"
+      },
+      "unchanged": {
+        "postDate": "2031-12-31T23:59:37",
+        "postDateGmt": "2032-01-01T07:59:37.000Z",
+        "scheduledAt": "2032-01-01T07:59:37.000Z"
+      },
+      "changed": {
+        "postDate": "2033-02-03T04:05:19",
+        "postDateGmt": "2033-02-02T22:20:19.000Z",
+        "scheduledAt": "2033-02-02T22:20:19.000Z"
+      },
+      "cleared": {
+        "postDate": "2026-11-09T05:57:34",
+        "postDateGmt": null,
+        "scheduledAt": null
+      },
+      "fixedDraft": {
+        "id": 21,
+        "postDate": "2026-11-08T18:12:34",
+        "postDateGmt": "2026-11-09T02:12:34.000Z",
+        "scheduledAt": "2026-11-09T02:12:34.000Z"
+      },
+      "floatingView": {
+        "action": "Publish",
+        "browserZone": "America/Los_Angeles",
+        "description": "Site timezone: America/Los_Angeles. Publication time: 2026-11-09 14:12:35",
+        "errors": [],
+        "overflow": false,
+        "status": "draft",
+        "step": "1",
+        "value": "2026-11-09T14:12:35"
+      },
+      "inactive": {
+        "id": 23,
+        "postDate": "2002-01-02T03:04:37",
+        "postDateGmt": "2002-01-01T21:19:37.000Z",
+        "scheduledAt": "2035-02-02T22:20:19.000Z",
+        "status": "publish"
+      },
+      "final": {
+        "action": "Publish",
+        "browserZone": "America/Los_Angeles",
+        "description": "Site timezone: +05:45. Publication time: 2026-11-09 05:57:34",
+        "errors": [],
+        "overflow": false,
+        "status": "draft",
+        "step": "1",
+        "value": "2026-11-09T05:57:34"
+      },
+      "screenshot": "../screens/historical-civil-date-native-editor-375.png"
+    }
+  ]
+}

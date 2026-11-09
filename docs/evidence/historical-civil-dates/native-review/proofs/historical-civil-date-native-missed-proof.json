@@ -1,0 +1,45 @@
+{
+  "sha": "23355068f8207675d387a7ee2abbda8030978534",
+  "rows": [
+    {
+      "width": 1440,
+      "selectedCivil": "2036-02-03T04:05:19",
+      "selectedGmt": "2036-02-02T22:20:19.000Z",
+      "actualLegacyDue": "2000-01-01T00:00:00.000Z",
+      "observation": {
+        "date": [
+          "Missed schedule\n2036/02/03 at 4:05 am"
+        ],
+        "error": true,
+        "overflow": false
+      }
+    },
+    {
+      "width": 768,
+      "selectedCivil": "2036-02-03T04:05:19",
+      "selectedGmt": "2036-02-02T22:20:19.000Z",
+      "actualLegacyDue": "2000-01-01T00:00:00.000Z",
+      "observation": {
+        "date": [
+          "Missed schedule2036/02/03 at 4:05 am"
+        ],
+        "error": true,
+        "overflow": false
+      }
+    },
+    {
+      "width": 375,
+      "selectedCivil": "2036-02-03T04:05:19",
+      "selectedGmt": "2036-02-02T22:20:19.000Z",
+      "actualLegacyDue": "2000-01-01T00:00:00.000Z",
+      "observation": {
+        "date": [
+          "Missed schedule\n2036/02/03 at 4:05 am"
+        ],
+        "error": true,
+        "overflow": false
+      }
+    }
+  ],
+  "screenshot": "../screens/historical-civil-date-native-missed-utc-375.png"
+}

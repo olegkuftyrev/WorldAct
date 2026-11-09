@@ -1,0 +1,153 @@
+{
+  "sha": "23355068f8207675d387a7ee2abbda8030978534",
+  "feedRows": [
+    {
+      "id": 4,
+      "civil": "2001-12-31T23:59:37",
+      "selectedGmt": "2002-01-01T07:59:37.000Z",
+      "legacyPublishedAt": "2002-01-01T07:59:37.000Z",
+      "rssPubDate": "Tue, 01 Jan 2002 07:59:37 GMT",
+      "atomPublished": "2002-01-01T07:59:37.000Z",
+      "wxrPubDate": "Tue, 01 Jan 2002 07:59:37 GMT",
+      "wxrCivil": "2001-12-31 23:59:37"
+    },
+    {
+      "id": 24,
+      "civil": "2002-01-01T00:01:19",
+      "selectedGmt": "2002-01-01T07:59:37.000Z",
+      "legacyPublishedAt": "1998-04-05T06:07:08.234Z",
+      "rssPubDate": "Tue, 01 Jan 2002 07:59:37 GMT",
+      "atomPublished": "2002-01-01T07:59:37.000Z",
+      "wxrPubDate": "Tue, 01 Jan 2002 07:59:37 GMT",
+      "wxrCivil": "2002-01-01 00:01:19"
+    },
+    {
+      "id": 25,
+      "civil": "2002-01-02T03:04:37",
+      "selectedGmt": null,
+      "legacyPublishedAt": "1998-04-05T06:07:08.234Z",
+      "rssPubDate": "",
+      "atomPublished": "",
+      "wxrPubDate": "",
+      "wxrCivil": "2002-01-02 03:04:37"
+    }
+  ],
+  "models": [
+    {
+      "theme": "twentytwentyfive",
+      "firstKey": "post:4:2001-12-31T23:59:37",
+      "secondKey": "post:24:2002-01-01T00:01:19",
+      "firstValue": "2001-12-31 23:59:37 +05:45",
+      "secondValue": "2002-01-01 00:01:19 +05:45",
+      "commentTimestampKey": "2025-01-01T12:00:00.000Z",
+      "commentValue": "January 1, 2025"
+    },
+    {
+      "theme": "classic",
+      "firstKey": "post:4:2001-12-31T23:59:37",
+      "secondKey": "post:24:2002-01-01T00:01:19",
+      "firstValue": "2001-12-31 23:59:37 +05:45",
+      "secondValue": "2002-01-01 00:01:19 +05:45",
+      "commentTimestampKey": "2025-01-01T12:00:00.000Z",
+      "commentValue": "January 1, 2025"
+    }
+  ],
+  "rows": [
+    {
+      "kind": "same-gmt-home",
+      "theme": "twentytwentyfive",
+      "width": 375,
+      "screenshot": "../screens/historical-civil-date-native-final-same-gmt-twentytwentyfive.png"
+    },
+    {
+      "kind": "authenticated-preview",
+      "theme": "twentytwentyfive",
+      "width": 375,
+      "screenshot": "../screens/historical-civil-date-native-final-preview-twentytwentyfive.png"
+    },
+    {
+      "kind": "same-gmt-home",
+      "theme": "classic",
+      "width": 375,
+      "screenshot": "../screens/historical-civil-date-native-final-same-gmt-classic.png"
+    },
+    {
+      "kind": "authenticated-preview",
+      "theme": "classic",
+      "width": 375,
+      "screenshot": "../screens/historical-civil-date-native-final-preview-classic.png"
+    },
+    {
+      "kind": "archive-calendar-day-canonical",
+      "width": 1440,
+      "calendar": {
+        "alternate": false,
+        "caption": "December 2001",
+        "chosen": true,
+        "day31": "31",
+        "overflow": false
+      },
+      "dayPath": "/2001/12/31/",
+      "canonical": "/date/2001/12/31/23/59/37/4/chosen-civil-native-post/",
+      "screenshot": "../screens/historical-civil-date-native-final-calendar-1440.png"
+    },
+    {
+      "kind": "dashboard-site-civil-seconds",
+      "width": 1440,
+      "dashboard": {
+        "errors": [],
+        "future": "Publishing Soon\nNov 8th, 18:12:05\nFixed draft native 1440\nNov 8th, 18:12:20\nFixed draft native 768\nNov 8th, 18:12:34\nFixed draft native 375\nFeb 3rd 2036, 04:05:19\nCivil Editor Schedule 1440 ordinary edit\nFeb 3rd 2036, 04:05:19\nCivil Editor Schedule 768 ordinary edit",
+        "overflow": false
+      },
+      "screenshot": "../screens/historical-civil-date-native-final-dashboard-1440.png"
+    },
+    {
+      "kind": "archive-calendar-day-canonical",
+      "width": 768,
+      "calendar": {
+        "alternate": false,
+        "caption": "December 2001",
+        "chosen": true,
+        "day31": "31",
+        "overflow": false
+      },
+      "dayPath": "/2001/12/31/",
+      "canonical": "/date/2001/12/31/23/59/37/4/chosen-civil-native-post/",
+      "screenshot": "../screens/historical-civil-date-native-final-calendar-768.png"
+    },
+    {
+      "kind": "dashboard-site-civil-seconds",
+      "width": 768,
+      "dashboard": {
+        "errors": [],
+        "future": "Publishing Soon\nNov 8th, 18:12:05\nFixed draft native 1440\nNov 8th, 18:12:20\nFixed draft native 768\nNov 8th, 18:12:34\nFixed draft native 375\nFeb 3rd 2036, 04:05:19\nCivil Editor Schedule 1440 ordinary edit\nFeb 3rd 2036, 04:05:19\nCivil Editor Schedule 768 ordinary edit",
+        "overflow": false
+      },
+      "screenshot": "../screens/historical-civil-date-native-final-dashboard-768.png"
+    },
+    {
+      "kind": "archive-calendar-day-canonical",
+      "width": 375,
+      "calendar": {
+        "alternate": false,
+        "caption": "December 2001",
+        "chosen": true,
+        "day31": "31",
+        "overflow": false
+      },
+      "dayPath": "/2001/12/31/",
+      "canonical": "/date/2001/12/31/23/59/37/4/chosen-civil-native-post/",
+      "screenshot": "../screens/historical-civil-date-native-final-calendar-375.png"
+    },
+    {
+      "kind": "dashboard-site-civil-seconds",
+      "width": 375,
+      "dashboard": {
+        "errors": [],
+        "future": "Publishing Soon\nNov 8th, 18:12:05\nFixed draft native 1440\nNov 8th, 18:12:20\nFixed draft native 768\nNov 8th, 18:12:34\nFixed draft native 375\nFeb 3rd 2036, 04:05:19\nCivil Editor Schedule 1440 ordinary edit\nFeb 3rd 2036, 04:05:19\nCivil Editor Schedule 768 ordinary edit",
+        "overflow": false
+      },
+      "screenshot": "../screens/historical-civil-date-native-final-dashboard-375.png"
+    }
+  ]
+}

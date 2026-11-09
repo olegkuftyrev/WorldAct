@@ -1,0 +1,107 @@
+{
+  "sha": "740dc4be9d17500f5fe79ec28c81694cd8fa1472",
+  "rows": [
+    {
+      "width": 1440,
+      "before": {
+        "browserZone": "America/Los_Angeles",
+        "step": "1",
+        "value": "2036-02-03T04:05:19",
+        "zone": "Site timezone: +05:45"
+      },
+      "saved": {
+        "id": 8,
+        "status": "future",
+        "postDate": "2036-02-03T04:05:19",
+        "postDateGmt": "2036-02-02T22:20:19.000Z",
+        "scheduledAt": "2036-02-02T22:20:19.000Z"
+      },
+      "after": {
+        "dateCells": [
+          "Scheduled\n2036/02/03 at 4:05 am",
+          "Last Modified\n2026/11/09 at 5:57 am",
+          "Last Modified\n2026/11/09 at 5:57 am"
+        ],
+        "errors": [],
+        "overflow": false
+      },
+      "requests": [
+        {
+          "id": 2057,
+          "method": "POST",
+          "path": "/api/posts/bulk",
+          "status": 200
+        }
+      ],
+      "screenshot": "../screens/historical-civil-date-native-bulk-1440.png"
+    },
+    {
+      "width": 768,
+      "before": {
+        "browserZone": "America/Los_Angeles",
+        "step": "1",
+        "value": "2036-02-03T04:05:19",
+        "zone": "Site timezone: +05:45"
+      },
+      "saved": {
+        "id": 9,
+        "status": "future",
+        "postDate": "2036-02-03T04:05:19",
+        "postDateGmt": "2036-02-02T22:20:19.000Z",
+        "scheduledAt": "2036-02-02T22:20:19.000Z"
+      },
+      "after": {
+        "dateCells": [
+          "Scheduled2036/02/03 at 4:05 am",
+          "Scheduled2036/02/03 at 4:05 am",
+          "Last Modified2026/11/09 at 5:57 am"
+        ],
+        "errors": [],
+        "overflow": false
+      },
+      "requests": [
+        {
+          "id": 2078,
+          "method": "POST",
+          "path": "/api/posts/bulk",
+          "status": 200
+        }
+      ],
+      "screenshot": "../screens/historical-civil-date-native-bulk-768.png"
+    },
+    {
+      "width": 375,
+      "before": {
+        "browserZone": "America/Los_Angeles",
+        "step": "1",
+        "value": "2036-02-03T04:05:19",
+        "zone": "Site timezone: +05:45"
+      },
+      "saved": {
+        "id": 10,
+        "status": "future",
+        "postDate": "2036-02-03T04:05:19",
+        "postDateGmt": "2036-02-02T22:20:19.000Z",
+        "scheduledAt": "2036-02-02T22:20:19.000Z"
+      },
+      "after": {
+        "dateCells": [
+          "Scheduled\n2036/02/03 at 4:05 am",
+          "Scheduled\n2036/02/03 at 4:05 am",
+          "Scheduled\n2036/02/03 at 4:05 am"
+        ],
+        "errors": [],
+        "overflow": false
+      },
+      "requests": [
+        {
+          "id": 2099,
+          "method": "POST",
+          "path": "/api/posts/bulk",
+          "status": 200
+        }
+      ],
+      "screenshot": "../screens/historical-civil-date-native-bulk-375.png"
+    }
+  ]
+}
