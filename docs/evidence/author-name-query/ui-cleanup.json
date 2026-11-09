@@ -1,0 +1,13 @@
+{
+  "scope": "author-name UI first implementation stage only",
+  "anchorNeverCreatedVerifiedAbsent": true,
+  "guardRunnerCompletedAndDisposedOwnFixtures": true,
+  "guardPort5195Free": true,
+  "ownEnvRemoved": true,
+  "ownReadonlyDependencyLinkRemoved": true,
+  "dependencyOwnerPreserved": true,
+  "noPersistentNativeDatabaseOrUploadsCreated": true,
+  "noBrowserSessionOrVaultCreated": true,
+  "noNativeAPIServicesCreated": true,
+  "mainAndOtherOwnersUntouched": true
+}
