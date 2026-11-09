@@ -1,0 +1,207 @@
+{
+  "schemaVersion": 1,
+  "verdict": "PASS for the bounded civil-date backend package at the reviewed runtime",
+  "reviewedRuntime": {
+    "commit": "f7ba335415ff2878743291361fca047c2bc56342",
+    "tree": "690708e8dcb8207af2c171c5b963d8009d9d63ab",
+    "nodeBundleSha256": "da76eac89167163ecca73f16cdd26ee642a5248c1e27c08f521cb64328dd8659",
+    "localNode": "24.14.1",
+    "localPostgreSQLMajor": 17,
+    "typecheck": "PASS",
+    "viteRunnerBuild": "PASS",
+    "esbuild": "PASS"
+  },
+  "broadGates": {
+    "source": {
+      "files": 184,
+      "passed": 1029,
+      "conditionalSkips": 10,
+      "failed": 0
+    },
+    "actualCompiledHttpServer": {
+      "files": 136,
+      "passed": 896,
+      "conditionalSkips": 6,
+      "failed": 0
+    },
+    "countsIncludeNodeTestParents": true,
+    "sourceIncludesTwoIndependentSupplementalFiles": true,
+    "compiledSelection": "Actual CI selection excluding the three separately coordinated fixed-port files, plus the independent exporter-snapshot probe",
+    "excludedFixedPortFiles": [
+      "tests/incoming-ping-flood.test.ts",
+      "tests/incoming-ping-flood-production.test.ts",
+      "tests/incoming-ping-flood-leases.test.ts"
+    ],
+    "excludedFileCoverage": "Separate author/root source and compiled gates; not executed by this reviewer"
+  },
+  "freshArchives": {
+    "normalV4": {
+      "sourceExportPassed": 1,
+      "freshSourceRestorePassed": 1,
+      "freshCompiledRestorePassed": 1
+    },
+    "extendedV4": {
+      "sourceExportPassed": 1,
+      "freshSourceRestorePassed": 1,
+      "freshCompiledRestorePassed": 1
+    },
+    "sourceArchiveHashesMeasuredAfterExportAndUnchangedAcrossRestores": true,
+    "extendedCoverage": [
+      "different destination IDs and importing administrator",
+      "different destination timezone and both design choices",
+      "calendar years 0001 and 9999",
+      "both repeated DST instants with identical civil fields",
+      "same GMT with different local publication dates",
+      "protected, private and future visibility",
+      "actual native comment 303 and follow retaining second body and query/comment counters",
+      "invalid import rollback of posts, settings and files"
+    ]
+  },
+  "actualExporterSnapshotProbe": {
+    "sourcePassed": 1,
+    "compiledHttpPassed": 1,
+    "includedInBroadGates": true,
+    "sha256": "2adf7a58b6e0162e2144649aedeede364b6f95ad643e1bf3eb2ad09a4af3e92c",
+    "coverage": "A measured exporter row-projection wait spans a concurrent selected-pair and settings change; export retains one coherent old pair, canonical and settings snapshot, while a subsequent read sees the new values"
+  },
+  "unseededInstallation": {
+    "source": {
+      "passed": 7,
+      "conditionalSkips": 1,
+      "failed": 0
+    },
+    "compiled": {
+      "passed": 7,
+      "conditionalSkips": 1,
+      "failed": 0
+    }
+  },
+  "testOnlyFollowup": {
+    "originalCommit": "d958b30f2fb82a441ca80be3635b4e1309754bde",
+    "reviewerCommit": "07c210e828a27ac079028a625317a95f922d2160",
+    "onlyChangedFile": "tests/user-nicenames-migration.test.ts",
+    "productionRuntimeChanged": false,
+    "source": {
+      "files": 1,
+      "passed": 9,
+      "conditionalSkips": 0,
+      "failed": 0
+    },
+    "compiled": {
+      "files": 1,
+      "passed": 9,
+      "conditionalSkips": 0,
+      "failed": 0
+    },
+    "typecheck": "PASS",
+    "broadGatesWereNotRelabeledAfterThisFollowup": true
+  },
+  "immutableFinalProbeSha256": {
+    "post-civil-independent-waits.test.ts": "e561deaf65a7e91d8d688888cfc87dbd61d8fdbfa6456606c2d2e909ecb94258",
+    "post-civil-native-final-waits.test.ts": "467a1f4cc4ad738273cbed277b7832cc6f845f065683c394fee5373e0c4596ec",
+    "post-civil-fixed-draft.test.ts": "8b3cb3e268734d06819c7c94e3ab003de8572b2ecb809adac1a1ef6b99b74d37",
+    "post-civil-boundaries.test.ts": "4896a3ffe3c9981feb807d4b56ce5b56800be3973fcdef188a01a439440c0674",
+    "post-civil-transactions.test.ts": "1f9d7849a5c1d0b33cc0367dd5f05e3999dc377cee3047879fcd807f7b5106a9",
+    "post-civil-migration.test.ts": "ee14672fe29d5c0650f4f02dca6a7bb6e7417937fd4800dc6c55698e9914b54f",
+    "post-civil-schedule-intent.test.ts": "d8ce1f3a9a7d5469a3d2c3849911947987cd99fcc7ab2c7a38494c74307c3b2b",
+    "post-civil-final-fences.test.ts": "1cd6be7accb895ab86ec736f2585de78da97fb4d4119a22adc3cd63d4a76a42b",
+    "post-civil-selected-gmt.test.ts": "f1424bb62eff85b6dcf2d58f3e5880b400b78ada4615fbb4163ad1775e3a40bc"
+  },
+  "preservedFailureStages": [
+    {
+      "probe": "tests/post-civil-independent-waits.test.ts",
+      "beforeRuntime": "f7d40cb066eb38d1d55e73ae0c358296ccdcecbc",
+      "independentBeforeEachMode": {
+        "passed": 0,
+        "failed": 4
+      },
+      "finalEachMode": {
+        "passed": 4,
+        "failed": 0
+      }
+    },
+    {
+      "probe": "tests/post-civil-native-final-waits.test.ts",
+      "beforeRuntime": "f7d40cb066eb38d1d55e73ae0c358296ccdcecbc",
+      "independentBeforeEachMode": {
+        "passed": 0,
+        "failed": 3
+      },
+      "finalEachMode": {
+        "passed": 3,
+        "failed": 0
+      }
+    },
+    {
+      "probe": "tests/post-civil-fixed-draft.test.ts",
+      "beforeRuntime": "f7d40cb066eb38d1d55e73ae0c358296ccdcecbc",
+      "independentBeforeEachMode": {
+        "passed": 0,
+        "failed": 3
+      },
+      "finalEachMode": {
+        "passed": 3,
+        "failed": 0
+      }
+    },
+    {
+      "probe": "tests/post-civil-schedule-intent.test.ts",
+      "beforeAttribution": "Author certificate; not independently rerun at the original before runtime",
+      "authorBeforeEachMode": {
+        "passed": 2,
+        "failed": 5
+      },
+      "independentFinalEachMode": {
+        "passed": 7,
+        "failed": 0
+      }
+    },
+    {
+      "probe": "tests/post-civil-selected-gmt.test.ts",
+      "beforeRuntime": "bc7d6448d30bdf81e47fe81c2874317a6b7458ae",
+      "independentBeforeEachMode": {
+        "passed": 1,
+        "failed": 8
+      },
+      "finalEachMode": {
+        "passed": 9,
+        "failed": 0
+      }
+    }
+  ],
+  "cleanup": {
+    "ownedGuardProcessesEnded": true,
+    "ownedPortsFree": [
+      3068,
+      3069,
+      3070
+    ],
+    "neverCreatedAnchorsAbsent": true,
+    "ownedEnvironmentFilesDependencyLinksAndUntrackedProbeCopiesRemoved": true,
+    "sharedDependencyOwnerAndMainDataUntouched": true,
+    "ownedWorktreesCleanBeforeEvidenceCommit": true,
+    "failedDropCount": 0,
+    "failedProbesAndOriginalPrivateReportsRetained": true,
+    "successfulPrivateArchivesRetained": 4,
+    "retainedArchiveDirectoryMode": "0700",
+    "retainedArchiveFileMode": "0600",
+    "archiveCleanupScope": "Only the four successful reviewer-owned fixtures after root release verification; retain failed probes and verified main backups"
+  },
+  "certificateBoundary": {
+    "laterClassicPreviewUiSuccessor": "23355068f8207675d387a7ee2abbda8030978534",
+    "laterUiCovered": false,
+    "nativeBrowserAndVisualAcceptance": "Separate native reviewer gate",
+    "actualMainBackupRestoreAndMigrationPreservation": "Separate root release gate",
+    "remoteNode22And24CI": "Separate root release gate",
+    "directImportedServicesUnderCompiledGuard": "Remain source imports; actual HTTP/native/export cases use the separately built compiled Node server",
+    "wholeCmsCompletionClaim": false
+  },
+  "documentedFollowups": [
+    "source 60-second status and bulk publication behavior",
+    "ordinary civil rather than instant ordering",
+    "historical local modification, media and comment dates",
+    "expanded-year UTC interchange",
+    "exact exotic PHP-versus-Moment normalization",
+    "general canonical aliases, source account import and pretty author archives"
+  ]
+}
