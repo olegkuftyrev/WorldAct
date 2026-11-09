@@ -1,3 +1,4 @@
+import {readPublicPath} from "./public-path.js";
 import {resolvePrettyAuthorArchive,authorArchiveRequestPath} from "./author-archives.js";
 import {authorArchivePath} from "../shared/author-archive.js";
 import {renderPublicTemplateDocument} from "./public-presentation.js";
@@ -39,7 +40,7 @@ import { postPermalink, resolvePublicPath } from "./permalinks.js";
 import iconsRouter from "./icons.js";
 import { normalizeBlockRenderAttributes } from "./block-render-attributes.js";
 import { isPublicRequestPath } from "./public-pagination.js";
-import {listingRequestPath,type NamedAuthorPin} from "./author-query.js";
+import {listingRequestPath,normalizeListingQuery,type NamedAuthorPin} from "./author-query.js";
 import {resolvePublicDocumentRoute} from "./public-documents.js";
 
 const escapeHTML = (value: unknown) =>
@@ -860,8 +861,9 @@ router.get("/api/public/templates/:slug", async (req:AuthRequest, res) => {
     const resolved = await resolvePublicPath(requestPath);
     if (resolved?.id === post.id && resolved.contentPage) contentPage = resolved.contentPage;
   }
-  const query: Record<string, unknown> = {};
-  for (const [key, value] of Object.entries(req.query))
+  const normalizedNamed=namedPath?normalizeListingQuery(readPublicPath(namedPath).query,{singular:Boolean(post),archive:namedRoute?.archive,namedAuthor:listing?.namedAuthor}):null;
+  const query: Record<string, unknown> = normalizedNamed?{...normalizedNamed.values}:{};
+  if(!normalizedNamed)for (const [key, value] of Object.entries(req.query))
     if (
       !["postId", "requestPath", "type"].includes(key) &&
       typeof value === "string"
@@ -884,7 +886,7 @@ router.get("/api/public/templates/:slug", async (req:AuthRequest, res) => {
       listing,
       // On a singular request page selects the document body, not an inherited
       // Query Loop. Its explicit query-N-page remains independently authoritative.
-      page: post ? 1 : prettyAuthor.archive?.page || Number(req.query.page) || 1,
+      page: post ? 1 : normalizedNamed?.archivePage || prettyAuthor.archive?.page || Number(req.query.page) || 1,
       contentPage,
       placeholderBindings: false,
       user: (req as AuthRequest).user,

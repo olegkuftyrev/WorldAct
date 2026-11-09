@@ -11,7 +11,8 @@ import { avatarURL } from "./avatars.js";
 import { appendPostDateArchiveSQL, dateArchiveDTO, parseDateArchiveQuery } from "./date-archives.js";
 import { HttpError } from "./utils.js";
 import {completePublicRead,observePublicPost,observePublicAuthor,settledPublicReads} from "./public-read-attempt.js";
-import {listingRequestPath,listingFilterValues,publicListingWhere,type PublicListingContext,type NamedAuthorPin} from "./author-query.js";
+import {listingRequestPath,listingFilterValues,publicListingWhere,normalizeListingQuery,type PublicListingContext,type NamedAuthorPin} from "./author-query.js";
+import {readPublicPath} from "./public-path.js";
 import {resolvePublicDocumentRoute} from "./public-documents.js";
 
 export type PublicReadContext = {
@@ -96,7 +97,13 @@ async function readPublicSiteOnce(context: PublicReadContext,selection:{author?:
   const settings=await getSettings();
   let listing=context.listing;
   const nameVisible=Object.keys(context.query).some(key=>/^author_name(?:\[|$)/.test(key)) || Boolean(context.requestPath&&/[?&]author_name(?:=|%5b|\[)/i.test(context.requestPath));
-  if(!listing&&nameVisible){const path=listingRequestPath(context.requestPath,context.query),resolved=await resolvePublicDocumentRoute(path,{namedPin:selection.named,authenticated:Boolean(context.user)});if(resolved.status===404)throw new HttpError(404,"Named author listing not found.");listing=resolved.listing;}
+  if(!listing&&nameVisible){
+    const path=listingRequestPath(context.requestPath,context.query),resolved=await resolvePublicDocumentRoute(path,{namedPin:selection.named,authenticated:Boolean(context.user)});
+    if(resolved.status===404)throw new HttpError(404,"Named author listing not found.");
+    listing=resolved.listing;
+    const query=normalizeListingQuery(readPublicPath(path).query,{singular:["singular","front-page"].includes(resolved.kind),archive:resolved.archive,namedAuthor:listing?.namedAuthor});
+    context={...context,query:{...query.values,page:query.archivePage}};
+  }
   const named=listing?.namedAuthor;
   if(named?.selected)observePublicAuthor(context.canReadProtectedPost,named.selected);
   const pretty=!named&&context.requestPath?await resolvePrettyAuthorArchive(authorArchiveRequestPath(context.requestPath,context.query,settings),settings):null;

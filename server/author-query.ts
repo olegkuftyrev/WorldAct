@@ -1,7 +1,7 @@
 import {pool,getSettings} from "./db.js";
 import {HttpError} from "./utils.js";
 import {normalizeAuthorArchiveSlug,authorArchivePath} from "../shared/author-archive.js";
-import {readNamedAuthorInput,PublicQueryError} from "../shared/public-routing.js";
+import {readNamedAuthorInput,normalizePublicQuery,PublicQueryError} from "../shared/public-routing.js";
 import type {NamedAuthorSelection,PublicArchive,PublicRoute} from "../shared/public-document.js";
 import {parseDateArchiveQuery,dateArchiveDTO,appendPostDateArchiveSQL} from "./date-archives.js";
 export type PublicListingContext={kind:PublicRoute["kind"];archive:PublicArchive|null;namedAuthor?:NamedAuthorSelection};
@@ -9,6 +9,7 @@ export type NamedAuthorPin={value?:NamedAuthorSelection};
 type Database=Pick<typeof pool,"query">;
 type Settings=Awaited<ReturnType<typeof getSettings>>;
 type Resolution={status:200|404;kind:PublicRoute["kind"]|"framework";archive?:PublicArchive|null;selectedId?:number;listing?:PublicListingContext};
+export function normalizeListingQuery(query:URLSearchParams,options:Parameters<typeof normalizePublicQuery>[1]){try{return normalizePublicQuery(query,options);}catch(error){if(error instanceof PublicQueryError)throw new HttpError(400,error.message);throw error;}}
 export function namedAuthorInput(query:URLSearchParams){try{return readNamedAuthorInput(query);}catch(error){if(error instanceof PublicQueryError)throw new HttpError(400,error.message);throw error;}}
 /** Express objects are validated before flattening; visible path values and
  * explicit transport values must agree, including the original numeric filter. */
@@ -18,7 +19,7 @@ export function listingRequestPath(path:string|undefined,values:Record<string,un
   try{decodeURIComponent(visible);}catch{throw new HttpError(400,"The URL path is malformed.");}
   for(const [key,value]of Object.entries(values)){
     const base=key.split("[")[0];
-    if(!["author_name","author","page","search","s","category","tag","year","month","monthnum","day","m","w"].includes(base))continue;
+    if(!/^(?:author_name|author|page|search|s|category|tag|year|month|monthnum|day|m|w|commentPage|replytocom|query-\d+-page)$/.test(base))continue;
     if(typeof value!=="string"&&typeof value!=="number")throw new HttpError(400,"Use scalar public listing query values.");
     const text=String(value);if(text.length>2000)throw new HttpError(400,"The public listing query exceeds its supported length.");
     if(query.has(key)&&(query.getAll(key).length!==1||query.get(key)!==text))throw new HttpError(400,"The public listing inputs conflict.");
@@ -71,7 +72,7 @@ export async function applyNamedAuthorListing<T extends Resolution>(path:string,
   if(!input||base.kind==="framework"||base.kind==="singular"||base.kind==="front-page"||base.status===404)return base;
   const selection=await resolveNamedAuthor(query,settings,db,pin);if(!selection)return base;
   if(base.archive&&"type" in base.archive&&base.archive.type==="author"&&(!selection.selected||base.archive.authorId!==selection.selected.authorId||base.archive.slug!==selection.selected.slug))throw new HttpError(400,"The author archive identities conflict.");
-  const values=listingFilterValues(Object.fromEntries(query),base.archive || null);
+  const values=normalizeListingQuery(query,{singular:false,archive:base.archive,namedAuthor:selection}).values;
   const rawPage=base.archive&&"type" in base.archive&&base.archive.type==="author"&&base.archive.page?String(base.archive.page):query.get("page")||"1";
   if(!/^[1-9]\d{0,9}$/.test(rawPage)||Number(rawPage)>2147483647||query.getAll("page").length>1||[...query.keys()].some(key=>/^page\[/.test(key)))throw new HttpError(400,"Use a single valid archive page.");
   let matchedTaxonomy:PublicArchive|null=base.archive&&"taxonomy" in base.archive?base.archive:null;
