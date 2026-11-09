@@ -1,0 +1,218 @@
+{
+  "runtimeCommit": "c2c69ef388f4426d733d4ea46231c122ce2058fa",
+  "runtimeTree": "a35b59f6723b443a1806a4710440f9ff7d7b7bcc",
+  "compiledNodeSha256": "1618944b7b7b4ea0b755a9c8fd3ca14aa142d8f3371970a5a0d7e7a874955e53",
+  "ownerStatus": "BACKEND_COMPLETE; independent/native/root release pending at report generation",
+  "newDDL": false,
+  "mainMutated": false,
+  "phpOrMysqlExecuted": false,
+  "benchmarksRun": false,
+  "build": {
+    "typecheck": "PASS",
+    "viteConfigLoaderRunner": "PASS",
+    "esbuildNode": "PASS",
+    "nodeVersion": "v24.14.1"
+  },
+  "predecessorWholeStage": {
+    "candidate": "6f2ca95e5955c7b8f9b12ee12779ce1a8085d20c",
+    "runtime": "87819b5a72379129e988b7be97a3e5354b62d8c5",
+    "selectedSourceFiles": 188,
+    "sourcePassed": 1058,
+    "sourceSkipped": 10,
+    "selectedActualCICompiledFiles": 141,
+    "compiledPassed": 925,
+    "compiledSkipped": 7,
+    "separateFixedCandidate": "87819b5a72379129e988b7be97a3e5354b62d8c5",
+    "fixedFilesEachMode": 3,
+    "fixedPassedEachMode": 36,
+    "compositeSource": {
+      "files": 191,
+      "pass": 1094,
+      "skip": 10
+    },
+    "compositeActualCICompiled": {
+      "files": 144,
+      "pass": 961,
+      "skip": 7
+    },
+    "scope": "Whole predecessor gate, not exact final default-target runtime. Root authorized final affected scope for the narrow successor; release CI will run exact final whole selectors."
+  },
+  "finalAffected": {
+    "source": {
+      "files": 36,
+      "log": "worldact-pretty-author-c2-affected-source.log",
+      "logSha256": "866f38f5adf78a455ecedb28cbcaab3413107728ad9da9a6d47dc30ac42355cd",
+      "complete": true,
+      "tests": 314,
+      "pass": 313,
+      "fail": 0,
+      "skipped": 1
+    },
+    "compiled": {
+      "files": 36,
+      "log": "worldact-pretty-author-c2-affected-compiled.log",
+      "logSha256": "e527068f5bdfbbd7ab233e24d32a275b7c9c446b7754d7321e63c9069a1c99fe",
+      "complete": true,
+      "tests": 314,
+      "pass": 313,
+      "fail": 0,
+      "skipped": 1
+    },
+    "selector": [
+      "tests/post-author-link-defaults.test.ts",
+      "tests/pretty-author-archives-original.test.ts",
+      "tests/pretty-author-archives.test.ts",
+      "tests/pretty-author-identity.test.ts",
+      "tests/pretty-author-identity-pinning.test.ts",
+      "tests/pretty-author-portability.test.ts",
+      "tests/public-author-archive-ui.test.ts",
+      "tests/blocks.test.ts",
+      "tests/author-permalinks.test.ts",
+      "tests/author-access-waits.test.ts",
+      "tests/author-nicename-independent-waits.test.ts",
+      "tests/author-document-waits.test.ts",
+      "tests/author-archive-independent-waits.test.ts",
+      "tests/author-query-accumulation-independent-waits.test.ts",
+      "tests/public-read-accumulation.test.ts",
+      "tests/author-feed-accumulation-root.test.ts",
+      "tests/author-navigation-identity-corrected-expectation.test.ts",
+      "tests/author-internal-rss-independent-waits.test.ts",
+      "tests/public-direct-metadata.test.ts",
+      "tests/protected-metadata.test.ts",
+      "tests/native-continuation.test.ts",
+      "tests/public-document-data.test.ts",
+      "tests/public-document-view.test.ts",
+      "tests/public-document-ssr.test.ts",
+      "tests/public-http-status.test.ts",
+      "tests/plain-permalink-routing.test.ts",
+      "tests/plain-source-pagination.test.ts",
+      "tests/front-page-availability.test.ts",
+      "tests/comment-avatar-context.test.ts",
+      "tests/theme-blocks.test.ts",
+      "tests/term-blocks.test.ts",
+      "tests/widget-blocks.test.ts",
+      "tests/compat.test.ts",
+      "tests/post-civil-final-fences.test.ts",
+      "tests/post-civil-independent-waits.test.ts",
+      "tests/post-civil-native-final-waits.test.ts"
+    ],
+    "skipReason": "Conditional fresh archive test without archive stage environment; its three stages passed separately."
+  },
+  "finalCIFullInventory": {
+    "sourceFiles": 192,
+    "actualCompiledFiles": 145
+  },
+  "finalFreshArchive": {
+    "candidate": "c2c69ef388f4426d733d4ea46231c122ce2058fa",
+    "nodeSha256": "1618944b7b7b4ea0b755a9c8fd3ca14aa142d8f3371970a5a0d7e7a874955e53",
+    "archive": "/tmp/worldact-core-CScUR8yM/pretty-author-c2-archive.json",
+    "archiveSha256": "033f111589121a5fbe72faf766bbb1c0e8f67c6fdf48a8b5b37e66c0200cf32a",
+    "bytes": 1748656,
+    "stages": [
+      {
+        "phase": "export-source",
+        "code": 0,
+        "log": "/tmp/worldact-pretty-author-c2-fresh-export-source.log",
+        "logSha256": "a8ecf7f934b02ea2b3ef84b9d523662305236c028400f4e486fd8a3dc95473cf",
+        "tests": 1,
+        "pass": 1,
+        "fail": 0,
+        "skipped": 0,
+        "archiveSha256": "033f111589121a5fbe72faf766bbb1c0e8f67c6fdf48a8b5b37e66c0200cf32a",
+        "archiveUnchanged": true
+      },
+      {
+        "phase": "restore-source",
+        "code": 0,
+        "log": "/tmp/worldact-pretty-author-c2-fresh-restore-source.log",
+        "logSha256": "2dd499e84f4b7e9726528404dfc8db55929d2acb17b430053aee09d8ab101132",
+        "tests": 1,
+        "pass": 1,
+        "fail": 0,
+        "skipped": 0,
+        "archiveSha256": "033f111589121a5fbe72faf766bbb1c0e8f67c6fdf48a8b5b37e66c0200cf32a",
+        "archiveUnchanged": true
+      },
+      {
+        "phase": "restore-compiled",
+        "code": 0,
+        "log": "/tmp/worldact-pretty-author-c2-fresh-restore-compiled.log",
+        "logSha256": "ad8a80fb77b196bafb192c345f1b0c609d601239c48ab8b43fb42a57ebf118d3",
+        "tests": 1,
+        "pass": 1,
+        "fail": 0,
+        "skipped": 0,
+        "archiveSha256": "033f111589121a5fbe72faf766bbb1c0e8f67c6fdf48a8b5b37e66c0200cf32a",
+        "archiveUnchanged": true
+      }
+    ],
+    "retainedForRootReleaseCI": true
+  },
+  "unseededPredecessor": {
+    "source": {
+      "files": 1,
+      "log": "worldact-pretty-author-6f-unseeded-source.log",
+      "logSha256": "d69ae04198476a51acba8bc86a9701e53e15891cb9e67a6f6c0026098be4f5d6",
+      "complete": true,
+      "tests": 8,
+      "pass": 7,
+      "fail": 0,
+      "skipped": 1
+    },
+    "compiled": {
+      "files": 1,
+      "log": "worldact-pretty-author-6f-unseeded-compiled.log",
+      "logSha256": "a23f07176d025ba142424f40c6015139c00a307a962044ffebd5f24d64e2c60b",
+      "complete": true,
+      "tests": 8,
+      "pass": 7,
+      "fail": 0,
+      "skipped": 1
+    }
+  },
+  "immutableTests": {
+    "tests/pretty-author-archives-original.test.ts": "907986fadb15e1d136ebe7a325efcdb3682bbf54be02462c309a621bcf467691",
+    "tests/pretty-author-identity.test.ts": "7ea4177c256964e1c610dfa593818950dd96a6ce8bcea26235df388a748e1619",
+    "tests/pretty-author-identity-pinning.test.ts": "fe40b593bd1f5bab0f675c0ef92fd5c8ecec65ad3aaf14b95a4e8e6645da9d7f",
+    "tests/post-author-link-defaults.test.ts": "ebbae30692d9413ffe902b9ac459299a997411bd1e06973059c1169de34fb7fa"
+  },
+  "fixtureAdapters": [
+    {
+      "file": "tests/author-query-accumulation-independent-waits.test.ts",
+      "original": "/tmp/worldact-core-CScUR8yM/pretty-author-preexisting-query-waits-before-adapter.test.ts",
+      "purpose": "Qualify nicename counter to canonicalSELECT after newly generated linked author-name metadata, preserving body-finished marker and all policy assertions."
+    },
+    {
+      "file": "tests/public-read-accumulation.test.ts",
+      "original": "/tmp/worldact-core-CScUR8yM/pretty-author-preexisting-public-read-before-adapter.test.ts",
+      "purpose": "Qualify both first/two-attempt canonical counters; original late wait did not establish after extra nicename projection. Not a byte-identical old privacy certificate."
+    }
+  ],
+  "cleanup": {
+    "candidate": "c2c69ef388f4426d733d4ea46231c122ce2058fa",
+    "privateEnvRemoved": true,
+    "ownDependencySymlinkRemoved": true,
+    "sharedDependencyOwnerUntouched": true,
+    "neverCreatedAnchor": "worldact_pretty_author_anchor",
+    "anchorExists": false,
+    "URLApplicationNamePresent": false,
+    "ownedPortsFree": [
+      3046,
+      3047,
+      3048
+    ],
+    "allOwnGuardsExited": true,
+    "guardCleanupExitSuccess": true,
+    "fixed3062PreviouslyReleasedToRoot": true,
+    "successfulPrettyArchivesRetainedPendingRootReleaseCI": true,
+    "mainUntouched": true
+  },
+  "limits": [
+    "Source default query normalization is bounded to stored ASCII nicenames; Unicode/octets outside that domain reserved404.",
+    "Assigned doubled-hyphen canonical output can normalize to another public author or404 as the explicitly accepted source-inferred quirk.",
+    "Numeric aliases retain their preexisting empty/excessive200 policy.",
+    "No author_name public query, author feeds, numeric canonical redirects, author_base or nicename/account import/editing added.",
+    "Author identity is validated before final post/password-token decision, not all metadata/settings globally atomic.",
+    "Direct imported test services remain source even when actual HTTP server is compiled."
+  ]
+}
