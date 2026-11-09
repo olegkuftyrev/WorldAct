@@ -64,6 +64,7 @@ jobs:
           tests/comment-flood-delete-locks.test.ts
           tests/comment-approval-history.test.ts tests/comment-approval-actors.test.ts tests/comment-approval-waits.test.ts
           tests/compat.test.ts tests/theme-blocks.test.ts
+          tests/search-explicit-query-original.test.ts
           tests/notification-mail-ui.test.ts
           tests/comment-avatar-context.test.ts
           tests/comment-window.test.ts
