@@ -99,17 +99,18 @@ export default function PublicDocumentController({ initialModel, initialError = 
             if (event.defaultPrevented)
                 return;
             const form = event.target;
-            if (!(form instanceof HTMLFormElement) || !form.closest("[data-worldact-public-island]"))
+            // Explicit Search fields can shadow methods on their form instance.
+            if (!(form instanceof HTMLFormElement) || !Element.prototype.closest.call(form, "[data-worldact-public-island]"))
                 return;
-            if (form.matches("form.worldact-native-password-form")) {
+            if (Element.prototype.matches.call(form, "form.worldact-native-password-form")) {
                 event.preventDefault();
                 void unlockForm(form, owner);
             }
-            else if (form.matches("form.worldact-native-comment-form, .wp-block-post-comments-form form, form.comment-form")) {
+            else if (Element.prototype.matches.call(form, "form.worldact-native-comment-form, .wp-block-post-comments-form form, form.comment-form")) {
                 event.preventDefault();
                 void submitForm(form, owner);
             }
-            else if (form.getAttribute("action") === "/logout") {
+            else if (Element.prototype.getAttribute.call(form, "action") === "/logout") {
                 event.preventDefault();
                 void logout(owner);
             }
