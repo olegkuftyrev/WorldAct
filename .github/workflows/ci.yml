@@ -110,6 +110,7 @@ jobs:
           tests/public-listing-template-boundaries.test.ts tests/public-listing-pagination-portability.test.ts
           tests/public-listing-pretty-identity-original.test.ts
           tests/public-document-data.test.ts
+          tests/singular-date-template-priority-original.test.ts
           tests/public-document-view.test.ts
           tests/public-document-ssr.test.ts
           tests/native-continuation.test.ts
