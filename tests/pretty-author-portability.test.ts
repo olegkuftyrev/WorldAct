@@ -27,7 +27,8 @@ test("fresh imported author archives generate destination identity paths in reta
   const ids:number[]=[];
   for(const n of [1,2])ids.push((await api("/api/posts","POST",{title:"Pretty portable post "+n,status:"publish",authorId:person.id,content:'<p>PRETTY-PORTABLE-'+n+'</p><!-- wp:post-author-name {"isLink":true} /--><!-- wp:avatar {"isLink":true} /-->'})).data.post.id);
   await api("/api/posts","POST",{title:"Pretty portable private",status:"private",authorId:person.id,content:"<p>PRETTY-PORTABLE-PRIVATE-SECRET</p>"});
-  for(const [slug,marker] of [["author-"+nicename,"SOURCE-NICENAME-TEMPLATE"],["author","IMPORTED-GENERAL-AUTHOR-TEMPLATE"]])await api("/api/site-editor/documents","POST",{type:"template",slug,title:slug,content:"<p>"+marker+"</p><!-- wp:query-title /--><!-- wp:query {\"query\":{\"inherit\":true}} --><!-- wp:post-template --><!-- wp:post-title /--><!-- wp:post-author-name {\"isLink\":true} /--><!-- /wp:post-template --><!-- /wp:query -->"});
+  for(const theme of ["twentytwentyfive","classic"]){await api("/api/settings","PUT",{theme});for(const [slug,marker] of [["author-"+nicename,"SOURCE-NICENAME-TEMPLATE"],["author","IMPORTED-GENERAL-AUTHOR-TEMPLATE"]])await api("/api/site-editor/documents","POST",{type:"template",slug,title:slug,content:"<p>"+marker+"</p><!-- wp:query-title /--><!-- wp:query {\"query\":{\"inherit\":true}} --><!-- wp:post-template --><!-- wp:post-title /--><!-- wp:post-author-name {\"isLink\":true} /--><!-- /wp:post-template --><!-- /wp:query -->"});
+  }await api("/api/settings","PUT",{theme:"twentytwentyfive"});
   const archive=(await api("/api/tools/export")).data;
   await writeFile(archivePath!,JSON.stringify({archive,sourceAuthorId:person.id,sourceNicename:nicename,sourcePostIds:ids}),{mode:0o600});
   return;
@@ -37,7 +38,7 @@ test("fresh imported author archives generate destination identity paths in reta
  const switched=await api("/api/auth/login","POST",{login:username,password:"Pretty-archive-password-123"});cookie=switched.response.headers.get("set-cookie")!.split(";")[0];
  assert.notEqual(person.id,fixture.sourceAuthorId);
  for(let i=0;i<5;i++)await api("/api/posts","POST",{title:"Destination post ID offset "+i,status:"draft"});
- await api("/api/site-editor/documents","POST",{type:"template",slug:"author-"+nicename,title:"Destination author template",content:"<p>DESTINATION-NICENAME-TEMPLATE</p><!-- wp:query-title /-->"});
+ for(const theme of ["twentytwentyfive","classic"]){await api("/api/settings","PUT",{theme});await api("/api/site-editor/documents","POST",{type:"template",slug:"author-"+nicename,title:"Destination author template",content:"<p>DESTINATION-NICENAME-TEMPLATE</p><!-- wp:query-title /-->"});}
  for(const [structure,replaceDesign] of [["",false],["/destination-%postname%",false],[sourceStructure,true]] as const){
   await api("/api/settings","PUT",{permalinkStructure:structure,postsPerPage:1});
   const restored=(await api("/api/tools/import","POST",{...fixture.archive,replaceDesign})).data,settings=(await api("/api/settings")).data.settings;
