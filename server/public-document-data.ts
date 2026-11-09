@@ -6,7 +6,7 @@ import { commentReturnPath, commentLoginHref } from "../shared/comment-links.js"
 import { type User } from "./db.js";
 import { readCookieSessionUser } from "./auth.js";
 import { postAccessReader, currentPublicPostPolicy } from "./post-passwords.js";
-import {completePublicRead} from "./public-read-attempt.js";
+import {completePublicRead,observePublicAuthor} from "./public-read-attempt.js";
 import { resolvePublicDocumentRoute } from "./public-documents.js";
 import { readPublicPath } from "./public-path.js";
 import { readPublicSite, readPublishedPostById, type PublicReadContext } from "./public-read.js";
@@ -71,6 +71,8 @@ export function readPublicDocument(path:string,context:PublicDocumentContext):Pr
 }
 async function readPublicDocumentOnce(path: string, context: PublicDocumentContext): Promise<PublicDocumentModel | FrameworkDocument> {
   let resolution=await resolvePublicDocumentRoute(path);
+  const selectedAuthor=resolution.archive && "type" in resolution.archive && resolution.archive.type==="author"?resolution.archive:null;
+  if(selectedAuthor)observePublicAuthor(context.canReadProtectedPost,selectedAuthor);
   if(resolution.kind==="framework")return {kind:"framework",status:200,requestPath:path};
   if(!await isInstalled())return {kind:"framework",status:resolution.status,requestPath:path};
   const rawQuery=readPublicPath(path).query;
@@ -82,7 +84,7 @@ async function readPublicDocumentOnce(path: string, context: PublicDocumentConte
     if(resolution.status===404)query=normalizePublicQuery(new URLSearchParams(),{singular:false});
     else throw new HttpError(400,error.message);
   }else throw error;}
-  const readContext:PublicReadContext={query:{...query.values,page:query.archivePage},requestPath:path,user:context.user,canReadProtectedPost:context.canReadProtectedPost};
+  const readContext:PublicReadContext={...(selectedAuthor?{authorArchive:selectedAuthor}:{}),query:{...query.values,page:query.archivePage},requestPath:path,user:context.user,canReadProtectedPost:context.canReadProtectedPost};
   // Metadata resolution above and body acquisition below are deliberately
   // independent. No later slug lookup can substitute another published row.
   let body: Awaited<ReturnType<typeof readPublishedPostById>> | null=null;

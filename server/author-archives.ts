@@ -5,7 +5,7 @@ export {authorArchivePath} from "../shared/author-archive.js";
 type Settings=Awaited<ReturnType<typeof getSettings>>;
 type Database=Pick<typeof pool,"query">;
 export type AuthorArchive={type:"author";name:string;authorId:number;slug:string;permalink:string;page?:number};
-export async function resolvePrettyAuthorArchive(path:string,settings?:Settings,db:Database=pool):Promise<{recognized:boolean;archive:AuthorArchive|null}>{
+export async function resolvePrettyAuthorArchive(path:string,settings?:Settings,db:Database=pool):Promise<{recognized:boolean;archive:AuthorArchive|null;taxonomyPriority?:boolean}>{
  if(path.length>2000)throw new HttpError(414,"The URL exceeds the supported length.");
  if(!path.startsWith("/")||path.startsWith("//")||/[\u0000-\u001f\u007f#\\]/.test(path))throw new HttpError(400,"Use a site-relative path.");
  try{decodeURIComponent(path);}catch{throw new HttpError(400,"The URL path is malformed.");}
@@ -14,7 +14,7 @@ export async function resolvePrettyAuthorArchive(path:string,settings?:Settings,
  if(!parsed)return {recognized:false,archive:null};
  // Existing configured taxonomy paths keep their established priority.
  const parts=path.split("?")[0].split("/").filter(Boolean).map(decodeURIComponent);
- if(parts.length===2 && [s.categoryBase,s.tagBase].includes(parts[0]))return {recognized:false,archive:null};
+ if(parts.length===2 && [s.categoryBase,s.tagBase].includes(parts[0]))return {recognized:false,archive:null,taxonomyPriority:true};
  if(parsed.invalid)return {recognized:true,archive:null};
  const query=new URLSearchParams(path.includes("?")?path.slice(path.indexOf("?")+1):"");
  for(const [key] of query)if(/^(?:page|author)(?:\[|$)/.test(key) && (key.includes("[")||query.getAll(key).length!==1))throw new HttpError(400,"Use a single scalar author archive counter.");

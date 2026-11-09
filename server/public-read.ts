@@ -1,4 +1,4 @@
-import {authorArchivePath,resolvePrettyAuthorArchive} from "./author-archives.js";
+import {authorArchivePath,resolvePrettyAuthorArchive,type AuthorArchive} from "./author-archives.js";
 import { z } from "zod";
 import { pool, getSettings, postFields, type User } from "./db.js";
 import { withPermalink } from "./permalinks.js";
@@ -10,10 +10,10 @@ import { renderedCommentContent } from "./comment-policy.js";
 import { avatarURL } from "./avatars.js";
 import { appendPostDateArchiveSQL, dateArchiveDTO, parseDateArchiveQuery } from "./date-archives.js";
 import { HttpError } from "./utils.js";
-import {completePublicRead,observePublicPost,settledPublicReads} from "./public-read-attempt.js";
+import {completePublicRead,observePublicPost,observePublicAuthor,settledPublicReads} from "./public-read-attempt.js";
 
 export type PublicReadContext = {
-  query: Record<string, unknown>; requestPath?: string; user?: User;
+  query: Record<string, unknown>; requestPath?: string; user?: User;authorArchive?:AuthorArchive;
   canReadProtectedPost: NonNullable<RenderOptions["canReadProtectedPost"]>;
 };
 function decoratePost(post: any) {
@@ -86,8 +86,11 @@ export function readPublicSite(context:PublicReadContext){
   return completePublicRead(context.canReadProtectedPost,reader=>readPublicSiteOnce({...context,canReadProtectedPost:reader}));
 }
 async function readPublicSiteOnce(context: PublicReadContext) {
+  if(context.authorArchive)observePublicAuthor(context.canReadProtectedPost,context.authorArchive);
   const pretty=context.requestPath?await resolvePrettyAuthorArchive(context.requestPath):null;
   if(pretty?.recognized && !pretty.archive)throw new HttpError(404,"Author archive not found.");
+  if(context.authorArchive && (!pretty?.archive || pretty.archive.authorId!==context.authorArchive.authorId || pretty.archive.slug!==context.authorArchive.slug))throw new HttpError(404,"The author archive identity changed.");
+  if(pretty?.archive)observePublicAuthor(context.canReadProtectedPost,pretty.archive);
   const filter = z
     .object({
       page: z.coerce.number().int().positive().max(2_147_483_647).default(1),

@@ -57,6 +57,7 @@ export async function resolvePublicDocumentRoute(path: string): Promise<PublicDo
     if (!post) return missing();
   } else {
     const author=await resolvePrettyAuthorArchive(path);
+    if(author.taxonomyPriority){const archive=await resolvePublicArchive(path);return archive?{status:200,kind:"archive",archive}:missing();}
     if(author.recognized)return author.archive?{status:200,kind:"archive",archive:author.archive}:missing();
     const identity = await resolvePublicPath(path);
     contentPage = identity?.contentPage;

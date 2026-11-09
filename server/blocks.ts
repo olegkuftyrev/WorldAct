@@ -1,7 +1,7 @@
 import {resolvePrettyAuthorArchive} from "./author-archives.js";
 import {authorArchivePath} from "../shared/author-archive.js";
 import {renderPublicTemplateDocument} from "./public-presentation.js";
-import {completePublicRead} from "./public-read-attempt.js";
+import {completePublicRead,observePublicAuthor} from "./public-read-attempt.js";
 import {pingbackHeader} from "./incoming-ping-policy.js";
 import express, { type Request, type Response } from "express";
 import { createHash } from "node:crypto";
@@ -836,6 +836,7 @@ router.get("/api/public/templates/:slug", async (req:AuthRequest, res) => {
   if (!isPublicRequestPath(requestPath))
     throw new HttpError(400, "Use a site-relative request path.");
   const prettyAuthor=await resolvePrettyAuthorArchive(requestPath,settings);
+  if(prettyAuthor.archive)observePublicAuthor(reader,prettyAuthor.archive);
   if(prettyAuthor.recognized && !prettyAuthor.archive)throw new HttpError(404,"Author archive not found.");
   if(prettyAuthor.archive && req.query.author!==undefined && req.query.author!==String(prettyAuthor.archive.authorId))throw new HttpError(400,"The author archive identities conflict.");
   let contentPage = parseContentPage(req.query.contentPage ?? (post ? req.query.page : undefined));

@@ -222,7 +222,8 @@ export async function resolvePublicPath(path: string) {
     }
   }
   const settings = await getSettings();
-  if((await resolvePrettyAuthorArchive(path,settings)).recognized)return null;
+  const authorArchive=await resolvePrettyAuthorArchive(path,settings);
+  if(authorArchive.recognized || authorArchive.taxonomyPriority)return null;
   const exact = await resolveExactPublicPath(path, settings);
   if (exact) return rootContentPage ? {...exact,contentPage:rootContentPage} : exact;
   const normalized = "/" + path.split("?")[0].replace(/^\/+|\/+$/g, "") + "/";
