@@ -1,0 +1,196 @@
+{
+  "scope": "Historical independent bounded backend certificate; UI source review is separate, not native acceptance.",
+  "backendCommit": "5a819ef4a68b3dcd8f9c2ea0e033d690f34d029a",
+  "backendTree": "c8a4c593b57ee628d7e8eda9507ff31a78bb1294",
+  "nodeSHA256": "af2177df906780e5c6f65554a1181d606cd337789d3cfa9d9bb8d87ffaf5fc33",
+  "firstRuntimeCandidate": "cabaf3e1d430242433f0b0e54f5e1aa37a98dd75",
+  "runtimeEquivalentToFirstCandidate": true,
+  "build": {
+    "projectTypeScript": true,
+    "viteConfigLoaderRunner": true,
+    "esbuild": true,
+    "logSHA256": {
+      "typecheck": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "vite": "95e4536cd6fc3c2ee7e08c78ee8059df02a77d5628ae1ad821b4f59d0906c153",
+      "nodebuild": "38b0992045441d2fca003e36eed0359e53966f2c067ba2764326af593816d05d"
+    }
+  },
+  "selectorSHA256": "5cdfce6911f4397ce9e3888d7c6c3df615bbc6640173fed27e6825223f52ce89",
+  "files": [
+    "tests/search-explicit-query-original.test.ts",
+    "tests/block-render-attributes.test.ts",
+    "tests/theme-blocks.test.ts",
+    "tests/blocks.test.ts",
+    "tests/block-bindings.test.ts",
+    "tests/author-name-independent-count-grant.test.ts"
+  ],
+  "fileSHA256": {
+    "tests/search-explicit-query-original.test.ts": "42352ea7c91847d2046220b8090dcf11a39616dc2efffb1b89cfcc001642b75c",
+    "tests/block-render-attributes.test.ts": "be923affd756f83d5cc4b336b31885c3707d5e8217d32c7fb699448e34fb8efc",
+    "tests/theme-blocks.test.ts": "21924834f2010d917595734b4bf6208ca1834130b95755e2e29d82131477f14d",
+    "tests/blocks.test.ts": "fa0fb26d5a57b93232b4d9b481eebaa729ce5e0e76c951db6239c85152a93fd3",
+    "tests/block-bindings.test.ts": "9ff463f05d7d454e3ac8b000f84ad817fe89a209780d0bcc494987a05f5af369",
+    "tests/author-name-independent-count-grant.test.ts": "6643e7832a8272913a88bab1bac653a6cb674f25e25bd9c09139cfc65252f031"
+  },
+  "runtimeFileSHA256": {
+    "server/search-query-fields.ts": "00201d0cd4d89d09048b4794f9f0b0d9709fea1db22dda0ac030d17208accfab",
+    "server/theme-blocks.ts": "c7a4e891f390e3988ff7b699d001e0fb709719980384924f86efd8a3b695914f"
+  },
+  "runs": [
+    {
+      "mode": "source",
+      "counts": {
+        "tests": 31,
+        "pass": 31,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0
+      },
+      "logSHA256": "118465747ccccf918de1d9dd41297018f134c7d6b9ada436a2029845b58213dd",
+      "searchDispatchGroups": 29,
+      "setupFailures": 0
+    },
+    {
+      "mode": "compiled",
+      "counts": {
+        "tests": 31,
+        "pass": 31,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0
+      },
+      "logSHA256": "e2d18dd501c4f75d219943d4827ffc942a020780bc553e8d9fa0415125eff75c",
+      "searchDispatchGroups": 29,
+      "setupFailures": 0
+    }
+  ],
+  "sourceImportLimit": "Direct renderer/normalizer/binding imports are SOURCE in both API modes. Search/count-grant HTTP exercise actual compiled API in compiled mode.",
+  "lineage": [
+    {
+      "stage": "original-before",
+      "testCommit": "ba1d4215606766be68547c921143de2acf879872",
+      "testSHA256": "b4a35c21bd472077f787e2c2a99f8ad90e40262d019b1fb5a962c37e346cf594",
+      "nodeSHA256": "b8012b887e1b2281774e7318ad70f4a9debfb4d396eaeb3cd41e8e752ae1d80c",
+      "eachMode": {
+        "pass": 0,
+        "fail": 6,
+        "substantiveChildren": 5,
+        "parent": 1,
+        "setupFailures": 0,
+        "dispatchGroups": 29
+      },
+      "sourceLogSHA256": "1a6c1f15ad68b9ebb4d40bef31def74320cb5fcbac8d66e8e9f72d7aaec28af6",
+      "compiledLogSHA256": "a26b79d8501e234d2cf8b7cbce0ab6af5c6e1f54fd89e01daf2c485653254002"
+    },
+    {
+      "stage": "original-first-after-retained",
+      "runtimeCommit": "cabaf3e1d430242433f0b0e54f5e1aa37a98dd75",
+      "testSHA256": "b4a35c21bd472077f787e2c2a99f8ad90e40262d019b1fb5a962c37e346cf594",
+      "ownerEachMode": {
+        "pass": 1,
+        "fail": 5
+      },
+      "classification": "Fixture canonical JSONB ordering and oversized surrounding-page timing assumptions; no runtime repair applied."
+    },
+    {
+      "stage": "corrected-before",
+      "testCommit": "f89eb1d403f22fa63ead226bb2613b02b392a3f7",
+      "testSHA256": "42352ea7c91847d2046220b8090dcf11a39616dc2efffb1b89cfcc001642b75c",
+      "adapterDiffSHA256": "a9d3c0b4604a2c1f049212cb9b4bda4b1f111669da437347c163724847f5b269",
+      "changes": "Canonical saved JSON key order with strict membership/manual tuples; capture single GET/HEAD before publishing repeated page. Raw order, duplicate order, values, entity table and statuses unchanged.",
+      "eachMode": {
+        "pass": 0,
+        "fail": 6,
+        "setupFailures": 0,
+        "dispatchGroups": 29
+      },
+      "sourceLogSHA256": "ed4d4bb7df3de4982a9a745e0c9f85142a6d6915bca97bfa5d7cd3fff64f072d",
+      "compiledLogSHA256": "7fc5aaf7c0446267100835c30032b2900aa59dbe56e1c3c2f0d1deff83cff0a2"
+    },
+    {
+      "stage": "corrected-final-independent",
+      "testSHA256": "42352ea7c91847d2046220b8090dcf11a39616dc2efffb1b89cfcc001642b75c",
+      "eachMode": {
+        "searchPass": 6,
+        "remainingControlPass": 25,
+        "totalPass": 31,
+        "fail": 0,
+        "skip": 0,
+        "cancel": 0,
+        "dispatchGroups": 29
+      }
+    }
+  ],
+  "staticEntityAudit": {
+    "names": 252,
+    "missing": 0,
+    "extra": 0,
+    "duplicate": 0,
+    "reference": "Supplied KSES 253 names minus apos; no PHP execution.",
+    "auditSHA256": "5c29679b53085580b8db2188bb7ec57077c213f4f989295a2ca4935669f27fe5"
+  },
+  "cleanup": {
+    "allSixJournaledDatabasesAbsent": true,
+    "threeNeverCreatedAnchorsAbsent": true,
+    "ownPortsFree": true,
+    "ownConfigAndDependencyLinkRemoved": true,
+    "dependencyOwnerUnchanged": true,
+    "fixturesAndOriginalFailuresRetained": true,
+    "originalBuildArchive": {
+      "files": 411,
+      "sha256": "378c69689e57bc130409517a50070cf1d9fb3710d51a11e0f8aa7a5dad7d64bf",
+      "retainedPrivately": true
+    },
+    "temporaryUploads": "Normal isolated-runner finally cleanup only; exact paths not independently journaled.",
+    "siteArchiveCreated": false,
+    "privateReceiptSHA256": "b1d531b0e61030d9e73691b6de63e9e9ded8e8649976b908e5b89d07c1908454"
+  },
+  "uiSourceReview": {
+    "commit": "9928f5dfc7fbd4af3c0a639ddb2c2f9312d061d2",
+    "diff": "One controller file, five additions/four removals; no backend difference from 5a.",
+    "actualBeforeProofSHA256": "aac1aa475b678843fd9ac859bb265d9ed0c2037fe57d38a471cd70ae79010c7c",
+    "actualBefore": "Three method-shadow TypeErrors; all native GETs already returned 200.",
+    "independentScope": "Read-only exact diff/ownership/default-policy audit; no new native execution.",
+    "nativeFinal": "Separate owner gate; pending at report timestamp."
+  },
+  "reports": [
+    {
+      "file": "independent-before-review.md",
+      "originalReportSHA256": "49b25091383190a6b24945d1b674c3340d471cd138550ffed33ce44805693b6c",
+      "packagedSHA256": "488cbab8b9227c1be9b9e6682301cf8a9982af2072bc8f5f4e3c7d093a2f0fe3",
+      "sanitization": "Temporary absolute log paths replaced with log basenames only; private original retained."
+    },
+    {
+      "file": "independent-corrected-before-review.md",
+      "originalReportSHA256": "60082d1528c3af643063f4621abc1304262ef305eb5d70375e779c8fb7fb4e41",
+      "packagedSHA256": "54da0addbd38ca1a4fb91d2f51251a8e27c7217392791cf74135bc906f5aca11",
+      "sanitization": "Temporary absolute log paths replaced with log basenames only; private original retained."
+    },
+    {
+      "file": "independent-review.md",
+      "originalReportSHA256": "4719c8b0176b935ce7aa41353ea280744d1022480bf7ad778f3d37206a2b509a",
+      "packagedSHA256": "077676f1614b53242286fa578eabd9694048628ff3a8ddc296d519680c726893",
+      "sanitization": "Temporary absolute log paths replaced with log basenames only; private original retained."
+    },
+    {
+      "file": "independent-code-audit.md",
+      "originalReportSHA256": "0eafe711056f2e07a78f6dd518fb7fd5f34ff4927a15ce86f0afcbc9038ce39f",
+      "packagedSHA256": "0eafe711056f2e07a78f6dd518fb7fd5f34ff4927a15ce86f0afcbc9038ce39f",
+      "sanitization": "No content change."
+    },
+    {
+      "file": "independent-ui-source-review.md",
+      "originalReportSHA256": "38b3369c9e4f130e6352b8297004fdfdb3aa75880b7d23be5c9a5ca71e5ee9cd",
+      "packagedSHA256": "38b3369c9e4f130e6352b8297004fdfdb3aa75880b7d23be5c9a5ca71e5ee9cd",
+      "sanitization": "No content change."
+    }
+  ],
+  "omitted": "Credentials, private absolute paths, raw fixtures/logs/browser proofs and database identities; full private originals remain retained.",
+  "notClaimed": [
+    "Whole suite",
+    "Fresh archive or fixed-port run",
+    "Native browser acceptance",
+    "Arbitrary PHP coercion or invalid-encoding parity",
+    "Whole-CMS completion"
+  ]
+}

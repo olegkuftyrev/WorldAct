@@ -1,0 +1,28 @@
+# Explicit Search first candidate: independent read-only code audit
+
+Exact cabaf3e1d430242433f0b0e54f5e1aa37a98dd75, tree3dda546b3e557130188b9b9c65833d861a98eff4. Read all148 helper lines and the complete two-file runtime diff against its parent, using checklistaa25 and full planbd85. This is SOURCE audit only: no new tests, imports/execution of the helper, build, environment, database, service or checkout. Owner-reported Nodeaf2177df906780e5c6f65554a1181d606cd337789d3cfa9d9bb8d87ffaf5fc33 is not relabeled an independent build.
+
+No material runtime defect found in the reviewed bounded contract. Actual acceptance remains pending corrected fixture handling/root-approved independent affected gates; the original b4a first-after failures are preserved separately.
+
+## Code findings and bounds
+
+The fixed local entity set was extracted as text and compared directly with all253 supplied KSES names minus apos. Exactly252 distinct names match, with no missing/extra/duplicate name. The original b4a repository test hash remains b4a35c21bd472077f787e2c2a99f8ad90e40262d019b1fb5a962c37e346cf594. Static hashes/comparison are recorded in search-explicit-cabaf-static-audit.json; no runtime scanner probe was used.
+
+referenceAt uses bounded significant-digit/named lookahead and index-only leading-zero runs. Valid Unicode ranges match supplied source, including preserved C1 references. Decimal and hexadecimal valid normalization is bounded; matching invalid hex retains original captured zeros/case while normalizing X, whereas unmatched all-zero/overlong references retain their prefix through ordinary ampersand escaping. Recognized output is never rescanned. The same escapedBytes routine drives sizing and emission; raw quotes, apos/unknown names and numeric-reference branches agree with the accepted source-composed contract. Float/key-order/invalid-encoding parity remains bounded as documented.
+
+Whole-form preflight reserves actual pre-existing prefix/suffix bytes plus every hidden-input punctuation/name/value. Count mode constructs only bounded token snippets/metadata and scans long spans without allocating their escaped equivalent. It completes all fields before the writer is created. Ordinary UTF-8 sizing handles1/2/3-byte units,4-byte surrogate pairs and documented isolated-surrogate3-byte encoding. Emission chunks are bounded8192 code units; a pair can cross chunks, but chunks are joined as strings before final UTF-8 measurement/encoding, so it is restored without an intervening separator. Numeric spans are ASCII and charge their actual retained/normalized spelling. Failed numeric lookahead plus ordinary scanning remains linear rather than revisiting suffixes quadratically.
+
+Object.keys plus own enumerable data descriptors avoids inherited/accessor values. Conversion never calls nested toString/getters and stores only key/string references or short primitive conversions. No key is assigned into a property bag, no options/listing/request/author data is merged and no state/input is mutated. The helper accepts only object/array containers and handles unsupported non-JSON values without executing conversion hooks; arbitrary Proxy behavior is outside the accepted JSON contract.
+
+The callsite is synchronous inside Search, with no new DB/await, observation, authority, route or final-fence change. Form action/get/visible s and no-button ordering are preserved. state.outputBytes is only read; existing render() remains the sole final charge, and reusable expansion shares its existing state. The claim is bounded hidden-field expansion before rejection, not absence of ordinary fixed-fragment allocation or a bound on the outer HTTP envelope. Generic esc, sanitizer, preview normalizer, renderer accounting and React source are unchanged.
+
+## Actual owner-after fixture issues requiring root decision
+
+Owner reports original b4a source/compiled first-after each1PASS5FAIL/6, with all29 groups and no setup failure. Source inspection explains two fixture-context assumptions, not a requested runtime revision:
+
+- JSON blocks persist as JSONB. Actual saved attrs.query property order can differ from request insertion order. The new helper correctly enumerates retained canonical data, while b4a compares JSON hidden pairs against original request Object.entries. Raw comments remain TEXT and retain their own order. A bounded test adapter should derive JSON expected pair order from the actual canonical saved query and keep each expected value assertion; it must not sort away real field/source ordering.
+- The single reusable-host request is made after the forty-ref PAGE is published. Existing readPublicSite renders all public pages as surroundings, so the over-budget repeated page can cause413 on both URLs. A bounded fixture adapter can acquire the single pair before publishing the repeated host, then acquire the repeated pair and preview control before any aggregate policy assertion. No surrounding-page/body policy or budget change is justified.
+
+The original b4a test, accepted before0/6 logs and owner first-after failure logs must remain unchanged. Any adapter needs its own frozen hash, exact diff and root-approved genuine BEFORE source/compiled rerun before after acceptance. No such edit, rerun or new resource was performed by this audit.
+
+Default global Search remains correct. Source-inferred entity expectations are not executed-PHP evidence, and field omission before does not measure old conversion behavior. Existing anonymous confidentiality controls are distinct from public filter-transport failures. No full suite, fresh archive, native matrix, ordinary release result or whole-CMS claim follows from this code-only review.
