@@ -671,7 +671,7 @@ test("block entity REST permissions, canonical persistence and optimistic confli
     const unlocked = await request(templatePath, "GET", undefined, access);
     assert.equal(unlocked.response.status, 200, JSON.stringify(unlocked.data));
     assert.match(unlocked.data.content, new RegExp("Confidential " + name));
-    assert.match(unlocked.data.content, /href="\/\?author=\d+"/);
+    assert.match(unlocked.data.content, /href="\/author\/[a-z0-9_-]+\/"/);
     const privatePost = await request(
       "/api/posts",
       "POST",

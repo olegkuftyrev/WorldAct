@@ -65,12 +65,12 @@ test("persisted author slugs coordinate creation, REST, exact public identity, m
     });
     await t.test("public REST user/me and post/media embeds expose the same nicename without unpublished identity or credentials",async()=>{
       const own=await ok("/wp-json/wp/v2/users/me");assert.equal(own.data.slug,(await pool.query("SELECT nicename FROM users WHERE id=$1",[signed.data.user.id])).rows[0].nicename);
-      const person=await ok("/wp-json/wp/v2/users/"+one.id,"GET",undefined,"");assert.equal(person.data.slug,one.nicename);assert.equal(person.data.link,"/?author="+one.id);
+      const person=await ok("/wp-json/wp/v2/users/"+one.id,"GET",undefined,"");assert.equal(person.data.slug,one.nicename);assert.equal(person.data.link,"/author/"+one.nicename+"/");
       const listed=await ok("/wp-json/wp/v2/users?include="+[one.id,hidden.id].join(","),"GET",undefined,"");assert.deepEqual(listed.data.map((row:any)=>row.id),[one.id]);assert.equal((await api("/wp-json/wp/v2/users/"+hidden.id,"GET",undefined,"")).response.status,404);
       const embedded=await ok(`/wp-json/wp/v2/posts/${record.id}?_embed=author`,"GET",undefined,"");assert.equal(embedded.data._embedded.author[0].slug,one.nicename);assert.doesNotMatch(JSON.stringify(embedded.data._embedded.author),/password|@example.test|key_hash|nicename/);
       const png=await sharp({create:{width:8,height:8,channels:3,background:"#123456"}}).png().toBuffer(),form=new FormData();form.append("file",new Blob([new Uint8Array(png)],{type:"image/png"}),"author-proof.png");
       const uploaded=await fetch(base+"/api/media",{method:"POST",headers:{Origin:origin,Cookie:cookie},body:form});assert.equal(uploaded.status,201);const image=(await uploaded.json()).media;media.push(image.id);await pool.query("UPDATE media SET author_id=$1 WHERE id=$2",[one.id,image.id]);
-      const imageREST=await ok(`/wp-json/wp/v2/media/${image.id}?_embed=author`,"GET",undefined,"");assert.equal(imageREST.data._embedded.author[0].slug,one.nicename);assert.equal(imageREST.data._embedded.author[0].email,undefined);
+      const imageREST=await ok(`/wp-json/wp/v2/media/${image.id}?_embed=author`,"GET",undefined,"");assert.equal(imageREST.data._embedded.author[0].slug,one.nicename);assert.equal(imageREST.data._embedded.author[0].email,undefined);assert.equal(imageREST.data._embedded.author[0].link,new URL("/author/"+one.nicename+"/",(await getSettings()).siteUrl).href);
       const archive=await api("/api/public/document?"+new URLSearchParams({path:"/?author="+one.id}),"GET",undefined,"");assert.equal(archive.response.status,200);assert.ok(JSON.stringify(archive.data).includes(record.slug));
     });
     await t.test("profile changes preserve assigned identity and new associations use the actual current author",async()=>{
