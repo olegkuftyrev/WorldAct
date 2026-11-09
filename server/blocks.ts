@@ -839,7 +839,7 @@ router.get("/api/public/templates/:slug", async (req:AuthRequest, res) => {
     delete post.passwordHash;
   }
   if(!preview && post){const pingback=pingbackHeader(post,settings);if(pingback)res.setHeader("X-Pingback",pingback);}
-  const requestPath = String(req.query.requestPath || "/").slice(0, 2000);
+  const requestPath = String(req.query.requestPath || "/");
   if (!isPublicRequestPath(requestPath))
     throw new HttpError(400, "Use a site-relative request path.");
   const nameVisible=hasNamedAuthorQuery(req.query,requestPath);
