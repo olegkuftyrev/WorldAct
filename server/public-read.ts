@@ -1,3 +1,4 @@
+import {authorArchivePath,authorArchiveRequestPath,resolvePrettyAuthorArchive,type AuthorArchive} from "./author-archives.js";
 import { z } from "zod";
 import { pool, getSettings, postFields, type User } from "./db.js";
 import { withPermalink } from "./permalinks.js";
@@ -9,10 +10,10 @@ import { renderedCommentContent } from "./comment-policy.js";
 import { avatarURL } from "./avatars.js";
 import { appendPostDateArchiveSQL, dateArchiveDTO, parseDateArchiveQuery } from "./date-archives.js";
 import { HttpError } from "./utils.js";
-import {completePublicRead,observePublicPost,settledPublicReads} from "./public-read-attempt.js";
+import {completePublicRead,observePublicPost,observePublicAuthor,settledPublicReads} from "./public-read-attempt.js";
 
 export type PublicReadContext = {
-  query: Record<string, unknown>; requestPath?: string; user?: User;
+  query: Record<string, unknown>; requestPath?: string; user?: User;authorArchive?:AuthorArchive;
   canReadProtectedPost: NonNullable<RenderOptions["canReadProtectedPost"]>;
 };
 function decoratePost(post: any) {
@@ -82,9 +83,16 @@ export async function commentResponse(postId: number, context: PublicReadContext
   };
 }
 export function readPublicSite(context:PublicReadContext){
-  return completePublicRead(context.canReadProtectedPost,reader=>readPublicSiteOnce({...context,canReadProtectedPost:reader}));
+  const selection:{author?:AuthorArchive}={author:context.authorArchive};
+  return completePublicRead(context.canReadProtectedPost,reader=>readPublicSiteOnce({...context,canReadProtectedPost:reader},selection));
 }
-async function readPublicSiteOnce(context: PublicReadContext) {
+async function readPublicSiteOnce(context: PublicReadContext,selection:{author?:AuthorArchive}) {
+  const selectedAuthor=context.authorArchive || selection.author;
+  if(selectedAuthor)observePublicAuthor(context.canReadProtectedPost,selectedAuthor);
+  const pretty=context.requestPath?await resolvePrettyAuthorArchive(authorArchiveRequestPath(context.requestPath,context.query)):null;
+  if(pretty?.recognized && !pretty.archive)throw new HttpError(404,"Author archive not found.");
+  if(selectedAuthor && (!pretty?.archive || pretty.archive.authorId!==selectedAuthor.authorId || pretty.archive.slug!==selectedAuthor.slug))throw new HttpError(404,"The author archive identity changed.");
+  if(pretty?.archive){selection.author ||= pretty.archive;observePublicAuthor(context.canReadProtectedPost,pretty.archive);}
   const filter = z
     .object({
       page: z.coerce.number().int().positive().max(2_147_483_647).default(1),
@@ -93,7 +101,7 @@ async function readPublicSiteOnce(context: PublicReadContext) {
       tag: z.string().min(1).max(220).optional(),
       author: z.coerce.number().int().positive().max(2147483647).optional(),
     })
-    .parse(context.query);
+    .parse({...context.query,...(pretty?.archive?{author:pretty.archive.authorId,page:pretty.archive.page || context.query.page}: {})});
   const settings = await getSettings(),
     args: unknown[] = [];
   const dateArchive = parseDateArchiveQuery(context.query);
@@ -135,7 +143,7 @@ async function readPublicSiteOnce(context: PublicReadContext) {
     );
   };
   const { defaultPingbackFlag: _outgoingFlag, pingServices: _pingServices, adminEmail: _adminEmail, commentModerationKeys: _moderationKeys, disallowedCommentKeys: _disallowedKeys, ...safeSettings } = settings;
-  const author = filter.author ? (await pool.query("SELECT display_name AS name FROM users WHERE id=$1 AND EXISTS(SELECT 1 FROM posts WHERE author_id=$1 AND type='post' AND status='publish')", [filter.author])).rows[0] : null;
+  const author = filter.author ? (await pool.query("SELECT id,nicename,display_name AS name FROM users WHERE id=$1 AND EXISTS(SELECT 1 FROM posts WHERE author_id=$1 AND type='post' AND status='publish')", [filter.author])).rows[0] : null;
   const icon = settings.siteIconId
     ? (
         await pool.query(
@@ -158,7 +166,7 @@ async function readPublicSiteOnce(context: PublicReadContext) {
       siteIconUrl: icon ? `/uploads/${icon.filename}` : null,
       siteIconSizes:icon?.sizes || {},
     },
-    archive: dateArchive ? dateArchiveDTO(dateArchive) : author ? { type: "author", name: author.name, authorId: filter.author } : null,
+    archive: pretty?.archive || (dateArchive ? dateArchiveDTO(dateArchive) : author ? { type: "author", name: author.name, authorId: filter.author!,slug:author.nicename,permalink:authorArchivePath(author,settings) } : null),
     posts: await settledPublicReads(posts.rows.map(post => sanitize(post, "archive"))),
     pages: safePages,
     frontPage,

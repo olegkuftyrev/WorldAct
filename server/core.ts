@@ -1,3 +1,4 @@
+import {readPublicPath} from "./public-path.js";
 import {readPublicDocument,publicDocumentContext} from "./public-document-data.js";
 import { publicPost, commentResponse, readPublicSite,readPublishedPostById } from "./public-read.js";
 import { hasPostAccess } from "./post-passwords.js";
@@ -1282,8 +1283,10 @@ router.get("/public/document", async (req: AuthRequest, res) => {
   res.status(model.status).json(model);
 });
 router.get("/public/site", async (req: AuthRequest, res) => {
+  const requestPath=req.query.requestPath===undefined?undefined:z.string().parse(req.query.requestPath);
+  if(requestPath!==undefined)readPublicPath(requestPath);
   await setRobots(res);
-  res.json(await readPublicSite({query:req.query,user:req.user,canReadProtectedPost:postAccessReader(req)}));
+  res.json(await readPublicSite({query:req.query,requestPath,user:req.user,canReadProtectedPost:postAccessReader(req)}));
 });
 router.get("/public/terms", async (req, res) => {
   const taxonomy = z

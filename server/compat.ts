@@ -1,3 +1,4 @@
+import {authorArchivePath} from "../shared/author-archive.js";
 import {readPublishedPostById} from "./public-read.js";
 import {normalizePingSource,renderedCommentContent} from "./comment-policy.js";
 import {submitPublicComment} from "./core.js";
@@ -331,7 +332,7 @@ async function postEmbeddings(post: any, req: Request) {
   if (embeddingRequested(req, "author")) {
     const person = await embeddedRecord(req, `author:${post.authorId}`, async () => {
       const row = (await pool.query("SELECT id,nicename,display_name,profile FROM users WHERE id=$1", [post.authorId])).rows[0];
-      return row ? { id: row.id, name: row.display_name, slug: row.nicename, description: row.profile?.bio || "", url: row.profile?.website || "", link: `/?author=${row.id}`, avatar_urls: {} } : null;
+      return row ? { id: row.id, name: row.display_name, slug: row.nicename, description: row.profile?.bio || "", url: row.profile?.website || "", link: authorArchivePath(row,await getSettings()), avatar_urls: {} } : null;
     });
     if (person) embedded.author = [person];
   }
@@ -812,7 +813,7 @@ async function mediaEmbeddings(item: any, req: AuthRequest, settings: Awaited<Re
       return {
         id: row.id, name: row.display_name, slug: row.nicename,
         description: row.profile?.bio || "", url: row.profile?.website || "",
-        link: absolute(`/?author=${row.id}`, settings.siteUrl),
+        link: absolute(authorArchivePath(row,settings), settings.siteUrl),
         avatar_urls: avatar ? Object.fromEntries([24, 48, 96].map(size => [size, avatarURL(row.email, settings, size)])) : {},
       };
     });

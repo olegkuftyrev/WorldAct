@@ -16,7 +16,7 @@ async function fixture(db: Database) {
   const users: number[] = [];
   async function user(label: string) {
     const email = `${stamp}-${label}-private@example.test`;
-    const record = (await db.query("INSERT INTO users(username,email,display_name,password_hash,role,nicename) VALUES($1,$2,$3,'PRIVATE-AVATAR-PASSWORD-HASH','author',$4) RETURNING id,email,display_name AS name", [stamp + "-" + label, email, label + " account name", fixtureUserNicename(stamp + "-" + label)])).rows[0];
+    const record = (await db.query("INSERT INTO users(username,email,display_name,password_hash,role,nicename) VALUES($1,$2,$3,'PRIVATE-AVATAR-PASSWORD-HASH','author',$4) RETURNING id,email,nicename,display_name AS name", [stamp + "-" + label, email, label + " account name", fixtureUserNicename(stamp + "-" + label)])).rows[0];
     users.push(record.id); return record;
   }
   const owner = await user("PostOwner"), member = await user("Member"), departed = await user("Departed");
@@ -84,7 +84,7 @@ test("comment avatar links reject unsafe websites, while ordinary post/user avat
     const postAvatar = dom(await render(block("avatar", {isLink: true, linkTarget: "_blank"})));
     assert.equal(postAvatar.querySelector("img")?.getAttribute("src"), avatarURL(f.owner.email, settings));
     assert.equal(postAvatar.querySelector("img")?.getAttribute("alt"), f.owner.name + " Avatar");
-    assert.equal(postAvatar.querySelector("a")?.getAttribute("href"), "/?author=" + f.owner.id);
+    assert.equal(postAvatar.querySelector("a")?.getAttribute("href"), "/author/" + f.owner.nicename + "/");
     assert.equal(postAvatar.querySelector("a")?.getAttribute("aria-label"), `(${f.owner.name} author archive, opens in a new tab)`);
     assert.equal(dom(await render(block("avatar", {userId: f.member.id}))).querySelector("img")?.getAttribute("src"), avatarURL(f.member.email, settings));
     assert.equal(await render(block("avatar", {userId: 0})), "");

@@ -26,6 +26,10 @@ export function normalizePublicQuery(query: URLSearchParams, options: {
   const category = archive && "taxonomy" in archive && archive.taxonomy === "category" ? archive.slug : values.category || "";
   const tag = archive && "taxonomy" in archive && archive.taxonomy === "tag" ? archive.slug : values.tag || "";
   if (category.length > 220 || tag.length > 220) throw new PublicQueryError("The taxonomy slug exceeds the supported length.");
+  if(archive && "type" in archive && archive.type==="author"){
+    values.author=String(archive.authorId);
+    if(archive.page!==undefined)values.page=String(archive.page);
+  }
   const date = archive && "type" in archive && archive.type === "date" ? archive : null;
   if (date) {
     delete values.m; delete values.month; values.year = String(date.year);
@@ -49,13 +53,13 @@ export function normalizePublicQuery(query: URLSearchParams, options: {
 /** Exact priority formerly owned by PublicSite.selectSourceTemplate. */
 export function sourceTemplateCandidates(context: {
   notFound: boolean; single: boolean; post: Pick<PublicPost, "id" | "type" | "slug" | "templateSlug"> | null;
-  frontPage: boolean; search: boolean; category?: string; tag?: string; author: boolean; date: boolean;
+  frontPage: boolean; search: boolean; category?: string; tag?: string; author: boolean; authorSlug?:string;authorId?:number;date: boolean;
 }) {
   return context.notFound ? ["404", "index"]
     : context.search ? ["search", "index"]
     : context.category ? [`category-${context.category}`, "category", "archive", "index"]
     : context.tag ? [`tag-${context.tag}`, "tag", "archive", "index"]
-    : context.author ? ["author", "archive", "index"] : context.date ? ["date", "archive", "index"]
+    : context.author ? [...(context.authorSlug?[`author-${context.authorSlug}`]:[]),...(context.authorId?[`author-${context.authorId}`]:[]),"author", "archive", "index"] : context.date ? ["date", "archive", "index"]
     : context.single && context.post ? [
       ...(context.frontPage ? ["front-page"] : []), ...(context.post.templateSlug ? [context.post.templateSlug] : []),
       ...(context.post.type === "page" ? [`page-${context.post.slug}`, `page-${context.post.id}`, "page"] : [`single-post-${context.post.slug}`, "single-post", "single"]), "singular", "index",

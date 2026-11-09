@@ -6,6 +6,8 @@ import { Brand, ResourceState } from "../components/PublicPrimitives";
 import { postLink } from "../publicLinks";
 import { commentReturnPath } from "../../shared/comment-links";
 import { postPublicationKey } from "../../shared/post-civil-date";
+import { publicArchivePageLocation, publicArchiveSearchPath } from "../publicArchiveLinks";
+import type { PublicArchive, PublicSettings } from "../../shared/public-document";
 
 export type PublicInteractionState = {
  error:string; errorLocal?:boolean; notice:string; busy:boolean; password:string; publicSearch:string;
@@ -35,7 +37,7 @@ export function PublicDocumentView({model,state=initialPublicInteraction(model),
  const detail=model.route.detail,notFound=model.status===404,missingPost=false,preview=false,loading=false;
  const isPostsPage=model.route.kind==="posts-page",displaySingle=["singular","front-page"].includes(model.route.kind),displayedPost=post;
  const requestLocation=new URL(model.requestPath,"https://worldact.invalid"),params=requestLocation.searchParams;
- const {search:searchTerm,category:categoryFilter,tag:tagFilter,date:dateArchive}=model.route.query;
+ const {search:searchTerm,category:categoryFilter,tag:tagFilter,author:authorFilter,date:dateArchive}=model.route.query;
  const archive=model.route.archive,hasDateFilter=Boolean(dateArchive),pagination=model.site.pagination;
  const replyReturn=model.controls.commentReturnPath;
  const passwordReturn=commentReturnPath(model.requestPath,model.route.query.values,Number(model.route.query.values.replytocom)).split("#")[0];
@@ -376,8 +378,8 @@ export function PublicDocumentView({model,state=initialPublicInteraction(model),
                       ? `Category: ${archive?.name || categoryFilter}`
                       : tagFilter
                         ? `Tag: ${archive?.name || tagFilter}`
-                        : params.get("author")
-                          ? `Author: ${site.data?.archive?.name || "Posts"}`
+                        : authorFilter
+                          ? `Author: ${archive?.name || "Posts"}`
                           : hasDateFilter
                             ? site.data?.archive?.name || dateArchive?.name || "Archives"
                           : isPostsPage
@@ -387,7 +389,7 @@ export function PublicDocumentView({model,state=initialPublicInteraction(model),
                 <form
                   className="public-search-form"
                   role="search"
-                  action={requestLocation.pathname} method="get" onSubmit={actions.search}
+                  action={publicArchiveSearchPath(model.requestPath,archive,settings)} method="get" onSubmit={actions.search}
 
                 >
                   <label className="screen-reader-text" htmlFor="public-search">
@@ -405,7 +407,7 @@ export function PublicDocumentView({model,state=initialPublicInteraction(model),
                   {(searchTerm ||
                     categoryFilter ||
                     tagFilter ||
-                    params.get("author") || hasDateFilter) && <a onClick={actions.navigate} href="/">Show all posts</a>}
+                    authorFilter || hasDateFilter) && <a onClick={actions.navigate} href="/">Show all posts</a>}
                 </form>
                 <div className="public-posts">
                   {posts.map((item) => (
@@ -453,11 +455,11 @@ export function PublicDocumentView({model,state=initialPublicInteraction(model),
             )}
             {pagination && pagination.totalPages > 1 && (
               <nav className="public-pagination" aria-label="Posts pagination">
-                <PageLink onNavigate={actions.navigate} path={model.requestPath} field="page" page={pagination.page - 1} disabled={pagination.page <= 1}>← Newer posts</PageLink>
+                <PageLink onNavigate={actions.navigate} path={model.requestPath} archive={archive} settings={settings} field="page" page={pagination.page - 1} disabled={pagination.page <= 1}>← Newer posts</PageLink>
                 <span>
                   {pagination.page} of {pagination.totalPages}
                 </span>
-                <PageLink onNavigate={actions.navigate} path={model.requestPath} field="page" page={pagination.page + 1} disabled={pagination.page >= pagination.totalPages}>Older posts →</PageLink>
+                <PageLink onNavigate={actions.navigate} path={model.requestPath} archive={archive} settings={settings} field="page" page={pagination.page + 1} disabled={pagination.page >= pagination.totalPages}>Older posts →</PageLink>
               </nav>
             )}
           </>
@@ -514,9 +516,9 @@ function SourceDocument({model,state,actions}:{model:PublicDocumentModel;state:P
  </>;
 }
 function Slot({html,className}:{html:string;className:string}) {return <div className={className} data-worldact-public-island="true" dangerouslySetInnerHTML={{__html:html}}/>;}
-function PageLink({path,field,page,disabled,children,onNavigate}:{path:string;field:string;page:number;disabled:boolean;children:ReactNode;onNavigate?:PublicDocumentActions["navigate"]}) {
+function PageLink({path,field,page,disabled,children,onNavigate,archive,settings}:{path:string;field:string;page:number;disabled:boolean;children:ReactNode;onNavigate?:PublicDocumentActions["navigate"];archive?:PublicArchive|null;settings?:PublicSettings}) {
  const target=new URL(path,"https://worldact.invalid");target.searchParams.set(field,String(Math.max(1,page)));
- return disabled ? <button disabled>{children}</button> : <a onClick={onNavigate} className="public-page-link" href={target.pathname+target.search}>{children}</a>;
+ return disabled ? <button disabled>{children}</button> : <a onClick={onNavigate} className="public-page-link" href={field==="page"?publicArchivePageLocation(path,archive,settings,page):target.pathname+target.search}>{children}</a>;
 }
 function fontStack(name: string | undefined) {
   if (!name) return undefined;

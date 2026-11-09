@@ -82,6 +82,9 @@ jobs:
           tests/public-read-accumulation.test.ts tests/author-feed-accumulation-root.test.ts
           tests/author-navigation-identity-corrected-expectation.test.ts tests/author-internal-rss-independent-waits.test.ts
           tests/public-direct-metadata.test.ts
+          tests/pretty-author-archives-original.test.ts tests/pretty-author-archives.test.ts
+          tests/pretty-author-identity.test.ts tests/pretty-author-identity-pinning.test.ts
+          tests/pretty-author-portability.test.ts tests/public-author-archive-ui.test.ts
           tests/user-creation-concurrency.test.ts tests/user-nicenames-migration.test.ts
           tests/author-permalink-portability.test.ts
           tests/page-delete-reparent.test.ts tests/post-mutation-locks.test.ts
@@ -191,6 +194,25 @@ jobs:
           AUTHOR_PERMALINK_ARCHIVE_STAGE: restore
           AUTHOR_PERMALINK_ARCHIVE_PATH: ${{ runner.temp }}/worldact-author-permalinks.json
         run: node scripts/test-isolated.mjs tests/author-permalink-portability.test.ts
+      - name: Export pretty author archive
+        if: matrix.node == 24
+        env:
+          PRETTY_AUTHOR_ARCHIVE_STAGE: export
+          PRETTY_AUTHOR_ARCHIVE_PATH: ${{ runner.temp }}/worldact-pretty-authors.json
+        run: node scripts/test-isolated.mjs tests/pretty-author-portability.test.ts
+      - name: Restore pretty author archive to a fresh source database
+        if: matrix.node == 24
+        env:
+          PRETTY_AUTHOR_ARCHIVE_STAGE: restore
+          PRETTY_AUTHOR_ARCHIVE_PATH: ${{ runner.temp }}/worldact-pretty-authors.json
+        run: node scripts/test-isolated.mjs tests/pretty-author-portability.test.ts
+      - name: Restore pretty author archive on a fresh compiled server
+        if: matrix.node == 24
+        env:
+          ISOLATED_TEST_COMPILED: "true"
+          PRETTY_AUTHOR_ARCHIVE_STAGE: restore
+          PRETTY_AUTHOR_ARCHIVE_PATH: ${{ runner.temp }}/worldact-pretty-authors.json
+        run: node scripts/test-isolated.mjs tests/pretty-author-portability.test.ts
       - name: Export image format archive
         if: matrix.node == 24
         env:

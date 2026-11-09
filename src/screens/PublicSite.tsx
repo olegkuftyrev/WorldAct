@@ -9,6 +9,9 @@ import { commentsOpen } from "../../shared/comment-open";
 import { commentReturnPath, commentLoginHref } from "../../shared/comment-links";
 import { readPlainPermalinkQuery } from "../../shared/plain-permalink-query";
 import { shouldResolveStaticFrontPage } from "../plainPermalinkRouting";
+import { publicArchivePageLocation, publicArchiveSearchPath } from "../publicArchiveLinks";
+import { selectPublicSourceTemplate } from "../../shared/public-routing";
+import type { PublicArchive } from "../../shared/public-document";
 import { scrollToMoreFragment } from "../contentFragments";
 import {enhancePlaylists} from "../playlists";
 import "@wordpress/block-library/build-style/style.css";
@@ -25,6 +28,7 @@ import {
 import {
   Link,
   useLocation,
+  useNavigate,
   useParams,
   useSearchParams,
 } from "react-router-dom";
@@ -53,19 +57,6 @@ import {
   ResourceState,
 } from "../components/AdminUI";
 
-type DateArchive = {
-  type: "date";
-  year: number;
-  month?: number;
-  day?: number;
-  week?: number;
-  name: string;
-  permalink: string;
-};
-type PublicArchive =
-  | { taxonomy: "category" | "tag"; slug: string; name?: string }
-  | DateArchive;
-
 export default function PublicSite({
   detail = false,
   page = false,
@@ -89,6 +80,7 @@ export default function PublicSite({
     { user, setUser } = useContext(Session);
   const slug = slugOverride || routeSlug;
   const requestLocation = useLocation();
+  const navigate = useNavigate();
   const [params, setParams] = useSearchParams();
   const searchTerm = params.get("search") || params.get("s") || "";
   const categoryFilter =
@@ -96,6 +88,8 @@ export default function PublicSite({
   const tagFilter =
     archive && "taxonomy" in archive && archive.taxonomy === "tag" ? archive.slug : params.get("tag");
   const dateArchive = archive && "type" in archive && archive.type === "date" ? archive : null;
+  const routeAuthor = archive && "type" in archive && archive.type === "author" ? archive : null;
+  const authorFilter = routeAuthor?.authorId || params.get("author");
   const dateQuery = new URLSearchParams();
   for (const key of ["year", "monthnum", "day", "m", "w"])
     if (params.get(key)) dateQuery.set(key, params.get(key)!);
@@ -109,7 +103,7 @@ export default function PublicSite({
       else dateQuery.delete(key);
   }
   const hasDateFilter = Boolean(dateArchive || dateQuery.size);
-  const requestedPage = Math.max(1, Number(params.get("page")) || 1);
+  const requestedPage = routeAuthor?.page || Math.max(1, Number(params.get("page")) || 1);
   const commentPageParam = params.get("commentPage");
   const commentPage = Math.max(1, Number(commentPageParam) || 1);
   const blockQuery = new URLSearchParams(
@@ -124,7 +118,7 @@ export default function PublicSite({
     ["search", searchTerm],
     ["category", categoryFilter],
     ["tag", tagFilter],
-    ["author", params.get("author")],
+    ["author", authorFilter ? String(authorFilter) : null],
   ])
     if (value) publicQuery.set(key!, value);
   for (const [key, value] of new URLSearchParams(blockQuery))
@@ -136,16 +130,18 @@ export default function PublicSite({
     if(params.has("page"))templateQuery.set("page",String(bodyPagination.page));
     templateQuery.set("contentPage",String(bodyPagination.page));
   }
+  const siteQuery = new URLSearchParams(publicQuery);
+  if (routeAuthor) siteQuery.set("requestPath", requestLocation.pathname + requestLocation.search);
   const design = useResource<PublicDesign>("/public/design");
   const site = useResource<{
     settings: Partial<Settings>;
-    archive?: { type: "author"; name: string; authorId: number } | DateArchive | null;
+    archive?: PublicArchive | null;
     posts: Post[];
     pages: Post[];
     frontPage: Post | null;
     postsPage: Post | null;
     pagination: { page: number; totalPosts: number; totalPages: number };
-  }>(`/public/site?${publicQuery}`);
+  }>(`/public/site?${siteQuery}`);
   const [missingPost,setMissingPost] = useState(false);
   const [commentsPagination, setCommentsPagination] =
     useState<CommentPagination | null>(null);
@@ -206,6 +202,8 @@ export default function PublicSite({
   const settings = site.data?.settings,
     title = settings?.siteTitle || "WorldAct",
     posts = site.data?.posts || [];
+  const resolvedArchive = archive || site.data?.archive;
+  const authorArchive = resolvedArchive && "type" in resolvedArchive && resolvedArchive.type === "author" ? resolvedArchive : null;
   const replyReturn = commentReturnPath(requestLocation.pathname + requestLocation.search);
   const replyLocation = useRef({key:"",applied:false});
   useEffect(() => {
@@ -241,7 +239,7 @@ export default function PublicSite({
     searchTerm ||
     categoryFilter ||
     tagFilter ||
-    params.get("author") ||
+    authorFilter ||
     hasDateFilter ||
     params.get("page"),
   );
@@ -502,11 +500,12 @@ export default function PublicSite({
     single: displaySingle,
     post: displayedPost,
     frontPage: isFrontPage || (!detail && !hasArchiveFilter && settings?.frontPageMode !== "page"),
-    home: !detail && !hasArchiveFilter,
     search: Boolean(searchTerm),
     category: categoryFilter || undefined,
     tag: tagFilter || undefined,
-    author: Boolean(params.get("author")),
+    author: Boolean(authorFilter),
+    authorSlug: authorArchive?.slug,
+    authorId: authorArchive?.authorId,
     date: hasDateFilter,
   });
   if (!detail && !notFound && shouldResolveStaticFrontPage(requestLocation.pathname, params, site.data))
@@ -863,8 +862,8 @@ export default function PublicSite({
                       ? `Category: ${archive?.name || categoryFilter}`
                       : tagFilter
                         ? `Tag: ${archive?.name || tagFilter}`
-                        : params.get("author")
-                          ? `Author: ${site.data?.archive?.name || "Posts"}`
+                        : authorFilter
+                          ? `Author: ${authorArchive?.name || "Posts"}`
                           : hasDateFilter
                             ? site.data?.archive?.name || dateArchive?.name || "Archives"
                           : isPostsPage
@@ -881,7 +880,8 @@ export default function PublicSite({
                     publicSearch.trim()
                       ? next.set("search", publicSearch.trim())
                       : next.delete("search");
-                    setParams(next);
+                    const pathname = publicArchiveSearchPath(requestLocation.pathname + requestLocation.search, resolvedArchive, settings);
+                    navigate(pathname + (next.size ? "?" + next : ""));
                   }}
                 >
                   <label className="screen-reader-text" htmlFor="public-search">
@@ -898,7 +898,7 @@ export default function PublicSite({
                   {(searchTerm ||
                     categoryFilter ||
                     tagFilter ||
-                    params.get("author") || hasDateFilter) && <Link to="/">Show all posts</Link>}
+                    authorFilter || hasDateFilter) && <Link to="/">Show all posts</Link>}
                 </form>
                 <div className="public-posts">
                   {posts.map((item) => (
@@ -949,9 +949,7 @@ export default function PublicSite({
                 <button
                   disabled={pagination.page <= 1}
                   onClick={() => {
-                    const next = new URLSearchParams(params);
-                    next.set("page", String(pagination.page - 1));
-                    setParams(next);
+                    navigate(publicArchivePageLocation(requestLocation.pathname + requestLocation.search, resolvedArchive, settings, pagination.page - 1));
                     window.scrollTo(0, 0);
                   }}
                 >
@@ -963,9 +961,7 @@ export default function PublicSite({
                 <button
                   disabled={pagination.page >= pagination.totalPages}
                   onClick={() => {
-                    const next = new URLSearchParams(params);
-                    next.set("page", String(pagination.page + 1));
-                    setParams(next);
+                    navigate(publicArchivePageLocation(requestLocation.pathname + requestLocation.search, resolvedArchive, settings, pagination.page + 1));
                     window.scrollTo(0, 0);
                   }}
                 >
@@ -1107,27 +1103,10 @@ function RenderedTemplate({
 
 function selectSourceTemplate(documents: SiteTemplate[] | undefined, context: {
   notFound: boolean; single: boolean; post: Post | null | undefined;
-  frontPage: boolean; home: boolean; search: boolean;
-  category?: string; tag?: string; author: boolean; date: boolean;
+  frontPage: boolean; search: boolean;
+  category?: string; tag?: string; author: boolean; authorSlug?: string; authorId?: number; date: boolean;
 }) {
-  const candidates = context.notFound ? ["404", "index"]
-    : context.search ? ["search", "index"]
-    : context.category ? [`category-${context.category}`, "category", "archive", "index"]
-    : context.tag ? [`tag-${context.tag}`, "tag", "archive", "index"]
-    : context.author ? ["author", "archive", "index"]
-    : context.date ? ["date", "archive", "index"]
-    : context.single && context.post ? [
-        ...(context.frontPage ? ["front-page"] : []),
-        ...(context.post.templateSlug ? [context.post.templateSlug] : []),
-        ...(context.post.type === "page" ? [`page-${context.post.slug}`, `page-${context.post.id}`, "page"] : [`single-post-${context.post.slug}`, "single-post", "single"]),
-        "singular", "index",
-      ]
-    : [...(context.frontPage ? ["front-page"] : []), "home", "index"];
-  for (const slug of candidates) {
-    const document = documents?.find((item) => item.slug === slug);
-    if (document) return document;
-  }
-  return null;
+  return selectPublicSourceTemplate(documents || [], {...context, post:context.post || null});
 }
 function enhanceEmbeds(root: ParentNode) {
   for (const wrapper of root.querySelectorAll<HTMLElement>(".wp-block-embed__wrapper")) {
