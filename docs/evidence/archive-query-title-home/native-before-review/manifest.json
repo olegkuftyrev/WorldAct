@@ -1,0 +1,131 @@
+{
+  "schema": 1,
+  "classification": "GENUINE_BOUNDED_HOME_BEFORE_WITH_HISTORICAL_CONSTRUCTION_AND_RETENTION_SNAPSHOTS",
+  "candidateOriginNotMainRelease": "eba54f98188fe6752ad37380bd6e4cb7b18b82bc",
+  "actualNodeSHA256": "300199e4aebe00b526fee49af14904d50cacd20333b07c99c2ded6ba3ddf7070",
+  "testOnlyCommit": "f8a4d89f2bf221c09e765ef0c55a1170ee49f98d",
+  "testSHA256": "af82c59144a210e3d9d6e3d070b88a3f9d8cc97631b5d35ff786154f9354a9cc",
+  "records": [
+    {
+      "file": "review.md",
+      "privateSource": "<private-evidence-root>/archive-query-title-home-before-review.md",
+      "privateSourceSHA256": "cdb55d84f8b3b4a306041bc8adca47857fcf268ec07db1faf6c7ff43bd8a6054",
+      "copySHA256": "7bdb88f6b13dda2d770120f13c7789958b6317c6ed11ff9273ffe3bda7dc1a08",
+      "bytes": 8783,
+      "pathOnlySanitization": [
+        {
+          "rule": "owned-home-before-worktree",
+          "occurrences": 1
+        },
+        {
+          "rule": "private-evidence-root",
+          "occurrences": 1
+        },
+        {
+          "rule": "dependency-owner-workspace",
+          "occurrences": 1
+        }
+      ],
+      "otherwiseByteIdentical": true
+    },
+    {
+      "file": "checks.json",
+      "privateSource": "<private-evidence-root>/archive-query-title-home-before-checks.json",
+      "privateSourceSHA256": "5b54091b9b44cd9585dafacb66983abc1d43a196b7bb80d967ee01767db35ef1",
+      "copySHA256": "6e03951958f2f2183c81cfa66160ffbd5b02fcd16eff5cf157d54a946875b094",
+      "bytes": 11039,
+      "pathOnlySanitization": [
+        {
+          "rule": "owned-home-before-worktree",
+          "occurrences": 2
+        },
+        {
+          "rule": "private-evidence-root",
+          "occurrences": 12
+        },
+        {
+          "rule": "dependency-owner-workspace",
+          "occurrences": 1
+        }
+      ],
+      "otherwiseByteIdentical": true
+    },
+    {
+      "file": "ownership.json",
+      "privateSource": "<private-evidence-root>/archive-query-title-home-before-ownership.json",
+      "privateSourceSHA256": "f960599ff86125d1c12cc75f60231f78ef6af6f7a4936320b16091315826a86e",
+      "copySHA256": "dc88c887b13d598582681278978c29297235623d60cfae97876a7912f21cd4e8",
+      "bytes": 2787,
+      "pathOnlySanitization": [
+        {
+          "rule": "owned-home-before-worktree",
+          "occurrences": 4
+        },
+        {
+          "rule": "private-evidence-root",
+          "occurrences": 2
+        },
+        {
+          "rule": "dependency-owner-workspace",
+          "occurrences": 1
+        }
+      ],
+      "otherwiseByteIdentical": true
+    },
+    {
+      "file": "selector.json",
+      "privateSource": "<private-evidence-root>/archive-query-title-home-before-selector.json",
+      "privateSourceSHA256": "cecc70e5557a4f9e0b2ba3ca9e13b1126dc317f450f80a16e5d4c163a1a8be20",
+      "copySHA256": "706e793ddc57cae1cb8c94002f045d41964bd251c8568e9d5bbc4dee566ea188",
+      "bytes": 3203,
+      "pathOnlySanitization": [
+        {
+          "rule": "owned-home-before-worktree",
+          "occurrences": 1
+        }
+      ],
+      "otherwiseByteIdentical": true
+    },
+    {
+      "file": "owned-cleanup.json",
+      "privateSource": "<private-evidence-root>/archive-query-title-home-before-owned-cleanup.json",
+      "privateSourceSHA256": "78e4bc578c051f04ded8b495126cef4402b0f4357870d30959ca563d3ca98dd2",
+      "copySHA256": "f4b5a284c69b5aad87b65835e298fb92e95562ae38341ed6c3a29c61bebbac85",
+      "bytes": 7217,
+      "pathOnlySanitization": [
+        {
+          "rule": "owned-home-before-worktree",
+          "occurrences": 3
+        },
+        {
+          "rule": "dependency-owner-workspace",
+          "occurrences": 2
+        }
+      ],
+      "otherwiseByteIdentical": true
+    }
+  ],
+  "README": {
+    "file": "README.md",
+    "sha256": "a0ce956dea6a810dc20ede650303ac3bd193ea182540f1e7eaba14b5603990aa"
+  },
+  "sanitizationPolicy": "Only known private absolute roots replaced; no result/failure/expectation rewriting",
+  "rawBootstrapAuthConfigLogsIncludedInGit": false,
+  "sourceCounts": {
+    "tests": 3,
+    "pass": 1,
+    "fail": 2,
+    "cancelled": 0,
+    "skipped": 0,
+    "actualReads": 6
+  },
+  "actualCompiledCounts": {
+    "tests": 3,
+    "pass": 1,
+    "fail": 2,
+    "cancelled": 0,
+    "skipped": 0,
+    "actualReads": 6
+  },
+  "docsOnly": true
+}

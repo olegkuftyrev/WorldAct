@@ -1,0 +1,78 @@
+{
+  "status": "CONSTRUCTION_ONLY_UNEXECUTED_ROOT_READ_REQUIRED",
+  "candidateOriginNotMainRelease": "eba54f98188fe6752ad37380bd6e4cb7b18b82bc",
+  "testOnlyCommit": "f8a4d89f2bf221c09e765ef0c55a1170ee49f98d",
+  "testFile": "tests/archive-query-title-home-before.test.ts",
+  "testSHA256": "af82c59144a210e3d9d6e3d070b88a3f9d8cc97631b5d35ff786154f9354a9cc",
+  "expectedNodeOriginSHA256": "300199e4aebe00b526fee49af14904d50cacd20333b07c99c2ded6ba3ddf7070",
+  "nodeOriginProvidedByBackend": true,
+  "independentBuildPerformed": false,
+  "sourceExecuted": false,
+  "compiledExecuted": false,
+  "groups": [
+    {
+      "label": "home",
+      "path": "/",
+      "expectedRouteKind": "home",
+      "expectedTemplate": "home",
+      "expectedExplicitArchiveTitle": "NO ELEMENT/WRAPPER"
+    },
+    {
+      "label": "date",
+      "path": "/?year=2001",
+      "expectedRouteKind": "archive",
+      "expectedTemplate": "date",
+      "expectedExplicitArchiveTitle": "Year: 2001 ELEMENT"
+    }
+  ],
+  "surfacesPerGroup": [
+    "anonymous actual native GET",
+    "anonymous actual native HEAD",
+    "anonymous actual GET /api/public/document?path=<encoded visible path>"
+  ],
+  "plannedReadsPerMode": 6,
+  "allReadsConsumedBeforeAggregateAssertions": true,
+  "plannedPolicyChildren": [
+    "ordinary unfiltered posts home has no explicit archive QueryTitle element or wrapper",
+    "actual populated date archive retains its explicit archive QueryTitle"
+  ],
+  "plannedChildren": 2,
+  "plannedTestsIncludingParent": 3,
+  "sourceSelector": "ISOLATED_TEST_PORT=5195 ARCHIVE_TITLE_HOME_PROOF_PATH=<new private source proof path> node scripts/test-isolated.mjs tests/archive-query-title-home-before.test.ts",
+  "compiledSelector": "ISOLATED_TEST_PORT=5195 ISOLATED_TEST_COMPILED=true ARCHIVE_TITLE_HOME_PROOF_PATH=<new private compiled proof path> node scripts/test-isolated.mjs tests/archive-query-title-home-before.test.ts",
+  "fixturePlan": {
+    "theme": "twentytwentyfive",
+    "timezone": "UTC",
+    "frontPageMode": "posts",
+    "permalinkStructure": "/%postname%/",
+    "publishedPosts": 1,
+    "postCivilDate": "2001-02-03T04:05:37",
+    "postContent": "plain paragraph, no QueryTitle",
+    "templates": [
+      "home",
+      "date"
+    ],
+    "existingTemplates": "snapshot/version-restore",
+    "missingTemplates": "API-create/track/delete",
+    "literalMainIdsMatchCommentAnchor": true,
+    "independentMarkers": true,
+    "explicitArchiveTitleDistinctAnchors": true,
+    "noQueryLoopPostTitleBodyTitleOrExtraMatrix": true,
+    "savedIdsSlugsRawAttrsAndPermalinkValidated": true
+  },
+  "domBoundary": "Actual Source native island + literal anchored main; model presentation fragment separately; never raw bootstrap JSON",
+  "resourceState": {
+    "physicalWorktree": "<owned-home-before-worktree>",
+    "envExists": false,
+    "dependencyLinkExists": false,
+    "buildOutputsExist": false,
+    "dbServicesBrowserCreated": false
+  },
+  "exclusions": [
+    "No runtime/UI/shared/CSS/CI edit",
+    "No other QueryTitle type/default",
+    "No raw global flags or SQL/canonical/body selection assertion",
+    "No full/fresh/fixed/feeds/browser matrix",
+    "Current singular-title release acceptance unchanged"
+  ]
+}

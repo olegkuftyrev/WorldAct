@@ -1,0 +1,70 @@
+{
+  "classification": "NORMAL_DISPOSABLE_RUNNER_CLEANUP_WITH_RETAINED_OWN_SETUP_PENDING_ROOT_REVIEW",
+  "physicalWorktree": "<owned-home-before-worktree>",
+  "gitHEAD": "f8a4d89f2bf221c09e765ef0c55a1170ee49f98d",
+  "trackedStatus": "",
+  "phases": [
+    {
+      "mode": "source",
+      "observedDisposableDatabases": [
+        "worldact_test_1794239620337_585ead3f"
+      ],
+      "PGAPPNAME": "worldact-archive-title-home-before-source-f8a",
+      "postExitRemainingOwnedDatabases": [],
+      "postExitRemainingPhaseSessions": [],
+      "runnerExitCode": 1,
+      "signal": null,
+      "completedAt": "2026-11-09T15:53:43.951Z",
+      "receipt": "<private-evidence-root>/archive-query-title-home-before-source-run.json",
+      "receiptSHA256": "d501cd44c242b0b4e5a487598384939ac892416c81c6cf8441b1a940243346ec"
+    },
+    {
+      "mode": "compiled",
+      "observedDisposableDatabases": [
+        "worldact_test_1794239678745_575afdcc"
+      ],
+      "PGAPPNAME": "worldact-archive-title-home-before-compiled-f8a",
+      "postExitRemainingOwnedDatabases": [],
+      "postExitRemainingPhaseSessions": [],
+      "runnerExitCode": 1,
+      "signal": null,
+      "completedAt": "2026-11-09T15:54:41.712Z",
+      "receipt": "<private-evidence-root>/archive-query-title-home-before-compiled-run.json",
+      "receiptSHA256": "9e7cabfae398bf988cc8d25edec7b8046fb9323b7061f4118c80a90f962c0b1e"
+    }
+  ],
+  "anchor": "worldact_archive_title_home_before_anchor",
+  "anchorAbsentAfterBoth": true,
+  "activeAPI": false,
+  "port5195FreeAtFinalEvidenceAudit": true,
+  "noFurtherSQLOrTestsForThisJournal": true,
+  "retainedConfig": {
+    "path": "<owned-home-before-worktree>/.env",
+    "type": "owned regular file",
+    "uid": 501,
+    "mode": "0600",
+    "exactConstructedBytesVerifiedByBothGatedPreflights": true,
+    "contentsNotCopied": true
+  },
+  "retainedDependencyLink": {
+    "path": "<owned-home-before-worktree>/node_modules",
+    "type": "owned symlink",
+    "target": "<dependency-owner-workspace>/node_modules",
+    "realOwnerUID": 501,
+    "realOwnerMode": "0755",
+    "realOwnerNonsymlink": true,
+    "lockSHA256": "233888ed8f864581a8835aab0b4c33ccd7fbc391f2a98650b63fcf8db8814892"
+  },
+  "retainedBuild": {
+    "nodePath": "<owned-home-before-worktree>/dist-server/index.js",
+    "nodeSHA256": "300199e4aebe00b526fee49af14904d50cacd20333b07c99c2ded6ba3ddf7070",
+    "clientBuildRetained": true
+  },
+  "retainedTestSHA256": "af82c59144a210e3d9d6e3d070b88a3f9d8cc97631b5d35ff786154f9354a9cc",
+  "removedOwnedPaths": [],
+  "archiveCreated": false,
+  "uploadExactPathsJournaled": false,
+  "uploadCleanupLimit": "Normal runner finally removal only; no guessed per-path absence claim",
+  "oldCBCFa7AndAllOldEvidenceUntouched": true,
+  "awaitRootReadBeforeAnyCleanupOrDocsPackage": true
+}

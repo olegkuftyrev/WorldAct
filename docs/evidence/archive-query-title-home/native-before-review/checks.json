@@ -1,0 +1,269 @@
+{
+  "classification": "GENUINE_BOUNDED_HOME_BEFORE_NEEDS_REVISION",
+  "candidateOrigin": "eba54f98188fe6752ad37380bd6e4cb7b18b82bc",
+  "mainReleaseClaim": false,
+  "testOnlyCommit": "f8a4d89f2bf221c09e765ef0c55a1170ee49f98d",
+  "testSHA256": "af82c59144a210e3d9d6e3d070b88a3f9d8cc97631b5d35ff786154f9354a9cc",
+  "selectorSHA256": "cecc70e5557a4f9e0b2ba3ca9e13b1126dc317f450f80a16e5d4c163a1a8be20",
+  "independentNodeSHA256": "300199e4aebe00b526fee49af14904d50cacd20333b07c99c2ded6ba3ddf7070",
+  "independentTSCViteRunnerDirectNativeEsbuildPassed": true,
+  "standardRunnerOnly": true,
+  "sourceThenActualCompiledSequential5195": true,
+  "gatedPreconditionsBeforeBoth": true,
+  "modes": [
+    {
+      "mode": "source",
+      "actualCounts": {
+        "tests": 3,
+        "pass": 1,
+        "fail": 2,
+        "cancelled": 0,
+        "skipped": 0
+      },
+      "actualAnonymousReads": 6,
+      "allHTTP200": true,
+      "allHEADBodiesEmpty": true,
+      "noSetupTransportHarnessContainerErrors": true,
+      "failureLabels": [
+        "native home archive anchor absent",
+        "native home archive wrapper absent",
+        "model HTML home archive anchor absent",
+        "model HTML home archive wrapper absent"
+      ],
+      "datePositivePassed": true,
+      "rows": [
+        {
+          "label": "home",
+          "path": "/",
+          "statuses": [
+            200,
+            200,
+            200
+          ],
+          "headBytes": 0,
+          "routeKind": "home",
+          "documentId": 10,
+          "documentSlug": "home",
+          "mainId": "archive-home-mw9fy1yk-home-main",
+          "actualTitleElements": [
+            {
+              "tag": "H1",
+              "id": "archive-home-mw9fy1yk-home-title",
+              "text": "Blog"
+            }
+          ],
+          "actualMainHTML": "<main id=\"archive-home-mw9fy1yk-home-main\" class=\"wp-block-group\"><p>HOME-MARKER-archive-home-mw9fy1yk</p><h1 class=\"wp-block-query-title\" id=\"archive-home-mw9fy1yk-home-title\">Blog</h1></main>",
+          "modelPresentationHTML": "<main id=\"archive-home-mw9fy1yk-home-main\" class=\"wp-block-group wp-block-group\"><p>HOME-MARKER-archive-home-mw9fy1yk</p><h1 class=\"wp-block-query-title\" id=\"archive-home-mw9fy1yk-home-title\">Blog</h1></main>"
+        },
+        {
+          "label": "date",
+          "path": "/?year=2001",
+          "statuses": [
+            200,
+            200,
+            200
+          ],
+          "headBytes": 0,
+          "routeKind": "archive",
+          "documentId": 215,
+          "documentSlug": "date",
+          "mainId": "archive-home-mw9fy1yk-date-main",
+          "actualTitleElements": [
+            {
+              "tag": "H1",
+              "id": "archive-home-mw9fy1yk-date-title",
+              "text": "Year: 2001"
+            }
+          ],
+          "actualMainHTML": "<main id=\"archive-home-mw9fy1yk-date-main\" class=\"wp-block-group\"><p>DATE-MARKER-archive-home-mw9fy1yk</p><h1 class=\"wp-block-query-title\" id=\"archive-home-mw9fy1yk-date-title\">Year: 2001</h1></main>",
+          "modelPresentationHTML": "<main id=\"archive-home-mw9fy1yk-date-main\" class=\"wp-block-group wp-block-group\"><p>DATE-MARKER-archive-home-mw9fy1yk</p><h1 class=\"wp-block-query-title\" id=\"archive-home-mw9fy1yk-date-title\">Year: 2001</h1></main>"
+        }
+      ],
+      "fixture": {
+        "id": 4,
+        "slug": "archive-home-mw9fy1yk-post",
+        "postDate": "2001-02-03T04:05:37",
+        "permalink": "/archive-home-mw9fy1yk-post/"
+      },
+      "run": {
+        "mode": "source",
+        "compiled": false,
+        "app": "worldact-archive-title-home-before-source-f8a",
+        "startedAt": "2026-11-09T15:53:40.293Z",
+        "runner": "node scripts/test-isolated.mjs tests/archive-query-title-home-before.test.ts",
+        "proof": "<private-evidence-root>/archive-query-title-home-before-source-proof.json",
+        "log": "<private-evidence-root>/archive-query-title-home-before-source.log",
+        "anchor": "worldact_archive_title_home_before_anchor",
+        "preflightPassed": true,
+        "uploadsExactPathJournaled": false,
+        "runnerPID": 19875,
+        "exitCode": 1,
+        "signal": null,
+        "completedAt": "2026-11-09T15:53:43.951Z",
+        "observedDatabases": [
+          "worldact_test_1794239620337_585ead3f"
+        ],
+        "remainingOwnedDatabases": [],
+        "remainingPhaseSessions": []
+      },
+      "artifacts": {
+        "proof": {
+          "path": "<private-evidence-root>/archive-query-title-home-before-source-proof.json",
+          "sha256": "a9431ae7198f3e70acacad0ea416fec9a6487abbf8f0583db51c377ed29b7828"
+        },
+        "log": {
+          "path": "<private-evidence-root>/archive-query-title-home-before-source.log",
+          "sha256": "d20baa16a40e3ae565425962b8fd67fc345a22505dd71d459f9285100733e4e1"
+        },
+        "run": {
+          "path": "<private-evidence-root>/archive-query-title-home-before-source-run.json",
+          "sha256": "d501cd44c242b0b4e5a487598384939ac892416c81c6cf8441b1a940243346ec"
+        },
+        "preflight": {
+          "path": "<private-evidence-root>/archive-query-title-home-before-source-preflight.json",
+          "sha256": "bac8a7d674a2e246fad707f7d07519a528748c4cb6741794c0c37fb135dd9a91"
+        }
+      }
+    },
+    {
+      "mode": "compiled",
+      "actualCounts": {
+        "tests": 3,
+        "pass": 1,
+        "fail": 2,
+        "cancelled": 0,
+        "skipped": 0
+      },
+      "actualAnonymousReads": 6,
+      "allHTTP200": true,
+      "allHEADBodiesEmpty": true,
+      "noSetupTransportHarnessContainerErrors": true,
+      "failureLabels": [
+        "native home archive anchor absent",
+        "native home archive wrapper absent",
+        "model HTML home archive anchor absent",
+        "model HTML home archive wrapper absent"
+      ],
+      "datePositivePassed": true,
+      "rows": [
+        {
+          "label": "home",
+          "path": "/",
+          "statuses": [
+            200,
+            200,
+            200
+          ],
+          "headBytes": 0,
+          "routeKind": "home",
+          "documentId": 10,
+          "documentSlug": "home",
+          "mainId": "archive-home-mw9fzaj1-home-main",
+          "actualTitleElements": [
+            {
+              "tag": "H1",
+              "id": "archive-home-mw9fzaj1-home-title",
+              "text": "Blog"
+            }
+          ],
+          "actualMainHTML": "<main id=\"archive-home-mw9fzaj1-home-main\" class=\"wp-block-group\"><p>HOME-MARKER-archive-home-mw9fzaj1</p><h1 class=\"wp-block-query-title\" id=\"archive-home-mw9fzaj1-home-title\">Blog</h1></main>",
+          "modelPresentationHTML": "<main id=\"archive-home-mw9fzaj1-home-main\" class=\"wp-block-group wp-block-group\"><p>HOME-MARKER-archive-home-mw9fzaj1</p><h1 class=\"wp-block-query-title\" id=\"archive-home-mw9fzaj1-home-title\">Blog</h1></main>"
+        },
+        {
+          "label": "date",
+          "path": "/?year=2001",
+          "statuses": [
+            200,
+            200,
+            200
+          ],
+          "headBytes": 0,
+          "routeKind": "archive",
+          "documentId": 215,
+          "documentSlug": "date",
+          "mainId": "archive-home-mw9fzaj1-date-main",
+          "actualTitleElements": [
+            {
+              "tag": "H1",
+              "id": "archive-home-mw9fzaj1-date-title",
+              "text": "Year: 2001"
+            }
+          ],
+          "actualMainHTML": "<main id=\"archive-home-mw9fzaj1-date-main\" class=\"wp-block-group\"><p>DATE-MARKER-archive-home-mw9fzaj1</p><h1 class=\"wp-block-query-title\" id=\"archive-home-mw9fzaj1-date-title\">Year: 2001</h1></main>",
+          "modelPresentationHTML": "<main id=\"archive-home-mw9fzaj1-date-main\" class=\"wp-block-group wp-block-group\"><p>DATE-MARKER-archive-home-mw9fzaj1</p><h1 class=\"wp-block-query-title\" id=\"archive-home-mw9fzaj1-date-title\">Year: 2001</h1></main>"
+        }
+      ],
+      "fixture": {
+        "id": 4,
+        "slug": "archive-home-mw9fzaj1-post",
+        "postDate": "2001-02-03T04:05:37",
+        "permalink": "/archive-home-mw9fzaj1-post/"
+      },
+      "run": {
+        "mode": "compiled",
+        "compiled": true,
+        "app": "worldact-archive-title-home-before-compiled-f8a",
+        "startedAt": "2026-11-09T15:54:38.699Z",
+        "runner": "node scripts/test-isolated.mjs tests/archive-query-title-home-before.test.ts",
+        "proof": "<private-evidence-root>/archive-query-title-home-before-compiled-proof.json",
+        "log": "<private-evidence-root>/archive-query-title-home-before-compiled.log",
+        "anchor": "worldact_archive_title_home_before_anchor",
+        "preflightPassed": true,
+        "uploadsExactPathJournaled": false,
+        "runnerPID": 20021,
+        "exitCode": 1,
+        "signal": null,
+        "completedAt": "2026-11-09T15:54:41.712Z",
+        "observedDatabases": [
+          "worldact_test_1794239678745_575afdcc"
+        ],
+        "remainingOwnedDatabases": [],
+        "remainingPhaseSessions": []
+      },
+      "artifacts": {
+        "proof": {
+          "path": "<private-evidence-root>/archive-query-title-home-before-compiled-proof.json",
+          "sha256": "c5471dcdc916c8c889ea0e1bbea964d1747554adf9d7f893c1eb73aaf93d810b"
+        },
+        "log": {
+          "path": "<private-evidence-root>/archive-query-title-home-before-compiled.log",
+          "sha256": "91b1d9e1c0d9e8c544900309cdf56e4b4b6450d84def4f010704bdbe7e151d0a"
+        },
+        "run": {
+          "path": "<private-evidence-root>/archive-query-title-home-before-compiled-run.json",
+          "sha256": "9e7cabfae398bf988cc8d25edec7b8046fb9323b7061f4118c80a90f962c0b1e"
+        },
+        "preflight": {
+          "path": "<private-evidence-root>/archive-query-title-home-before-compiled-preflight.json",
+          "sha256": "4c680a66384c0d95208b2697ca3efa29b92e64085cf85165984f747610ab97b2"
+        }
+      }
+    }
+  ],
+  "retainedOwnership": {
+    "physicalWorktree": "<owned-home-before-worktree>",
+    "envPath": "<owned-home-before-worktree>/.env",
+    "envMode": "600",
+    "dependencyLinkTarget": "<dependency-owner-workspace>/node_modules",
+    "realDependencyOwnerUID": 501,
+    "realDependencyOwnerMode": "755",
+    "buildOutputsRetained": true,
+    "activeAPI": false,
+    "port5195Free": true,
+    "anchor": "worldact_archive_title_home_before_anchor",
+    "anchorAbsentAfterBoth": true,
+    "uploadsExactPathJournaled": false,
+    "uploadLimit": "Normal runner finally removal only; no independent guessed per-path absence claim",
+    "archivesCreated": false
+  },
+  "oldCBCFa7AndReadOnlyReviewUnchanged": true,
+  "noRuntimeUITestExpectationAdapter": true,
+  "limits": [
+    "Two cases only, posts-home and realdatearchive",
+    "No otherQueryTitleType/default/404/search/post-type conclusion",
+    "No globalrawflags/SQL/canonical/bodyselectionchange claim",
+    "No browser/screenshots/full/fresh/fixed/archive exercise",
+    "No MAIN/config/data/tabs orotherowners changed",
+    "Keep ownenv/link/build pendingROOTreview"
+  ]
+}
