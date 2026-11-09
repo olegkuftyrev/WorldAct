@@ -1,0 +1,27 @@
+# Ordinary posts-home archive Query Title
+
+An explicit archive Query Title now produces no heading or wrapper on the ordinary unfiltered posts home, including Source template loops, Classic full-body cards, document-model post bodies and the public site API. Real date archives keep their titles. The six-file runtime freeze is `90dc05ec16f95c9fad60eb95840154ef37c7daca`; the compiled server SHA256 is `7f5e15d054e0a888ae362f95b055c587dab1dff8c9fd836b0d98ea1eafb96093`.
+
+## Separate immutable baselines
+
+| Original | Source and compiled each | Actual responses per mode | Result |
+| --- | --- | ---: | --- |
+| Outer template `af82` | 1 pass / 2 failures / 3 counted | 6 | Home heading survives; date control passes |
+| Source/Classic body `14dc` | 1 pass / 3 failures / 4 counted | 16 | Both home body paths fail; both date body paths pass |
+| Direct template `bf0e` | 2 passes / 2 failures / 4 counted | 6 | Home fails; both date-input controls pass |
+
+The [outer baseline](native-before-review/README.md), [body baseline](independent-before-README.md) and [direct baseline](direct-before/README.md) retain their original tests, reports and independently built baseline outputs. Their results remain separate. The body report's 352-entry prose typo is explicitly corrected to its authoritative 353-entry inventory without rewriting the original report. The direct baseline preserves an initial native-binary invocation error and a later reporting-only correction for Node's spec summaries; neither changed its assertions.
+
+## Runtime and bounded verification
+
+The [context contract](../../../server/query-title-selection.md) describes the server-owned final tags and their producer boundaries. The pure classifier checks held posts-front settings, exact root path, original visible and transport filters, and normalized values. Refusal preserves existing output. Selected-body defaults, explicit preserve and configured posts-page resolution retain their previous behavior. The decision adds no SQL, await, public grant or query flag, and remains stable as loops change their current post. Generic page and preview rendering keep their existing context.
+
+Backend and independent owners each passed the exact 12-file selector in source and actual compiled API modes: **58 passed, zero failed/skipped/cancelled** per run. Actual per-file counts are `[3,4,4,6,4,9,4,7,1,6,4,6]`. Eleven checks come from the three unchanged home regressions; 47 retain the earlier singular/date/posts-page controls. Direct TypeScript imports in mixed tests still execute source code during compiled API runs.
+
+Each mode acquired 64 targeted responses across five fixtures: 6 outer, 16 body, 6 direct, 23 singular and 13 configured-page responses. Root independently inspected all 256 saved responses, actual DOM, title wrappers, fixture identities, links, markers and raw count/completion records. All 12 test hashes, six runtime hashes and server binaries match across backend, independent and integration trees. The independent start/end/current inventory also matches: 354 source entries, 12 selected tests and 411 build files.
+
+Root corrected two mistakes in its read-only evidence checker: resolving relative saved permalinks and selecting the owned Classic card rather than the first seeded card. Original and corrected scripts remain private. A manifest comparison also accounted for the start record's additional empty `gitStatus` field. These corrections required no server/test reruns or fixture changes.
+
+Root verified all four disposable databases, two never-created anchors and four phase application groups absent, with no listeners on the six owned ports. The successful isolated runners completed normal upload cleanup; exact random upload paths were not separately journaled. Baseline builds and original failure evidence remain retained. Owner config/link cleanup and release CI are recorded separately as they complete.
+
+This scope leaves omitted/other Query Title types, search/404 eligibility, label transport quirks, canonical rules and broader CMS parity open. The direct path-only year control deliberately retains its existing `Blog` label, while transport year retains `Year: 2001`. Production build passed; exact release CI remains pending.
