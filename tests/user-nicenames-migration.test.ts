@@ -73,7 +73,15 @@ async function ownDatabase(work: (db: pg.Pool, run: (entry: string, name?: strin
     try {
       if (created) {
         assert.match(name, /^worldact_test_\d+_[a-f0-9]{8}$/);
-        await admin.query("DROP DATABASE " + quote(name) + " WITH (FORCE)");
+        // Pool.end() removes idle clients before their server-side sessions have
+        // necessarily finished disconnecting. Do not FORCE-terminate our own
+        // closing clients and race a late error into the completed test.
+        const deadline = Date.now() + 5000;
+        while (Number((await admin.query("SELECT count(*)::int AS n FROM pg_stat_activity WHERE datname=$1", [name])).rows[0].n)) {
+          assert.ok(Date.now() < deadline, "Owned database sessions did not finish closing");
+          await new Promise(resolve => setTimeout(resolve, 10));
+        }
+        await admin.query("DROP DATABASE " + quote(name));
       }
     } finally { await admin.end(); await rm(uploads, { recursive: true, force: true }); }
   }
