@@ -67,12 +67,15 @@ function publicHead(model: Pick<PublicDocumentModel,"post"|"site"|"route"|"statu
 
 /** One request, direct services, no internal HTTP or Express response adapter. */
 export function readPublicDocument(path:string,context:PublicDocumentContext):Promise<PublicDocumentModel|FrameworkDocument>{
-  return completePublicRead(context.canReadProtectedPost,reader=>readPublicDocumentOnce(path,{...context,canReadProtectedPost:reader}));
+  const selection:{author?:Extract<PublicArchive,{type:"author"}>}={};
+  return completePublicRead(context.canReadProtectedPost,reader=>readPublicDocumentOnce(path,{...context,canReadProtectedPost:reader},selection));
 }
-async function readPublicDocumentOnce(path: string, context: PublicDocumentContext): Promise<PublicDocumentModel | FrameworkDocument> {
+async function readPublicDocumentOnce(path: string, context: PublicDocumentContext,selection:{author?:Extract<PublicArchive,{type:"author"}>}): Promise<PublicDocumentModel | FrameworkDocument> {
+  if(selection.author)observePublicAuthor(context.canReadProtectedPost,selection.author);
   let resolution=await resolvePublicDocumentRoute(path);
   const selectedAuthor=resolution.archive && "type" in resolution.archive && resolution.archive.type==="author"?resolution.archive:null;
-  if(selectedAuthor)observePublicAuthor(context.canReadProtectedPost,selectedAuthor);
+  if(selection.author && (!selectedAuthor || selectedAuthor.authorId!==selection.author.authorId || selectedAuthor.slug!==selection.author.slug))throw new HttpError(404,"The selected author archive identity retired.");
+  if(selectedAuthor){selection.author ||= selectedAuthor;observePublicAuthor(context.canReadProtectedPost,selectedAuthor);}
   if(resolution.kind==="framework")return {kind:"framework",status:200,requestPath:path};
   if(!await isInstalled())return {kind:"framework",status:resolution.status,requestPath:path};
   const rawQuery=readPublicPath(path).query;

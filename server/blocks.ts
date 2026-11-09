@@ -797,7 +797,9 @@ router.all(
   },
 );
 router.get("/api/public/templates/:slug", async (req:AuthRequest, res) => {
+  let selectedAuthor:{authorId:number;slug:string}|undefined;
   const output=await completePublicRead(postAccessReader(req),async reader=>{
+  if(selectedAuthor)observePublicAuthor(reader,selectedAuthor);
   const settings = await getSettings();
   const templateSlug = z
       .string()
@@ -836,7 +838,8 @@ router.get("/api/public/templates/:slug", async (req:AuthRequest, res) => {
   if (!isPublicRequestPath(requestPath))
     throw new HttpError(400, "Use a site-relative request path.");
   const prettyAuthor=await resolvePrettyAuthorArchive(requestPath,settings);
-  if(prettyAuthor.archive)observePublicAuthor(reader,prettyAuthor.archive);
+  if(selectedAuthor && (!prettyAuthor.archive || selectedAuthor.authorId!==prettyAuthor.archive.authorId || selectedAuthor.slug!==prettyAuthor.archive.slug))throw new HttpError(404,"The selected author archive identity retired.");
+  if(prettyAuthor.archive){selectedAuthor ||= prettyAuthor.archive;observePublicAuthor(reader,prettyAuthor.archive);}
   if(prettyAuthor.recognized && !prettyAuthor.archive)throw new HttpError(404,"Author archive not found.");
   if(prettyAuthor.archive && req.query.author!==undefined && req.query.author!==String(prettyAuthor.archive.authorId))throw new HttpError(400,"The author archive identities conflict.");
   let contentPage = parseContentPage(req.query.contentPage ?? (post ? req.query.page : undefined));
