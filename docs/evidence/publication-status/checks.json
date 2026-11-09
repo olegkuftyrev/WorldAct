@@ -1,0 +1,102 @@
+{
+  "frozenCandidate": "4ec2cdebebe8086966e27392cff8f4faf7d33b0f",
+  "tree": "3504b0e1f0fad832034b090eba2926fa1769782b",
+  "nodeSha256": "6e3c50f4dc969b0d6389a20c1f2ee9215f49e8fb81bd19f9ed042a13d645e03f",
+  "status": "Own backend gates complete; combined independent/native acceptance pending",
+  "baseline": {
+    "candidate": "a397f0baaac59a6b69dc10f12ef383c540524b07",
+    "originalSha256": "329aa6be07352652c87b2637bfe54775674782e4d34195b9392ae5ef4c1fb58e",
+    "source": {
+      "pass": 1,
+      "fail": 9
+    },
+    "actualCompiled": {
+      "pass": 1,
+      "fail": 9
+    }
+  },
+  "immutableInputs": {
+    "publication-status-original.test.ts": "329aa6be07352652c87b2637bfe54775674782e4d34195b9392ae5ef4c1fb58e",
+    "publication-status-corrected.test.ts": "8e8a119f3cab4c1624380f0d96ceb2a0266db828b02e4a5439f8bfd7fa9e8a39",
+    "publication-status-null-gmt-original.test.ts": "d48816fcb0e6cdbfd82e03a9ff799f630301a93dcf17a77283695f544c137666",
+    "publication-status-null-gmt-corrected.test.ts": "9637d89fda20c69c0c977e610efaaa53f6e7296fe67accc7ac71f87724453935",
+    "publication-status-bulk-gap-original.test.ts": "3fc0f05bdf705d5f89fa4034b58c1311da48d25125115fda19bfe242b5edd3be",
+    "publication-status-waits-first.test.ts": "024f5bc74eca2db98fb9c73be4b667155cf9dfb7676e35e61b3f36c7a5cf5463"
+  },
+  "corrections": [
+    {
+      "input": "329aa6be ->8e8a119f",
+      "change": "REST expected existing .000 format only; policy assertions unchanged; corrected before independently reproduced1pass9fail both modes"
+    },
+    {
+      "input": "d48816fc ->9637d89f",
+      "change": "Fixture-only $2::varchar in CASE; original SQL42P08 is invalid setup, corrected actual before4pass6fail both modes"
+    },
+    {
+      "input": "024f5bc7",
+      "change": "Direct mail service returns Date objects; ISO representation comparison corrected without runtime change; four held-wait children already passed"
+    }
+  ],
+  "fullSource": {
+    "files": 202,
+    "pass": 1172,
+    "skip": 11,
+    "fail": 0,
+    "composition": [
+      "199 broad excluding fixed3",
+      "3 fixed3 serial separately"
+    ]
+  },
+  "fullActualCICompiled": {
+    "files": 155,
+    "pass": 1039,
+    "skip": 8,
+    "fail": 0,
+    "composition": [
+      "152 actual CI excluding fixed3",
+      "3 fixed3 serial separately"
+    ]
+  },
+  "focused": {
+    "files": 15,
+    "sourcePass": 106,
+    "compiledPass": 106,
+    "skip": 0
+  },
+  "freshArchive": {
+    "phases": 3,
+    "passEach": 1,
+    "sameArtifactAfterEachRestore": true,
+    "sha256": "4a2399713813821fdaf530dcfe12850e4f40f509adfbb66e360f338f8f046519",
+    "differentDestinationIDsOwnerZoneAndDesign": true,
+    "existingFutureToDraftImportPolicyPreserved": true
+  },
+  "unseeded": {
+    "sourcePass": 7,
+    "sourceConditionalSkip": 1,
+    "compiledPass": 7,
+    "compiledConditionalSkip": 1
+  },
+  "scope": "HTTP source/compiled checks use the actual selected server. Imported direct scheduler and mail service probes remain source in either server mode and are labelled direct service.",
+  "cleanup": {
+    "ownedJournalDatabaseCount": 23,
+    "allAbsent": true,
+    "anchorNeverCreated": true,
+    "portsFree": [
+      3046,
+      3047,
+      3048
+    ],
+    "privateEnvRemoved": true,
+    "ownDepsSymlinkRemoved": true,
+    "sharedDependencyOwnerUntouched": true,
+    "fixed3062Released": true,
+    "successfulArchivesRetainedUntilRootReleaseCI": true
+  },
+  "nativeStatus": "Saved publication/status/GMT correct; pending delegated UI successor for post-save unsaved fingerprint",
+  "noMainMutation": true,
+  "noDDL": true,
+  "noExistingDatabaseSeed": true,
+  "noPHPMySQLExecution": true,
+  "noBenchmarks": true
+}
