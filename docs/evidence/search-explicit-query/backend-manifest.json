@@ -1,0 +1,73 @@
+{
+  "created": "2026-11-09T14:00:56.704850+00:00",
+  "runtimeFreeze": "cabaf3e1d430242433f0b0e54f5e1aa37a98dd75",
+  "testOnlyCandidate": "5a819ef4a68b3dcd8f9c2ea0e033d690f34d029a",
+  "nodeSha256": "af2177df906780e5c6f65554a1181d606cd337789d3cfa9d9bb8d87ffaf5fc33",
+  "scope": "Evidence-only; no runtime/tests/CI/MAIN changes; no full broad/fresh/fixed/native/release claim. Original and corrected before stages are external historical certificates.",
+  "sanitization": "No credentials, environments, raw site archives, raw logs or workstation resource paths copied. Each payload has byte/hash correspondence below; the manifest does not self-hash.",
+  "files": [
+    {
+      "file": "backend-stage.md",
+      "sha256": "e7beb6c9076a2724f83b83ec3508b731cdd19f3b23cd2ada8166ef1c542b1e8b",
+      "bytes": 6479,
+      "transformation": "Exact credential-free copy",
+      "privateSource": "search-explicit-backend-stage.md",
+      "privateSourceSha256": "e7beb6c9076a2724f83b83ec3508b731cdd19f3b23cd2ada8166ef1c542b1e8b",
+      "byteIdenticalToPrivateSource": true
+    },
+    {
+      "file": "backend-checks.json",
+      "sha256": "c306c828a6f45c96eabc1476831ca5ad30bb3ff0cf7662c1706f193fe69e33ad",
+      "bytes": 10454,
+      "transformation": "Exact credential-free copy",
+      "privateSource": "search-explicit-backend-checks.json",
+      "privateSourceSha256": "c306c828a6f45c96eabc1476831ca5ad30bb3ff0cf7662c1706f193fe69e33ad",
+      "byteIdenticalToPrivateSource": true
+    },
+    {
+      "file": "backend-resources.json",
+      "sha256": "0c931145a04657edb85d92127151235121ab8a4847b799a8551248725d858927",
+      "bytes": 2718,
+      "transformation": "Remove private database/anchor/artifact/dependency paths and uid; retain counts,modes,ownership verification and hashes",
+      "privateSource": "search-explicit-backend-cleanup.json",
+      "privateSourceSha256": "59686b64397e0a583811205fc8ccc48bdfbe40d9884ced5ba57722760162e433",
+      "byteIdenticalToPrivateSource": false
+    },
+    {
+      "file": "backend-callsite-inventory.md",
+      "sha256": "a994cae7f92f3373f0ceda260a4685d331d1af4639ec5dfc38cf93066831e46e",
+      "bytes": 6017,
+      "transformation": "Exact credential-free copy",
+      "privateSource": "search-explicit-backend-callsite-inventory.md",
+      "privateSourceSha256": "a994cae7f92f3373f0ceda260a4685d331d1af4639ec5dfc38cf93066831e46e",
+      "byteIdenticalToPrivateSource": true
+    },
+    {
+      "file": "backend-frozen-inputs.json",
+      "sha256": "292d27b122def66821a6fc84fa8cd84a034b08826ccf3473c7403ec6d82ab672",
+      "bytes": 2480,
+      "transformation": "Exact credential-free copy",
+      "privateSource": "search-explicit-backend-frozen-inputs.json",
+      "privateSourceSha256": "292d27b122def66821a6fc84fa8cd84a034b08826ccf3473c7403ec6d82ab672",
+      "byteIdenticalToPrivateSource": true
+    },
+    {
+      "file": "backend-before-certificates.json",
+      "sha256": "d76e6b774bd64b53f1d93d25e1d1981c011bb2306146ca77bff5430dbd52f3ff",
+      "bytes": 3887,
+      "transformation": "Exact credential-free copy",
+      "privateSource": "search-explicit-backend-before-certificates.json",
+      "privateSourceSha256": "d76e6b774bd64b53f1d93d25e1d1981c011bb2306146ca77bff5430dbd52f3ff",
+      "byteIdenticalToPrivateSource": true
+    },
+    {
+      "file": "backend-run-receipts.json",
+      "sha256": "85d91db72985984208a0cf1cda5e4efabc913ec9e7b2e73adcd9583cdf71dd7c",
+      "bytes": 6307,
+      "transformation": "Exact selected six receipt fields from private backend-checks; each includes original receiptSHA256 and rawlogSHA256, no resource names or raw logs",
+      "privateSource": "search-explicit-backend-checks.json",
+      "privateSourceSha256": "c306c828a6f45c96eabc1476831ca5ad30bb3ff0cf7662c1706f193fe69e33ad",
+      "byteIdenticalToPrivateSource": false
+    }
+  ]
+}

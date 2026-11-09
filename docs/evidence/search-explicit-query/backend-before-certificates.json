@@ -1,0 +1,102 @@
+{
+  "certificates": [
+    {
+      "certificateOwner": "independent reviewer; external historical certificate, not backend-owner execution",
+      "privateCertificate": "search-explicit-before-checks.json",
+      "privateCertificateSha256": "9277a9a4e8c6c0d5393a4fc61c7153804b49e257435d0c08776df01eaaa54d63",
+      "testSha256": "b4a35c21bd472077f787e2c2a99f8ad90e40262d019b1fb5a962c37e346cf594",
+      "runtimeNodeSha256": "b8012b887e1b2281774e7318ad70f4a9debfb4d396eaeb3cd41e8e752ae1d80c",
+      "runs": [
+        {
+          "commit": "ba1d4215606766be68547c921143de2acf879872",
+          "label": "search-explicit-before-source",
+          "mode": "source",
+          "files": [
+            "tests/search-explicit-query-original.test.ts"
+          ],
+          "counts": {
+            "tests": 6,
+            "pass": 0,
+            "fail": 6,
+            "cancelled": 0,
+            "skipped": 0
+          },
+          "exitCode": 1,
+          "logSHA256": "1a6c1f15ad68b9ebb4d40bef31def74320cb5fcbac8d66e8e9f72d7aaec28af6"
+        },
+        {
+          "commit": "ba1d4215606766be68547c921143de2acf879872",
+          "label": "search-explicit-before-compiled",
+          "mode": "compiled",
+          "files": [
+            "tests/search-explicit-query-original.test.ts"
+          ],
+          "counts": {
+            "tests": 6,
+            "pass": 0,
+            "fail": 6,
+            "cancelled": 0,
+            "skipped": 0
+          },
+          "exitCode": 1,
+          "logSHA256": "a26b79d8501e234d2cf8b7cbce0ab6af5c6e1f54fd89e01daf2c485653254002"
+        }
+      ],
+      "dispatchGroupsEachMode": 29,
+      "setupFailuresEachMode": 0,
+      "semanticChildrenEachMode": 5,
+      "parentFailuresEachMode": 1,
+      "resourceScope": "Fields absent; repeated200 is not an old allocation-limit failure. Corrected certificate observes single200 before publishing repeated page.",
+      "rawLogsAndOriginalsRetainedPrivately": true
+    },
+    {
+      "certificateOwner": "independent reviewer; external historical certificate, not backend-owner execution",
+      "privateCertificate": "search-explicit-corrected-before-checks.json",
+      "privateCertificateSha256": "57afb287036d49b8cf52b05bd65bbd39ff745ecdbcea668d234b6368bef81317",
+      "testSha256": "42352ea7c91847d2046220b8090dcf11a39616dc2efffb1b89cfcc001642b75c",
+      "runtimeNodeSha256": "b8012b887e1b2281774e7318ad70f4a9debfb4d396eaeb3cd41e8e752ae1d80c",
+      "runs": [
+        {
+          "commit": "f89eb1d403f22fa63ead226bb2613b02b392a3f7",
+          "label": "search-adapter-before-source",
+          "mode": "source",
+          "files": [
+            "tests/search-explicit-query-original.test.ts"
+          ],
+          "counts": {
+            "tests": 6,
+            "pass": 0,
+            "fail": 6,
+            "cancelled": 0,
+            "skipped": 0
+          },
+          "exitCode": 1,
+          "logSHA256": "ed4d4bb7df3de4982a9a745e0c9f85142a6d6915bca97bfa5d7cd3fff64f072d"
+        },
+        {
+          "commit": "f89eb1d403f22fa63ead226bb2613b02b392a3f7",
+          "label": "search-adapter-before-compiled",
+          "mode": "compiled",
+          "files": [
+            "tests/search-explicit-query-original.test.ts"
+          ],
+          "counts": {
+            "tests": 6,
+            "pass": 0,
+            "fail": 6,
+            "cancelled": 0,
+            "skipped": 0
+          },
+          "exitCode": 1,
+          "logSHA256": "7fc5aaf7c0446267100835c30032b2900aa59dbe56e1c3c2f0d1deff83cff0a2"
+        }
+      ],
+      "dispatchGroupsEachMode": 29,
+      "setupFailuresEachMode": 0,
+      "semanticChildrenEachMode": 5,
+      "parentFailuresEachMode": 1,
+      "resourceScope": "Fields absent; repeated200 is not an old allocation-limit failure. Corrected certificate observes single200 before publishing repeated page.",
+      "rawLogsAndOriginalsRetainedPrivately": true
+    }
+  ]
+}

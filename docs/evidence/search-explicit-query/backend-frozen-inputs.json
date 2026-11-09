@@ -1,0 +1,42 @@
+{
+  "runtimeFreeze": "cabaf3e1d430242433f0b0e54f5e1aa37a98dd75",
+  "testOnlySuccessor": "5a819ef4a68b3dcd8f9c2ea0e033d690f34d029a",
+  "nodeSha256": "af2177df906780e5c6f65554a1181d606cd337789d3cfa9d9bb8d87ffaf5fc33",
+  "original": {
+    "privateSource": "search-explicit-query-original.test.ts",
+    "sha256": "b4a35c21bd472077f787e2c2a99f8ad90e40262d019b1fb5a962c37e346cf594",
+    "originalCommit": "ba1d4215606766be68547c921143de2acf879872",
+    "retainedUnmodified": true
+  },
+  "corrected": {
+    "privateSource": "search-explicit-query-corrected.test.ts",
+    "sha256": "42352ea7c91847d2046220b8090dcf11a39616dc2efffb1b89cfcc001642b75c",
+    "privateAdapterCommit": "f89eb1d403f22fa63ead226bb2613b02b392a3f7",
+    "ownerCherry": "5a819ef4a68b3dcd8f9c2ea0e033d690f34d029a",
+    "permanent": "tests/search-explicit-query-original.test.ts",
+    "byteIdenticalToCorrectedPrivate": true
+  },
+  "fixtureAdapter": {
+    "exactDiffSHA256": "a9d3c0b4604a2c1f049212cb9b4bda4b1f111669da437347c163724847f5b269",
+    "diffScope": "10-line canonical-key-order/manual-table helper, four JSON expected-order comparisons, and delayed repeated-page publication inside sequential gather. Manual input/value/entity tables, raw order, duplicate order, statuses and aggregate-after-dispatch semantics unchanged.",
+    "unknownKeyPolicy": "Canonical key count and per-key membership asserted; no sorting, filtering or rendered-output-derived expectations. Entity source keys map to unchanged manual decoded-name/value tuples.",
+    "resourcePolicy": "single GET+HEAD completes before repeated page is published; repeated GET+HEAD and preview still complete before aggregate assertions.200/413 unchanged."
+  },
+  "unchangedAssertions": [
+    "manual scalar/entity values and decoded names",
+    "raw order and explicit duplicate s order",
+    "statuses200/400/404/413",
+    "five semantic children plus parent",
+    "29 dispatch groups and actual GET/HEAD before aggregate assertions"
+  ],
+  "acceptedPlan": {
+    "privateSource": "explicit-search-query-implementation-plan.md",
+    "sha256": "bd85d207dc436be9e6463152c63e9b58cb9c0bd0a5de931fa3db3cdb93f3ceb9"
+  },
+  "sourceReferenceHashes": {
+    "search.php": "916468a8b8d8633f25ad289db298b19209cb34bbdad7f727ed5d70ead04a82d9",
+    "formatting.php": "350f6b32303915df970bb0e3ea360fcd54bb0b8a7ecc3d504c3d860ab9468d32",
+    "kses.php": "3560ff58ef987a313be5b591fa4c8f61899585df9728661e072b1b39d8555a6a"
+  },
+  "sourceInferenceNotExecutedPHP": true
+}
