@@ -1,0 +1,20 @@
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:
+
+  assert.ok(ref)
+
+    at chooseStatus (file:///private[private-review-directory]/publication-status-native-harness/native-helpers.mjs:14:238)
+    at file:///private[private-review-directory]/publication-status-native-harness/native-quick-bulk.mjs:7:313
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5) {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: undefined,
+  expected: true,
+  operator: '==',
+  diff: 'simple'
+}
+
+Node.js v24.14.1

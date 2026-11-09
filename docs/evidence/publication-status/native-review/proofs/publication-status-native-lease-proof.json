@@ -1,0 +1,292 @@
+{
+  "code": "45e9cbccff6ac8ded4151e2fa430a3e4e2c44395",
+  "tree": "578c195e272188d78ec489131e3ab80d22f8753b",
+  "uiCode": "703251b07f0feb4ac0ada956e205a8abda447170",
+  "nodeSha256": "6e3c50f4dc969b0d6389a20c1f2ee9215f49e8fb81bd19f9ed042a13d645e03f",
+  "rows": [
+    {
+      "scene": "other-actor-edit-lease-pauses-native-saving",
+      "width": 375,
+      "postId": 57,
+      "saveDisabled": true,
+      "noPostWrite": true,
+      "requests": [
+        {
+          "id": 2879,
+          "method": "GET",
+          "path": "/admin/posts/57",
+          "startedAt": 1794209566299,
+          "status": 200,
+          "finishedAt": 1794209566305
+        },
+        {
+          "id": 2880,
+          "method": "GET",
+          "path": "/assets/index-BsgYOWhl.css",
+          "startedAt": 1794209566323,
+          "status": 304,
+          "finishedAt": 1794209566324
+        },
+        {
+          "id": 2881,
+          "method": "GET",
+          "path": "/assets/index-D7cogK6H.js",
+          "startedAt": 1794209566323,
+          "status": 304,
+          "finishedAt": 1794209566324
+        },
+        {
+          "id": 2882,
+          "method": "GET",
+          "path": "/assets/App-Zy5IMufS.js",
+          "startedAt": 1794209566345,
+          "status": 304,
+          "finishedAt": 1794209566345
+        },
+        {
+          "id": 2883,
+          "method": "GET",
+          "path": "/assets/playlists-B6HK4GV9.js",
+          "startedAt": 1794209566345,
+          "status": 304,
+          "finishedAt": 1794209566346
+        },
+        {
+          "id": 2884,
+          "method": "GET",
+          "path": "/assets/App-CMvjQ72B.css",
+          "startedAt": 1794209566345,
+          "status": 304,
+          "finishedAt": 1794209566346
+        },
+        {
+          "id": 2885,
+          "method": "GET",
+          "path": "/api/session",
+          "startedAt": 1794209566648,
+          "status": 200,
+          "finishedAt": 1794209566655
+        },
+        {
+          "id": 2886,
+          "method": "GET",
+          "path": "/vendor/wordpress/wp-admin/css/colors/modern/colors.css",
+          "startedAt": 1794209566649,
+          "status": 304,
+          "finishedAt": 1794209566651
+        },
+        {
+          "id": 2887,
+          "method": "GET",
+          "path": "/assets/GutenbergEditor-jZeDyVLq.js",
+          "startedAt": 1794209566666,
+          "status": 304,
+          "finishedAt": 1794209566667
+        },
+        {
+          "id": 2888,
+          "method": "GET",
+          "path": "/assets/Editor-BQ6kP5nQ.js",
+          "startedAt": 1794209566666,
+          "status": 304,
+          "finishedAt": 1794209566667
+        },
+        {
+          "id": 2889,
+          "method": "GET",
+          "path": "/assets/style-C901zAgd.js",
+          "startedAt": 1794209566666,
+          "status": 304,
+          "finishedAt": 1794209566667
+        },
+        {
+          "id": 2890,
+          "method": "GET",
+          "path": "/assets/style-D8oqX3h3.css",
+          "startedAt": 1794209566667,
+          "status": 304,
+          "finishedAt": 1794209566668
+        },
+        {
+          "id": 2891,
+          "method": "GET",
+          "path": "/assets/GutenbergEditor-BndIUFWj.css",
+          "startedAt": 1794209566667,
+          "status": 304,
+          "finishedAt": 1794209566668
+        },
+        {
+          "id": 2892,
+          "method": "GET",
+          "path": "/assets/index-DUC-K1nk.js",
+          "startedAt": 1794209566668,
+          "status": 304,
+          "finishedAt": 1794209566669
+        },
+        {
+          "id": 2893,
+          "method": "GET",
+          "path": "/assets/Editor-lCK1tJMm.css",
+          "startedAt": 1794209566668,
+          "status": 304,
+          "finishedAt": 1794209566669
+        },
+        {
+          "id": 2894,
+          "method": "GET",
+          "path": "/api/profile",
+          "startedAt": 1794209566668,
+          "status": 200,
+          "finishedAt": 1794209566674
+        },
+        {
+          "id": 2895,
+          "method": "GET",
+          "path": "/api/profile",
+          "startedAt": 1794209566674,
+          "status": 200,
+          "finishedAt": 1794209566678
+        },
+        {
+          "id": 2896,
+          "method": "GET",
+          "path": "/api/admin/plugin-notices",
+          "startedAt": 1794209566727,
+          "status": 200,
+          "finishedAt": 1794209566735
+        },
+        {
+          "id": 2897,
+          "method": "GET",
+          "path": "/api/public/site",
+          "startedAt": 1794209566727,
+          "status": 200,
+          "finishedAt": 1794209566765
+        },
+        {
+          "id": 2898,
+          "method": "GET",
+          "path": "/api/posts/57",
+          "startedAt": 1794209566727,
+          "status": 200,
+          "finishedAt": 1794209566751,
+          "result": {
+            "post": {
+              "id": 57,
+              "title": "Native Contributor Review 1440 submitted",
+              "status": "pending",
+              "postDate": "2099-07-08T09:10:37",
+              "postDateGmt": "2099-07-08T03:25:37.000Z",
+              "scheduledAt": null,
+              "publishedAt": "2099-07-08T03:25:37.000Z",
+              "version": 2
+            }
+          }
+        },
+        {
+          "id": 2899,
+          "method": "GET",
+          "path": "/api/authors",
+          "startedAt": 1794209566730,
+          "status": 200,
+          "finishedAt": 1794209566746
+        },
+        {
+          "id": 2900,
+          "method": "GET",
+          "path": "/api/terms",
+          "startedAt": 1794209566730,
+          "status": 200,
+          "finishedAt": 1794209566748
+        },
+        {
+          "id": 2901,
+          "method": "GET",
+          "path": "/api/profile",
+          "startedAt": 1794209566731,
+          "status": 200,
+          "finishedAt": 1794209566746
+        },
+        {
+          "id": 2902,
+          "method": "GET",
+          "path": "/api/posts/57/autosave",
+          "startedAt": 1794209566756,
+          "status": 200,
+          "finishedAt": 1794209566763,
+          "result": {}
+        },
+        {
+          "id": 2903,
+          "method": "GET",
+          "path": "/api/public/site",
+          "startedAt": 1794209566766,
+          "status": 200,
+          "finishedAt": 1794209566800
+        },
+        {
+          "id": 2904,
+          "method": "GET",
+          "path": "/wp-json/wp/v2/blocks?per_page=100&context=edit&_locale=user",
+          "startedAt": 1794209566772,
+          "status": 200,
+          "finishedAt": 1794209566783
+        },
+        {
+          "id": 2905,
+          "method": "GET",
+          "path": "/api/public/design",
+          "startedAt": 1794209566772,
+          "status": 200,
+          "finishedAt": 1794209566798
+        },
+        {
+          "id": 2906,
+          "method": "PUT",
+          "path": "/api/posts/57/lock",
+          "startedAt": 1794209566773,
+          "fields": [],
+          "body": {},
+          "status": 409,
+          "finishedAt": 1794209566797,
+          "result": {
+            "error": "Administrator is currently editing this post."
+          }
+        },
+        {
+          "id": 2907,
+          "method": "GET",
+          "path": "/wp-json/wp/v2/types?context=view&_locale=user",
+          "startedAt": 1794209566787,
+          "status": 200,
+          "finishedAt": 1794209566791
+        },
+        {
+          "id": 2908,
+          "method": "GET",
+          "path": "/api/public/site",
+          "startedAt": 1794209566801,
+          "status": 200,
+          "finishedAt": 1794209566817
+        },
+        {
+          "id": 2909,
+          "method": "GET",
+          "path": "/wp-json/wp/v2/posts/57?context=edit&_locale=user",
+          "startedAt": 1794209566810,
+          "status": 200,
+          "finishedAt": 1794209566819
+        },
+        {
+          "id": 2910,
+          "method": "GET",
+          "path": "/vendor/wordpress/wp-content/themes/twentytwentyfive/assets/fonts/manrope/Manrope-VariableFont_wght.woff2",
+          "startedAt": 1794209566817,
+          "status": 304,
+          "finishedAt": 1794209566818
+        }
+      ],
+      "screenshot": "../screens/publication-status-native-lease-blocked.png"
+    }
+  ]
+}

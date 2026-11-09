@@ -1,0 +1,11 @@
+file:///private[private-review-directory]/publication-status-native-harness/native-browser.mjs:4
+export function br(...args){const r=spawnSync(binary,['--session',session,...args],{encoding:'utf8',maxBuffer:2e7});if(r.status)throw Error(r.stderr+r.stdout);return r.stdout;}
+                                                                                                                                      ^
+
+Error: ✗ 64 elements have role "button", but none match name "Howdy, Administrator". Names seen: "Toggle menu", "Apply", "Search Posts", "Filter", "Screen Options", ...
+
+    at br (file:///private[private-review-directory]/publication-status-native-harness/native-browser.mjs:4:135)
+    at file:///private[private-review-directory]/publication-status-native-harness/native-rights.mjs:4:81
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+
+Node.js v24.14.1

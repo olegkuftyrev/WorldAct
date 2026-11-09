@@ -1,0 +1,256 @@
+{
+  "code": "45e9cbccff6ac8ded4151e2fa430a3e4e2c44395",
+  "tree": "578c195e272188d78ec489131e3ab80d22f8753b",
+  "uiCode": "703251b07f0feb4ac0ada956e205a8abda447170",
+  "nodeSha256": "6e3c50f4dc969b0d6389a20c1f2ee9215f49e8fb81bd19f9ed042a13d645e03f",
+  "rows": [
+    {
+      "scene": "contributor-cannot-publish-can-submit-fixed-date-for-review",
+      "width": 1440,
+      "role": "contributor",
+      "response": {
+        "id": 2675,
+        "method": "PUT",
+        "path": "/api/posts/57",
+        "startedAt": 1794209452247,
+        "fields": [
+          "title",
+          "content",
+          "blocks",
+          "footnotes",
+          "excerpt",
+          "slug",
+          "status",
+          "categoryIds",
+          "tagIds",
+          "featuredMediaId",
+          "parentId",
+          "menuOrder",
+          "templateSlug",
+          "commentStatus",
+          "pingStatus",
+          "authorId",
+          "format",
+          "sticky",
+          "password",
+          "version",
+          "type"
+        ],
+        "body": {
+          "title": "Native Contributor Review 1440 submitted",
+          "content": "<!-- wp:paragraph --><p>NATIVE SAVED CONTENT.</p><!-- /wp:paragraph -->",
+          "status": "pending",
+          "version": 1,
+          "type": "post"
+        },
+        "status": 200,
+        "finishedAt": 1794209452272,
+        "result": {
+          "post": {
+            "id": 57,
+            "title": "Native Contributor Review 1440 submitted",
+            "status": "pending",
+            "postDate": "2099-07-08T09:10:37",
+            "postDateGmt": "2099-07-08T03:25:37.000Z",
+            "scheduledAt": null,
+            "publishedAt": "2099-07-08T03:25:37.000Z",
+            "version": 2
+          }
+        }
+      },
+      "saved": {
+        "status": "pending",
+        "postDate": "2099-07-08T09:10:37",
+        "postDateGmt": "2099-07-08T03:25:37.000Z"
+      },
+      "noDateControl": true,
+      "noPublishScheduleControl": true,
+      "clean": {
+        "beforeUnloadPrevented": false,
+        "state": {
+          "disabled": false,
+          "hostZone": "America/Los_Angeles",
+          "indicator": "Pending Review",
+          "now": 1794209452996,
+          "overflow": false,
+          "primary": "Submit for Review",
+          "text": "W\nNative Contributor Review 1440 submitted \u00b7 Post\nSave draft\nSubmit for Review\nPatterns\nDocument\nPost\nBlock\nNative Contributor Review 1440 submitted\n\n3 words \u00b7 Pending Review\n\nStatus\nDraft\nPending Review\n\nRevisions\n\nLink\nSlug\nAuthor\nFormat\nCategories\nUncategorized\nTags\nTemplate\nTemplate\nDefault template\nExcerpt\nDiscussion\nPost\n3 words\nPending Review",
+          "title": "Native Contributor Review 1440 submitted"
+        }
+      },
+      "screenshot": "../screens/publication-status-native-rights-1440.png"
+    },
+    {
+      "scene": "contributor-cannot-publish-can-submit-fixed-date-for-review",
+      "width": 768,
+      "role": "contributor",
+      "response": {
+        "id": 2747,
+        "method": "PUT",
+        "path": "/api/posts/58",
+        "startedAt": 1794209453781,
+        "fields": [
+          "title",
+          "content",
+          "blocks",
+          "footnotes",
+          "excerpt",
+          "slug",
+          "status",
+          "categoryIds",
+          "tagIds",
+          "featuredMediaId",
+          "parentId",
+          "menuOrder",
+          "templateSlug",
+          "commentStatus",
+          "pingStatus",
+          "authorId",
+          "format",
+          "sticky",
+          "password",
+          "version",
+          "type"
+        ],
+        "body": {
+          "title": "Native Contributor Review 768 submitted",
+          "content": "<!-- wp:paragraph --><p>NATIVE SAVED CONTENT.</p><!-- /wp:paragraph -->",
+          "status": "pending",
+          "version": 1,
+          "type": "post"
+        },
+        "status": 200,
+        "finishedAt": 1794209453805,
+        "result": {
+          "post": {
+            "id": 58,
+            "title": "Native Contributor Review 768 submitted",
+            "status": "pending",
+            "postDate": "2099-07-08T09:10:37",
+            "postDateGmt": "2099-07-08T03:25:37.000Z",
+            "scheduledAt": null,
+            "publishedAt": "2099-07-08T03:25:37.000Z",
+            "version": 2
+          }
+        }
+      },
+      "saved": {
+        "status": "pending",
+        "postDate": "2099-07-08T09:10:37",
+        "postDateGmt": "2099-07-08T03:25:37.000Z"
+      },
+      "noDateControl": true,
+      "noPublishScheduleControl": true,
+      "clean": {
+        "beforeUnloadPrevented": false,
+        "state": {
+          "disabled": false,
+          "hostZone": "America/Los_Angeles",
+          "indicator": "Pending Review",
+          "now": 1794209454567,
+          "overflow": false,
+          "primary": "Submit for Review",
+          "text": "W\nSave draft\nSubmit for Review\nPatterns\nPost\nBlock\nNative Contributor Review 768 submitted\n\n3 words \u00b7 Pending Review\n\nStatus\nDraft\nPending Review\n\nRevisions\n\nLink\nSlug\nAuthor\nFormat\nCategories\nUncategorized\nTags\nTemplate\nTemplate\nDefault template\nExcerpt\nDiscussion\nPost\n3 words\nPending Review",
+          "title": "Native Contributor Review 768 submitted"
+        }
+      },
+      "screenshot": "../screens/publication-status-native-rights-768.png"
+    },
+    {
+      "scene": "contributor-cannot-publish-can-submit-fixed-date-for-review",
+      "width": 375,
+      "role": "contributor",
+      "response": {
+        "id": 2818,
+        "method": "PUT",
+        "path": "/api/posts/59",
+        "startedAt": 1794209455413,
+        "fields": [
+          "title",
+          "content",
+          "blocks",
+          "footnotes",
+          "excerpt",
+          "slug",
+          "status",
+          "categoryIds",
+          "tagIds",
+          "featuredMediaId",
+          "parentId",
+          "menuOrder",
+          "templateSlug",
+          "commentStatus",
+          "pingStatus",
+          "authorId",
+          "format",
+          "sticky",
+          "password",
+          "version",
+          "type"
+        ],
+        "body": {
+          "title": "Native Contributor Review 375 submitted",
+          "content": "<!-- wp:paragraph --><p>NATIVE SAVED CONTENT.</p><!-- /wp:paragraph -->",
+          "status": "pending",
+          "version": 1,
+          "type": "post"
+        },
+        "status": 200,
+        "finishedAt": 1794209455433,
+        "result": {
+          "post": {
+            "id": 59,
+            "title": "Native Contributor Review 375 submitted",
+            "status": "pending",
+            "postDate": "2099-07-08T09:10:37",
+            "postDateGmt": "2099-07-08T03:25:37.000Z",
+            "scheduledAt": null,
+            "publishedAt": "2099-07-08T03:25:37.000Z",
+            "version": 2
+          }
+        }
+      },
+      "saved": {
+        "status": "pending",
+        "postDate": "2099-07-08T09:10:37",
+        "postDateGmt": "2099-07-08T03:25:37.000Z"
+      },
+      "noDateControl": true,
+      "noPublishScheduleControl": true,
+      "clean": {
+        "beforeUnloadPrevented": false,
+        "state": {
+          "disabled": false,
+          "hostZone": "America/Los_Angeles",
+          "indicator": "Pending Review",
+          "now": 1794209456199,
+          "overflow": false,
+          "primary": "Submit for Review",
+          "text": "W\nSave draft\nSubmit for Review\nPatterns\nPost\nBlock\nNative Contributor Review 375 submitted\n\n3 words \u00b7 Pending Review\n\nStatus\nDraft\nPending Review\n\nRevisions\n\nLink\nSlug\nAuthor\nFormat\nCategories\nUncategorized\nTags\nTemplate\nTemplate\nDefault template\nExcerpt\nDiscussion\nPost\n3 words\nPending Review",
+          "title": "Native Contributor Review 375 submitted"
+        }
+      },
+      "screenshot": "../screens/publication-status-native-rights-375.png"
+    },
+    {
+      "scene": "contributor-denied-other-private-editor",
+      "width": 375,
+      "requests": [
+        {
+          "id": 2874,
+          "method": "GET",
+          "path": "/api/posts/60",
+          "startedAt": 1794209456686,
+          "status": 403,
+          "finishedAt": 1794209456694,
+          "result": {
+            "error": "You can only edit your own content."
+          }
+        }
+      ],
+      "privateBodyAbsent": true,
+      "saveDisabled": true,
+      "screenshot": "../screens/publication-status-native-rights-denied.png"
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
++ actual - expected
+
++ 'Publish'
+- 'Schedule'
+
+    at file:///private[private-review-directory]/publication-status-native-harness/native-editor.mjs:6:209
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5) {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: 'Publish',
+  expected: 'Schedule',
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.14.1

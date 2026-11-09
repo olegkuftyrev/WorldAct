@@ -1,0 +1,127 @@
+WorldAct database migrated.
+WorldAct seeded. Sign in with username admin or your administrator email.
+Running against a disposable local database and upload directory; outgoing mail uses the local outbox.
+✖ a loaded raw-HTML document compares the same live parsed canvas at submission and response (1.91425ms)
+✖ a newer live body remains dirty even before the cached document receives its editor callback (0.275333ms)
+✖ new title, date intent, selected GMT, saved provenance and footnotes are never ignored (0.169833ms)
+✔ a missing canvas compares all cached document fields without fabricating content (0.1105ms)
+✔ reading a live snapshot changes neither the cached document nor the submitted snapshot (0.440708ms)
+✖ a new floating draft rebases only its known creation acknowledgement before comparison (0.147083ms)
+✖ a date selected before Save while automatic creation is pending remains part of the submitted baseline (0.170833ms)
+✔ new date, title and status edits made after Save while creation waits remain dirty (0.127667ms)
+✔ clearing and later selecting a new date stay distinct across creation acknowledgement (0.092292ms)
+✔ known draft acknowledgement does not mutate the sent values or replace editable content and status (0.118042ms)
+ℹ tests 10
+ℹ suites 0
+ℹ pass 5
+ℹ fail 5
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 435.636833
+
+✖ failing tests:
+
+test at tests/editor-document-snapshot.test.ts:1:882
+✖ a loaded raw-HTML document compares the same live parsed canvas at submission and response (1.91425ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+
+  true !== false
+
+      at TestContext.<anonymous> ([owned-ui-checkout]/tests/editor-document-snapshot.test.ts:15:10)
+      at Test.runInAsyncScope (node:async_hooks:228:14)
+      at Test.run (node:internal/test_runner/test:1118:25)
+      at Test.start (node:internal/test_runner/test:1015:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:358:17) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: true,
+    expected: false,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/editor-document-snapshot.test.ts:1:1216
+✖ a newer live body remains dirty even before the cached document receives its editor callback (0.275333ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+
+  false !== true
+
+      at TestContext.<anonymous> ([owned-ui-checkout]/tests/editor-document-snapshot.test.ts:21:10)
+      at Test.runInAsyncScope (node:async_hooks:228:14)
+      at Test.run (node:internal/test_runner/test:1118:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:787:18)
+      at Test.postRun (node:internal/test_runner/test:1247:19)
+      at Test.run (node:internal/test_runner/test:1175:12)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:358:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/editor-document-snapshot.test.ts:1:1565
+✖ new title, date intent, selected GMT, saved provenance and footnotes are never ignored (0.169833ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+
+  false !== true
+
+      at TestContext.<anonymous> ([owned-ui-checkout]/tests/editor-document-snapshot.test.ts:30:10)
+      at Test.runInAsyncScope (node:async_hooks:228:14)
+      at Test.run (node:internal/test_runner/test:1118:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:787:18)
+      at Test.postRun (node:internal/test_runner/test:1247:19)
+      at Test.run (node:internal/test_runner/test:1175:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:787:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/editor-document-snapshot.test.ts:1:3081
+✖ a new floating draft rebases only its known creation acknowledgement before comparison (0.147083ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+
+  true !== false
+
+      at TestContext.<anonymous> ([owned-ui-checkout]/tests/editor-document-snapshot.test.ts:53:10)
+      at Test.runInAsyncScope (node:async_hooks:228:14)
+      at Test.run (node:internal/test_runner/test:1118:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:787:18)
+      at Test.postRun (node:internal/test_runner/test:1247:19)
+      at Test.run (node:internal/test_runner/test:1175:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:787:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: true,
+    expected: false,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/editor-document-snapshot.test.ts:1:3594
+✖ a date selected before Save while automatic creation is pending remains part of the submitted baseline (0.170833ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+
+  true !== false
+
+      at TestContext.<anonymous> ([owned-ui-checkout]/tests/editor-document-snapshot.test.ts:62:10)
+      at Test.runInAsyncScope (node:async_hooks:228:14)
+      at Test.run (node:internal/test_runner/test:1118:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:787:18)
+      at Test.postRun (node:internal/test_runner/test:1247:19)
+      at Test.run (node:internal/test_runner/test:1175:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:787:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: true,
+    expected: false,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+Test command exited 1

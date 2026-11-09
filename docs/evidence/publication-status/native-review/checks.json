@@ -1,0 +1,121 @@
+{
+  "result": "PASS within explicit scene/stage bounds",
+  "reportSha256": "d53b39655325f699a0c845e8bd94df175ed8232b96af853af2ca2e3c9fe1dad3",
+  "finalCode": "45e9cbccff6ac8ded4151e2fa430a3e4e2c44395",
+  "finalTree": "578c195e272188d78ec489131e3ab80d22f8753b",
+  "backendBase": "4ec2cdebebe8086966e27392cff8f4faf7d33b0f",
+  "uiCorrection": "703251b07f0feb4ac0ada956e205a8abda447170",
+  "predecessorCode": "759a553bbd99bf46ee8360fb5b0d05cd5ab72710",
+  "nodeSha256": "6e3c50f4dc969b0d6389a20c1f2ee9215f49e8fb81bd19f9ed042a13d645e03f",
+  "build": {
+    "tsc": true,
+    "viteConfigLoaderRunner": true,
+    "esbuild": true
+  },
+  "finalOwnGuard": {
+    "files": 8,
+    "sourcePass": 59,
+    "actualCompiledRunnerPass": 59,
+    "skipped": 0,
+    "pureUIHelperFilesImportSource": 5,
+    "actualHTTPFiles": 3
+  },
+  "predecessorOwnGuard": {
+    "files": 6,
+    "sourcePass": 44,
+    "actualCompiledRunnerPass": 44
+  },
+  "frozenBeforeRegression": {
+    "tests": 10,
+    "pass": 5,
+    "fail": 5,
+    "finalSameBytesPass": 10,
+    "sha256": "60d2e4d15f423714674e252a133b66daf8b77e6e5c6237c139937f3c0247c6cb"
+  },
+  "native": {
+    "passingMultiStepRows": 32,
+    "finalRows": 23,
+    "predecessorUnchangedQuickBulkRows": 9,
+    "preservedOriginalFalseDirtyRows": 3,
+    "selectedInspectedPNGs": 38,
+    "widths": [
+      1440,
+      768,
+      375
+    ],
+    "actualSQLHeldCases375": 3,
+    "actualRecoveryActionObserved": true,
+    "dateStatusRecoveryClaimed": false,
+    "leaseAndRightsObserved": true
+  },
+  "originalProofs": {
+    "editor-final": {
+      "rows": 9,
+      "originalSha256": "b33e75e6deb1eeee3a195fb5e3a67d84b89d301183103c982482c187701065cd",
+      "copiedSha256": "b83caff54e65b8495b81b4bed56f11a00461c53caf8260ee174f0bc0baffa595"
+    },
+    "held": {
+      "rows": 9,
+      "originalSha256": "fcbb3b7fd1a2b440cdaf21419e19ee5d812d57c985555aeac77885a104134882",
+      "copiedSha256": "5b0e34d30a4bb653eebbb6221fbca7527604de6a8f24d0db8c104797ced63ee7"
+    },
+    "quick-bulk": {
+      "rows": 9,
+      "originalSha256": "ceb29f59508654d884c10479e66ad5141920222bb18cfaa9ac598b52570c95e6",
+      "copiedSha256": "518058e1e4fde973835d7339f8b7c26449ca1de2da9c7ff0be25d68eb5de328a"
+    },
+    "rights": {
+      "rows": 4,
+      "originalSha256": "634fcf4e71c4295999303826b4650d812522becd5081080c17c58b025e5f9d90",
+      "copiedSha256": "b1d02d24814580ac6cf002983fedef2e30bc9c6a5233bbf38b069779a67b0fd6"
+    },
+    "lease": {
+      "rows": 1,
+      "originalSha256": "e89ba0d6db710520fe6f1ca238a5085ef0a335fa7d8a79f3a04744ff2f03e292",
+      "copiedSha256": "792d94edd87fb898ee6a3523494793af07f5164a7a63e7690728a12b8686a589"
+    },
+    "dirty-original": {
+      "rows": 1,
+      "originalSha256": "73206fe177f1d363985a472841b690949ae8ccc19b036474fdc322df9b19a786",
+      "copiedSha256": "db2e330b293b2fae5ff5e3e307475721a890ec1fb812fb6091b376f9348a128b"
+    },
+    "dirty-controls-before": {
+      "rows": 1,
+      "originalSha256": "5bf17451876cb35ec1a01e34bf08058defed63e07ddf5204d1e6e226ed2d7a17",
+      "copiedSha256": "04387f69904994e0c2bd7e0091fbea12f6aac31e2bedb5354ce12fed5ab81526"
+    },
+    "dirty-visual-before": {
+      "rows": 1,
+      "originalSha256": "2be2344fed7e54e239341a7190228a54db36cce1136b183e05eb05579da847a8",
+      "copiedSha256": "f770636e6d0a2a989fd503531a58aaeeb51dbfdc95e86c9753f22b01cc1a768f"
+    }
+  },
+  "evidenceScan": {
+    "knownPrivateValueScanPass": true,
+    "rawDatabaseURLBearerSetCookieScanPass": true,
+    "selectedScreenshotCount": 38,
+    "allSelectedScreenshotsInspected": true,
+    "publicFixtureOnly": true,
+    "originalBytesPreserved": true,
+    "proofRows": {
+      "editor-final": 9,
+      "held": 9,
+      "quick-bulk": 9,
+      "rights": 4,
+      "lease": 1,
+      "dirty-original": 1,
+      "dirty-controls-before": 1,
+      "dirty-visual-before": 1
+    }
+  },
+  "manifestSha256": "a22b531d50089f888c7bb555fb3bcb0d403e836cb9410761f2874fdb75b800ac",
+  "cleanupSha256": "e6cac7100452f7d36b3cfba0027aa6f3203ec73f8c22e8a577da2b380d213d9d",
+  "limitations": [
+    "Scoped UI/native controls; not whole CMS release",
+    "Quick/Bulk actual759 stage retained; not relabeled45e9",
+    "Pure helper tests remain source imports in compiled runner",
+    "Recovery proves title/body; no date/status recovery claim",
+    "Unselected diagnostic PNGs preserved privately;38 selected individually inspected",
+    "Backend/archive/fullpublicprivacy/BFCache/liveWPpixels/benchmarks not certified here"
+  ]
+}

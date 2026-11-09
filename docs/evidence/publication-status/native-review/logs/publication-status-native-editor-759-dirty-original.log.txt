@@ -1,0 +1,19 @@
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Expected "actual" to be strictly unequal to:
+
+'Unsaved changes'
+    at assertClean (file:///private[private-review-directory]/publication-status-native-harness/native-helpers.mjs:18:54)
+    at file:///private[private-review-directory]/publication-status-native-harness/native-editor.mjs:8:235
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5) {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: 'Unsaved changes',
+  expected: 'Unsaved changes',
+  operator: 'notStrictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.14.1
