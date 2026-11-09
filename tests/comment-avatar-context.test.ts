@@ -2,7 +2,8 @@ import test, { after } from "./isolated-test.js";
 import assert from "node:assert/strict";
 import { DOMParser } from "linkedom";
 import type { PoolClient } from "pg";
-import { pool, postFields } from "../server/db.js";
+import { pool, postFields, getSettings } from "../server/db.js";
+import {authorArchivePath} from "../shared/author-archive.js";
 import { renderSiteDocument } from "../server/block-renderer.js";
 import { avatarURL } from "../server/avatars.js";
 import { fixtureUserNicename } from "./helpers/user-fixtures.js";
@@ -84,7 +85,7 @@ test("comment avatar links reject unsafe websites, while ordinary post/user avat
     const postAvatar = dom(await render(block("avatar", {isLink: true, linkTarget: "_blank"})));
     assert.equal(postAvatar.querySelector("img")?.getAttribute("src"), avatarURL(f.owner.email, settings));
     assert.equal(postAvatar.querySelector("img")?.getAttribute("alt"), f.owner.name + " Avatar");
-    assert.equal(postAvatar.querySelector("a")?.getAttribute("href"), "/author/" + f.owner.nicename + "/");
+    assert.equal(postAvatar.querySelector("a")?.getAttribute("href"), authorArchivePath(f.owner,await getSettings(db)));
     assert.equal(postAvatar.querySelector("a")?.getAttribute("aria-label"), `(${f.owner.name} author archive, opens in a new tab)`);
     assert.equal(dom(await render(block("avatar", {userId: f.member.id}))).querySelector("img")?.getAttribute("src"), avatarURL(f.member.email, settings));
     assert.equal(await render(block("avatar", {userId: 0})), "");
