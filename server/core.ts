@@ -364,6 +364,12 @@ function comparable(post: any) {
     metadata(post),
   ]);
 }
+function fixSelectedPublicationGmt(pair:ReturnType<typeof resolvePostDate>,timezone:string){
+  if(pair.postDateGmt!==null)return pair;
+  const gmt=postCivilInstant(pair.postDate,timezone);
+  if(civilFromInstant(gmt,timezone)!==pair.postDate)throw new HttpError(400,"This local time does not exist in the selected timezone. Choose another time.");
+  return {postDate:pair.postDate,postDateGmt:gmt};
+}
 async function savePost(
   client: PoolClient,
   input: PostInput,
@@ -533,7 +539,7 @@ async function savePost(
     const bulkPublishNow=intent===bulkPublishNowIntent && input.status==="publish" && existing && ["draft","future"].includes(existing.status);
     // A server-owned reset must not hide invalid user dates, including a
     // simultaneous legacy null that would otherwise take reset precedence.
-    if(bulkPublishNow && input.postDate!==undefined && input.postDate!==null)resolvePostDate({postDate:input.postDate},existing,status,dateSettings.timezone,dateNow);
+    if(bulkPublishNow && input.postDate!==undefined && input.postDate!==null)fixSelectedPublicationGmt(resolvePostDate({postDate:input.postDate},existing,status,dateSettings.timezone,dateNow),dateSettings.timezone);
     let pair=resolvePostDate(input,existing,status,dateSettings.timezone,dateNow);
     if(bulkPublishNow)pair=resolvePostDate({postDate:null},existing,status,dateSettings.timezone,dateNow);
     const civilIntent=input.postDate!==undefined || input.restDate!==undefined && input.restDate!=="" || input.restDateGmt!==undefined && input.restDateGmt!=="";
@@ -550,11 +556,7 @@ async function savePost(
       // A null selected GMT has no fixed instant to reinterpret. Touched
       // nonfloating rows fix it from their unchanged civil value in this same
       // late zone snapshot, rejecting gaps instead of rolling their date.
-      if(pair.postDateGmt===null){
-        const gmt=postCivilInstant(pair.postDate,dateSettings.timezone);
-        if(civilFromInstant(gmt,dateSettings.timezone)!==pair.postDate)throw new HttpError(400,"This local time does not exist in the selected timezone. Choose another time.");
-        pair={postDate:pair.postDate,postDateGmt:gmt};
-      }
+      pair=fixSelectedPublicationGmt(pair,dateSettings.timezone);
       status=publicationStatusAt(status,pair.postDateGmt,dateNow);
       assertNewAccess(user,type,status,existing?.status);
       if(status==="future")scheduledAt=pair.postDateGmt;
