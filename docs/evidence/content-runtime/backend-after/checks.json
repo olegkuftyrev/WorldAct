@@ -1,0 +1,415 @@
+{
+  "stage": "BACKEND_FINAL_AFFECTED108_REVIEW_READY_FOR_ROOT",
+  "timeUTC": "2026-11-10T10:50:55.826Z",
+  "head": "99002f8a8ebda75a90687b24128f70742911f06c",
+  "tree": "66184625d0715032212d080fac18d83e86d43743",
+  "nodeSHA256": "874bd4cc38b5b34b5f6e7d2f813aa585d3bd4e172d2ab5270b6567a0b4645092",
+  "review": {
+    "name": "content-runtime-backend-review.md",
+    "sha256": "a3864c86bf4c2d34f36dea9d509c7e8146b9c3ff0d9baf0b8f7eb7b508b3a603",
+    "bytes": 5846
+  },
+  "resourceAudit": {
+    "name": "content-runtime-backend-resource-audit.json",
+    "sha256": "8e5694999adc704a0a9cd90542c19a732ad8d9b9efc20ebfc7a8969a1f238236",
+    "bytes": 7833
+  },
+  "construction": {
+    "runtimeFiles": {
+      "server/runtime-content-registry.ts": "9a5e49d84ace344d528351101c6ccce337da33738875ea3e501ba2fa88ac8558",
+      "server/content-runtime.ts": "7d389b7b866e0a8c3ef3533768cdcc17e2d391c9d09d825d45af38e11f261059",
+      "server/index.ts": "af5b137a5b8413454652b7255f11e762f19a770ebf92e1347e2a52ec2b65542a",
+      "server/migrate.ts": "d126bbf554b1ed5b835c137e9ededd66b946f5a7fc3a82f5659d0ecc68f01d63"
+    },
+    "selectedTestFiles": {
+      "tests/content-runtime.test.ts": "0b62c79cbd0ea7c347115a616255e241b52614c0730705b60c2e4441a9eab2c1",
+      "tests/content-registry-http-original.test.ts": "7afefe1ee911041516f476f459a0bd3b61f5734baf46969ca91021f02f132ae0",
+      "tests/content-registry.test.ts": "c8a5c46c854da9e2f548c4339aafa2a7cafb15aa66cd2fc681d9fa6097f9b9ae",
+      "tests/core.test.ts": "fd7743a0946c1cd2b826a81b67e3f3c32ece41c6b2cea1e95aeddd49286cf84b",
+      "tests/terms.test.ts": "6ce15dfeb6bca773bf251f888f48442cea4fa023ddf271f27d13f5c89765ead9",
+      "tests/compat.test.ts": "012e40b0495580bf33d4b8821bc5e4dc00cdcee36c463a13141518059c074161",
+      "tests/post-templates.test.ts": "ee1e8adfc474d0b1a0717a9a84df3b5e79693532cb64e91eebb7ee44b126b76a",
+      "tests/platform.test.ts": "7472b594deba5860b4dd4861fd7a122224f5574f8fa9b0ed8d586fdf5f950db9",
+      "tests/portability.test.ts": "862daf0a186c0c54f034eef0c6f4658b993e894ba6aabdfe851d23c194889ecf",
+      "tests/blocks.test.ts": "50521c9c671d7ede4a608c9d6975303da34a15f1ab80dbf338f4b43e8268615a",
+      "tests/term-blocks.test.ts": "b3aedcc8627c58dab3f294d2e78da37ca0a55755ad81091c5085474b60cdbea1",
+      "tests/post-mutation-locks.test.ts": "b56e5527288004aa4015308d9f3b287f84a09034a4f6039886350edcb2a1c344",
+      "tests/publication-status.test.ts": "87116faebe02aba6a41c5af9f61964043180d0584eb0cfd9a770a89c69d3f444",
+      "tests/password-listings.test.ts": "ca40ccd27ec4746b6ba045c2667a0bb433793004eef10523d19076b13dd1641f",
+      "tests/author-name-independent-count-grant.test.ts": "6643e7832a8272913a88bab1bac653a6cb674f25e25bd9c09139cfc65252f031",
+      "tests/author-name-independent-identity.test.ts": "595dc91255e5439626e7209ea9420e4662e0886fc3f5f3c8dcd05a16ad9c2882",
+      "tests/query-title-missing-type-original.test.ts": "ec6e6351d2477ff6927fb45318cbf734b54ff4595c5a2e40b04b47656166de8f",
+      "tests/query-title-search-format-original.test.ts": "169be75223968724229540836b78237b1735923e78283fc6a6f881c23ee1b385"
+    },
+    "closedCompilerSHA256": "cb2b5853f40921acc6f97713b25be5e3668e08082dc7ff720f5afe4fb791911a",
+    "originalProductionCommit": "6cfd2b27186d1c008f77e1f0b5e9d7b38ff7e563",
+    "originalTestCommit": "8cb8865c4ced5400134d4b6f10e5cffb3dafd2c7",
+    "correctiveProductionCommit": "a0719e6a5ac2a19549ee561c35d605db9a410b52",
+    "correctiveTestCommit": "99002f8a8ebda75a90687b24128f70742911f06c",
+    "findingsWereStaticOnly": true,
+    "noRuntimeOrTestChangesAfterCorrectedFreeze": true
+  },
+  "buildHistory": {
+    "overallBuildAttempt": 1,
+    "typecheckExitCode": 0,
+    "viteRunnerExitCode": 0,
+    "directNativeEsbuildExitCode": 0,
+    "actualNodeSHA256": "874bd4cc38b5b34b5f6e7d2f813aa585d3bd4e172d2ab5270b6567a0b4645092",
+    "noRetriesOrSourceEdits": true
+  },
+  "currentInventory": {
+    "sourceFiles": 357,
+    "allTrackedTestDirectoryFiles": 246,
+    "testFiles": 241,
+    "testSupports": 5,
+    "selectedWholeTestFiles": 18,
+    "runtimeFiles": 4,
+    "actualBuildOutputs": 411,
+    "allHashesCurrentlyVerified": true,
+    "notExecutionCounts": true
+  },
+  "executions": [
+    {
+      "mode": "source",
+      "port": 3046,
+      "counts": {
+        "tests": 108,
+        "pass": 108,
+        "fail": 0,
+        "skipped": 0,
+        "cancelled": 0
+      },
+      "perFileCounts": [
+        4,
+        4,
+        3,
+        1,
+        6,
+        10,
+        1,
+        9,
+        3,
+        9,
+        9,
+        9,
+        14,
+        4,
+        4,
+        6,
+        6,
+        6
+      ],
+      "wholeFilesCompleted": 18,
+      "officialRunnerExitCode": 0,
+      "sourceImportsRemainSOURCE": true,
+      "actualAPINodeSHA256": null,
+      "runReceipt": {
+        "name": "content-runtime-backend-source-run.json",
+        "sha256": "2859e83c9fe398d1238dc73f025e16785f83fba59924e9252c9f75c19840f923",
+        "bytes": 24765
+      },
+      "rawLog": {
+        "name": "content-runtime-backend-source.log",
+        "sha256": "42680059f6b726a89a0a941a6d11d0be3c3e21e018d7413db10f2e9cfe147d53",
+        "bytes": 30463
+      },
+      "targetedProofs": [
+        {
+          "kind": "registry",
+          "dispatches": 49,
+          "artifact": {
+            "name": "content-runtime-backend-source-registry-proof.json",
+            "sha256": "4515258fab374d419411b31ff021945bfcfee6eef84d14dc06ae1be13f7938ce",
+            "bytes": 52496
+          }
+        },
+        {
+          "kind": "missing",
+          "dispatches": 9,
+          "artifact": {
+            "name": "content-runtime-backend-source-missing-proof.json",
+            "sha256": "b279e2023ab5a4b4e25a9f661c24eac2b685b3b2d2fb31da1eb24951f5e27535",
+            "bytes": 298565
+          }
+        },
+        {
+          "kind": "format",
+          "dispatches": 12,
+          "artifact": {
+            "name": "content-runtime-backend-source-format-proof.json",
+            "sha256": "3e5a22d8d2b7b558966eacdfdaa06e1dfb29cfff52d9f369109aa536bfa423fc",
+            "bytes": 297327
+          }
+        }
+      ],
+      "actualFixtureCleanupLogLines": [
+        "CONTENT_REGISTRY_CLEANUP {\"ownedPosts\":3,\"ownedTerms\":2,\"ownedUsers\":2,\"failures\":[]}",
+        "QUERY_TITLE_MISSING_FIXTURE_CLEANUP {\"postIds\":[99],\"documentIds\":[221],\"restoredDocumentIds\":[14],\"settingsRestoreAttempted\":true,\"failures\":[]}",
+        "QUERY_TITLE_SEARCH_FIXTURE_CLEANUP {\"postIds\":[100],\"documentIds\":[],\"restoredDocumentId\":14,\"settingsRestoreAttempted\":true,\"failures\":[]}"
+      ]
+    },
+    {
+      "mode": "compiled",
+      "port": 3047,
+      "counts": {
+        "tests": 108,
+        "pass": 108,
+        "fail": 0,
+        "skipped": 0,
+        "cancelled": 0
+      },
+      "perFileCounts": [
+        4,
+        4,
+        3,
+        1,
+        6,
+        10,
+        1,
+        9,
+        3,
+        9,
+        9,
+        9,
+        14,
+        4,
+        4,
+        6,
+        6,
+        6
+      ],
+      "wholeFilesCompleted": 18,
+      "officialRunnerExitCode": 0,
+      "sourceImportsRemainSOURCE": true,
+      "actualAPINodeSHA256": "874bd4cc38b5b34b5f6e7d2f813aa585d3bd4e172d2ab5270b6567a0b4645092",
+      "runReceipt": {
+        "name": "content-runtime-backend-compiled-run.json",
+        "sha256": "fcf7db4c4c172801b98959d994eba16e60c733ef7ee7532629185b4239eeb8ac",
+        "bytes": 20920
+      },
+      "rawLog": {
+        "name": "content-runtime-backend-compiled.log",
+        "sha256": "966f8a905b0cf5d97bebd62f6550b10a20dbd45dd624cbd0ec720ddc432fc27f",
+        "bytes": 30448
+      },
+      "targetedProofs": [
+        {
+          "kind": "registry",
+          "dispatches": 49,
+          "artifact": {
+            "name": "content-runtime-backend-compiled-registry-proof.json",
+            "sha256": "5eff1591a50dc536d4e95a8941d867306dad5e295038b465a524da00b5ef4af1",
+            "bytes": 52496
+          }
+        },
+        {
+          "kind": "missing",
+          "dispatches": 9,
+          "artifact": {
+            "name": "content-runtime-backend-compiled-missing-proof.json",
+            "sha256": "ec6001b722c4d9d78c4aca63b24a7a630353f52540e3a92ab144f4d879e1d23d",
+            "bytes": 298565
+          }
+        },
+        {
+          "kind": "format",
+          "dispatches": 12,
+          "artifact": {
+            "name": "content-runtime-backend-compiled-format-proof.json",
+            "sha256": "a40666488d48f7eabada37e265ea5b039e924ec12d6213499e0b901e70133313",
+            "bytes": 297327
+          }
+        }
+      ],
+      "actualFixtureCleanupLogLines": [
+        "CONTENT_REGISTRY_CLEANUP {\"ownedPosts\":3,\"ownedTerms\":2,\"ownedUsers\":2,\"failures\":[]}",
+        "QUERY_TITLE_MISSING_FIXTURE_CLEANUP {\"postIds\":[99],\"documentIds\":[221],\"restoredDocumentIds\":[14],\"settingsRestoreAttempted\":true,\"failures\":[]}",
+        "QUERY_TITLE_SEARCH_FIXTURE_CLEANUP {\"postIds\":[100],\"documentIds\":[],\"restoredDocumentId\":14,\"settingsRestoreAttempted\":true,\"failures\":[]}"
+      ]
+    }
+  ],
+  "totalCountedChecks": 216,
+  "totalTargetedResponses": 140,
+  "totalRegistryJSONControls": 98,
+  "totalHeadingResponseDOMChecks": 42,
+  "metadataComparison": {
+    "surfacesEachMode": 24,
+    "bothModesCompared": 48,
+    "fullRawTextAndOrderedParsedJSON": true,
+    "genuineBeforeGreen": true
+  },
+  "allTestsFirstExecutionPass": true,
+  "sourceImportsRemainSOURCEInCompiledAPIMode": true,
+  "artifactOnlyProofAuditNoNewBuildTestsAPIHTTP": true,
+  "ownConfigAndReadonlyLinkRetained": true,
+  "cleanupAndDocsPublicationNotYetAuthorized": true,
+  "noCustomStorageDiscoveryCRUDAuthorityOrFullParityClaim": true,
+  "limits": [
+    "PostgreSQL connections were sampled about every50ms and descendant OS processes about every250ms; this is not an exhaustive census of transient resources.",
+    "Only exact own databases/anchor, phase/prefix applications, recorded PostgreSQL PIDs, observed owned OS PIDs, identified detached child groups and own loopback ports are checked. The runner's inherited parent process group is not an owned detached group.",
+    "The official runner finally removes its upload directory; exact upload/outbox paths were not journaled, so no independent per-path absence claim is made.",
+    "Own minimal environment, readonly dependency link, all411 outputs, original static construction sources/freezes, raw logs and proofs remain retained for root review."
+  ],
+  "provenance": [
+    {
+      "name": "content-runtime-complete-affected-selector.json",
+      "sha256": "c29d3075728d5bb0fc1af7ff22e4fd874605cd40d7e71444f3baef7609c7921a",
+      "bytes": 10793
+    },
+    {
+      "name": "content-runtime-constructed-source-selector.json",
+      "sha256": "6d6c43756c5bc420892058cfa4d761222a9057f52cc9df4aa7c4caa993128a31",
+      "bytes": 9210
+    },
+    {
+      "name": "content-runtime-corrected-construction-freeze.json",
+      "sha256": "608fdf0ab3f507fcff4e7d4e89a341b9a2c4bba0fd5071a36c17191015f8f704",
+      "bytes": 15907
+    },
+    {
+      "name": "content-runtime-final-construction-freeze.json",
+      "sha256": "13d57bc7cc74aed7a1cc815f34710905b14455031b409dfa05c5b3cbbc4f97cd",
+      "bytes": 10689
+    },
+    {
+      "name": "content-runtime-production-construction-freeze.json",
+      "sha256": "1685bd5ca57fa318910f4ea5fbcdce1ffb4df7777a129ac73a5b4f876e6da785",
+      "bytes": 3377
+    },
+    {
+      "name": "content-runtime-correction-review.md",
+      "sha256": "9a57fbd48be1c6dc6ef2586302ca795b8fd981cd3d860fa93cf7f54d3378bb99",
+      "bytes": 2294
+    },
+    {
+      "name": "content-runtime-correction-full.diff",
+      "sha256": "ec80b7cb1f90c879e748cc05155c4bf3435b66a61983cc1432c76134b2998c79",
+      "bytes": 14077
+    },
+    {
+      "name": "content-runtime-correction-runtime-full.diff",
+      "sha256": "3fc880d7c43299dc0525726138d9056258ab58154d6a24e9b86954131776d4b5",
+      "bytes": 9386
+    },
+    {
+      "name": "content-runtime-correction-test-full.diff",
+      "sha256": "2f21d038bd5da3f82a2b71dbca387ae63e7e366f4085e50f05f19c6cb4686e2c",
+      "bytes": 4691
+    },
+    {
+      "name": "content-runtime-corrected-final-construction-full.diff",
+      "sha256": "ba772b8e1a3b2cd99eacbff7513bb7d8a4e4dbcde59023b1c636ddce18fa4979",
+      "bytes": 42206
+    },
+    {
+      "name": "content-runtime-production-runtime-content-registry.ts",
+      "sha256": "394160ada0411044d59dfc76cda03e6fc35929ff769e5b727b026010fc575b1f",
+      "bytes": 19737
+    },
+    {
+      "name": "content-runtime-test-original.test.ts",
+      "sha256": "b818f9ee2dbf85c7217cda11100f7d121f9a278fff1628ae4160f62d45541838",
+      "bytes": 13888
+    },
+    {
+      "name": "content-runtime-corrected-construction-ast.json",
+      "sha256": "58026fffc374009509f977322253da28d77d05eecc4beb2a4a6694cdd87a0c89",
+      "bytes": 6898
+    },
+    {
+      "name": "content-runtime-backend-build-only.mjs",
+      "sha256": "58fc82a393471aceb477aa6b72ce3af57ec792ab8b0f8a60a2a4a56863ae1d2a",
+      "bytes": 9253
+    },
+    {
+      "name": "content-runtime-backend-build-preflight.json",
+      "sha256": "ae676c160e22d5c552c1bc68cad4c118d89c87eff9f9a17a26a690ca41e0ddb6",
+      "bytes": 67254
+    },
+    {
+      "name": "content-runtime-backend-build-checks.json",
+      "sha256": "aeb5e4f1131166390d1fe134df0c05f9445fac0e7bc134f614d7cb1b14cb377f",
+      "bytes": 3901
+    },
+    {
+      "name": "content-runtime-backend-build-fingerprints.json",
+      "sha256": "d944a57aee902df7afca0becfecf19e68c2cbabe5752190c9e0b88a350979dd2",
+      "bytes": 209213
+    },
+    {
+      "name": "content-runtime-backend-typecheck.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "name": "content-runtime-backend-typecheck-run.json",
+      "sha256": "dad10dda0e5a45d6ef0db6daaf0bd70965b54804e90e5b1c4f2461b24b4a9cf2",
+      "bytes": 482
+    },
+    {
+      "name": "content-runtime-backend-vite.log",
+      "sha256": "d91af24372c4cad3dbe1b67455d8c3e4d076f1145d7872888fe79dc12204776a",
+      "bytes": 2342
+    },
+    {
+      "name": "content-runtime-backend-vite-run.json",
+      "sha256": "23b949134f77d00968018616fb6857e8772d2b7f1165e3e8c1033f68fefe11f9",
+      "bytes": 506
+    },
+    {
+      "name": "content-runtime-backend-native-esbuild.log",
+      "sha256": "372689cfd2c178e8cf9d319ba289fc01ed55d79a0a29f9c07648ce1670c6232d",
+      "bytes": 56
+    },
+    {
+      "name": "content-runtime-backend-native-esbuild-run.json",
+      "sha256": "5f4bbbbd2a50f62f94b12fa521b19b30e075df6a82dd182c75f807b2af7d78fd",
+      "bytes": 642
+    },
+    {
+      "name": "content-runtime-backend-prepare.json",
+      "sha256": "0ac50b9439ca2817fdf8cd22d329fa33d991de9d94d478ff6e5b5003a656ba43",
+      "bytes": 916
+    },
+    {
+      "name": "content-runtime-backend-gates.mjs",
+      "sha256": "35aba15ab0b21cfe5d41037b479be076b608ec14ac413b533c70b6d7a142f8b1",
+      "bytes": 17136
+    },
+    {
+      "name": "content-runtime-backend-proof-audit.mjs",
+      "sha256": "f1cf9ecc2e97e479dfac7b7c85579fde3287e02f997b6576a7bfc592ba0653bd",
+      "bytes": 5893
+    },
+    {
+      "name": "content-runtime-backend-proof-audit.json",
+      "sha256": "56b409e755243979037807f37bb8867e32c94f7a1a28dea13b0836f72dcb4366",
+      "bytes": 18125
+    },
+    {
+      "name": "builtin-content-registry-http-proof-audit-wp-error-envelope.mjs",
+      "sha256": "2b4002b9f0c0b94ba0b9e9e5ccb82f1198b88dd2ab7e02f87d24384f62dd4802",
+      "bytes": 14335
+    },
+    {
+      "name": "query-title-missing-type-proof-audit-quoted-search.mjs",
+      "sha256": "b35e93d3beedbc6c5f9a09beb26e6d713396c45fba2ee5d4429e9b54731a0390",
+      "bytes": 2883
+    },
+    {
+      "name": "query-title-search-format-proof-audit.mjs",
+      "sha256": "40e530c037066b9d9f1fd66391d12e870174411eea2ded8e4760734b5ed07d9d",
+      "bytes": 3112
+    },
+    {
+      "name": "builtin-content-registry-before-green-source-proof.json",
+      "sha256": "4ed6da7ea61ee8517d5dc243340290094e4b32fc81cbfbb58ceae5e23f7f7cdd",
+      "bytes": 52496
+    },
+    {
+      "name": "builtin-content-registry-before-green-compiled-proof.json",
+      "sha256": "fedb6e2735fad71795935fea3c1cacfa25cb88a4d9233e00453faf84e712f515",
+      "bytes": 52496
+    }
+  ]
+}

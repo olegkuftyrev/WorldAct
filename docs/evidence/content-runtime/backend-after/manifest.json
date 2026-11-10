@@ -1,0 +1,112 @@
+{
+  "schemaVersion": 1,
+  "scope": "Backend bounded runtime content compiler/bootstrap108checks each/source and actualcompiled; no new execution by this docs package.",
+  "runtimeCommit": "99002f8a8ebda75a90687b24128f70742911f06c",
+  "runtimeTree": "66184625d0715032212d080fac18d83e86d43743",
+  "nodeSHA256": "874bd4cc38b5b34b5f6e7d2f813aa585d3bd4e172d2ab5270b6567a0b4645092",
+  "payloads": [
+    {
+      "path": "docs/evidence/content-runtime/backend-after/review.md",
+      "sourceArtifact": {
+        "name": "content-runtime-backend-review.md",
+        "sha256": "a3864c86bf4c2d34f36dea9d509c7e8146b9c3ff0d9baf0b8f7eb7b508b3a603",
+        "bytes": 5846
+      },
+      "publicCopy": {
+        "sha256": "a3864c86bf4c2d34f36dea9d509c7e8146b9c3ff0d9baf0b8f7eb7b508b3a603",
+        "bytes": 5846
+      },
+      "literalPrefixReplacementOccurrences": {
+        "privateEvidenceCanonical": 0,
+        "privateEvidence": 0,
+        "backendWorktreeCanonical": 0,
+        "backendWorktree": 0,
+        "mainWorktree": 0
+      }
+    },
+    {
+      "path": "docs/evidence/content-runtime/backend-after/checks.json",
+      "sourceArtifact": {
+        "name": "content-runtime-backend-checks.json",
+        "sha256": "f75eda70439b68d5af10170f22784b7cb6d3ecd3c24b798c047828fa547ae82d",
+        "bytes": 16183
+      },
+      "publicCopy": {
+        "sha256": "f75eda70439b68d5af10170f22784b7cb6d3ecd3c24b798c047828fa547ae82d",
+        "bytes": 16183
+      },
+      "literalPrefixReplacementOccurrences": {
+        "privateEvidenceCanonical": 0,
+        "privateEvidence": 0,
+        "backendWorktreeCanonical": 0,
+        "backendWorktree": 0,
+        "mainWorktree": 0
+      }
+    },
+    {
+      "path": "docs/evidence/content-runtime/backend-after/resource-audit.json",
+      "sourceArtifact": {
+        "name": "content-runtime-backend-resource-audit.json",
+        "sha256": "8e5694999adc704a0a9cd90542c19a732ad8d9b9efc20ebfc7a8969a1f238236",
+        "bytes": 7833
+      },
+      "publicCopy": {
+        "sha256": "5378b8b3cf6be98dee68e402c3da3aa2ac07d9155df3008cb22e20fcbb2a2dc2",
+        "bytes": 7801
+      },
+      "literalPrefixReplacementOccurrences": {
+        "privateEvidenceCanonical": 0,
+        "privateEvidence": 0,
+        "backendWorktreeCanonical": 0,
+        "backendWorktree": 0,
+        "mainWorktree": 1
+      }
+    },
+    {
+      "path": "docs/evidence/content-runtime/backend-after/build-checks.json",
+      "sourceArtifact": {
+        "name": "content-runtime-backend-build-checks.json",
+        "sha256": "aeb5e4f1131166390d1fe134df0c05f9445fac0e7bc134f614d7cb1b14cb377f",
+        "bytes": 3901
+      },
+      "publicCopy": {
+        "sha256": "9120a15975404f8c08b5c9d280338f57e58c6b719ed82a790dccfdcbb00a0578",
+        "bytes": 3879
+      },
+      "literalPrefixReplacementOccurrences": {
+        "privateEvidenceCanonical": 0,
+        "privateEvidence": 0,
+        "backendWorktreeCanonical": 0,
+        "backendWorktree": 2,
+        "mainWorktree": 0
+      }
+    },
+    {
+      "path": "docs/evidence/content-runtime/backend-after/owned-cleanup.json",
+      "sourceArtifact": {
+        "name": "content-runtime-backend-owned-cleanup.json",
+        "sha256": "6d4ebf7f3d42ac2765b2fae859d42f7b4f19705aca20a5432b269476971028e5",
+        "bytes": 2062
+      },
+      "publicCopy": {
+        "sha256": "291aa64bcf9a40e685ebecedf57410f620b6f5a48584a27c625d6a1696acdcac",
+        "bytes": 1976
+      },
+      "literalPrefixReplacementOccurrences": {
+        "privateEvidenceCanonical": 0,
+        "privateEvidence": 0,
+        "backendWorktreeCanonical": 0,
+        "backendWorktree": 2,
+        "mainWorktree": 2
+      }
+    }
+  ],
+  "README": {
+    "path": "docs/evidence/content-runtime/backend-after/README.md",
+    "sha256": "a1db5efc86824ad351417bfb4caf0fdb0f4cbda816729ed6e7bac6aaa1789256",
+    "bytes": 2908
+  },
+  "sanitization": "Only the literal known-prefix substitutions counted above; no result, field or claim rewriting. Exact private prefix map retained in private correspondence.",
+  "manifestSelfHash": "Intentionally excluded; exact hash and all seven paths recorded in private correspondence.",
+  "privateRawProofsLogsConfigurationExcluded": true
+}

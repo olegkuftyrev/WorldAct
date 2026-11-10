@@ -1,0 +1,48 @@
+{
+  "stage": "ROOT_AUTHORIZED_OWN_CONFIG_AND_LINK_CLEANUP_ONLY",
+  "timeUTC": "2026-11-10T10:56:01.301428+00:00",
+  "freshIdentityVerifiedAtUTC": "2026-11-10T10:56:01.116695+00:00",
+  "head": "99002f8a8ebda75a90687b24128f70742911f06c",
+  "tree": "66184625d0715032212d080fac18d83e86d43743",
+  "removedOwnConfig": {
+    "path": "<backend-worktree>/.env",
+    "regularNonSymlink": true,
+    "uid": 501,
+    "mode": "0600",
+    "creationSHA256": "42bb2ee939563fde4a536db93f09e92a3ccc26ae96bc90c7d4ca070d88127e4a",
+    "freshSHA256Matched": true,
+    "absentAfter": true
+  },
+  "removedOwnReadonlyLink": {
+    "path": "<backend-worktree>/node_modules",
+    "uid": 501,
+    "target": "<main-worktree>/node_modules",
+    "exactFreshTargetAndRealpathVerified": true,
+    "absentAfter": true
+  },
+  "sharedTargetPreserved": {
+    "path": "<main-worktree>/node_modules",
+    "realNonSymlinkDirectory": true,
+    "uid": 501,
+    "mode": "0755",
+    "inodeAndDeviceUnchanged": true,
+    "lockSHA256": "233888ed8f864581a8835aab0b4c33ccd7fbc391f2a98650b63fcf8db8814892"
+  },
+  "currentSource357TestDirectory246Selected18Runtime4Build411Unchanged": true,
+  "all411OutputsPreserved": true,
+  "originalStaticConstructionSourcesAndFreezesPreserved": true,
+  "earlierAcceptedReadOnlyResourceAudit": {
+    "name": "content-runtime-backend-resource-audit.json",
+    "sha256": "8e5694999adc704a0a9cd90542c19a732ad8d9b9efc20ebfc7a8969a1f238236",
+    "bytes": 7833
+  },
+  "earlierAuditHistoricallyRetainedConfigAndLinkNowRemovedByThisLaterReceipt": true,
+  "noNewSQLHTTPAPIBuildTestOrServices": true,
+  "noProductTestsCIUIMainChanges": true,
+  "logsProofsOriginalCopiesRetained": true,
+  "noRawLogsProofsOrConfigPublished": true,
+  "limits": [
+    "Resource closure is established by the earlier accepted read-only resource audit; cleanup made no new resource or HTTP requests.",
+    "Connection/process sampling and unjournaled exact upload/outbox-path limits in that audit remain unchanged."
+  ]
+}
