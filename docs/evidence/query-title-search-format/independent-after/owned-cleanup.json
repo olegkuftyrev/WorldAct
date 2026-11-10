@@ -1,0 +1,49 @@
+{
+  "status": "AUTHORIZED_ONLY_OWN_CONFIG_AND_READONLY_DEPENDENCY_LINK_REMOVED",
+  "time": "2026-11-10T08:59:46.236353+00:00",
+  "head": "b4035a01368ac4aa010c460685851804cd4d7e0c",
+  "tree": "0079c008893eb6820baa1da34c4ebcb0aecf2bac",
+  "config": {
+    "path": "[independent-after-worktree]/.env",
+    "uid": 501,
+    "mode": 384,
+    "sha256": "2dc15af0c2fafe881f1a50e08367dd2f3923e29fd618134e26c1ce88e37ceee6",
+    "inode": 24417915,
+    "removed": true
+  },
+  "dependencyLink": {
+    "path": "[independent-after-worktree]/node_modules",
+    "uid": 501,
+    "target": "[main-worktree]/node_modules",
+    "inode": 24415318,
+    "removed": true
+  },
+  "sharedDependencyOwner": {
+    "path": "[main-worktree]/node_modules",
+    "uid": 501,
+    "mode": 493,
+    "symlink": false,
+    "lockSHA256": "233888ed8f864581a8835aab0b4c33ccd7fbc391f2a98650b63fcf8db8814892"
+  },
+  "rootFinalAcceptance": {
+    "name": "root-query-title-search-format-independent-after-final-audit.json",
+    "sha256": "3189ff79e43c9c556c64f6501afb377136fe7ee3c169c09d9d342889beaa09ff"
+  },
+  "historicalResourceClosure": {
+    "name": "query-title-search-format-independent-after-resource-closure.json",
+    "sha256": "773dfe339ae7e4c6a913a37593622aa17eef4a9898d2829654fecd894b8b0021",
+    "stateThen": "Normal guard resources closed; owned config/link retained pending root.",
+    "stateNow": "Only exact two owned paths removed after authorization; no new SQL/service/test."
+  },
+  "preserved": {
+    "sourceFiles": 354,
+    "selectedTests": 14,
+    "runtimeFilesIncluded": 2,
+    "buildFiles": 411,
+    "startEndCurrentHashesMatch": true,
+    "nodeSHA256": "0773317bac6ebfb42323a6a5fef346ed1602e2d3e9d64841a94fae27c737aee2",
+    "allBeforeOriginalsBuildsLogsProofsRetained": true
+  },
+  "archiveCreated": false,
+  "noOtherCleanupOrRerun": true
+}

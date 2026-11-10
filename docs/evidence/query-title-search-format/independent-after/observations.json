@@ -1,0 +1,146 @@
+{
+  "scope": "Approved68 counted per mode including parents;73 targeted responses per mode, not all requests from14 fixtures",
+  "source": {
+    "counts": {
+      "tests": 68,
+      "pass": 68,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0
+    },
+    "perFileCounts": [
+      6,
+      3,
+      6,
+      2,
+      7,
+      6,
+      4,
+      4,
+      4,
+      9,
+      4,
+      6,
+      6,
+      1
+    ],
+    "complete14Marker": true,
+    "log": {
+      "name": "query-title-search-format-independent-after-source.log",
+      "sha256": "933f58a304c278e91e5534509d9accb8aad1edbe5091484554dd60f10c96bce2",
+      "bytes": 28669
+    }
+  },
+  "compiled": {
+    "counts": {
+      "tests": 68,
+      "pass": 68,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0
+    },
+    "perFileCounts": [
+      6,
+      3,
+      6,
+      2,
+      7,
+      6,
+      4,
+      4,
+      4,
+      9,
+      4,
+      6,
+      6,
+      1
+    ],
+    "complete14Marker": true,
+    "log": {
+      "name": "query-title-search-format-independent-after-compiled.log",
+      "sha256": "068981e60a145c389cb7a77854e95a3c00867e2d45127e0707adff54868590db",
+      "bytes": 28671
+    }
+  },
+  "proofs": {
+    "source": {
+      "format": {
+        "name": "query-title-search-format-independent-after-source-format-proof.json",
+        "sha256": "35dddfc60ff259c8675ab1463fd5c9e0ddfadb0bcd67c60ddf72d21b96995fe7",
+        "bytes": 297313,
+        "targetedResponses": 12
+      },
+      "missing": {
+        "name": "query-title-search-format-independent-after-source-missing-proof.json",
+        "sha256": "d7ad379dbaba3c2d701130b79d1efb88350d852ea8f99365e9f848b6230d3ada",
+        "bytes": 298552,
+        "targetedResponses": 9
+      },
+      "singular": {
+        "name": "query-title-search-format-independent-after-source-singular-proof.json",
+        "sha256": "123c549a71f428dbae92ad35f5e335185f526abf89296ecec7e2b09930d09ab9",
+        "bytes": 782156,
+        "targetedResponses": 23
+      },
+      "posts-page": {
+        "name": "query-title-search-format-independent-after-source-posts-page-proof.json",
+        "sha256": "780d3c446a2f49f7602b4a88407b4611f112f18b7f6f2b5c24bff5ef0a92caea",
+        "bytes": 222180,
+        "targetedResponses": 13
+      },
+      "home-body": {
+        "name": "query-title-search-format-independent-after-source-home-body-proof.json",
+        "sha256": "ddce37bf4d84231f8e9ac651a1d9dd0171d313b5b63cabff32bc483be84f8569",
+        "bytes": 420586,
+        "targetedResponses": 16
+      }
+    },
+    "compiled": {
+      "format": {
+        "name": "query-title-search-format-independent-after-compiled-format-proof.json",
+        "sha256": "48891fa39f2a6785727f981d6f8857f71baeae601ba12ac8bf1e7a786a9aae79",
+        "bytes": 297313,
+        "targetedResponses": 12
+      },
+      "missing": {
+        "name": "query-title-search-format-independent-after-compiled-missing-proof.json",
+        "sha256": "38dc14fb0862099cd64c7b74ca45917b465cfbbd10109d3df6d7487db0549f0f",
+        "bytes": 298552,
+        "targetedResponses": 9
+      },
+      "singular": {
+        "name": "query-title-search-format-independent-after-compiled-singular-proof.json",
+        "sha256": "f1f868e958539e059b0a101fcc653d5b430dba3ed41cda09de86b4880f32741a",
+        "bytes": 782156,
+        "targetedResponses": 23
+      },
+      "posts-page": {
+        "name": "query-title-search-format-independent-after-compiled-posts-page-proof.json",
+        "sha256": "fbe3d619a90fbb1199611e4626d88ba85928867da08ca980582d095f0f181c8d",
+        "bytes": 222180,
+        "targetedResponses": 13
+      },
+      "home-body": {
+        "name": "query-title-search-format-independent-after-compiled-home-body-proof.json",
+        "sha256": "57b2570d0b344380f4afb0a38f7e7d8ebe0c3526a34b421a48e5e04b6f1c6483",
+        "bytes": 420586,
+        "targetedResponses": 16
+      }
+    }
+  },
+  "rootRawDomResourceAudit": {
+    "name": "root-query-title-search-format-after-raw-audit.json",
+    "sha256": "95c248209b84c6b17b7023a71b983131683552886e495635507dbb7da4296bae",
+    "bytes": 3905
+  },
+  "behavior": "Quoted explicit search default/true, false label, showPrefix independence, safe entity text and raw-s Blog compatibility controls pass. Missing/empty, date/unknown, selected body/posts-page/home and final author/grant controls remain passing. Explicit Search form fields/entity/cumulative budgets remain passing.",
+  "executionBoundary": "Actual HTTP uses source API3068 then verified compiled Node0773317b on3069. New budget tests, normalization/service/renderer and supplied-client imports, and theme-blocks remain SOURCE in both modes.",
+  "historicalBefore": "Unchanged169be/929 formatting BEFORE separately accepted1PASS5FAIL/6 each mode;12 actual acquisitions per mode. Reviewer did not rerun its baseline.",
+  "intentionalExpectationAdapter": "Old missing-type fixture5b unquoted search preservation expectation intentionally changed to ec6 quoted expectation after accepted new before; not a setup correction or original-byte identity claim.",
+  "reportingOnlyMetadataObservation": {
+    "name": "query-title-search-format-independent-after-metadata-count-observation.json",
+    "sha256": "b8f70d7311bf49442bc9cc2919180f13c6824362d421a1b6ab4bcf213232d713",
+    "bytes": 641
+  },
+  "reportingOnlyClarification": "243 tracked files under tests/ =238 .test.ts plus5 support/fixture files; initial narrower-filter assertion preserved, not a build/test/product failure."
+}

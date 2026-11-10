@@ -1,0 +1,157 @@
+{
+  "scope": "Seven docs-only sanitized independent search formatting after evidence",
+  "certificateHead": "b4035a01368ac4aa010c460685851804cd4d7e0c",
+  "tree": "0079c008893eb6820baa1da34c4ebcb0aecf2bac",
+  "nodeSHA256": "0773317bac6ebfb42323a6a5fef346ed1602e2d3e9d64841a94fae27c737aee2",
+  "payloads": [
+    {
+      "privateSource": {
+        "name": "query-title-search-format-independent-after-review.md",
+        "sha256": "50aaad13abff35f970e6bcc5ecc9e212ccc04621f7892818cb20a9cd2305945b",
+        "bytes": 3436
+      },
+      "repositoryCopy": {
+        "path": "docs/evidence/query-title-search-format/independent-after/review.md",
+        "sha256": "50aaad13abff35f970e6bcc5ecc9e212ccc04621f7892818cb20a9cd2305945b",
+        "bytes": 3436
+      },
+      "replacements": [
+        {
+          "replacement": "[private-evidence-root]",
+          "occurrences": 0
+        },
+        {
+          "replacement": "[independent-after-worktree]",
+          "occurrences": 0
+        },
+        {
+          "replacement": "[main-worktree]",
+          "occurrences": 0
+        }
+      ],
+      "onlyKnownExactPrefixesChanged": true
+    },
+    {
+      "privateSource": {
+        "name": "query-title-search-format-independent-after-checks.json",
+        "sha256": "d24aa16b73c484c0f8d43b5a4a6b6dbc7841ac65b726c814d8798ba7919947c2",
+        "bytes": 6896
+      },
+      "repositoryCopy": {
+        "path": "docs/evidence/query-title-search-format/independent-after/checks.json",
+        "sha256": "d24aa16b73c484c0f8d43b5a4a6b6dbc7841ac65b726c814d8798ba7919947c2",
+        "bytes": 6896
+      },
+      "replacements": [
+        {
+          "replacement": "[private-evidence-root]",
+          "occurrences": 0
+        },
+        {
+          "replacement": "[independent-after-worktree]",
+          "occurrences": 0
+        },
+        {
+          "replacement": "[main-worktree]",
+          "occurrences": 0
+        }
+      ],
+      "onlyKnownExactPrefixesChanged": true
+    },
+    {
+      "privateSource": {
+        "name": "query-title-search-format-independent-after-observations.json",
+        "sha256": "af688237c41ab7a519e1993c76ff8010c11c32eefecc9bd8e35ebfb5e3b5d263",
+        "bytes": 5453
+      },
+      "repositoryCopy": {
+        "path": "docs/evidence/query-title-search-format/independent-after/observations.json",
+        "sha256": "af688237c41ab7a519e1993c76ff8010c11c32eefecc9bd8e35ebfb5e3b5d263",
+        "bytes": 5453
+      },
+      "replacements": [
+        {
+          "replacement": "[private-evidence-root]",
+          "occurrences": 0
+        },
+        {
+          "replacement": "[independent-after-worktree]",
+          "occurrences": 0
+        },
+        {
+          "replacement": "[main-worktree]",
+          "occurrences": 0
+        }
+      ],
+      "onlyKnownExactPrefixesChanged": true
+    },
+    {
+      "privateSource": {
+        "name": "query-title-search-format-independent-after-resource-closure.json",
+        "sha256": "773dfe339ae7e4c6a913a37593622aa17eef4a9898d2829654fecd894b8b0021",
+        "bytes": 2533
+      },
+      "repositoryCopy": {
+        "path": "docs/evidence/query-title-search-format/independent-after/resource-closure.json",
+        "sha256": "bcdfcf0993658e075664e37d9e0d3475ce482d4bfadae6566c06a916e8569709",
+        "bytes": 2443
+      },
+      "replacements": [
+        {
+          "replacement": "[private-evidence-root]",
+          "occurrences": 0
+        },
+        {
+          "replacement": "[independent-after-worktree]",
+          "occurrences": 2
+        },
+        {
+          "replacement": "[main-worktree]",
+          "occurrences": 1
+        }
+      ],
+      "onlyKnownExactPrefixesChanged": true
+    },
+    {
+      "privateSource": {
+        "name": "query-title-search-format-independent-after-owned-cleanup.json",
+        "sha256": "dea2028170ef438ddc92d1247458c7c8f24edb695214e1bb1ee5dd87b5fbea49",
+        "bytes": 1943
+      },
+      "repositoryCopy": {
+        "path": "docs/evidence/query-title-search-format/independent-after/owned-cleanup.json",
+        "sha256": "347df961cf17f2d68854e893c2aad804cc3e0205286aee0b1141aec391129c2e",
+        "bytes": 1821
+      },
+      "replacements": [
+        {
+          "replacement": "[private-evidence-root]",
+          "occurrences": 0
+        },
+        {
+          "replacement": "[independent-after-worktree]",
+          "occurrences": 2
+        },
+        {
+          "replacement": "[main-worktree]",
+          "occurrences": 2
+        }
+      ],
+      "onlyKnownExactPrefixesChanged": true
+    }
+  ],
+  "README": {
+    "path": "docs/evidence/query-title-search-format/independent-after/README.md",
+    "sha256": "8e1ff1377c116c1be371e95d3d9614e1c743201275ea61853b17fe6927b5d6dc",
+    "bytes": 2887
+  },
+  "rootFinalAcceptance": {
+    "name": "root-query-title-search-format-independent-after-final-audit.json",
+    "sha256": "3189ff79e43c9c556c64f6501afb377136fe7ee3c169c09d9d342889beaa09ff",
+    "bytes": 4829
+  },
+  "allPrivateReferencedInputsAndHistoricalBuildsRetained": true,
+  "manifestSelfHashConvention": "No self-hash inside manifest. Exact manifest SHA is recorded in the external private package and commit receipt.",
+  "noRawProofLogConfigAuthInRepositoryPackage": true,
+  "noProductTestUiCiMainEditOrRerun": true
+}

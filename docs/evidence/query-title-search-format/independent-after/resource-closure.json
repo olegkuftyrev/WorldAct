@@ -1,0 +1,66 @@
+{
+  "status": "NORMAL_GUARD_RESOURCES_CLOSED_OWN_CONFIG_LINK_RETAINED_FOR_ROOT",
+  "head": "b4035a01368ac4aa010c460685851804cd4d7e0c",
+  "tree": "0079c008893eb6820baa1da34c4ebcb0aecf2bac",
+  "journalDatabases": [
+    "worldact_test_1794300811510_27416d5a",
+    "worldact_test_1794300886860_af904340"
+  ],
+  "neverCreatedAnchor": "worldact_query_title_search_format_independent_after_anchor",
+  "journalApplications": [
+    "worldact_qt_search_format_independent_source",
+    "worldact_qt_search_format_independent_compiled"
+  ],
+  "phaseCatalogClosure": {
+    "source": {
+      "databases": [],
+      "sessions": []
+    },
+    "compiled": {
+      "databases": [],
+      "sessions": []
+    }
+  },
+  "officialRunnerPIDs": {
+    "source": 46022,
+    "compiled": 46896
+  },
+  "observedProcessCounts": {
+    "source": 61,
+    "compiled": 43
+  },
+  "pidMonitorLimit": "300ms sampling of observed official-runner descendants; not exhaustive for every short-lived process. No unowned process signalled.",
+  "uploadScopeLimit": "Exact random upload/outbox paths not independently journaled; official runner finally cleanup owns that scope. Reviewer performed no upload glob deletion.",
+  "rootIndependentPhysicalClosureAudit": {
+    "name": "root-query-title-search-format-after-raw-audit.json",
+    "sha256": "95c248209b84c6b17b7023a71b983131683552886e495635507dbb7da4296bae",
+    "bytes": 3905
+  },
+  "closureAuditScope": "Root verified four owner/reviewer DBs, two anchors, four app groups, observed OS PIDs and six ports closed; no additional SQL/service/test was run for this report.",
+  "configRetained": {
+    "path": "[independent-after-worktree]/.env",
+    "uid": 501,
+    "mode": 384,
+    "sha256": "2dc15af0c2fafe881f1a50e08367dd2f3923e29fd618134e26c1ce88e37ceee6"
+  },
+  "dependencyLinkRetained": {
+    "path": "[independent-after-worktree]/node_modules",
+    "uid": 501,
+    "target": "[main-worktree]/node_modules"
+  },
+  "preserved": {
+    "sourceFiles": 354,
+    "selectedTests": 14,
+    "runtimeFilesIncluded": 2,
+    "buildFiles": 411,
+    "fingerprintManifest": {
+      "name": "query-title-search-format-independent-after-build-fingerprints.json",
+      "sha256": "105ad418a491a4820abd83f97db83dd3471c28dcaf7ea7ef7650f191d96ee36f",
+      "bytes": 98998
+    },
+    "startEndCurrentHashesMatch": true,
+    "allBeforeOriginalsBuildsLogsProofsRetained": true
+  },
+  "archiveCreated": false,
+  "noBuildOrTestRerunOrOtherCleanup": true
+}
