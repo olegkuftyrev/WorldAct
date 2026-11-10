@@ -1,10 +1,16 @@
 # Explicit archive Query Title presentation
 
-An explicit `core/query-title` block with `type: "archive"` produces no markup
-in a selected singular presentation or an ordinary unfiltered posts home.
-The supplied WordPress `blocks/query-title.php` returns before generating its
-wrapper in these cases. Actual archives retain their headings. Omitted and
-other types retain their existing behavior.
+A `core/query-title` block with an omitted type or an exact empty-string type
+produces no markup before context, label lookups or wrapper generation. The
+block metadata has no type default. This applies to saved documents and the
+metadata-normalized authenticated preview through the same renderer branch.
+It does not trim values, add a default, reject unknown nonempty strings or
+change raw null/false/zero/string-zero handling.
+
+An explicit block with `type: "archive"` also produces no markup in a selected
+singular presentation or an ordinary unfiltered posts home. The supplied
+WordPress `blocks/query-title.php` returns before generating its wrapper in
+these cases. Explicit archive headings on actual archives remain supported.
 
 `archiveTitleContext` is server-owned presentation provenance. The final tags
 are `selected-singular`, `unfiltered-posts-home` and `preserve`. Only the first
@@ -48,5 +54,6 @@ the path-only date transport quirk is not repaired by this change.
 
 This contract does not implement every WordPress conditional. Label priority,
 raw date SQL, query normalization, template selection, canonical URLs, response
-status, publication/password fences, and omitted/other Query Title types keep
-their existing behavior.
+status, publication/password fences, and other Query Title types keep their
+existing behavior. Broader raw malformed/falsy attributes and search/post-type
+eligibility and formatting remain separate compatibility work.
