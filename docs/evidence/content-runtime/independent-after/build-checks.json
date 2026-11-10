@@ -1,0 +1,110 @@
+{
+  "status": "BUILD_PASS_NO_TEST_EXECUTION",
+  "head": "99002f8a8ebda75a90687b24128f70742911f06c",
+  "tree": "66184625d0715032212d080fac18d83e86d43743",
+  "overallBuildAttempt": 1,
+  "startedUTC": "2026-11-10T10:40:55.877581+00:00",
+  "endedUTC": "2026-11-10T10:41:15.421661+00:00",
+  "steps": [
+    {
+      "step": "typecheck",
+      "argv": [
+        "node",
+        "node_modules/typescript/bin/tsc",
+        "--noEmit"
+      ],
+      "pid": 63704,
+      "startedUTC": "2026-11-10T10:40:55.945192+00:00",
+      "endedUTC": "2026-11-10T10:41:05.748581+00:00",
+      "exitCode": 0,
+      "log": {
+        "file": "<private-evidence>/content-runtime-independent-after-typecheck.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0
+      }
+    },
+    {
+      "step": "vite",
+      "argv": [
+        "node",
+        "node_modules/vite/bin/vite.js",
+        "build",
+        "--configLoader",
+        "runner"
+      ],
+      "pid": 63732,
+      "startedUTC": "2026-11-10T10:41:05.836393+00:00",
+      "endedUTC": "2026-11-10T10:41:15.041699+00:00",
+      "exitCode": 0,
+      "log": {
+        "file": "<private-evidence>/content-runtime-independent-after-vite.log",
+        "sha256": "950d8552f61e8cf43eea9f4f132f2a039ab909e6d559a8af29c1f45b3b558324",
+        "bytes": 2342
+      }
+    },
+    {
+      "step": "node-bundle",
+      "argv": [
+        "node_modules/.bin/esbuild",
+        "server/index.ts",
+        "--bundle",
+        "--platform=node",
+        "--format=esm",
+        "--packages=external",
+        "--outfile=dist-server/index.js"
+      ],
+      "pid": 63777,
+      "startedUTC": "2026-11-10T10:41:15.165178+00:00",
+      "endedUTC": "2026-11-10T10:41:15.207204+00:00",
+      "exitCode": 0,
+      "log": {
+        "file": "<private-evidence>/content-runtime-independent-after-node-bundle.log",
+        "sha256": "2a1afed9af765ed40626cf23cd20bb4cbd4b4c46e0ab8e81cadd16bb6d7d563d",
+        "bytes": 56
+      }
+    }
+  ],
+  "failure": null,
+  "nodeSHA256": "874bd4cc38b5b34b5f6e7d2f813aa585d3bd4e172d2ab5270b6567a0b4645092",
+  "counts": {
+    "trackedSource": 357,
+    "allTrackedTestsDirectory": 246,
+    "testFiles": 241,
+    "supports": 5,
+    "selectedFiles": 18,
+    "runtimeFiles": 4,
+    "actualProducedOutputs": 411
+  },
+  "prePostCurrentInputsUnchanged": true,
+  "postCurrentProducedOutputsIdentical": true,
+  "refs": {
+    "pre": {
+      "file": "<private-evidence>/content-runtime-independent-after-pre-build-fingerprints.json",
+      "sha256": "729f34f9500c2aeb1d47f3c6b9d9be4641de510b4e3599881ac082bed6da4f4a",
+      "bytes": 66139
+    },
+    "post": {
+      "file": "<private-evidence>/content-runtime-independent-after-post-build-fingerprints.json",
+      "sha256": "831a58d3350dcea84ea57355fc8a4cd996edb032196676502f41d057350e576e",
+      "bytes": 127277
+    },
+    "current": {
+      "file": "<private-evidence>/content-runtime-independent-after-current-build-fingerprints.json",
+      "sha256": "a2fdf142fbbbd0fd7a9009e51625946fd0f4e861c6986477c68a9e74c2783ca7",
+      "bytes": 127277
+    },
+    "selector": {
+      "file": "<private-evidence>/content-runtime-constructed-source-selector.json",
+      "sha256": "6d6c43756c5bc420892058cfa4d761222a9057f52cc9df4aa7c4caa993128a31",
+      "bytes": 9210
+    }
+  },
+  "environmentAbsent": true,
+  "anchorDatabaseApiHttpTestsServicesCreated": false,
+  "ownReadonlyDependencyLinkRetained": true,
+  "noApplicationModuleImport": true,
+  "backendNodeComparison": "PENDING_SEPARATE_MEASUREMENT",
+  "oldBuildsAndOriginalsUntouched": true,
+  "noRetryOrEdit": true,
+  "trackedTreeClean": true
+}

@@ -1,0 +1,114 @@
+{
+  "schemaVersion": 1,
+  "scope": "Independent bounded content runtime108 each; intentionally unwired compiler/bootstrap; docs-only no new execution.",
+  "candidateCommit": "99002f8a8ebda75a90687b24128f70742911f06c",
+  "productionCommit": "a0719e6a5ac2a19549ee561c35d605db9a410b52",
+  "candidateTree": "66184625d0715032212d080fac18d83e86d43743",
+  "nodeSHA256": "874bd4cc38b5b34b5f6e7d2f813aa585d3bd4e172d2ab5270b6567a0b4645092",
+  "payloads": [
+    {
+      "path": "docs/evidence/content-runtime/independent-after/review.md",
+      "sourceArtifact": {
+        "name": "content-runtime-independent-after-final-review.md",
+        "sha256": "4011512af04842dc31f1c125aead58ef2eb23e15a79bf5d551b56757028ad6aa",
+        "bytes": 4557
+      },
+      "publicCopy": {
+        "sha256": "4011512af04842dc31f1c125aead58ef2eb23e15a79bf5d551b56757028ad6aa",
+        "bytes": 4557
+      },
+      "literalPrefixReplacementOccurrences": {
+        "privateEvidenceCanonical": 0,
+        "privateEvidence": 0,
+        "independentWorktreeCanonical": 0,
+        "independentWorktree": 0,
+        "mainWorktree": 0
+      }
+    },
+    {
+      "path": "docs/evidence/content-runtime/independent-after/checks.json",
+      "sourceArtifact": {
+        "name": "content-runtime-independent-after-final-checks.json",
+        "sha256": "6c57646fba69613b7ea39b031dbdefff5131387d51ec2f0edb1ddad78764f6da",
+        "bytes": 12688
+      },
+      "publicCopy": {
+        "sha256": "b9dc34cd680d198138e5f3e7852bd86444ee688f75e837c7509a049acff0f6b3",
+        "bytes": 12382
+      },
+      "literalPrefixReplacementOccurrences": {
+        "privateEvidenceCanonical": 0,
+        "privateEvidence": 34,
+        "independentWorktreeCanonical": 0,
+        "independentWorktree": 0,
+        "mainWorktree": 0
+      }
+    },
+    {
+      "path": "docs/evidence/content-runtime/independent-after/resource-audit.json",
+      "sourceArtifact": {
+        "name": "content-runtime-independent-after-resource-closure.json",
+        "sha256": "a9a125b55b78bc376229aeedfdf924a6ce4d0b1d537ea2643e601dd467ee4adb",
+        "bytes": 6393
+      },
+      "publicCopy": {
+        "sha256": "b236748c16f8908bd33be5509eb2754e70df76f38808fddc3235cef70c060277",
+        "bytes": 6384
+      },
+      "literalPrefixReplacementOccurrences": {
+        "privateEvidenceCanonical": 0,
+        "privateEvidence": 1,
+        "independentWorktreeCanonical": 0,
+        "independentWorktree": 0,
+        "mainWorktree": 0
+      }
+    },
+    {
+      "path": "docs/evidence/content-runtime/independent-after/build-checks.json",
+      "sourceArtifact": {
+        "name": "content-runtime-independent-after-build-checks.json",
+        "sha256": "946eb2fc439c6371bf037b5a05ff30b4d46b84276a2c6f80e87dd42b234d9db4",
+        "bytes": 3680
+      },
+      "publicCopy": {
+        "sha256": "c05e317a8f3c458b6d36d36f6569c1a4b0518a44dcf41cd68551ef0f61d631ff",
+        "bytes": 3617
+      },
+      "literalPrefixReplacementOccurrences": {
+        "privateEvidenceCanonical": 0,
+        "privateEvidence": 7,
+        "independentWorktreeCanonical": 0,
+        "independentWorktree": 0,
+        "mainWorktree": 0
+      }
+    },
+    {
+      "path": "docs/evidence/content-runtime/independent-after/owned-cleanup.json",
+      "sourceArtifact": {
+        "name": "content-runtime-independent-after-owned-cleanup.json",
+        "sha256": "b176698b941235bc9a44c968321d6d03c0d53dabd4889f5d22cea812da8df8c5",
+        "bytes": 2101
+      },
+      "publicCopy": {
+        "sha256": "658ea4004fc6f15c58c1aad089671bccedccfcc7b914c0bba11d103aef3c4f13",
+        "bytes": 1987
+      },
+      "literalPrefixReplacementOccurrences": {
+        "privateEvidenceCanonical": 0,
+        "privateEvidence": 0,
+        "independentWorktreeCanonical": 0,
+        "independentWorktree": 2,
+        "mainWorktree": 2
+      }
+    }
+  ],
+  "README": {
+    "path": "docs/evidence/content-runtime/independent-after/README.md",
+    "sha256": "f38e0b0246b89ac4fd367265d24acdff625853ce263cc332d9be6f514bae49e3",
+    "bytes": 3940
+  },
+  "sanitization": "Only five literal known-prefix substitutions counted above; no result, field or claim rewriting. Exact private map retained in private correspondence.",
+  "manifestSelfHash": "Intentionally excluded; private correspondence records exact hash and all seven paths.",
+  "privateRawLogsProofsAuthConfigExcluded": true,
+  "sourceMonitorScopeIncidentRetainedNoSourceRerun": true
+}

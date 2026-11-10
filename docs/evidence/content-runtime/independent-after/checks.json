@@ -1,0 +1,327 @@
+{
+  "status": "SCOPED_FINAL_ACCEPTANCE_108_EACH_NO_PRODUCT_OR_TEST_FAILURE",
+  "timeUTC": "2026-11-10T10:54:24.827152+00:00",
+  "head": "99002f8a8ebda75a90687b24128f70742911f06c",
+  "tree": "66184625d0715032212d080fac18d83e86d43743",
+  "base": "78028e54501e1b77330e10b2934757221eace46c",
+  "nodeSHA256": "874bd4cc38b5b34b5f6e7d2f813aa585d3bd4e172d2ab5270b6567a0b4645092",
+  "phases": {
+    "source": {
+      "officialRunnerExitCode": 0,
+      "monitorWrapperExitCode": 1,
+      "complete18Marker": true,
+      "counts": {
+        "tests": 108,
+        "pass": 108,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0
+      },
+      "perFileCounts": [
+        4,
+        4,
+        3,
+        1,
+        6,
+        10,
+        1,
+        9,
+        3,
+        9,
+        9,
+        9,
+        14,
+        4,
+        4,
+        6,
+        6,
+        6
+      ],
+      "run": {
+        "file": "<private-evidence>/content-runtime-independent-after-source-run.json",
+        "sha256": "cbbc10f1737ec26d4c2ea13433301a3c1437e2c1a621be7a881b6f8a577fe86b",
+        "bytes": 30746
+      },
+      "rawLog": {
+        "file": "<private-evidence>/content-runtime-independent-after-source.log",
+        "sha256": "2ad6a25b76fdedc28ab5b6d93e962eed841fd3fca49d9546322cea963d767f4b",
+        "bytes": 30480
+      },
+      "proofs": {
+        "registry": {
+          "file": "<private-evidence>/content-runtime-independent-after-source-registry-proof.json",
+          "sha256": "d11d8dec522f5f11f959f98e72b1af85900852c3a04891c64fb4ffe969e8f913",
+          "bytes": 52496
+        },
+        "missing": {
+          "file": "<private-evidence>/content-runtime-independent-after-source-missing-proof.json",
+          "sha256": "31568f16b9ce42eb9f1b80a55790c394351032f920d478d14aff1d8dd813670a",
+          "bytes": 298565
+        },
+        "format": {
+          "file": "<private-evidence>/content-runtime-independent-after-source-format-proof.json",
+          "sha256": "90a5e050db8426f5971422bcc57b01c82ce4eb52502e0a9bbcb2073e999709a1",
+          "bytes": 297327
+        }
+      },
+      "disposableDatabases": [
+        "worldact_test_1794307577157_b77c45cd"
+      ],
+      "application": "worldact_content_runtime_independent_source",
+      "monitorErrors": [],
+      "runtimeNodeSHA256": "874bd4cc38b5b34b5f6e7d2f813aa585d3bd4e172d2ab5270b6567a0b4645092"
+    },
+    "compiled": {
+      "officialRunnerExitCode": 0,
+      "monitorWrapperExitCode": 0,
+      "complete18Marker": true,
+      "counts": {
+        "tests": 108,
+        "pass": 108,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0
+      },
+      "perFileCounts": [
+        4,
+        4,
+        3,
+        1,
+        6,
+        10,
+        1,
+        9,
+        3,
+        9,
+        9,
+        9,
+        14,
+        4,
+        4,
+        6,
+        6,
+        6
+      ],
+      "run": {
+        "file": "<private-evidence>/content-runtime-independent-after-compiled-run.json",
+        "sha256": "a16a408116079eedd3cfa4bafb357f43b6b9e13b7a5ed7b74a9b068a7d2d7f64",
+        "bytes": 27092
+      },
+      "rawLog": {
+        "file": "<private-evidence>/content-runtime-independent-after-compiled.log",
+        "sha256": "1fe75a5816b6946d675a7605363ba0fd8f67a3413f42f9805106000cebc37d3d",
+        "bytes": 30452
+      },
+      "proofs": {
+        "registry": {
+          "file": "<private-evidence>/content-runtime-independent-after-compiled-registry-proof.json",
+          "sha256": "aff1da1f592fd35d3c23c5169c2b0e289306129d94d21775940944698d6cb4b9",
+          "bytes": 52496
+        },
+        "missing": {
+          "file": "<private-evidence>/content-runtime-independent-after-compiled-missing-proof.json",
+          "sha256": "7ccda88a4b66842a97e91172ba523f958ef3ace9219c86101b4a0c628da719d5",
+          "bytes": 298565
+        },
+        "format": {
+          "file": "<private-evidence>/content-runtime-independent-after-compiled-format-proof.json",
+          "sha256": "feacb364774510f395fe5036780f6d68a50719bd2d784cf1ecaecccd71a6b405",
+          "bytes": 297327
+        }
+      },
+      "disposableDatabases": [
+        "worldact_test_1794307816914_cfa22e5c"
+      ],
+      "application": "worldact_content_runtime_independent_compiled",
+      "monitorErrors": [],
+      "runtimeNodeSHA256": "874bd4cc38b5b34b5f6e7d2f813aa585d3bd4e172d2ab5270b6567a0b4645092"
+    }
+  },
+  "phaseOrder": [
+    "source",
+    "fresh corrected source closure",
+    "compiled"
+  ],
+  "sourceSuiteRerun": false,
+  "firstAndOnlyOfficialRunnerInvocationEachMode": true,
+  "build": {
+    "firstOverallAttemptThisSlice": 1,
+    "allThreeExitZero": true,
+    "counts": {
+      "trackedSource": 357,
+      "allTrackedTestsDirectory": 246,
+      "testFiles": 241,
+      "supports": 5,
+      "selectedFiles": 18,
+      "runtimeFiles": 4,
+      "actualProducedOutputs": 411
+    },
+    "all357Source246TestDirectory18Selected4Runtime411BuildHashesStable": true,
+    "noProductOrAssertionEditsDuringGates": true
+  },
+  "artifactAudit": {
+    "exitCode": 0,
+    "status": "EXISTING_ARTIFACTS_CONFORM_NO_NEW_HTTP_TEST_EXECUTION",
+    "helpers": {
+      "builtin-content-registry-http-proof-audit-wp-error-envelope.mjs": "2b4002b9f0c0b94ba0b9e9e5ccb82f1198b88dd2ab7e02f87d24384f62dd4802",
+      "query-title-missing-type-proof-audit-quoted-search.mjs": "b35e93d3beedbc6c5f9a09beb26e6d713396c45fba2ee5d4429e9b54731a0390",
+      "query-title-search-format-proof-audit.mjs": "40e530c037066b9d9f1fd66391d12e870174411eea2ded8e4760734b5ed07d9d"
+    },
+    "all24MetadataRawOrderedEqual": true,
+    "targetedAfterResponses": 140
+  },
+  "resourceClosure": {
+    "status": "OWN_OBSERVED_RESOURCES_CLOSED_ENV_AND_LINK_RETAINED",
+    "twoDisposableDatabasesAbsent": true,
+    "anchorNeverCreatedAndAbsent": true,
+    "declaredAppAndOwnerPrefixSessionRowsEmpty": true,
+    "observedPGPIDCount": 187,
+    "observedOSPIDCount": 132,
+    "recordedPIDOrPGIDMatchesEmpty": true,
+    "ports3068Through3070NoListeners": true,
+    "configSHA256": "299f8d09d4fa9cf5e519b19c3b9fe544662bbf94afe72b68637367fadba903ed",
+    "envAndReadonlyLinkRetainedForRootReview": true
+  },
+  "monitorFailurePreserved": {
+    "sourceOfficialRunnerExitCode": 0,
+    "sourceOriginalWrapperExitCode": 1,
+    "incidentIsHarnessScopeNotRuntimeFinding": true,
+    "originalSourceRunUnchanged": true,
+    "scopeOnlyCorrectionSeparateNewDriver": true,
+    "sourceCorrectedClosurePass": true
+  },
+  "noMainProductionSchemaCodeDataOrUploadsChangeByReviewer": true,
+  "isolatedExistingRaceFixturesMayCreateSchemaObjects": true,
+  "noNewCustomAPIInjectionDDLOrAuthorityClaim": true,
+  "noFullFreshFixedBrowserGate": true,
+  "noFurtherTestsOrReruns": true,
+  "observations": {
+    "file": "<private-evidence>/content-runtime-independent-after-observations.json",
+    "sha256": "dcb4b2278c6bbb1cafc5caf169c2aa3648cf14fe9fca3936fd2292ddb8904e3b",
+    "bytes": 2833
+  },
+  "references": [
+    {
+      "file": "<private-evidence>/content-runtime-corrected-construction-freeze.json",
+      "sha256": "608fdf0ab3f507fcff4e7d4e89a341b9a2c4bba0fd5071a36c17191015f8f704",
+      "bytes": 15907
+    },
+    {
+      "file": "<private-evidence>/content-runtime-corrected-construction-independent-review.md",
+      "sha256": "a2242ac158fe14f2c5c737e58f287f47a5975469cb7954105663a38e441a3e1a",
+      "bytes": 3126
+    },
+    {
+      "file": "<private-evidence>/content-runtime-corrected-construction-independent-checks.json",
+      "sha256": "6c9e27cef23e17358392d03a6365b966f3a8d3140018ff0981c1cf7e5987b280",
+      "bytes": 7692
+    },
+    {
+      "file": "<private-evidence>/content-runtime-complete-affected-selector.json",
+      "sha256": "c29d3075728d5bb0fc1af7ff22e4fd874605cd40d7e71444f3baef7609c7921a",
+      "bytes": 10793
+    },
+    {
+      "file": "<private-evidence>/content-runtime-independent-after-build-review.md",
+      "sha256": "bfa2cc5ac1cf63db00672713c763e16d5911290e28f90826a8871f193a103786",
+      "bytes": 2794
+    },
+    {
+      "file": "<private-evidence>/content-runtime-independent-after-build-checks.json",
+      "sha256": "946eb2fc439c6371bf037b5a05ff30b4d46b84276a2c6f80e87dd42b234d9db4",
+      "bytes": 3680
+    },
+    {
+      "file": "<private-evidence>/content-runtime-independent-after-pre-build-fingerprints.json",
+      "sha256": "729f34f9500c2aeb1d47f3c6b9d9be4641de510b4e3599881ac082bed6da4f4a",
+      "bytes": 66139
+    },
+    {
+      "file": "<private-evidence>/content-runtime-independent-after-post-build-fingerprints.json",
+      "sha256": "831a58d3350dcea84ea57355fc8a4cd996edb032196676502f41d057350e576e",
+      "bytes": 127277
+    },
+    {
+      "file": "<private-evidence>/content-runtime-independent-after-current-build-fingerprints.json",
+      "sha256": "a2fdf142fbbbd0fd7a9009e51625946fd0f4e861c6986477c68a9e74c2783ca7",
+      "bytes": 127277
+    },
+    {
+      "file": "<private-evidence>/content-runtime-independent-after-ownership.json",
+      "sha256": "6c8bcdb6510d8165ca9b2e22d1a39277cb9f2e15c6c383ef4e914315a45c015c",
+      "bytes": 1236
+    },
+    {
+      "file": "<private-evidence>/content-runtime-independent-after-run.mjs",
+      "sha256": "db1d91fb64818f129aba9b4c8aad00b3fb67b31b39988dc9b35f69cbc279cbdc",
+      "bytes": 11676
+    },
+    {
+      "file": "<private-evidence>/content-runtime-independent-after-run-scoped-apps.mjs",
+      "sha256": "542d2fb1d1b125ad457c351c2b32d58c397320befde5861237077f111cf744f8",
+      "bytes": 11801
+    },
+    {
+      "file": "<private-evidence>/content-runtime-independent-after-source-prelaunch.json",
+      "sha256": "d631ed1137942108448448bf16c38f93b2a64a8f75cc4d0330a5829cfe38216b",
+      "bytes": 2031
+    },
+    {
+      "file": "<private-evidence>/content-runtime-independent-after-compiled-prelaunch.json",
+      "sha256": "4069c2e4476e9b598b3b4de648500a298b82769ebb901d48d9dc6d1b0d09a475",
+      "bytes": 2041
+    },
+    {
+      "file": "<private-evidence>/content-runtime-independent-after-source-monitor-scope-incident.json",
+      "sha256": "87b9b25745d7cca4368610cb8a777dac96c178d49dcea35f32c1430ceb892941",
+      "bytes": 2045
+    },
+    {
+      "file": "<private-evidence>/content-runtime-independent-after-monitor-scope-correction.diff",
+      "sha256": "bf53ee58fcfdc4364d1cccd6fe67d7f69598536da88d448a5bab253c1900f2a0",
+      "bytes": 2083
+    },
+    {
+      "file": "<private-evidence>/content-runtime-independent-after-monitor-scope-correction.json",
+      "sha256": "d063784432254800efed51ff4ce30bc57fd3e69a22baf89a6e108517a2eab0cd",
+      "bytes": 977
+    },
+    {
+      "file": "<private-evidence>/content-runtime-independent-after-source-corrected-closure.json",
+      "sha256": "cd654a73517511fc4a8415f89152bd668396d3ebcdca39e81870e81adfb5d448",
+      "bytes": 1903
+    },
+    {
+      "file": "<private-evidence>/content-runtime-independent-after-artifact-audit.mjs",
+      "sha256": "b0b0c9df2b954b8785170959eb2cb47f8e2491d3331f590a2850f7aecdb92844",
+      "bytes": 3270
+    },
+    {
+      "file": "<private-evidence>/content-runtime-independent-after-artifact-audit.json",
+      "sha256": "cb726fc5bb107fc2c1cb5eaea91641f6eb14943da15418f6caa9baee0b69be4a",
+      "bytes": 148937
+    },
+    {
+      "file": "<private-evidence>/content-runtime-independent-after-artifact-audit.stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "file": "<private-evidence>/content-runtime-independent-after-final-fingerprints.json",
+      "sha256": "9b718712e239882a4530f72f82b632e28a38bb922a2a3244a3a823e4e3364bfe",
+      "bytes": 127062
+    },
+    {
+      "file": "<private-evidence>/content-runtime-independent-after-resource-closure.json",
+      "sha256": "a9a125b55b78bc376229aeedfdf924a6ce4d0b1d537ea2643e601dd467ee4adb",
+      "bytes": 6393
+    }
+  ],
+  "artifactAndServiceLimits": {
+    "PGAndOSMonitoring": "300ms sampling; recorded observed descendants/PIDs only, not exhaustive. Final OS query also checks recorded IDs as process-group IDs.",
+    "uploads": "Official runner normal finally awaited. Exact random mkdtemp upload path not journaled, so no independent path-specific deletion proof.",
+    "outgoingDelivery": "Official isolated runner sets mail mode outbox; no external delivery added by this review.",
+    "newSelfAuditConnection": "Read-only audit connection pool ended; final root independent audit may verify physical disconnection."
+  },
+  "originalStaticFindingsAndSourcesRetained": true
+}

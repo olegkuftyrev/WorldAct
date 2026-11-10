@@ -1,0 +1,57 @@
+{
+  "status": "AUTHORIZED_OWN_CONFIG_AND_EXACT_LINK_REMOVED_ONLY",
+  "timeUTC": "2026-11-10T11:00:09.259576+00:00",
+  "testHead": "99002f8a8ebda75a90687b24128f70742911f06c",
+  "tree": "66184625d0715032212d080fac18d83e86d43743",
+  "removedConfig": {
+    "path": "<independent-worktree>/.env",
+    "uid": 501,
+    "mode": "0o600",
+    "inode": 24449599,
+    "device": 16777234,
+    "symlink": false,
+    "sha256": "299f8d09d4fa9cf5e519b19c3b9fe544662bbf94afe72b68637367fadba903ed"
+  },
+  "removedDependencyLink": {
+    "path": "<independent-worktree>/node_modules",
+    "uid": 501,
+    "mode": "0o755",
+    "inode": 24447828,
+    "device": 16777234,
+    "symlink": true,
+    "target": "<main-worktree>/node_modules"
+  },
+  "sharedTarget": {
+    "path": "<main-worktree>/node_modules",
+    "uid": 501,
+    "mode": "0o755",
+    "inode": 18751975,
+    "device": 16777234,
+    "symlink": false,
+    "lockSHA256": "233888ed8f864581a8835aab0b4c33ccd7fbc391f2a98650b63fcf8db8814892",
+    "identityUnchangedAfterCleanup": true,
+    "neverUnlinkedOrModifiedByCleanup": true
+  },
+  "ownConfigAbsent": true,
+  "ownDependencyLinkAbsent": true,
+  "retainedInventoryCounts": {
+    "source": 357,
+    "testDirectory": 246,
+    "selectedTests": 18,
+    "runtime": 4,
+    "buildOutputs": 411
+  },
+  "allRetainedInventoryHashesRecheckedUnchanged": true,
+  "nodeSHA256": "874bd4cc38b5b34b5f6e7d2f813aa585d3bd4e172d2ab5270b6567a0b4645092",
+  "fingerprintBaseline": {
+    "file": "content-runtime-independent-after-final-fingerprints.json",
+    "sha256": "9b718712e239882a4530f72f82b632e28a38bb922a2a3244a3a823e4e3364bfe"
+  },
+  "priorSQLProcessAndPortClosureUnchangedHistoricalReceipt": {
+    "file": "content-runtime-independent-after-resource-closure.json",
+    "sha256": "a9a125b55b78bc376229aeedfdf924a6ce4d0b1d537ea2643e601dd467ee4adb"
+  },
+  "originalSourceMonitorIncidentAndAllPrivateArtifactsRetained": true,
+  "noAdditionalSQLHTTPBuildTestOrService": true,
+  "noOtherCleanupOrArchiveRemoval": true
+}
