@@ -30,6 +30,7 @@ import { applyBlockBindings, patternOverrides, type PatternOverrides } from "./b
 import { publicPaginationLocation } from "./public-pagination.js";
 import {completePublicRead,observePublicPost,observePublicAuthor} from "./public-read-attempt.js";
 import {appendNamedAuthorSQL,listingFilterValues,type PublicListingContext} from "./author-query.js";
+import { escapeSearchQueryTitleTerm } from "./search-query-fields.js";
 
 export type BlockDatabase = Pick<pg.Pool, "query"> | pg.PoolClient;
 export type RenderPost = Record<string, any>;
@@ -885,6 +886,15 @@ async function renderNode(
     const query = state.options.query || {};
     const listing=state.options.listing,named=listing?.namedAuthor;
     const dateArchive = parseDateArchiveQuery(query);
+    if (a.type === "search" && query.search) {
+      const level = integer(a.level, 1, 1, 6);
+      const open = `<h${level}${attr()}>`, close = `</h${level}>`;
+      if (a.showSearchTerm === false) return open + "Search results" + close;
+      const prefix = "Search results for: &#8220;", suffix = "&#8221;";
+      const term = escapeSearchQueryTitleTerm(String(query.search), MAX_RENDER_BYTES - state.outputBytes,
+        Buffer.byteLength(open + prefix + suffix + close, "utf8"));
+      return open + prefix + term + suffix + close;
+    }
     let label = "Blog",
       prefix = "";
     if (query.search) {

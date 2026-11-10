@@ -103,6 +103,28 @@ function scalar(value: unknown): string | undefined {
   // Saved/preview inputs are JSON. Do not call arbitrary getters/toString.
 }
 
+/** Escape one selected title term after reserving its complete heading markup. */
+export function escapeSearchQueryTitleTerm(term: string, remainingBytes: number, surroundingBytes: number): string {
+  const allowance = remainingBytes - surroundingBytes;
+  if (!Number.isFinite(remainingBytes) || !Number.isFinite(surroundingBytes) || surroundingBytes < 0 || allowance < 0) tooLarge();
+  escapedBytes(term, allowance);
+  const parts: string[] = [];
+  let chunk = "";
+  const writer: Writer = {
+    text(value) { this.span(value, 0, value.length); },
+    span(value, from, to) {
+      while (from < to) {
+        const end = Math.min(to, from + 8192 - chunk.length);
+        chunk += value.slice(from, end); from = end;
+        if (chunk.length === 8192) { parts.push(chunk); chunk = ""; }
+      }
+    },
+  };
+  escapedBytes(term, allowance, writer);
+  if (chunk) parts.push(chunk);
+  return parts.join("");
+}
+
 /**
  * Own explicit JSON query only. Preflight the complete form before creating
  * escaped fields; the caller's normal renderer remains the sole output charge.
