@@ -26,6 +26,7 @@ Vite serves development at `127.0.0.1:5173` and proxies API, upload, REST, and f
 | `src/embeds.ts`, `src/publicLinks.ts`, `src/template.ts`           | Video-provider validation, public links and safe template binding                         |
 | `server/index.ts`, `server/auth.ts`                                | HTTP application, sessions, login, common middleware and bootstrap                        |
 | `server/core.ts`                                                   | Editorial workflows, access rules, taxonomies, revisions/autosaves, locks and scheduler   |
+| `server/content-registry.ts`                                       | Immutable closed builtin metadata and shared post/page/category/tag validator tuples     |
 | `server/public-read.ts`, `server/public-document-data.ts`, `server/render-public-document.tsx` | Direct authorized public reads, presentation models and complete HTML assembly |
 | `server/platform.ts`, `server/design.ts`                           | Profiles/settings, media, menus, site documents, extensions, tools and mail               |
 | `server/media-files.ts`, `server/permalinks.ts`, `server/utils.ts` | Derivatives/storage, routing, validation, sanitization and canonical block handling       |
@@ -76,6 +77,8 @@ Editable footnote controls require the exact post ID/type owned by that editor's
 ## Domain and editorial rules
 
 PostgreSQL holds users/sessions, posts/pages, terms and post-term relations, media metadata, comments, settings/preferences, revisions, autosaves, navigation menus, site documents/styles, synced block/navigation entities, extensions, password-reset tokens, privacy requests/expiring exports and mail messages. File bytes and generated image derivatives live separately in `uploads/`.
+
+The synchronous content registry copies and recursively freezes trusted JSON definitions for the existing `post`, `page`, `category` and `tag` identities. It rejects malformed metadata, duplicate identities, REST collisions and inconsistent associations in a deterministic order. Shared closed tuples feed the existing validators; metadata projections feed the existing compatibility responses. The tag adapter retains its `post_tag` REST identity. Metadata and `supports` flags grant no capabilities. This extraction adds no runtime registration, custom type/taxonomy storage, schema migration, routing or editor extension; those require separately reviewed authority and persistence work. See the [registry evidence](evidence/builtin-content-registry/integrated-review.md).
 
 Posts/pages support `draft`, `pending`, `publish`, `future`, `private`, and `trash`, with publication/scheduling timestamps, page hierarchy/order, featured media, post-format classification metadata, sticky and discussion settings, and optional password protection. The Writing default supplies the format classification/public class; format-specific templates and archives are not implemented. 150-second editor leases renew through heartbeat and require an explicit takeover before another editor can save. Optimistic versions prevent silently overwriting a concurrent save. Per-user autosaves support recovery; transactional row locks serialize conflicting writes. The in-process scheduler publishes due content while Node is running; it is not a separate always-on job service.
 
