@@ -1,0 +1,114 @@
+{
+  "stage": "REGISTRY_SUCCESSOR_BUILD_ONLY_NO_TEST_EXECUTION",
+  "timeUTC": "2026-11-10T09:42:02.448Z",
+  "completed": true,
+  "failure": null,
+  "worktree": "<backend-worktree>",
+  "head": "1bcec366090969539bf6d00b75238c0e3ebfb471",
+  "tree": "d897e7c7857a0a6f713c27b63c5c1c4e3b0b1dfa",
+  "constructionFreeze": {
+    "name": "builtin-content-registry-flow-construction-freeze.json",
+    "sha256": "e68fe17f37250685e67e878e7cd6ae1c7f463900035607ce49de05aeed341473"
+  },
+  "preflight": {
+    "name": "builtin-content-registry-flow-backend-build-preflight.json",
+    "sha256": "12a1112c180ad4049f2654de1b8c1a9573ddc4ab11ba85cf3cf9b390aee5764a",
+    "bytes": 67538
+  },
+  "overallCandidateBuildAttempt": 2,
+  "firstBuildAttemptOnThisSuccessor": true,
+  "originalD007TSCFailureRetained": true,
+  "buildRuns": [
+    {
+      "kind": "typecheck",
+      "command": [
+        "/usr/local/bin/node",
+        "node_modules/typescript/bin/tsc",
+        "--noEmit"
+      ],
+      "startedAtUTC": "2026-11-10T09:41:44.073Z",
+      "finishedAtUTC": "2026-11-10T09:41:53.164Z",
+      "exitCode": 0,
+      "signal": null,
+      "pid": 54235,
+      "rawLog": {
+        "name": "builtin-content-registry-flow-backend-typecheck.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0,
+        "mode": "0600"
+      },
+      "stepReceipt": {
+        "name": "builtin-content-registry-flow-backend-typecheck-run.json",
+        "sha256": "abb78f7c1958d557abb0c3a78133ed5559d185a5db3d71401386f998c3fbdd9d",
+        "bytes": 474
+      }
+    },
+    {
+      "kind": "vite",
+      "command": [
+        "/usr/local/bin/node",
+        "node_modules/vite/bin/vite.js",
+        "build",
+        "--configLoader",
+        "runner"
+      ],
+      "startedAtUTC": "2026-11-10T09:41:53.244Z",
+      "finishedAtUTC": "2026-11-10T09:42:02.195Z",
+      "exitCode": 0,
+      "signal": null,
+      "pid": 54255,
+      "rawLog": {
+        "name": "builtin-content-registry-flow-backend-vite.log",
+        "sha256": "082f882354dbf9259181a1361f3c5fe1287eb9d857df86a774e8eaae5d64b857",
+        "bytes": 2342,
+        "mode": "0600"
+      },
+      "stepReceipt": {
+        "name": "builtin-content-registry-flow-backend-vite-run.json",
+        "sha256": "df2fad86a78677c5b013df2eeac57ee1f8b48df070994be92521ac07ff9aa4e9",
+        "bytes": 498
+      }
+    },
+    {
+      "kind": "native-esbuild",
+      "command": [
+        "<backend-worktree>/node_modules/@esbuild/darwin-arm64/bin/esbuild",
+        "server/index.ts",
+        "--bundle",
+        "--platform=node",
+        "--format=esm",
+        "--packages=external",
+        "--outfile=dist-server/index.js"
+      ],
+      "startedAtUTC": "2026-11-10T09:42:02.270Z",
+      "finishedAtUTC": "2026-11-10T09:42:02.338Z",
+      "exitCode": 0,
+      "signal": null,
+      "pid": 54277,
+      "rawLog": {
+        "name": "builtin-content-registry-flow-backend-native-esbuild.log",
+        "sha256": "a8d6c1620f99ba870b58ef32984e8b9fd553b116215bae5daf334e08587a03d9",
+        "bytes": 56,
+        "mode": "0600"
+      },
+      "stepReceipt": {
+        "name": "builtin-content-registry-flow-backend-native-esbuild-run.json",
+        "sha256": "ec6e60f2e5de582198ebc24c85b97a7474abe34433350e30c2f40cb5fb5227f0",
+        "bytes": 643
+      }
+    }
+  ],
+  "actualNodeSHA256": "26f4cb1733a35f9afc4124181b3fb9de6a4dd2716168a83903b7b78b1c526354",
+  "inventory": {
+    "name": "builtin-content-registry-flow-backend-build-fingerprints.json",
+    "sha256": "a6ba7acd19bf55cae0caa54e0d270564ba2313f5189b763f1694e17c248ab856",
+    "bytes": 145880
+  },
+  "sourceAndTestFingerprintsCurrentlyUnchanged": true,
+  "ownReadonlyLinkRetained": true,
+  "noInstall": true,
+  "configAbsent": true,
+  "noAnchorDBAPIHTTPTestsOrServices": true,
+  "noProductTestCIUIOrMainChanges": true,
+  "rootBuildAuditAndSeparateComplete104ActivationRequired": true
+}

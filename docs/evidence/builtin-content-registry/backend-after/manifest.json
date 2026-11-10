@@ -1,0 +1,112 @@
+{
+  "schemaVersion": 1,
+  "scope": "Backend bounded builtin registry104checks each/source and actualcompiled; no new execution by this docs package.",
+  "runtimeCommit": "1bcec366090969539bf6d00b75238c0e3ebfb471",
+  "runtimeTree": "d897e7c7857a0a6f713c27b63c5c1c4e3b0b1dfa",
+  "nodeSHA256": "26f4cb1733a35f9afc4124181b3fb9de6a4dd2716168a83903b7b78b1c526354",
+  "payloads": [
+    {
+      "path": "docs/evidence/builtin-content-registry/backend-after/review.md",
+      "sourceArtifact": {
+        "name": "builtin-content-registry-flow-backend-review.md",
+        "sha256": "805f712d2e18c72fd355a08a4e1c5d5f231ecf83dcc6db0e72467d40be385f17",
+        "bytes": 7382
+      },
+      "publicCopy": {
+        "sha256": "805f712d2e18c72fd355a08a4e1c5d5f231ecf83dcc6db0e72467d40be385f17",
+        "bytes": 7382
+      },
+      "literalPrefixReplacementOccurrences": {
+        "privateEvidenceCanonical": 0,
+        "privateEvidence": 0,
+        "backendWorktreeCanonical": 0,
+        "backendWorktree": 0,
+        "mainWorktree": 0
+      }
+    },
+    {
+      "path": "docs/evidence/builtin-content-registry/backend-after/checks.json",
+      "sourceArtifact": {
+        "name": "builtin-content-registry-flow-backend-checks.json",
+        "sha256": "49e3097bb74bbf6a91ea2d8f28fb2640e1b7bd0bf697360183d43d4a5caadf03",
+        "bytes": 18612
+      },
+      "publicCopy": {
+        "sha256": "49e3097bb74bbf6a91ea2d8f28fb2640e1b7bd0bf697360183d43d4a5caadf03",
+        "bytes": 18612
+      },
+      "literalPrefixReplacementOccurrences": {
+        "privateEvidenceCanonical": 0,
+        "privateEvidence": 0,
+        "backendWorktreeCanonical": 0,
+        "backendWorktree": 0,
+        "mainWorktree": 0
+      }
+    },
+    {
+      "path": "docs/evidence/builtin-content-registry/backend-after/resource-audit.json",
+      "sourceArtifact": {
+        "name": "builtin-content-registry-flow-backend-resource-audit.json",
+        "sha256": "ba8797e5f2150c2fecacca9939ca77e786c696102143643a40a8014ac331578a",
+        "bytes": 7857
+      },
+      "publicCopy": {
+        "sha256": "5733ebce2fa487f1e4a7831a3e171a07a61ec241de4967130b89fe2599a78aa0",
+        "bytes": 7825
+      },
+      "literalPrefixReplacementOccurrences": {
+        "privateEvidenceCanonical": 0,
+        "privateEvidence": 0,
+        "backendWorktreeCanonical": 0,
+        "backendWorktree": 0,
+        "mainWorktree": 1
+      }
+    },
+    {
+      "path": "docs/evidence/builtin-content-registry/backend-after/build-checks.json",
+      "sourceArtifact": {
+        "name": "builtin-content-registry-flow-backend-build-checks.json",
+        "sha256": "70ad715552c17ea098b6753d62dc98692d075d7fcde246bde6a270ae1ba44705",
+        "bytes": 3926
+      },
+      "publicCopy": {
+        "sha256": "41e55b16d34437f096c0c2570bb24cda05412d18821686b83af5499e1309f7a3",
+        "bytes": 3886
+      },
+      "literalPrefixReplacementOccurrences": {
+        "privateEvidenceCanonical": 0,
+        "privateEvidence": 0,
+        "backendWorktreeCanonical": 0,
+        "backendWorktree": 2,
+        "mainWorktree": 0
+      }
+    },
+    {
+      "path": "docs/evidence/builtin-content-registry/backend-after/owned-cleanup.json",
+      "sourceArtifact": {
+        "name": "builtin-content-registry-flow-backend-owned-cleanup.json",
+        "sha256": "b3d1d82210b24c91cfb7b3a0fb634cc7b2102b9f177fb66a1fc75a41d69aa741",
+        "bytes": 2079
+      },
+      "publicCopy": {
+        "sha256": "cee7f17771d8fdea97f8ac4cb0bbf92109f0d05c9fac67d4bf90feba6ecc2e4a",
+        "bytes": 1975
+      },
+      "literalPrefixReplacementOccurrences": {
+        "privateEvidenceCanonical": 0,
+        "privateEvidence": 0,
+        "backendWorktreeCanonical": 0,
+        "backendWorktree": 2,
+        "mainWorktree": 2
+      }
+    }
+  ],
+  "README": {
+    "path": "docs/evidence/builtin-content-registry/backend-after/README.md",
+    "sha256": "1a94c42466f6b2e96bbc8668e92aa87c0fcf9cb395bf1ce6ebec858e3b12cf7d",
+    "bytes": 3120
+  },
+  "sanitization": "Only the literal known-prefix substitutions counted above; no result, field or claim rewriting. Exact private prefix map retained in private correspondence.",
+  "manifestSelfHash": "Intentionally excluded; exact hash and all seven paths recorded in private correspondence.",
+  "privateRawProofsLogsConfigurationExcluded": true
+}

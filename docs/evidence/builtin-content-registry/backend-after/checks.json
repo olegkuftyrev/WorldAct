@@ -1,0 +1,474 @@
+{
+  "stage": "BACKEND_FINAL_AFFECTED104_REVIEW_READY_FOR_ROOT",
+  "timeUTC": "2026-11-10T10:03:39.081Z",
+  "head": "1bcec366090969539bf6d00b75238c0e3ebfb471",
+  "tree": "d897e7c7857a0a6f713c27b63c5c1c4e3b0b1dfa",
+  "nodeSHA256": "26f4cb1733a35f9afc4124181b3fb9de6a4dd2716168a83903b7b78b1c526354",
+  "review": {
+    "name": "builtin-content-registry-flow-backend-review.md",
+    "sha256": "805f712d2e18c72fd355a08a4e1c5d5f231ecf83dcc6db0e72467d40be385f17",
+    "bytes": 7382
+  },
+  "resourceAudit": {
+    "name": "builtin-content-registry-flow-backend-resource-audit.json",
+    "sha256": "ba8797e5f2150c2fecacca9939ca77e786c696102143643a40a8014ac331578a",
+    "bytes": 7857
+  },
+  "construction": {
+    "runtimeFiles": {
+      "server/content-registry.ts": "cb2b5853f40921acc6f97713b25be5e3668e08082dc7ff720f5afe4fb791911a",
+      "server/compat.ts": "78404bb2e68715b9489279e36459678784ea5470b36e5a1ae54003fce231503e",
+      "server/core.ts": "7393e5bb6273bb8b44b2da2e31fc22ec1daa55407d4bd7132f844895859b1bc5",
+      "server/post-templates.ts": "f188d43b035d83cd35b39f41a769100b165465e7e625ec9361042ebd40d3dffd",
+      "server/platform.ts": "e0cc25ff6e98e3764a59e18d3a1169922c024e7e73d623065f5b919beeceb15b",
+      "server/block-renderer.ts": "eb5030c9847466476cde0343dfe41b79ad1bf6ad709b1ea5ee9960c085e6e5cd"
+    },
+    "selectedTestFiles": {
+      "tests/content-registry-http-original.test.ts": "7afefe1ee911041516f476f459a0bd3b61f5734baf46969ca91021f02f132ae0",
+      "tests/content-registry.test.ts": "c8a5c46c854da9e2f548c4339aafa2a7cafb15aa66cd2fc681d9fa6097f9b9ae",
+      "tests/core.test.ts": "fd7743a0946c1cd2b826a81b67e3f3c32ece41c6b2cea1e95aeddd49286cf84b",
+      "tests/terms.test.ts": "6ce15dfeb6bca773bf251f888f48442cea4fa023ddf271f27d13f5c89765ead9",
+      "tests/compat.test.ts": "012e40b0495580bf33d4b8821bc5e4dc00cdcee36c463a13141518059c074161",
+      "tests/post-templates.test.ts": "ee1e8adfc474d0b1a0717a9a84df3b5e79693532cb64e91eebb7ee44b126b76a",
+      "tests/platform.test.ts": "7472b594deba5860b4dd4861fd7a122224f5574f8fa9b0ed8d586fdf5f950db9",
+      "tests/portability.test.ts": "862daf0a186c0c54f034eef0c6f4658b993e894ba6aabdfe851d23c194889ecf",
+      "tests/blocks.test.ts": "50521c9c671d7ede4a608c9d6975303da34a15f1ab80dbf338f4b43e8268615a",
+      "tests/term-blocks.test.ts": "b3aedcc8627c58dab3f294d2e78da37ca0a55755ad81091c5085474b60cdbea1",
+      "tests/post-mutation-locks.test.ts": "b56e5527288004aa4015308d9f3b287f84a09034a4f6039886350edcb2a1c344",
+      "tests/publication-status.test.ts": "87116faebe02aba6a41c5af9f61964043180d0584eb0cfd9a770a89c69d3f444",
+      "tests/password-listings.test.ts": "ca40ccd27ec4746b6ba045c2667a0bb433793004eef10523d19076b13dd1641f",
+      "tests/author-name-independent-count-grant.test.ts": "6643e7832a8272913a88bab1bac653a6cb674f25e25bd9c09139cfc65252f031",
+      "tests/author-name-independent-identity.test.ts": "595dc91255e5439626e7209ea9420e4662e0886fc3f5f3c8dcd05a16ad9c2882",
+      "tests/query-title-missing-type-original.test.ts": "ec6e6351d2477ff6927fb45318cbf734b54ff4595c5a2e40b04b47656166de8f",
+      "tests/query-title-search-format-original.test.ts": "169be75223968724229540836b78237b1735923e78283fc6a6f881c23ee1b385"
+    },
+    "immutableHTTPTestSHA256": "7afefe1ee911041516f476f459a0bd3b61f5734baf46969ca91021f02f132ae0",
+    "compilerTestSHA256": "c8a5c46c854da9e2f548c4339aafa2a7cafb15aa66cd2fc681d9fa6097f9b9ae",
+    "unchangedSearchHelperSHA256": "ed93e2fc0fd95be7747cb8eeff61f3747baa06aa2d28183ea7ba908df6074bec",
+    "noNewRuntimeChangesAfterFlowCorrection": true
+  },
+  "buildHistory": {
+    "initialD007": {
+      "result": "TYPECHECK_FAILED",
+      "diagnostics": 8,
+      "viteRun": false,
+      "nativeEsbuildRun": false,
+      "nodeProduced": false,
+      "testsExecuted": false,
+      "originalArtifacts": [
+        {
+          "name": "builtin-content-registry-backend-typecheck.log",
+          "sha256": "b48b61f916d9853c4d9f679cdba1511846c35e5874ec1bc6005ac05d1c992971",
+          "bytes": 1211
+        },
+        {
+          "name": "builtin-content-registry-backend-typecheck-run.json",
+          "sha256": "de866b3632b7499f2f34696dc253f8cd2b4e29d3456cbdce90dd51624afeaf5e",
+          "bytes": 472
+        },
+        {
+          "name": "builtin-content-registry-backend-build-preflight.json",
+          "sha256": "bf691e516b108ba6598f3b39d7f0efc9bc763e9bb496ca1072b3ea6aaf154981",
+          "bytes": 66437
+        },
+        {
+          "name": "builtin-content-registry-backend-build-checks.json",
+          "sha256": "d0968278a0fe2969011dc59cd88e1fc79e91a951ab374debb14df7feca2c5426",
+          "bytes": 1859
+        },
+        {
+          "name": "builtin-content-registry-independent-after-build.log",
+          "sha256": "f5fc00c09375df13600b57796f1e1d09371399190e20d7b30e6edcb13665fced",
+          "bytes": 1590
+        }
+      ]
+    },
+    "successor1bcec": {
+      "overallCandidateBuildAttempt": 2,
+      "firstBuildOnCorrectedSuccessor": true,
+      "typecheckExitCode": 0,
+      "viteRunnerExitCode": 0,
+      "directNativeEsbuildExitCode": 0,
+      "measuredNodeSHA256": "26f4cb1733a35f9afc4124181b3fb9de6a4dd2716168a83903b7b78b1c526354",
+      "matchingIndependentNodeReported": true
+    }
+  },
+  "currentInventory": {
+    "sourceFiles": 355,
+    "allTrackedTestDirectoryFiles": 245,
+    "testFiles": 240,
+    "testSupports": 5,
+    "selectedWholeTestFiles": 17,
+    "runtimeFiles": 6,
+    "actualBuildOutputs": 411,
+    "allHashesCurrentlyVerified": true,
+    "notExecutionCounts": true
+  },
+  "executions": [
+    {
+      "mode": "source",
+      "port": 3046,
+      "counts": {
+        "tests": 104,
+        "pass": 104,
+        "fail": 0,
+        "skipped": 0,
+        "cancelled": 0
+      },
+      "perFileCounts": [
+        4,
+        3,
+        1,
+        6,
+        10,
+        1,
+        9,
+        3,
+        9,
+        9,
+        9,
+        14,
+        4,
+        4,
+        6,
+        6,
+        6
+      ],
+      "wholeFilesCompleted": 17,
+      "officialRunnerExitCode": 0,
+      "sourceImportsRemainSOURCE": true,
+      "actualAPINodeSHA256": null,
+      "runReceipt": {
+        "name": "builtin-content-registry-flow-backend-source-run.json",
+        "sha256": "404152517cb52b61798913609c3b01b760ebc1292e70e304007a4707ac94e187",
+        "bytes": 23639
+      },
+      "rawLog": {
+        "name": "builtin-content-registry-flow-backend-source.log",
+        "sha256": "afe135c776aaeef4fbf721d446b38043126dbe0ac3afeaa07afad6879afd70ad",
+        "bytes": 29859
+      },
+      "targetedProofs": [
+        {
+          "kind": "registry",
+          "dispatches": 49,
+          "artifact": {
+            "name": "builtin-content-registry-flow-backend-source-registry-proof.json",
+            "sha256": "988a0b3be474e09798daddeedb56aae0fc7b97e10eb8aecc895c6a0c5b62ab01",
+            "bytes": 52496
+          }
+        },
+        {
+          "kind": "missing",
+          "dispatches": 9,
+          "artifact": {
+            "name": "builtin-content-registry-flow-backend-source-missing-proof.json",
+            "sha256": "6bcd45eccb011afc8ad619544bde576dee910991524d99a2482b175bcf0dcc2a",
+            "bytes": 298565
+          }
+        },
+        {
+          "kind": "format",
+          "dispatches": 12,
+          "artifact": {
+            "name": "builtin-content-registry-flow-backend-source-format-proof.json",
+            "sha256": "0b3bced8495b01093ee987b07f05384276936f042efe4ef8f34b85988cf0241b",
+            "bytes": 297327
+          }
+        }
+      ],
+      "actualFixtureCleanupLogLines": [
+        "CONTENT_REGISTRY_CLEANUP {\"ownedPosts\":3,\"ownedTerms\":2,\"ownedUsers\":2,\"failures\":[]}",
+        "QUERY_TITLE_MISSING_FIXTURE_CLEANUP {\"postIds\":[99],\"documentIds\":[221],\"restoredDocumentIds\":[14],\"settingsRestoreAttempted\":true,\"failures\":[]}",
+        "QUERY_TITLE_SEARCH_FIXTURE_CLEANUP {\"postIds\":[100],\"documentIds\":[],\"restoredDocumentId\":14,\"settingsRestoreAttempted\":true,\"failures\":[]}"
+      ]
+    },
+    {
+      "mode": "compiled",
+      "port": 3047,
+      "counts": {
+        "tests": 104,
+        "pass": 104,
+        "fail": 0,
+        "skipped": 0,
+        "cancelled": 0
+      },
+      "perFileCounts": [
+        4,
+        3,
+        1,
+        6,
+        10,
+        1,
+        9,
+        3,
+        9,
+        9,
+        9,
+        14,
+        4,
+        4,
+        6,
+        6,
+        6
+      ],
+      "wholeFilesCompleted": 17,
+      "officialRunnerExitCode": 0,
+      "sourceImportsRemainSOURCE": true,
+      "actualAPINodeSHA256": "26f4cb1733a35f9afc4124181b3fb9de6a4dd2716168a83903b7b78b1c526354",
+      "runReceipt": {
+        "name": "builtin-content-registry-flow-backend-compiled-run.json",
+        "sha256": "768e8c5580e235379bcc1ac71042fccfd1849215a3cbce8d58f8dab1563f37c3",
+        "bytes": 19575
+      },
+      "rawLog": {
+        "name": "builtin-content-registry-flow-backend-compiled.log",
+        "sha256": "a0df4caea878c9da3d7c532c8e87e7ea78e57abccf91c5624f32370e496ca99f",
+        "bytes": 29858
+      },
+      "targetedProofs": [
+        {
+          "kind": "registry",
+          "dispatches": 49,
+          "artifact": {
+            "name": "builtin-content-registry-flow-backend-compiled-registry-proof.json",
+            "sha256": "edee70e24d9a9c23887b99aa1b4b63836cbca1784b05b0f146bdff0e9470c259",
+            "bytes": 52496
+          }
+        },
+        {
+          "kind": "missing",
+          "dispatches": 9,
+          "artifact": {
+            "name": "builtin-content-registry-flow-backend-compiled-missing-proof.json",
+            "sha256": "705c18837e5ac0064c2ce896bd5de0b021da7065597e0892e4e6c30c68a522c7",
+            "bytes": 298565
+          }
+        },
+        {
+          "kind": "format",
+          "dispatches": 12,
+          "artifact": {
+            "name": "builtin-content-registry-flow-backend-compiled-format-proof.json",
+            "sha256": "63fbfe7f450b550b64d292549631a97256c1d30c41a903351db2a6be41d944dc",
+            "bytes": 297327
+          }
+        }
+      ],
+      "actualFixtureCleanupLogLines": [
+        "CONTENT_REGISTRY_CLEANUP {\"ownedPosts\":3,\"ownedTerms\":2,\"ownedUsers\":2,\"failures\":[]}",
+        "QUERY_TITLE_MISSING_FIXTURE_CLEANUP {\"postIds\":[99],\"documentIds\":[221],\"restoredDocumentIds\":[14],\"settingsRestoreAttempted\":true,\"failures\":[]}",
+        "QUERY_TITLE_SEARCH_FIXTURE_CLEANUP {\"postIds\":[100],\"documentIds\":[],\"restoredDocumentId\":14,\"settingsRestoreAttempted\":true,\"failures\":[]}"
+      ]
+    }
+  ],
+  "totalCountedChecks": 208,
+  "totalTargetedResponses": 140,
+  "totalRegistryJSONControls": 98,
+  "totalHeadingResponseDOMChecks": 42,
+  "metadataComparison": {
+    "surfacesEachMode": 24,
+    "bothModesCompared": 48,
+    "fullRawTextAndOrderedParsedJSON": true,
+    "genuineBeforeGreen": true
+  },
+  "allTestsFirstExecutionPass": true,
+  "sourceImportsRemainSOURCEInCompiledAPIMode": true,
+  "artifactOnlyFinalAuditNoNewBuildTestsAPIHTTP": true,
+  "ownConfigAndReadonlyLinkRetained": true,
+  "cleanupAndDocsPublicationNotYetAuthorized": true,
+  "limits": [
+    "Complete affected selector only; not a full-suite, performance, production compatibility, or whole WordPress parity certification.",
+    "140 proof dispatches are targeted responses from three test files per mode, not all HTTP traffic from17 whole files.",
+    "355/245/17/6/411 are current inventory counts, not counted execution totals.",
+    "Historical immutable baseline172/Node582d proof labels are not current compiled runtime attribution.",
+    "See resource audit for sampled connection/process and unjournaled upload/outbox-path limitations."
+  ],
+  "provenance": [
+    {
+      "name": "builtin-content-registry-complete-affected-selector.json",
+      "sha256": "13d03cb866290197c86d620ba8027755caf899db58b581de6991920a3393028d",
+      "bytes": 9112
+    },
+    {
+      "name": "builtin-content-registry-flow-construction-freeze.json",
+      "sha256": "e68fe17f37250685e67e878e7cd6ae1c7f463900035607ce49de05aeed341473",
+      "bytes": 4740
+    },
+    {
+      "name": "builtin-content-registry-runtime-construction-freeze.json",
+      "sha256": "755065673e1af4149c4749c9739ece24e908cc924ca3b71e69f10f00d90c5f71",
+      "bytes": 11714
+    },
+    {
+      "name": "builtin-content-registry-runtime-baseline-freeze.json",
+      "sha256": "4efe1e4426a3c41964df6ba9d2cf2a54fdec62da480bc66bb984e79927c09e80",
+      "bytes": 13055
+    },
+    {
+      "name": "builtin-content-registry-runtime-edit-map-inputs.json",
+      "sha256": "fcd2c347e72c3bc8310401b2d86b959aaac2589bae291cc44a5212a72077f827",
+      "bytes": 20249
+    },
+    {
+      "name": "builtin-content-registry-stage-a-construction-freeze.json",
+      "sha256": "25dccf7eb5723060487647d80000ab1fa1007527e2503bcb0471c1001ac37a72",
+      "bytes": 1484
+    },
+    {
+      "name": "builtin-content-registry-stage-b-construction-freeze.json",
+      "sha256": "334139d4671b54ebe5ba254b5b1a23e3f69906e213048861aef807bce96ebc15",
+      "bytes": 1335
+    },
+    {
+      "name": "builtin-content-registry-error-order-construction-freeze.json",
+      "sha256": "af23a58630183bb377125eef9b20f961231433b860d9ca3fd14a1b1ed08f70cd",
+      "bytes": 1370
+    },
+    {
+      "name": "builtin-content-registry-compiler-test-construction-freeze.json",
+      "sha256": "de6218621316fe2f5d217a0c10a59c0b16d24ac5b178d9047c675ccf9003454b",
+      "bytes": 1021
+    },
+    {
+      "name": "builtin-content-registry-flow-frozen.diff",
+      "sha256": "d2e571d90369e4f93ceaafa6447c82e53b47fbb70feef9a87214a256b559d7e7",
+      "bytes": 931
+    },
+    {
+      "name": "builtin-content-registry-flow-content-registry.ts",
+      "sha256": "cb2b5853f40921acc6f97713b25be5e3668e08082dc7ff720f5afe4fb791911a",
+      "bytes": 13634
+    },
+    {
+      "name": "builtin-content-registry-flow-original-content-registry.ts",
+      "sha256": "b7beb6261bd06fe86440847358f2b2271049bbeb835bcdbd5b4e3867d2b3ad41",
+      "bytes": 13638
+    },
+    {
+      "name": "builtin-content-registry-backend-typecheck.log",
+      "sha256": "b48b61f916d9853c4d9f679cdba1511846c35e5874ec1bc6005ac05d1c992971",
+      "bytes": 1211
+    },
+    {
+      "name": "builtin-content-registry-backend-typecheck-run.json",
+      "sha256": "de866b3632b7499f2f34696dc253f8cd2b4e29d3456cbdce90dd51624afeaf5e",
+      "bytes": 472
+    },
+    {
+      "name": "builtin-content-registry-backend-build-preflight.json",
+      "sha256": "bf691e516b108ba6598f3b39d7f0efc9bc763e9bb496ca1072b3ea6aaf154981",
+      "bytes": 66437
+    },
+    {
+      "name": "builtin-content-registry-backend-build-checks.json",
+      "sha256": "d0968278a0fe2969011dc59cd88e1fc79e91a951ab374debb14df7feca2c5426",
+      "bytes": 1859
+    },
+    {
+      "name": "builtin-content-registry-independent-after-build.log",
+      "sha256": "f5fc00c09375df13600b57796f1e1d09371399190e20d7b30e6edcb13665fced",
+      "bytes": 1590
+    },
+    {
+      "name": "builtin-content-registry-flow-backend-build-preflight.json",
+      "sha256": "12a1112c180ad4049f2654de1b8c1a9573ddc4ab11ba85cf3cf9b390aee5764a",
+      "bytes": 67538
+    },
+    {
+      "name": "builtin-content-registry-flow-backend-build-checks.json",
+      "sha256": "70ad715552c17ea098b6753d62dc98692d075d7fcde246bde6a270ae1ba44705",
+      "bytes": 3926
+    },
+    {
+      "name": "builtin-content-registry-flow-backend-build-fingerprints.json",
+      "sha256": "a6ba7acd19bf55cae0caa54e0d270564ba2313f5189b763f1694e17c248ab856",
+      "bytes": 145880
+    },
+    {
+      "name": "builtin-content-registry-flow-backend-typecheck.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "name": "builtin-content-registry-flow-backend-typecheck-run.json",
+      "sha256": "abb78f7c1958d557abb0c3a78133ed5559d185a5db3d71401386f998c3fbdd9d",
+      "bytes": 474
+    },
+    {
+      "name": "builtin-content-registry-flow-backend-vite.log",
+      "sha256": "082f882354dbf9259181a1361f3c5fe1287eb9d857df86a774e8eaae5d64b857",
+      "bytes": 2342
+    },
+    {
+      "name": "builtin-content-registry-flow-backend-vite-run.json",
+      "sha256": "df2fad86a78677c5b013df2eeac57ee1f8b48df070994be92521ac07ff9aa4e9",
+      "bytes": 498
+    },
+    {
+      "name": "builtin-content-registry-flow-backend-native-esbuild.log",
+      "sha256": "a8d6c1620f99ba870b58ef32984e8b9fd553b116215bae5daf334e08587a03d9",
+      "bytes": 56
+    },
+    {
+      "name": "builtin-content-registry-flow-backend-native-esbuild-run.json",
+      "sha256": "ec6e60f2e5de582198ebc24c85b97a7474abe34433350e30c2f40cb5fb5227f0",
+      "bytes": 643
+    },
+    {
+      "name": "builtin-content-registry-flow-backend-prepare.json",
+      "sha256": "919085112abb1a1cd9b936382e12d7a6f9c3b767447eed3fd4d1c9b628b2b6d7",
+      "bytes": 925
+    },
+    {
+      "name": "builtin-content-registry-flow-backend-gates.mjs",
+      "sha256": "3df4e562b2e9304a042f4fa53635787c67f784b6d2e2e2235aa0c9c2a52f1b2f",
+      "bytes": 17005
+    },
+    {
+      "name": "builtin-content-registry-flow-backend-proof-audit.mjs",
+      "sha256": "b56ef51c02aa18f04918d211abe0574a3bd45d8632b1fefaaf01734e8e928a20",
+      "bytes": 5245
+    },
+    {
+      "name": "builtin-content-registry-flow-backend-proof-audit.json",
+      "sha256": "91a14d6fc1565896237d3bf35d674eb5aaf6a30d751e04850275c7b108591a56",
+      "bytes": 18044
+    },
+    {
+      "name": "builtin-content-registry-http-proof-audit-wp-error-envelope.mjs",
+      "sha256": "2b4002b9f0c0b94ba0b9e9e5ccb82f1198b88dd2ab7e02f87d24384f62dd4802",
+      "bytes": 14335
+    },
+    {
+      "name": "query-title-missing-type-proof-audit-quoted-search.mjs",
+      "sha256": "b35e93d3beedbc6c5f9a09beb26e6d713396c45fba2ee5d4429e9b54731a0390",
+      "bytes": 2883
+    },
+    {
+      "name": "query-title-missing-type-proof-audit.mjs",
+      "sha256": "d18ee94045a63b4771a5a2e1b1555676e60bb1aa7b808575e30245d47d489bce",
+      "bytes": 2874
+    },
+    {
+      "name": "query-title-search-format-proof-audit.mjs",
+      "sha256": "40e530c037066b9d9f1fd66391d12e870174411eea2ded8e4760734b5ed07d9d",
+      "bytes": 3112
+    },
+    {
+      "name": "builtin-content-registry-before-green-source-proof.json",
+      "sha256": "4ed6da7ea61ee8517d5dc243340290094e4b32fc81cbfbb58ceae5e23f7f7cdd",
+      "bytes": 52496
+    },
+    {
+      "name": "builtin-content-registry-before-green-compiled-proof.json",
+      "sha256": "fedb6e2735fad71795935fea3c1cacfa25cb88a4d9233e00453faf84e712f515",
+      "bytes": 52496
+    },
+    {
+      "name": "root-builtin-content-registry-before-final-audit.json",
+      "sha256": "0683776a64cdfde3b8604511a4b0a9f7c53b86fda98d72b588cf09383d8bbdd5",
+      "bytes": 1680
+    }
+  ]
+}
