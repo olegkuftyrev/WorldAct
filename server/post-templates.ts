@@ -1,3 +1,4 @@
+import { builtinContentTypeKeys } from "./content-registry.js";
 import {Router} from "express";
 import type {PoolClient} from "pg";
 import {z} from "zod";
@@ -16,6 +17,6 @@ export async function validatePostTemplate(slug:string,type:"post"|"page",db:Pic
 }
 const router=Router();
 router.get("/posts/templates",requireRole("administrator","editor","author","contributor"),async(req,res)=>{
- const type=z.enum(["post","page"]).default("post").parse(req.query.type);res.json({templates:await availablePostTemplates(type)});
+ const type=z.enum(builtinContentTypeKeys).default("post").parse(req.query.type);res.json({templates:await availablePostTemplates(type)});
 });
 export default router;

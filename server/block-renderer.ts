@@ -1,3 +1,4 @@
+import { isBuiltinContentType } from "./content-registry.js";
 import {authorArchivePath,parseAuthorArchivePath} from "../shared/author-archive.js";
 import {excludesArchiveTitle,type ArchiveTitleContext} from "./query-title-context.js";
 import { parse } from "@wordpress/block-serialization-default-parser";
@@ -413,7 +414,7 @@ async function queryPosts(
   );
   const maxPages = integer(input.pages, 0, 0, 10000);
   const offset = integer(input.offset, 0, 0, 10000) + (page - 1) * perPage;
-  const postType = ["post", "page"].includes(input.postType)
+  const postType = isBuiltinContentType(input.postType)
     ? input.postType
     : "post";
   const args: unknown[] = [postType];

@@ -1,3 +1,4 @@
+import { builtinContentTypeKeys, builtinTaxonomyKeys } from "./content-registry.js";
 import {publicationPair,resolvePostDate,civilFromInstant} from "./post-date.js";
 import {normalizePingSource} from "./comment-policy.js";
 import {akismetKey,readAkismetSecretStatus,updateAkismetConfiguration} from "./bundled-plugins.js";
@@ -1220,7 +1221,7 @@ router.post("/tools/import", admin, async (req: AuthRequest, res) => {
       const term = z
         .object({
           id: id,
-          taxonomy: z.enum(["category", "tag"]),
+          taxonomy: z.enum(builtinTaxonomyKeys),
           name: text(1, 200),
           slug: text(1, 220),
           description: z.string().max(5000).default(""),
@@ -1278,7 +1279,7 @@ router.post("/tools/import", admin, async (req: AuthRequest, res) => {
       const post = z
         .object({
           id: id,
-          type: z.enum(["post", "page"]),
+          type: z.enum(builtinContentTypeKeys),
           title: z.string().max(300),
           slug: text(1, 220),
           content: z.string().max(MAX_STORED_CONTENT_BYTES),

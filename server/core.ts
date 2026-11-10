@@ -1,3 +1,4 @@
+import { builtinContentTypeKeys, builtinTaxonomyKeys } from "./content-registry.js";
 import {readPublicPath} from "./public-path.js";
 import {readPublicDocument,publicDocumentContext} from "./public-document-data.js";
 import { publicPost, commentResponse, readPublicSite,readPublishedPostById } from "./public-read.js";
@@ -72,7 +73,7 @@ const idsSchema = z
 const dateSchema = z.iso.datetime({ offset: true }).nullable();
 const postShape = {
   authorId: idSchema.optional(),
-  type: z.enum(["post", "page"]).optional(),
+  type: z.enum(builtinContentTypeKeys).optional(),
   format: z.enum(postFormats).optional(),
   title: z.string().trim().max(300).optional(),
   content: z.string().max(1_000_000).optional(),
@@ -671,7 +672,7 @@ router.get("/posts", contentRoles, async (req: AuthRequest, res) => {
   const user = needUser(req);
   const filter = z
     .object({
-      type: z.enum(["post", "page"]).default("post"),
+      type: z.enum(builtinContentTypeKeys).default("post"),
       status: z.enum(["all", ...statuses]).default("all"),
       search: z.string().trim().max(200).default(""),
       page: z.coerce.number().int().min(1).max(2_147_483_647).optional(),
@@ -1028,7 +1029,7 @@ const defaultCategorySQL = `COALESCE(
 )`;
 const termFields = `t.id,t.taxonomy,t.name,t.slug,t.description,t.parent_id AS "parentId",COALESCE(t.taxonomy='category' AND t.id=(${defaultCategorySQL}),false) AS "isDefault",(SELECT count(*)::int FROM post_terms pt JOIN posts p ON p.id=pt.post_id WHERE pt.term_id=t.id AND p.status='publish') AS count`;
 const termShape = {
-  taxonomy: z.enum(["category", "tag"]),
+  taxonomy: z.enum(builtinTaxonomyKeys),
   name: z.string().trim().min(1).max(200),
   slug: z.string().max(220).optional(),
   description: z.string().max(20_000).optional(),
@@ -1059,7 +1060,7 @@ async function validateTermParent(
 }
 router.get("/terms", contentRoles, async (req, res) => {
   const input = z.object({
-    taxonomy: z.enum(["category", "tag"]).optional(),
+    taxonomy: z.enum(builtinTaxonomyKeys).optional(),
     page: z.coerce.number().int().positive().max(1_000_000).default(1),
     perPage: z.coerce.number().int().positive().max(1000).default(20),
     search: z.string().trim().max(300).optional(),
@@ -1313,7 +1314,7 @@ router.get("/public/site", async (req: AuthRequest, res) => {
 });
 router.get("/public/terms", async (req, res) => {
   const taxonomy = z
-    .enum(["category", "tag"])
+    .enum(builtinTaxonomyKeys)
     .optional()
     .parse(req.query.taxonomy);
   const result = await pool.query(
