@@ -880,6 +880,7 @@ async function renderNode(
     return `<div${attr()}>${parts.join(" ")}</div>`;
   }
   if (name === "core/query-title") {
+    if (a.type === undefined || a.type === "") return "";
     if (a.type === "archive" && excludesArchiveTitle(state.options.archiveTitleContext)) return "";
     const query = state.options.query || {};
     const listing=state.options.listing,named=listing?.namedAuthor;
