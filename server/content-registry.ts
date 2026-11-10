@@ -30,7 +30,7 @@ type ContentDefinition = { readonly storageKey: string; readonly storageAdapter:
 type TaxonomyDefinition = { readonly storageKey: string; readonly rest: TaxonomyRest };
 type DefinitionKeys<T extends readonly { readonly storageKey: string }[]> = { readonly [K in keyof T]: T[K]["storageKey"] };
 
-const invalid = (code: string): never => { throw new Error("Invalid built-in content registry: " + code + "."); };
+function invalid(code: string): never { throw new Error("Invalid built-in content registry: " + code + "."); }
 const own = (value: object, key: string) => Object.hasOwn(value, key);
 
 /** Read only own JSON data; never invoke accessors or retain the input tree. */
