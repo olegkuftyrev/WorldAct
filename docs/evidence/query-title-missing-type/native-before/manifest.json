@@ -1,0 +1,128 @@
+{
+  "schema": 1,
+  "classification": "GENUINE_FAILING_OMITTED_EMPTY_TYPE_BEFORE",
+  "baselineCandidate": "d7c9a996f7336fc91049833db89789385a214545",
+  "testOnlyCommit": "8e97e863b55fa91e1e587561d78fb7e7e622c6ce",
+  "testSHA256": "5b2406b78a9395fe252cdf3e318150babc9550da319e1b4cf5787c8cfcf44856",
+  "expectedAndActualNodeSHA256": "7f5e15d054e0a888ae362f95b055c587dab1dff8c9fd836b0d98ea1eafb96093",
+  "sourceAndCompiledEach": {
+    "responses": 9,
+    "anonymous": 6,
+    "safeAuthenticatedPreview": 3,
+    "policyChildren": 5,
+    "parent": 1,
+    "tests": 6,
+    "pass": 2,
+    "fail": 4,
+    "cancelled": 0,
+    "skipped": 0,
+    "individualFeatureAssertionFailures": 10
+  },
+  "sanitizationPolicy": "Only known absolute private roots replaced; no failure/result/fixture/CI chronology rewrite.",
+  "copiedRecords": [
+    {
+      "file": "review.md",
+      "privateSource": "<private-evidence-root>/query-title-missing-type-before-review.md",
+      "privateSourceSHA256": "76c29359f8d3c2783b7a1dc20debd8c237d1615e50a658513f559fc05c277bff",
+      "copySHA256": "76c29359f8d3c2783b7a1dc20debd8c237d1615e50a658513f559fc05c277bff",
+      "bytes": 7133,
+      "pathOnlySanitization": [],
+      "otherwiseByteIdentical": true
+    },
+    {
+      "file": "checks.json",
+      "privateSource": "<private-evidence-root>/query-title-missing-type-before-checks.json",
+      "privateSourceSHA256": "e0dfedf006f1b50bc0f702d5dd2ad249a16f7fae97c2d32673114612bb818cdf",
+      "copySHA256": "08b752ed69d5b59a0df628e5f858c57a04ee2b292e7dae288ad1ed23f8376bee",
+      "bytes": 13585,
+      "pathOnlySanitization": [
+        {
+          "rule": "owned-missing-type-before-worktree",
+          "occurrences": 6
+        },
+        {
+          "rule": "private-evidence-root",
+          "occurrences": 25
+        },
+        {
+          "rule": "dependency-owner-workspace",
+          "occurrences": 2
+        }
+      ],
+      "otherwiseByteIdentical": true
+    },
+    {
+      "file": "dom-audit.json",
+      "privateSource": "<private-evidence-root>/query-title-missing-type-before-dom-audit.json",
+      "privateSourceSHA256": "5339c3e3866cc226a0e861c5ba56789b50be3aacaa87dc729120c3b04218156f",
+      "copySHA256": "16505b78085044a54299f6ace912a243c509d38ae4c1cce8f2b9ab46991dc17c",
+      "bytes": 22514,
+      "pathOnlySanitization": [
+        {
+          "rule": "owned-missing-type-before-worktree",
+          "occurrences": 4
+        },
+        {
+          "rule": "private-evidence-root",
+          "occurrences": 6
+        },
+        {
+          "rule": "dependency-owner-workspace",
+          "occurrences": 2
+        }
+      ],
+      "otherwiseByteIdentical": true
+    },
+    {
+      "file": "owned-cleanup.json",
+      "privateSource": "<private-evidence-root>/query-title-missing-type-before-owned-cleanup.json",
+      "privateSourceSHA256": "f894d1b7f50dc484d05cc1f48980c7048c517852daf8dd8bd637a21603130878",
+      "copySHA256": "6c81cc0ba053c379cda456d3cfc64d890a75f771ef4ebae36abdb6aed8cd9613",
+      "bytes": 3275,
+      "pathOnlySanitization": [
+        {
+          "rule": "owned-missing-type-before-worktree",
+          "occurrences": 2
+        },
+        {
+          "rule": "private-evidence-root",
+          "occurrences": 2
+        },
+        {
+          "rule": "dependency-owner-workspace",
+          "occurrences": 4
+        }
+      ],
+      "otherwiseByteIdentical": true
+    },
+    {
+      "file": "build-checks.json",
+      "privateSource": "<private-evidence-root>/query-title-missing-type-before-build.json",
+      "privateSourceSHA256": "f3f610f8af4d3f9c2fe3674ad462f619bdc0903a78a92bb711ebdff67ec5b427",
+      "copySHA256": "c47ed20f730d96605fb9d84058ca2aa91d868d69e4dd02c93d9969ee4cdf3941",
+      "bytes": 1684,
+      "pathOnlySanitization": [
+        {
+          "rule": "private-evidence-root",
+          "occurrences": 1
+        }
+      ],
+      "otherwiseByteIdentical": true
+    }
+  ],
+  "packageREADME": {
+    "file": "README.md",
+    "sha256": "f752ab83a9c2961f5969c86b4b684c3618114e1de7293c4445a856a0597c21b1"
+  },
+  "chronology": [
+    "Construction and execution both retain candidate-pending CI attribution.",
+    "Root explicitly waived CI wait only for isolated immutable BEFORE; original selector/freeze unchanged.",
+    "Independent first-attempt TSC/Vite/direct-native build, robust first-write actual count summaries, no fixture/assertion adapter/rerun.",
+    "Root later reported HOME CI SUCCESS at cleanup authorization, raw CI-count verification pending; historical snapshots not rewritten.",
+    "Final exact two-path owned setup cleanup;411 candidate outputs and originals preserved."
+  ],
+  "rawProofLogBootstrapAuthSetupConfigArchiveIncludedInGit": false,
+  "runtimeExistingTestAdapterUiCiMainChanges": false,
+  "archivesCreated": false,
+  "candidateBuildFilesRetained": 411
+}

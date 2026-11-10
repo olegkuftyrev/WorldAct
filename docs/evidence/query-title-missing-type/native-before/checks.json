@@ -1,0 +1,324 @@
+{
+  "classification": "GENUINE_FAILING_IMMUTABLE_MISSING_EMPTY_TYPE_BEFORE",
+  "recordedAtUtc": "2026-11-09T17:14:27.886089+00:00",
+  "baselineCandidate": "d7c9a996f7336fc91049833db89789385a214545",
+  "testOnlyCommit": "8e97e863b55fa91e1e587561d78fb7e7e622c6ce",
+  "worktree": "<owned-missing-type-before-worktree>",
+  "physicalWorktree": "<owned-missing-type-before-worktree>",
+  "ciAttribution": "Pushed/live HOME candidate d7c9, exactCI42657839192 pending at root execution activation; no CI API queried or CI-green/released claim. Root execution-only amendment supersedes historical selector CI-wait condition; original selector/freeze unchanged.",
+  "test": {
+    "file": "tests/query-title-missing-type-original.test.ts",
+    "sha256": "5b2406b78a9395fe252cdf3e318150babc9550da319e1b4cf5787c8cfcf44856",
+    "lines": 217,
+    "firstImport": "./isolated-test.js",
+    "privateOriginalByteIdentical": true,
+    "fixtureOrAssertionAdapters": false,
+    "existingTestsChanged": false
+  },
+  "build": {
+    "tsc": "PASS",
+    "viteConfigLoaderRunner": "PASS",
+    "directNativeEsbuild": "PASS executable invoked directly, never through Node",
+    "expectedAndActualNodeSha256": "7f5e15d054e0a888ae362f95b055c587dab1dff8c9fd836b0d98ea1eafb96093",
+    "allCommandsExit0": true,
+    "noHarnessSetupFailures": true,
+    "record": {
+      "path": "<private-evidence-root>/query-title-missing-type-before-build.json",
+      "sha256": "f3f610f8af4d3f9c2fe3674ad462f619bdc0903a78a92bb711ebdff67ec5b427"
+    },
+    "allCandidateOutputsRetained": true,
+    "buildFileCount": 411,
+    "manifest": {
+      "path": "<private-evidence-root>/query-title-missing-type-before-candidate-build-manifest.json",
+      "sha256": "2bc348893ee66992f98ad0085877c46eeafaa1b8c41c1a9c75e6a153f194c37e",
+      "bytes": 85914,
+      "mode": "0600"
+    }
+  },
+  "phases": [
+    {
+      "mode": "source",
+      "actualApiMode": "Runner starts --import tsx server/index.ts",
+      "command": [
+        "node",
+        "scripts/test-isolated.mjs",
+        "tests/query-title-missing-type-original.test.ts"
+      ],
+      "guardPort": 5195,
+      "counts": {
+        "tests": 6,
+        "pass": 2,
+        "fail": 4,
+        "cancelled": 0,
+        "skipped": 0
+      },
+      "runnerExitCode": 1,
+      "observations": 9,
+      "anonymous": 6,
+      "safeAuthenticatedPreview": 3,
+      "allReadStatuses": 200,
+      "headBodiesEmpty": true,
+      "allGatheredBeforePolicy": true,
+      "failedIndividualAssertions": 10,
+      "failureLabels": [
+        "native omitted anchor absent",
+        "native omitted wrapper absent",
+        "model HTML omitted anchor absent",
+        "model HTML omitted wrapper absent",
+        "native empty anchor absent",
+        "native empty wrapper absent",
+        "model HTML empty anchor absent",
+        "model HTML empty wrapper absent",
+        "omitted exact empty rendered output",
+        "empty exact empty rendered output"
+      ],
+      "setupTransportContainerFailures": false,
+      "positiveControls": [
+        "Explicit archive date title Year: 2001",
+        "Unknown nonempty date title Year: 2001",
+        "Explicit search CURRENT exact unquoted Search results for: <unique token>",
+        "Authenticated explicit archive preview Year: 2001"
+      ],
+      "fixtureCleanup": {
+        "postIds": [
+          4
+        ],
+        "documentIds": [
+          215
+        ],
+        "restoredDocumentIds": [
+          14
+        ],
+        "settingsRestoreAttempted": true,
+        "failures": []
+      },
+      "files": {
+        "proof": {
+          "path": "<private-evidence-root>/query-title-missing-type-before-source-proof.json",
+          "sha256": "09ece3c8b6cee72d3b6f4c2bf45c8ef49bcb8be4bf4ed274aae0c026b7b1293e"
+        },
+        "log": {
+          "path": "<private-evidence-root>/query-title-missing-type-before-source.log",
+          "sha256": "881c27c440c074ab0d363f8c89490c7887d665cc552eca073f10275fd61b7c63"
+        },
+        "run": {
+          "path": "<private-evidence-root>/query-title-missing-type-before-source-run.json",
+          "sha256": "034572ce8aa1e825caec80e79e27f1e7aedba63db59f8a3c16bd5045c27249bb"
+        }
+      }
+    },
+    {
+      "mode": "compiled",
+      "actualApiMode": "Runner ISOLATED_TEST_COMPILED=true starts dist-server/index.js",
+      "command": [
+        "node",
+        "scripts/test-isolated.mjs",
+        "tests/query-title-missing-type-original.test.ts"
+      ],
+      "guardPort": 5195,
+      "counts": {
+        "tests": 6,
+        "pass": 2,
+        "fail": 4,
+        "cancelled": 0,
+        "skipped": 0
+      },
+      "runnerExitCode": 1,
+      "observations": 9,
+      "anonymous": 6,
+      "safeAuthenticatedPreview": 3,
+      "allReadStatuses": 200,
+      "headBodiesEmpty": true,
+      "allGatheredBeforePolicy": true,
+      "failedIndividualAssertions": 10,
+      "failureLabels": [
+        "native omitted anchor absent",
+        "native omitted wrapper absent",
+        "model HTML omitted anchor absent",
+        "model HTML omitted wrapper absent",
+        "native empty anchor absent",
+        "native empty wrapper absent",
+        "model HTML empty anchor absent",
+        "model HTML empty wrapper absent",
+        "omitted exact empty rendered output",
+        "empty exact empty rendered output"
+      ],
+      "setupTransportContainerFailures": false,
+      "positiveControls": [
+        "Explicit archive date title Year: 2001",
+        "Unknown nonempty date title Year: 2001",
+        "Explicit search CURRENT exact unquoted Search results for: <unique token>",
+        "Authenticated explicit archive preview Year: 2001"
+      ],
+      "fixtureCleanup": {
+        "postIds": [
+          4
+        ],
+        "documentIds": [
+          215
+        ],
+        "restoredDocumentIds": [
+          14
+        ],
+        "settingsRestoreAttempted": true,
+        "failures": []
+      },
+      "files": {
+        "proof": {
+          "path": "<private-evidence-root>/query-title-missing-type-before-compiled-proof.json",
+          "sha256": "b41742c9939fa29d731916825799beeac79d80170f946d7ac480241c14e1b013"
+        },
+        "log": {
+          "path": "<private-evidence-root>/query-title-missing-type-before-compiled.log",
+          "sha256": "9b9aa459613d8aaaf2058844d86b715b382d8622b71e8dbafd336ca651098e45"
+        },
+        "run": {
+          "path": "<private-evidence-root>/query-title-missing-type-before-compiled-run.json",
+          "sha256": "611fe6e2f5af0903869a270fad29bc2d34afe8cee631c4e07b414e47c2a318f2"
+        }
+      }
+    }
+  ],
+  "failingPolicy": "Omitted/empty anchor and wrapper survive on native date markup + model fragment, plus omitted/empty authenticated preview returns Year:2001 wrapper instead of empty string. Three failed children and failed parent; other2children pass.",
+  "safeProofPolicy": "Public native/HEAD/model observations are anonymous. Preview array keys are ONLY label,status,rendered; no raw auth/setup response, cookie/header/config/credential is stored in proof. Actual fixture metadata is public and owned.",
+  "domAudit": {
+    "path": "<private-evidence-root>/query-title-missing-type-before-dom-audit.json",
+    "sha256": "5339c3e3866cc226a0e861c5ba56789b50be3aacaa87dc729120c3b04218156f",
+    "method": "Native actual rendered Source island and separately parsed model presentation fragment, not bootstrap-as-DOM."
+  },
+  "preconditions": "Every guard gated clean frozen HEAD/test, exact constructed600config/read-onlydependencylink/realowner5010755/matchinglock233, actual7f5e binary, no5195listener/ownedAPI, never-created anchor and phase-app groups/earlier observedDBabsence, fresh proof/log/receipt. Failed gate throws before spawn.",
+  "cleanup": {
+    "databaseNames": [
+      "worldact_query_title_missing_type_before_anchor",
+      "worldact_test_1794243605997_bca5e224",
+      "worldact_test_1794244060997_6a347a47"
+    ],
+    "databaseRows": [],
+    "phaseAppGroups": [
+      "worldact-query-title-missing-type-before-source",
+      "worldact-query-title-missing-type-before-compiled"
+    ],
+    "allOwnedPrefixPhaseObserverSetupSessionRows": [],
+    "port5195Free": true,
+    "config": {
+      "path": "<owned-missing-type-before-worktree>/.env",
+      "mode": "0600",
+      "uid": 501,
+      "constructedBytesUnchanged": true,
+      "state": "retained pending root review"
+    },
+    "readonlyDependencies": {
+      "link": "<owned-missing-type-before-worktree>/node_modules",
+      "target": "<dependency-owner-workspace>/node_modules",
+      "realpath": "<dependency-owner-workspace>/node_modules",
+      "ownerUid": 501,
+      "ownerMode": "0755",
+      "state": "retained pending root review"
+    },
+    "builds": {
+      "dist": "<owned-missing-type-before-worktree>/dist",
+      "distServer": "<owned-missing-type-before-worktree>/dist-server",
+      "nodeSha256": "7f5e15d054e0a888ae362f95b055c587dab1dff8c9fd836b0d98ea1eafb96093",
+      "state": "retained"
+    },
+    "uploads": "Exact generated upload paths not journaled; standard runner finally cleanup only. No per-path absence claim.",
+    "archivesCreated": false
+  },
+  "harness": {
+    "issuesInThisStage": false,
+    "countParser": "Original first-write source/compiled receipts parse actual \u2139 or # summary; counts numeric, no null adapter/correction/rerun.",
+    "nativeBuild": "Direct executable command recorded correctly on first attempt."
+  },
+  "scopeLimits": [
+    "Nine actual responses per mode,5children+parent6; no full/fresh/fixed/3062/browser/PHP/MySQL.",
+    "No runtime/UI/shared/CI/MAIN or existing-test adapter changes.",
+    "Other malformed/falsy types including null,false,0,string0/whitespace are outside scope.",
+    "Unknown type only certified as preserved date positive; no home/404/source wrapper parity claim.",
+    "Search control preserves current unquoted output; no search eligibility/showSearchTerm/entity/level/post-type correction.",
+    "Existing blocks/date/author-name-independent-identity omitted-heading contradictions remain untouched; any future fixture adapter is separate.",
+    "Exact generated upload paths not journaled: standard runner-finally cleanup limit only.",
+    "Own600config/readonlydependencylink/builds/raworiginals retained pending root review. No archive."
+  ],
+  "inputs": [
+    {
+      "path": "<private-evidence-root>/query-title-missing-type-before-original.test.ts",
+      "sha256": "5b2406b78a9395fe252cdf3e318150babc9550da319e1b4cf5787c8cfcf44856",
+      "bytes": 20236
+    },
+    {
+      "path": "<private-evidence-root>/query-title-missing-type-before-full.diff",
+      "sha256": "5b29283ff38bbe196dc1b3ca20de40dce46b91d457123e5a5a61414460ae229f",
+      "bytes": 20694
+    },
+    {
+      "path": "<private-evidence-root>/query-title-missing-type-before-selector.json",
+      "sha256": "af7207687214feab8b9fe85bbe1a13e05159984683ac27c02014dcdac72f0b5f",
+      "bytes": 9877
+    },
+    {
+      "path": "<private-evidence-root>/query-title-missing-type-before-construction-freeze.json",
+      "sha256": "b4ead3da2c3561a61bff238ff4ef8a9ca7273b665c99ba9e5a66a97dee52babf",
+      "bytes": 3079
+    },
+    {
+      "path": "<private-evidence-root>/query-title-missing-type-before-ownership.json",
+      "sha256": "e3b43e32fe9e434a89e0938cd3652f0162669d4bd560a71602c04f6f3c7d3c20",
+      "bytes": 1861
+    },
+    {
+      "path": "<private-evidence-root>/query-title-missing-type-before-execution.mjs",
+      "sha256": "cd3c876f4f3d1424b6a3af34a0995f326b20018b4f3a058cfa504d210c7924d7",
+      "bytes": 10055
+    },
+    {
+      "path": "<private-evidence-root>/query-title-missing-type-before-build.log",
+      "sha256": "6af1d548d387bed84d28aa668a237821807093576aace53b65ba5c7be358b790",
+      "bytes": 2398
+    },
+    {
+      "path": "<private-evidence-root>/query-title-missing-type-before-build.json",
+      "sha256": "f3f610f8af4d3f9c2fe3674ad462f619bdc0903a78a92bb711ebdff67ec5b427",
+      "bytes": 1688
+    },
+    {
+      "path": "<private-evidence-root>/query-title-missing-type-before-source.log",
+      "sha256": "881c27c440c074ab0d363f8c89490c7887d665cc552eca073f10275fd61b7c63",
+      "bytes": 7653
+    },
+    {
+      "path": "<private-evidence-root>/query-title-missing-type-before-source-proof.json",
+      "sha256": "09ece3c8b6cee72d3b6f4c2bf45c8ef49bcb8be4bf4ed274aae0c026b7b1293e",
+      "bytes": 299442
+    },
+    {
+      "path": "<private-evidence-root>/query-title-missing-type-before-source-run.json",
+      "sha256": "034572ce8aa1e825caec80e79e27f1e7aedba63db59f8a3c16bd5045c27249bb",
+      "bytes": 4014
+    },
+    {
+      "path": "<private-evidence-root>/query-title-missing-type-before-compiled.log",
+      "sha256": "9b9aa459613d8aaaf2058844d86b715b382d8622b71e8dbafd336ca651098e45",
+      "bytes": 7662
+    },
+    {
+      "path": "<private-evidence-root>/query-title-missing-type-before-compiled-proof.json",
+      "sha256": "b41742c9939fa29d731916825799beeac79d80170f946d7ac480241c14e1b013",
+      "bytes": 299442
+    },
+    {
+      "path": "<private-evidence-root>/query-title-missing-type-before-compiled-run.json",
+      "sha256": "611fe6e2f5af0903869a270fad29bc2d34afe8cee631c4e07b414e47c2a318f2",
+      "bytes": 4145
+    },
+    {
+      "path": "<private-evidence-root>/query-title-missing-type-before-dom-audit.json",
+      "sha256": "5339c3e3866cc226a0e861c5ba56789b50be3aacaa87dc729120c3b04218156f",
+      "bytes": 22612
+    },
+    {
+      "path": "<private-evidence-root>/query-title-missing-type-before-candidate-build-manifest.json",
+      "sha256": "2bc348893ee66992f98ad0085877c46eeafaa1b8c41c1a9c75e6a153f194c37e",
+      "bytes": 85914
+    }
+  ]
+}

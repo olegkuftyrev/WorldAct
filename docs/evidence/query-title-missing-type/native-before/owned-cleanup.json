@@ -1,0 +1,60 @@
+{
+  "stage": "FINAL_AUTHORIZED_OWNED_SETUP_CLEANUP",
+  "startedAtUtc": "2026-11-10T07:01:09.072296+00:00",
+  "finishedAtUtc": "2026-11-10T07:01:09.201139+00:00",
+  "baselineCandidate": "d7c9a996f7336fc91049833db89789385a214545",
+  "testOnlyCommit": "8e97e863b55fa91e1e587561d78fb7e7e622c6ce",
+  "removedOnly": [
+    {
+      "path": "<owned-missing-type-before-worktree>/.env",
+      "type": "regular file",
+      "uid": 501,
+      "mode": "0600",
+      "exactOriginalSha256": "24e4fe3926932e75d31c9545319136d004bacfd7085a84c6bc834cd35276a074",
+      "originalHashProvenance": {
+        "record": "<private-evidence-root>/query-title-missing-type-before-ownership.json",
+        "recordSha256": "e3b43e32fe9e434a89e0938cd3652f0162669d4bd560a71602c04f6f3c7d3c20",
+        "recordedAtUtc": "2026-11-09T16:58:34.075Z",
+        "method": "Contemporaneous initial setup: hash computed from exact owned .env immediately after exclusive0600 write and recorded before any build/guard. Each guard also reverified identity/bytes. No secret config bytes copied into this receipt."
+      },
+      "identityVerifiedBeforeUnlink": true,
+      "absentAfter": true
+    },
+    {
+      "path": "<owned-missing-type-before-worktree>/node_modules",
+      "type": "symlink",
+      "uid": 501,
+      "exactTarget": "<dependency-owner-workspace>/node_modules",
+      "realTarget": "<dependency-owner-workspace>/node_modules",
+      "identityVerifiedBeforeUnlink": true,
+      "absentAfter": true
+    }
+  ],
+  "dependencyOwner": {
+    "path": "<dependency-owner-workspace>/node_modules",
+    "realpath": "<dependency-owner-workspace>/node_modules",
+    "uid": 501,
+    "mode": "0755",
+    "nonsymlink": true,
+    "preserved": true,
+    "matchingPackageLockSha256": "233888ed8f864581a8835aab0b4c33ccd7fbc391f2a98650b63fcf8db8814892"
+  },
+  "port5195": {
+    "noListenerBefore": true,
+    "servicesStartedOrStoppedDuringCleanup": false
+  },
+  "databaseAndSessionStatus": "Prior final DOM audit and independent root SQL verified exact two disposable DBs, never-created anchor and all owned prefix sessions absent. No new SQL/DB resource work during this two-path cleanup.",
+  "retained": {
+    "buildManifest": "<private-evidence-root>/query-title-missing-type-before-candidate-build-manifest.json",
+    "buildManifestSha256": "2bc348893ee66992f98ad0085877c46eeafaa1b8c41c1a9c75e6a153f194c37e",
+    "buildFiles": 411,
+    "allBuildHashesVerifiedBeforeAndAfter": true,
+    "actualNodeSha256": "7f5e15d054e0a888ae362f95b055c587dab1dff8c9fd836b0d98ea1eafb96093",
+    "testSha256": "5b2406b78a9395fe252cdf3e318150babc9550da319e1b4cf5787c8cfcf44856",
+    "privateOriginalsRawProofsLogsRunReceiptsAndHistory": "unchanged"
+  },
+  "ciChronology": "Root now reports exact HOME42657839192SUCCESS, raw CI-count verification pending at cleanup authorization. Historical candidate-pending construction/execution records and root CI-wait override are unchanged; no new CI execution or count certificate here.",
+  "uploads": "Exact runner-generated paths were not journaled; standard runner finally cleanup only, no independent per-path absence claim.",
+  "archiveCreated": false,
+  "mutations": "Exactly two authorized unlink operations; no chmod/runtime/UI/test/existingadapter/CI/MAIN/database/browser mutation."
+}

@@ -1,0 +1,61 @@
+{
+  "stage": "INDEPENDENT_BASELINE_BUILD",
+  "startedAtUtc": "2026-11-09T16:59:33.622Z",
+  "finishedAtUtc": "2026-11-09T16:59:53.533Z",
+  "checks": {
+    "commit": "8e97e863b55fa91e1e587561d78fb7e7e622c6ce",
+    "testSha256": "5b2406b78a9395fe252cdf3e318150babc9550da319e1b4cf5787c8cfcf44856",
+    "configByteIdentity": true,
+    "configMode": "0600",
+    "readonlyLinkIdentity": true,
+    "dependencyOwnerUid": 501,
+    "dependencyOwnerMode": "0755",
+    "lockSha256": "233888ed8f864581a8835aab0b4c33ccd7fbc391f2a98650b63fcf8db8814892",
+    "port5195Free": true
+  },
+  "commands": [
+    {
+      "command": [
+        "node",
+        "node_modules/typescript/bin/tsc",
+        "--noEmit"
+      ],
+      "code": 0,
+      "signal": null,
+      "pid": 27174
+    },
+    {
+      "command": [
+        "node",
+        "node_modules/vite/bin/vite.js",
+        "build",
+        "--configLoader",
+        "runner"
+      ],
+      "code": 0,
+      "signal": null,
+      "pid": 27179
+    },
+    {
+      "command": [
+        "node_modules/@esbuild/darwin-arm64/bin/esbuild",
+        "server/index.ts",
+        "--bundle",
+        "--platform=node",
+        "--format=esm",
+        "--packages=external",
+        "--outfile=dist-server/index.js"
+      ],
+      "code": 0,
+      "signal": null,
+      "pid": 27185
+    }
+  ],
+  "nodeSha256": "7f5e15d054e0a888ae362f95b055c587dab1dff8c9fd836b0d98ea1eafb96093",
+  "expectedNodeSha256": "7f5e15d054e0a888ae362f95b055c587dab1dff8c9fd836b0d98ea1eafb96093",
+  "log": {
+    "path": "<private-evidence-root>/query-title-missing-type-before-build.log",
+    "sha256": "6af1d548d387bed84d28aa668a237821807093576aace53b65ba5c7be358b790"
+  },
+  "testsRun": false
+}

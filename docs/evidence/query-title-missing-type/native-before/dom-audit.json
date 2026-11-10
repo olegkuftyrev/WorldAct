@@ -1,0 +1,551 @@
+{
+  "stage": "GENUINE_IMMUTABLE_MISSING_EMPTY_TYPE_BEFORE_DOM_AUDIT",
+  "recordedAtUtc": "2026-11-09T17:08:59.720Z",
+  "baselineCandidate": "d7c9a996f7336fc91049833db89789385a214545",
+  "testOnlyCommit": "8e97e863b55fa91e1e587561d78fb7e7e622c6ce",
+  "testSha256": "5b2406b78a9395fe252cdf3e318150babc9550da319e1b4cf5787c8cfcf44856",
+  "actualNodeSha256": "7f5e15d054e0a888ae362f95b055c587dab1dff8c9fd836b0d98ea1eafb96093",
+  "ciAttribution": "Root reported HOME CI still pending; execution-only amendment supersedes historical selector wait. No CI-green/release claim.",
+  "modes": [
+    {
+      "mode": "source",
+      "counts": {
+        "tests": 6,
+        "pass": 2,
+        "fail": 4,
+        "cancelled": 0,
+        "skipped": 0
+      },
+      "runnerExitCode": 1,
+      "actualApiMode": "Runner starts --import tsx server/index.ts",
+      "dispatches": 9,
+      "anonymousGroups": [
+        {
+          "label": "date",
+          "path": "/?year=2001",
+          "statuses": {
+            "get": 200,
+            "head": 200,
+            "model": 200
+          },
+          "headBodyEmpty": true,
+          "routeKind": "archive",
+          "dateArchiveType": "date",
+          "dateArchiveYear": 2001,
+          "savedDocument": {
+            "id": 215,
+            "slug": "date",
+            "title": "qt-missing-mw9ibhpv date",
+            "type": "template",
+            "version": 1,
+            "updatedAt": "2026-11-09T17:00:09.850Z",
+            "isCustom": true
+          },
+          "fixturePostPresent": true,
+          "surfaces": [
+            {
+              "surface": "native island",
+              "mainCount": 1,
+              "markerCount": 1,
+              "titles": [
+                {
+                  "key": "omitted",
+                  "anchor": "qt-missing-mw9ibhpv-omitted",
+                  "titleCount": 1,
+                  "wrapperCount": 1,
+                  "tag": "H1",
+                  "class": "wp-block-query-title",
+                  "text": "Year: 2001"
+                },
+                {
+                  "key": "empty",
+                  "anchor": "qt-missing-mw9ibhpv-empty",
+                  "titleCount": 1,
+                  "wrapperCount": 1,
+                  "tag": "H1",
+                  "class": "wp-block-query-title",
+                  "text": "Year: 2001"
+                },
+                {
+                  "key": "archive",
+                  "anchor": "qt-missing-mw9ibhpv-archive",
+                  "titleCount": 1,
+                  "wrapperCount": 1,
+                  "tag": "H1",
+                  "class": "wp-block-query-title",
+                  "text": "Year: 2001"
+                },
+                {
+                  "key": "unknown",
+                  "anchor": "qt-missing-mw9ibhpv-unknown",
+                  "titleCount": 1,
+                  "wrapperCount": 1,
+                  "tag": "H1",
+                  "class": "wp-block-query-title",
+                  "text": "Year: 2001"
+                }
+              ],
+              "actualOwnedMainFragment": "<main id=\"qt-missing-mw9ibhpv-date-main\" class=\"wp-block-group\"><p>DATE-MARKER-mw9ibhpv</p><section id=\"qt-missing-mw9ibhpv-omitted-case\"><h1 class=\"wp-block-query-title\" id=\"qt-missing-mw9ibhpv-omitted\">Year: 2001</h1></section><section id=\"qt-missing-mw9ibhpv-empty-case\"><h1 class=\"wp-block-query-title\" id=\"qt-missing-mw9ibhpv-empty\">Year: 2001</h1></section><section id=\"qt-missing-mw9ibhpv-archive-case\"><h1 class=\"wp-block-query-title\" id=\"qt-missing-mw9ibhpv-archive\">Year: 2001</h1></section><section id=\"qt-missing-mw9ibhpv-unknown-case\"><h1 class=\"wp-block-query-title\" id=\"qt-missing-mw9ibhpv-unknown\">Year: 2001</h1></section></main>"
+            },
+            {
+              "surface": "model presentation fragment",
+              "mainCount": 1,
+              "markerCount": 1,
+              "titles": [
+                {
+                  "key": "omitted",
+                  "anchor": "qt-missing-mw9ibhpv-omitted",
+                  "titleCount": 1,
+                  "wrapperCount": 1,
+                  "tag": "H1",
+                  "class": "wp-block-query-title",
+                  "text": "Year: 2001"
+                },
+                {
+                  "key": "empty",
+                  "anchor": "qt-missing-mw9ibhpv-empty",
+                  "titleCount": 1,
+                  "wrapperCount": 1,
+                  "tag": "H1",
+                  "class": "wp-block-query-title",
+                  "text": "Year: 2001"
+                },
+                {
+                  "key": "archive",
+                  "anchor": "qt-missing-mw9ibhpv-archive",
+                  "titleCount": 1,
+                  "wrapperCount": 1,
+                  "tag": "H1",
+                  "class": "wp-block-query-title",
+                  "text": "Year: 2001"
+                },
+                {
+                  "key": "unknown",
+                  "anchor": "qt-missing-mw9ibhpv-unknown",
+                  "titleCount": 1,
+                  "wrapperCount": 1,
+                  "tag": "H1",
+                  "class": "wp-block-query-title",
+                  "text": "Year: 2001"
+                }
+              ],
+              "actualOwnedMainFragment": "<main id=\"qt-missing-mw9ibhpv-date-main\" class=\"wp-block-group\"><p>DATE-MARKER-mw9ibhpv</p><section id=\"qt-missing-mw9ibhpv-omitted-case\"><h1 class=\"wp-block-query-title\" id=\"qt-missing-mw9ibhpv-omitted\">Year: 2001</h1></section><section id=\"qt-missing-mw9ibhpv-empty-case\"><h1 class=\"wp-block-query-title\" id=\"qt-missing-mw9ibhpv-empty\">Year: 2001</h1></section><section id=\"qt-missing-mw9ibhpv-archive-case\"><h1 class=\"wp-block-query-title\" id=\"qt-missing-mw9ibhpv-archive\">Year: 2001</h1></section><section id=\"qt-missing-mw9ibhpv-unknown-case\"><h1 class=\"wp-block-query-title\" id=\"qt-missing-mw9ibhpv-unknown\">Year: 2001</h1></section></main>"
+            }
+          ]
+        },
+        {
+          "label": "search",
+          "path": "/?s=missingtypemw9ibhpv",
+          "statuses": {
+            "get": 200,
+            "head": 200,
+            "model": 200
+          },
+          "headBodyEmpty": true,
+          "routeKind": "archive",
+          "normalizedSearch": "missingtypemw9ibhpv",
+          "savedDocument": {
+            "id": 14,
+            "slug": "search",
+            "title": "Search",
+            "type": "template",
+            "version": 2,
+            "updatedAt": "2026-11-09T17:00:09.904Z",
+            "isCustom": true
+          },
+          "fixturePostPresent": true,
+          "surfaces": [
+            {
+              "surface": "native island",
+              "mainCount": 1,
+              "markerCount": 1,
+              "titles": [
+                {
+                  "key": "search",
+                  "anchor": "qt-missing-mw9ibhpv-search",
+                  "titleCount": 1,
+                  "wrapperCount": 1,
+                  "tag": "H1",
+                  "class": "wp-block-query-title",
+                  "text": "Search results for: missingtypemw9ibhpv"
+                }
+              ],
+              "actualOwnedMainFragment": "<main id=\"qt-missing-mw9ibhpv-search-main\" class=\"wp-block-group\"><p>SEARCH-MARKER-mw9ibhpv</p><section id=\"qt-missing-mw9ibhpv-search-case\"><h1 class=\"wp-block-query-title\" id=\"qt-missing-mw9ibhpv-search\">Search results for: missingtypemw9ibhpv</h1></section></main>"
+            },
+            {
+              "surface": "model presentation fragment",
+              "mainCount": 1,
+              "markerCount": 1,
+              "titles": [
+                {
+                  "key": "search",
+                  "anchor": "qt-missing-mw9ibhpv-search",
+                  "titleCount": 1,
+                  "wrapperCount": 1,
+                  "tag": "H1",
+                  "class": "wp-block-query-title",
+                  "text": "Search results for: missingtypemw9ibhpv"
+                }
+              ],
+              "actualOwnedMainFragment": "<main id=\"qt-missing-mw9ibhpv-search-main\" class=\"wp-block-group\"><p>SEARCH-MARKER-mw9ibhpv</p><section id=\"qt-missing-mw9ibhpv-search-case\"><h1 class=\"wp-block-query-title\" id=\"qt-missing-mw9ibhpv-search\">Search results for: missingtypemw9ibhpv</h1></section></main>"
+            }
+          ]
+        }
+      ],
+      "previews": [
+        {
+          "label": "omitted",
+          "status": 200,
+          "rendered": "<h1 class=\"wp-block-query-title\" id=\"qt-missing-mw9ibhpv-omitted\">Year: 2001</h1>"
+        },
+        {
+          "label": "empty",
+          "status": 200,
+          "rendered": "<h1 class=\"wp-block-query-title\" id=\"qt-missing-mw9ibhpv-empty\">Year: 2001</h1>"
+        },
+        {
+          "label": "archive",
+          "status": 200,
+          "rendered": "<h1 class=\"wp-block-query-title\" id=\"qt-missing-mw9ibhpv-archive\">Year: 2001</h1>"
+        }
+      ],
+      "failedIndividualAssertions": 10,
+      "failureLabels": [
+        "native omitted anchor absent",
+        "native omitted wrapper absent",
+        "model HTML omitted anchor absent",
+        "model HTML omitted wrapper absent",
+        "native empty anchor absent",
+        "native empty wrapper absent",
+        "model HTML empty anchor absent",
+        "model HTML empty wrapper absent",
+        "omitted exact empty rendered output",
+        "empty exact empty rendered output"
+      ],
+      "setupTransportContainerFailures": false,
+      "allGatheredBeforePolicy": true,
+      "fixtureCleanup": {
+        "postIds": [
+          4
+        ],
+        "documentIds": [
+          215
+        ],
+        "restoredDocumentIds": [
+          14
+        ],
+        "settingsRestoreAttempted": true,
+        "failures": []
+      },
+      "observedDatabases": [
+        "worldact_test_1794243605997_bca5e224"
+      ],
+      "phaseAppGroup": "worldact-query-title-missing-type-before-source",
+      "files": {
+        "proof": {
+          "path": "<private-evidence-root>/query-title-missing-type-before-source-proof.json",
+          "sha256": "09ece3c8b6cee72d3b6f4c2bf45c8ef49bcb8be4bf4ed274aae0c026b7b1293e"
+        },
+        "log": {
+          "path": "<private-evidence-root>/query-title-missing-type-before-source.log",
+          "sha256": "881c27c440c074ab0d363f8c89490c7887d665cc552eca073f10275fd61b7c63"
+        },
+        "run": {
+          "path": "<private-evidence-root>/query-title-missing-type-before-source-run.json",
+          "sha256": "034572ce8aa1e825caec80e79e27f1e7aedba63db59f8a3c16bd5045c27249bb"
+        }
+      }
+    },
+    {
+      "mode": "compiled",
+      "counts": {
+        "tests": 6,
+        "pass": 2,
+        "fail": 4,
+        "cancelled": 0,
+        "skipped": 0
+      },
+      "runnerExitCode": 1,
+      "actualApiMode": "Runner ISOLATED_TEST_COMPILED=true starts dist-server/index.js",
+      "dispatches": 9,
+      "anonymousGroups": [
+        {
+          "label": "date",
+          "path": "/?year=2001",
+          "statuses": {
+            "get": 200,
+            "head": 200,
+            "model": 200
+          },
+          "headBodyEmpty": true,
+          "routeKind": "archive",
+          "dateArchiveType": "date",
+          "dateArchiveYear": 2001,
+          "savedDocument": {
+            "id": 215,
+            "slug": "date",
+            "title": "qt-missing-mw9il7va date",
+            "type": "template",
+            "version": 1,
+            "updatedAt": "2026-11-09T17:07:43.656Z",
+            "isCustom": true
+          },
+          "fixturePostPresent": true,
+          "surfaces": [
+            {
+              "surface": "native island",
+              "mainCount": 1,
+              "markerCount": 1,
+              "titles": [
+                {
+                  "key": "omitted",
+                  "anchor": "qt-missing-mw9il7va-omitted",
+                  "titleCount": 1,
+                  "wrapperCount": 1,
+                  "tag": "H1",
+                  "class": "wp-block-query-title",
+                  "text": "Year: 2001"
+                },
+                {
+                  "key": "empty",
+                  "anchor": "qt-missing-mw9il7va-empty",
+                  "titleCount": 1,
+                  "wrapperCount": 1,
+                  "tag": "H1",
+                  "class": "wp-block-query-title",
+                  "text": "Year: 2001"
+                },
+                {
+                  "key": "archive",
+                  "anchor": "qt-missing-mw9il7va-archive",
+                  "titleCount": 1,
+                  "wrapperCount": 1,
+                  "tag": "H1",
+                  "class": "wp-block-query-title",
+                  "text": "Year: 2001"
+                },
+                {
+                  "key": "unknown",
+                  "anchor": "qt-missing-mw9il7va-unknown",
+                  "titleCount": 1,
+                  "wrapperCount": 1,
+                  "tag": "H1",
+                  "class": "wp-block-query-title",
+                  "text": "Year: 2001"
+                }
+              ],
+              "actualOwnedMainFragment": "<main id=\"qt-missing-mw9il7va-date-main\" class=\"wp-block-group\"><p>DATE-MARKER-mw9il7va</p><section id=\"qt-missing-mw9il7va-omitted-case\"><h1 class=\"wp-block-query-title\" id=\"qt-missing-mw9il7va-omitted\">Year: 2001</h1></section><section id=\"qt-missing-mw9il7va-empty-case\"><h1 class=\"wp-block-query-title\" id=\"qt-missing-mw9il7va-empty\">Year: 2001</h1></section><section id=\"qt-missing-mw9il7va-archive-case\"><h1 class=\"wp-block-query-title\" id=\"qt-missing-mw9il7va-archive\">Year: 2001</h1></section><section id=\"qt-missing-mw9il7va-unknown-case\"><h1 class=\"wp-block-query-title\" id=\"qt-missing-mw9il7va-unknown\">Year: 2001</h1></section></main>"
+            },
+            {
+              "surface": "model presentation fragment",
+              "mainCount": 1,
+              "markerCount": 1,
+              "titles": [
+                {
+                  "key": "omitted",
+                  "anchor": "qt-missing-mw9il7va-omitted",
+                  "titleCount": 1,
+                  "wrapperCount": 1,
+                  "tag": "H1",
+                  "class": "wp-block-query-title",
+                  "text": "Year: 2001"
+                },
+                {
+                  "key": "empty",
+                  "anchor": "qt-missing-mw9il7va-empty",
+                  "titleCount": 1,
+                  "wrapperCount": 1,
+                  "tag": "H1",
+                  "class": "wp-block-query-title",
+                  "text": "Year: 2001"
+                },
+                {
+                  "key": "archive",
+                  "anchor": "qt-missing-mw9il7va-archive",
+                  "titleCount": 1,
+                  "wrapperCount": 1,
+                  "tag": "H1",
+                  "class": "wp-block-query-title",
+                  "text": "Year: 2001"
+                },
+                {
+                  "key": "unknown",
+                  "anchor": "qt-missing-mw9il7va-unknown",
+                  "titleCount": 1,
+                  "wrapperCount": 1,
+                  "tag": "H1",
+                  "class": "wp-block-query-title",
+                  "text": "Year: 2001"
+                }
+              ],
+              "actualOwnedMainFragment": "<main id=\"qt-missing-mw9il7va-date-main\" class=\"wp-block-group\"><p>DATE-MARKER-mw9il7va</p><section id=\"qt-missing-mw9il7va-omitted-case\"><h1 class=\"wp-block-query-title\" id=\"qt-missing-mw9il7va-omitted\">Year: 2001</h1></section><section id=\"qt-missing-mw9il7va-empty-case\"><h1 class=\"wp-block-query-title\" id=\"qt-missing-mw9il7va-empty\">Year: 2001</h1></section><section id=\"qt-missing-mw9il7va-archive-case\"><h1 class=\"wp-block-query-title\" id=\"qt-missing-mw9il7va-archive\">Year: 2001</h1></section><section id=\"qt-missing-mw9il7va-unknown-case\"><h1 class=\"wp-block-query-title\" id=\"qt-missing-mw9il7va-unknown\">Year: 2001</h1></section></main>"
+            }
+          ]
+        },
+        {
+          "label": "search",
+          "path": "/?s=missingtypemw9il7va",
+          "statuses": {
+            "get": 200,
+            "head": 200,
+            "model": 200
+          },
+          "headBodyEmpty": true,
+          "routeKind": "archive",
+          "normalizedSearch": "missingtypemw9il7va",
+          "savedDocument": {
+            "id": 14,
+            "slug": "search",
+            "title": "Search",
+            "type": "template",
+            "version": 2,
+            "updatedAt": "2026-11-09T17:07:43.713Z",
+            "isCustom": true
+          },
+          "fixturePostPresent": true,
+          "surfaces": [
+            {
+              "surface": "native island",
+              "mainCount": 1,
+              "markerCount": 1,
+              "titles": [
+                {
+                  "key": "search",
+                  "anchor": "qt-missing-mw9il7va-search",
+                  "titleCount": 1,
+                  "wrapperCount": 1,
+                  "tag": "H1",
+                  "class": "wp-block-query-title",
+                  "text": "Search results for: missingtypemw9il7va"
+                }
+              ],
+              "actualOwnedMainFragment": "<main id=\"qt-missing-mw9il7va-search-main\" class=\"wp-block-group\"><p>SEARCH-MARKER-mw9il7va</p><section id=\"qt-missing-mw9il7va-search-case\"><h1 class=\"wp-block-query-title\" id=\"qt-missing-mw9il7va-search\">Search results for: missingtypemw9il7va</h1></section></main>"
+            },
+            {
+              "surface": "model presentation fragment",
+              "mainCount": 1,
+              "markerCount": 1,
+              "titles": [
+                {
+                  "key": "search",
+                  "anchor": "qt-missing-mw9il7va-search",
+                  "titleCount": 1,
+                  "wrapperCount": 1,
+                  "tag": "H1",
+                  "class": "wp-block-query-title",
+                  "text": "Search results for: missingtypemw9il7va"
+                }
+              ],
+              "actualOwnedMainFragment": "<main id=\"qt-missing-mw9il7va-search-main\" class=\"wp-block-group\"><p>SEARCH-MARKER-mw9il7va</p><section id=\"qt-missing-mw9il7va-search-case\"><h1 class=\"wp-block-query-title\" id=\"qt-missing-mw9il7va-search\">Search results for: missingtypemw9il7va</h1></section></main>"
+            }
+          ]
+        }
+      ],
+      "previews": [
+        {
+          "label": "omitted",
+          "status": 200,
+          "rendered": "<h1 class=\"wp-block-query-title\" id=\"qt-missing-mw9il7va-omitted\">Year: 2001</h1>"
+        },
+        {
+          "label": "empty",
+          "status": 200,
+          "rendered": "<h1 class=\"wp-block-query-title\" id=\"qt-missing-mw9il7va-empty\">Year: 2001</h1>"
+        },
+        {
+          "label": "archive",
+          "status": 200,
+          "rendered": "<h1 class=\"wp-block-query-title\" id=\"qt-missing-mw9il7va-archive\">Year: 2001</h1>"
+        }
+      ],
+      "failedIndividualAssertions": 10,
+      "failureLabels": [
+        "native omitted anchor absent",
+        "native omitted wrapper absent",
+        "model HTML omitted anchor absent",
+        "model HTML omitted wrapper absent",
+        "native empty anchor absent",
+        "native empty wrapper absent",
+        "model HTML empty anchor absent",
+        "model HTML empty wrapper absent",
+        "omitted exact empty rendered output",
+        "empty exact empty rendered output"
+      ],
+      "setupTransportContainerFailures": false,
+      "allGatheredBeforePolicy": true,
+      "fixtureCleanup": {
+        "postIds": [
+          4
+        ],
+        "documentIds": [
+          215
+        ],
+        "restoredDocumentIds": [
+          14
+        ],
+        "settingsRestoreAttempted": true,
+        "failures": []
+      },
+      "observedDatabases": [
+        "worldact_test_1794243605997_bca5e224",
+        "worldact_test_1794244060997_6a347a47"
+      ],
+      "phaseAppGroup": "worldact-query-title-missing-type-before-compiled",
+      "files": {
+        "proof": {
+          "path": "<private-evidence-root>/query-title-missing-type-before-compiled-proof.json",
+          "sha256": "b41742c9939fa29d731916825799beeac79d80170f946d7ac480241c14e1b013"
+        },
+        "log": {
+          "path": "<private-evidence-root>/query-title-missing-type-before-compiled.log",
+          "sha256": "9b9aa459613d8aaaf2058844d86b715b382d8622b71e8dbafd336ca651098e45"
+        },
+        "run": {
+          "path": "<private-evidence-root>/query-title-missing-type-before-compiled-run.json",
+          "sha256": "611fe6e2f5af0903869a270fad29bc2d34afe8cee631c4e07b414e47c2a318f2"
+        }
+      }
+    }
+  ],
+  "cleanup": {
+    "databaseNames": [
+      "worldact_query_title_missing_type_before_anchor",
+      "worldact_test_1794243605997_bca5e224",
+      "worldact_test_1794244060997_6a347a47"
+    ],
+    "databaseRows": [],
+    "phaseAppGroups": [
+      "worldact-query-title-missing-type-before-source",
+      "worldact-query-title-missing-type-before-compiled"
+    ],
+    "allOwnedPrefixPhaseObserverSetupSessionRows": [],
+    "port5195Free": true,
+    "config": {
+      "path": "<owned-missing-type-before-worktree>/.env",
+      "mode": "0600",
+      "uid": 501,
+      "constructedBytesUnchanged": true,
+      "state": "retained pending root review"
+    },
+    "readonlyDependencies": {
+      "link": "<owned-missing-type-before-worktree>/node_modules",
+      "target": "<dependency-owner-workspace>/node_modules",
+      "realpath": "<dependency-owner-workspace>/node_modules",
+      "ownerUid": 501,
+      "ownerMode": "0755",
+      "state": "retained pending root review"
+    },
+    "builds": {
+      "dist": "<owned-missing-type-before-worktree>/dist",
+      "distServer": "<owned-missing-type-before-worktree>/dist-server",
+      "nodeSha256": "7f5e15d054e0a888ae362f95b055c587dab1dff8c9fd836b0d98ea1eafb96093",
+      "state": "retained"
+    },
+    "uploads": "Exact generated upload paths not journaled; standard runner finally cleanup only. No per-path absence claim.",
+    "archivesCreated": false
+  },
+  "runtimeExistingTestsAdaptersChanged": false,
+  "sourceWorktreeClean": true,
+  "resourcesAfter": "No API/listener/disposable DB/app session remains. Own env/link/builds intentionally retained until root review. No browser/PHP/full/fresh/fixed/3062.",
+  "harnessIssues": "None in this stage. Robust actual ℹ/# reporter parser wrote numeric counts correctly in original first-write source and compiled receipts; native esbuild executed directly."
+}
