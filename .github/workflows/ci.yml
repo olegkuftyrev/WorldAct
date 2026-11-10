@@ -66,6 +66,7 @@ jobs:
           tests/compat.test.ts tests/theme-blocks.test.ts
           tests/content-registry-http-original.test.ts
           tests/content-registry.test.ts
+          tests/content-runtime.test.ts
           tests/search-explicit-query-original.test.ts
           tests/notification-mail-ui.test.ts
           tests/comment-avatar-context.test.ts
