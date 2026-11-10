@@ -170,7 +170,6 @@ export function compileRuntimeContentRegistry(contributions: readonly unknown[])
     if (!owner.length || owner.length > 100 || !/^[a-z][a-z0-9]*(?:[._/-][a-z0-9]+)*$/.test(owner) || owner === builtinOwner) invalid("OWNER");
     const revision = contribution.integrityRevision;
     if (typeof revision !== "number" || !Number.isInteger(revision) || revision < 1 || revision > 2147483647) invalid("REVISION");
-    if (owners.has(owner)) invalid("DUPLICATE_OWNER"); owners.add(owner);
     const identity = { owner, integrityRevision: revision }; sources.push(identity);
     for (const rawContent of array(contribution.contentTypes, "CONTRIBUTION_SHAPE")) {
       const entry = fields(rawContent, ["key", "storageAdapter", "rest", "policy"], "CONTENT_SHAPE");
@@ -183,18 +182,26 @@ export function compileRuntimeContentRegistry(contributions: readonly unknown[])
     }
   }
   const contentTypes: Record<string, RuntimeContentDefinition> = Object.create(null), taxonomyTypes: Record<string, RuntimeTaxonomyDefinition> = Object.create(null);
+  const contentDefinitions: RuntimeContentDefinition[] = [], taxonomyDefinitions: RuntimeTaxonomyDefinition[] = [];
+  const contentKeys: string[] = [], taxonomyKeys: string[] = [];
   for (const name of ["post", "page"] as const) {
     contentTypes[name] = { key: name, owner: builtinOwner, integrityRevision: 1, storageAdapter: "posts", rest: contentRest(copyJSON(builtinContentTypes[name].rest)), policy: { ...baseVisibility(name === "page"), excludeFromSearch: name !== "post", capabilityFamily: name, mapMetaCap: true, routing: { profile: "builtin-" + name } } };
+    contentDefinitions.push(contentTypes[name]); contentKeys.push(name);
   }
   for (const name of ["category", "tag"] as const) {
     // These references preserve operation-specific legacy gates: authors may
     // create tags, but update/delete remain admin/editor; assignment still
     // follows the actual post mutation gate, including contributor cases.
     taxonomyTypes[name] = { key: name, owner: builtinOwner, integrityRevision: 1, rest: taxonomyRest(copyJSON(builtinTaxonomies[name].rest)), policy: { ...baseVisibility(name === "category"), permissions: { managementProfile: name === "category" ? "builtin-category" : "builtin-tag", assignmentFamily: "post" }, routing: { profile: "builtin-" + name }, defaultTerm: name === "category" ? "configured-category" : null } };
+    taxonomyDefinitions.push(taxonomyTypes[name]); taxonomyKeys.push(name);
   }
-  const contentSlugs = new Set(Object.values(contentTypes).map(item => item.rest.slug)), taxonomySlugs = new Set(Object.values(taxonomyTypes).map(item => item.rest.slug));
+  for (const identity of sources.slice(1)) {
+    if (owners.has(identity.owner)) invalid("DUPLICATE_OWNER"); owners.add(identity.owner);
+  }
+  const contentKeySet = new Set(contentKeys), taxonomyKeySet = new Set(taxonomyKeys);
+  const contentSlugs = new Set(contentDefinitions.map(item => item.rest.slug)), taxonomySlugs = new Set(taxonomyDefinitions.map(item => item.rest.slug));
   const collections = new Set(reservedCollections.map(base => "wp/v2\0" + base));
-  for (const item of [...Object.values(contentTypes), ...Object.values(taxonomyTypes)]) collections.add(item.rest.rest_namespace + "\0" + item.rest.rest_base);
+  for (const item of [...contentDefinitions, ...taxonomyDefinitions]) collections.add(item.rest.rest_namespace + "\0" + item.rest.rest_base);
   function collision(rest: ContentRest | TaxonomyRest, slugs: Set<string>, code: string) {
     if (slugs.has(rest.slug)) invalid(code); slugs.add(rest.slug);
     const pair = rest.rest_namespace + "\0" + rest.rest_base;
@@ -204,18 +211,25 @@ export function compileRuntimeContentRegistry(contributions: readonly unknown[])
     if (rest.slug !== storageKey || rest.rest_namespace !== "wp/v2" || !/^[a-z0-9][a-z0-9_-]*$/.test(rest.rest_base)) invalid("REST_IDENTITY");
   }
   for (const item of content) {
-    if (Object.hasOwn(contentTypes, item.key)) invalid("DUPLICATE_CONTENT_KEY");
-    collision(item.rest, contentSlugs, "DUPLICATE_CONTENT_REST_SLUG"); restIdentity(item.rest, item.key);
+    if (contentKeySet.has(item.key)) invalid("DUPLICATE_CONTENT_KEY"); contentKeySet.add(item.key); contentKeys.push(item.key);
+    collision(item.rest, contentSlugs, "DUPLICATE_CONTENT_REST_SLUG");
+  }
+  for (const item of taxonomies) {
+    if (taxonomyKeySet.has(item.key)) invalid("DUPLICATE_TAXONOMY_KEY"); taxonomyKeySet.add(item.key); taxonomyKeys.push(item.key);
+    collision(item.rest, taxonomySlugs, "DUPLICATE_TAXONOMY_REST_SLUG");
+  }
+  for (const item of content) {
+    restIdentity(item.rest, item.key);
     if (item.storageAdapter !== "posts") invalid("CONTENT_ADAPTER");
     const flags = visibility(item.policy);
     if (flags.hierarchical !== item.rest.hierarchical || flags.publiclyQueryable !== item.rest.viewable) invalid("POLICY_REST_MISMATCH");
     const capabilityFamily = family(item.policy.capabilityFamily);
     if (item.policy.mapMetaCap !== true) invalid("CAPABILITY_PROFILE");
     contentTypes[item.key] = { ...item.identity, key: item.key, storageAdapter: "posts", rest: item.rest, policy: { ...flags, excludeFromSearch: boolean(item.policy.excludeFromSearch, "POLICY_SHAPE"), capabilityFamily, mapMetaCap: true, routing: routing(item.policy.routing, null, false) } };
+    contentDefinitions.push(contentTypes[item.key]);
   }
   for (const item of taxonomies) {
-    if (Object.hasOwn(taxonomyTypes, item.key)) invalid("DUPLICATE_TAXONOMY_KEY");
-    collision(item.rest, taxonomySlugs, "DUPLICATE_TAXONOMY_REST_SLUG"); restIdentity(item.rest, item.key);
+    restIdentity(item.rest, item.key);
     const flags = visibility(item.policy), permissions = object(item.policy.permissions, "POLICY_SHAPE"), managementProfile = permissions.managementProfile;
     if (managementProfile !== "builtin-category" && managementProfile !== "builtin-tag" && managementProfile !== "managed-page") invalid("CAPABILITY_PROFILE");
     if (flags.hierarchical !== item.rest.hierarchical || flags.public !== item.rest.visibility.public || flags.publiclyQueryable !== item.rest.visibility.publicly_queryable || flags.showUI !== item.rest.visibility.show_ui || flags.showInNavigation !== item.rest.visibility.show_in_nav_menus) invalid("POLICY_REST_MISMATCH");
@@ -223,20 +237,23 @@ export function compileRuntimeContentRegistry(contributions: readonly unknown[])
     const assignmentFamily = family(permissions.assignmentFamily);
     if (managementProfile === "managed-page" && assignmentFamily !== "page") invalid("CAPABILITY_PROFILE");
     taxonomyTypes[item.key] = { ...item.identity, key: item.key, rest: item.rest, policy: { ...flags, permissions: { managementProfile, assignmentFamily }, routing: routing(item.policy.routing, null, true), defaultTerm: null } };
+    taxonomyDefinitions.push(taxonomyTypes[item.key]);
   }
-  const byRestTaxonomy = new Map(Object.values(taxonomyTypes).map(item => [item.rest.slug, item]));
-  for (const item of Object.values(contentTypes)) {
+  const byRestTaxonomy = new Map(taxonomyDefinitions.map(item => [item.rest.slug, item]));
+  for (const item of contentDefinitions) {
     const seen = new Set<string>();
     for (const slug of item.rest.taxonomies) { if (seen.has(slug)) invalid("DUPLICATE_ASSOCIATION"); seen.add(slug); const taxonomy = byRestTaxonomy.get(slug); if (!taxonomy || !taxonomy.rest.types.includes(item.key)) invalid("ASSOCIATION"); }
   }
-  for (const item of Object.values(taxonomyTypes)) {
+  for (const item of taxonomyDefinitions) {
     const seen = new Set<string>();
     for (const name of item.rest.types) { if (seen.has(name)) invalid("DUPLICATE_ASSOCIATION"); seen.add(name); const type = contentTypes[name]; if (!type || !type.rest.taxonomies.includes(item.rest.slug)) invalid("ASSOCIATION"); }
   }
+  // The arrays retain registration order, including numeric keys. JavaScript
+  // record enumeration sorts integer-like keys in lookup and REST projections.
   const data = {
-    profileVersion: 1 as const, sources, contentKeys: Object.keys(contentTypes), taxonomyKeys: Object.keys(taxonomyTypes), contentTypes, taxonomies: taxonomyTypes,
-    restContentTypes: Object.fromEntries(Object.values(contentTypes).filter(item => item.policy.showInRest).map(item => [item.rest.slug, item.rest])),
-    restTaxonomies: Object.fromEntries(Object.values(taxonomyTypes).filter(item => item.policy.showInRest).map(item => [item.rest.slug, item.rest])),
+    profileVersion: 1 as const, sources, contentKeys, taxonomyKeys, contentTypes, taxonomies: taxonomyTypes,
+    restContentTypes: Object.fromEntries(contentDefinitions.filter(item => item.policy.showInRest).map(item => [item.rest.slug, item.rest])),
+    restTaxonomies: Object.fromEntries(taxonomyDefinitions.filter(item => item.policy.showInRest).map(item => [item.rest.slug, item.rest])),
   };
   const snapshot: RuntimeContentSnapshot = { ...data, profileFingerprint: createHash("sha256").update(canonical(data)).digest("hex") };
   Object.defineProperty(snapshot, snapshotBrand, { value: snapshotToken });
