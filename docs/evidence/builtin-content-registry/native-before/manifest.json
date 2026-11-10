@@ -1,0 +1,174 @@
+{
+  "schemaVersion": 1,
+  "purpose": "HISTORICAL_GREEN_BUILTIN_EQUIVALENCE_BASELINE",
+  "historicalBase": "172ce9326962fedd84884cf85d20005f1260cefe",
+  "constructorCommit": "1837c99b813ea4da28dd6532df0602ba84663efa",
+  "nodeSHA256": "582d1aa48ee69058e08be6406b86d604cf92010cf0e36a9e180e997b920da07b",
+  "fivePrivatePayloadCopies": [
+    {
+      "sourceBasename": "builtin-content-registry-before-green-review.md",
+      "sourceSHA256": "9ed7c7afd7019840511893934647f5d760225ac1db53985295c2cbb216e855d3",
+      "sourceBytes": 3859,
+      "copy": "review.md",
+      "copySHA256": "9ed7c7afd7019840511893934647f5d760225ac1db53985295c2cbb216e855d3",
+      "copyBytes": 3859,
+      "prefixOccurrenceLedger": [
+        {
+          "prefixIdentifier": "private-evidence",
+          "replacement": "<private-evidence>",
+          "occurrences": 0
+        },
+        {
+          "prefixIdentifier": "before-worktree",
+          "replacement": "<before-worktree>",
+          "occurrences": 0
+        },
+        {
+          "prefixIdentifier": "main-worktree",
+          "replacement": "<main-worktree>",
+          "occurrences": 0
+        }
+      ],
+      "transformation": "Exact UTF-8 literal known-prefix substitutions only; no parsing/reserialization, field/result/assertion/content edits."
+    },
+    {
+      "sourceBasename": "builtin-content-registry-before-green-checks.json",
+      "sourceSHA256": "5b6358c7bd099e98f7eb729be7f0065cd32f949ad7a9808b0a656a678aa651cf",
+      "sourceBytes": 4464,
+      "copy": "checks.json",
+      "copySHA256": "5b6358c7bd099e98f7eb729be7f0065cd32f949ad7a9808b0a656a678aa651cf",
+      "copyBytes": 4464,
+      "prefixOccurrenceLedger": [
+        {
+          "prefixIdentifier": "private-evidence",
+          "replacement": "<private-evidence>",
+          "occurrences": 0
+        },
+        {
+          "prefixIdentifier": "before-worktree",
+          "replacement": "<before-worktree>",
+          "occurrences": 0
+        },
+        {
+          "prefixIdentifier": "main-worktree",
+          "replacement": "<main-worktree>",
+          "occurrences": 0
+        }
+      ],
+      "transformation": "Exact UTF-8 literal known-prefix substitutions only; no parsing/reserialization, field/result/assertion/content edits."
+    },
+    {
+      "sourceBasename": "builtin-content-registry-before-green-resource-audit.json",
+      "sourceSHA256": "f3e519ef85dda6ebb1ab1080d09e6bf0f4af9b502fcb79f43b60975badc5f742",
+      "sourceBytes": 2685,
+      "copy": "resource-audit.json",
+      "copySHA256": "ba6c35c067c646a2514938a29f444ce8ba278f39993e794f3f9cecd6b9d746fc",
+      "copyBytes": 2579,
+      "prefixOccurrenceLedger": [
+        {
+          "prefixIdentifier": "private-evidence",
+          "replacement": "<private-evidence>",
+          "occurrences": 2
+        },
+        {
+          "prefixIdentifier": "before-worktree",
+          "replacement": "<before-worktree>",
+          "occurrences": 2
+        },
+        {
+          "prefixIdentifier": "main-worktree",
+          "replacement": "<main-worktree>",
+          "occurrences": 1
+        }
+      ],
+      "transformation": "Exact UTF-8 literal known-prefix substitutions only; no parsing/reserialization, field/result/assertion/content edits."
+    },
+    {
+      "sourceBasename": "builtin-content-registry-before-build-only-checks.json",
+      "sourceSHA256": "1d16732f9e6da7c43e5ac387a2a191de76ccbdc2999a9a37021651de02aaa0ea",
+      "sourceBytes": 2970,
+      "copy": "build-checks.json",
+      "copySHA256": "1d16732f9e6da7c43e5ac387a2a191de76ccbdc2999a9a37021651de02aaa0ea",
+      "copyBytes": 2970,
+      "prefixOccurrenceLedger": [
+        {
+          "prefixIdentifier": "private-evidence",
+          "replacement": "<private-evidence>",
+          "occurrences": 0
+        },
+        {
+          "prefixIdentifier": "before-worktree",
+          "replacement": "<before-worktree>",
+          "occurrences": 0
+        },
+        {
+          "prefixIdentifier": "main-worktree",
+          "replacement": "<main-worktree>",
+          "occurrences": 0
+        }
+      ],
+      "transformation": "Exact UTF-8 literal known-prefix substitutions only; no parsing/reserialization, field/result/assertion/content edits."
+    },
+    {
+      "sourceBasename": "builtin-content-registry-before-owned-cleanup.json",
+      "sourceSHA256": "0b609a1350059befdf6cb5cd871b1db9cb9d780c5593d53407088a9dff84acdb",
+      "sourceBytes": 2566,
+      "copy": "owned-cleanup.json",
+      "copySHA256": "013a39b60e453c2a1af724f2a3379fce523c77ed2bfa58e7914a9407e7c57263",
+      "copyBytes": 2446,
+      "prefixOccurrenceLedger": [
+        {
+          "prefixIdentifier": "private-evidence",
+          "replacement": "<private-evidence>",
+          "occurrences": 0
+        },
+        {
+          "prefixIdentifier": "before-worktree",
+          "replacement": "<before-worktree>",
+          "occurrences": 2
+        },
+        {
+          "prefixIdentifier": "main-worktree",
+          "replacement": "<main-worktree>",
+          "occurrences": 2
+        }
+      ],
+      "transformation": "Exact UTF-8 literal known-prefix substitutions only; no parsing/reserialization, field/result/assertion/content edits."
+    }
+  ],
+  "README": {
+    "file": "README.md",
+    "sha256": "02c52f22ec0d7af344e7b4e18c4b4af6d76e77a0cdc4925f8dc3256e9599ed9b",
+    "bytes": 3867
+  },
+  "packageFiles": [
+    "README.md",
+    "review.md",
+    "checks.json",
+    "resource-audit.json",
+    "build-checks.json",
+    "owned-cleanup.json",
+    "manifest.json"
+  ],
+  "sourceCopyCorrespondenceRetainedPrivately": true,
+  "payloadTransformationOnlyKnownLiteralPrefixSubstitution": true,
+  "noRuntimeTestCIUIOrMainChanges": true,
+  "measuredScope": {
+    "SOURCE": {
+      "tests": 4,
+      "pass": 4,
+      "fail": 0,
+      "skipped": 0,
+      "cancelled": 0,
+      "targetedResponses": 49
+    },
+    "actualCompiledAPI": {
+      "tests": 4,
+      "pass": 4,
+      "fail": 0,
+      "skipped": 0,
+      "cancelled": 0,
+      "targetedResponses": 49
+    }
+  }
+}

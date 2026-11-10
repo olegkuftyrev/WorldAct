@@ -1,0 +1,63 @@
+{
+  "status": "FIRST_BUILD_ONLY_PASS_NO_TEST_EXECUTION",
+  "base": "172ce9326962fedd84884cf85d20005f1260cefe",
+  "commit": "1837c99b813ea4da28dd6532df0602ba84663efa",
+  "buildAttempt": 1,
+  "nodeSHA256": "582d1aa48ee69058e08be6406b86d604cf92010cf0e36a9e180e997b920da07b",
+  "outputFileCount": 411,
+  "cleanTrackedTree": true,
+  "ownEnvAbsent": true,
+  "noDatabaseConnectionAnchorAllocationAPIHTTPTestsServiceOrInstallExecution": true,
+  "prospectiveGREENScope": {
+    "controlResponses": 49,
+    "metadata": 24,
+    "builtins": 20,
+    "import": 5,
+    "countedTests": 4,
+    "measured": false,
+    "genreCoverage": "Only core term-negative control; not taxonomy-import rollback."
+  },
+  "manifest": "builtin-content-registry-before-build-only-manifest.json",
+  "manifestSHA256": "529d674dbf20a308a9a58ee52e9935c8841e9bc14f4c1552a991741045e88ba1",
+  "constructionProgramAuditSHA256": "98a2c2b50c74efc597807ae3f7887607627a1a9cc615c048e1e0e9018333a1f6",
+  "inputManifestSHA256": "6cb39fe8940042fb5b485fc46fc657600e8ae175f5ef35ba74802b084ed50936",
+  "buildLogs": [
+    {
+      "step": "typecheck",
+      "rawLog": "builtin-content-registry-before-typecheck.log",
+      "rawLogSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "exitCode": 0,
+      "receipt": "builtin-content-registry-before-typecheck-run.json",
+      "receiptSHA256": "6b88f2dc224173d9a05622505b8528a6512304ffb3555592615a0effdfc3f168"
+    },
+    {
+      "step": "vite",
+      "rawLog": "builtin-content-registry-before-vite.log",
+      "rawLogSHA256": "082f882354dbf9259181a1361f3c5fe1287eb9d857df86a774e8eaae5d64b857",
+      "exitCode": 0,
+      "receipt": "builtin-content-registry-before-vite-run.json",
+      "receiptSHA256": "13e68d7015ce96094225c6c920a1b5e9f3652072e7a1e5e97aaac565f6982620"
+    },
+    {
+      "step": "native-esbuild",
+      "rawLog": "builtin-content-registry-before-native-esbuild.log",
+      "rawLogSHA256": "c714cf9bce455fc45f1cc37c62592e48e0a81781617633a45fb3abf29d4a92ce",
+      "exitCode": 0,
+      "receipt": "builtin-content-registry-before-native-esbuild-run.json",
+      "receiptSHA256": "ed591234fb95dda4e9dd1f8e2d49a0c0804ca5055e4ea124c00b26ed9cbf62a8"
+    }
+  ],
+  "dependencyLinkRetained": true,
+  "auditMetadataCorrections": [
+    {
+      "receipt": "builtin-content-registry-before-construction-program-initial-stop.json",
+      "sha256": "8eb480ddacf42923941025bf607a3760998ee3d6d49bebe4424ae5cba102d7c3",
+      "reason": "Initial prebuild audit expected both preserved historical Nodes582d instead of their own7f5e/582d originals. Corrected before resources; not a build failure."
+    },
+    {
+      "receipt": "builtin-content-registry-before-postbuild-audit-initial-stop.json",
+      "sha256": "16db8d8e1a7191a9f83da72eb8c7a279f4c359488e3a81f507beef343aa7a0a5",
+      "reason": "Optional live MAIN equality is irrelevant after MAIN advanced0773. Own historical172 build correctly582d; no rebuild or product failure."
+    }
+  ]
+}

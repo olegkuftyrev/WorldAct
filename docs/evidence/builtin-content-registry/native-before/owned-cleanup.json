@@ -1,0 +1,62 @@
+{
+  "status": "AUTHORIZED_OWN_ENV_AND_READONLY_LINK_REMOVED_ONLY",
+  "utc": "2026-11-10T09:15:01.907291+00:00",
+  "historicalBase": "172ce9326962fedd84884cf85d20005f1260cefe",
+  "constructorHead": "1837c99b813ea4da28dd6532df0602ba84663efa",
+  "authority": "Root accepted GREEN before final audit and authorized exact own .env creation hash and readonly dependency link removal.",
+  "removed": [
+    {
+      "path": "<before-worktree>/.env",
+      "type": "regular file",
+      "uid": 501,
+      "mode": "0600",
+      "creationSHA256": "9c1f852154b835fc3172979c3f066b1066736d2bdfb44570ad64719955d64c1c",
+      "actualSHA256MatchedBeforeRemoval": true,
+      "absentAfterRemoval": true
+    },
+    {
+      "path": "<before-worktree>/node_modules",
+      "type": "symbolic link only",
+      "uid": 501,
+      "exactTarget": "<main-worktree>/node_modules",
+      "absentAfterRemoval": true
+    }
+  ],
+  "realDependencyOwner": {
+    "path": "<main-worktree>/node_modules",
+    "uid": 501,
+    "mode": "0755",
+    "notSymlink": true,
+    "matchingLockSHA256": "233888ed8f864581a8835aab0b4c33ccd7fbc391f2a98650b63fcf8db8814892",
+    "untouched": true
+  },
+  "retained": {
+    "own411BuildOutputs": 411,
+    "nodeSHA256": "582d1aa48ee69058e08be6406b86d604cf92010cf0e36a9e180e997b920da07b",
+    "proofs": [
+      {
+        "file": "builtin-content-registry-before-green-source-proof.json",
+        "sha256": "4ed6da7ea61ee8517d5dc243340290094e4b32fc81cbfbb58ceae5e23f7f7cdd",
+        "retained": true
+      },
+      {
+        "file": "builtin-content-registry-before-green-compiled-proof.json",
+        "sha256": "fedb6e2735fad71795935fea3c1cacfa25cb88a4d9233e00453faf84e712f515",
+        "retained": true
+      }
+    ],
+    "allOriginalsRawLogsBuildsAndAuditMetadataCorrectionReceipts": true
+  },
+  "noDatabaseOrServiceOperationDuringCleanup": true,
+  "priorResourceClosure": {
+    "file": "builtin-content-registry-before-green-resource-audit.json",
+    "sha256": "f3e519ef85dda6ebb1ab1080d09e6bf0f4af9b502fcb79f43b60975badc5f742",
+    "observedDatabasesClosed": 2,
+    "neverAnchorAbsent": true,
+    "phaseAppsObservedPIDsAndDetachedGroupsAbsent": true,
+    "port5196FreeAtAcceptedClosure": true
+  },
+  "noArchivesCreatedOrRemoved": true,
+  "uploadLimitation": "Disposable upload paths were not journaled; only official runner normal finally is recorded, not an independent upload-absence claim.",
+  "noRuntimeTestSchemaPermissionUIOrCIChanges": true
+}

@@ -1,0 +1,92 @@
+{
+  "status": "OWNED_GREEN_BEFORE_RESOURCES_CLOSED_CONFIG_AND_LINK_RETAINED",
+  "timeUTC": "2026-11-10T09:09:32.519Z",
+  "base": "172ce9326962fedd84884cf85d20005f1260cefe",
+  "head": "1837c99b813ea4da28dd6532df0602ba84663efa",
+  "runs": [
+    {
+      "mode": "source",
+      "receipt": "<private-evidence>/builtin-content-registry-before-green-source-run.json",
+      "sha256": "53968bdb31798363698539035b545dfc3b58247d961f25275c1f556e9368090c"
+    },
+    {
+      "mode": "compiled",
+      "receipt": "<private-evidence>/builtin-content-registry-before-green-compiled-run.json",
+      "sha256": "68731697f2829fd5814078ab19c0ad6dfd5b6cc0c2dddf92e2396824f7ed264a"
+    }
+  ],
+  "observedDisposableDatabases": [
+    "worldact_test_1794301689444_a1e71688",
+    "worldact_test_1794301707402_c74d46b7"
+  ],
+  "remainingDatabases": [],
+  "phaseApplicationNames": [
+    "worldact_builtin_registry_before_source",
+    "worldact_builtin_registry_before_compiled"
+  ],
+  "remainingPhaseDatabaseSessions": [],
+  "anchor": "worldact_builtin_content_registry_before_anchor",
+  "anchorAbsent": true,
+  "URLApplicationNamePresent": false,
+  "loopback54329": true,
+  "configRetained": {
+    "path": "<before-worktree>/.env",
+    "sha256": "9c1f852154b835fc3172979c3f066b1066736d2bdfb44570ad64719955d64c1c",
+    "creationSHA256": "9c1f852154b835fc3172979c3f066b1066736d2bdfb44570ad64719955d64c1c",
+    "uid": 501,
+    "mode": "600",
+    "regularNonSymlink": true
+  },
+  "dependencyLinkRetained": {
+    "path": "<before-worktree>/node_modules",
+    "target": "<main-worktree>/node_modules",
+    "linkUID": 501,
+    "realOwnerUID": 501,
+    "realOwnerMode": "755",
+    "ownerNotSymlink": true,
+    "matchingLockSHA256": "233888ed8f864581a8835aab0b4c33ccd7fbc391f2a98650b63fcf8db8814892"
+  },
+  "all411BuildOutputsAndPrivateProofsRawLogsRetained": true,
+  "noArchivesCreated": true,
+  "uploadScope": "Official runner normal finally; disposable upload paths were not journaled, so no independent upload-absence claim.",
+  "journalPID": 797756,
+  "journalPoolEnded": true,
+  "finalJournalBackendOSPIDAbsent": true,
+  "observedPIDs": [
+    50591,
+    797448,
+    50604,
+    50611,
+    50654,
+    50661,
+    50701,
+    50702,
+    50740,
+    50741,
+    50748,
+    797449,
+    797450,
+    797458,
+    797462,
+    797461,
+    797460,
+    797459,
+    50822,
+    797520,
+    50835,
+    50880,
+    50913,
+    50932,
+    50933,
+    797521,
+    797522,
+    797523,
+    797534,
+    797533,
+    797532,
+    797531
+  ],
+  "remainingObservedOSPIDs": [],
+  "port5196PhysicallyFree": true,
+  "cleanTrackedTree": true
+}

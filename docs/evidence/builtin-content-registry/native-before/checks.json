@@ -1,0 +1,116 @@
+{
+  "status": "GREEN_BUILTIN_EQUIVALENCE_BASELINE_PASS",
+  "timeUTC": "2026-11-10T09:10:36.311751+00:00",
+  "base": "172ce9326962fedd84884cf85d20005f1260cefe",
+  "commit": "1837c99b813ea4da28dd6532df0602ba84663efa",
+  "nodeSHA256": "582d1aa48ee69058e08be6406b86d604cf92010cf0e36a9e180e997b920da07b",
+  "immutableTestSHA256": "7afefe1ee911041516f476f459a0bd3b61f5734baf46969ca91021f02f132ae0",
+  "eachOfficialRunnerExecutedOnce": true,
+  "runs": [
+    {
+      "mode": "source",
+      "runReceipt": "builtin-content-registry-before-green-source-run.json",
+      "runReceiptSHA256": "53968bdb31798363698539035b545dfc3b58247d961f25275c1f556e9368090c",
+      "rawLog": "builtin-content-registry-before-green-source.log",
+      "rawLogSHA256": "0487ef1dfdab4a7160f6d14e284b3a61e4c1677ba04f35ed5886244d6e369c75",
+      "proof": "builtin-content-registry-before-green-source-proof.json",
+      "proofSHA256": "4ed6da7ea61ee8517d5dc243340290094e4b32fc81cbfbb58ceae5e23f7f7cdd",
+      "counts": {
+        "tests": 4,
+        "pass": 4,
+        "fail": 0,
+        "skipped": 0,
+        "cancelled": 0
+      },
+      "files": 1,
+      "perFileCounts": [
+        4
+      ],
+      "officialOneFileCompletion": true,
+      "dispatches": 49,
+      "groups": {
+        "metadata": 24,
+        "builtins": 20,
+        "import": 5
+      },
+      "statusHistogram": {
+        "200": 23,
+        "201": 5,
+        "400": 11,
+        "401": 4,
+        "403": 3,
+        "404": 3
+      },
+      "setupErrors": [],
+      "ownedFixtureCleanup": {
+        "ownedPosts": 3,
+        "ownedTerms": 2,
+        "ownedUsers": 2,
+        "failures": []
+      },
+      "frozen354Source242TestDirectory411OutputHashesVerifiedPreAndPost": true,
+      "remainingDatabases": [],
+      "remainingSessions": [],
+      "remainingOSPIDs": [],
+      "port5196Free": true
+    },
+    {
+      "mode": "compiled",
+      "runReceipt": "builtin-content-registry-before-green-compiled-run.json",
+      "runReceiptSHA256": "68731697f2829fd5814078ab19c0ad6dfd5b6cc0c2dddf92e2396824f7ed264a",
+      "rawLog": "builtin-content-registry-before-green-compiled.log",
+      "rawLogSHA256": "ab00ed4f20d80f998a1005c4505fbce52c2c0e1b6ef703b2ec544236bba6fd83",
+      "proof": "builtin-content-registry-before-green-compiled-proof.json",
+      "proofSHA256": "fedb6e2735fad71795935fea3c1cacfa25cb88a4d9233e00453faf84e712f515",
+      "counts": {
+        "tests": 4,
+        "pass": 4,
+        "fail": 0,
+        "skipped": 0,
+        "cancelled": 0
+      },
+      "files": 1,
+      "perFileCounts": [
+        4
+      ],
+      "officialOneFileCompletion": true,
+      "dispatches": 49,
+      "groups": {
+        "metadata": 24,
+        "builtins": 20,
+        "import": 5
+      },
+      "statusHistogram": {
+        "200": 23,
+        "201": 5,
+        "400": 11,
+        "401": 4,
+        "403": 3,
+        "404": 3
+      },
+      "setupErrors": [],
+      "ownedFixtureCleanup": {
+        "ownedPosts": 3,
+        "ownedTerms": 2,
+        "ownedUsers": 2,
+        "failures": []
+      },
+      "frozen354Source242TestDirectory411OutputHashesVerifiedPreAndPost": true,
+      "remainingDatabases": [],
+      "remainingSessions": [],
+      "remainingOSPIDs": [],
+      "port5196Free": true
+    }
+  ],
+  "metadataAll24FullRawBodiesJSONKeysOrderSourceCompiledEqual": true,
+  "resourceAudit": "builtin-content-registry-before-green-resource-audit.json",
+  "resourceAuditSHA256": "f3e519ef85dda6ebb1ab1080d09e6bf0f4af9b502fcb79f43b60975badc5f742",
+  "configRetainedSHA256": "9c1f852154b835fc3172979c3f066b1066736d2bdfb44570ad64719955d64c1c",
+  "ownReadonlyDependencyLinkRetained": true,
+  "noRegistryImplementationNoRuntimeSchemaPermissionImportUIOrCIChange": true,
+  "scope": "Existing built-in metadata/protected detail projections, post/page/category/tag writes and closed validators, one unsupported book JSON import rollback plus ordinary page import. Genre is only a core term-negative, not taxonomy-import rollback coverage.",
+  "noFullFreshFixedBrowserNativeOrReleaseClaim": true,
+  "rawProofContainsNoAuthenticationSetupResponsesHeadersCookiesOrCredentialsBySchema": true,
+  "uploadsLimitation": "Official runner normal finally; disposable upload paths were not journaled, so no independent upload-absence claim.",
+  "buildAuditOnlyCorrections": "Previous prebuild historical-node and optional live-MAIN-node metadata assertion stops are preserved; neither was a build/test/product failure. GREEN guards were not retried."
+}
