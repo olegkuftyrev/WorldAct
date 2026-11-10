@@ -1,0 +1,65 @@
+{
+  "status": "ONLY_OWN_EXACT_CONFIG_AND_READONLY_DEPENDENCY_LINK_REMOVED",
+  "time": "2026-11-10T07:55:23.474Z",
+  "candidate": "7a891113fbf5e96ee1c135e4d4b7b83001d2fdcf",
+  "runtimeFreeze": "1fcc2cbe3bdb25d60331ec657c923bea6b685489",
+  "nodeSHA256": "582d1aa48ee69058e08be6406b86d604cf92010cf0e36a9e180e997b920da07b",
+  "authorization": "Root accepted both52-case/raw122-response backend audits and authorized only exact own environment/link cleanup.",
+  "config": {
+    "path": "<owned-checkout>/.env",
+    "uid": 501,
+    "mode": "0600",
+    "regularNonSymlink": true,
+    "originalCreationSHA256": "15e6429f85542cd24ec651816a79be359867e114fb0a04505ab981f0c63c4247",
+    "creationHashReverified": true,
+    "removed": true,
+    "absent": true
+  },
+  "dependencyLink": {
+    "path": "<owned-checkout>/node_modules",
+    "uid": 501,
+    "exactKnownTarget": "<shared-dependency-owner>/node_modules",
+    "removed": true,
+    "absent": true,
+    "realOwnerUidBeforeAndAfter": 501,
+    "realOwnerModeBeforeAndAfter": "0755",
+    "realOwnerNonSymlink": true,
+    "lockSHA256": "233888ed8f864581a8835aab0b4c33ccd7fbc391f2a98650b63fcf8db8814892",
+    "sharedOwnerUnmodified": true,
+    "noInstall": true
+  },
+  "previousResourceAudit": {
+    "file": "query-title-missing-type-backend-resource-audit.json",
+    "sha256": "a85b1ae69c85fd79d5492be02c13e42e75522f0e536d3d86e843a5eaf05c417b",
+    "retainedStateIsHistorical": true
+  },
+  "journaledDatabases": [
+    "worldact_test_1794296981389_ad499c2b",
+    "worldact_test_1794297013553_ee59a692"
+  ],
+  "neverCreatedAnchor": "worldact_query_title_missing_type_backend_anchor",
+  "anchorAbsent": true,
+  "remainingDatabases": [],
+  "remainingPhaseSessions": [],
+  "cleanupPoolEnded": true,
+  "portsPhysicallyBoundAndReleased": {
+    "3046": true,
+    "3047": true,
+    "3048": true
+  },
+  "port3048UnusedByGuards": true,
+  "fixed3062NeverUsed": true,
+  "removedPathsOnly": [
+    "<owned-checkout>/.env",
+    "<owned-checkout>/node_modules"
+  ],
+  "archivesCreated": 0,
+  "allBuildsOriginalBeforeProofsRawLogsAndFailuresRetained": true,
+  "noRuntimeTestsCIUIOrMainChanges": true,
+  "normalFinallyUploads": {
+    "bothStandardRunnersExitZero": true,
+    "runner": "scripts/test-isolated.mjs removes disposable upload directory in finally",
+    "exactUploadPathsJournaled": false,
+    "limitation": "No independent per-upload-path absence certificate or global temporary-directory sweep is claimed."
+  }
+}

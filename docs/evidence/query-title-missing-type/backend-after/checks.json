@@ -1,0 +1,703 @@
+{
+  "status": "SCOPED_MISSING_OR_EMPTY_QUERY_TITLE_TYPE_PASS",
+  "created": "2026-11-10T07:52:40.629885+00:00",
+  "base": "d7c9a996f7336fc91049833db89789385a214545",
+  "runtimeFreeze": "1fcc2cbe3bdb25d60331ec657c923bea6b685489",
+  "fixtureAdapterHead": "7a891113fbf5e96ee1c135e4d4b7b83001d2fdcf",
+  "tree": "f66095b81abb70ea75ba1bcbf076f27dcd597812",
+  "nodeSHA256": "582d1aa48ee69058e08be6406b86d604cf92010cf0e36a9e180e997b920da07b",
+  "runtime": {
+    "files": [
+      {
+        "file": "server/block-renderer.ts",
+        "beforeSHA256": "a3ead8521060e4ab3cf1dd17e530e2881bb50a57df5dcf65e67b3e6ec898277f",
+        "afterSHA256": "6002a966d9a69b2dc1805f1144957c87ee9e036304d313cef87426672e5fc95c",
+        "addedLines": 1,
+        "removedLines": 0
+      }
+    ],
+    "diff": {
+      "file": "query-title-missing-type-runtime-frozen.diff",
+      "sha256": "c37ec0f4b6686fe7496c12ea915c074b3e9816241906cc473c16ddf25d3eeb25"
+    },
+    "exactDelta": "One early undefined-or-exact-empty-string return in core/query-title before existing archive context, labels, SQL and wrapper.",
+    "noSQLAwaitNormalizationDefaultContextDTOOrAuthorityChange": true
+  },
+  "immutableRegression": {
+    "file": "tests/query-title-missing-type-original.test.ts",
+    "sha256": "5b2406b78a9395fe252cdf3e318150babc9550da319e1b4cf5787c8cfcf44856",
+    "originCommit": "8e97e863b55fa91e1e587561d78fb7e7e622c6ce",
+    "cherryCommit": "901459b6842161f93fbb5eaf2bc5bb0974b447f1",
+    "unchanged": true
+  },
+  "fixtureAdapters": [
+    {
+      "file": "tests/blocks.test.ts",
+      "beforeSHA256": "fa0fb26d5a57b93232b4d9b481eebaa729ce5e0e76c951db6239c85152a93fd3",
+      "afterSHA256": "50521c9c671d7ede4a608c9d6975303da34a15f1ab80dbf338f4b43e8268615a",
+      "explicitArchiveAttributeAdditions": 1,
+      "onlyFixtureTypeAdditions": true,
+      "assertionsUnchanged": true
+    },
+    {
+      "file": "tests/date-archives.test.ts",
+      "beforeSHA256": "a79de3f453d0122ec702747614ec17409407eea47e6de859448768df30758958",
+      "afterSHA256": "efa03a60b5530b82fc3947af2be67e91da2298f94f2c0163fb32d42d34d9d175",
+      "explicitArchiveAttributeAdditions": 3,
+      "onlyFixtureTypeAdditions": true,
+      "assertionsUnchanged": true
+    },
+    {
+      "file": "tests/author-name-independent-identity.test.ts",
+      "beforeSHA256": "4fa756c8f65279ce5de5e5aa4a8dafa64a530ed96718cc9bc79b0e1542114a21",
+      "afterSHA256": "595dc91255e5439626e7209ea9420e4662e0886fc3f5f3c8dcd05a16ad9c2882",
+      "explicitArchiveAttributeAdditions": 1,
+      "onlyFixtureTypeAdditions": true,
+      "assertionsUnchanged": true
+    }
+  ],
+  "fixtureAdapterDiff": {
+    "file": "query-title-missing-type-fixture-adapter-frozen.diff",
+    "sha256": "2f8b4f39956da528c39923c63e0c5f7a56043e92d64c44a66d36d2b53314bd1d"
+  },
+  "adapterOriginalsReceipt": {
+    "file": "query-title-missing-type-future-adapter-originals.json",
+    "sha256": "db365b5a4a5481f7592f3be478cad44426adb263633a612ebc76b6b0550929ec"
+  },
+  "allAssertionsAndInstrumentationUnchanged": true,
+  "externalBefore": {
+    "scope": "Root-accepted historical native-owner before; not executed by this backend owner",
+    "base": "d7c9a996f7336fc91049833db89789385a214545",
+    "nodeSHA256": "7f5e15d054e0a888ae362f95b055c587dab1dff8c9fd836b0d98ea1eafb96093",
+    "testOriginCommit": "8e97e863b55fa91e1e587561d78fb7e7e622c6ce",
+    "testSHA256": "5b2406b78a9395fe252cdf3e318150babc9550da319e1b4cf5787c8cfcf44856",
+    "eachMode": {
+      "tests": 6,
+      "pass": 2,
+      "fail": 4,
+      "responses": 9,
+      "responseStatuses": "all200",
+      "setupErrors": 0,
+      "fixtureAdapterUsed": false
+    },
+    "rootAudit": {
+      "file": "root-query-title-missing-type-before-audit.json",
+      "sha256": "3439e4a8c4d8f97155094049a0af8b5241d85be13650cc90dbd13877ae5ed079"
+    }
+  },
+  "build": {
+    "receipt": {
+      "file": "query-title-missing-type-backend-build-checks.json",
+      "sha256": "4144a602df1174ce55ea6fc106c702066dd3970fd1fa80c8aa7b091f33528d34"
+    },
+    "data": {
+      "status": "BUILD_ONLY_PASS_NO_ENV_DATABASE_API_OR_TESTS",
+      "time": "2026-11-10T07:13:49.541210+00:00",
+      "base": "d7c9a996f7336fc91049833db89789385a214545",
+      "runtimeFreeze": "1fcc2cbe3bdb25d60331ec657c923bea6b685489",
+      "fixtureAdapterHead": "7a891113fbf5e96ee1c135e4d4b7b83001d2fdcf",
+      "tree": "f66095b81abb70ea75ba1bcbf076f27dcd597812",
+      "nodeSHA256": "582d1aa48ee69058e08be6406b86d604cf92010cf0e36a9e180e997b920da07b",
+      "buildRuns": [
+        {
+          "kind": "typecheck",
+          "command": [
+            "node",
+            "node_modules/typescript/bin/tsc",
+            "--noEmit"
+          ],
+          "started": "2026-11-10T07:10:57.462438+00:00",
+          "finished": "2026-11-10T07:13:22.689336+00:00",
+          "exitCode": 0,
+          "privateLogBasename": "worldact-query-title-missing-type-typecheck.log",
+          "logSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "logBytes": 0,
+          "logMode": "0600"
+        },
+        {
+          "kind": "vite",
+          "command": [
+            "node",
+            "node_modules/vite/bin/vite.js",
+            "build",
+            "--configLoader",
+            "runner"
+          ],
+          "started": "2026-11-10T07:13:22.692028+00:00",
+          "finished": "2026-11-10T07:13:49.423975+00:00",
+          "exitCode": 0,
+          "privateLogBasename": "worldact-query-title-missing-type-vite.log",
+          "logSHA256": "019d17d1a3b081ebf8225624d5c7e6566c1a6b3f79d296902ce682c829a3b9ca",
+          "logBytes": 2343,
+          "logMode": "0600"
+        },
+        {
+          "kind": "native-esbuild",
+          "command": [
+            "node_modules/@esbuild/darwin-arm64/bin/esbuild",
+            "server/index.ts",
+            "--bundle",
+            "--platform=node",
+            "--format=esm",
+            "--packages=external",
+            "--outfile=dist-server/index.js"
+          ],
+          "started": "2026-11-10T07:13:49.424939+00:00",
+          "finished": "2026-11-10T07:13:49.494908+00:00",
+          "exitCode": 0,
+          "privateLogBasename": "worldact-query-title-missing-type-native-esbuild.log",
+          "logSHA256": "a8d6c1620f99ba870b58ef32984e8b9fd553b116215bae5daf334e08587a03d9",
+          "logBytes": 56,
+          "logMode": "0600"
+        }
+      ],
+      "sourceFingerprints": [
+        {
+          "file": "server/block-renderer.ts",
+          "beforeSHA256": "a3ead8521060e4ab3cf1dd17e530e2881bb50a57df5dcf65e67b3e6ec898277f",
+          "afterSHA256": "6002a966d9a69b2dc1805f1144957c87ee9e036304d313cef87426672e5fc95c",
+          "addedLines": 1,
+          "removedLines": 0
+        }
+      ],
+      "all10TestFingerprints": [
+        {
+          "file": "tests/query-title-missing-type-original.test.ts",
+          "sha256": "5b2406b78a9395fe252cdf3e318150babc9550da319e1b4cf5787c8cfcf44856",
+          "prospectiveTests": 6,
+          "scope": "actual HTTP public GET/HEAD/model and authenticated preview; actual compiled API in compiled mode"
+        },
+        {
+          "file": "tests/block-render-attributes.test.ts",
+          "sha256": "be923affd756f83d5cc4b336b31885c3707d5e8217d32c7fb699448e34fb8efc",
+          "prospectiveTests": 2,
+          "scope": "direct TypeScript normalization imports remain SOURCE in both modes"
+        },
+        {
+          "file": "tests/public-document-data.test.ts",
+          "sha256": "dee95240a579ec16327b0ca10f1497cbf2deae37dfd218113a08675cfa0454b1",
+          "prospectiveTests": 7,
+          "scope": "mixed direct TypeScript service/renderer imports (SOURCE) and actual HTTP"
+        },
+        {
+          "file": "tests/singular-archive-query-title-before.test.ts",
+          "sha256": "fa7f74eaab2edf81507422dc96015f823ee5a1de41e2a2f4bc9d902385966724",
+          "prospectiveTests": 6,
+          "scope": "actual HTTP selected document/template/body and archive loop"
+        },
+        {
+          "file": "tests/singular-archive-query-title-posts-page.test.ts",
+          "sha256": "454a4bdce36dcf096e53fb670cde36a18220d05474505dd61a3dc492bf008820",
+          "prospectiveTests": 4,
+          "scope": "actual HTTP selected/configured posts-page representation preservation"
+        },
+        {
+          "file": "tests/archive-query-title-home-body-original.test.ts",
+          "sha256": "14dc9e1cc335174df1b4f826ddf57699e97d0add3daffacfb80639c9adf0264b",
+          "prospectiveTests": 4,
+          "scope": "actual HTTP Source/Classic body/model/site API controls"
+        },
+        {
+          "file": "tests/author-name-independent-count-grant.test.ts",
+          "sha256": "6643e7832a8272913a88bab1bac653a6cb674f25e25bd9c09139cfc65252f031",
+          "prospectiveTests": 4,
+          "scope": "actual HTTP measured identity/final grant boundary"
+        },
+        {
+          "file": "tests/blocks.test.ts",
+          "sha256": "50521c9c671d7ede4a608c9d6975303da34a15f1ab80dbf338f4b43e8268615a",
+          "prospectiveTests": 9,
+          "scope": "mixed direct TypeScript rendering (SOURCE) and actual HTTP preview/blocks"
+        },
+        {
+          "file": "tests/date-archives.test.ts",
+          "sha256": "efa03a60b5530b82fc3947af2be67e91da2298f94f2c0163fb32d42d34d9d175",
+          "prospectiveTests": 4,
+          "scope": "mixed direct TypeScript renderer/date helpers (SOURCE) and actual HTTP date API"
+        },
+        {
+          "file": "tests/author-name-independent-identity.test.ts",
+          "sha256": "595dc91255e5439626e7209ea9420e4662e0886fc3f5f3c8dcd05a16ad9c2882",
+          "prospectiveTests": 6,
+          "scope": "actual HTTP identity controls plus supplied-client direct TypeScript rendering (SOURCE)"
+        }
+      ],
+      "sourceAndTestHashesUnchangedAfterBuild": true,
+      "readOnlyDependencies": {
+        "ownerUid": 501,
+        "ownerMode": "0755",
+        "ownerNonSymlink": true,
+        "lockSHA256": "233888ed8f864581a8835aab0b4c33ccd7fbc391f2a98650b63fcf8db8814892",
+        "ownLinkRetained": true,
+        "noInstall": true
+      },
+      "noEnvDatabaseAPIOrTests": true,
+      "runtimeTestCIUIAndMainUnchanged": true
+    }
+  },
+  "frozenSelector": {
+    "file": "query-title-missing-type-complete-affected-selector.json",
+    "sha256": "936c5b50083cb4fd15f4e8ce75f390111fe563eb0068364ecc9e5d925a5362d9",
+    "entries": [
+      {
+        "file": "tests/query-title-missing-type-original.test.ts",
+        "sha256": "5b2406b78a9395fe252cdf3e318150babc9550da319e1b4cf5787c8cfcf44856",
+        "prospectiveTests": 6,
+        "scope": "actual HTTP public GET/HEAD/model and authenticated preview; actual compiled API in compiled mode"
+      },
+      {
+        "file": "tests/block-render-attributes.test.ts",
+        "sha256": "be923affd756f83d5cc4b336b31885c3707d5e8217d32c7fb699448e34fb8efc",
+        "prospectiveTests": 2,
+        "scope": "direct TypeScript normalization imports remain SOURCE in both modes"
+      },
+      {
+        "file": "tests/public-document-data.test.ts",
+        "sha256": "dee95240a579ec16327b0ca10f1497cbf2deae37dfd218113a08675cfa0454b1",
+        "prospectiveTests": 7,
+        "scope": "mixed direct TypeScript service/renderer imports (SOURCE) and actual HTTP"
+      },
+      {
+        "file": "tests/singular-archive-query-title-before.test.ts",
+        "sha256": "fa7f74eaab2edf81507422dc96015f823ee5a1de41e2a2f4bc9d902385966724",
+        "prospectiveTests": 6,
+        "scope": "actual HTTP selected document/template/body and archive loop"
+      },
+      {
+        "file": "tests/singular-archive-query-title-posts-page.test.ts",
+        "sha256": "454a4bdce36dcf096e53fb670cde36a18220d05474505dd61a3dc492bf008820",
+        "prospectiveTests": 4,
+        "scope": "actual HTTP selected/configured posts-page representation preservation"
+      },
+      {
+        "file": "tests/archive-query-title-home-body-original.test.ts",
+        "sha256": "14dc9e1cc335174df1b4f826ddf57699e97d0add3daffacfb80639c9adf0264b",
+        "prospectiveTests": 4,
+        "scope": "actual HTTP Source/Classic body/model/site API controls"
+      },
+      {
+        "file": "tests/author-name-independent-count-grant.test.ts",
+        "sha256": "6643e7832a8272913a88bab1bac653a6cb674f25e25bd9c09139cfc65252f031",
+        "prospectiveTests": 4,
+        "scope": "actual HTTP measured identity/final grant boundary"
+      },
+      {
+        "file": "tests/blocks.test.ts",
+        "sha256": "50521c9c671d7ede4a608c9d6975303da34a15f1ab80dbf338f4b43e8268615a",
+        "prospectiveTests": 9,
+        "scope": "mixed direct TypeScript rendering (SOURCE) and actual HTTP preview/blocks"
+      },
+      {
+        "file": "tests/date-archives.test.ts",
+        "sha256": "efa03a60b5530b82fc3947af2be67e91da2298f94f2c0163fb32d42d34d9d175",
+        "prospectiveTests": 4,
+        "scope": "mixed direct TypeScript renderer/date helpers (SOURCE) and actual HTTP date API"
+      },
+      {
+        "file": "tests/author-name-independent-identity.test.ts",
+        "sha256": "595dc91255e5439626e7209ea9420e4662e0886fc3f5f3c8dcd05a16ad9c2882",
+        "prospectiveTests": 6,
+        "scope": "actual HTTP identity controls plus supplied-client direct TypeScript rendering (SOURCE)"
+      }
+    ],
+    "actualPerFileCountsEachMode": [
+      6,
+      2,
+      7,
+      6,
+      4,
+      4,
+      4,
+      9,
+      4,
+      6
+    ],
+    "actualTestsEachMode": 52
+  },
+  "runs": [
+    {
+      "mode": "source",
+      "port": 3046,
+      "candidate": "7a891113fbf5e96ee1c135e4d4b7b83001d2fdcf",
+      "runtimeFreeze": "1fcc2cbe3bdb25d60331ec657c923bea6b685489",
+      "tree": "f66095b81abb70ea75ba1bcbf076f27dcd597812",
+      "nodeSHA256": "582d1aa48ee69058e08be6406b86d604cf92010cf0e36a9e180e997b920da07b",
+      "selectorSHA256": "936c5b50083cb4fd15f4e8ce75f390111fe563eb0068364ecc9e5d925a5362d9",
+      "files": [
+        "tests/query-title-missing-type-original.test.ts",
+        "tests/block-render-attributes.test.ts",
+        "tests/public-document-data.test.ts",
+        "tests/singular-archive-query-title-before.test.ts",
+        "tests/singular-archive-query-title-posts-page.test.ts",
+        "tests/archive-query-title-home-body-original.test.ts",
+        "tests/author-name-independent-count-grant.test.ts",
+        "tests/blocks.test.ts",
+        "tests/date-archives.test.ts",
+        "tests/author-name-independent-identity.test.ts"
+      ],
+      "log": "<private-logs>/worldact-query-title-missing-type-final-source.log",
+      "anchor": "worldact_query_title_missing_type_backend_anchor",
+      "applicationName": "worldact_query_title_missing_type_backend_source",
+      "URLApplicationNamePresent": false,
+      "launchGates": {
+        "exactRuntimeAnd10TestAndBinaryHashes": true,
+        "cleanHead": true,
+        "readonlyDependencyOwnerAndLock": true,
+        "ownMinimal600ConfigOriginalBytes": true,
+        "anchorAbsent": true,
+        "priorOwnPhaseSessionsAbsent": true,
+        "allFourProofOutputsFresh": true,
+        "primaryPortsPhysicallyFree": {
+          "3046": true,
+          "3047": true,
+          "3048": true
+        }
+      },
+      "databases": [
+        "worldact_test_1794296981389_ad499c2b"
+      ],
+      "started": "2026-11-10T07:49:41.333Z",
+      "runnerPID": 29903,
+      "tests": 52,
+      "pass": 52,
+      "fail": 0,
+      "skipped": 0,
+      "cancelled": 0,
+      "perFileCounts": [
+        6,
+        2,
+        7,
+        6,
+        4,
+        4,
+        4,
+        9,
+        4,
+        6
+      ],
+      "completedFiles": 10,
+      "exitCode": 0,
+      "logSHA256": "3c1f82f5208e4d38ce9df46565d4c817136324c63d9b7d460dd6ca22e426bae8",
+      "finished": "2026-11-10T07:50:00.595Z",
+      "anchorAbsent": true,
+      "remainingDatabases": [],
+      "remainingSessions": [],
+      "proofs": [
+        {
+          "kind": "missing",
+          "path": "<private-evidence>/query-title-missing-type-backend-source-missing-proof.json",
+          "sha256": "b85d837c3e2fb9134daf5df1023d141bc409b2493019419e7f4e56067eb76121",
+          "dispatches": 9,
+          "wantedDispatches": 9,
+          "dispatchesMatch": true,
+          "uid": 501,
+          "mode": "600",
+          "regularNonSymlink": true
+        },
+        {
+          "kind": "singular",
+          "path": "<private-evidence>/query-title-missing-type-backend-source-singular-proof.json",
+          "sha256": "eac1c388fb1df341d89631a975ee0b9a75cddc1ccc9a8eb0181d5fdf2adc3906",
+          "dispatches": 23,
+          "wantedDispatches": 23,
+          "dispatchesMatch": true,
+          "uid": 501,
+          "mode": "600",
+          "regularNonSymlink": true
+        },
+        {
+          "kind": "posts-page",
+          "path": "<private-evidence>/query-title-missing-type-backend-source-posts-page-proof.json",
+          "sha256": "e0f5d976df2010bd9ac287ffbe3f459119e199f79437a03f1abeffdfa5e78d46",
+          "dispatches": 13,
+          "wantedDispatches": 13,
+          "dispatchesMatch": true,
+          "uid": 501,
+          "mode": "600",
+          "regularNonSymlink": true
+        },
+        {
+          "kind": "home-body",
+          "path": "<private-evidence>/query-title-missing-type-backend-source-home-body-proof.json",
+          "sha256": "454f5c8a837e613e5f0f0f5209315e3c8e7c0d25d99570a3f0c9a45b02910589",
+          "dispatches": 16,
+          "wantedDispatches": 16,
+          "dispatchesMatch": true,
+          "uid": 501,
+          "mode": "600",
+          "regularNonSymlink": true
+        }
+      ],
+      "totalProofResponses": 61,
+      "journalPoolEnded": true,
+      "primaryPortsPhysicallyFree": {
+        "3046": true,
+        "3047": true,
+        "3048": true
+      },
+      "portFree": true,
+      "metadataCountsAccurateFirstWrite": true,
+      "privateReceipt": {
+        "file": "query-title-missing-type-backend-final-source-run.json",
+        "sha256": "63baff60a3557e35b8c45eaf7d4e0668976beb2837af8f1d356141dd41c83c3e"
+      },
+      "observedDatabaseSessionCount": 84,
+      "independentRawCounterParse": {
+        "tests": 52,
+        "pass": 52,
+        "fail": 0,
+        "skipped": 0,
+        "cancelled": 0
+      },
+      "rawLogBytes": 19213
+    },
+    {
+      "mode": "compiled",
+      "port": 3047,
+      "candidate": "7a891113fbf5e96ee1c135e4d4b7b83001d2fdcf",
+      "runtimeFreeze": "1fcc2cbe3bdb25d60331ec657c923bea6b685489",
+      "tree": "f66095b81abb70ea75ba1bcbf076f27dcd597812",
+      "nodeSHA256": "582d1aa48ee69058e08be6406b86d604cf92010cf0e36a9e180e997b920da07b",
+      "selectorSHA256": "936c5b50083cb4fd15f4e8ce75f390111fe563eb0068364ecc9e5d925a5362d9",
+      "files": [
+        "tests/query-title-missing-type-original.test.ts",
+        "tests/block-render-attributes.test.ts",
+        "tests/public-document-data.test.ts",
+        "tests/singular-archive-query-title-before.test.ts",
+        "tests/singular-archive-query-title-posts-page.test.ts",
+        "tests/archive-query-title-home-body-original.test.ts",
+        "tests/author-name-independent-count-grant.test.ts",
+        "tests/blocks.test.ts",
+        "tests/date-archives.test.ts",
+        "tests/author-name-independent-identity.test.ts"
+      ],
+      "log": "<private-logs>/worldact-query-title-missing-type-final-compiled.log",
+      "anchor": "worldact_query_title_missing_type_backend_anchor",
+      "applicationName": "worldact_query_title_missing_type_backend_compiled",
+      "URLApplicationNamePresent": false,
+      "launchGates": {
+        "exactRuntimeAnd10TestAndBinaryHashes": true,
+        "cleanHead": true,
+        "readonlyDependencyOwnerAndLock": true,
+        "ownMinimal600ConfigOriginalBytes": true,
+        "anchorAbsent": true,
+        "priorOwnPhaseSessionsAbsent": true,
+        "allFourProofOutputsFresh": true,
+        "primaryPortsPhysicallyFree": {
+          "3046": true,
+          "3047": true,
+          "3048": true
+        }
+      },
+      "databases": [
+        "worldact_test_1794297013553_ee59a692"
+      ],
+      "started": "2026-11-10T07:50:13.506Z",
+      "runnerPID": 29984,
+      "tests": 52,
+      "pass": 52,
+      "fail": 0,
+      "skipped": 0,
+      "cancelled": 0,
+      "perFileCounts": [
+        6,
+        2,
+        7,
+        6,
+        4,
+        4,
+        4,
+        9,
+        4,
+        6
+      ],
+      "completedFiles": 10,
+      "exitCode": 0,
+      "logSHA256": "1e639adc93c9b18525e51eefac03577a532da5010632042d40ecdd885e113154",
+      "finished": "2026-11-10T07:50:29.155Z",
+      "anchorAbsent": true,
+      "remainingDatabases": [],
+      "remainingSessions": [],
+      "proofs": [
+        {
+          "kind": "missing",
+          "path": "<private-evidence>/query-title-missing-type-backend-compiled-missing-proof.json",
+          "sha256": "cd90b91164baa48e6f20bc40cec0d768c05c83bc390cdfc85e2547fe3b4a7392",
+          "dispatches": 9,
+          "wantedDispatches": 9,
+          "dispatchesMatch": true,
+          "uid": 501,
+          "mode": "600",
+          "regularNonSymlink": true
+        },
+        {
+          "kind": "singular",
+          "path": "<private-evidence>/query-title-missing-type-backend-compiled-singular-proof.json",
+          "sha256": "e1bc47207d5cd3b952291b8301736cd1d0faaade9aa6e86cf3b517b63926ac5f",
+          "dispatches": 23,
+          "wantedDispatches": 23,
+          "dispatchesMatch": true,
+          "uid": 501,
+          "mode": "600",
+          "regularNonSymlink": true
+        },
+        {
+          "kind": "posts-page",
+          "path": "<private-evidence>/query-title-missing-type-backend-compiled-posts-page-proof.json",
+          "sha256": "51e275020900a1f62eaf4b39e9da0207f40962135dcacd1ce9f95fc7c78c82c5",
+          "dispatches": 13,
+          "wantedDispatches": 13,
+          "dispatchesMatch": true,
+          "uid": 501,
+          "mode": "600",
+          "regularNonSymlink": true
+        },
+        {
+          "kind": "home-body",
+          "path": "<private-evidence>/query-title-missing-type-backend-compiled-home-body-proof.json",
+          "sha256": "97469f1db4e716ca756dafa0826afb69d149f73092d16bdb00d12aa7eec2331c",
+          "dispatches": 16,
+          "wantedDispatches": 16,
+          "dispatchesMatch": true,
+          "uid": 501,
+          "mode": "600",
+          "regularNonSymlink": true
+        }
+      ],
+      "totalProofResponses": 61,
+      "journalPoolEnded": true,
+      "primaryPortsPhysicallyFree": {
+        "3046": true,
+        "3047": true,
+        "3048": true
+      },
+      "portFree": true,
+      "metadataCountsAccurateFirstWrite": true,
+      "privateReceipt": {
+        "file": "query-title-missing-type-backend-final-compiled-run.json",
+        "sha256": "3bebbe0f24126c5232b80abdd813295ffebce0b954e61d18fca8276996027b60"
+      },
+      "observedDatabaseSessionCount": 85,
+      "independentRawCounterParse": {
+        "tests": 52,
+        "pass": 52,
+        "fail": 0,
+        "skipped": 0,
+        "cancelled": 0
+      },
+      "rawLogBytes": 19204
+    }
+  ],
+  "final": {
+    "filesEachMode": 10,
+    "passEachMode": 52,
+    "failSkipCancelEachMode": 0,
+    "proofResponsesEachMode": 61,
+    "proofGroupsEachMode": [
+      9,
+      23,
+      13,
+      16
+    ],
+    "disjointComponentsEachMode": {
+      "newImmutableRegression": 6,
+      "unchangedSixFiles": 27,
+      "adaptedBlocksAndDate": 13,
+      "adaptedIdentity": 6
+    },
+    "allCounterMetadataAccurateFirstWrite": true,
+    "sourceImportsRemainSOURCEInCompiledAPIMode": true,
+    "noWholeFreshFixedBrowserOrReleaseClaim": true
+  },
+  "resources": {
+    "receipt": {
+      "file": "query-title-missing-type-backend-resource-audit.json",
+      "sha256": "a85b1ae69c85fd79d5492be02c13e42e75522f0e536d3d86e843a5eaf05c417b"
+    },
+    "data": {
+      "status": "OWNED_DATABASES_PHASE_SESSIONS_AND_PORTS_CLOSED_CONFIG_AND_LINK_RETAINED",
+      "time": "2026-11-10T07:51:14.054Z",
+      "candidate": "7a891113fbf5e96ee1c135e4d4b7b83001d2fdcf",
+      "runtimeFreeze": "1fcc2cbe3bdb25d60331ec657c923bea6b685489",
+      "nodeSHA256": "582d1aa48ee69058e08be6406b86d604cf92010cf0e36a9e180e997b920da07b",
+      "runReceipts": [
+        {
+          "file": "query-title-missing-type-backend-final-source-run.json",
+          "sha256": "63baff60a3557e35b8c45eaf7d4e0668976beb2837af8f1d356141dd41c83c3e",
+          "mode": "source",
+          "rawLogSHA256": "3c1f82f5208e4d38ce9df46565d4c817136324c63d9b7d460dd6ca22e426bae8",
+          "runnerPID": 29903,
+          "observedDatabaseSessionCount": 84
+        },
+        {
+          "file": "query-title-missing-type-backend-final-compiled-run.json",
+          "sha256": "3bebbe0f24126c5232b80abdd813295ffebce0b954e61d18fca8276996027b60",
+          "mode": "compiled",
+          "rawLogSHA256": "1e639adc93c9b18525e51eefac03577a532da5010632042d40ecdd885e113154",
+          "runnerPID": 29984,
+          "observedDatabaseSessionCount": 85
+        }
+      ],
+      "journaledDatabases": [
+        "worldact_test_1794296981389_ad499c2b",
+        "worldact_test_1794297013553_ee59a692"
+      ],
+      "neverCreatedAnchor": "worldact_query_title_missing_type_backend_anchor",
+      "anchorAbsent": true,
+      "remainingDatabases": [],
+      "remainingSessions": [],
+      "phaseApplications": [
+        "worldact_query_title_missing_type_backend_source",
+        "worldact_query_title_missing_type_backend_compiled"
+      ],
+      "journalAndAuditPoolsEnded": true,
+      "primaryPortsPhysicallyBoundAndReleased": {
+        "3046": true,
+        "3047": true,
+        "3048": true
+      },
+      "port3048UnusedByGuards": true,
+      "fixed3062NeverUsed": true,
+      "config": {
+        "path": "<owned-checkout>/.env",
+        "uid": 501,
+        "mode": "0600",
+        "regularNonSymlink": true,
+        "sha256": "15e6429f85542cd24ec651816a79be359867e114fb0a04505ab981f0c63c4247",
+        "hashRecordedAtCreation": true,
+        "retainedForRootReview": true
+      },
+      "dependencyLink": {
+        "path": "<owned-checkout>/node_modules",
+        "uid": 501,
+        "exactKnownTarget": "<shared-dependency-owner>/node_modules",
+        "retainedForRootReview": true,
+        "sharedOwnerUid": 501,
+        "sharedOwnerMode": "0755",
+        "sharedOwnerNonSymlink": true,
+        "lockSHA256": "233888ed8f864581a8835aab0b4c33ccd7fbc391f2a98650b63fcf8db8814892",
+        "sharedOwnerUnmodified": true,
+        "noInstall": true
+      },
+      "runtimeAndAll10TestsAndBinaryStillFrozen": true,
+      "noMainUIOrCIChanges": true,
+      "noArchiveCreated": true,
+      "originalTestsBeforeProofsFailuresBuildsLogsRetained": true,
+      "normalFinallyUploads": {
+        "bothStandardRunnersExitZero": true,
+        "runner": "scripts/test-isolated.mjs removes disposable upload directory in finally",
+        "exactUploadPathsJournaled": false,
+        "limitation": "No independent per-upload-path absence certificate or global temporary-directory sweep is claimed."
+      }
+    }
+  },
+  "preserved": [
+    "All nonempty explicit types and current labels, including explicit archive, unknown nonempty and explicit search positives",
+    "Existing archiveTitleContext and selected/body/home/posts-page producer decisions",
+    "Strict preview metadata normalization and saved raw/JSON attributes; no default inserted",
+    "All listing SQL/counters, supplied-client visibility, identity and final author-before-post/password grant fences",
+    "Existing assertions; fixture additions only make intended archive title semantics explicit"
+  ],
+  "noSourceEditsOrRerunsDuringGates": true,
+  "originalFailuresAndBeforeProofsBuildsAndRawLogsRetained": true
+}

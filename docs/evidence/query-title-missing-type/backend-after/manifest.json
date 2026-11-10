@@ -1,0 +1,335 @@
+{
+  "schemaVersion": 1,
+  "scope": "SCOPED_MISSING_OR_EMPTY_QUERY_TITLE_TYPE_BACKEND_AFTER",
+  "base": "d7c9a996f7336fc91049833db89789385a214545",
+  "runtimeFreeze": "1fcc2cbe3bdb25d60331ec657c923bea6b685489",
+  "fixtureAdapterHead": "7a891113fbf5e96ee1c135e4d4b7b83001d2fdcf",
+  "nodeSHA256": "582d1aa48ee69058e08be6406b86d604cf92010cf0e36a9e180e997b920da07b",
+  "payloadCorrespondence": [
+    {
+      "file": "review.md",
+      "privateSourceBasename": "query-title-missing-type-backend-review.md",
+      "privateSourceSHA256": "fc1c0b83af0000f32191f7daa7c5b405cd2f2e561aa1b84a6e1fcee7ccdc3205",
+      "privateSourceBytes": 3600,
+      "publishedSHA256": "fc1c0b83af0000f32191f7daa7c5b405cd2f2e561aa1b84a6e1fcee7ccdc3205",
+      "publishedBytes": 3600,
+      "transformation": "Exact bytes except listed literal known path-prefix substitutions.",
+      "occurrenceLedger": []
+    },
+    {
+      "file": "checks.json",
+      "privateSourceBasename": "query-title-missing-type-backend-checks.json",
+      "privateSourceSHA256": "0802ac5cc6378d12979f869db58db9996c11424b53156b182c8612c47dcb34b4",
+      "privateSourceBytes": 27572,
+      "publishedSHA256": "7f69a68c567b8aab416aec064308f6a0400a247a6c90df24b8dc61b60716de6d",
+      "publishedBytes": 27454,
+      "transformation": "Exact bytes except listed literal known path-prefix substitutions.",
+      "occurrenceLedger": [
+        {
+          "rule": "PRIVATE_EVIDENCE_ROOT",
+          "replacementPrefix": "<private-evidence>/",
+          "occurrences": 8
+        },
+        {
+          "rule": "PRIVATE_LOG_PREFIX",
+          "replacementPrefix": "<private-logs>/worldact-query-title-missing-type-",
+          "occurrences": 2
+        },
+        {
+          "rule": "OWN_WORKTREE_ROOT",
+          "replacementPrefix": "<owned-checkout>/",
+          "occurrences": 2
+        },
+        {
+          "rule": "SHARED_MAIN_ROOT",
+          "replacementPrefix": "<shared-dependency-owner>/",
+          "occurrences": 1
+        }
+      ]
+    },
+    {
+      "file": "resource-audit.json",
+      "privateSourceBasename": "query-title-missing-type-backend-resource-audit.json",
+      "privateSourceSHA256": "a85b1ae69c85fd79d5492be02c13e42e75522f0e536d3d86e843a5eaf05c417b",
+      "privateSourceBytes": 2946,
+      "publishedSHA256": "97391fa6e5e8beeeb90e12ef5ce95c5e0cf494528d6d79fa4c78d8d5e3e13d5a",
+      "publishedBytes": 2880,
+      "transformation": "Exact bytes except listed literal known path-prefix substitutions.",
+      "occurrenceLedger": [
+        {
+          "rule": "OWN_WORKTREE_ROOT",
+          "replacementPrefix": "<owned-checkout>/",
+          "occurrences": 2
+        },
+        {
+          "rule": "SHARED_MAIN_ROOT",
+          "replacementPrefix": "<shared-dependency-owner>/",
+          "occurrences": 1
+        }
+      ]
+    },
+    {
+      "file": "owned-cleanup.json",
+      "privateSourceBasename": "query-title-missing-type-backend-owned-cleanup.json",
+      "privateSourceSHA256": "04077f7a23e32b8caa1c9ee8dbbdd723904dd4868363a56c93bf1a6f2ef7b343",
+      "privateSourceBytes": 2556,
+      "publishedSHA256": "41c76df9386b97808cf1a3d824e4afa701a2b3b4bc62176c283a438ed318a427",
+      "publishedBytes": 2446,
+      "transformation": "Exact bytes except listed literal known path-prefix substitutions.",
+      "occurrenceLedger": [
+        {
+          "rule": "OWN_WORKTREE_ROOT",
+          "replacementPrefix": "<owned-checkout>/",
+          "occurrences": 4
+        },
+        {
+          "rule": "SHARED_MAIN_ROOT",
+          "replacementPrefix": "<shared-dependency-owner>/",
+          "occurrences": 1
+        }
+      ]
+    },
+    {
+      "file": "build-checks.json",
+      "privateSourceBasename": "query-title-missing-type-backend-build-checks.json",
+      "privateSourceSHA256": "4144a602df1174ce55ea6fc106c702066dd3970fd1fa80c8aa7b091f33528d34",
+      "privateSourceBytes": 5563,
+      "publishedSHA256": "4144a602df1174ce55ea6fc106c702066dd3970fd1fa80c8aa7b091f33528d34",
+      "publishedBytes": 5563,
+      "transformation": "Exact bytes except listed literal known path-prefix substitutions.",
+      "occurrenceLedger": []
+    }
+  ],
+  "README": {
+    "file": "README.md",
+    "sha256": "a2bbfcfecbbc2133b95cb8466757f3fb181145fa778b23db33bb5ba111f850df",
+    "bytes": 3287
+  },
+  "runtimeFiles": [
+    {
+      "file": "server/block-renderer.ts",
+      "beforeSHA256": "a3ead8521060e4ab3cf1dd17e530e2881bb50a57df5dcf65e67b3e6ec898277f",
+      "afterSHA256": "6002a966d9a69b2dc1805f1144957c87ee9e036304d313cef87426672e5fc95c",
+      "addedLines": 1,
+      "removedLines": 0
+    }
+  ],
+  "frozenSelector": {
+    "file": "query-title-missing-type-complete-affected-selector.json",
+    "sha256": "936c5b50083cb4fd15f4e8ce75f390111fe563eb0068364ecc9e5d925a5362d9",
+    "entries": [
+      {
+        "file": "tests/query-title-missing-type-original.test.ts",
+        "sha256": "5b2406b78a9395fe252cdf3e318150babc9550da319e1b4cf5787c8cfcf44856",
+        "prospectiveTests": 6,
+        "scope": "actual HTTP public GET/HEAD/model and authenticated preview; actual compiled API in compiled mode"
+      },
+      {
+        "file": "tests/block-render-attributes.test.ts",
+        "sha256": "be923affd756f83d5cc4b336b31885c3707d5e8217d32c7fb699448e34fb8efc",
+        "prospectiveTests": 2,
+        "scope": "direct TypeScript normalization imports remain SOURCE in both modes"
+      },
+      {
+        "file": "tests/public-document-data.test.ts",
+        "sha256": "dee95240a579ec16327b0ca10f1497cbf2deae37dfd218113a08675cfa0454b1",
+        "prospectiveTests": 7,
+        "scope": "mixed direct TypeScript service/renderer imports (SOURCE) and actual HTTP"
+      },
+      {
+        "file": "tests/singular-archive-query-title-before.test.ts",
+        "sha256": "fa7f74eaab2edf81507422dc96015f823ee5a1de41e2a2f4bc9d902385966724",
+        "prospectiveTests": 6,
+        "scope": "actual HTTP selected document/template/body and archive loop"
+      },
+      {
+        "file": "tests/singular-archive-query-title-posts-page.test.ts",
+        "sha256": "454a4bdce36dcf096e53fb670cde36a18220d05474505dd61a3dc492bf008820",
+        "prospectiveTests": 4,
+        "scope": "actual HTTP selected/configured posts-page representation preservation"
+      },
+      {
+        "file": "tests/archive-query-title-home-body-original.test.ts",
+        "sha256": "14dc9e1cc335174df1b4f826ddf57699e97d0add3daffacfb80639c9adf0264b",
+        "prospectiveTests": 4,
+        "scope": "actual HTTP Source/Classic body/model/site API controls"
+      },
+      {
+        "file": "tests/author-name-independent-count-grant.test.ts",
+        "sha256": "6643e7832a8272913a88bab1bac653a6cb674f25e25bd9c09139cfc65252f031",
+        "prospectiveTests": 4,
+        "scope": "actual HTTP measured identity/final grant boundary"
+      },
+      {
+        "file": "tests/blocks.test.ts",
+        "sha256": "50521c9c671d7ede4a608c9d6975303da34a15f1ab80dbf338f4b43e8268615a",
+        "prospectiveTests": 9,
+        "scope": "mixed direct TypeScript rendering (SOURCE) and actual HTTP preview/blocks"
+      },
+      {
+        "file": "tests/date-archives.test.ts",
+        "sha256": "efa03a60b5530b82fc3947af2be67e91da2298f94f2c0163fb32d42d34d9d175",
+        "prospectiveTests": 4,
+        "scope": "mixed direct TypeScript renderer/date helpers (SOURCE) and actual HTTP date API"
+      },
+      {
+        "file": "tests/author-name-independent-identity.test.ts",
+        "sha256": "595dc91255e5439626e7209ea9420e4662e0886fc3f5f3c8dcd05a16ad9c2882",
+        "prospectiveTests": 6,
+        "scope": "actual HTTP identity controls plus supplied-client direct TypeScript rendering (SOURCE)"
+      }
+    ],
+    "actualPerFileCountsEachMode": [
+      6,
+      2,
+      7,
+      6,
+      4,
+      4,
+      4,
+      9,
+      4,
+      6
+    ],
+    "actualTestsEachMode": 52
+  },
+  "fixtureAdapters": [
+    {
+      "file": "tests/blocks.test.ts",
+      "beforeSHA256": "fa0fb26d5a57b93232b4d9b481eebaa729ce5e0e76c951db6239c85152a93fd3",
+      "afterSHA256": "50521c9c671d7ede4a608c9d6975303da34a15f1ab80dbf338f4b43e8268615a",
+      "explicitArchiveAttributeAdditions": 1,
+      "onlyFixtureTypeAdditions": true,
+      "assertionsUnchanged": true
+    },
+    {
+      "file": "tests/date-archives.test.ts",
+      "beforeSHA256": "a79de3f453d0122ec702747614ec17409407eea47e6de859448768df30758958",
+      "afterSHA256": "efa03a60b5530b82fc3947af2be67e91da2298f94f2c0163fb32d42d34d9d175",
+      "explicitArchiveAttributeAdditions": 3,
+      "onlyFixtureTypeAdditions": true,
+      "assertionsUnchanged": true
+    },
+    {
+      "file": "tests/author-name-independent-identity.test.ts",
+      "beforeSHA256": "4fa756c8f65279ce5de5e5aa4a8dafa64a530ed96718cc9bc79b0e1542114a21",
+      "afterSHA256": "595dc91255e5439626e7209ea9420e4662e0886fc3f5f3c8dcd05a16ad9c2882",
+      "explicitArchiveAttributeAdditions": 1,
+      "onlyFixtureTypeAdditions": true,
+      "assertionsUnchanged": true
+    }
+  ],
+  "externalBefore": {
+    "scope": "Root-accepted historical native-owner before; not executed by this backend owner",
+    "base": "d7c9a996f7336fc91049833db89789385a214545",
+    "nodeSHA256": "7f5e15d054e0a888ae362f95b055c587dab1dff8c9fd836b0d98ea1eafb96093",
+    "testOriginCommit": "8e97e863b55fa91e1e587561d78fb7e7e622c6ce",
+    "testSHA256": "5b2406b78a9395fe252cdf3e318150babc9550da319e1b4cf5787c8cfcf44856",
+    "eachMode": {
+      "tests": 6,
+      "pass": 2,
+      "fail": 4,
+      "responses": 9,
+      "responseStatuses": "all200",
+      "setupErrors": 0,
+      "fixtureAdapterUsed": false
+    },
+    "rootAudit": {
+      "file": "root-query-title-missing-type-before-audit.json",
+      "sha256": "3439e4a8c4d8f97155094049a0af8b5241d85be13650cc90dbd13877ae5ed079"
+    }
+  },
+  "countLedger": {
+    "source": {
+      "mode": "source",
+      "files": 10,
+      "tests": 52,
+      "pass": 52,
+      "fail": 0,
+      "skip": 0,
+      "cancel": 0,
+      "exitCode": 0,
+      "perFileCounts": [
+        6,
+        2,
+        7,
+        6,
+        4,
+        4,
+        4,
+        9,
+        4,
+        6
+      ],
+      "targetedResponses": 61,
+      "proofGroupResponses": [
+        9,
+        23,
+        13,
+        16
+      ],
+      "privateRunReceipt": {
+        "file": "query-title-missing-type-backend-final-source-run.json",
+        "sha256": "63baff60a3557e35b8c45eaf7d4e0668976beb2837af8f1d356141dd41c83c3e"
+      },
+      "rawLogBasename": "worldact-query-title-missing-type-final-source.log",
+      "rawLogSHA256": "3c1f82f5208e4d38ce9df46565d4c817136324c63d9b7d460dd6ca22e426bae8",
+      "rawLogBytes": 19213,
+      "counterMetadataAccurateFirstWrite": true
+    },
+    "compiledAPI": {
+      "mode": "compiled",
+      "files": 10,
+      "tests": 52,
+      "pass": 52,
+      "fail": 0,
+      "skip": 0,
+      "cancel": 0,
+      "exitCode": 0,
+      "perFileCounts": [
+        6,
+        2,
+        7,
+        6,
+        4,
+        4,
+        4,
+        9,
+        4,
+        6
+      ],
+      "targetedResponses": 61,
+      "proofGroupResponses": [
+        9,
+        23,
+        13,
+        16
+      ],
+      "privateRunReceipt": {
+        "file": "query-title-missing-type-backend-final-compiled-run.json",
+        "sha256": "3bebbe0f24126c5232b80abdd813295ffebce0b954e61d18fca8276996027b60"
+      },
+      "rawLogBasename": "worldact-query-title-missing-type-final-compiled.log",
+      "rawLogSHA256": "1e639adc93c9b18525e51eefac03577a532da5010632042d40ecdd885e113154",
+      "rawLogBytes": 19204,
+      "counterMetadataAccurateFirstWrite": true
+    },
+    "disjointComponentsEachMode": {
+      "newImmutableRegression": 6,
+      "unchangedSixFiles": 27,
+      "adaptedBlocksAndDate": 13,
+      "adaptedIdentity": 6
+    },
+    "targetedResponsesEachMode": 61,
+    "sourceImportsRemainSOURCEInCompiledAPIMode": true,
+    "noRerunWholeFreshFixedBrowserOrReleaseClaim": true
+  },
+  "publicationPolicy": {
+    "fivePayloads": 5,
+    "totalFilesIncludingREADMEAndManifest": 7,
+    "transformation": "Literal known private path-prefix substitutions only; no result, assertion, field or whitespace edits.",
+    "privateMappingReceiptBasename": "query-title-missing-type-backend-publication-correspondence.json",
+    "allPrivateOriginalsProofsBuildsFailuresAndRawLogsRetained": true,
+    "noRuntimeTestsUIOrCIChanges": true
+  }
+}

@@ -1,0 +1,144 @@
+{
+  "status": "BUILD_ONLY_PASS_NO_ENV_DATABASE_API_OR_TESTS",
+  "time": "2026-11-10T07:13:49.541210+00:00",
+  "base": "d7c9a996f7336fc91049833db89789385a214545",
+  "runtimeFreeze": "1fcc2cbe3bdb25d60331ec657c923bea6b685489",
+  "fixtureAdapterHead": "7a891113fbf5e96ee1c135e4d4b7b83001d2fdcf",
+  "tree": "f66095b81abb70ea75ba1bcbf076f27dcd597812",
+  "nodeSHA256": "582d1aa48ee69058e08be6406b86d604cf92010cf0e36a9e180e997b920da07b",
+  "buildRuns": [
+    {
+      "kind": "typecheck",
+      "command": [
+        "node",
+        "node_modules/typescript/bin/tsc",
+        "--noEmit"
+      ],
+      "started": "2026-11-10T07:10:57.462438+00:00",
+      "finished": "2026-11-10T07:13:22.689336+00:00",
+      "exitCode": 0,
+      "privateLogBasename": "worldact-query-title-missing-type-typecheck.log",
+      "logSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "logBytes": 0,
+      "logMode": "0600"
+    },
+    {
+      "kind": "vite",
+      "command": [
+        "node",
+        "node_modules/vite/bin/vite.js",
+        "build",
+        "--configLoader",
+        "runner"
+      ],
+      "started": "2026-11-10T07:13:22.692028+00:00",
+      "finished": "2026-11-10T07:13:49.423975+00:00",
+      "exitCode": 0,
+      "privateLogBasename": "worldact-query-title-missing-type-vite.log",
+      "logSHA256": "019d17d1a3b081ebf8225624d5c7e6566c1a6b3f79d296902ce682c829a3b9ca",
+      "logBytes": 2343,
+      "logMode": "0600"
+    },
+    {
+      "kind": "native-esbuild",
+      "command": [
+        "node_modules/@esbuild/darwin-arm64/bin/esbuild",
+        "server/index.ts",
+        "--bundle",
+        "--platform=node",
+        "--format=esm",
+        "--packages=external",
+        "--outfile=dist-server/index.js"
+      ],
+      "started": "2026-11-10T07:13:49.424939+00:00",
+      "finished": "2026-11-10T07:13:49.494908+00:00",
+      "exitCode": 0,
+      "privateLogBasename": "worldact-query-title-missing-type-native-esbuild.log",
+      "logSHA256": "a8d6c1620f99ba870b58ef32984e8b9fd553b116215bae5daf334e08587a03d9",
+      "logBytes": 56,
+      "logMode": "0600"
+    }
+  ],
+  "sourceFingerprints": [
+    {
+      "file": "server/block-renderer.ts",
+      "beforeSHA256": "a3ead8521060e4ab3cf1dd17e530e2881bb50a57df5dcf65e67b3e6ec898277f",
+      "afterSHA256": "6002a966d9a69b2dc1805f1144957c87ee9e036304d313cef87426672e5fc95c",
+      "addedLines": 1,
+      "removedLines": 0
+    }
+  ],
+  "all10TestFingerprints": [
+    {
+      "file": "tests/query-title-missing-type-original.test.ts",
+      "sha256": "5b2406b78a9395fe252cdf3e318150babc9550da319e1b4cf5787c8cfcf44856",
+      "prospectiveTests": 6,
+      "scope": "actual HTTP public GET/HEAD/model and authenticated preview; actual compiled API in compiled mode"
+    },
+    {
+      "file": "tests/block-render-attributes.test.ts",
+      "sha256": "be923affd756f83d5cc4b336b31885c3707d5e8217d32c7fb699448e34fb8efc",
+      "prospectiveTests": 2,
+      "scope": "direct TypeScript normalization imports remain SOURCE in both modes"
+    },
+    {
+      "file": "tests/public-document-data.test.ts",
+      "sha256": "dee95240a579ec16327b0ca10f1497cbf2deae37dfd218113a08675cfa0454b1",
+      "prospectiveTests": 7,
+      "scope": "mixed direct TypeScript service/renderer imports (SOURCE) and actual HTTP"
+    },
+    {
+      "file": "tests/singular-archive-query-title-before.test.ts",
+      "sha256": "fa7f74eaab2edf81507422dc96015f823ee5a1de41e2a2f4bc9d902385966724",
+      "prospectiveTests": 6,
+      "scope": "actual HTTP selected document/template/body and archive loop"
+    },
+    {
+      "file": "tests/singular-archive-query-title-posts-page.test.ts",
+      "sha256": "454a4bdce36dcf096e53fb670cde36a18220d05474505dd61a3dc492bf008820",
+      "prospectiveTests": 4,
+      "scope": "actual HTTP selected/configured posts-page representation preservation"
+    },
+    {
+      "file": "tests/archive-query-title-home-body-original.test.ts",
+      "sha256": "14dc9e1cc335174df1b4f826ddf57699e97d0add3daffacfb80639c9adf0264b",
+      "prospectiveTests": 4,
+      "scope": "actual HTTP Source/Classic body/model/site API controls"
+    },
+    {
+      "file": "tests/author-name-independent-count-grant.test.ts",
+      "sha256": "6643e7832a8272913a88bab1bac653a6cb674f25e25bd9c09139cfc65252f031",
+      "prospectiveTests": 4,
+      "scope": "actual HTTP measured identity/final grant boundary"
+    },
+    {
+      "file": "tests/blocks.test.ts",
+      "sha256": "50521c9c671d7ede4a608c9d6975303da34a15f1ab80dbf338f4b43e8268615a",
+      "prospectiveTests": 9,
+      "scope": "mixed direct TypeScript rendering (SOURCE) and actual HTTP preview/blocks"
+    },
+    {
+      "file": "tests/date-archives.test.ts",
+      "sha256": "efa03a60b5530b82fc3947af2be67e91da2298f94f2c0163fb32d42d34d9d175",
+      "prospectiveTests": 4,
+      "scope": "mixed direct TypeScript renderer/date helpers (SOURCE) and actual HTTP date API"
+    },
+    {
+      "file": "tests/author-name-independent-identity.test.ts",
+      "sha256": "595dc91255e5439626e7209ea9420e4662e0886fc3f5f3c8dcd05a16ad9c2882",
+      "prospectiveTests": 6,
+      "scope": "actual HTTP identity controls plus supplied-client direct TypeScript rendering (SOURCE)"
+    }
+  ],
+  "sourceAndTestHashesUnchangedAfterBuild": true,
+  "readOnlyDependencies": {
+    "ownerUid": 501,
+    "ownerMode": "0755",
+    "ownerNonSymlink": true,
+    "lockSHA256": "233888ed8f864581a8835aab0b4c33ccd7fbc391f2a98650b63fcf8db8814892",
+    "ownLinkRetained": true,
+    "noInstall": true
+  },
+  "noEnvDatabaseAPIOrTests": true,
+  "runtimeTestCIUIAndMainUnchanged": true
+}
