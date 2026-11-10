@@ -1,3 +1,4 @@
+import { defaultContentBootstrap, assertBuiltinStorageBoundary } from "./content-runtime.js";
 import { readPublicDocument, publicDocumentContext } from "./public-document-data.js";
 import { renderPublicDocument, renderFrameworkDocument } from "./render-public-document.js";
 import incomingPingsRouter from "./incoming-pings.js";
@@ -51,6 +52,7 @@ import { readDashboard } from "./dashboard.js";
 import mailIntakeRouter, { startMailIntakeWorker } from "./mail-intake.js";
 import { plainText, HttpError, parseId, needUser } from "./utils.js";
 
+assertBuiltinStorageBoundary(defaultContentBootstrap);
 export const app = express();
 app.disable("x-powered-by");
 app.set("query parser", (query: string) => {

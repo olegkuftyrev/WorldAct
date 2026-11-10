@@ -1,3 +1,4 @@
+import { defaultContentBootstrap, assertBuiltinStorageBoundary } from "./content-runtime.js";
 import { readFile } from "node:fs/promises";
 import path from "node:path";
 import { pool, rootDir } from "./db.js";
@@ -7,6 +8,7 @@ import {migratePostDates} from "./post-date-migration.js";
 import { migrateUserNicenames } from "./user-nicenames-migration.js";
 
 export async function migrate() {
+  assertBuiltinStorageBoundary(defaultContentBootstrap);
   const sql = await readFile(
     path.join(rootDir, "server", "schema.sql"),
     "utf8",
