@@ -101,6 +101,10 @@ test("runtime compiler fails deterministic shapes collisions and policy profiles
     ["reserved adapter key", d => { d[0].contentTypes[0].key = "wp_block"; }, "RESERVED_KEY"],
     ["metadata precedes duplicate", d => { d[0].contentTypes[0].key = "post"; d[0].contentTypes[0].rest.labels = null; }, "REST_SHAPE"],
     ["policy shape precedes duplicate", d => { d[0].contentTypes[0].key = "post"; d[0].contentTypes[0].policy.roles = ["author"]; }, "POLICY_SHAPE"],
+    ["all metadata shapes precede duplicate owner", d => { const duplicate = structuredClone(d[0]); duplicate.contentTypes[0].rest.labels = null; d.push(duplicate); }, "REST_SHAPE"],
+    ["later content collision precedes capability profile", d => { d[0].contentTypes[0].policy.capabilityFamily = "book"; d[0].contentTypes.push(structuredClone(d[0].contentTypes[0])); }, "DUPLICATE_CONTENT_KEY"],
+    ["later taxonomy collision precedes REST identity", d => { d[0].contentTypes[0].rest.rest_namespace = "extension/v1"; d[0].taxonomies[0].key = "tag"; }, "DUPLICATE_TAXONOMY_KEY"],
+    ["later taxonomy collection collision precedes routing profile", d => { d[0].contentTypes[0].policy.routing.rewrite = true; d[0].taxonomies[0].rest.rest_base = "media"; }, "REST_COLLECTION_COLLISION"],
     ["duplicate content identity", d => { d[0].contentTypes[0].key = "post"; }, "DUPLICATE_CONTENT_KEY"],
     ["duplicate taxonomy identity", d => { d[0].taxonomies[0].key = "tag"; }, "DUPLICATE_TAXONOMY_KEY"],
     ["duplicate REST slug", d => { d[0].contentTypes[0].rest.slug = "post"; }, "DUPLICATE_CONTENT_REST_SLUG"],
@@ -158,6 +162,33 @@ test("copied frozen snapshots keep deterministic fingerprints separate from per-
   assert.equal(explicitFalse.contentTypes.book.rest.supports.excerpt, false);
   assert.equal(Object.hasOwn(absent.contentTypes.book.rest.supports, "excerpt"), false);
   assert.notEqual(explicitFalse.profileFingerprint, absent.profileFingerprint);
+  const numeric = fixture(), contentTemplate = numeric[0].contentTypes[0], taxonomyTemplate = numeric[0].taxonomies[0];
+  numeric[0].contentTypes = ["2", "1"].map(key => {
+    const item = structuredClone(contentTemplate); item.key = key; item.rest.slug = key; item.rest.rest_base = "books-" + key; item.rest.taxonomies = [key]; return item;
+  });
+  numeric[0].taxonomies = ["2", "1"].map(key => {
+    const item = structuredClone(taxonomyTemplate); item.key = key; item.rest.slug = key; item.rest.rest_base = "genres-" + key; item.rest.types = [key]; return item;
+  });
+  const numericFirst = compileRuntimeContentRegistry(numeric);
+  assert.deepEqual(numericFirst.contentKeys, ["post", "page", "2", "1"]);
+  assert.deepEqual(numericFirst.taxonomyKeys, ["category", "tag", "2", "1"]);
+  assert.strictEqual(numericFirst.restContentTypes["2"], numericFirst.contentTypes["2"].rest);
+  assert.strictEqual(numericFirst.restTaxonomies["1"], numericFirst.taxonomies["1"].rest);
+  // Lookup/projection records follow JavaScript's integer-key enumeration;
+  // the explicit key arrays and fingerprint retain declared registration order.
+  assert.deepEqual(Object.keys(numericFirst.restContentTypes), ["1", "2", "post", "page"]);
+  assert.deepEqual(Object.keys(numericFirst.restTaxonomies), ["1", "2", "category", "post_tag"]);
+  assert.equal(compileRuntimeContentRegistry(numeric).profileFingerprint, numericFirst.profileFingerprint);
+  const swappedContent = structuredClone(numeric); swappedContent[0].contentTypes.reverse();
+  const contentReordered = compileRuntimeContentRegistry(swappedContent);
+  assert.deepEqual(contentReordered.contentKeys, ["post", "page", "1", "2"]);
+  assert.deepEqual(contentReordered.taxonomyKeys, numericFirst.taxonomyKeys);
+  assert.notEqual(contentReordered.profileFingerprint, numericFirst.profileFingerprint);
+  const swappedTaxonomy = structuredClone(numeric); swappedTaxonomy[0].taxonomies.reverse();
+  const taxonomyReordered = compileRuntimeContentRegistry(swappedTaxonomy);
+  assert.deepEqual(taxonomyReordered.contentKeys, numericFirst.contentKeys);
+  assert.deepEqual(taxonomyReordered.taxonomyKeys, ["category", "tag", "1", "2"]);
+  assert.notEqual(taxonomyReordered.profileFingerprint, numericFirst.profileFingerprint);
   const omitted = compileRuntimeContentRegistry([]), next = createContentBootstrap(omitted);
   assert.notStrictEqual(next, bootstrap);
   assert.equal(runtimeContentType(next.snapshot, "book"), undefined);
