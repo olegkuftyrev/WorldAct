@@ -1,0 +1,94 @@
+{
+  "stage": "BUILD_ONLY_NO_TEST_EXECUTION",
+  "timeUTC": "2026-11-10T08:43:41.941Z",
+  "completed": true,
+  "failure": null,
+  "worktree": "<backend-checkout>",
+  "head": "a591eeea2def952cc80aeb593ca1af7c4a27bd3b",
+  "tree": "0079c008893eb6820baa1da34c4ebcb0aecf2bac",
+  "runtimeCommit": "24e1c37096c3ac2e33054e9b45c1870af8a7a35f",
+  "expectationAdapterCommit": "2d765a4cc307200a441a5e0cea0e2149cd85afc2",
+  "budgetCommit": "a591eeea2def952cc80aeb593ca1af7c4a27bd3b",
+  "preflight": {
+    "name": "query-title-search-format-backend-build-preflight.json",
+    "sha256": "31fbf7e240ca117e50f6ac0de34c6d85d4aee12fb965310ccddd67c3cd9d336d",
+    "bytes": 63195
+  },
+  "buildRuns": [
+    {
+      "kind": "typecheck",
+      "command": [
+        "/usr/local/bin/node",
+        "node_modules/typescript/bin/tsc",
+        "--noEmit"
+      ],
+      "startedAtUTC": "2026-11-10T08:43:19.627Z",
+      "finishedAtUTC": "2026-11-10T08:43:30.125Z",
+      "exitCode": 0,
+      "signal": null,
+      "pid": 42959,
+      "log": {
+        "name": "query-title-search-format-backend-typecheck.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0,
+        "mode": "0600"
+      }
+    },
+    {
+      "kind": "vite",
+      "command": [
+        "/usr/local/bin/node",
+        "node_modules/vite/bin/vite.js",
+        "build",
+        "--configLoader",
+        "runner"
+      ],
+      "startedAtUTC": "2026-11-10T08:43:30.211Z",
+      "finishedAtUTC": "2026-11-10T08:43:41.121Z",
+      "exitCode": 0,
+      "signal": null,
+      "pid": 42987,
+      "log": {
+        "name": "query-title-search-format-backend-vite.log",
+        "sha256": "df49a9a1d74d0068905b32257583f1208bf0ba972804b221a936ca08c051d400",
+        "bytes": 2343,
+        "mode": "0600"
+      }
+    },
+    {
+      "kind": "native-esbuild",
+      "command": [
+        "<backend-checkout>/node_modules/@esbuild/darwin-arm64/bin/esbuild",
+        "server/index.ts",
+        "--bundle",
+        "--platform=node",
+        "--format=esm",
+        "--packages=external",
+        "--outfile=dist-server/index.js"
+      ],
+      "startedAtUTC": "2026-11-10T08:43:41.241Z",
+      "finishedAtUTC": "2026-11-10T08:43:41.831Z",
+      "exitCode": 0,
+      "signal": null,
+      "pid": 43064,
+      "log": {
+        "name": "query-title-search-format-backend-native-esbuild.log",
+        "sha256": "0807025821bd9cc8ee69311ab45199a44f63d297a176082aebcf436d5e5c5080",
+        "bytes": 56,
+        "mode": "0600"
+      }
+    }
+  ],
+  "actualNodeSHA256": "0773317bac6ebfb42323a6a5fef346ed1602e2d3e9d64841a94fae27c737aee2",
+  "inventory": {
+    "name": "query-title-search-format-backend-build-fingerprints.json",
+    "sha256": "6de9091fd90cfd8aeb6489dd66cce135ba6a1beae377c7c8624332c65bdd7ee9",
+    "bytes": 142859
+  },
+  "readOnlyDependencyLinkRetained": true,
+  "noInstall": true,
+  "configAbsent": true,
+  "noDatabaseAPIHTTPTestsServicesOrBrowser": true,
+  "noCodeTestCIUIMainOrBeforeArtifactChanges": true,
+  "rootActivationRequiredBeforeAnyTests": true
+}

@@ -1,0 +1,716 @@
+{
+  "stage": "SEARCH_FORMAT_BACKEND_COMPLETE68_AFTER_REVIEW_RESOURCES_RETAINED",
+  "timeUTC": "2026-11-10T08:57:31.963743+00:00",
+  "worktree": "<backend-checkout>",
+  "baseline": "172ce9326962fedd84884cf85d20005f1260cefe",
+  "head": "a591eeea2def952cc80aeb593ca1af7c4a27bd3b",
+  "tree": "0079c008893eb6820baa1da34c4ebcb0aecf2bac",
+  "runtimeCommit": "24e1c37096c3ac2e33054e9b45c1870af8a7a35f",
+  "expectationAdapterCommit": "2d765a4cc307200a441a5e0cea0e2149cd85afc2",
+  "budgetCommit": "a591eeea2def952cc80aeb593ca1af7c4a27bd3b",
+  "rendererSHA256": "b8598357bdf4581537e9a49d4965f29c24091962340c943272eb8cad8b1a8d5e",
+  "helperSHA256": "ed93e2fc0fd95be7747cb8eeff61f3747baa06aa2d28183ea7ba908df6074bec",
+  "actualNodeSHA256": "0773317bac6ebfb42323a6a5fef346ed1602e2d3e9d64841a94fae27c737aee2",
+  "runtimeScope": {
+    "exactTwoExistingServerFiles": true,
+    "addedLines": 32,
+    "existingHelperBytesOutsideNewExportUnchanged": true,
+    "existingRendererBytesOutsideImportAndExplicitBranchUnchanged": true,
+    "completeUTF8SurroundingHeadingReservedBeforeWholeTermPreflight": true,
+    "renderRemainsSoleOwnNodeCharge": true,
+    "dateValidationMissingTypeAndArchiveGuardsUnchanged": true,
+    "falseShowSearchTermDoesNotSerializeTerm": true,
+    "localOmittedShowSearchTermDefaultsTrue": true,
+    "searchIgnoresShowPrefix": true,
+    "allOtherFallbackEligibilityAndTransportBehaviorUnchanged": true
+  },
+  "genuineBefore": {
+    "baseline": "f6f4dcda7ff0f8b7ef08ae43f7dac3422e510a07",
+    "testOnlyCommit": "92920c53964fe1573bb4aef98b943eb6420c14a1",
+    "immutableTestSHA256": "169be75223968724229540836b78237b1735923e78283fc6a6f881c23ee1b385",
+    "actualNodeSHA256": "582d1aa48ee69058e08be6406b86d604cf92010cf0e36a9e180e997b920da07b",
+    "sourceCounts": {
+      "tests": 6,
+      "pass": 1,
+      "fail": 5,
+      "cancelled": 0,
+      "skipped": 0
+    },
+    "compiledCounts": {
+      "tests": 6,
+      "pass": 1,
+      "fail": 5,
+      "cancelled": 0,
+      "skipped": 0
+    },
+    "fourFeatureChildrenPlusParentFailRawSControlPasses": true,
+    "beforeChecks": {
+      "path": "<private-evidence>/query-title-search-format-before-checks.json",
+      "sha256": "c59e443a645fc132473f93068b557540a1aff9995a293110f1b7383b5b473203",
+      "bytes": 14118
+    },
+    "all411BeforeOutputsRehashedUnchanged": true,
+    "beforeHistoryAndProofsNeverRewritten": true
+  },
+  "intentionalExpectationAdapter": {
+    "notFixtureCorrection": true,
+    "originalPrivateCopy": {
+      "path": "<private-evidence>/query-title-search-format-missing-type-expectation-original.test.ts",
+      "sha256": "5b2406b78a9395fe252cdf3e318150babc9550da319e1b4cf5787c8cfcf44856",
+      "bytes": 20236
+    },
+    "originalMissingTypeSHA256": "5b2406b78a9395fe252cdf3e318150babc9550da319e1b4cf5787c8cfcf44856",
+    "adaptedSHA256": "ec6e6351d2477ff6927fb45318cbf734b54ff4595c5a2e40b04b47656166de8f",
+    "changedSourceLines": 2,
+    "changedAssertionExpressions": 1,
+    "allFixtureInputsIDsDefaultsWrappersWaitsCleanupAndOtherAssertionsUnchanged": true,
+    "frozen169beFormattingRegressionUnchanged": true,
+    "oldMissingTypeAuditHelperUnchanged": true,
+    "newQuotedSearchAfterArtifactHelperSeparate": true
+  },
+  "newBudgetSourceTests": {
+    "file": "tests/query-title-search-format-budget.test.ts",
+    "sha256": "e236db78656b081b51bf5a98d9ab8f90572bab2999418d301c015088d1c5605b",
+    "wholeFileCountedTests": 3,
+    "sourceImportsRemainSOURCEUnderCompiledAPI": true,
+    "coverage": [
+      "ExactUTF8 complete surrounding heading reserve success and one-byte-less HttpError413.",
+      "Nonfinite/negative reserve or allowance rejected even with empty term; equality fits.",
+      "Bounded16384 leading-zero decimal compaction, invalid matching hex oversized413 and retained captured zeros; existing known amp/unknown/apos/all-zero recognition."
+    ],
+    "noPerformanceOrMemoryAllocationCertificate": true
+  },
+  "build": {
+    "firstAttempt": true,
+    "allThreeCommandsExitZero": true,
+    "actualNodeSHA256": "0773317bac6ebfb42323a6a5fef346ed1602e2d3e9d64841a94fae27c737aee2",
+    "receipt": {
+      "path": "<private-evidence>/query-title-search-format-backend-build-checks.json",
+      "sha256": "17602c3275596618d61c00fc3076cd53fad794d3ae8b3679b1371ede21e48108",
+      "bytes": 3081
+    },
+    "inventory": {
+      "path": "<private-evidence>/query-title-search-format-backend-build-fingerprints.json",
+      "sha256": "6de9091fd90cfd8aeb6489dd66cce135ba6a1beae377c7c8624332c65bdd7ee9",
+      "bytes": 142859
+    },
+    "sourceFiles": 354,
+    "allTrackedTestFiles": 243,
+    "actualProducedFiles": 411,
+    "allHashesCurrentAfterBothModes": true,
+    "not243ExecutedTests": true,
+    "usualViteChunkSizeAdvisoryOnly": true
+  },
+  "execution": {
+    "officialCommand": [
+      "node",
+      "scripts/test-isolated.mjs",
+      "tests/query-title-search-format-original.test.ts",
+      "tests/query-title-search-format-budget.test.ts",
+      "tests/query-title-missing-type-original.test.ts",
+      "tests/block-render-attributes.test.ts",
+      "tests/public-document-data.test.ts",
+      "tests/singular-archive-query-title-before.test.ts",
+      "tests/singular-archive-query-title-posts-page.test.ts",
+      "tests/archive-query-title-home-body-original.test.ts",
+      "tests/author-name-independent-count-grant.test.ts",
+      "tests/blocks.test.ts",
+      "tests/date-archives.test.ts",
+      "tests/author-name-independent-identity.test.ts",
+      "tests/search-explicit-query-original.test.ts",
+      "tests/theme-blocks.test.ts"
+    ],
+    "modesSequential": [
+      "source",
+      "compiled"
+    ],
+    "ports": [
+      3046,
+      3047
+    ],
+    "wholeFilesEachMode": 14,
+    "countedEachMode": 68,
+    "perFileCountsEachMode": [
+      6,
+      3,
+      6,
+      2,
+      7,
+      6,
+      4,
+      4,
+      4,
+      9,
+      4,
+      6,
+      6,
+      1
+    ],
+    "totalCountedAcrossTwoModes": 136,
+    "fiveProofGroupsTargetedResponsesEachMode": 73,
+    "totalTargetedResponses": 146,
+    "notAllHTTPMadeBy14Files": true,
+    "reruns": false,
+    "fakeIsolationOrDirectNodeTest": false,
+    "firstWriteCountsAccurate": true,
+    "directTypeScriptImportsRemainSOURCEUnderCompiledAPI": true,
+    "sourceAndActualCompiledAPIsSeparatelyServed": true
+  },
+  "testEntries": [
+    {
+      "file": "tests/query-title-search-format-original.test.ts",
+      "sha256": "169be75223968724229540836b78237b1735923e78283fc6a6f881c23ee1b385",
+      "prospectiveTests": 6,
+      "scope": "Actual public GET/HEAD/model and authenticated renderer API observations; actual compiled API in compiled mode."
+    },
+    {
+      "file": "tests/query-title-search-format-budget.test.ts",
+      "sha256": "e236db78656b081b51bf5a98d9ab8f90572bab2999418d301c015088d1c5605b",
+      "prospectiveTests": 3,
+      "scope": "Direct TypeScript helper/utils SOURCE imports only, even while API uses compiled bundle."
+    },
+    {
+      "file": "tests/query-title-missing-type-original.test.ts",
+      "sha256": "ec6e6351d2477ff6927fb45318cbf734b54ff4595c5a2e40b04b47656166de8f",
+      "prospectiveTests": 6,
+      "scope": "actual HTTP public GET/HEAD/model and authenticated preview; actual compiled API in compiled mode"
+    },
+    {
+      "file": "tests/block-render-attributes.test.ts",
+      "sha256": "be923affd756f83d5cc4b336b31885c3707d5e8217d32c7fb699448e34fb8efc",
+      "prospectiveTests": 2,
+      "scope": "direct TypeScript normalization imports remain SOURCE in both modes"
+    },
+    {
+      "file": "tests/public-document-data.test.ts",
+      "sha256": "dee95240a579ec16327b0ca10f1497cbf2deae37dfd218113a08675cfa0454b1",
+      "prospectiveTests": 7,
+      "scope": "mixed direct TypeScript service/renderer imports (SOURCE) and actual HTTP"
+    },
+    {
+      "file": "tests/singular-archive-query-title-before.test.ts",
+      "sha256": "fa7f74eaab2edf81507422dc96015f823ee5a1de41e2a2f4bc9d902385966724",
+      "prospectiveTests": 6,
+      "scope": "actual HTTP selected document/template/body and archive loop"
+    },
+    {
+      "file": "tests/singular-archive-query-title-posts-page.test.ts",
+      "sha256": "454a4bdce36dcf096e53fb670cde36a18220d05474505dd61a3dc492bf008820",
+      "prospectiveTests": 4,
+      "scope": "actual HTTP selected/configured posts-page representation preservation"
+    },
+    {
+      "file": "tests/archive-query-title-home-body-original.test.ts",
+      "sha256": "14dc9e1cc335174df1b4f826ddf57699e97d0add3daffacfb80639c9adf0264b",
+      "prospectiveTests": 4,
+      "scope": "actual HTTP Source/Classic body/model/site API controls"
+    },
+    {
+      "file": "tests/author-name-independent-count-grant.test.ts",
+      "sha256": "6643e7832a8272913a88bab1bac653a6cb674f25e25bd9c09139cfc65252f031",
+      "prospectiveTests": 4,
+      "scope": "actual HTTP measured identity/final grant boundary"
+    },
+    {
+      "file": "tests/blocks.test.ts",
+      "sha256": "50521c9c671d7ede4a608c9d6975303da34a15f1ab80dbf338f4b43e8268615a",
+      "prospectiveTests": 9,
+      "scope": "mixed direct TypeScript rendering (SOURCE) and actual HTTP preview/blocks"
+    },
+    {
+      "file": "tests/date-archives.test.ts",
+      "sha256": "efa03a60b5530b82fc3947af2be67e91da2298f94f2c0163fb32d42d34d9d175",
+      "prospectiveTests": 4,
+      "scope": "mixed direct TypeScript renderer/date helpers (SOURCE) and actual HTTP date API"
+    },
+    {
+      "file": "tests/author-name-independent-identity.test.ts",
+      "sha256": "595dc91255e5439626e7209ea9420e4662e0886fc3f5f3c8dcd05a16ad9c2882",
+      "prospectiveTests": 6,
+      "scope": "actual HTTP identity controls plus supplied-client direct TypeScript rendering (SOURCE)"
+    },
+    {
+      "file": "tests/search-explicit-query-original.test.ts",
+      "sha256": "42352ea7c91847d2046220b8090dcf11a39616dc2efffb1b89cfcc001642b75c",
+      "prospectiveTests": 6,
+      "scope": "All renderer/form assertions use actual HTTP; direct database imports are fixture/setup and teardown, not compiled renderer services. Protects shared HTML401/numeric transducer, coercion and cumulative Search field budget."
+    },
+    {
+      "file": "tests/theme-blocks.test.ts",
+      "sha256": "21924834f2010d917595734b4bf6208ca1834130b95755e2e29d82131477f14d",
+      "prospectiveTests": 1,
+      "scope": "Direct TypeScript renderSiteDocument/renderPublicContent/utils/db supplied-transaction calls only; SOURCE in both API modes. No HTTP renderer assertion."
+    }
+  ],
+  "modes": [
+    {
+      "mode": "source",
+      "counts": {
+        "tests": 68,
+        "pass": 68,
+        "fail": 0,
+        "skipped": 0,
+        "cancelled": 0
+      },
+      "perFileCounts": [
+        6,
+        3,
+        6,
+        2,
+        7,
+        6,
+        4,
+        4,
+        4,
+        9,
+        4,
+        6,
+        6,
+        1
+      ],
+      "runnerCompletedFiles": 14,
+      "runReceipt": {
+        "path": "<private-evidence>/query-title-search-format-backend-source-run.json",
+        "sha256": "cc34b030d3bd4a2110d1f91d175b772a6a93d987122c35c1c360df5b4809300b",
+        "bytes": 23641
+      },
+      "rawLog": {
+        "path": "<private-evidence>/query-title-search-format-backend-source.log",
+        "sha256": "e240fdbd72aee0f5e4805587e1f50cbfac1c145483ab823d90f1155d4d2b232e",
+        "bytes": 28654
+      },
+      "proofs": [
+        {
+          "kind": "format",
+          "responses": 12,
+          "proof": {
+            "path": "<private-evidence>/query-title-search-format-backend-source-format-proof.json",
+            "sha256": "8c981473daec3b833d752e5b3d686ec8f5801f7d299c88110fb97144a1b48359",
+            "bytes": 297313
+          }
+        },
+        {
+          "kind": "missing",
+          "responses": 9,
+          "proof": {
+            "path": "<private-evidence>/query-title-search-format-backend-source-missing-proof.json",
+            "sha256": "ecaf127f877bbba167cac5ebc390a08b2b71fa53792c5d828a41436b7dc1b77b",
+            "bytes": 298552
+          }
+        },
+        {
+          "kind": "singular",
+          "responses": 23,
+          "proof": {
+            "path": "<private-evidence>/query-title-search-format-backend-source-singular-proof.json",
+            "sha256": "17c6dd6c945ddbe02d00672dc3dec143547d6f0aba51e34f905b54883b6c62ac",
+            "bytes": 782156
+          }
+        },
+        {
+          "kind": "posts-page",
+          "responses": 13,
+          "proof": {
+            "path": "<private-evidence>/query-title-search-format-backend-source-posts-page-proof.json",
+            "sha256": "a35c51b79d59fcdfcf210f331dab293019fc2684187c042296b01650f1bdbd16",
+            "bytes": 222180
+          }
+        },
+        {
+          "kind": "home-body",
+          "responses": 16,
+          "proof": {
+            "path": "<private-evidence>/query-title-search-format-backend-source-home-body-proof.json",
+            "sha256": "d33c3f5c0d4468714d4377e8603c8ef515ef99091512c4eda07e512bbf4b628e",
+            "bytes": 420586
+          }
+        }
+      ],
+      "actualDOMInspected": true,
+      "fixtureCleanupSummaries": [
+        {
+          "postIds": [
+            4
+          ],
+          "documentIds": [],
+          "restoredDocumentId": 14,
+          "settingsRestoreAttempted": true,
+          "failures": []
+        },
+        {
+          "postIds": [
+            5
+          ],
+          "documentIds": [
+            215
+          ],
+          "restoredDocumentIds": [
+            14
+          ],
+          "settingsRestoreAttempted": true,
+          "failures": []
+        }
+      ]
+    },
+    {
+      "mode": "compiled",
+      "counts": {
+        "tests": 68,
+        "pass": 68,
+        "fail": 0,
+        "skipped": 0,
+        "cancelled": 0
+      },
+      "perFileCounts": [
+        6,
+        3,
+        6,
+        2,
+        7,
+        6,
+        4,
+        4,
+        4,
+        9,
+        4,
+        6,
+        6,
+        1
+      ],
+      "runnerCompletedFiles": 14,
+      "runReceipt": {
+        "path": "<private-evidence>/query-title-search-format-backend-compiled-run.json",
+        "sha256": "e2edd2011095ae729abc64c7b45c9c65145d6b4d9e511da9d9652226ae1eb5c4",
+        "bytes": 20019
+      },
+      "rawLog": {
+        "path": "<private-evidence>/query-title-search-format-backend-compiled.log",
+        "sha256": "2ed28d2332ac8b49a6951cbc80f44e226687c41d3cdea60e6f7d96abba5da3f4",
+        "bytes": 28659
+      },
+      "proofs": [
+        {
+          "kind": "format",
+          "responses": 12,
+          "proof": {
+            "path": "<private-evidence>/query-title-search-format-backend-compiled-format-proof.json",
+            "sha256": "6a37d15cc4a4283341b8b56cedd0dd471b9bb6b6f00ecfa261e5681f927f7f6c",
+            "bytes": 297313
+          }
+        },
+        {
+          "kind": "missing",
+          "responses": 9,
+          "proof": {
+            "path": "<private-evidence>/query-title-search-format-backend-compiled-missing-proof.json",
+            "sha256": "a83908945106bb0ee6716131c1a36f5f52013f4a485d5ca1baf3ed349f5d9e5c",
+            "bytes": 298552
+          }
+        },
+        {
+          "kind": "singular",
+          "responses": 23,
+          "proof": {
+            "path": "<private-evidence>/query-title-search-format-backend-compiled-singular-proof.json",
+            "sha256": "b12f9890bc8ab3bcc5e16a4217ebabd83b95cc702ddf89279cc9fbc4e75944ff",
+            "bytes": 782156
+          }
+        },
+        {
+          "kind": "posts-page",
+          "responses": 13,
+          "proof": {
+            "path": "<private-evidence>/query-title-search-format-backend-compiled-posts-page-proof.json",
+            "sha256": "388ca78f8fef158fd1e2373963dad2f4cced368f5e5c41af1516c4943c0949cb",
+            "bytes": 222180
+          }
+        },
+        {
+          "kind": "home-body",
+          "responses": 16,
+          "proof": {
+            "path": "<private-evidence>/query-title-search-format-backend-compiled-home-body-proof.json",
+            "sha256": "7ef12720c394ff932c79d723057bf9d67fdbd86628bdc903ebb67f913d8e904c",
+            "bytes": 420586
+          }
+        }
+      ],
+      "actualDOMInspected": true,
+      "fixtureCleanupSummaries": [
+        {
+          "postIds": [
+            4
+          ],
+          "documentIds": [],
+          "restoredDocumentId": 14,
+          "settingsRestoreAttempted": true,
+          "failures": []
+        },
+        {
+          "postIds": [
+            5
+          ],
+          "documentIds": [
+            215
+          ],
+          "restoredDocumentIds": [
+            14
+          ],
+          "settingsRestoreAttempted": true,
+          "failures": []
+        }
+      ]
+    }
+  ],
+  "domAudit": {
+    "path": "<private-evidence>/query-title-search-format-backend-dom-audit.json",
+    "sha256": "0717dba9cd024dc9e6e73bb438b14f715311cefb2f59e7566aaafe56f064bccf",
+    "bytes": 12717
+  },
+  "all146ActualTargetedResponsesAndOwnedDOMInspected": true,
+  "artifactAuditToolingCorrection": {
+    "receipt": {
+      "path": "<private-evidence>/query-title-search-format-backend-audit-tooling-correction.json",
+      "sha256": "47c916aa5649aaa18bdc7abcedc816a23045c03300ae904874e6c50ce9753a0b",
+      "bytes": 1076
+    },
+    "originalAuditRetained": true,
+    "actualFailure": "Cleanup summary regex used invented FORMAT tag; actual logs have QUERY_TITLE_SEARCH_FIXTURE_CLEANUP. One summary was found rather than two.",
+    "exactOneTagCorrectionInNewDriver": true,
+    "noTestsOrProductOrProofsRerunOrChanged": true,
+    "notRuntimeOrRegressionFailure": true
+  },
+  "resources": {
+    "databaseNames": [
+      "worldact_query_title_search_format_backend_anchor",
+      "worldact_test_1794300576877_5538991c",
+      "worldact_test_1794300617692_0ca8be2b"
+    ],
+    "databaseRows": [],
+    "phaseApps": [
+      "worldact_query_title_search_format_backend_source",
+      "worldact_query_title_search_format_backend_compiled"
+    ],
+    "phaseOrDatabaseSessionRows": [],
+    "observedPostgreSQLPIDsStillPresent": [],
+    "observedOwnedOSProcessCount": 105,
+    "remainingObservedOwnedOSPIDs": [],
+    "portsPhysicallyFree": {
+      "3046": true,
+      "3047": true,
+      "3048": true
+    },
+    "ownConfigRetained": {
+      "regularNonSymlink": true,
+      "uid": 501,
+      "mode": "0600",
+      "originalCreationSHA256": "391116dd3ad3bea11762ed732c31098858b936bfe40cdc1bbdbf042d500ad911",
+      "currentHashMatchesCreation": true
+    },
+    "ownReadonlyDependencyLinkRetained": true,
+    "owner5010755NonSymlinkAndLock233Verified": true,
+    "all411BuildsRetained": true,
+    "noIndependentExactUploadOutboxAbsenceClaim": true,
+    "journalPoolEnded": true
+  },
+  "limits": [
+    "Only explicit type search with existing truthy finalquery.search; unchanged date validation, missing/empty/archive guard and fallback/type behavior.",
+    "Actual authenticated block-renderer API observations are not browser/editor UI proof.",
+    "Numeric entity wire spelling may be canonicalized by unchanged sanitizer; certify safe exact DOM text and helper raw normalization, not raw PHP wire equivalence.",
+    "SOURCE helper/renderer/service imports remain SOURCE in compiled API mode.",
+    "No search eligibility/global flags, aliases/path-only transport repair, level0, post-type registry, malformed raw attributes, arbitrary PHP invalid UTF8 equivalence or broader sanitizer change.",
+    "No whole CMS/full-suite/fresh/fixed3062/browser/benchmark/production release or new CI claim.",
+    "Exact generated upload/outbox paths were not independently measured; normal runner-finally cleanup only, no per-path absence claim.",
+    "Own environment/dependency link and all builds intentionally retained until separate root cleanup authorization."
+  ],
+  "noCodeTestCIUIMainOrOldEvidenceChangedAfterFrozenConstruction": true,
+  "noArchiveCreated": true,
+  "docsPublicationNotYetAuthorized": true,
+  "artifacts": [
+    {
+      "path": "<private-evidence>/query-title-search-format-implementation-plan.md",
+      "sha256": "bb46b7daa4b894c29aa2d2501edf646440cf9492555cd3ce10874830e580d5d0",
+      "bytes": 14386
+    },
+    {
+      "path": "<private-evidence>/query-title-search-format-implementation-independent-review.md",
+      "sha256": "35fb6ee4e2317e2dc27a030bf9dcd8cd0bfd04d64ef92fcc2bd3edb7236dbce6",
+      "bytes": 4133
+    },
+    {
+      "path": "<private-evidence>/query-title-search-format-runtime-independent-review.md",
+      "sha256": "8dbb955cb5d89d4722baaa594ef13d5dca30dc8009d3614057afd0cc2a9bf1a4",
+      "bytes": 3089
+    },
+    {
+      "path": "<private-evidence>/query-title-search-format-runtime-independent-checks.json",
+      "sha256": "29d06e48e04ca33eb6f98b3d70ebf68eba0ce2154ea6d48398959994c0b5b1de",
+      "bytes": 1286
+    },
+    {
+      "path": "<private-evidence>/query-title-search-format-backend-baseline-freeze.json",
+      "sha256": "e832ba47a49d0373e52d40f5683142f485cacaa98e79a4a5d374c1413580a99e",
+      "bytes": 1387
+    },
+    {
+      "path": "<private-evidence>/query-title-search-format-backend-runtime-construction-freeze.json",
+      "sha256": "33b905b4e70ea07ade7b74d1480517426ef8ca774ae96846fdccaa1439d1b30d",
+      "bytes": 2878
+    },
+    {
+      "path": "<private-evidence>/query-title-search-format-expectation-adapter-original-receipt.json",
+      "sha256": "d97771ca3ff2c0d07b640df29894e124e76e60cc9f61551dba7ebeccbfe93053",
+      "bytes": 779
+    },
+    {
+      "path": "<private-evidence>/query-title-search-format-expectation-adapter-construction-freeze.json",
+      "sha256": "484cbbfc518bd494ea61a70b9b55ff90e9e09b1486da387aed8f9a7febacb6c2",
+      "bytes": 1144
+    },
+    {
+      "path": "<private-evidence>/query-title-search-format-budget-construction-freeze.json",
+      "sha256": "29465e3a539b728628dbbddd751661c2cbe1b143e5d074b8325281dd21c14951",
+      "bytes": 1438
+    },
+    {
+      "path": "<private-evidence>/query-title-search-format-complete-affected-selector.json",
+      "sha256": "d2721196e10528608808c1889dd062e21c1f290edde29bf5cba9063a00d58cfa",
+      "bytes": 6899
+    },
+    {
+      "path": "<private-evidence>/query-title-search-format-backend-build-preflight.json",
+      "sha256": "31fbf7e240ca117e50f6ac0de34c6d85d4aee12fb965310ccddd67c3cd9d336d",
+      "bytes": 63195
+    },
+    {
+      "path": "<private-evidence>/query-title-search-format-backend-build-checks.json",
+      "sha256": "17602c3275596618d61c00fc3076cd53fad794d3ae8b3679b1371ede21e48108",
+      "bytes": 3081
+    },
+    {
+      "path": "<private-evidence>/query-title-search-format-backend-build-fingerprints.json",
+      "sha256": "6de9091fd90cfd8aeb6489dd66cce135ba6a1beae377c7c8624332c65bdd7ee9",
+      "bytes": 142859
+    },
+    {
+      "path": "<private-evidence>/query-title-search-format-backend-typecheck.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "<private-evidence>/query-title-search-format-backend-vite.log",
+      "sha256": "df49a9a1d74d0068905b32257583f1208bf0ba972804b221a936ca08c051d400",
+      "bytes": 2343
+    },
+    {
+      "path": "<private-evidence>/query-title-search-format-backend-native-esbuild.log",
+      "sha256": "0807025821bd9cc8ee69311ab45199a44f63d297a176082aebcf436d5e5c5080",
+      "bytes": 56
+    },
+    {
+      "path": "<private-evidence>/query-title-search-format-backend-prepare.json",
+      "sha256": "6633782b8d25f5014218ef42ebd33bd29301d74438474dc652a30e5ac3412e95",
+      "bytes": 917
+    },
+    {
+      "path": "<private-evidence>/query-title-search-format-backend-gates.mjs",
+      "sha256": "4682a20b8f04abd5366084742c9cae4cdce0aa0063e8678028732e665c07f28f",
+      "bytes": 16030
+    },
+    {
+      "path": "<private-evidence>/query-title-search-format-backend-source-prelaunch.json",
+      "sha256": "298e8f451f61dc500c72028271b7cd9cdc721cfe255b0ef5ff90f357efb5a730",
+      "bytes": 894
+    },
+    {
+      "path": "<private-evidence>/query-title-search-format-backend-source-run.json",
+      "sha256": "cc34b030d3bd4a2110d1f91d175b772a6a93d987122c35c1c360df5b4809300b",
+      "bytes": 23641
+    },
+    {
+      "path": "<private-evidence>/query-title-search-format-backend-source.log",
+      "sha256": "e240fdbd72aee0f5e4805587e1f50cbfac1c145483ab823d90f1155d4d2b232e",
+      "bytes": 28654
+    },
+    {
+      "path": "<private-evidence>/query-title-search-format-backend-compiled-prelaunch.json",
+      "sha256": "d829b5483a5864cecce981eb90ef136b2b25a8ac71680315ba14de2a1b97609f",
+      "bytes": 896
+    },
+    {
+      "path": "<private-evidence>/query-title-search-format-backend-compiled-run.json",
+      "sha256": "e2edd2011095ae729abc64c7b45c9c65145d6b4d9e511da9d9652226ae1eb5c4",
+      "bytes": 20019
+    },
+    {
+      "path": "<private-evidence>/query-title-search-format-backend-compiled.log",
+      "sha256": "2ed28d2332ac8b49a6951cbc80f44e226687c41d3cdea60e6f7d96abba5da3f4",
+      "bytes": 28659
+    },
+    {
+      "path": "<private-evidence>/query-title-search-format-backend-audit.mjs",
+      "sha256": "d5380c4284713c92659bb71c25f4f2d7a4a02674eaffa1cb8ef075c8ae33e732",
+      "bytes": 10634
+    },
+    {
+      "path": "<private-evidence>/query-title-search-format-backend-audit-cleanup-tag.mjs",
+      "sha256": "ba99a04dca472e64172d4ce16af4e62120d7d4823eccf4a9ed81b184b21c4fc6",
+      "bytes": 10627
+    },
+    {
+      "path": "<private-evidence>/query-title-search-format-backend-audit-tooling-correction.json",
+      "sha256": "47c916aa5649aaa18bdc7abcedc816a23045c03300ae904874e6c50ce9753a0b",
+      "bytes": 1076
+    },
+    {
+      "path": "<private-evidence>/query-title-search-format-backend-dom-audit.json",
+      "sha256": "0717dba9cd024dc9e6e73bb438b14f715311cefb2f59e7566aaafe56f064bccf",
+      "bytes": 12717
+    },
+    {
+      "path": "<private-evidence>/query-title-search-format-proof-audit.mjs",
+      "sha256": "40e530c037066b9d9f1fd66391d12e870174411eea2ded8e4760734b5ed07d9d",
+      "bytes": 3112
+    },
+    {
+      "path": "<private-evidence>/query-title-missing-type-proof-audit.mjs",
+      "sha256": "d18ee94045a63b4771a5a2e1b1555676e60bb1aa7b808575e30245d47d489bce",
+      "bytes": 2874
+    },
+    {
+      "path": "<private-evidence>/query-title-missing-type-proof-audit-quoted-search.mjs",
+      "sha256": "b35e93d3beedbc6c5f9a09beb26e6d713396c45fba2ee5d4429e9b54731a0390",
+      "bytes": 2883
+    },
+    {
+      "path": "<private-evidence>/root-query-title-search-format-quoted-audit-helper.json",
+      "sha256": "6b9670eb460e46b9f836baeafe349e21fd3281768247c1570b5fd4c5b84b833f",
+      "bytes": 296
+    },
+    {
+      "path": "<private-evidence>/archive-query-title-home-proof-audit-owned-card.mjs",
+      "sha256": "f9702436d5eb0f4e9a48c97c201ccc8b42eb3e0a743273860a493823afa21d1d",
+      "bytes": 9770
+    },
+    {
+      "path": "<private-evidence>/query-title-search-format-before-checks.json",
+      "sha256": "c59e443a645fc132473f93068b557540a1aff9995a293110f1b7383b5b473203",
+      "bytes": 14118
+    },
+    {
+      "path": "<private-evidence>/query-title-search-format-before-owned-cleanup.json",
+      "sha256": "e9d47069ebdcd89384a80d224dd03adeaa148f90b28e3485b078a3a6ee733157",
+      "bytes": 3669
+    },
+    {
+      "path": "<private-evidence>/query-title-search-format-before-build-only-manifest.json",
+      "sha256": "54aae04bdb14a74836436469a556d0120d4299fffcb062cc8e0a79bb57f3a4c9",
+      "bytes": 86155
+    },
+    {
+      "path": "<private-evidence>/root-query-title-search-format-before-audit.json",
+      "sha256": "132434e2a864bb43b6efe9f0ed495ed74c40ee73a166fbf10157543a0af42063",
+      "bytes": 571
+    }
+  ]
+}

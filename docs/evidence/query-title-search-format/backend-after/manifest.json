@@ -1,0 +1,506 @@
+{
+  "schemaVersion": 1,
+  "scope": "SCOPED_EXPLICIT_SEARCH_QUERY_TITLE_FORMAT_BACKEND_AFTER",
+  "baseline": "172ce9326962fedd84884cf85d20005f1260cefe",
+  "runtimeCommit": "24e1c37096c3ac2e33054e9b45c1870af8a7a35f",
+  "expectationAdapterCommit": "2d765a4cc307200a441a5e0cea0e2149cd85afc2",
+  "budgetCommit": "a591eeea2def952cc80aeb593ca1af7c4a27bd3b",
+  "candidateBeforeDocs": "a591eeea2def952cc80aeb593ca1af7c4a27bd3b",
+  "treeBeforeDocs": "0079c008893eb6820baa1da34c4ebcb0aecf2bac",
+  "nodeSHA256": "0773317bac6ebfb42323a6a5fef346ed1602e2d3e9d64841a94fae27c737aee2",
+  "files": [
+    {
+      "file": "README.md",
+      "sha256": "4994bbabf3642fb66f9838c71ed3be975fd4c4806cf6ef9f9e188185c785e05e",
+      "bytes": 5270
+    },
+    {
+      "file": "build-checks.json",
+      "sha256": "165d6dccbb879c470eace3791378625cceb13c7bf33e7e94d2782afe599aa2d2",
+      "bytes": 3039
+    },
+    {
+      "file": "checks.json",
+      "sha256": "59e0bcb62c9b217e7a26882caf3cc6e6ae87466e75904c415c298e6b894b8da3",
+      "bytes": 27430
+    },
+    {
+      "file": "dom-audit.json",
+      "sha256": "cb3cbe23b0185989e1a064d3c5a739e69c924c8c763198a0f14e3f5778f644b5",
+      "bytes": 12555
+    },
+    {
+      "file": "owned-cleanup.json",
+      "sha256": "d7442ed2d93bd17872a2c307e8285e3442fa83f20fc8195f0862a3de2adf28cf",
+      "bytes": 3445
+    },
+    {
+      "file": "review.md",
+      "sha256": "d4ce8c2dbbbb962bd1630a57e9a5ae3bf8e9e9ec5fc33227dec6618475ada806",
+      "bytes": 7727
+    },
+    {
+      "file": "manifest.json",
+      "sha256": null,
+      "bytes": null,
+      "digestConvention": "This row names the manifest only. No recursive self digest is claimed. Exact manifest digest is recorded externally in private publication correspondence/package receipts and Git."
+    }
+  ],
+  "payloadCorrespondence": [
+    {
+      "file": "review.md",
+      "privateSourceBasename": "query-title-search-format-backend-review.md",
+      "privateSourceSHA256": "19ab5becb469657946fcf0bb0e68fa8b5b778791d13850fcdd015c810ee92d86",
+      "privateSourceBytes": 7745,
+      "publishedSHA256": "d4ce8c2dbbbb962bd1630a57e9a5ae3bf8e9e9ec5fc33227dec6618475ada806",
+      "publishedBytes": 7727,
+      "transformation": "Exact original bytes except listed literal known path-prefix substitutions.",
+      "occurrenceLedger": [
+        {
+          "rule": "PRIVATE_EVIDENCE_ROOT_CANONICAL",
+          "replacementPrefix": "<private-evidence>",
+          "occurrences": 0
+        },
+        {
+          "rule": "FORMAT_BEFORE_CHECKOUT_CANONICAL",
+          "replacementPrefix": "<format-before-checkout>",
+          "occurrences": 0
+        },
+        {
+          "rule": "MISSING_BEFORE_CHECKOUT_CANONICAL",
+          "replacementPrefix": "<missing-before-checkout>",
+          "occurrences": 0
+        },
+        {
+          "rule": "OWN_BACKEND_CHECKOUT_CANONICAL",
+          "replacementPrefix": "<backend-checkout>",
+          "occurrences": 0
+        },
+        {
+          "rule": "PRIVATE_EVIDENCE_ROOT",
+          "replacementPrefix": "<private-evidence>",
+          "occurrences": 2
+        },
+        {
+          "rule": "FORMAT_BEFORE_CHECKOUT",
+          "replacementPrefix": "<format-before-checkout>",
+          "occurrences": 0
+        },
+        {
+          "rule": "MISSING_BEFORE_CHECKOUT",
+          "replacementPrefix": "<missing-before-checkout>",
+          "occurrences": 0
+        },
+        {
+          "rule": "OWN_BACKEND_CHECKOUT",
+          "replacementPrefix": "<backend-checkout>",
+          "occurrences": 0
+        },
+        {
+          "rule": "SHARED_MAIN_CHECKOUT",
+          "replacementPrefix": "<shared-main-checkout>",
+          "occurrences": 0
+        }
+      ]
+    },
+    {
+      "file": "checks.json",
+      "privateSourceBasename": "query-title-search-format-backend-checks.json",
+      "privateSourceSHA256": "8339256ca14b36aff94a8b992d4f9caf1c283764d33d0b118b9fca3f88ade226",
+      "privateSourceBytes": 27964,
+      "publishedSHA256": "59e0bcb62c9b217e7a26882caf3cc6e6ae87466e75904c415c298e6b894b8da3",
+      "publishedBytes": 27430,
+      "transformation": "Exact original bytes except listed literal known path-prefix substitutions.",
+      "occurrenceLedger": [
+        {
+          "rule": "PRIVATE_EVIDENCE_ROOT_CANONICAL",
+          "replacementPrefix": "<private-evidence>",
+          "occurrences": 0
+        },
+        {
+          "rule": "FORMAT_BEFORE_CHECKOUT_CANONICAL",
+          "replacementPrefix": "<format-before-checkout>",
+          "occurrences": 0
+        },
+        {
+          "rule": "MISSING_BEFORE_CHECKOUT_CANONICAL",
+          "replacementPrefix": "<missing-before-checkout>",
+          "occurrences": 0
+        },
+        {
+          "rule": "OWN_BACKEND_CHECKOUT_CANONICAL",
+          "replacementPrefix": "<backend-checkout>",
+          "occurrences": 0
+        },
+        {
+          "rule": "PRIVATE_EVIDENCE_ROOT",
+          "replacementPrefix": "<private-evidence>",
+          "occurrences": 57
+        },
+        {
+          "rule": "FORMAT_BEFORE_CHECKOUT",
+          "replacementPrefix": "<format-before-checkout>",
+          "occurrences": 0
+        },
+        {
+          "rule": "MISSING_BEFORE_CHECKOUT",
+          "replacementPrefix": "<missing-before-checkout>",
+          "occurrences": 0
+        },
+        {
+          "rule": "OWN_BACKEND_CHECKOUT",
+          "replacementPrefix": "<backend-checkout>",
+          "occurrences": 1
+        },
+        {
+          "rule": "SHARED_MAIN_CHECKOUT",
+          "replacementPrefix": "<shared-main-checkout>",
+          "occurrences": 0
+        }
+      ]
+    },
+    {
+      "file": "dom-audit.json",
+      "privateSourceBasename": "query-title-search-format-backend-dom-audit.json",
+      "privateSourceSHA256": "0717dba9cd024dc9e6e73bb438b14f715311cefb2f59e7566aaafe56f064bccf",
+      "privateSourceBytes": 12717,
+      "publishedSHA256": "cb3cbe23b0185989e1a064d3c5a739e69c924c8c763198a0f14e3f5778f644b5",
+      "publishedBytes": 12555,
+      "transformation": "Exact original bytes except listed literal known path-prefix substitutions.",
+      "occurrenceLedger": [
+        {
+          "rule": "PRIVATE_EVIDENCE_ROOT_CANONICAL",
+          "replacementPrefix": "<private-evidence>",
+          "occurrences": 0
+        },
+        {
+          "rule": "FORMAT_BEFORE_CHECKOUT_CANONICAL",
+          "replacementPrefix": "<format-before-checkout>",
+          "occurrences": 0
+        },
+        {
+          "rule": "MISSING_BEFORE_CHECKOUT_CANONICAL",
+          "replacementPrefix": "<missing-before-checkout>",
+          "occurrences": 0
+        },
+        {
+          "rule": "OWN_BACKEND_CHECKOUT_CANONICAL",
+          "replacementPrefix": "<backend-checkout>",
+          "occurrences": 0
+        },
+        {
+          "rule": "PRIVATE_EVIDENCE_ROOT",
+          "replacementPrefix": "<private-evidence>",
+          "occurrences": 18
+        },
+        {
+          "rule": "FORMAT_BEFORE_CHECKOUT",
+          "replacementPrefix": "<format-before-checkout>",
+          "occurrences": 0
+        },
+        {
+          "rule": "MISSING_BEFORE_CHECKOUT",
+          "replacementPrefix": "<missing-before-checkout>",
+          "occurrences": 0
+        },
+        {
+          "rule": "OWN_BACKEND_CHECKOUT",
+          "replacementPrefix": "<backend-checkout>",
+          "occurrences": 0
+        },
+        {
+          "rule": "SHARED_MAIN_CHECKOUT",
+          "replacementPrefix": "<shared-main-checkout>",
+          "occurrences": 0
+        }
+      ]
+    },
+    {
+      "file": "owned-cleanup.json",
+      "privateSourceBasename": "query-title-search-format-backend-owned-cleanup.json",
+      "privateSourceSHA256": "906541f246bd9ee737a3a5bda2fbbd2b4d931f0284d5b6d3d437755adf9b5f15",
+      "privateSourceBytes": 3571,
+      "publishedSHA256": "d7442ed2d93bd17872a2c307e8285e3442fa83f20fc8195f0862a3de2adf28cf",
+      "publishedBytes": 3445,
+      "transformation": "Exact original bytes except listed literal known path-prefix substitutions.",
+      "occurrenceLedger": [
+        {
+          "rule": "PRIVATE_EVIDENCE_ROOT_CANONICAL",
+          "replacementPrefix": "<private-evidence>",
+          "occurrences": 0
+        },
+        {
+          "rule": "FORMAT_BEFORE_CHECKOUT_CANONICAL",
+          "replacementPrefix": "<format-before-checkout>",
+          "occurrences": 0
+        },
+        {
+          "rule": "MISSING_BEFORE_CHECKOUT_CANONICAL",
+          "replacementPrefix": "<missing-before-checkout>",
+          "occurrences": 0
+        },
+        {
+          "rule": "OWN_BACKEND_CHECKOUT_CANONICAL",
+          "replacementPrefix": "<backend-checkout>",
+          "occurrences": 0
+        },
+        {
+          "rule": "PRIVATE_EVIDENCE_ROOT",
+          "replacementPrefix": "<private-evidence>",
+          "occurrences": 1
+        },
+        {
+          "rule": "FORMAT_BEFORE_CHECKOUT",
+          "replacementPrefix": "<format-before-checkout>",
+          "occurrences": 0
+        },
+        {
+          "rule": "MISSING_BEFORE_CHECKOUT",
+          "replacementPrefix": "<missing-before-checkout>",
+          "occurrences": 0
+        },
+        {
+          "rule": "OWN_BACKEND_CHECKOUT",
+          "replacementPrefix": "<backend-checkout>",
+          "occurrences": 2
+        },
+        {
+          "rule": "SHARED_MAIN_CHECKOUT",
+          "replacementPrefix": "<shared-main-checkout>",
+          "occurrences": 3
+        }
+      ]
+    },
+    {
+      "file": "build-checks.json",
+      "privateSourceBasename": "query-title-search-format-backend-build-checks.json",
+      "privateSourceSHA256": "17602c3275596618d61c00fc3076cd53fad794d3ae8b3679b1371ede21e48108",
+      "privateSourceBytes": 3081,
+      "publishedSHA256": "165d6dccbb879c470eace3791378625cceb13c7bf33e7e94d2782afe599aa2d2",
+      "publishedBytes": 3039,
+      "transformation": "Exact original bytes except listed literal known path-prefix substitutions.",
+      "occurrenceLedger": [
+        {
+          "rule": "PRIVATE_EVIDENCE_ROOT_CANONICAL",
+          "replacementPrefix": "<private-evidence>",
+          "occurrences": 0
+        },
+        {
+          "rule": "FORMAT_BEFORE_CHECKOUT_CANONICAL",
+          "replacementPrefix": "<format-before-checkout>",
+          "occurrences": 0
+        },
+        {
+          "rule": "MISSING_BEFORE_CHECKOUT_CANONICAL",
+          "replacementPrefix": "<missing-before-checkout>",
+          "occurrences": 0
+        },
+        {
+          "rule": "OWN_BACKEND_CHECKOUT_CANONICAL",
+          "replacementPrefix": "<backend-checkout>",
+          "occurrences": 0
+        },
+        {
+          "rule": "PRIVATE_EVIDENCE_ROOT",
+          "replacementPrefix": "<private-evidence>",
+          "occurrences": 0
+        },
+        {
+          "rule": "FORMAT_BEFORE_CHECKOUT",
+          "replacementPrefix": "<format-before-checkout>",
+          "occurrences": 0
+        },
+        {
+          "rule": "MISSING_BEFORE_CHECKOUT",
+          "replacementPrefix": "<missing-before-checkout>",
+          "occurrences": 0
+        },
+        {
+          "rule": "OWN_BACKEND_CHECKOUT",
+          "replacementPrefix": "<backend-checkout>",
+          "occurrences": 2
+        },
+        {
+          "rule": "SHARED_MAIN_CHECKOUT",
+          "replacementPrefix": "<shared-main-checkout>",
+          "occurrences": 0
+        }
+      ]
+    }
+  ],
+  "sourceFiles": {
+    "server/block-renderer.ts": "b8598357bdf4581537e9a49d4965f29c24091962340c943272eb8cad8b1a8d5e",
+    "server/search-query-fields.ts": "ed93e2fc0fd95be7747cb8eeff61f3747baa06aa2d28183ea7ba908df6074bec"
+  },
+  "testEntries": [
+    {
+      "file": "tests/query-title-search-format-original.test.ts",
+      "sha256": "169be75223968724229540836b78237b1735923e78283fc6a6f881c23ee1b385",
+      "prospectiveTests": 6,
+      "scope": "Actual public GET/HEAD/model and authenticated renderer API observations; actual compiled API in compiled mode."
+    },
+    {
+      "file": "tests/query-title-search-format-budget.test.ts",
+      "sha256": "e236db78656b081b51bf5a98d9ab8f90572bab2999418d301c015088d1c5605b",
+      "prospectiveTests": 3,
+      "scope": "Direct TypeScript helper/utils SOURCE imports only, even while API uses compiled bundle."
+    },
+    {
+      "file": "tests/query-title-missing-type-original.test.ts",
+      "sha256": "ec6e6351d2477ff6927fb45318cbf734b54ff4595c5a2e40b04b47656166de8f",
+      "prospectiveTests": 6,
+      "scope": "actual HTTP public GET/HEAD/model and authenticated preview; actual compiled API in compiled mode"
+    },
+    {
+      "file": "tests/block-render-attributes.test.ts",
+      "sha256": "be923affd756f83d5cc4b336b31885c3707d5e8217d32c7fb699448e34fb8efc",
+      "prospectiveTests": 2,
+      "scope": "direct TypeScript normalization imports remain SOURCE in both modes"
+    },
+    {
+      "file": "tests/public-document-data.test.ts",
+      "sha256": "dee95240a579ec16327b0ca10f1497cbf2deae37dfd218113a08675cfa0454b1",
+      "prospectiveTests": 7,
+      "scope": "mixed direct TypeScript service/renderer imports (SOURCE) and actual HTTP"
+    },
+    {
+      "file": "tests/singular-archive-query-title-before.test.ts",
+      "sha256": "fa7f74eaab2edf81507422dc96015f823ee5a1de41e2a2f4bc9d902385966724",
+      "prospectiveTests": 6,
+      "scope": "actual HTTP selected document/template/body and archive loop"
+    },
+    {
+      "file": "tests/singular-archive-query-title-posts-page.test.ts",
+      "sha256": "454a4bdce36dcf096e53fb670cde36a18220d05474505dd61a3dc492bf008820",
+      "prospectiveTests": 4,
+      "scope": "actual HTTP selected/configured posts-page representation preservation"
+    },
+    {
+      "file": "tests/archive-query-title-home-body-original.test.ts",
+      "sha256": "14dc9e1cc335174df1b4f826ddf57699e97d0add3daffacfb80639c9adf0264b",
+      "prospectiveTests": 4,
+      "scope": "actual HTTP Source/Classic body/model/site API controls"
+    },
+    {
+      "file": "tests/author-name-independent-count-grant.test.ts",
+      "sha256": "6643e7832a8272913a88bab1bac653a6cb674f25e25bd9c09139cfc65252f031",
+      "prospectiveTests": 4,
+      "scope": "actual HTTP measured identity/final grant boundary"
+    },
+    {
+      "file": "tests/blocks.test.ts",
+      "sha256": "50521c9c671d7ede4a608c9d6975303da34a15f1ab80dbf338f4b43e8268615a",
+      "prospectiveTests": 9,
+      "scope": "mixed direct TypeScript rendering (SOURCE) and actual HTTP preview/blocks"
+    },
+    {
+      "file": "tests/date-archives.test.ts",
+      "sha256": "efa03a60b5530b82fc3947af2be67e91da2298f94f2c0163fb32d42d34d9d175",
+      "prospectiveTests": 4,
+      "scope": "mixed direct TypeScript renderer/date helpers (SOURCE) and actual HTTP date API"
+    },
+    {
+      "file": "tests/author-name-independent-identity.test.ts",
+      "sha256": "595dc91255e5439626e7209ea9420e4662e0886fc3f5f3c8dcd05a16ad9c2882",
+      "prospectiveTests": 6,
+      "scope": "actual HTTP identity controls plus supplied-client direct TypeScript rendering (SOURCE)"
+    },
+    {
+      "file": "tests/search-explicit-query-original.test.ts",
+      "sha256": "42352ea7c91847d2046220b8090dcf11a39616dc2efffb1b89cfcc001642b75c",
+      "prospectiveTests": 6,
+      "scope": "All renderer/form assertions use actual HTTP; direct database imports are fixture/setup and teardown, not compiled renderer services. Protects shared HTML401/numeric transducer, coercion and cumulative Search field budget."
+    },
+    {
+      "file": "tests/theme-blocks.test.ts",
+      "sha256": "21924834f2010d917595734b4bf6208ca1834130b95755e2e29d82131477f14d",
+      "prospectiveTests": 1,
+      "scope": "Direct TypeScript renderSiteDocument/renderPublicContent/utils/db supplied-transaction calls only; SOURCE in both API modes. No HTTP renderer assertion."
+    }
+  ],
+  "countLedger": {
+    "perMode": {
+      "wholeFiles": 14,
+      "counted": 68,
+      "pass": 68,
+      "fail": 0,
+      "skip": 0,
+      "cancel": 0,
+      "perFileCounts": [
+        6,
+        3,
+        6,
+        2,
+        7,
+        6,
+        4,
+        4,
+        4,
+        9,
+        4,
+        6,
+        6,
+        1
+      ],
+      "fiveProofGroups": [
+        12,
+        9,
+        23,
+        13,
+        16
+      ],
+      "targetedResponses": 73
+    },
+    "totalTwoModes": {
+      "counted": 136,
+      "targetedResponses": 146
+    },
+    "directSourceImportsRemainSOURCEInCompiledAPIMode": true,
+    "notAllHTTPMadeBy14Files": true
+  },
+  "historicalBefore": {
+    "baseline": "f6f4dcda7ff0f8b7ef08ae43f7dac3422e510a07",
+    "testOnlyCommit": "92920c53964fe1573bb4aef98b943eb6420c14a1",
+    "immutableTestSHA256": "169be75223968724229540836b78237b1735923e78283fc6a6f881c23ee1b385",
+    "actualNodeSHA256": "582d1aa48ee69058e08be6406b86d604cf92010cf0e36a9e180e997b920da07b",
+    "sourceCounts": {
+      "tests": 6,
+      "pass": 1,
+      "fail": 5,
+      "cancelled": 0,
+      "skipped": 0
+    },
+    "compiledCounts": {
+      "tests": 6,
+      "pass": 1,
+      "fail": 5,
+      "cancelled": 0,
+      "skipped": 0
+    },
+    "fourFeatureChildrenPlusParentFailRawSControlPasses": true,
+    "beforeChecks": {
+      "path": "<private-evidence>/query-title-search-format-before-checks.json",
+      "sha256": "c59e443a645fc132473f93068b557540a1aff9995a293110f1b7383b5b473203",
+      "bytes": 14118
+    },
+    "all411BeforeOutputsRehashedUnchanged": true,
+    "beforeHistoryAndProofsNeverRewritten": true
+  },
+  "intentionalExpectationAdapter": {
+    "notFixtureCorrection": true,
+    "originalMissingTypeSHA256": "5b2406b78a9395fe252cdf3e318150babc9550da319e1b4cf5787c8cfcf44856",
+    "adaptedSHA256": "ec6e6351d2477ff6927fb45318cbf734b54ff4595c5a2e40b04b47656166de8f",
+    "changedSourceLines": 2,
+    "changedAssertionExpressions": 1,
+    "immutableNewFormattingTestSHA256": "169be75223968724229540836b78237b1735923e78283fc6a6f881c23ee1b385"
+  },
+  "publicationPolicy": {
+    "fiveCopiedPayloads": 5,
+    "totalFilesIncludingREADMEAndManifest": 7,
+    "transformation": "Literal known private path-prefix substitutions only; no results, assertions, fields or whitespace edits in copied payloads.",
+    "privateMappingReceiptBasename": "query-title-search-format-backend-publication-correspondence.json",
+    "allPrivateOriginalsProofsBuildsFailuresAndRawLogsRetained": true,
+    "noRuntimeTestsCIUIOrMainChanges": true,
+    "manifestOwnRowIsNotSelfDigest": true
+  }
+}

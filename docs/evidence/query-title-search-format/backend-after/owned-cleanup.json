@@ -1,0 +1,95 @@
+{
+  "stage": "ROOT_AUTHORIZED_EXACT_TWO_OWN_SETUP_PATH_REMOVAL",
+  "startedAtUTC": "2026-11-10T09:00:08.105Z",
+  "finishedAtUTC": "2026-11-10T09:00:08.237Z",
+  "head": "a591eeea2def952cc80aeb593ca1af7c4a27bd3b",
+  "nodeSHA256": "0773317bac6ebfb42323a6a5fef346ed1602e2d3e9d64841a94fae27c737aee2",
+  "rootAcceptance": {
+    "path": "<private-evidence>/root-query-title-search-format-backend-final-audit.json",
+    "sha256": "ae77f37c95e6bcf76ddecfc4ab6222016524a04964d71ec11567d5239246fa17",
+    "allReferencedHashesAcceptedByRoot": 48
+  },
+  "authorization": "Root explicitly authorized exact own regular600.env after original creationSHA and exact own readonly dependency symlink after owner5010755/lock233 checks; no other path removal.",
+  "removed": [
+    {
+      "path": "<backend-checkout>/.env",
+      "uid": 501,
+      "mode": "0600",
+      "regularNonSymlink": true,
+      "originalCreationSHA256": "391116dd3ad3bea11762ed732c31098858b936bfe40cdc1bbdbf042d500ad911",
+      "currentHashMatchesCreation": true,
+      "absentAfter": true
+    },
+    {
+      "path": "<backend-checkout>/node_modules",
+      "uid": 501,
+      "symlink": true,
+      "target": "<shared-main-checkout>/node_modules",
+      "realTarget": "<shared-main-checkout>/node_modules",
+      "absentAfter": true
+    }
+  ],
+  "sharedDependencyOwner": {
+    "path": "<shared-main-checkout>/node_modules",
+    "uid": 501,
+    "mode": "0755",
+    "nonSymlink": true,
+    "dev": 16777234,
+    "ino": 18751975,
+    "lockSHA256": "233888ed8f864581a8835aab0b4c33ccd7fbc391f2a98650b63fcf8db8814892",
+    "sameDeviceAndInodeAfter": true,
+    "ownerAndLockUnchanged": true
+  },
+  "resourceClosureBefore": {
+    "timeUTC": "2026-11-10T09:00:08.079Z",
+    "databaseNames": [
+      "worldact_query_title_search_format_backend_anchor",
+      "worldact_test_1794300576877_5538991c",
+      "worldact_test_1794300617692_0ca8be2b"
+    ],
+    "databaseRows": [],
+    "phaseApps": [
+      "worldact_query_title_search_format_backend_source",
+      "worldact_query_title_search_format_backend_compiled"
+    ],
+    "phaseOrDatabaseSessionRows": [],
+    "recordedPostgresPIDsStillPresent": [],
+    "remainingRecordedOSPIDs": [],
+    "portsPhysicallyFree": {
+      "3046": true,
+      "3047": true,
+      "3048": true
+    }
+  },
+  "resourceClosureAfter": {
+    "timeUTC": "2026-11-10T09:00:08.230Z",
+    "databaseNames": [
+      "worldact_query_title_search_format_backend_anchor",
+      "worldact_test_1794300576877_5538991c",
+      "worldact_test_1794300617692_0ca8be2b"
+    ],
+    "databaseRows": [],
+    "phaseApps": [
+      "worldact_query_title_search_format_backend_source",
+      "worldact_query_title_search_format_backend_compiled"
+    ],
+    "phaseOrDatabaseSessionRows": [],
+    "recordedPostgresPIDsStillPresent": [],
+    "remainingRecordedOSPIDs": [],
+    "portsPhysicallyFree": {
+      "3046": true,
+      "3047": true,
+      "3048": true
+    }
+  },
+  "all354Source243TrackedTests411CurrentOutputsAnd411BeforeOutputsRehashedUnchanged": true,
+  "all51AcceptedReferencedPrivateArtifactHashesRecheckedUnchanged": true,
+  "allOriginalLogsProofsFailuresAndHistoriesRetained": true,
+  "reviewChecksAndDOMAuditRemainHistoricalRetainedSetupSnapshots": true,
+  "noIndependentExactUploadOutboxAbsenceClaim": true,
+  "noArchiveCreated": true,
+  "noTestsBuildsAPIsHTTPOrServicesRerun": true,
+  "noRuntimeTestCIUIOrMainChange": true,
+  "noOtherPathsRemoved": true,
+  "journalPoolEnded": true
+}
