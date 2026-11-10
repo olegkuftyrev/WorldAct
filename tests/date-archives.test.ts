@@ -108,12 +108,12 @@ test("public date archives, inherited loops and titles use the site-local public
     assert.equal((await ok("/api/public/resolve?path=%2F2025%2F12%2F")).data.archive.month, 12);
     assert.equal((await api("/api/public/resolve?path=%2F0001%2F")).response.status, 404);
     for (const suffix of ["m=20250229", "year=2025&monthnum=13", "year=2025&day=2", "year[]=2025", "m=202512&monthnum=11"]) assert.equal((await api("/api/public/site?" + suffix)).response.status, 400, suffix);
-    const document = { rawContent: '<!-- wp:query-title /--><!-- wp:query {"query":{"inherit":true,"perPage":10}} --><!-- wp:post-template --><!-- wp:post-title /--><!-- /wp:post-template --><!-- /wp:query -->' };
+    const document = { rawContent: '<!-- wp:query-title {"type":"archive"} /--><!-- wp:query {"query":{"inherit":true,"perPage":10}} --><!-- wp:post-template --><!-- wp:post-title /--><!-- /wp:post-template --><!-- /wp:query -->' };
     const html = await renderSiteDocument(document, { query: { year: "2025", monthnum: "12", search: stamp }, requestPath: "/2025/12/" });
     assert.match(html, new RegExp(stamp + " end")); assert.match(html, new RegExp(stamp + " first"));
     assert.doesNotMatch(html, new RegExp(stamp + " (before|after|private|page|protected)"));
-    assert.match(await renderSiteDocument({ rawContent: '<!-- wp:query-title /-->' }, { query: { m: "202512" } }), /Month: December 2025/);
-    assert.match(await renderSiteDocument({ rawContent: '<!-- wp:query-title {"showPrefix":false} /-->' }, { query: { year: "2025", monthnum: "12", day: "31" } }), />December 31, 2025</);
+    assert.match(await renderSiteDocument({ rawContent: '<!-- wp:query-title {"type":"archive"} /-->' }, { query: { m: "202512" } }), /Month: December 2025/);
+    assert.match(await renderSiteDocument({ rawContent: '<!-- wp:query-title {"type":"archive","showPrefix":false} /-->' }, { query: { year: "2025", monthnum: "12", day: "31" } }), />December 31, 2025</);
     const authorId = (await pool.query("SELECT author_id FROM posts WHERE id=$1", [ids[0]])).rows[0].author_id;
     const media = (await pool.query("INSERT INTO media(author_id,title,filename,mime_type,size,created_at) VALUES($1,$2,$3,'image/png',1,'2026-01-01T00:30:00Z') RETURNING id", [authorId, stamp, stamp + ".png"])).rows[0];
     mediaIds.push(media.id);

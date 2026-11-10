@@ -361,7 +361,7 @@ test("canonical block rendering, public isolation, pagination, nested context an
         );
         assert.match(modified, />2022<\/time>/);
         const archive = await renderSiteDocument(
-          { rawContent: block("query-title") },
+          { rawContent: block("query-title", { type: "archive" }) },
           { ...options, query: { author: String(user.id) } },
         );
         assert.match(archive, /Author:/);

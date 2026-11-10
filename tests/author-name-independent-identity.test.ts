@@ -15,7 +15,7 @@ test("named author identity survives later empty-list and supplied-renderer boun
   const login=await api("/api/auth/login","POST",{login:process.env.ADMIN_EMAIL,password:process.env.ADMIN_PASSWORD});assert.equal(login.status,200);const signed=await fetch(base+"/api/auth/login",{method:"POST",headers:{Origin:origin,"Content-Type":"application/json"},body:JSON.stringify({login:process.env.ADMIN_EMAIL,password:process.env.ADMIN_PASSWORD})});assert.equal(signed.status,200);cookie=signed.headers.get("set-cookie")!.split(";")[0];await signed.text();
   const admin=(await pool.query("SELECT id FROM users WHERE email=$1",[process.env.ADMIN_EMAIL])).rows[0];
   assert.equal((await api("/api/settings","PUT",{theme:"twentytwentyfive",frontPageMode:"posts",frontPageId:null,postsPageId:null,showAvatars:true,pingServices:[]},true)).status,200);
-  const content='<!-- wp:query-title /--><!-- wp:avatar {"userId":'+admin.id+'} /-->';
+  const content='<!-- wp:query-title {"type":"archive"} /--><!-- wp:avatar {"userId":'+admin.id+'} /-->';
   const created=await api("/api/posts","POST",{type:"page",title:stamp,status:"publish",postDate:"2001-01-01T00:00:00",content},true);assert.equal(created.status,201);posts.push(created.data.post.id);
   const post=(await pool.query(`SELECT ${postFields} FROM posts p JOIN users u ON u.id=p.author_id WHERE p.id=$1`,[created.data.post.id])).rows[0];
   const template=await api("/api/site-editor/documents","POST",{type:"template",slug:stamp,title:stamp,content},true);assert.equal(template.status,201);documents.push(template.data.document.id);
