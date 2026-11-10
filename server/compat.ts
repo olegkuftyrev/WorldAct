@@ -1,3 +1,4 @@
+import { builtinRestContentTypes, builtinRestTaxonomies } from "./content-registry.js";
 import {authorArchivePath} from "../shared/author-archive.js";
 import {resolvePublicDocumentRoute} from "./public-documents.js";
 import {ordinaryListingPageRequested} from "./public-listing-page.js";
@@ -1394,50 +1395,8 @@ router.get("/wp-json/wp/v2/search", async (req, res) => {
   res.json(output);
 });
 const types = {
-  post: {
-    slug: "post",
-    name: "Posts",
-    labels: { name: "Posts", singular_name: "Post" },
-    viewable: true,
-    description: "Posts published in the site blog.",
-    hierarchical: false,
-    rest_base: "posts",
-    rest_namespace: "wp/v2",
-    taxonomies: ["category", "post_tag"],
-    supports: {
-      title: true,
-      editor: true,
-      excerpt: true,
-      author: true,
-      thumbnail: true,
-      "custom-fields": true,
-      "post-formats": true,
-      comments: true,
-      revisions: true,
-    },
-  },
-  page: {
-    slug: "page",
-    name: "Pages",
-    labels: { name: "Pages", singular_name: "Page" },
-    viewable: true,
-    description: "Hierarchical site pages.",
-    hierarchical: true,
-    rest_base: "pages",
-    rest_namespace: "wp/v2",
-    taxonomies: [],
-    supports: {
-      title: true,
-      editor: true,
-      excerpt: true,
-      author: true,
-      thumbnail: true,
-      "custom-fields": true,
-      comments: true,
-      revisions: true,
-      "page-attributes": true,
-    },
-  },
+  post: builtinRestContentTypes.post,
+  page: builtinRestContentTypes.page,
   attachment: {
     slug: "attachment",
     name: "Media",
@@ -1475,30 +1434,8 @@ const types = {
   },
 };
 const taxonomies = {
-  category: {
-    slug: "category",
-    name: "Categories",
-    labels: { name: "Categories", singular_name: "Category" },
-    visibility: { public: true, publicly_queryable: true, show_ui: true, show_in_nav_menus: true, show_admin_column: true, show_tagcloud: true },
-    show_cloud: true,
-    description: "Hierarchical post categories.",
-    hierarchical: true,
-    types: ["post"],
-    rest_base: "categories",
-    rest_namespace: "wp/v2",
-  },
-  post_tag: {
-    slug: "post_tag",
-    name: "Tags",
-    labels: { name: "Tags", singular_name: "Tag" },
-    visibility: { public: true, publicly_queryable: true, show_ui: true, show_in_nav_menus: true, show_admin_column: true, show_tagcloud: true },
-    show_cloud: true,
-    description: "Post tags.",
-    hierarchical: false,
-    types: ["post"],
-    rest_base: "tags",
-    rest_namespace: "wp/v2",
-  },
+  category: builtinRestTaxonomies.category,
+  post_tag: builtinRestTaxonomies.post_tag,
 };
 router.get("/wp-json/wp/v2/types", (_req, res) => res.json(types));
 router.get("/wp-json/wp/v2/types/:type", (req, res) => {
