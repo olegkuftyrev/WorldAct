@@ -186,14 +186,14 @@ test("omitted and empty QueryTitle types emit no wrapper while explicit archive,
           [surface + " " + key + " current date label", () => assert.equal(required(read(), "#" + anchors[key]).textContent.trim(), "Year: 2001")]);
       verify(checks);
     });
-    await t.test("valid explicit search preserves its current exact unquoted label", () => {
+    await t.test("valid explicit search emits its exact quoted label", () => {
       const group = groups.get("search"), checks = commonChecks("search", search, searchMain, searchMarker, post.id);
       checks.push(["actual normalized search token", () => assert.equal(group?.model.data?.route?.query?.search, token)]);
       for (const [surface, read] of [["native", () => nativeMain(group, searchMain)], ["model HTML", () => presentationMain(group, searchMain)]] as const)
         checks.push([surface + " search element count", () => assert.equal(read().querySelectorAll("#" + anchors.search).length, 1)],
           [surface + " search wrapper count", () => assert.equal(required(read(), "#" + anchors.search + "-case").querySelectorAll(".wp-block-query-title").length, 1)],
           [surface + " search class", () => assert.ok(required(read(), "#" + anchors.search).classList.contains("wp-block-query-title"))],
-          [surface + " unchanged search label", () => assert.equal(required(read(), "#" + anchors.search).textContent.trim(), "Search results for: " + token)]);
+          [surface + " quoted search label", () => assert.equal(required(read(), "#" + anchors.search).textContent.trim(), "Search results for: “" + token + "”")]);
       verify(checks);
     });
     await t.test("authenticated metadata-normalized previews suppress only omitted and empty types", () => {
