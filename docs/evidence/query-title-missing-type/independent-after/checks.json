@@ -1,0 +1,175 @@
+{
+  "status": "PASS_APPROVED_52_EACH_RETAIN_OWN_CONFIG_LINK_FOR_ROOT",
+  "head": "82edb01327915acc9abbe1c118c8b441e81cb6d9",
+  "tree": "f66095b81abb70ea75ba1bcbf076f27dcd597812",
+  "nodeSHA256": "582d1aa48ee69058e08be6406b86d604cf92010cf0e36a9e180e997b920da07b",
+  "selector": {
+    "name": "query-title-missing-type-complete-affected-selector.json",
+    "sha256": "936c5b50083cb4fd15f4e8ce75f390111fe563eb0068364ecc9e5d925a5362d9",
+    "bytes": 4451
+  },
+  "sourceCounts": {
+    "tests": 52,
+    "pass": 52,
+    "fail": 0,
+    "cancelled": 0,
+    "skipped": 0
+  },
+  "compiledCounts": {
+    "tests": 52,
+    "pass": 52,
+    "fail": 0,
+    "cancelled": 0,
+    "skipped": 0
+  },
+  "perFileCounts": [
+    6,
+    2,
+    7,
+    6,
+    4,
+    4,
+    4,
+    9,
+    4,
+    6
+  ],
+  "actualStableCounts": {
+    "source": 354,
+    "tests": 10,
+    "builds": 411
+  },
+  "startEndCurrentHashesUnchanged": true,
+  "proofs": {
+    "source": {
+      "missing": {
+        "name": "query-title-missing-type-independent-after-source-missing-proof.json",
+        "sha256": "7605e27c834acf747905576dc2e71fbe56fe7c4c2640ddc10db24085b8471725",
+        "bytes": 298522,
+        "targetedResponses": 9
+      },
+      "singular": {
+        "name": "query-title-missing-type-independent-after-source-singular-proof.json",
+        "sha256": "d06332a85d95ff182cd2f56e95f82277808e3cf27d8bc0aa8e24c2d1a9f5b337",
+        "bytes": 782141,
+        "targetedResponses": 23
+      },
+      "posts-page": {
+        "name": "query-title-missing-type-independent-after-source-posts-page-proof.json",
+        "sha256": "114da21f6ff7cc0a3cec2b9054cae43aa341250a9126b21a8be6bc4389204c24",
+        "bytes": 222170,
+        "targetedResponses": 13
+      },
+      "home-body": {
+        "name": "query-title-missing-type-independent-after-source-home-body-proof.json",
+        "sha256": "2006f37e0896c4fb1aea311f268e27dec1bcb534faa5e126def3f92b94a3575f",
+        "bytes": 420567,
+        "targetedResponses": 16
+      }
+    },
+    "compiled": {
+      "missing": {
+        "name": "query-title-missing-type-independent-after-compiled-missing-proof.json",
+        "sha256": "f7809a7b6dab6b9c3e63000245cfce848b1a4f52f782c5bbcd971cf3856e4ec9",
+        "bytes": 298528,
+        "targetedResponses": 9
+      },
+      "singular": {
+        "name": "query-title-missing-type-independent-after-compiled-singular-proof.json",
+        "sha256": "84a46d599b8ec9cc5802c6671caec3bec39a23f6fc6a767c7041f81137582a56",
+        "bytes": 782156,
+        "targetedResponses": 23
+      },
+      "posts-page": {
+        "name": "query-title-missing-type-independent-after-compiled-posts-page-proof.json",
+        "sha256": "b8ef28ee72423225ba33b4a76cb7d6cc3d5ac2ae707b3da56cf5d66dc09576e6",
+        "bytes": 222180,
+        "targetedResponses": 13
+      },
+      "home-body": {
+        "name": "query-title-missing-type-independent-after-compiled-home-body-proof.json",
+        "sha256": "66f5474e01d5e1f5bd3f14f5a2650a79b4e27b804d77144b6826707c3e86c2ac",
+        "bytes": 420586,
+        "targetedResponses": 16
+      }
+    }
+  },
+  "review": {
+    "name": "query-title-missing-type-independent-after-review.md",
+    "sha256": "a6ba43eb307ee301988d4ad4a6eec7f70f52257b1c4aeb8f16aea7b6a4c49f29",
+    "bytes": 3618
+  },
+  "observations": {
+    "name": "query-title-missing-type-independent-after-observations.json",
+    "sha256": "4d4eff90b36094183b51a46aca379fea892c4c83759361ab9336a6da34906cff",
+    "bytes": 4253
+  },
+  "cleanup": {
+    "name": "query-title-missing-type-independent-after-cleanup.json",
+    "sha256": "6c901be1706fac76c476c597d59b60cecc0eae0654b88974295b2cd6988fbf02",
+    "bytes": 2276
+  },
+  "priorImmutableReceipts": [
+    {
+      "name": "query-title-missing-type-independent-after-build-preflight.json",
+      "sha256": "222a257a4b41d2b0f31bed57e36a8652512c0f1ab1fff2b98fab788130a76458",
+      "bytes": 38026
+    },
+    {
+      "name": "query-title-missing-type-independent-after-build.json",
+      "sha256": "63c76d08ddf92bbd598d5f88254e423a8699999ca72012e4ae57165f5056027e",
+      "bytes": 1199
+    },
+    {
+      "name": "query-title-missing-type-independent-after-build-checks.json",
+      "sha256": "b9c2ddfaa4ff2fbabb29b9b204456ee2d6f6ab1d0f884de08ab8dc63a0936143",
+      "bytes": 3037
+    },
+    {
+      "name": "query-title-missing-type-independent-after-build-fingerprints.json",
+      "sha256": "9e69b432cffa09ba4db5bf9b33eb65a6385aecc1112a4a6c03277d2bbaa6e908",
+      "bytes": 98281
+    },
+    {
+      "name": "query-title-missing-type-independent-after-source-review.md",
+      "sha256": "c62449a34d7689e2214c27eec978c9646ddba86d0f399efe76a4f8c43dc27dd9",
+      "bytes": 2123
+    },
+    {
+      "name": "query-title-missing-type-independent-after-source-audit.json",
+      "sha256": "4e4251deb08886962b154ec6bff28cfb8a1dc2418b8aa498d7c38b3822fc8e0d",
+      "bytes": 1231
+    },
+    {
+      "name": "query-title-missing-type-independent-after-ownership.json",
+      "sha256": "f7319c65c1a6af0bdf8ca4256e1b3d394f54683e35ab8d654bf80d63e9a939bb",
+      "bytes": 1204
+    },
+    {
+      "name": "query-title-missing-type-independent-after-source-prelaunch.json",
+      "sha256": "b2a0a2731f714d69f883d8ea318c0e41d1ff28fe1eb5604f7cb53d6052cd6108",
+      "bytes": 1908
+    },
+    {
+      "name": "query-title-missing-type-independent-after-source-run.json",
+      "sha256": "3e180969c209a47b2031f8cb721f9ec42bf8b19bd93e43466485f39cf8ef4bdf",
+      "bytes": 6225
+    },
+    {
+      "name": "query-title-missing-type-independent-after-compiled-prelaunch.json",
+      "sha256": "921b0362208aae353de4710e27cf1b35080d54399aa51c435faae7a79aba09b9",
+      "bytes": 1920
+    },
+    {
+      "name": "query-title-missing-type-independent-after-compiled-run.json",
+      "sha256": "d8d1746636c83b819ebd29fb8d28704a772c50cc45818c57b24f69f68f00dbe5",
+      "bytes": 5227
+    },
+    {
+      "name": "query-title-missing-type-independent-after-run.mjs",
+      "sha256": "869adeec42352be7462d2792efd11d6485fbbc5960e6ac2d2a71e3b502655c24",
+      "bytes": 10452
+    }
+  ],
+  "noRerunOrRuntimeTestUiCiMainMutation": true
+}

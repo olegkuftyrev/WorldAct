@@ -1,0 +1,64 @@
+{
+  "status": "NORMAL_GUARD_RESOURCES_CLOSED_OWN_CONFIG_AND_LINK_RETAINED_PENDING_ROOT",
+  "head": "82edb01327915acc9abbe1c118c8b441e81cb6d9",
+  "tree": "f66095b81abb70ea75ba1bcbf076f27dcd597812",
+  "journalDatabases": [
+    "worldact_test_1794297558090_408fa501",
+    "worldact_test_1794297602772_e042b780"
+  ],
+  "neverCreatedAnchor": "worldact_query_title_missing_type_independent_after_anchor",
+  "journalApplications": [
+    "worldact_qt_missing_independent_source",
+    "worldact_qt_missing_independent_compiled"
+  ],
+  "phaseSQLClosure": {
+    "source": {
+      "databases": [],
+      "sessions": []
+    },
+    "compiled": {
+      "databases": [],
+      "sessions": []
+    }
+  },
+  "runnerPIDs": {
+    "source": 31224,
+    "compiled": 31749
+  },
+  "observedProcessCounts": {
+    "source": 46,
+    "compiled": 33
+  },
+  "pidMonitorLimit": "300ms polling records observed runner descendants only, not every short-lived process; no external/unowned process was signalled.",
+  "uploadLimit": "Exact random upload/outbox paths were not separately journaled. Official isolated runner finally disposed its own database/upload scope; reviewer performed no upload glob deletion.",
+  "independentRootSQLPortClosure": {
+    "name": "root-query-title-missing-type-all-resource-audit.json",
+    "sha256": "166633318fcf6ec5c30d0dab8afa78b98a5b450167d8e02314052ce7f05ac061",
+    "bytes": 1079
+  },
+  "configRetained": {
+    "path": "[independent-after-worktree]/.env",
+    "uid": 501,
+    "mode": 384,
+    "sha256": "c13ffe95ae17ff7eaf1463aa96f32d6a6f5205f4d2a4c0f563ec7012ef9cb7fc"
+  },
+  "dependencyLinkRetained": {
+    "path": "[independent-after-worktree]/node_modules",
+    "uid": 501,
+    "target": "[main-worktree]/node_modules"
+  },
+  "preserved": {
+    "sourceFiles": 354,
+    "selectedTests": 10,
+    "buildFiles": 411,
+    "frozenManifest": {
+      "name": "query-title-missing-type-independent-after-build-fingerprints.json",
+      "sha256": "9e69b432cffa09ba4db5bf9b33eb65a6385aecc1112a4a6c03277d2bbaa6e908",
+      "bytes": 98281
+    },
+    "allStartEndCurrentHashesMatch": true,
+    "beforeOriginalsBuildsAndLogs": true
+  },
+  "archiveCreated": false,
+  "newTestsOrReruns": false
+}

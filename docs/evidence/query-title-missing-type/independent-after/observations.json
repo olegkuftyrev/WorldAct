@@ -1,0 +1,120 @@
+{
+  "scope": "Approved52 counted per mode including parent counts;61 targeted responses per mode, not all requests made by ten fixtures",
+  "source": {
+    "counts": {
+      "tests": 52,
+      "pass": 52,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0
+    },
+    "perFileCounts": [
+      6,
+      2,
+      7,
+      6,
+      4,
+      4,
+      4,
+      9,
+      4,
+      6
+    ],
+    "completion": true,
+    "log": {
+      "name": "query-title-missing-type-independent-after-source.log",
+      "sha256": "35b5cd97e40650055e4a55d83251933a7c7be29d98d37eb3777f7cf6b863d291",
+      "bytes": 19216
+    }
+  },
+  "compiled": {
+    "counts": {
+      "tests": 52,
+      "pass": 52,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0
+    },
+    "perFileCounts": [
+      6,
+      2,
+      7,
+      6,
+      4,
+      4,
+      4,
+      9,
+      4,
+      6
+    ],
+    "completion": true,
+    "log": {
+      "name": "query-title-missing-type-independent-after-compiled.log",
+      "sha256": "d016f7204d3832c95380d016f0ba027b18ee4a03014a49e5154a63b9a1177523",
+      "bytes": 19222
+    }
+  },
+  "proofs": {
+    "source": {
+      "missing": {
+        "name": "query-title-missing-type-independent-after-source-missing-proof.json",
+        "sha256": "7605e27c834acf747905576dc2e71fbe56fe7c4c2640ddc10db24085b8471725",
+        "bytes": 298522,
+        "targetedResponses": 9
+      },
+      "singular": {
+        "name": "query-title-missing-type-independent-after-source-singular-proof.json",
+        "sha256": "d06332a85d95ff182cd2f56e95f82277808e3cf27d8bc0aa8e24c2d1a9f5b337",
+        "bytes": 782141,
+        "targetedResponses": 23
+      },
+      "posts-page": {
+        "name": "query-title-missing-type-independent-after-source-posts-page-proof.json",
+        "sha256": "114da21f6ff7cc0a3cec2b9054cae43aa341250a9126b21a8be6bc4389204c24",
+        "bytes": 222170,
+        "targetedResponses": 13
+      },
+      "home-body": {
+        "name": "query-title-missing-type-independent-after-source-home-body-proof.json",
+        "sha256": "2006f37e0896c4fb1aea311f268e27dec1bcb534faa5e126def3f92b94a3575f",
+        "bytes": 420567,
+        "targetedResponses": 16
+      }
+    },
+    "compiled": {
+      "missing": {
+        "name": "query-title-missing-type-independent-after-compiled-missing-proof.json",
+        "sha256": "f7809a7b6dab6b9c3e63000245cfce848b1a4f52f782c5bbcd971cf3856e4ec9",
+        "bytes": 298528,
+        "targetedResponses": 9
+      },
+      "singular": {
+        "name": "query-title-missing-type-independent-after-compiled-singular-proof.json",
+        "sha256": "84a46d599b8ec9cc5802c6671caec3bec39a23f6fc6a767c7041f81137582a56",
+        "bytes": 782156,
+        "targetedResponses": 23
+      },
+      "posts-page": {
+        "name": "query-title-missing-type-independent-after-compiled-posts-page-proof.json",
+        "sha256": "b8ef28ee72423225ba33b4a76cb7d6cc3d5ac2ae707b3da56cf5d66dc09576e6",
+        "bytes": 222180,
+        "targetedResponses": 13
+      },
+      "home-body": {
+        "name": "query-title-missing-type-independent-after-compiled-home-body-proof.json",
+        "sha256": "66f5474e01d5e1f5bd3f14f5a2650a79b4e27b804d77144b6826707c3e86c2ac",
+        "bytes": 420586,
+        "targetedResponses": 16
+      }
+    }
+  },
+  "rootDOMRawAudit": {
+    "name": "root-query-title-missing-type-all-proofs-audit.json",
+    "sha256": "ec7b808fa4f3dc24e396469aa8a5c07670a51a9b8e9f54332d22c7293eee4420",
+    "bytes": 7297
+  },
+  "behavior": "Missing/empty wrappers omitted; explicit archive, unknown nonempty date, current explicit search and authenticated preview controls retained; selected singular/posts-page/home/date body and author identity/final-grant controls pass.",
+  "executionBoundary": "Actual HTTP uses SOURCE API on3068 and actual built Node582d on3069. Direct TypeScript normalization/service/renderer and supplied-client imports stay SOURCE in both modes.",
+  "historicalBefore": "Separate accepted immutable5b/8e97 before:2PASS4FAIL/6 in each mode, nine acquisitions per mode; not rerun or relabeled here.",
+  "fixtureLineage": "New5b unchanged; three legacy files have only five explicit archive type additions, assertions/waits unchanged; original hashes and reversal proof remain in source-audit.json."
+}

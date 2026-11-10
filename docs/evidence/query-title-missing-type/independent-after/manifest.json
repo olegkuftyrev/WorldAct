@@ -1,0 +1,382 @@
+{
+  "scope": "Docs-only sanitized independent52 after evidence; historical before and resource states preserved",
+  "certificateHead": "82edb01327915acc9abbe1c118c8b441e81cb6d9",
+  "tree": "f66095b81abb70ea75ba1bcbf076f27dcd597812",
+  "nodeSHA256": "582d1aa48ee69058e08be6406b86d604cf92010cf0e36a9e180e997b920da07b",
+  "payloads": [
+    {
+      "privateSource": {
+        "name": "query-title-missing-type-independent-after-review.md",
+        "sha256": "a6ba43eb307ee301988d4ad4a6eec7f70f52257b1c4aeb8f16aea7b6a4c49f29",
+        "bytes": 3618
+      },
+      "repositoryCopy": {
+        "path": "docs/evidence/query-title-missing-type/independent-after/review.md",
+        "sha256": "a6ba43eb307ee301988d4ad4a6eec7f70f52257b1c4aeb8f16aea7b6a4c49f29",
+        "bytes": 3618
+      },
+      "replacements": [
+        {
+          "replacement": "[private-evidence-root]",
+          "occurrences": 0
+        },
+        {
+          "replacement": "[independent-after-worktree]",
+          "occurrences": 0
+        },
+        {
+          "replacement": "[main-worktree]",
+          "occurrences": 0
+        }
+      ],
+      "onlyExactKnownPrefixesChanged": true
+    },
+    {
+      "privateSource": {
+        "name": "query-title-missing-type-independent-after-checks.json",
+        "sha256": "c8653873168b6915660f0c6ff9c032f592622eb7e06c3a15c3470e6de30161ed",
+        "bytes": 6067
+      },
+      "repositoryCopy": {
+        "path": "docs/evidence/query-title-missing-type/independent-after/checks.json",
+        "sha256": "c8653873168b6915660f0c6ff9c032f592622eb7e06c3a15c3470e6de30161ed",
+        "bytes": 6067
+      },
+      "replacements": [
+        {
+          "replacement": "[private-evidence-root]",
+          "occurrences": 0
+        },
+        {
+          "replacement": "[independent-after-worktree]",
+          "occurrences": 0
+        },
+        {
+          "replacement": "[main-worktree]",
+          "occurrences": 0
+        }
+      ],
+      "onlyExactKnownPrefixesChanged": true
+    },
+    {
+      "privateSource": {
+        "name": "query-title-missing-type-independent-after-observations.json",
+        "sha256": "4d4eff90b36094183b51a46aca379fea892c4c83759361ab9336a6da34906cff",
+        "bytes": 4253
+      },
+      "repositoryCopy": {
+        "path": "docs/evidence/query-title-missing-type/independent-after/observations.json",
+        "sha256": "4d4eff90b36094183b51a46aca379fea892c4c83759361ab9336a6da34906cff",
+        "bytes": 4253
+      },
+      "replacements": [
+        {
+          "replacement": "[private-evidence-root]",
+          "occurrences": 0
+        },
+        {
+          "replacement": "[independent-after-worktree]",
+          "occurrences": 0
+        },
+        {
+          "replacement": "[main-worktree]",
+          "occurrences": 0
+        }
+      ],
+      "onlyExactKnownPrefixesChanged": true
+    },
+    {
+      "privateSource": {
+        "name": "query-title-missing-type-independent-after-cleanup.json",
+        "sha256": "6c901be1706fac76c476c597d59b60cecc0eae0654b88974295b2cd6988fbf02",
+        "bytes": 2276
+      },
+      "repositoryCopy": {
+        "path": "docs/evidence/query-title-missing-type/independent-after/resource-closure.json",
+        "sha256": "1682cde95f739bf32e48030508aba525111767964ad50b153e8cedc091f928ce",
+        "bytes": 2188
+      },
+      "replacements": [
+        {
+          "replacement": "[private-evidence-root]",
+          "occurrences": 0
+        },
+        {
+          "replacement": "[independent-after-worktree]",
+          "occurrences": 2
+        },
+        {
+          "replacement": "[main-worktree]",
+          "occurrences": 1
+        }
+      ],
+      "onlyExactKnownPrefixesChanged": true
+    },
+    {
+      "privateSource": {
+        "name": "query-title-missing-type-independent-after-owned-cleanup.json",
+        "sha256": "44ac5bcb6c59b8561bbb59440c178725ae5fe20ac858b5430fa4508b991cb981",
+        "bytes": 1884
+      },
+      "repositoryCopy": {
+        "path": "docs/evidence/query-title-missing-type/independent-after/owned-cleanup.json",
+        "sha256": "e1c083fb6ab6d3fa8bbf1242ea65d0f5594a75494c62fbdd18a66696f708b0ed",
+        "bytes": 1764
+      },
+      "replacements": [
+        {
+          "replacement": "[private-evidence-root]",
+          "occurrences": 0
+        },
+        {
+          "replacement": "[independent-after-worktree]",
+          "occurrences": 2
+        },
+        {
+          "replacement": "[main-worktree]",
+          "occurrences": 2
+        }
+      ],
+      "onlyExactKnownPrefixesChanged": true
+    }
+  ],
+  "readme": {
+    "path": "docs/evidence/query-title-missing-type/independent-after/README.md",
+    "sha256": "a57ab3c3641f2e7700b056eaf57a15b7645231d6ad33ccfe1a4cfa55f39e15d3",
+    "bytes": 2629
+  },
+  "retainedLinkedPrivateInputCount": 37,
+  "retainedLinkedPrivateInputs": [
+    {
+      "name": "query-title-missing-type-backend-compiled-home-body-proof.json",
+      "sha256": "97469f1db4e716ca756dafa0826afb69d149f73092d16bdb00d12aa7eec2331c",
+      "bytes": 420567,
+      "retainedPrivately": true
+    },
+    {
+      "name": "query-title-missing-type-backend-compiled-missing-proof.json",
+      "sha256": "cd90b91164baa48e6f20bc40cec0d768c05c83bc390cdfc85e2547fe3b4a7392",
+      "bytes": 298522,
+      "retainedPrivately": true
+    },
+    {
+      "name": "query-title-missing-type-backend-compiled-posts-page-proof.json",
+      "sha256": "51e275020900a1f62eaf4b39e9da0207f40962135dcacd1ce9f95fc7c78c82c5",
+      "bytes": 222170,
+      "retainedPrivately": true
+    },
+    {
+      "name": "query-title-missing-type-backend-compiled-singular-proof.json",
+      "sha256": "e1bc47207d5cd3b952291b8301736cd1d0faaade9aa6e86cf3b517b63926ac5f",
+      "bytes": 782141,
+      "retainedPrivately": true
+    },
+    {
+      "name": "query-title-missing-type-backend-source-home-body-proof.json",
+      "sha256": "454f5c8a837e613e5f0f0f5209315e3c8e7c0d25d99570a3f0c9a45b02910589",
+      "bytes": 420567,
+      "retainedPrivately": true
+    },
+    {
+      "name": "query-title-missing-type-backend-source-missing-proof.json",
+      "sha256": "b85d837c3e2fb9134daf5df1023d141bc409b2493019419e7f4e56067eb76121",
+      "bytes": 298522,
+      "retainedPrivately": true
+    },
+    {
+      "name": "query-title-missing-type-backend-source-posts-page-proof.json",
+      "sha256": "e0f5d976df2010bd9ac287ffbe3f459119e199f79437a03f1abeffdfa5e78d46",
+      "bytes": 222170,
+      "retainedPrivately": true
+    },
+    {
+      "name": "query-title-missing-type-backend-source-singular-proof.json",
+      "sha256": "eac1c388fb1df341d89631a975ee0b9a75cddc1ccc9a8eb0181d5fdf2adc3906",
+      "bytes": 782141,
+      "retainedPrivately": true
+    },
+    {
+      "name": "query-title-missing-type-complete-affected-selector.json",
+      "sha256": "936c5b50083cb4fd15f4e8ce75f390111fe563eb0068364ecc9e5d925a5362d9",
+      "bytes": 4451,
+      "retainedPrivately": true
+    },
+    {
+      "name": "query-title-missing-type-independent-after-build-checks.json",
+      "sha256": "b9c2ddfaa4ff2fbabb29b9b204456ee2d6f6ab1d0f884de08ab8dc63a0936143",
+      "bytes": 3037,
+      "retainedPrivately": true
+    },
+    {
+      "name": "query-title-missing-type-independent-after-build-fingerprints.json",
+      "sha256": "9e69b432cffa09ba4db5bf9b33eb65a6385aecc1112a4a6c03277d2bbaa6e908",
+      "bytes": 98281,
+      "retainedPrivately": true
+    },
+    {
+      "name": "query-title-missing-type-independent-after-build-preflight.json",
+      "sha256": "222a257a4b41d2b0f31bed57e36a8652512c0f1ab1fff2b98fab788130a76458",
+      "bytes": 38026,
+      "retainedPrivately": true
+    },
+    {
+      "name": "query-title-missing-type-independent-after-build.json",
+      "sha256": "63c76d08ddf92bbd598d5f88254e423a8699999ca72012e4ae57165f5056027e",
+      "bytes": 1199,
+      "retainedPrivately": true
+    },
+    {
+      "name": "query-title-missing-type-independent-after-build.log",
+      "sha256": "c761b0fa0d619b31b2da2773a7e6ab3dbe98a36294fd40d8da0ccab82741305e",
+      "bytes": 2719,
+      "retainedPrivately": true
+    },
+    {
+      "name": "query-title-missing-type-independent-after-cleanup.json",
+      "sha256": "6c901be1706fac76c476c597d59b60cecc0eae0654b88974295b2cd6988fbf02",
+      "bytes": 2276,
+      "retainedPrivately": true
+    },
+    {
+      "name": "query-title-missing-type-independent-after-compiled-home-body-proof.json",
+      "sha256": "66f5474e01d5e1f5bd3f14f5a2650a79b4e27b804d77144b6826707c3e86c2ac",
+      "bytes": 420586,
+      "retainedPrivately": true
+    },
+    {
+      "name": "query-title-missing-type-independent-after-compiled-missing-proof.json",
+      "sha256": "f7809a7b6dab6b9c3e63000245cfce848b1a4f52f782c5bbcd971cf3856e4ec9",
+      "bytes": 298528,
+      "retainedPrivately": true
+    },
+    {
+      "name": "query-title-missing-type-independent-after-compiled-posts-page-proof.json",
+      "sha256": "b8ef28ee72423225ba33b4a76cb7d6cc3d5ac2ae707b3da56cf5d66dc09576e6",
+      "bytes": 222180,
+      "retainedPrivately": true
+    },
+    {
+      "name": "query-title-missing-type-independent-after-compiled-prelaunch.json",
+      "sha256": "921b0362208aae353de4710e27cf1b35080d54399aa51c435faae7a79aba09b9",
+      "bytes": 1920,
+      "retainedPrivately": true
+    },
+    {
+      "name": "query-title-missing-type-independent-after-compiled-run.json",
+      "sha256": "d8d1746636c83b819ebd29fb8d28704a772c50cc45818c57b24f69f68f00dbe5",
+      "bytes": 5227,
+      "retainedPrivately": true
+    },
+    {
+      "name": "query-title-missing-type-independent-after-compiled-singular-proof.json",
+      "sha256": "84a46d599b8ec9cc5802c6671caec3bec39a23f6fc6a767c7041f81137582a56",
+      "bytes": 782156,
+      "retainedPrivately": true
+    },
+    {
+      "name": "query-title-missing-type-independent-after-compiled.log",
+      "sha256": "d016f7204d3832c95380d016f0ba027b18ee4a03014a49e5154a63b9a1177523",
+      "bytes": 19222,
+      "retainedPrivately": true
+    },
+    {
+      "name": "query-title-missing-type-independent-after-observations.json",
+      "sha256": "4d4eff90b36094183b51a46aca379fea892c4c83759361ab9336a6da34906cff",
+      "bytes": 4253,
+      "retainedPrivately": true
+    },
+    {
+      "name": "query-title-missing-type-independent-after-ownership.json",
+      "sha256": "f7319c65c1a6af0bdf8ca4256e1b3d394f54683e35ab8d654bf80d63e9a939bb",
+      "bytes": 1204,
+      "retainedPrivately": true
+    },
+    {
+      "name": "query-title-missing-type-independent-after-review.md",
+      "sha256": "a6ba43eb307ee301988d4ad4a6eec7f70f52257b1c4aeb8f16aea7b6a4c49f29",
+      "bytes": 3618,
+      "retainedPrivately": true
+    },
+    {
+      "name": "query-title-missing-type-independent-after-run.mjs",
+      "sha256": "869adeec42352be7462d2792efd11d6485fbbc5960e6ac2d2a71e3b502655c24",
+      "bytes": 10452,
+      "retainedPrivately": true
+    },
+    {
+      "name": "query-title-missing-type-independent-after-source-audit.json",
+      "sha256": "4e4251deb08886962b154ec6bff28cfb8a1dc2418b8aa498d7c38b3822fc8e0d",
+      "bytes": 1231,
+      "retainedPrivately": true
+    },
+    {
+      "name": "query-title-missing-type-independent-after-source-home-body-proof.json",
+      "sha256": "2006f37e0896c4fb1aea311f268e27dec1bcb534faa5e126def3f92b94a3575f",
+      "bytes": 420567,
+      "retainedPrivately": true
+    },
+    {
+      "name": "query-title-missing-type-independent-after-source-missing-proof.json",
+      "sha256": "7605e27c834acf747905576dc2e71fbe56fe7c4c2640ddc10db24085b8471725",
+      "bytes": 298522,
+      "retainedPrivately": true
+    },
+    {
+      "name": "query-title-missing-type-independent-after-source-posts-page-proof.json",
+      "sha256": "114da21f6ff7cc0a3cec2b9054cae43aa341250a9126b21a8be6bc4389204c24",
+      "bytes": 222170,
+      "retainedPrivately": true
+    },
+    {
+      "name": "query-title-missing-type-independent-after-source-prelaunch.json",
+      "sha256": "b2a0a2731f714d69f883d8ea318c0e41d1ff28fe1eb5604f7cb53d6052cd6108",
+      "bytes": 1908,
+      "retainedPrivately": true
+    },
+    {
+      "name": "query-title-missing-type-independent-after-source-review.md",
+      "sha256": "c62449a34d7689e2214c27eec978c9646ddba86d0f399efe76a4f8c43dc27dd9",
+      "bytes": 2123,
+      "retainedPrivately": true
+    },
+    {
+      "name": "query-title-missing-type-independent-after-source-run.json",
+      "sha256": "3e180969c209a47b2031f8cb721f9ec42bf8b19bd93e43466485f39cf8ef4bdf",
+      "bytes": 6225,
+      "retainedPrivately": true
+    },
+    {
+      "name": "query-title-missing-type-independent-after-source-singular-proof.json",
+      "sha256": "d06332a85d95ff182cd2f56e95f82277808e3cf27d8bc0aa8e24c2d1a9f5b337",
+      "bytes": 782141,
+      "retainedPrivately": true
+    },
+    {
+      "name": "query-title-missing-type-independent-after-source.log",
+      "sha256": "35b5cd97e40650055e4a55d83251933a7c7be29d98d37eb3777f7cf6b863d291",
+      "bytes": 19216,
+      "retainedPrivately": true
+    },
+    {
+      "name": "root-query-title-missing-type-all-proofs-audit.json",
+      "sha256": "ec7b808fa4f3dc24e396469aa8a5c07670a51a9b8e9f54332d22c7293eee4420",
+      "bytes": 7297,
+      "retainedPrivately": true
+    },
+    {
+      "name": "root-query-title-missing-type-all-resource-audit.json",
+      "sha256": "166633318fcf6ec5c30d0dab8afa78b98a5b450167d8e02314052ce7f05ac061",
+      "bytes": 1079,
+      "retainedPrivately": true
+    }
+  ],
+  "separateChecksEntryPoint": {
+    "name": "query-title-missing-type-independent-after-checks.json",
+    "sha256": "c8653873168b6915660f0c6ff9c032f592622eb7e06c3a15c3470e6de30161ed",
+    "bytes": 6067,
+    "retainedPrivately": true
+  },
+  "allBeforeOriginalsBuildsLogsProofsRetained": true,
+  "noRawProofLogConfigAuthInRepositoryPackage": true,
+  "noRuntimeTestUiCiMainChangeOrRerun": true
+}

@@ -1,0 +1,13 @@
+# Independent omitted/empty Query Title verification
+
+This package preserves the independent bounded after review at head `82edb01327915acc9abbe1c118c8b441e81cb6d9`, tree `f66095b81abb70ea75ba1bcbf076f27dcd597812`, equivalent to frozen candidate7a. The Node bundle SHA is `582d1aa48ee69058e08be6406b86d604cf92010cf0e36a9e180e997b920da07b`.
+
+Both approved ten-file runs passed **52/52 counted tests**, without failures, cancellations, skips or reruns. Counts include parents. Per-file counts were `[6,2,7,6,4,4,4,9,4,6]`. Each mode preserved61 targeted responses in four private proofs: missing-type9, selected singular23, configured posts-page13 and home-body16. These are not all requests made by the selector. Actual HTTP used the source server and then the verified compiled server; direct TypeScript normalization, service/renderer and supplied-client imports remain SOURCE in both modes. There is no full-suite, fresh-archive, browser/pixel or whole-CMS completion claim.
+
+The original immutable5b/8e97 before remains distinct:2PASS4FAIL/6 in each mode. It was not rerun here. The unchanged new fixture passes after the single undefined/empty guard. Three old heading fixtures gained exactly five explicit archive attributes, preserving assertions and wait instrumentation; original bytes and reversal proof remain private.
+
+`resource-closure.json` is the historical journal from before authorized unlink: databases/app groups were closed, while owned config/link were retained. `owned-cleanup.json` records the later authorized removal of only those two exact paths after identity/hash/dependency checks. No historical state was rewritten. All354 source, ten fixture and411 build-file hashes stayed stable. Original before/after builds, raw logs, proofs, manifests and all37 linked private input references remain retained. No archive was created.
+
+The PID monitor used300ms polling and does not enumerate every short-lived process. Exact random upload/outbox paths were not separately journaled; the official isolated runner owns normal finally cleanup, and no reviewer upload glob deletion occurred. Root separately verified SQL/app/port closure.
+
+Five payloads were copied from immutable private originals with only exact known private/worktree path prefixes replaced. `manifest.json` records source/copy SHA-256 and byte lengths, replacement occurrence counts, the exact37 linked private inputs, and the separate checks entry point. The private package ledger retains the actual prefix mapping. Raw bootstrap proofs, raw logs, configuration bytes and authentication data are intentionally absent from this Git package.
