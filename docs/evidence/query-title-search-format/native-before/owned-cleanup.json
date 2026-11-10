@@ -1,0 +1,74 @@
+{
+  "stage": "ROOT_AUTHORIZED_TWO_PATH_OWNED_SETUP_REMOVAL_AFTER_ACCEPTED_GENUINE_BEFORE",
+  "startedAtUtc": "2026-11-10T08:31:27.672486+00:00",
+  "finishedAtUtc": "2026-11-10T08:31:28.038899+00:00",
+  "testOnlyCommit": "92920c53964fe1573bb4aef98b943eb6420c14a1",
+  "candidateBaseline": "f6f4dcda7ff0f8b7ef08ae43f7dac3422e510a07",
+  "actualNodeSha256": "582d1aa48ee69058e08be6406b86d604cf92010cf0e36a9e180e997b920da07b",
+  "authorization": "Root accepted original review783283/checksc59e/raw both modes and separately authorized only exact own.env and dependency-link removal. No further execution authorized or performed.",
+  "removed": [
+    {
+      "path": "<owned-search-format-before-worktree>/.env",
+      "kind": "regular file",
+      "uid": 501,
+      "mode": "0600",
+      "originalCreationSha256": "d15b469029368c1780595723c94430c3b823f90e707ab55baa07b410131d4571",
+      "originalHashProvenance": "Recorded contemporaneously immediately after exclusive0600 creation before any guard in immutable ownership267964 receipt; verified again immediately before removal.",
+      "ownershipReceipt": {
+        "path": "<private-evidence-root>/query-title-search-format-before-ownership.json",
+        "sha256": "267964ed52d1d9d2801977e525c809d405e7f0f218b831ad2168b70c9d733a61"
+      },
+      "absentAfter": true
+    },
+    {
+      "path": "<owned-search-format-before-worktree>/node_modules",
+      "kind": "symlink",
+      "uid": 501,
+      "target": "<dependency-owner-workspace>/node_modules",
+      "realTarget": "<dependency-owner-workspace>/node_modules",
+      "ownerNonsymlink": true,
+      "ownerUid": 501,
+      "ownerMode": "0755",
+      "ownerInodeIdentityPreserved": true,
+      "matchingLockSha256": "233888ed8f864581a8835aab0b4c33ccd7fbc391f2a98650b63fcf8db8814892",
+      "absentAfter": true
+    }
+  ],
+  "preservedBuildsBeforeAndAfter": [
+    {
+      "path": "<private-evidence-root>/query-title-search-format-before-build-only-manifest.json",
+      "sha256": "54aae04bdb14a74836436469a556d0120d4299fffcb062cc8e0a79bb57f3a4c9",
+      "worktree": "<owned-search-format-before-worktree>",
+      "files": 411,
+      "allHashesMatch": true
+    },
+    {
+      "path": "<private-evidence-root>/query-title-missing-type-before-candidate-build-manifest.json",
+      "sha256": "2bc348893ee66992f98ad0085877c46eeafaa1b8c41c1a9c75e6a153f194c37e",
+      "worktree": "<temporary-root>/worldact-query-title-missing-type-before",
+      "files": 411,
+      "allHashesMatch": true
+    }
+  ],
+  "all21OriginalArtifactsRehashedUnchangedBeforeAndAfter": true,
+  "runtimeTestAndHistoryUnchanged": true,
+  "cleanGitAtEndBeforeDocs": true,
+  "priorResourceClosure": {
+    "receipt": {
+      "path": "<private-evidence-root>/query-title-search-format-before-dom-audit.json",
+      "sha256": "1c1e54d51f6e1f5f2fedee6376a7b0ee497e2f444a0b79772f9cf4aa87316edb"
+    },
+    "observedAtUtc": "2026-11-10T08:23:55.673Z",
+    "anchorAndTwoActualDbAbsent": true,
+    "ownedSessionsAndObservedProcessesAbsent": true,
+    "physicalPort5195Free": true,
+    "rootIndependentlyConfirmedBeforeAuthorization": true,
+    "newSqlSessionOrServiceDuringThisCleanup": false
+  },
+  "uploadsOutbox": "Exact generated paths were not journaled; normal runner-finally limitation unchanged; no new exact per-path absence claim.",
+  "archiveCreated": false,
+  "otherPathsRemoved": false,
+  "testsRerun": false,
+  "runtimeUiExistingTestCiMainChanged": false,
+  "historicalSnapshots": "Review/checks/DOM audit still truthfully record env/link retained at their earlier freeze. This later receipt alone records authorized removal."
+}

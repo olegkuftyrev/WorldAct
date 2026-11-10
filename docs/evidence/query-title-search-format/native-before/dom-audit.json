@@ -1,0 +1,1044 @@
+{
+  "stage": "GENUINE_SEARCH_FORMAT_BEFORE_DOM_AUDIT",
+  "recordedAtUtc": "2026-11-10T08:23:55.673Z",
+  "candidateBaseline": "f6f4dcda7ff0f8b7ef08ae43f7dac3422e510a07",
+  "testOnlyCommit": "92920c53964fe1573bb4aef98b943eb6420c14a1",
+  "testSha256": "169be75223968724229540836b78237b1735923e78283fc6a6f881c23ee1b385",
+  "rendererSha256": "6002a966d9a69b2dc1805f1144957c87ee9e036304d313cef87426672e5fc95c",
+  "actualNodeSha256": "582d1aa48ee69058e08be6406b86d604cf92010cf0e36a9e180e997b920da07b",
+  "modes": [
+    {
+      "mode": "source",
+      "counts": {
+        "tests": 6,
+        "pass": 1,
+        "fail": 5,
+        "cancelled": 0,
+        "skipped": 0
+      },
+      "runnerExitCode": 1,
+      "actualApiMode": "Official runner starts --import tsx server/index.ts",
+      "observedApiProcesses": [
+        {
+          "pid": 34995,
+          "ppid": 34825,
+          "pgid": 34995,
+          "command": "/usr/local/bin/node --import tsx server/index.ts",
+          "firstSeenAtUtc": "2026-11-10T08:20:53.779Z"
+        }
+      ],
+      "dispatches": 12,
+      "titleDomObservations": 22,
+      "individualTextFeatureFailures": 21,
+      "publicGroups": [
+        {
+          "label": "ordinary",
+          "path": "/?s=searchformatmwaf7lcq",
+          "statuses": {
+            "get": 200,
+            "head": 200,
+            "model": 200
+          },
+          "headBodyEmpty": true,
+          "modelStatus": 200,
+          "routeKind": "archive",
+          "normalizedTerm": "searchformatmwaf7lcq",
+          "template": {
+            "id": 14,
+            "slug": "search",
+            "title": "Search",
+            "type": "template",
+            "version": 2,
+            "updatedAt": "2026-11-10T08:20:55.274Z",
+            "isCustom": true
+          },
+          "ordinaryPostPresent": true,
+          "actualListedPostCount": 1,
+          "surfaces": [
+            {
+              "surface": "native actual island",
+              "mainCount": 1,
+              "markerCount": 1,
+              "titles": [
+                {
+                  "key": "default",
+                  "anchor": "qt-search-mwaf7lcq-default",
+                  "anchorCount": 1,
+                  "wrapperCount": 1,
+                  "tag": "H1",
+                  "class": "wp-block-query-title",
+                  "activeChildCount": 0,
+                  "actualText": "Search results for: searchformatmwaf7lcq",
+                  "expectedSourceText": "Search results for: “searchformatmwaf7lcq”",
+                  "matchesExpectedSourceText": false,
+                  "actualTitleOuterHtml": "<h1 class=\"wp-block-query-title\" id=\"qt-search-mwaf7lcq-default\">Search results for: searchformatmwaf7lcq</h1>"
+                },
+                {
+                  "key": "explicitTrue",
+                  "anchor": "qt-search-mwaf7lcq-true",
+                  "anchorCount": 1,
+                  "wrapperCount": 1,
+                  "tag": "H1",
+                  "class": "wp-block-query-title",
+                  "activeChildCount": 0,
+                  "actualText": "Search results for: searchformatmwaf7lcq",
+                  "expectedSourceText": "Search results for: “searchformatmwaf7lcq”",
+                  "matchesExpectedSourceText": false,
+                  "actualTitleOuterHtml": "<h1 class=\"wp-block-query-title\" id=\"qt-search-mwaf7lcq-true\">Search results for: searchformatmwaf7lcq</h1>"
+                },
+                {
+                  "key": "falseTerm",
+                  "anchor": "qt-search-mwaf7lcq-false",
+                  "anchorCount": 1,
+                  "wrapperCount": 1,
+                  "tag": "H1",
+                  "class": "wp-block-query-title",
+                  "activeChildCount": 0,
+                  "actualText": "Search results for: searchformatmwaf7lcq",
+                  "expectedSourceText": "Search results",
+                  "matchesExpectedSourceText": false,
+                  "actualTitleOuterHtml": "<h1 class=\"wp-block-query-title\" id=\"qt-search-mwaf7lcq-false\">Search results for: searchformatmwaf7lcq</h1>"
+                },
+                {
+                  "key": "prefixFalse",
+                  "anchor": "qt-search-mwaf7lcq-prefix",
+                  "anchorCount": 1,
+                  "wrapperCount": 1,
+                  "tag": "H1",
+                  "class": "wp-block-query-title",
+                  "activeChildCount": 0,
+                  "actualText": "searchformatmwaf7lcq",
+                  "expectedSourceText": "Search results for: “searchformatmwaf7lcq”",
+                  "matchesExpectedSourceText": false,
+                  "actualTitleOuterHtml": "<h1 class=\"wp-block-query-title\" id=\"qt-search-mwaf7lcq-prefix\">searchformatmwaf7lcq</h1>"
+                }
+              ],
+              "actualOwnedMainFragment": "<main id=\"qt-search-mwaf7lcq-main\" class=\"wp-block-group\"><p>SEARCH-FORMAT-MARKER-mwaf7lcq</p><section id=\"qt-search-mwaf7lcq-default-case\"><h1 class=\"wp-block-query-title\" id=\"qt-search-mwaf7lcq-default\">Search results for: searchformatmwaf7lcq</h1></section><section id=\"qt-search-mwaf7lcq-true-case\"><h1 class=\"wp-block-query-title\" id=\"qt-search-mwaf7lcq-true\">Search results for: searchformatmwaf7lcq</h1></section><section id=\"qt-search-mwaf7lcq-false-case\"><h1 class=\"wp-block-query-title\" id=\"qt-search-mwaf7lcq-false\">Search results for: searchformatmwaf7lcq</h1></section><section id=\"qt-search-mwaf7lcq-prefix-case\"><h1 class=\"wp-block-query-title\" id=\"qt-search-mwaf7lcq-prefix\">searchformatmwaf7lcq</h1></section></main>"
+            },
+            {
+              "surface": "model presentation fragment",
+              "mainCount": 1,
+              "markerCount": 1,
+              "titles": [
+                {
+                  "key": "default",
+                  "anchor": "qt-search-mwaf7lcq-default",
+                  "anchorCount": 1,
+                  "wrapperCount": 1,
+                  "tag": "H1",
+                  "class": "wp-block-query-title",
+                  "activeChildCount": 0,
+                  "actualText": "Search results for: searchformatmwaf7lcq",
+                  "expectedSourceText": "Search results for: “searchformatmwaf7lcq”",
+                  "matchesExpectedSourceText": false,
+                  "actualTitleOuterHtml": "<h1 class=\"wp-block-query-title\" id=\"qt-search-mwaf7lcq-default\">Search results for: searchformatmwaf7lcq</h1>"
+                },
+                {
+                  "key": "explicitTrue",
+                  "anchor": "qt-search-mwaf7lcq-true",
+                  "anchorCount": 1,
+                  "wrapperCount": 1,
+                  "tag": "H1",
+                  "class": "wp-block-query-title",
+                  "activeChildCount": 0,
+                  "actualText": "Search results for: searchformatmwaf7lcq",
+                  "expectedSourceText": "Search results for: “searchformatmwaf7lcq”",
+                  "matchesExpectedSourceText": false,
+                  "actualTitleOuterHtml": "<h1 class=\"wp-block-query-title\" id=\"qt-search-mwaf7lcq-true\">Search results for: searchformatmwaf7lcq</h1>"
+                },
+                {
+                  "key": "falseTerm",
+                  "anchor": "qt-search-mwaf7lcq-false",
+                  "anchorCount": 1,
+                  "wrapperCount": 1,
+                  "tag": "H1",
+                  "class": "wp-block-query-title",
+                  "activeChildCount": 0,
+                  "actualText": "Search results for: searchformatmwaf7lcq",
+                  "expectedSourceText": "Search results",
+                  "matchesExpectedSourceText": false,
+                  "actualTitleOuterHtml": "<h1 class=\"wp-block-query-title\" id=\"qt-search-mwaf7lcq-false\">Search results for: searchformatmwaf7lcq</h1>"
+                },
+                {
+                  "key": "prefixFalse",
+                  "anchor": "qt-search-mwaf7lcq-prefix",
+                  "anchorCount": 1,
+                  "wrapperCount": 1,
+                  "tag": "H1",
+                  "class": "wp-block-query-title",
+                  "activeChildCount": 0,
+                  "actualText": "searchformatmwaf7lcq",
+                  "expectedSourceText": "Search results for: “searchformatmwaf7lcq”",
+                  "matchesExpectedSourceText": false,
+                  "actualTitleOuterHtml": "<h1 class=\"wp-block-query-title\" id=\"qt-search-mwaf7lcq-prefix\">searchformatmwaf7lcq</h1>"
+                }
+              ],
+              "actualOwnedMainFragment": "<main id=\"qt-search-mwaf7lcq-main\" class=\"wp-block-group\"><p>SEARCH-FORMAT-MARKER-mwaf7lcq</p><section id=\"qt-search-mwaf7lcq-default-case\"><h1 class=\"wp-block-query-title\" id=\"qt-search-mwaf7lcq-default\">Search results for: searchformatmwaf7lcq</h1></section><section id=\"qt-search-mwaf7lcq-true-case\"><h1 class=\"wp-block-query-title\" id=\"qt-search-mwaf7lcq-true\">Search results for: searchformatmwaf7lcq</h1></section><section id=\"qt-search-mwaf7lcq-false-case\"><h1 class=\"wp-block-query-title\" id=\"qt-search-mwaf7lcq-false\">Search results for: searchformatmwaf7lcq</h1></section><section id=\"qt-search-mwaf7lcq-prefix-case\"><h1 class=\"wp-block-query-title\" id=\"qt-search-mwaf7lcq-prefix\">searchformatmwaf7lcq</h1></section></main>"
+            }
+          ]
+        },
+        {
+          "label": "entity",
+          "path": "/?s=searchformatmwaf7lcq+A%26amp%3BB+%26%2300065%3B+%3Cx%3E+%22q%22+%27r%27",
+          "statuses": {
+            "get": 200,
+            "head": 200,
+            "model": 200
+          },
+          "headBodyEmpty": true,
+          "modelStatus": 200,
+          "routeKind": "archive",
+          "normalizedTerm": "searchformatmwaf7lcq A&amp;B &#00065; <x> \"q\" 'r'",
+          "template": {
+            "id": 14,
+            "slug": "search",
+            "title": "Search",
+            "type": "template",
+            "version": 2,
+            "updatedAt": "2026-11-10T08:20:55.274Z",
+            "isCustom": true
+          },
+          "ordinaryPostPresent": false,
+          "actualListedPostCount": 0,
+          "surfaces": [
+            {
+              "surface": "native actual island",
+              "mainCount": 1,
+              "markerCount": 1,
+              "titles": [
+                {
+                  "key": "default",
+                  "anchor": "qt-search-mwaf7lcq-default",
+                  "anchorCount": 1,
+                  "wrapperCount": 1,
+                  "tag": "H1",
+                  "class": "wp-block-query-title",
+                  "activeChildCount": 0,
+                  "actualText": "Search results for: searchformatmwaf7lcq A&amp;B &#00065; <x> \"q\" 'r'",
+                  "expectedSourceText": "Search results for: “searchformatmwaf7lcq A&B A <x> \"q\" 'r'”",
+                  "matchesExpectedSourceText": false,
+                  "actualTitleOuterHtml": "<h1 class=\"wp-block-query-title\" id=\"qt-search-mwaf7lcq-default\">Search results for: searchformatmwaf7lcq A&amp;amp;B &amp;#00065; &lt;x&gt; \"q\" 'r'</h1>"
+                },
+                {
+                  "key": "explicitTrue",
+                  "anchor": "qt-search-mwaf7lcq-true",
+                  "anchorCount": 1,
+                  "wrapperCount": 1,
+                  "tag": "H1",
+                  "class": "wp-block-query-title",
+                  "activeChildCount": 0,
+                  "actualText": "Search results for: searchformatmwaf7lcq A&amp;B &#00065; <x> \"q\" 'r'",
+                  "expectedSourceText": "Search results for: “searchformatmwaf7lcq A&B A <x> \"q\" 'r'”",
+                  "matchesExpectedSourceText": false,
+                  "actualTitleOuterHtml": "<h1 class=\"wp-block-query-title\" id=\"qt-search-mwaf7lcq-true\">Search results for: searchformatmwaf7lcq A&amp;amp;B &amp;#00065; &lt;x&gt; \"q\" 'r'</h1>"
+                },
+                {
+                  "key": "falseTerm",
+                  "anchor": "qt-search-mwaf7lcq-false",
+                  "anchorCount": 1,
+                  "wrapperCount": 1,
+                  "tag": "H1",
+                  "class": "wp-block-query-title",
+                  "activeChildCount": 0,
+                  "actualText": "Search results for: searchformatmwaf7lcq A&amp;B &#00065; <x> \"q\" 'r'",
+                  "expectedSourceText": "Search results",
+                  "matchesExpectedSourceText": false,
+                  "actualTitleOuterHtml": "<h1 class=\"wp-block-query-title\" id=\"qt-search-mwaf7lcq-false\">Search results for: searchformatmwaf7lcq A&amp;amp;B &amp;#00065; &lt;x&gt; \"q\" 'r'</h1>"
+                },
+                {
+                  "key": "prefixFalse",
+                  "anchor": "qt-search-mwaf7lcq-prefix",
+                  "anchorCount": 1,
+                  "wrapperCount": 1,
+                  "tag": "H1",
+                  "class": "wp-block-query-title",
+                  "activeChildCount": 0,
+                  "actualText": "searchformatmwaf7lcq A&amp;B &#00065; <x> \"q\" 'r'",
+                  "expectedSourceText": "Search results for: “searchformatmwaf7lcq A&B A <x> \"q\" 'r'”",
+                  "matchesExpectedSourceText": false,
+                  "actualTitleOuterHtml": "<h1 class=\"wp-block-query-title\" id=\"qt-search-mwaf7lcq-prefix\">searchformatmwaf7lcq A&amp;amp;B &amp;#00065; &lt;x&gt; \"q\" 'r'</h1>"
+                }
+              ],
+              "actualOwnedMainFragment": "<main id=\"qt-search-mwaf7lcq-main\" class=\"wp-block-group\"><p>SEARCH-FORMAT-MARKER-mwaf7lcq</p><section id=\"qt-search-mwaf7lcq-default-case\"><h1 class=\"wp-block-query-title\" id=\"qt-search-mwaf7lcq-default\">Search results for: searchformatmwaf7lcq A&amp;amp;B &amp;#00065; &lt;x&gt; \"q\" 'r'</h1></section><section id=\"qt-search-mwaf7lcq-true-case\"><h1 class=\"wp-block-query-title\" id=\"qt-search-mwaf7lcq-true\">Search results for: searchformatmwaf7lcq A&amp;amp;B &amp;#00065; &lt;x&gt; \"q\" 'r'</h1></section><section id=\"qt-search-mwaf7lcq-false-case\"><h1 class=\"wp-block-query-title\" id=\"qt-search-mwaf7lcq-false\">Search results for: searchformatmwaf7lcq A&amp;amp;B &amp;#00065; &lt;x&gt; \"q\" 'r'</h1></section><section id=\"qt-search-mwaf7lcq-prefix-case\"><h1 class=\"wp-block-query-title\" id=\"qt-search-mwaf7lcq-prefix\">searchformatmwaf7lcq A&amp;amp;B &amp;#00065; &lt;x&gt; \"q\" 'r'</h1></section></main>"
+            },
+            {
+              "surface": "model presentation fragment",
+              "mainCount": 1,
+              "markerCount": 1,
+              "titles": [
+                {
+                  "key": "default",
+                  "anchor": "qt-search-mwaf7lcq-default",
+                  "anchorCount": 1,
+                  "wrapperCount": 1,
+                  "tag": "H1",
+                  "class": "wp-block-query-title",
+                  "activeChildCount": 0,
+                  "actualText": "Search results for: searchformatmwaf7lcq A&amp;B &#00065; <x> \"q\" 'r'",
+                  "expectedSourceText": "Search results for: “searchformatmwaf7lcq A&B A <x> \"q\" 'r'”",
+                  "matchesExpectedSourceText": false,
+                  "actualTitleOuterHtml": "<h1 class=\"wp-block-query-title\" id=\"qt-search-mwaf7lcq-default\">Search results for: searchformatmwaf7lcq A&amp;amp;B &amp;#00065; &lt;x&gt; \"q\" 'r'</h1>"
+                },
+                {
+                  "key": "explicitTrue",
+                  "anchor": "qt-search-mwaf7lcq-true",
+                  "anchorCount": 1,
+                  "wrapperCount": 1,
+                  "tag": "H1",
+                  "class": "wp-block-query-title",
+                  "activeChildCount": 0,
+                  "actualText": "Search results for: searchformatmwaf7lcq A&amp;B &#00065; <x> \"q\" 'r'",
+                  "expectedSourceText": "Search results for: “searchformatmwaf7lcq A&B A <x> \"q\" 'r'”",
+                  "matchesExpectedSourceText": false,
+                  "actualTitleOuterHtml": "<h1 class=\"wp-block-query-title\" id=\"qt-search-mwaf7lcq-true\">Search results for: searchformatmwaf7lcq A&amp;amp;B &amp;#00065; &lt;x&gt; \"q\" 'r'</h1>"
+                },
+                {
+                  "key": "falseTerm",
+                  "anchor": "qt-search-mwaf7lcq-false",
+                  "anchorCount": 1,
+                  "wrapperCount": 1,
+                  "tag": "H1",
+                  "class": "wp-block-query-title",
+                  "activeChildCount": 0,
+                  "actualText": "Search results for: searchformatmwaf7lcq A&amp;B &#00065; <x> \"q\" 'r'",
+                  "expectedSourceText": "Search results",
+                  "matchesExpectedSourceText": false,
+                  "actualTitleOuterHtml": "<h1 class=\"wp-block-query-title\" id=\"qt-search-mwaf7lcq-false\">Search results for: searchformatmwaf7lcq A&amp;amp;B &amp;#00065; &lt;x&gt; \"q\" 'r'</h1>"
+                },
+                {
+                  "key": "prefixFalse",
+                  "anchor": "qt-search-mwaf7lcq-prefix",
+                  "anchorCount": 1,
+                  "wrapperCount": 1,
+                  "tag": "H1",
+                  "class": "wp-block-query-title",
+                  "activeChildCount": 0,
+                  "actualText": "searchformatmwaf7lcq A&amp;B &#00065; <x> \"q\" 'r'",
+                  "expectedSourceText": "Search results for: “searchformatmwaf7lcq A&B A <x> \"q\" 'r'”",
+                  "matchesExpectedSourceText": false,
+                  "actualTitleOuterHtml": "<h1 class=\"wp-block-query-title\" id=\"qt-search-mwaf7lcq-prefix\">searchformatmwaf7lcq A&amp;amp;B &amp;#00065; &lt;x&gt; \"q\" 'r'</h1>"
+                }
+              ],
+              "actualOwnedMainFragment": "<main id=\"qt-search-mwaf7lcq-main\" class=\"wp-block-group\"><p>SEARCH-FORMAT-MARKER-mwaf7lcq</p><section id=\"qt-search-mwaf7lcq-default-case\"><h1 class=\"wp-block-query-title\" id=\"qt-search-mwaf7lcq-default\">Search results for: searchformatmwaf7lcq A&amp;amp;B &amp;#00065; &lt;x&gt; \"q\" 'r'</h1></section><section id=\"qt-search-mwaf7lcq-true-case\"><h1 class=\"wp-block-query-title\" id=\"qt-search-mwaf7lcq-true\">Search results for: searchformatmwaf7lcq A&amp;amp;B &amp;#00065; &lt;x&gt; \"q\" 'r'</h1></section><section id=\"qt-search-mwaf7lcq-false-case\"><h1 class=\"wp-block-query-title\" id=\"qt-search-mwaf7lcq-false\">Search results for: searchformatmwaf7lcq A&amp;amp;B &amp;#00065; &lt;x&gt; \"q\" 'r'</h1></section><section id=\"qt-search-mwaf7lcq-prefix-case\"><h1 class=\"wp-block-query-title\" id=\"qt-search-mwaf7lcq-prefix\">searchformatmwaf7lcq A&amp;amp;B &amp;#00065; &lt;x&gt; \"q\" 'r'</h1></section></main>"
+            }
+          ]
+        }
+      ],
+      "previews": [
+        {
+          "label": "default",
+          "status": 200,
+          "rendered": "<h1 class=\"wp-block-query-title\" id=\"qt-search-mwaf7lcq-preview-default\">Search results for: searchformatmwaf7lcq</h1>",
+          "anchor": "qt-search-mwaf7lcq-preview-default",
+          "anchorCount": 1,
+          "wrapperCount": 1,
+          "tag": "H1",
+          "class": "wp-block-query-title",
+          "activeChildCount": 0,
+          "actualText": "Search results for: searchformatmwaf7lcq",
+          "expectedSourceOrCompatibilityText": "Search results for: “searchformatmwaf7lcq”",
+          "matchesExpectedText": false
+        },
+        {
+          "label": "true",
+          "status": 200,
+          "rendered": "<h1 class=\"wp-block-query-title\" id=\"qt-search-mwaf7lcq-preview-true\">Search results for: searchformatmwaf7lcq</h1>",
+          "anchor": "qt-search-mwaf7lcq-preview-true",
+          "anchorCount": 1,
+          "wrapperCount": 1,
+          "tag": "H1",
+          "class": "wp-block-query-title",
+          "activeChildCount": 0,
+          "actualText": "Search results for: searchformatmwaf7lcq",
+          "expectedSourceOrCompatibilityText": "Search results for: “searchformatmwaf7lcq”",
+          "matchesExpectedText": false
+        },
+        {
+          "label": "false",
+          "status": 200,
+          "rendered": "<h1 class=\"wp-block-query-title\" id=\"qt-search-mwaf7lcq-preview-false\">Search results for: searchformatmwaf7lcq</h1>",
+          "anchor": "qt-search-mwaf7lcq-preview-false",
+          "anchorCount": 1,
+          "wrapperCount": 1,
+          "tag": "H1",
+          "class": "wp-block-query-title",
+          "activeChildCount": 0,
+          "actualText": "Search results for: searchformatmwaf7lcq",
+          "expectedSourceOrCompatibilityText": "Search results",
+          "matchesExpectedText": false
+        },
+        {
+          "label": "prefix",
+          "status": 200,
+          "rendered": "<h1 class=\"wp-block-query-title\" id=\"qt-search-mwaf7lcq-preview-prefix\">searchformatmwaf7lcq</h1>",
+          "anchor": "qt-search-mwaf7lcq-preview-prefix",
+          "anchorCount": 1,
+          "wrapperCount": 1,
+          "tag": "H1",
+          "class": "wp-block-query-title",
+          "activeChildCount": 0,
+          "actualText": "searchformatmwaf7lcq",
+          "expectedSourceOrCompatibilityText": "Search results for: “searchformatmwaf7lcq”",
+          "matchesExpectedText": false
+        },
+        {
+          "label": "entity",
+          "status": 200,
+          "rendered": "<h1 class=\"wp-block-query-title\" id=\"qt-search-mwaf7lcq-preview-entity\">Search results for: searchformatmwaf7lcq A&amp;amp;B &amp;#00065; &lt;x&gt; \"q\" 'r'</h1>",
+          "anchor": "qt-search-mwaf7lcq-preview-entity",
+          "anchorCount": 1,
+          "wrapperCount": 1,
+          "tag": "H1",
+          "class": "wp-block-query-title",
+          "activeChildCount": 0,
+          "actualText": "Search results for: searchformatmwaf7lcq A&amp;B &#00065; <x> \"q\" 'r'",
+          "expectedSourceOrCompatibilityText": "Search results for: “searchformatmwaf7lcq A&B A <x> \"q\" 'r'”",
+          "matchesExpectedText": false
+        },
+        {
+          "label": "raw-s",
+          "status": 200,
+          "rendered": "<h1 class=\"wp-block-query-title\" id=\"qt-search-mwaf7lcq-preview-raw-s\">Blog</h1>",
+          "anchor": "qt-search-mwaf7lcq-preview-raw-s",
+          "anchorCount": 1,
+          "wrapperCount": 1,
+          "tag": "H1",
+          "class": "wp-block-query-title",
+          "activeChildCount": 0,
+          "actualText": "Blog",
+          "expectedSourceOrCompatibilityText": "Blog",
+          "matchesExpectedText": true
+        }
+      ],
+      "allAcquiredBeforeAssertions": true,
+      "acquisitionSetupTransportContainerOrNormalizationFailure": false,
+      "featureClassification": "Four text-formatting children fail plus parent; raw-s compatibility child passes. Structure/IDs/classes/markers/statuses are valid.",
+      "fixtureCleanup": {
+        "postIds": [
+          4
+        ],
+        "documentIds": [],
+        "restoredDocumentId": 14,
+        "settingsRestoreAttempted": true,
+        "failures": []
+      },
+      "observedDatabases": [
+        "worldact_test_1794298851348_e270d1f7"
+      ],
+      "phaseAppGroup": "worldact-query-title-search-format-before-source",
+      "observedProcessTree": [
+        {
+          "pid": 34825,
+          "ppid": 34797,
+          "pgid": 34797,
+          "command": "/usr/local/bin/node scripts/test-isolated.mjs tests/query-title-search-format-original.test.ts",
+          "firstSeenAtUtc": "2026-11-10T08:20:51.444Z"
+        },
+        {
+          "pid": 34838,
+          "ppid": 34825,
+          "pgid": 34838,
+          "command": "/usr/local/bin/node --import tsx server/migrate.ts",
+          "firstSeenAtUtc": "2026-11-10T08:20:51.514Z"
+        },
+        {
+          "pid": 34848,
+          "ppid": 34838,
+          "pgid": 34838,
+          "command": "<dependency-owner-workspace>/node_modules/tsx/node_modules/@esbuild/darwin-arm64/bin/esbuild --service=0.28.2 --ping",
+          "firstSeenAtUtc": "2026-11-10T08:20:51.605Z"
+        },
+        {
+          "pid": 34933,
+          "ppid": 34825,
+          "pgid": 34933,
+          "command": "/usr/local/bin/node --import tsx server/seed.ts",
+          "firstSeenAtUtc": "2026-11-10T08:20:52.871Z"
+        },
+        {
+          "pid": 34940,
+          "ppid": 34933,
+          "pgid": 34933,
+          "command": "<dependency-owner-workspace>/node_modules/tsx/node_modules/@esbuild/darwin-arm64/bin/esbuild --service=0.28.2 --ping",
+          "firstSeenAtUtc": "2026-11-10T08:20:52.962Z"
+        },
+        {
+          "pid": 34995,
+          "ppid": 34825,
+          "pgid": 34995,
+          "command": "/usr/local/bin/node --import tsx server/index.ts",
+          "firstSeenAtUtc": "2026-11-10T08:20:53.779Z"
+        },
+        {
+          "pid": 35002,
+          "ppid": 34995,
+          "pgid": 34995,
+          "command": "<dependency-owner-workspace>/node_modules/tsx/node_modules/@esbuild/darwin-arm64/bin/esbuild --service=0.28.2 --ping",
+          "firstSeenAtUtc": "2026-11-10T08:20:53.868Z"
+        },
+        {
+          "pid": 35079,
+          "ppid": 34825,
+          "pgid": 35079,
+          "command": "/usr/local/bin/node --import tsx --test tests/query-title-search-format-original.test.ts",
+          "firstSeenAtUtc": "2026-11-10T08:20:54.969Z"
+        },
+        {
+          "pid": 35080,
+          "ppid": 35079,
+          "pgid": 35079,
+          "command": "/usr/local/bin/node --test-concurrency=0 --heap-prof-interval=524288 --max-http-header-size=16384 --stack-trace-limit=10 --report-signal=SIGUSR2 --heapsnapshot-near-heap-limit=0 --tls-cipher-list=TLS_AES_256_GCM_SHA384:TLS_CHACHA20_POLY1305_SHA256:TLS_AES_128_GCM_SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-AES256-GCM-SHA384:DHE-RSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-SHA256:DHE-RSA-AES128-SHA256:ECDHE-RSA-AES256-SHA384:DHE-RSA-AES256-SHA384:ECDHE-RSA-AES256-SHA256:DHE-RSA-AES256-SHA256:HIGH:!aNULL:!eNULL:!EXPORT:!DES:!RC4:!MD5:!PSK:!SRP:!CAMELLIA --watch-kill-signal=SIGTERM --inspect-publish-uid=stderr,http --cpu-prof-interval=1000 --test-coverage-functions=0 --test-timeout=0 --test-coverage-lines=0 --test-isolation=process --test-coverage-branches=0 --network-family-autoselection-attempt-timeout=250 --use-largepages=off --inspect-port=127.0.0.1:9229 --secure-heap-min=2 --import=tsx --v8-pool-size=4 --node-snapshot --trace-event-file-pattern=node_trace.${rotation}.log --secure-heap=0 --import tsx tests/query-title-search-format-original.test.ts",
+          "firstSeenAtUtc": "2026-11-10T08:20:54.969Z"
+        },
+        {
+          "pid": 35087,
+          "ppid": 35080,
+          "pgid": 35079,
+          "command": "<dependency-owner-workspace>/node_modules/tsx/node_modules/@esbuild/darwin-arm64/bin/esbuild --service=0.28.2 --ping",
+          "firstSeenAtUtc": "2026-11-10T08:20:55.050Z"
+        }
+      ],
+      "remainingObservedOwnProcesses": [],
+      "files": {
+        "proof": {
+          "path": "<private-evidence-root>/query-title-search-format-before-source-proof.json",
+          "sha256": "7ac3238ce46094a3e8c6e8c4b4905ebc77037d38457deb51dad15edf88f70a47"
+        },
+        "log": {
+          "path": "<private-evidence-root>/query-title-search-format-before-source.log",
+          "sha256": "351612b60eb7d6d7480bb4b26134fbe3d57afc7fb472ceda8e3cfd9533e3ac77"
+        },
+        "run": {
+          "path": "<private-evidence-root>/query-title-search-format-before-source-run.json",
+          "sha256": "e3d884a113936cbb6153a48fb5b3b393235916ea696c6d07f52660d911756962"
+        },
+        "preflight": {
+          "path": "<private-evidence-root>/query-title-search-format-before-source-preflight.json",
+          "sha256": "307bf8d728b1cb89f0730d42e3916bf424a8fc0b17742861d085037235df1336"
+        }
+      }
+    },
+    {
+      "mode": "compiled",
+      "counts": {
+        "tests": 6,
+        "pass": 1,
+        "fail": 5,
+        "cancelled": 0,
+        "skipped": 0
+      },
+      "runnerExitCode": 1,
+      "actualApiMode": "Official runner starts dist-server/index.js",
+      "observedApiProcesses": [
+        {
+          "pid": 35484,
+          "ppid": 35323,
+          "pgid": 35484,
+          "command": "/usr/local/bin/node dist-server/index.js",
+          "firstSeenAtUtc": "2026-11-10T08:21:47.847Z"
+        }
+      ],
+      "dispatches": 12,
+      "titleDomObservations": 22,
+      "individualTextFeatureFailures": 21,
+      "publicGroups": [
+        {
+          "label": "ordinary",
+          "path": "/?s=searchformatmwaf8qkj",
+          "statuses": {
+            "get": 200,
+            "head": 200,
+            "model": 200
+          },
+          "headBodyEmpty": true,
+          "modelStatus": 200,
+          "routeKind": "archive",
+          "normalizedTerm": "searchformatmwaf8qkj",
+          "template": {
+            "id": 14,
+            "slug": "search",
+            "title": "Search",
+            "type": "template",
+            "version": 2,
+            "updatedAt": "2026-11-10T08:21:48.685Z",
+            "isCustom": true
+          },
+          "ordinaryPostPresent": true,
+          "actualListedPostCount": 1,
+          "surfaces": [
+            {
+              "surface": "native actual island",
+              "mainCount": 1,
+              "markerCount": 1,
+              "titles": [
+                {
+                  "key": "default",
+                  "anchor": "qt-search-mwaf8qkj-default",
+                  "anchorCount": 1,
+                  "wrapperCount": 1,
+                  "tag": "H1",
+                  "class": "wp-block-query-title",
+                  "activeChildCount": 0,
+                  "actualText": "Search results for: searchformatmwaf8qkj",
+                  "expectedSourceText": "Search results for: “searchformatmwaf8qkj”",
+                  "matchesExpectedSourceText": false,
+                  "actualTitleOuterHtml": "<h1 class=\"wp-block-query-title\" id=\"qt-search-mwaf8qkj-default\">Search results for: searchformatmwaf8qkj</h1>"
+                },
+                {
+                  "key": "explicitTrue",
+                  "anchor": "qt-search-mwaf8qkj-true",
+                  "anchorCount": 1,
+                  "wrapperCount": 1,
+                  "tag": "H1",
+                  "class": "wp-block-query-title",
+                  "activeChildCount": 0,
+                  "actualText": "Search results for: searchformatmwaf8qkj",
+                  "expectedSourceText": "Search results for: “searchformatmwaf8qkj”",
+                  "matchesExpectedSourceText": false,
+                  "actualTitleOuterHtml": "<h1 class=\"wp-block-query-title\" id=\"qt-search-mwaf8qkj-true\">Search results for: searchformatmwaf8qkj</h1>"
+                },
+                {
+                  "key": "falseTerm",
+                  "anchor": "qt-search-mwaf8qkj-false",
+                  "anchorCount": 1,
+                  "wrapperCount": 1,
+                  "tag": "H1",
+                  "class": "wp-block-query-title",
+                  "activeChildCount": 0,
+                  "actualText": "Search results for: searchformatmwaf8qkj",
+                  "expectedSourceText": "Search results",
+                  "matchesExpectedSourceText": false,
+                  "actualTitleOuterHtml": "<h1 class=\"wp-block-query-title\" id=\"qt-search-mwaf8qkj-false\">Search results for: searchformatmwaf8qkj</h1>"
+                },
+                {
+                  "key": "prefixFalse",
+                  "anchor": "qt-search-mwaf8qkj-prefix",
+                  "anchorCount": 1,
+                  "wrapperCount": 1,
+                  "tag": "H1",
+                  "class": "wp-block-query-title",
+                  "activeChildCount": 0,
+                  "actualText": "searchformatmwaf8qkj",
+                  "expectedSourceText": "Search results for: “searchformatmwaf8qkj”",
+                  "matchesExpectedSourceText": false,
+                  "actualTitleOuterHtml": "<h1 class=\"wp-block-query-title\" id=\"qt-search-mwaf8qkj-prefix\">searchformatmwaf8qkj</h1>"
+                }
+              ],
+              "actualOwnedMainFragment": "<main id=\"qt-search-mwaf8qkj-main\" class=\"wp-block-group\"><p>SEARCH-FORMAT-MARKER-mwaf8qkj</p><section id=\"qt-search-mwaf8qkj-default-case\"><h1 class=\"wp-block-query-title\" id=\"qt-search-mwaf8qkj-default\">Search results for: searchformatmwaf8qkj</h1></section><section id=\"qt-search-mwaf8qkj-true-case\"><h1 class=\"wp-block-query-title\" id=\"qt-search-mwaf8qkj-true\">Search results for: searchformatmwaf8qkj</h1></section><section id=\"qt-search-mwaf8qkj-false-case\"><h1 class=\"wp-block-query-title\" id=\"qt-search-mwaf8qkj-false\">Search results for: searchformatmwaf8qkj</h1></section><section id=\"qt-search-mwaf8qkj-prefix-case\"><h1 class=\"wp-block-query-title\" id=\"qt-search-mwaf8qkj-prefix\">searchformatmwaf8qkj</h1></section></main>"
+            },
+            {
+              "surface": "model presentation fragment",
+              "mainCount": 1,
+              "markerCount": 1,
+              "titles": [
+                {
+                  "key": "default",
+                  "anchor": "qt-search-mwaf8qkj-default",
+                  "anchorCount": 1,
+                  "wrapperCount": 1,
+                  "tag": "H1",
+                  "class": "wp-block-query-title",
+                  "activeChildCount": 0,
+                  "actualText": "Search results for: searchformatmwaf8qkj",
+                  "expectedSourceText": "Search results for: “searchformatmwaf8qkj”",
+                  "matchesExpectedSourceText": false,
+                  "actualTitleOuterHtml": "<h1 class=\"wp-block-query-title\" id=\"qt-search-mwaf8qkj-default\">Search results for: searchformatmwaf8qkj</h1>"
+                },
+                {
+                  "key": "explicitTrue",
+                  "anchor": "qt-search-mwaf8qkj-true",
+                  "anchorCount": 1,
+                  "wrapperCount": 1,
+                  "tag": "H1",
+                  "class": "wp-block-query-title",
+                  "activeChildCount": 0,
+                  "actualText": "Search results for: searchformatmwaf8qkj",
+                  "expectedSourceText": "Search results for: “searchformatmwaf8qkj”",
+                  "matchesExpectedSourceText": false,
+                  "actualTitleOuterHtml": "<h1 class=\"wp-block-query-title\" id=\"qt-search-mwaf8qkj-true\">Search results for: searchformatmwaf8qkj</h1>"
+                },
+                {
+                  "key": "falseTerm",
+                  "anchor": "qt-search-mwaf8qkj-false",
+                  "anchorCount": 1,
+                  "wrapperCount": 1,
+                  "tag": "H1",
+                  "class": "wp-block-query-title",
+                  "activeChildCount": 0,
+                  "actualText": "Search results for: searchformatmwaf8qkj",
+                  "expectedSourceText": "Search results",
+                  "matchesExpectedSourceText": false,
+                  "actualTitleOuterHtml": "<h1 class=\"wp-block-query-title\" id=\"qt-search-mwaf8qkj-false\">Search results for: searchformatmwaf8qkj</h1>"
+                },
+                {
+                  "key": "prefixFalse",
+                  "anchor": "qt-search-mwaf8qkj-prefix",
+                  "anchorCount": 1,
+                  "wrapperCount": 1,
+                  "tag": "H1",
+                  "class": "wp-block-query-title",
+                  "activeChildCount": 0,
+                  "actualText": "searchformatmwaf8qkj",
+                  "expectedSourceText": "Search results for: “searchformatmwaf8qkj”",
+                  "matchesExpectedSourceText": false,
+                  "actualTitleOuterHtml": "<h1 class=\"wp-block-query-title\" id=\"qt-search-mwaf8qkj-prefix\">searchformatmwaf8qkj</h1>"
+                }
+              ],
+              "actualOwnedMainFragment": "<main id=\"qt-search-mwaf8qkj-main\" class=\"wp-block-group\"><p>SEARCH-FORMAT-MARKER-mwaf8qkj</p><section id=\"qt-search-mwaf8qkj-default-case\"><h1 class=\"wp-block-query-title\" id=\"qt-search-mwaf8qkj-default\">Search results for: searchformatmwaf8qkj</h1></section><section id=\"qt-search-mwaf8qkj-true-case\"><h1 class=\"wp-block-query-title\" id=\"qt-search-mwaf8qkj-true\">Search results for: searchformatmwaf8qkj</h1></section><section id=\"qt-search-mwaf8qkj-false-case\"><h1 class=\"wp-block-query-title\" id=\"qt-search-mwaf8qkj-false\">Search results for: searchformatmwaf8qkj</h1></section><section id=\"qt-search-mwaf8qkj-prefix-case\"><h1 class=\"wp-block-query-title\" id=\"qt-search-mwaf8qkj-prefix\">searchformatmwaf8qkj</h1></section></main>"
+            }
+          ]
+        },
+        {
+          "label": "entity",
+          "path": "/?s=searchformatmwaf8qkj+A%26amp%3BB+%26%2300065%3B+%3Cx%3E+%22q%22+%27r%27",
+          "statuses": {
+            "get": 200,
+            "head": 200,
+            "model": 200
+          },
+          "headBodyEmpty": true,
+          "modelStatus": 200,
+          "routeKind": "archive",
+          "normalizedTerm": "searchformatmwaf8qkj A&amp;B &#00065; <x> \"q\" 'r'",
+          "template": {
+            "id": 14,
+            "slug": "search",
+            "title": "Search",
+            "type": "template",
+            "version": 2,
+            "updatedAt": "2026-11-10T08:21:48.685Z",
+            "isCustom": true
+          },
+          "ordinaryPostPresent": false,
+          "actualListedPostCount": 0,
+          "surfaces": [
+            {
+              "surface": "native actual island",
+              "mainCount": 1,
+              "markerCount": 1,
+              "titles": [
+                {
+                  "key": "default",
+                  "anchor": "qt-search-mwaf8qkj-default",
+                  "anchorCount": 1,
+                  "wrapperCount": 1,
+                  "tag": "H1",
+                  "class": "wp-block-query-title",
+                  "activeChildCount": 0,
+                  "actualText": "Search results for: searchformatmwaf8qkj A&amp;B &#00065; <x> \"q\" 'r'",
+                  "expectedSourceText": "Search results for: “searchformatmwaf8qkj A&B A <x> \"q\" 'r'”",
+                  "matchesExpectedSourceText": false,
+                  "actualTitleOuterHtml": "<h1 class=\"wp-block-query-title\" id=\"qt-search-mwaf8qkj-default\">Search results for: searchformatmwaf8qkj A&amp;amp;B &amp;#00065; &lt;x&gt; \"q\" 'r'</h1>"
+                },
+                {
+                  "key": "explicitTrue",
+                  "anchor": "qt-search-mwaf8qkj-true",
+                  "anchorCount": 1,
+                  "wrapperCount": 1,
+                  "tag": "H1",
+                  "class": "wp-block-query-title",
+                  "activeChildCount": 0,
+                  "actualText": "Search results for: searchformatmwaf8qkj A&amp;B &#00065; <x> \"q\" 'r'",
+                  "expectedSourceText": "Search results for: “searchformatmwaf8qkj A&B A <x> \"q\" 'r'”",
+                  "matchesExpectedSourceText": false,
+                  "actualTitleOuterHtml": "<h1 class=\"wp-block-query-title\" id=\"qt-search-mwaf8qkj-true\">Search results for: searchformatmwaf8qkj A&amp;amp;B &amp;#00065; &lt;x&gt; \"q\" 'r'</h1>"
+                },
+                {
+                  "key": "falseTerm",
+                  "anchor": "qt-search-mwaf8qkj-false",
+                  "anchorCount": 1,
+                  "wrapperCount": 1,
+                  "tag": "H1",
+                  "class": "wp-block-query-title",
+                  "activeChildCount": 0,
+                  "actualText": "Search results for: searchformatmwaf8qkj A&amp;B &#00065; <x> \"q\" 'r'",
+                  "expectedSourceText": "Search results",
+                  "matchesExpectedSourceText": false,
+                  "actualTitleOuterHtml": "<h1 class=\"wp-block-query-title\" id=\"qt-search-mwaf8qkj-false\">Search results for: searchformatmwaf8qkj A&amp;amp;B &amp;#00065; &lt;x&gt; \"q\" 'r'</h1>"
+                },
+                {
+                  "key": "prefixFalse",
+                  "anchor": "qt-search-mwaf8qkj-prefix",
+                  "anchorCount": 1,
+                  "wrapperCount": 1,
+                  "tag": "H1",
+                  "class": "wp-block-query-title",
+                  "activeChildCount": 0,
+                  "actualText": "searchformatmwaf8qkj A&amp;B &#00065; <x> \"q\" 'r'",
+                  "expectedSourceText": "Search results for: “searchformatmwaf8qkj A&B A <x> \"q\" 'r'”",
+                  "matchesExpectedSourceText": false,
+                  "actualTitleOuterHtml": "<h1 class=\"wp-block-query-title\" id=\"qt-search-mwaf8qkj-prefix\">searchformatmwaf8qkj A&amp;amp;B &amp;#00065; &lt;x&gt; \"q\" 'r'</h1>"
+                }
+              ],
+              "actualOwnedMainFragment": "<main id=\"qt-search-mwaf8qkj-main\" class=\"wp-block-group\"><p>SEARCH-FORMAT-MARKER-mwaf8qkj</p><section id=\"qt-search-mwaf8qkj-default-case\"><h1 class=\"wp-block-query-title\" id=\"qt-search-mwaf8qkj-default\">Search results for: searchformatmwaf8qkj A&amp;amp;B &amp;#00065; &lt;x&gt; \"q\" 'r'</h1></section><section id=\"qt-search-mwaf8qkj-true-case\"><h1 class=\"wp-block-query-title\" id=\"qt-search-mwaf8qkj-true\">Search results for: searchformatmwaf8qkj A&amp;amp;B &amp;#00065; &lt;x&gt; \"q\" 'r'</h1></section><section id=\"qt-search-mwaf8qkj-false-case\"><h1 class=\"wp-block-query-title\" id=\"qt-search-mwaf8qkj-false\">Search results for: searchformatmwaf8qkj A&amp;amp;B &amp;#00065; &lt;x&gt; \"q\" 'r'</h1></section><section id=\"qt-search-mwaf8qkj-prefix-case\"><h1 class=\"wp-block-query-title\" id=\"qt-search-mwaf8qkj-prefix\">searchformatmwaf8qkj A&amp;amp;B &amp;#00065; &lt;x&gt; \"q\" 'r'</h1></section></main>"
+            },
+            {
+              "surface": "model presentation fragment",
+              "mainCount": 1,
+              "markerCount": 1,
+              "titles": [
+                {
+                  "key": "default",
+                  "anchor": "qt-search-mwaf8qkj-default",
+                  "anchorCount": 1,
+                  "wrapperCount": 1,
+                  "tag": "H1",
+                  "class": "wp-block-query-title",
+                  "activeChildCount": 0,
+                  "actualText": "Search results for: searchformatmwaf8qkj A&amp;B &#00065; <x> \"q\" 'r'",
+                  "expectedSourceText": "Search results for: “searchformatmwaf8qkj A&B A <x> \"q\" 'r'”",
+                  "matchesExpectedSourceText": false,
+                  "actualTitleOuterHtml": "<h1 class=\"wp-block-query-title\" id=\"qt-search-mwaf8qkj-default\">Search results for: searchformatmwaf8qkj A&amp;amp;B &amp;#00065; &lt;x&gt; \"q\" 'r'</h1>"
+                },
+                {
+                  "key": "explicitTrue",
+                  "anchor": "qt-search-mwaf8qkj-true",
+                  "anchorCount": 1,
+                  "wrapperCount": 1,
+                  "tag": "H1",
+                  "class": "wp-block-query-title",
+                  "activeChildCount": 0,
+                  "actualText": "Search results for: searchformatmwaf8qkj A&amp;B &#00065; <x> \"q\" 'r'",
+                  "expectedSourceText": "Search results for: “searchformatmwaf8qkj A&B A <x> \"q\" 'r'”",
+                  "matchesExpectedSourceText": false,
+                  "actualTitleOuterHtml": "<h1 class=\"wp-block-query-title\" id=\"qt-search-mwaf8qkj-true\">Search results for: searchformatmwaf8qkj A&amp;amp;B &amp;#00065; &lt;x&gt; \"q\" 'r'</h1>"
+                },
+                {
+                  "key": "falseTerm",
+                  "anchor": "qt-search-mwaf8qkj-false",
+                  "anchorCount": 1,
+                  "wrapperCount": 1,
+                  "tag": "H1",
+                  "class": "wp-block-query-title",
+                  "activeChildCount": 0,
+                  "actualText": "Search results for: searchformatmwaf8qkj A&amp;B &#00065; <x> \"q\" 'r'",
+                  "expectedSourceText": "Search results",
+                  "matchesExpectedSourceText": false,
+                  "actualTitleOuterHtml": "<h1 class=\"wp-block-query-title\" id=\"qt-search-mwaf8qkj-false\">Search results for: searchformatmwaf8qkj A&amp;amp;B &amp;#00065; &lt;x&gt; \"q\" 'r'</h1>"
+                },
+                {
+                  "key": "prefixFalse",
+                  "anchor": "qt-search-mwaf8qkj-prefix",
+                  "anchorCount": 1,
+                  "wrapperCount": 1,
+                  "tag": "H1",
+                  "class": "wp-block-query-title",
+                  "activeChildCount": 0,
+                  "actualText": "searchformatmwaf8qkj A&amp;B &#00065; <x> \"q\" 'r'",
+                  "expectedSourceText": "Search results for: “searchformatmwaf8qkj A&B A <x> \"q\" 'r'”",
+                  "matchesExpectedSourceText": false,
+                  "actualTitleOuterHtml": "<h1 class=\"wp-block-query-title\" id=\"qt-search-mwaf8qkj-prefix\">searchformatmwaf8qkj A&amp;amp;B &amp;#00065; &lt;x&gt; \"q\" 'r'</h1>"
+                }
+              ],
+              "actualOwnedMainFragment": "<main id=\"qt-search-mwaf8qkj-main\" class=\"wp-block-group\"><p>SEARCH-FORMAT-MARKER-mwaf8qkj</p><section id=\"qt-search-mwaf8qkj-default-case\"><h1 class=\"wp-block-query-title\" id=\"qt-search-mwaf8qkj-default\">Search results for: searchformatmwaf8qkj A&amp;amp;B &amp;#00065; &lt;x&gt; \"q\" 'r'</h1></section><section id=\"qt-search-mwaf8qkj-true-case\"><h1 class=\"wp-block-query-title\" id=\"qt-search-mwaf8qkj-true\">Search results for: searchformatmwaf8qkj A&amp;amp;B &amp;#00065; &lt;x&gt; \"q\" 'r'</h1></section><section id=\"qt-search-mwaf8qkj-false-case\"><h1 class=\"wp-block-query-title\" id=\"qt-search-mwaf8qkj-false\">Search results for: searchformatmwaf8qkj A&amp;amp;B &amp;#00065; &lt;x&gt; \"q\" 'r'</h1></section><section id=\"qt-search-mwaf8qkj-prefix-case\"><h1 class=\"wp-block-query-title\" id=\"qt-search-mwaf8qkj-prefix\">searchformatmwaf8qkj A&amp;amp;B &amp;#00065; &lt;x&gt; \"q\" 'r'</h1></section></main>"
+            }
+          ]
+        }
+      ],
+      "previews": [
+        {
+          "label": "default",
+          "status": 200,
+          "rendered": "<h1 class=\"wp-block-query-title\" id=\"qt-search-mwaf8qkj-preview-default\">Search results for: searchformatmwaf8qkj</h1>",
+          "anchor": "qt-search-mwaf8qkj-preview-default",
+          "anchorCount": 1,
+          "wrapperCount": 1,
+          "tag": "H1",
+          "class": "wp-block-query-title",
+          "activeChildCount": 0,
+          "actualText": "Search results for: searchformatmwaf8qkj",
+          "expectedSourceOrCompatibilityText": "Search results for: “searchformatmwaf8qkj”",
+          "matchesExpectedText": false
+        },
+        {
+          "label": "true",
+          "status": 200,
+          "rendered": "<h1 class=\"wp-block-query-title\" id=\"qt-search-mwaf8qkj-preview-true\">Search results for: searchformatmwaf8qkj</h1>",
+          "anchor": "qt-search-mwaf8qkj-preview-true",
+          "anchorCount": 1,
+          "wrapperCount": 1,
+          "tag": "H1",
+          "class": "wp-block-query-title",
+          "activeChildCount": 0,
+          "actualText": "Search results for: searchformatmwaf8qkj",
+          "expectedSourceOrCompatibilityText": "Search results for: “searchformatmwaf8qkj”",
+          "matchesExpectedText": false
+        },
+        {
+          "label": "false",
+          "status": 200,
+          "rendered": "<h1 class=\"wp-block-query-title\" id=\"qt-search-mwaf8qkj-preview-false\">Search results for: searchformatmwaf8qkj</h1>",
+          "anchor": "qt-search-mwaf8qkj-preview-false",
+          "anchorCount": 1,
+          "wrapperCount": 1,
+          "tag": "H1",
+          "class": "wp-block-query-title",
+          "activeChildCount": 0,
+          "actualText": "Search results for: searchformatmwaf8qkj",
+          "expectedSourceOrCompatibilityText": "Search results",
+          "matchesExpectedText": false
+        },
+        {
+          "label": "prefix",
+          "status": 200,
+          "rendered": "<h1 class=\"wp-block-query-title\" id=\"qt-search-mwaf8qkj-preview-prefix\">searchformatmwaf8qkj</h1>",
+          "anchor": "qt-search-mwaf8qkj-preview-prefix",
+          "anchorCount": 1,
+          "wrapperCount": 1,
+          "tag": "H1",
+          "class": "wp-block-query-title",
+          "activeChildCount": 0,
+          "actualText": "searchformatmwaf8qkj",
+          "expectedSourceOrCompatibilityText": "Search results for: “searchformatmwaf8qkj”",
+          "matchesExpectedText": false
+        },
+        {
+          "label": "entity",
+          "status": 200,
+          "rendered": "<h1 class=\"wp-block-query-title\" id=\"qt-search-mwaf8qkj-preview-entity\">Search results for: searchformatmwaf8qkj A&amp;amp;B &amp;#00065; &lt;x&gt; \"q\" 'r'</h1>",
+          "anchor": "qt-search-mwaf8qkj-preview-entity",
+          "anchorCount": 1,
+          "wrapperCount": 1,
+          "tag": "H1",
+          "class": "wp-block-query-title",
+          "activeChildCount": 0,
+          "actualText": "Search results for: searchformatmwaf8qkj A&amp;B &#00065; <x> \"q\" 'r'",
+          "expectedSourceOrCompatibilityText": "Search results for: “searchformatmwaf8qkj A&B A <x> \"q\" 'r'”",
+          "matchesExpectedText": false
+        },
+        {
+          "label": "raw-s",
+          "status": 200,
+          "rendered": "<h1 class=\"wp-block-query-title\" id=\"qt-search-mwaf8qkj-preview-raw-s\">Blog</h1>",
+          "anchor": "qt-search-mwaf8qkj-preview-raw-s",
+          "anchorCount": 1,
+          "wrapperCount": 1,
+          "tag": "H1",
+          "class": "wp-block-query-title",
+          "activeChildCount": 0,
+          "actualText": "Blog",
+          "expectedSourceOrCompatibilityText": "Blog",
+          "matchesExpectedText": true
+        }
+      ],
+      "allAcquiredBeforeAssertions": true,
+      "acquisitionSetupTransportContainerOrNormalizationFailure": false,
+      "featureClassification": "Four text-formatting children fail plus parent; raw-s compatibility child passes. Structure/IDs/classes/markers/statuses are valid.",
+      "fixtureCleanup": {
+        "postIds": [
+          4
+        ],
+        "documentIds": [],
+        "restoredDocumentId": 14,
+        "settingsRestoreAttempted": true,
+        "failures": []
+      },
+      "observedDatabases": [
+        "worldact_test_1794298905414_e631d811"
+      ],
+      "phaseAppGroup": "worldact-query-title-search-format-before-compiled",
+      "observedProcessTree": [
+        {
+          "pid": 35323,
+          "ppid": 35290,
+          "pgid": 35290,
+          "command": "/usr/local/bin/node scripts/test-isolated.mjs tests/query-title-search-format-original.test.ts",
+          "firstSeenAtUtc": "2026-11-10T08:21:45.490Z"
+        },
+        {
+          "pid": 35330,
+          "ppid": 35323,
+          "pgid": 35330,
+          "command": "/usr/local/bin/node --import tsx server/migrate.ts",
+          "firstSeenAtUtc": "2026-11-10T08:21:45.578Z"
+        },
+        {
+          "pid": 35415,
+          "ppid": 35323,
+          "pgid": 35415,
+          "command": "/usr/local/bin/node --import tsx server/seed.ts",
+          "firstSeenAtUtc": "2026-11-10T08:21:46.849Z"
+        },
+        {
+          "pid": 35484,
+          "ppid": 35323,
+          "pgid": 35484,
+          "command": "/usr/local/bin/node dist-server/index.js",
+          "firstSeenAtUtc": "2026-11-10T08:21:47.847Z"
+        },
+        {
+          "pid": 35515,
+          "ppid": 35323,
+          "pgid": 35515,
+          "command": "/usr/local/bin/node --import tsx --test tests/query-title-search-format-original.test.ts",
+          "firstSeenAtUtc": "2026-11-10T08:21:48.312Z"
+        },
+        {
+          "pid": 35522,
+          "ppid": 35515,
+          "pgid": 35515,
+          "command": "/usr/local/bin/node --test-concurrency=0 --heap-prof-interval=524288 --max-http-header-size=16384 --stack-trace-limit=10 --report-signal=SIGUSR2 --heapsnapshot-near-heap-limit=0 --tls-cipher-list=TLS_AES_256_GCM_SHA384:TLS_CHACHA20_POLY1305_SHA256:TLS_AES_128_GCM_SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-AES256-GCM-SHA384:DHE-RSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-SHA256:DHE-RSA-AES128-SHA256:ECDHE-RSA-AES256-SHA384:DHE-RSA-AES256-SHA384:ECDHE-RSA-AES256-SHA256:DHE-RSA-AES256-SHA256:HIGH:!aNULL:!eNULL:!EXPORT:!DES:!RC4:!MD5:!PSK:!SRP:!CAMELLIA --watch-kill-signal=SIGTERM --inspect-publish-uid=stderr,http --cpu-prof-interval=1000 --test-coverage-functions=0 --test-timeout=0 --test-coverage-lines=0 --test-isolation=process --test-coverage-branches=0 --network-family-autoselection-attempt-timeout=250 --use-largepages=off --inspect-port=127.0.0.1:9229 --secure-heap-min=2 --import=tsx --v8-pool-size=4 --node-snapshot --trace-event-file-pattern=node_trace.${rotation}.log --secure-heap=0 --import tsx tests/query-title-search-format-original.test.ts",
+          "firstSeenAtUtc": "2026-11-10T08:21:48.400Z"
+        }
+      ],
+      "remainingObservedOwnProcesses": [],
+      "files": {
+        "proof": {
+          "path": "<private-evidence-root>/query-title-search-format-before-compiled-proof.json",
+          "sha256": "cc3c442dddadc6fdbed3e01d44d5bb8b7336ead7d4e562177126e7a1b91d5fb8"
+        },
+        "log": {
+          "path": "<private-evidence-root>/query-title-search-format-before-compiled.log",
+          "sha256": "36dba89fdde508c9a4984ff4dd3403eec04c27aa9c43251d403458f251c170f9"
+        },
+        "run": {
+          "path": "<private-evidence-root>/query-title-search-format-before-compiled-run.json",
+          "sha256": "c2259c691c66a5ec6313ffe083a3216896a6d2c4f52d4b2888601151d8465073"
+        },
+        "preflight": {
+          "path": "<private-evidence-root>/query-title-search-format-before-compiled-preflight.json",
+          "sha256": "a99ee3a26e06eb9a2e971c5d47f503c860fb6dfcb14b2b72a478e01f28d05bb8"
+        }
+      }
+    }
+  ],
+  "cleanup": {
+    "databaseNames": [
+      "worldact_query_title_search_format_before_anchor",
+      "worldact_test_1794298851348_e270d1f7",
+      "worldact_test_1794298905414_e631d811"
+    ],
+    "databaseRows": [],
+    "phaseApps": [
+      "worldact-query-title-search-format-before-source",
+      "worldact-query-title-search-format-before-compiled"
+    ],
+    "allOwnedPrefixSessionRows": [],
+    "physicalPort5195Free": true,
+    "allObservedProcessIdentitiesAbsent": true,
+    "config": {
+      "path": "<owned-search-format-before-worktree>/.env",
+      "uid": 501,
+      "mode": "0600",
+      "originalBytesIdentity": true,
+      "configSha256": "d15b469029368c1780595723c94430c3b823f90e707ab55baa07b410131d4571",
+      "state": "retained pending root review"
+    },
+    "readonlyDependencies": {
+      "link": "<owned-search-format-before-worktree>/node_modules",
+      "target": "<dependency-owner-workspace>/node_modules",
+      "realpath": "<dependency-owner-workspace>/node_modules",
+      "ownerUid": 501,
+      "ownerMode": "0755",
+      "state": "retained"
+    },
+    "all411OutputsRehashedAndRetained": true,
+    "uploadsOutbox": "Exact generated upload/outbox paths were not journaled; normal runner-finally cleanup only, no independent per-path absence claim.",
+    "archiveCreated": false
+  },
+  "runtimeTestExpectationOrFixtureAdapters": false,
+  "firstWriteCountsAccurate": true,
+  "harnessFailures": false,
+  "ciAttribution": "Root permits isolated immutable BEFORE while missing172CI still in progress; no next production release/CI-green claim here.",
+  "scope": "Only twelve actual targeted observations per mode. No browser/native UI/full/fresh/fixed3062/PHP/MAIN/CI or eligibility/alias/level0 implementation claim."
+}

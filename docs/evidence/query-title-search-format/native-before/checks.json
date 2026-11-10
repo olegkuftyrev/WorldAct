@@ -1,0 +1,330 @@
+{
+  "stage": "GENUINE_SEARCH_QUERY_TITLE_FORMAT_BEFORE_COMPLETE_RESOURCES_RETAINED",
+  "recordedAtUtc": "2026-11-10T08:29:09.587150+00:00",
+  "candidateBaseline": "f6f4dcda7ff0f8b7ef08ae43f7dac3422e510a07",
+  "testOnlyCommit": "92920c53964fe1573bb4aef98b943eb6420c14a1",
+  "testSha256": "169be75223968724229540836b78237b1735923e78283fc6a6f881c23ee1b385",
+  "rendererSha256": "6002a966d9a69b2dc1805f1144957c87ee9e036304d313cef87426672e5fc95c",
+  "actualNodeSha256": "582d1aa48ee69058e08be6406b86d604cf92010cf0e36a9e180e997b920da07b",
+  "worktree": "<owned-search-format-before-worktree>",
+  "construction": "One frozen new test; no runtime, UI, existing-test, CI or MAIN edits.",
+  "build": {
+    "firstAttempt": true,
+    "tsc": 0,
+    "viteConfigLoaderRunner": 0,
+    "directNativeEsbuild": 0,
+    "actualFiles": 411,
+    "allOutputHashesVerifiedBeforeEachModeAndAfter": true,
+    "oldMissingType411OutputsPreserved": true,
+    "receipt": {
+      "path": "<private-evidence-root>/query-title-search-format-before-build-only.json",
+      "sha256": "7844204aafed4a258ccb1c0ecf25d10c461c2a02aba30db3af3095daa594e6be"
+    },
+    "manifest": {
+      "path": "<private-evidence-root>/query-title-search-format-before-build-only-manifest.json",
+      "sha256": "54aae04bdb14a74836436469a556d0120d4299fffcb062cc8e0a79bb57f3a4c9"
+    }
+  },
+  "execution": {
+    "officialCommand": [
+      "node",
+      "scripts/test-isolated.mjs",
+      "tests/query-title-search-format-original.test.ts"
+    ],
+    "sequentialModes": [
+      "source",
+      "compiled"
+    ],
+    "port": 5195,
+    "fixtureOrAssertionAdapters": false,
+    "reruns": false,
+    "harnessFailures": false,
+    "countParserFirstWriteAccurate": true,
+    "allTwelveResponsesPerModeGatheredBeforeFeatureAssertions": true
+  },
+  "modes": [
+    {
+      "mode": "source",
+      "startedAtUtc": "2026-11-10T08:20:51.297Z",
+      "finishedAtUtc": "2026-11-10T08:20:55.989Z",
+      "counts": {
+        "tests": 6,
+        "pass": 1,
+        "fail": 5,
+        "cancelled": 0,
+        "skipped": 0
+      },
+      "runnerExitCode": 1,
+      "actualApiMode": "Official runner starts --import tsx server/index.ts",
+      "actualApiProcesses": [
+        {
+          "pid": 34995,
+          "ppid": 34825,
+          "pgid": 34995,
+          "command": "/usr/local/bin/node --import tsx server/index.ts",
+          "firstSeenAtUtc": "2026-11-10T08:20:53.779Z"
+        }
+      ],
+      "actualResponses": 12,
+      "allStatus200": true,
+      "bothHeadBodiesEmpty": true,
+      "titleDomObservations": 22,
+      "individualTextFailures": 21,
+      "acquisitionSetupTransportContainerOrNormalizationFailure": false,
+      "countedFailureMeaning": "Four formatting children plus parent; raw-s compatibility child passes.",
+      "fixtureCleanup": {
+        "postIds": [
+          4
+        ],
+        "documentIds": [],
+        "restoredDocumentId": 14,
+        "settingsRestoreAttempted": true,
+        "failures": []
+      },
+      "phaseDatabaseNames": [
+        "worldact_test_1794298851348_e270d1f7"
+      ],
+      "phaseApp": "worldact-query-title-search-format-before-source",
+      "runReceipt": {
+        "path": "<private-evidence-root>/query-title-search-format-before-source-run.json",
+        "sha256": "e3d884a113936cbb6153a48fb5b3b393235916ea696c6d07f52660d911756962"
+      },
+      "proof": {
+        "path": "<private-evidence-root>/query-title-search-format-before-source-proof.json",
+        "sha256": "7ac3238ce46094a3e8c6e8c4b4905ebc77037d38457deb51dad15edf88f70a47"
+      },
+      "rawLog": {
+        "path": "<private-evidence-root>/query-title-search-format-before-source.log",
+        "sha256": "351612b60eb7d6d7480bb4b26134fbe3d57afc7fb472ceda8e3cfd9533e3ac77"
+      },
+      "preflight": {
+        "path": "<private-evidence-root>/query-title-search-format-before-source-preflight.json",
+        "sha256": "307bf8d728b1cb89f0730d42e3916bf424a8fc0b17742861d085037235df1336"
+      }
+    },
+    {
+      "mode": "compiled",
+      "startedAtUtc": "2026-11-10T08:21:45.363Z",
+      "finishedAtUtc": "2026-11-10T08:21:49.422Z",
+      "counts": {
+        "tests": 6,
+        "pass": 1,
+        "fail": 5,
+        "cancelled": 0,
+        "skipped": 0
+      },
+      "runnerExitCode": 1,
+      "actualApiMode": "Official runner starts dist-server/index.js",
+      "actualApiProcesses": [
+        {
+          "pid": 35484,
+          "ppid": 35323,
+          "pgid": 35484,
+          "command": "/usr/local/bin/node dist-server/index.js",
+          "firstSeenAtUtc": "2026-11-10T08:21:47.847Z"
+        }
+      ],
+      "actualResponses": 12,
+      "allStatus200": true,
+      "bothHeadBodiesEmpty": true,
+      "titleDomObservations": 22,
+      "individualTextFailures": 21,
+      "acquisitionSetupTransportContainerOrNormalizationFailure": false,
+      "countedFailureMeaning": "Four formatting children plus parent; raw-s compatibility child passes.",
+      "fixtureCleanup": {
+        "postIds": [
+          4
+        ],
+        "documentIds": [],
+        "restoredDocumentId": 14,
+        "settingsRestoreAttempted": true,
+        "failures": []
+      },
+      "phaseDatabaseNames": [
+        "worldact_test_1794298905414_e631d811"
+      ],
+      "phaseApp": "worldact-query-title-search-format-before-compiled",
+      "runReceipt": {
+        "path": "<private-evidence-root>/query-title-search-format-before-compiled-run.json",
+        "sha256": "c2259c691c66a5ec6313ffe083a3216896a6d2c4f52d4b2888601151d8465073"
+      },
+      "proof": {
+        "path": "<private-evidence-root>/query-title-search-format-before-compiled-proof.json",
+        "sha256": "cc3c442dddadc6fdbed3e01d44d5bb8b7336ead7d4e562177126e7a1b91d5fb8"
+      },
+      "rawLog": {
+        "path": "<private-evidence-root>/query-title-search-format-before-compiled.log",
+        "sha256": "36dba89fdde508c9a4984ff4dd3403eec04c27aa9c43251d403458f251c170f9"
+      },
+      "preflight": {
+        "path": "<private-evidence-root>/query-title-search-format-before-compiled-preflight.json",
+        "sha256": "a99ee3a26e06eb9a2e971c5d47f503c860fb6dfcb14b2b72a478e01f28d05bb8"
+      }
+    }
+  ],
+  "findings": [
+    {
+      "case": "omitted/default and explicit true showSearchTerm",
+      "actual": "Search results for: <term>",
+      "sourceExpected": "Search results for: “<term>”"
+    },
+    {
+      "case": "showSearchTerm false (saved boolean and preview normalized stringfalse)",
+      "actual": "Search results for: <term>",
+      "sourceExpected": "Search results"
+    },
+    {
+      "case": "showPrefix false",
+      "actual": "<term>",
+      "sourceExpected": "Search results for: “<term>”"
+    },
+    {
+      "case": "literal entity spelling in search term",
+      "actualVisibleTerm": "<token> A&amp;B &#00065; <x> \"q\" 'r'",
+      "sourceExpectedVisibleTerm": "<token> A&B A <x> \"q\" 'r'",
+      "safeTextOnly": true
+    },
+    {
+      "case": "raw URL s auth-renderer compatibility",
+      "actual": "Blog",
+      "expectedCurrent": "Blog",
+      "pass": true
+    }
+  ],
+  "resourceClosure": {
+    "databaseNames": [
+      "worldact_query_title_search_format_before_anchor",
+      "worldact_test_1794298851348_e270d1f7",
+      "worldact_test_1794298905414_e631d811"
+    ],
+    "databaseRows": [],
+    "phaseApps": [
+      "worldact-query-title-search-format-before-source",
+      "worldact-query-title-search-format-before-compiled"
+    ],
+    "allOwnedPrefixSessionRows": [],
+    "physicalPort5195Free": true,
+    "allObservedProcessIdentitiesAbsent": true,
+    "config": {
+      "path": "<owned-search-format-before-worktree>/.env",
+      "uid": 501,
+      "mode": "0600",
+      "originalBytesIdentity": true,
+      "configSha256": "d15b469029368c1780595723c94430c3b823f90e707ab55baa07b410131d4571",
+      "state": "retained pending root review"
+    },
+    "readonlyDependencies": {
+      "link": "<owned-search-format-before-worktree>/node_modules",
+      "target": "<dependency-owner-workspace>/node_modules",
+      "realpath": "<dependency-owner-workspace>/node_modules",
+      "ownerUid": 501,
+      "ownerMode": "0755",
+      "state": "retained"
+    },
+    "all411OutputsRehashedAndRetained": true,
+    "uploadsOutbox": "Exact generated upload/outbox paths were not journaled; normal runner-finally cleanup only, no independent per-path absence claim.",
+    "archiveCreated": false,
+    "observedAtUtc": "2026-11-10T08:23:55.673Z",
+    "receipt": {
+      "path": "<private-evidence-root>/query-title-search-format-before-dom-audit.json",
+      "sha256": "1c1e54d51f6e1f5f2fedee6376a7b0ee497e2f444a0b79772f9cf4aa87316edb"
+    },
+    "interpretation": "Disposable phases closed; own config, readonly dependency link and all411 outputs intentionally retained pending root review and separate cleanup authorization."
+  },
+  "limits": [
+    "Only explicit type search with existing final query.search witness; unchanged date validation, aliases and path-only transport behavior.",
+    "API block-renderer controls are authenticated API observations, not client editor or browser/native interaction proof.",
+    "Entity search may have zero matches; ordinary owned post4 does populate the ordinary search.",
+    "DOM text and safe presentation fragments asserted; no literal PHP wire entity-spelling or general sanitizer/esc parity claim.",
+    "No level0, eligibility/global query flags, custom-content registry, unknown types, SQL, UI or broad/full/fresh/fixed3062 coverage.",
+    "Exact upload/outbox paths not journaled; standard runner finally cleanup only, no independent per-path absence claim.",
+    "Existing5b240 unquoted search positive and prior old builds are unchanged; any future expectation adapter is separate after root review."
+  ],
+  "ciChronology": "Construction/build/execution are attributed to frozen candidate f6f4/929. Root explicitly allowed this immutable isolated BEFORE while missing172 exactCI42780547646 was pending. No historical CI-green or next-production-release claim is made.",
+  "artifacts": [
+    {
+      "path": "<private-evidence-root>/query-title-search-format-before-original.test.ts",
+      "sha256": "169be75223968724229540836b78237b1735923e78283fc6a6f881c23ee1b385"
+    },
+    {
+      "path": "<private-evidence-root>/query-title-search-format-before-full.diff",
+      "sha256": "270f3309cbeea4d6aab212d2dbe5e6a94340338d6de3590c2263677f99eac011"
+    },
+    {
+      "path": "<private-evidence-root>/query-title-search-format-before-source-expectations.json",
+      "sha256": "3db418f608034e0d409671603545b593f45817d6923a01af7cff244b1d780f1f"
+    },
+    {
+      "path": "<private-evidence-root>/query-title-search-format-before-selector.json",
+      "sha256": "6463b7bde06e4088db56114c46477c109b0502181de8b8ce688810f92849add7"
+    },
+    {
+      "path": "<private-evidence-root>/query-title-search-format-before-construction-freeze.json",
+      "sha256": "f7d918f732291e5c299f783535fea9ea8eca436bcbd80a82a02694b14d717d81"
+    },
+    {
+      "path": "<private-evidence-root>/query-title-search-format-before-build-only.mjs",
+      "sha256": "72d2f1029af68aa90dd33bbcd6add86f4a7a95ec9f28cf9d7c45c470d4562ea9"
+    },
+    {
+      "path": "<private-evidence-root>/query-title-search-format-before-build-only-preflight.json",
+      "sha256": "62bbe595f2daa756d075a923bf89befa1de1493eba2b97cfc15d6bfd4cd86912"
+    },
+    {
+      "path": "<private-evidence-root>/query-title-search-format-before-build-only.log",
+      "sha256": "8c4132bad32955f85457e8f668342227b12e8fcbb428e3fdfa93bf2b8082421e"
+    },
+    {
+      "path": "<private-evidence-root>/query-title-search-format-before-build-only.json",
+      "sha256": "7844204aafed4a258ccb1c0ecf25d10c461c2a02aba30db3af3095daa594e6be"
+    },
+    {
+      "path": "<private-evidence-root>/query-title-search-format-before-build-only-manifest.json",
+      "sha256": "54aae04bdb14a74836436469a556d0120d4299fffcb062cc8e0a79bb57f3a4c9"
+    },
+    {
+      "path": "<private-evidence-root>/query-title-search-format-before-ownership.json",
+      "sha256": "267964ed52d1d9d2801977e525c809d405e7f0f218b831ad2168b70c9d733a61"
+    },
+    {
+      "path": "<private-evidence-root>/query-title-search-format-before-execution.mjs",
+      "sha256": "a4b442212ce19e5823fa442571c3c4f2a462369f91c0f9c1cd18000beb635137"
+    },
+    {
+      "path": "<private-evidence-root>/query-title-search-format-before-source-preflight.json",
+      "sha256": "307bf8d728b1cb89f0730d42e3916bf424a8fc0b17742861d085037235df1336"
+    },
+    {
+      "path": "<private-evidence-root>/query-title-search-format-before-source.log",
+      "sha256": "351612b60eb7d6d7480bb4b26134fbe3d57afc7fb472ceda8e3cfd9533e3ac77"
+    },
+    {
+      "path": "<private-evidence-root>/query-title-search-format-before-source-proof.json",
+      "sha256": "7ac3238ce46094a3e8c6e8c4b4905ebc77037d38457deb51dad15edf88f70a47"
+    },
+    {
+      "path": "<private-evidence-root>/query-title-search-format-before-source-run.json",
+      "sha256": "e3d884a113936cbb6153a48fb5b3b393235916ea696c6d07f52660d911756962"
+    },
+    {
+      "path": "<private-evidence-root>/query-title-search-format-before-compiled-preflight.json",
+      "sha256": "a99ee3a26e06eb9a2e971c5d47f503c860fb6dfcb14b2b72a478e01f28d05bb8"
+    },
+    {
+      "path": "<private-evidence-root>/query-title-search-format-before-compiled.log",
+      "sha256": "36dba89fdde508c9a4984ff4dd3403eec04c27aa9c43251d403458f251c170f9"
+    },
+    {
+      "path": "<private-evidence-root>/query-title-search-format-before-compiled-proof.json",
+      "sha256": "cc3c442dddadc6fdbed3e01d44d5bb8b7336ead7d4e562177126e7a1b91d5fb8"
+    },
+    {
+      "path": "<private-evidence-root>/query-title-search-format-before-compiled-run.json",
+      "sha256": "c2259c691c66a5ec6313ffe083a3216896a6d2c4f52d4b2888601151d8465073"
+    },
+    {
+      "path": "<private-evidence-root>/query-title-search-format-before-dom-audit.json",
+      "sha256": "1c1e54d51f6e1f5f2fedee6376a7b0ee497e2f444a0b79772f9cf4aa87316edb"
+    }
+  ]
+}

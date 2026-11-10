@@ -1,0 +1,64 @@
+{
+  "stage": "BUILD_ONLY_NO_TEST_EXECUTION",
+  "startedAtUtc": "2026-11-10T08:15:13.886Z",
+  "finishedAtUtc": "2026-11-10T08:15:34.620Z",
+  "completed": true,
+  "baseline": "f6f4dcda7ff0f8b7ef08ae43f7dac3422e510a07",
+  "testOnlyCommit": "92920c53964fe1573bb4aef98b943eb6420c14a1",
+  "commands": [
+    {
+      "command": [
+        "/usr/local/bin/node",
+        "node_modules/typescript/bin/tsc",
+        "--noEmit"
+      ],
+      "code": 0,
+      "signal": null,
+      "pid": 34094
+    },
+    {
+      "command": [
+        "/usr/local/bin/node",
+        "node_modules/vite/bin/vite.js",
+        "build",
+        "--configLoader",
+        "runner"
+      ],
+      "code": 0,
+      "signal": null,
+      "pid": 34135
+    },
+    {
+      "command": [
+        "<owned-search-format-before-worktree>/node_modules/@esbuild/darwin-arm64/bin/esbuild",
+        "server/index.ts",
+        "--bundle",
+        "--platform=node",
+        "--format=esm",
+        "--packages=external",
+        "--outfile=dist-server/index.js"
+      ],
+      "code": 0,
+      "signal": null,
+      "pid": 34160
+    }
+  ],
+  "expectedNodeSha256": "582d1aa48ee69058e08be6406b86d604cf92010cf0e36a9e180e997b920da07b",
+  "actualNodeSha256": "582d1aa48ee69058e08be6406b86d604cf92010cf0e36a9e180e997b920da07b",
+  "testSha256": "169be75223968724229540836b78237b1735923e78283fc6a6f881c23ee1b385",
+  "rendererSha256": "6002a966d9a69b2dc1805f1144957c87ee9e036304d313cef87426672e5fc95c",
+  "log": {
+    "path": "<private-evidence-root>/query-title-search-format-before-build-only.log",
+    "sha256": "8c4132bad32955f85457e8f668342227b12e8fcbb428e3fdfa93bf2b8082421e"
+  },
+  "manifest": {
+    "path": "<private-evidence-root>/query-title-search-format-before-build-only-manifest.json",
+    "sha256": "54aae04bdb14a74836436469a556d0120d4299fffcb062cc8e0a79bb57f3a4c9"
+  },
+  "configAbsent": true,
+  "dependencyLinkRetained": true,
+  "oldBefore411Preserved": true,
+  "envDatabaseApiHttpTestsBrowserCreatedOrRun": false,
+  "archiveCreated": false,
+  "productionCiClaim": false
+}

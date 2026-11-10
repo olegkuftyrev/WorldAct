@@ -1,0 +1,181 @@
+{
+  "schema": 1,
+  "classification": "GENUINE_FAILING_EXPLICIT_SEARCH_QUERY_TITLE_FORMAT_BEFORE",
+  "candidateBaseline": "f6f4dcda7ff0f8b7ef08ae43f7dac3422e510a07",
+  "testOnlyCommit": "92920c53964fe1573bb4aef98b943eb6420c14a1",
+  "testSHA256": "169be75223968724229540836b78237b1735923e78283fc6a6f881c23ee1b385",
+  "rendererSHA256": "6002a966d9a69b2dc1805f1144957c87ee9e036304d313cef87426672e5fc95c",
+  "actualNodeSHA256": "582d1aa48ee69058e08be6406b86d604cf92010cf0e36a9e180e997b920da07b",
+  "sourceAndActualCompiledEach": {
+    "actualResponses": 12,
+    "anonymous": 6,
+    "safeAuthenticatedRenderer": 6,
+    "policyChildren": 5,
+    "parent": 1,
+    "tests": 6,
+    "pass": 1,
+    "fail": 5,
+    "cancelled": 0,
+    "skipped": 0,
+    "titleDOMObservations": 22,
+    "individualExactTextFailures": 21
+  },
+  "copiedRecords": [
+    {
+      "file": "review.md",
+      "privateSource": "<private-evidence-root>/query-title-search-format-before-review.md",
+      "privateSourceSHA256": "78328339dbc224a3a2a3c09c040fafd5abb51dcfe1f2a3d73ecc53d56744c102",
+      "privateSourceBytes": 7029,
+      "copySHA256": "d21bcc7e5d3c74e3579da33cb6fcf37c82b66d5f7192fb22408b6e71c51f7519",
+      "copyBytes": 6976,
+      "pathOnlySanitization": [
+        {
+          "rule": "owned-worktree-lexical",
+          "occurrences": 1
+        },
+        {
+          "rule": "private-evidence-root-lexical",
+          "occurrences": 11
+        }
+      ],
+      "otherwiseByteIdentical": true
+    },
+    {
+      "file": "checks.json",
+      "privateSource": "<private-evidence-root>/query-title-search-format-before-checks.json",
+      "privateSourceSHA256": "c59e443a645fc132473f93068b557540a1aff9995a293110f1b7383b5b473203",
+      "privateSourceBytes": 14118,
+      "copySHA256": "4584671a6ced7a3e4f4dd4e158d621f4007e16567f8126fdfd1080349fe4534e",
+      "copyBytes": 13925,
+      "pathOnlySanitization": [
+        {
+          "rule": "owned-worktree-lexical",
+          "occurrences": 3
+        },
+        {
+          "rule": "private-evidence-root-lexical",
+          "occurrences": 32
+        },
+        {
+          "rule": "dependency-owner-workspace",
+          "occurrences": 2
+        }
+      ],
+      "otherwiseByteIdentical": true
+    },
+    {
+      "file": "dom-audit.json",
+      "privateSource": "<private-evidence-root>/query-title-search-format-before-dom-audit.json",
+      "privateSourceSHA256": "1c1e54d51f6e1f5f2fedee6376a7b0ee497e2f444a0b79772f9cf4aa87316edb",
+      "privateSourceBytes": 55820,
+      "copySHA256": "e5901991d142feab7037e8ae8cc9097dfd2b918839f0799bdbe86dbe941798f7",
+      "copyBytes": 55656,
+      "pathOnlySanitization": [
+        {
+          "rule": "owned-worktree-lexical",
+          "occurrences": 2
+        },
+        {
+          "rule": "private-evidence-root-lexical",
+          "occurrences": 8
+        },
+        {
+          "rule": "dependency-owner-workspace",
+          "occurrences": 6
+        }
+      ],
+      "otherwiseByteIdentical": true
+    },
+    {
+      "file": "owned-cleanup.json",
+      "privateSource": "<private-evidence-root>/query-title-search-format-before-owned-cleanup.json",
+      "privateSourceSHA256": "e9d47069ebdcd89384a80d224dd03adeaa148f90b28e3485b078a3a6ee733157",
+      "privateSourceBytes": 3669,
+      "copySHA256": "0d4a61d50dbf4140b15faf27a811dfcfb94ebacc309075e3541bb81f26283134",
+      "copyBytes": 3600,
+      "pathOnlySanitization": [
+        {
+          "rule": "owned-worktree-lexical",
+          "occurrences": 3
+        },
+        {
+          "rule": "private-evidence-root-lexical",
+          "occurrences": 4
+        },
+        {
+          "rule": "dependency-owner-workspace",
+          "occurrences": 2
+        },
+        {
+          "rule": "temporary-root-lexical",
+          "occurrences": 1
+        }
+      ],
+      "otherwiseByteIdentical": true
+    },
+    {
+      "file": "build-checks.json",
+      "privateSource": "<private-evidence-root>/query-title-search-format-before-build-only.json",
+      "privateSourceSHA256": "7844204aafed4a258ccb1c0ecf25d10c461c2a02aba30db3af3095daa594e6be",
+      "privateSourceBytes": 2047,
+      "copySHA256": "08ff5ec9d4b3b8a795998e3289a5bf6b468e6cbc0144bcf657b11020c14c67ab",
+      "copyBytes": 2030,
+      "pathOnlySanitization": [
+        {
+          "rule": "owned-worktree-lexical",
+          "occurrences": 1
+        },
+        {
+          "rule": "private-evidence-root-lexical",
+          "occurrences": 2
+        }
+      ],
+      "otherwiseByteIdentical": true
+    }
+  ],
+  "packageREADME": {
+    "file": "README.md",
+    "sha256": "2e70617762bfca2061e5ceb37bc083425fe89d09936f83489b5541463b4ff6a0",
+    "bytes": 5552
+  },
+  "sanitizationPolicy": "Only declared known absolute path-prefix replacements; all other source bytes unchanged.",
+  "allowedPathReplacementRules": [
+    {
+      "rule": "owned-worktree-physical",
+      "replacement": "<owned-search-format-before-worktree>"
+    },
+    {
+      "rule": "owned-worktree-lexical",
+      "replacement": "<owned-search-format-before-worktree>"
+    },
+    {
+      "rule": "private-evidence-root-physical",
+      "replacement": "<private-evidence-root>"
+    },
+    {
+      "rule": "private-evidence-root-lexical",
+      "replacement": "<private-evidence-root>"
+    },
+    {
+      "rule": "dependency-owner-workspace",
+      "replacement": "<dependency-owner-workspace>"
+    },
+    {
+      "rule": "temporary-root-physical",
+      "replacement": "<temporary-root>"
+    },
+    {
+      "rule": "temporary-root-lexical",
+      "replacement": "<temporary-root>"
+    }
+  ],
+  "firstAttemptBuildAndFirstWriteAccurateCounts": true,
+  "harnessParserNativeBuildCorrectionFixtureOrAssertionAdapterRerun": false,
+  "historicalCIPendingRetained": true,
+  "historicalEnvRetainedThenLaterAuthorizedCleanup": true,
+  "rawBootstrapProofLogAuthSetupConfigArchiveIncludedInGit": false,
+  "runtimeExistingTestUiCiMainChanged": false,
+  "archivesCreated": false,
+  "preservedCurrentBuildFiles": 411,
+  "preservedOldMissingTypeBuildFiles": 411
+}
