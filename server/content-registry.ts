@@ -131,9 +131,9 @@ export function compileBuiltinContentRegistry(contentInput: readonly unknown[], 
   };
   for (const raw of arrayValues(contentInput)) {
     const entry = fields(copyJSON(raw), ["storageKey", "storageAdapter", "rest"]), key = storageKey(entry.storageKey, 20);
-    if (contentKeys.has(key)) invalid("DUPLICATE_CONTENT_KEY"); contentKeys.add(key);
     if (entry.storageAdapter !== "posts") invalid("CONTENT_ADAPTER");
     const rest = contentRest(entry.rest);
+    if (contentKeys.has(key)) invalid("DUPLICATE_CONTENT_KEY"); contentKeys.add(key);
     if (contentSlugs.has(rest.slug)) invalid("DUPLICATE_CONTENT_REST_SLUG"); contentSlugs.add(rest.slug); collection(rest);
     if (key !== "post" && key !== "page") invalid("CONTENT_IDENTITIES");
     if (rest.slug !== key || rest.rest_base !== (key === "post" ? "posts" : "pages") || rest.rest_namespace !== "wp/v2") invalid("CONTENT_IDENTITIES");
@@ -141,8 +141,8 @@ export function compileBuiltinContentRegistry(contentInput: readonly unknown[], 
   }
   for (const raw of arrayValues(taxonomyInput)) {
     const entry = fields(copyJSON(raw), ["storageKey", "rest"]), key = storageKey(entry.storageKey, 32);
-    if (taxonomyKeys.has(key)) invalid("DUPLICATE_TAXONOMY_KEY"); taxonomyKeys.add(key);
     const rest = taxonomyRest(entry.rest);
+    if (taxonomyKeys.has(key)) invalid("DUPLICATE_TAXONOMY_KEY"); taxonomyKeys.add(key);
     if (taxonomySlugs.has(rest.slug)) invalid("DUPLICATE_TAXONOMY_REST_SLUG"); taxonomySlugs.add(rest.slug); collection(rest);
     if (key !== "category" && key !== "tag") invalid("TAXONOMY_IDENTITIES");
     if (rest.slug !== (key === "tag" ? "post_tag" : "category") || rest.rest_base !== (key === "tag" ? "tags" : "categories") || rest.rest_namespace !== "wp/v2") invalid("TAXONOMY_IDENTITIES");
