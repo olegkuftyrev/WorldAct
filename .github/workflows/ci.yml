@@ -117,6 +117,8 @@ jobs:
           tests/archive-query-title-home-body-original.test.ts
           tests/archive-query-title-home-direct-original.test.ts
           tests/query-title-missing-type-original.test.ts
+          tests/query-title-search-format-original.test.ts
+          tests/query-title-search-format-budget.test.ts
           tests/public-document-view.test.ts
           tests/public-document-ssr.test.ts
           tests/native-continuation.test.ts

@@ -1,4 +1,4 @@
-# Explicit archive Query Title presentation
+# Query Title presentation
 
 A `core/query-title` block with an omitted type or an exact empty-string type
 produces no markup before context, label lookups or wrapper generation. The
@@ -11,6 +11,19 @@ An explicit block with `type: "archive"` also produces no markup in a selected
 singular presentation or an ordinary unfiltered posts home. The supplied
 WordPress `blocks/query-title.php` returns before generating its wrapper in
 these cases. Explicit archive headings on actual archives remain supported.
+
+An explicit `type: "search"` with the existing nonempty final render query
+`search` value uses the full `Search results for: “term”` label. Omitted
+`showSearchTerm` locally means true; valid false produces exactly `Search
+results`, and search ignores `showPrefix`. The term uses the existing
+source-derived HTML401/numeric attribute escape rules without double escaping
+the combined title. The complete UTF-8 heading is preflighted before escaped
+term emission; normal rendering remains the sole output charge.
+
+This formatting branch follows existing date-query validation and preserves
+the current h1–h6 wrapper. It adds no query alias, global search conditional or
+type default. Full public documents retain their existing `s` normalization;
+a renderer preview with only raw URL `s` retains its existing fallback.
 
 `archiveTitleContext` is server-owned presentation provenance. The final tags
 are `selected-singular`, `unfiltered-posts-home` and `preserve`. Only the first
@@ -55,5 +68,6 @@ the path-only date transport quirk is not repaired by this change.
 This contract does not implement every WordPress conditional. Label priority,
 raw date SQL, query normalization, template selection, canonical URLs, response
 status, publication/password fences, and other Query Title types keep their
-existing behavior. Broader raw malformed/falsy attributes and search/post-type
-eligibility and formatting remain separate compatibility work.
+existing behavior. Broader raw malformed/falsy attributes, search eligibility/global conditionals,
+post-type eligibility/formatting and level0 paragraph output remain separate
+compatibility work.
