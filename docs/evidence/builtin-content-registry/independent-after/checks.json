@@ -1,0 +1,313 @@
+{
+  "status": "INDEPENDENT_SCOPED_FINAL_ACCEPTANCE_104_EACH_NO_OPEN_FINDING",
+  "timeUTC": "2026-11-10T09:56:47.720775+00:00",
+  "head": "f4cb75febd6fb48c2b6913d8dca9d3170021af61",
+  "equivalentCandidate": "1bcec366090969539bf6d00b75238c0e3ebfb471",
+  "tree": "d897e7c7857a0a6f713c27b63c5c1c4e3b0b1dfa",
+  "nodeSHA256": "26f4cb1733a35f9afc4124181b3fb9de6a4dd2716168a83903b7b78b1c526354",
+  "review": {
+    "name": "builtin-content-registry-flow-independent-after-final-review.md",
+    "sha256": "4c34a3760c11418969a12a6d8310a229031c8255b071c102baec8fccbf3109bb",
+    "bytes": 3761
+  },
+  "observations": {
+    "name": "builtin-content-registry-flow-independent-after-observations.json",
+    "sha256": "8bf6781125c67b120acbcac18f47095bba9201e6f22d575b00a288a177ef2dac",
+    "bytes": 6550
+  },
+  "finalCurrentFingerprints": {
+    "name": "builtin-content-registry-flow-independent-after-final-fingerprints.json",
+    "sha256": "6fda429af3bc8b76885fff4a55403faa804e59edd29bb479554d34fa32a04efa",
+    "bytes": 99653
+  },
+  "linkedPrivateArtifactCount": 36,
+  "linkedPrivateArtifacts": {
+    "builtin-content-registry-flow-independent-after-build-review.md": {
+      "sha256": "c81ee9b7f2e4501134800326dcda4173ac36bdde82c42a40d4b8f9ffba81428a",
+      "bytes": 1834
+    },
+    "builtin-content-registry-flow-independent-after-build-checks.json": {
+      "sha256": "5b96fdd869a06429d390baf31c11d0c069e47948fddd005de3e276e5898e065d",
+      "bytes": 4483
+    },
+    "builtin-content-registry-flow-independent-after-build-fingerprints.json": {
+      "sha256": "6fda429af3bc8b76885fff4a55403faa804e59edd29bb479554d34fa32a04efa",
+      "bytes": 99653
+    },
+    "builtin-content-registry-flow-independent-after-build.log": {
+      "sha256": "8d5057ea2e4f20949d4eb83679755886a90d4452a90d7d4445fd404488e957ee",
+      "bytes": 3774
+    },
+    "builtin-content-registry-flow-independent-after-build-step-receipt.json": {
+      "sha256": "58add7cb1d658cf5a274dbfb09a18874243eb3faacbba9d785f72b0b1333b54f",
+      "bytes": 1588
+    },
+    "builtin-content-registry-flow-independent-after-run.mjs": {
+      "sha256": "9f153f8a6bfcd479f85916d0902618293a7dac635e388acf2f3fce9fd8c5525f",
+      "bytes": 11530
+    },
+    "builtin-content-registry-flow-independent-after-ownership.json": {
+      "sha256": "3b1cec7b054b3f68f4f8484e8b8a333a5eeb474f9386101b42372f9ecdb02d57",
+      "bytes": 1204
+    },
+    "builtin-content-registry-flow-independent-after-source-prelaunch.json": {
+      "sha256": "90d5e68a2f27b70391fd0dda988e125adbd8462f021c8171928a94759079464a",
+      "bytes": 1981
+    },
+    "builtin-content-registry-flow-independent-after-source-run.json": {
+      "sha256": "5bb78837416a3623f621a4a9d1d2032e0daafe027b7c64339bb9524eec83eaac",
+      "bytes": 28706
+    },
+    "builtin-content-registry-flow-independent-after-source.log": {
+      "sha256": "c1426c51dca47ca43014dc329b385b114a7706f816578bc6c42b61bdd2c9b040",
+      "bytes": 29882
+    },
+    "builtin-content-registry-flow-independent-after-compiled-prelaunch.json": {
+      "sha256": "34c07c1ca808979e36e0de1317fc513a9dee392c8505704f5327856b0eab0384",
+      "bytes": 1991
+    },
+    "builtin-content-registry-flow-independent-after-compiled-run.json": {
+      "sha256": "3e432e65970f2f9754377f86762337e329915993a5b4697c8b8c8706bacd9599",
+      "bytes": 27204
+    },
+    "builtin-content-registry-flow-independent-after-compiled.log": {
+      "sha256": "b17cdd13471e007bd6bd8312e244f412b4218c824909b66ccdffe1dbcc81e1d4",
+      "bytes": 29891
+    },
+    "builtin-content-registry-flow-independent-after-artifact-audit.mjs": {
+      "sha256": "f99f9f8fec30b09ba888c796d120e6d1f607cf6a4e832ab356e15063da294725",
+      "bytes": 3176
+    },
+    "builtin-content-registry-flow-independent-after-artifact-audit.json": {
+      "sha256": "31d01ce4b511d443398f0047b19a2c4fa607b9918942fe7c787d7905b21d36fa",
+      "bytes": 148897
+    },
+    "builtin-content-registry-flow-independent-after-artifact-audit-run.json": {
+      "sha256": "ff437c7c527fdcc076eb280b05101ebef843167880cca7a076fd360695b3c411",
+      "bytes": 578
+    },
+    "builtin-content-registry-flow-independent-after-artifact-audit.stderr": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    "builtin-content-registry-flow-independent-after-close-observe.mjs": {
+      "sha256": "c7bcb173bc0a602ce3c8cccd8fe3fdd6169bc769e5e90806adaf885a12ecda50",
+      "bytes": 3731
+    },
+    "builtin-content-registry-flow-independent-after-resource-closure.json": {
+      "sha256": "9f2b45d299a36b2ee8b2a9429bda0e9f60973ad594a0b52ef4dfd5162bcc18c3",
+      "bytes": 3033
+    },
+    "builtin-content-registry-flow-independent-after-resource-closure.stderr": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    "builtin-content-registry-complete-affected-selector.json": {
+      "sha256": "13d03cb866290197c86d620ba8027755caf899db58b581de6991920a3393028d",
+      "bytes": 9112
+    },
+    "builtin-content-registry-flow-construction-freeze.json": {
+      "sha256": "e68fe17f37250685e67e878e7cd6ae1c7f463900035607ce49de05aeed341473",
+      "bytes": 4740
+    },
+    "root-builtin-content-registry-flow-builds-audit.json": {
+      "sha256": "7f02983615ab69e2ea86886bae2861e016862be8418c5d6cdfa4e11341569775",
+      "bytes": 1353
+    },
+    "builtin-content-registry-final-construction-independent-review.md": {
+      "sha256": "bf6d95af22a169b0d9df2e4e1e11b3286f4188bba2c0a047233b2f83d3b2e3c9",
+      "bytes": 3039
+    },
+    "builtin-content-registry-flow-independent-static-review.md": {
+      "sha256": "e467cc1ddadffdf4aeff73b6a12ef2ad1a5ec067dad296e94ce721869490c719",
+      "bytes": 1339
+    },
+    "builtin-content-registry-independent-after-d007-failed-build-review.md": {
+      "sha256": "b3e3b84886230dfe1a02d6077ba18bca1af1877cef9fd5379720eb845b3f5b9d",
+      "bytes": 1742
+    },
+    "builtin-content-registry-independent-after-d007-failed-build-checks.json": {
+      "sha256": "6428ffc75907bb470fbf1e3caacbaa0155fc2a505d590981aebc6d897428ff69",
+      "bytes": 2550
+    },
+    "builtin-content-registry-http-proof-audit-wp-error-envelope.mjs": {
+      "sha256": "2b4002b9f0c0b94ba0b9e9e5ccb82f1198b88dd2ab7e02f87d24384f62dd4802",
+      "bytes": 14335
+    },
+    "query-title-missing-type-proof-audit-quoted-search.mjs": {
+      "sha256": "b35e93d3beedbc6c5f9a09beb26e6d713396c45fba2ee5d4429e9b54731a0390",
+      "bytes": 2883
+    },
+    "query-title-search-format-proof-audit.mjs": {
+      "sha256": "40e530c037066b9d9f1fd66391d12e870174411eea2ded8e4760734b5ed07d9d",
+      "bytes": 3112
+    },
+    "builtin-content-registry-flow-independent-after-source-registry-proof.json": {
+      "sha256": "fc698e0e7360b75cf0a7364d7393105e57fe113006d98b3946dc59d61ca333cc",
+      "bytes": 52496
+    },
+    "builtin-content-registry-flow-independent-after-source-missing-proof.json": {
+      "sha256": "afa0101c977e635e01a44c9494dd77c2a580e310b3ca4b6fafbbd8fe56e738a3",
+      "bytes": 298565
+    },
+    "builtin-content-registry-flow-independent-after-source-format-proof.json": {
+      "sha256": "e99472e73a47a0b99fd29cc1636cd909ab3e546e8de1e9cb02b76047b536f7f3",
+      "bytes": 297327
+    },
+    "builtin-content-registry-flow-independent-after-compiled-registry-proof.json": {
+      "sha256": "19aed81c3dc7ac8b5be5e89f21b60e4025973a3703981df89025e217ae02b8ca",
+      "bytes": 52496
+    },
+    "builtin-content-registry-flow-independent-after-compiled-missing-proof.json": {
+      "sha256": "463e3f729d039a9800077cf6df9c7319bf9ab9208769c7771c1eee6c61489abf",
+      "bytes": 298565
+    },
+    "builtin-content-registry-flow-independent-after-compiled-format-proof.json": {
+      "sha256": "5384ff9868039c1aab2aca44e8b537a20cde473d42a004aecf462c6d56707a4a",
+      "bytes": 297327
+    }
+  },
+  "results": {
+    "source": {
+      "exitCode": 0,
+      "counts": {
+        "tests": 104,
+        "pass": 104,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0
+      },
+      "perFileCounts": [
+        4,
+        3,
+        1,
+        6,
+        10,
+        1,
+        9,
+        3,
+        9,
+        9,
+        9,
+        14,
+        4,
+        4,
+        6,
+        6,
+        6
+      ],
+      "official17FileCompletion": true,
+      "proofs": {
+        "registry": {
+          "name": "builtin-content-registry-flow-independent-after-source-registry-proof.json",
+          "sha256": "fc698e0e7360b75cf0a7364d7393105e57fe113006d98b3946dc59d61ca333cc",
+          "bytes": 52496,
+          "responses": 49
+        },
+        "missing": {
+          "name": "builtin-content-registry-flow-independent-after-source-missing-proof.json",
+          "sha256": "afa0101c977e635e01a44c9494dd77c2a580e310b3ca4b6fafbbd8fe56e738a3",
+          "bytes": 298565,
+          "responses": 9
+        },
+        "format": {
+          "name": "builtin-content-registry-flow-independent-after-source-format-proof.json",
+          "sha256": "e99472e73a47a0b99fd29cc1636cd909ab3e546e8de1e9cb02b76047b536f7f3",
+          "bytes": 297327,
+          "responses": 12
+        }
+      }
+    },
+    "compiled": {
+      "exitCode": 0,
+      "counts": {
+        "tests": 104,
+        "pass": 104,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0
+      },
+      "perFileCounts": [
+        4,
+        3,
+        1,
+        6,
+        10,
+        1,
+        9,
+        3,
+        9,
+        9,
+        9,
+        14,
+        4,
+        4,
+        6,
+        6,
+        6
+      ],
+      "official17FileCompletion": true,
+      "proofs": {
+        "registry": {
+          "name": "builtin-content-registry-flow-independent-after-compiled-registry-proof.json",
+          "sha256": "19aed81c3dc7ac8b5be5e89f21b60e4025973a3703981df89025e217ae02b8ca",
+          "bytes": 52496,
+          "responses": 49
+        },
+        "missing": {
+          "name": "builtin-content-registry-flow-independent-after-compiled-missing-proof.json",
+          "sha256": "463e3f729d039a9800077cf6df9c7319bf9ab9208769c7771c1eee6c61489abf",
+          "bytes": 298565,
+          "responses": 9
+        },
+        "format": {
+          "name": "builtin-content-registry-flow-independent-after-compiled-format-proof.json",
+          "sha256": "5384ff9868039c1aab2aca44e8b537a20cde473d42a004aecf462c6d56707a4a",
+          "bytes": 297327,
+          "responses": 12
+        }
+      }
+    }
+  },
+  "stableCounts": {
+    "trackedSource": 355,
+    "selectedTests": 17,
+    "runtime": 6,
+    "producedOutputs": 411
+  },
+  "allBuildPhasePrePostFinalCurrentHashesStable": true,
+  "actualTargetedResponsesPerMode": 70,
+  "metadataBeforeAfter24SurfaceRawAndOrderedEquality": true,
+  "initialD007TSCFailurePreserved": true,
+  "correctedBuildAttemptOverall": 2,
+  "firstTestExecutionsAtCorrectedCandidate": true,
+  "directSourceImportsRemainSOURCEUnderCompiledAPI": true,
+  "trackedTreeClean": true,
+  "resourceClosure": {
+    "ownedDBs": [
+      "worldact_test_1794304179183_c55b8c75",
+      "worldact_test_1794304244171_4585a3e9"
+    ],
+    "anchor": "worldact_builtin_content_registry_independent_after_anchor",
+    "remainingCatalog": {
+      "databases": [],
+      "sessions": []
+    },
+    "observedOSPIDs": 125,
+    "portsNoListeners": [
+      3068,
+      3069,
+      3070
+    ],
+    "monitorCoverage": "Sampled300ms, not exhaustive",
+    "uploads": "Official normal finally; exact paths not journaled"
+  },
+  "retainedForRootReview": {
+    "configSHA256": "80b5e846e5c71e6395d57ba5cf58612fe3c2471edfa91c7cd7e175bea7e93109",
+    "ownReadonlyDepsLink": true,
+    "builds": true,
+    "proofs": true
+  },
+  "noMainProductionSchemaOrCodeChanges": true,
+  "noFurtherTestsOrCleanup": true
+}

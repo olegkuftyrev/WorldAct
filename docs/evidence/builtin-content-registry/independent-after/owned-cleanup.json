@@ -1,0 +1,47 @@
+{
+  "status": "EXACT_AUTHORIZED_OWN_CONFIG_AND_LINK_REMOVED_ONLY",
+  "timeUTC": "2026-11-10T09:59:17.925141+00:00",
+  "head": "f4cb75febd6fb48c2b6913d8dca9d3170021af61",
+  "tree": "d897e7c7857a0a6f713c27b63c5c1c4e3b0b1dfa",
+  "authorizedBy": "Root after full final36refs/raw/resource acceptance; only config creationSHA80b5 and exact readonly link.",
+  "before": {
+    "config": {
+      "path": "<independent-worktree>/.env",
+      "uid": 501,
+      "mode": "0o600",
+      "sha256": "80b5e846e5c71e6395d57ba5cf58612fe3c2471edfa91c7cd7e175bea7e93109",
+      "device": 16777234,
+      "inode": 24433829
+    },
+    "link": {
+      "path": "<independent-worktree>/node_modules",
+      "uid": 501,
+      "mode": "0o755",
+      "target": "<main-worktree>/node_modules",
+      "device": 16777234,
+      "inode": 24431709
+    },
+    "realDependencyOwner": {
+      "path": "<main-worktree>/node_modules",
+      "uid": 501,
+      "mode": "0o755",
+      "nonSymlink": true,
+      "lockSHA256": "233888ed8f864581a8835aab0b4c33ccd7fbc391f2a98650b63fcf8db8814892"
+    }
+  },
+  "after": {
+    "ownConfigAbsent": true,
+    "ownLinkAbsent": true,
+    "realDependencyOwnerIdentityModeAndLockUnchanged": true,
+    "preservedCounts": {
+      "sourceFiles": 355,
+      "selectedTests": 17,
+      "runtimeFiles": 6,
+      "producedOutputs": 411
+    },
+    "allFinalFingerprintsUnchanged": true
+  },
+  "noDBServicesTestsRerunsOrOtherCleanup": true,
+  "allFailedInitialD007AndHistoricalBuildEvidencePreserved": true,
+  "historicalResourceReceiptRetainedState": "Retained env/link was true at guard closure; this later receipt records the two authorized unlinks."
+}

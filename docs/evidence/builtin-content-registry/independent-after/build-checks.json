@@ -1,0 +1,129 @@
+{
+  "status": "CORRECTED_INDEPENDENT_BUILD_ONLY_PASS_STOP_FOR_ROOT_ACTIVATION",
+  "timeUTC": "2026-11-10T09:43:58.075009+00:00",
+  "head": "f4cb75febd6fb48c2b6913d8dca9d3170021af61",
+  "equivalentCandidate": "1bcec366090969539bf6d00b75238c0e3ebfb471",
+  "tree": "d897e7c7857a0a6f713c27b63c5c1c4e3b0b1dfa",
+  "overallBuildAttempt": 2,
+  "correctedCandidateBuildAttempt": 1,
+  "initialD007GenuineFailurePreserved": true,
+  "review": {
+    "name": "builtin-content-registry-flow-independent-after-build-review.md",
+    "sha256": "c81ee9b7f2e4501134800326dcda4173ac36bdde82c42a40d4b8f9ffba81428a",
+    "bytes": 1834
+  },
+  "fingerprints": {
+    "name": "builtin-content-registry-flow-independent-after-build-fingerprints.json",
+    "sha256": "6fda429af3bc8b76885fff4a55403faa804e59edd29bb479554d34fa32a04efa",
+    "bytes": 99653
+  },
+  "immutableInputs": {
+    "builtin-content-registry-flow-independent-after-build-preconditions.json": {
+      "sha256": "924d94b3ce84dcf35c2e76f0ad096cf8607163c32939d995d360801cbcb9fe94",
+      "bytes": 3065
+    },
+    "builtin-content-registry-flow-independent-after-build-pre-fingerprints.json": {
+      "sha256": "315dacc8967ff4e62948ae5c4224a0ed75eae381c205d9a00eed231829ab4925",
+      "bytes": 38515
+    },
+    "builtin-content-registry-flow-independent-after-build.log": {
+      "sha256": "8d5057ea2e4f20949d4eb83679755886a90d4452a90d7d4445fd404488e957ee",
+      "bytes": 3774
+    },
+    "builtin-content-registry-flow-independent-after-build-step-receipt.json": {
+      "sha256": "58add7cb1d658cf5a274dbfb09a18874243eb3faacbba9d785f72b0b1333b54f",
+      "bytes": 1588
+    },
+    "builtin-content-registry-flow-independent-static-review.md": {
+      "sha256": "e467cc1ddadffdf4aeff73b6a12ef2ad1a5ec067dad296e94ce721869490c719",
+      "bytes": 1339
+    },
+    "builtin-content-registry-flow-independent-static-checks.json": {
+      "sha256": "2f9d356bb738fcad09e5baab77dda5fc54244b1384a87a8bf20fc68a15d22ce7",
+      "bytes": 1149
+    },
+    "builtin-content-registry-flow-construction-freeze.json": {
+      "sha256": "e68fe17f37250685e67e878e7cd6ae1c7f463900035607ce49de05aeed341473",
+      "bytes": 4740
+    },
+    "builtin-content-registry-independent-after-d007-failed-build-review.md": {
+      "sha256": "b3e3b84886230dfe1a02d6077ba18bca1af1877cef9fd5379720eb845b3f5b9d",
+      "bytes": 1742
+    },
+    "builtin-content-registry-independent-after-d007-failed-build-checks.json": {
+      "sha256": "6428ffc75907bb470fbf1e3caacbaa0155fc2a505d590981aebc6d897428ff69",
+      "bytes": 2550
+    }
+  },
+  "steps": [
+    {
+      "command": [
+        "node",
+        "node_modules/typescript/bin/tsc",
+        "--noEmit"
+      ],
+      "startedUTC": "2026-11-10T09:42:05.848860+00:00",
+      "pid": 54298,
+      "exitCode": 0,
+      "seconds": 8.565,
+      "completedUTC": "2026-11-10T09:42:14.414318+00:00"
+    },
+    {
+      "command": [
+        "node",
+        "node_modules/vite/bin/vite.js",
+        "build",
+        "--configLoader",
+        "runner"
+      ],
+      "startedUTC": "2026-11-10T09:42:14.475727+00:00",
+      "pid": 54309,
+      "exitCode": 0,
+      "seconds": 9.17,
+      "completedUTC": "2026-11-10T09:42:23.645573+00:00"
+    },
+    {
+      "command": [
+        "node_modules/.bin/esbuild",
+        "server/index.ts",
+        "--bundle",
+        "--platform=node",
+        "--format=esm",
+        "--packages=external",
+        "--outfile=dist-server/index.js"
+      ],
+      "startedUTC": "2026-11-10T09:42:23.709025+00:00",
+      "pid": 54342,
+      "exitCode": 0,
+      "seconds": 0.055,
+      "completedUTC": "2026-11-10T09:42:23.764483+00:00"
+    }
+  ],
+  "newNodeSHA256": "26f4cb1733a35f9afc4124181b3fb9de6a4dd2716168a83903b7b78b1c526354",
+  "backendNodeComparison": "Pending independent owner/root evidence, not assumed.",
+  "actualFrozenCounts": {
+    "sourceFiles": 355,
+    "selectedTests": 17,
+    "runtimeFiles": 6,
+    "producedFiles": 411
+  },
+  "prePostCurrentSourceTestRuntimeIdentical": true,
+  "postAndCurrentAllProducedFilesIdentical": true,
+  "allTrackedTestsDirectoryMetadata": {
+    "files": 245,
+    "dotTestTS": 240,
+    "supportOrFixture": 5,
+    "executed": false
+  },
+  "prospectiveGuardedSelector": {
+    "files": 17,
+    "counted": 104,
+    "executed": false
+  },
+  "trackedTreeClean": true,
+  "envCreated": false,
+  "anchorDatabaseApiHttpTestsServices": false,
+  "ownReadonlyDependencyLinkRetained": true,
+  "oldBeforeBuildsAndFailuresUntouched": true,
+  "noEditOrRerunWithinCorrectedAttempt": true
+}

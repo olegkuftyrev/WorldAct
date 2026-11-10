@@ -1,0 +1,113 @@
+{
+  "schemaVersion": 1,
+  "scope": "Independent bounded builtin registry104checks each/source and actualcompiled; no new execution by this docs package.",
+  "runtimeCommit": "1bcec366090969539bf6d00b75238c0e3ebfb471",
+  "independentTestHead": "f4cb75febd6fb48c2b6913d8dca9d3170021af61",
+  "runtimeTree": "d897e7c7857a0a6f713c27b63c5c1c4e3b0b1dfa",
+  "nodeSHA256": "26f4cb1733a35f9afc4124181b3fb9de6a4dd2716168a83903b7b78b1c526354",
+  "payloads": [
+    {
+      "path": "docs/evidence/builtin-content-registry/independent-after/review.md",
+      "sourceArtifact": {
+        "name": "builtin-content-registry-flow-independent-after-final-review.md",
+        "sha256": "4c34a3760c11418969a12a6d8310a229031c8255b071c102baec8fccbf3109bb",
+        "bytes": 3761
+      },
+      "publicCopy": {
+        "sha256": "4c34a3760c11418969a12a6d8310a229031c8255b071c102baec8fccbf3109bb",
+        "bytes": 3761
+      },
+      "literalPrefixReplacementOccurrences": {
+        "privateEvidenceCanonical": 0,
+        "privateEvidence": 0,
+        "independentWorktreeCanonical": 0,
+        "independentWorktree": 0,
+        "mainWorktree": 0
+      }
+    },
+    {
+      "path": "docs/evidence/builtin-content-registry/independent-after/checks.json",
+      "sourceArtifact": {
+        "name": "builtin-content-registry-flow-independent-after-final-checks.json",
+        "sha256": "ff7d466bbe6391390306ef48fd128523ff4b88d4a9f103ac9517509cb26cdfff",
+        "bytes": 11640
+      },
+      "publicCopy": {
+        "sha256": "ff7d466bbe6391390306ef48fd128523ff4b88d4a9f103ac9517509cb26cdfff",
+        "bytes": 11640
+      },
+      "literalPrefixReplacementOccurrences": {
+        "privateEvidenceCanonical": 0,
+        "privateEvidence": 0,
+        "independentWorktreeCanonical": 0,
+        "independentWorktree": 0,
+        "mainWorktree": 0
+      }
+    },
+    {
+      "path": "docs/evidence/builtin-content-registry/independent-after/resource-audit.json",
+      "sourceArtifact": {
+        "name": "builtin-content-registry-flow-independent-after-resource-closure.json",
+        "sha256": "9f2b45d299a36b2ee8b2a9429bda0e9f60973ad594a0b52ef4dfd5162bcc18c3",
+        "bytes": 3033
+      },
+      "publicCopy": {
+        "sha256": "9f2b45d299a36b2ee8b2a9429bda0e9f60973ad594a0b52ef4dfd5162bcc18c3",
+        "bytes": 3033
+      },
+      "literalPrefixReplacementOccurrences": {
+        "privateEvidenceCanonical": 0,
+        "privateEvidence": 0,
+        "independentWorktreeCanonical": 0,
+        "independentWorktree": 0,
+        "mainWorktree": 0
+      }
+    },
+    {
+      "path": "docs/evidence/builtin-content-registry/independent-after/build-checks.json",
+      "sourceArtifact": {
+        "name": "builtin-content-registry-flow-independent-after-build-checks.json",
+        "sha256": "5b96fdd869a06429d390baf31c11d0c069e47948fddd005de3e276e5898e065d",
+        "bytes": 4483
+      },
+      "publicCopy": {
+        "sha256": "5b96fdd869a06429d390baf31c11d0c069e47948fddd005de3e276e5898e065d",
+        "bytes": 4483
+      },
+      "literalPrefixReplacementOccurrences": {
+        "privateEvidenceCanonical": 0,
+        "privateEvidence": 0,
+        "independentWorktreeCanonical": 0,
+        "independentWorktree": 0,
+        "mainWorktree": 0
+      }
+    },
+    {
+      "path": "docs/evidence/builtin-content-registry/independent-after/owned-cleanup.json",
+      "sourceArtifact": {
+        "name": "builtin-content-registry-flow-independent-after-owned-cleanup.json",
+        "sha256": "f215f7abec2c066f060ca3a988a0b2ad0efcc7deb92aa8a890bd4131ca1c0d3c",
+        "bytes": 1773
+      },
+      "publicCopy": {
+        "sha256": "f5076c278c1938cc61bb4f1a1ce826f961b98bd14b17fe58fe3561b1258d43d9",
+        "bytes": 1641
+      },
+      "literalPrefixReplacementOccurrences": {
+        "privateEvidenceCanonical": 0,
+        "privateEvidence": 0,
+        "independentWorktreeCanonical": 0,
+        "independentWorktree": 2,
+        "mainWorktree": 2
+      }
+    }
+  ],
+  "README": {
+    "path": "docs/evidence/builtin-content-registry/independent-after/README.md",
+    "sha256": "f68f441fcb828a057ac1ff6217951e8253d2174daafc95f8eaf8da0e3e25ce8a",
+    "bytes": 2833
+  },
+  "sanitization": "Only the literal known-prefix substitutions counted above; no result, field or claim rewriting. Exact private prefix map retained in private correspondence.",
+  "manifestSelfHash": "Intentionally excluded; exact hash and all seven paths recorded in private correspondence.",
+  "privateRawProofsLogsConfigurationExcluded": true
+}
